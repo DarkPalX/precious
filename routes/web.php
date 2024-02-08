@@ -36,7 +36,10 @@ use App\Http\Controllers\Ecommerce\{
     Route::get('/search-contents', [ProductFrontController::class, 'search_content'])->name('search-content');
 
 // CMS4 Front Pages
-    Route::get('/', [FrontController::class, 'home'])->name('home');
+    // Route::get('/', [FrontController::class, 'home'])->name('home');
+    Route::get('/home', function(){
+        return redirect(route('home'));
+    });
     Route::get('/privacy-policy/', [FrontController::class, 'privacy_policy'])->name('privacy-policy');
     Route::post('/contact-us', [FrontController::class, 'contact_us'])->name('contact-us');
 
