@@ -43,6 +43,8 @@ class PageDefaultRequest extends FormRequest
             'meta_title' => 'max:60',
             'meta_description' => 'max:160',
             'meta_keyword' => 'max:160',
+            'json' => '',
+            'styles' => ''
         ];
     }
 }
