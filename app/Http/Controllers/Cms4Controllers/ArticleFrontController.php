@@ -46,7 +46,7 @@ class ArticleFrontController extends Controller
 
     public function news_list(Request $request)
     {
-        $pageLimit = 5;
+        $pageLimit = 6;
 
         $type = $request->get('type', false);
         $criteria = $request->get('criteria', false);
