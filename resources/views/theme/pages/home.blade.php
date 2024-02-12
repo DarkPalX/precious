@@ -66,8 +66,10 @@
                         <div class="entry-image">
                             <a href="'. $article->get_url() .'" data-lightbox="image"><img class="image_fade" src="'. $imageUrl .'" alt="Standard Post with Image"></a>
                         </div>
-                        <div class="entry-title">
-                            <h3><a href="'. $article->get_url() .'">'. $article->name .'</a></h3>
+                        <div class="entry-title" style="max-height: 70px; overflow: hidden;">
+                            <h3 style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-overflow: ellipsis;">
+                                <a href="'. $article->get_url() .'" style="text-decoration: none;">'. $article->name .'</a>
+                            </h3>
                         </div>
                         <ul class="entry-meta clearfix">
                             <li><i class="icon-calendar3"></i> '. $article->date_posted() .'</li>

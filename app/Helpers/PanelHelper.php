@@ -9,14 +9,22 @@ class PanelHelper
 {
     public static function get_routes()
     {
-        $panelName = env('APP_PANEL', 'cerebro');
+        //$panelName = config('services.env_setting.panel');
+        $panels = ['/admin-panel', 'admin-panel', 'admin-panel/mailing-list'];
         $routes = [];
 
-        foreach (Route::getRoutes() as $key => $route)
+
+        //dd(Route::getRoutes());
+        foreach (Route::getRoutes() as $route)
         {
-            if (self::is_panel_routes($route, $panelName)) {
+            // if($route->getPrefix() == $panelName){
+            if (in_array($route->getPrefix(), $panels)){                
                 $routes[] = $route;
             }
+            // if (self::is_panel_routes($route, $panelName)) {
+            //     dd($panelName);
+            //     $routes[] = $route;
+            // }
         }
 
         return $routes;

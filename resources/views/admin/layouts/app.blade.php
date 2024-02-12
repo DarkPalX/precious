@@ -137,6 +137,8 @@
 
     <script>
         var app_url = "{{ env('APP_URL') }}";
+        var app__url_prefix = "/cms9_phcc/public"
+        //var app_url = "http://localhost:8000";
     </script>
     
     <script src="{{ asset('lib/jquery/jquery.min.js') }}"></script>
