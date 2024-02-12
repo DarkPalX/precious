@@ -26,25 +26,30 @@
                     </div>
                     
                     <ul class="quicklinks mb-3">
+                        <li @if($parentPage->id == $page->id) class="active" @endif>
+                            <a href="{{ $parentPage->get_url() }}"><div>{{ $parentPage->name }}</div></a>
+                        </li>
                         @foreach($parentPage->sub_pages as $subPage)
-                            <li @if($subPage->id == $page->id) class="current" @endif>
-                                <a href="{{ $subPage->get_url() }}">{{ $subPage->name }}</a>
-                                <ul>
-                                    @foreach ($subPage->sub_pages as $subSubPage)
-                                    <li @if ($subSubPage->id == $page->id) class="current" @endif>
-                                        <a href="{{ $subSubPage->get_url() }}">{{ $subSubPage->name }}</a>
-                                        @if ($subSubPage->has_sub_pages())
-                                        <ul>
-                                            @foreach ($subSubPage->sub_pages as $subSubSubPage)
-                                                <li @if ($subSubSubPage->id == $page->id) class="current" @endif>
-                                                    <a href="{{ $subSubSubPage->get_url() }}">{{ $subSubSubPage->name }}></a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                        @endif
-                                    </li>
-                                    @endforeach
-                                </ul>
+                            <li @if($subPage->id == $page->id) class="active" @endif>
+                                <a href="{{ $subPage->get_url() }}"><div>{{ $subPage->name }}</div></a>
+                                @if ($subPage->has_sub_pages())
+                                    <ul>
+                                        @foreach ($subPage->sub_pages as $subSubPage)
+                                        <li @if ($subSubPage->id == $page->id) class="active" @endif>
+                                            <a href="{{ $subSubPage->get_url() }}"><div>{{ $subSubPage->name }}</div></a>
+                                            @if ($subSubPage->has_sub_pages())
+                                            <ul>
+                                                @foreach ($subSubPage->sub_pages as $subSubSubPage)
+                                                    <li @if ($subSubSubPage->id == $page->id) class="active" @endif>
+                                                        <a href="{{ $subSubSubPage->get_url() }}"><div>{{ $subSubSubPage->name }}</div></a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            @endif
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             </li>
                         @endforeach
                     </ul>

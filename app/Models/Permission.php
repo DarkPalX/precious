@@ -77,7 +77,8 @@ class Permission extends Model
             'promos' => 'Promos',
             // 'delivery_rates' => 'Delivery Rate',
             'coupons' => 'Coupons',
-            'ecommerce' => 'E-Commerce'
+            'ecommerce' => 'E-Commerce',
+            'reports' => 'Reports'
         ];
     }
 
