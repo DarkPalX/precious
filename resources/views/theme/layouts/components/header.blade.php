@@ -92,7 +92,7 @@
 								</form>
 							</div>
 							<div class="card-footer py-4 center">
-								<p class="mb-0">Don't have an account? <a href="#"><u>Sign up</u></a></p>
+								<p class="mb-0">Don't have an account? <a href="{{ route('customer-front.customer-sign-up') }}"><u>Sign up</u></a></p>
 							</div>
 						</div>
 					</div>
