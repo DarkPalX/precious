@@ -8,7 +8,7 @@ return [
     */
 
     // Include to pre-defined routes from package or not. Middlewares
-    'use_package_routes' => false,
+    'use_package_routes' => true,
 
     // Middlewares which should be applied to all package routes.
     // For laravel 5.1 and before, remove 'web' from the array.

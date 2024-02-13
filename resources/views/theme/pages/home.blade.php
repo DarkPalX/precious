@@ -74,8 +74,8 @@
                         <ul class="entry-meta clearfix">
                             <li><i class="icon-calendar3"></i> '. $article->date_posted() .'</li>
                         </ul>
-                        <div class="entry-content">
-                            <p>'. $article->teaser .'</p>
+                        <div class="entry-content" style="max-height: 140px; overflow: hidden;">
+                            <p style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-overflow: ellipsis;">'. $article->teaser .'</p>
                         </div>
                     </div>
                 </div>';
