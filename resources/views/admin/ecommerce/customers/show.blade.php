@@ -34,38 +34,46 @@
                     </li>
                 </ul>
                 <div class="tab-content rounded bd bd-gray-300 bd-t-0 pd-20" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="media mg-b-30 mg-t-20">
-                            @if(Auth::user()->avatar == '')
-                                <img src="{{ asset('images/user.png') }}" id="userLogo" class="wd-100 rounded-circle mg-r-20" alt="">
-                            @else
-                                <img src="{{ $user->avatar }}" id="userLogo" class="wd-100 rounded-circle mg-r-20" alt="">
-                            @endif
-                            <div class="media-body pd-t-30">
-                                <h5 class="mg-b-0 tx-inverse tx-bold">{{ $user->fullname }}</h5>
-                                <p>{{$user->email}}</p>
+                    <form id="customerForm" action="{{ route('customer.update') }}" method="post">
+                    @csrf
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="media mg-b-30 mg-t-20">
+                                @if(Auth::user()->avatar == '')
+                                    <img src="{{ asset('images/user.png') }}" id="userLogo" class="wd-100 rounded-circle mg-r-20" alt="">
+                                @else
+                                    <img src="{{ $user->avatar }}" id="userLogo" class="wd-100 rounded-circle mg-r-20" alt="">
+                                @endif
+                                <div class="media-body pd-t-30">
+                                    <h5 class="mg-b-0 tx-inverse tx-bold">{{ $user->fullname }}</h5>
+                                    <p>{{$user->email}}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="d-block">Mobile #</label>
-                            <input type="text" class="form-control" readonly value="{{$user->mobile}}">
-                        </div>
+                            <div class="form-group">
+                                <label class="d-block">Mobile #</label>
+                                <input type="text" class="form-control" readonly value="{{$user->mobile}}">
+                            </div>
 
-                        <div class="form-group">
-                            <label class="d-block">Telephone #</label>
-                            <input type="text" class="form-control" readonly value="{{$user->phone}}">
-                        </div>
+                            <div class="form-group">
+                                <label class="d-block">Telephone #</label>
+                                <input type="text" class="form-control" readonly value="{{$user->phone}}">
+                            </div>
 
-                        <div class="form-group">
-                            <label class="d-block">Address</label>
-                            <input type="text" class="form-control" readonly value="{{$user->address}}">
-                        </div>
+                            <div class="form-group">
+                                <label class="d-block">Address</label>
+                                <input type="text" class="form-control" readonly value="{{$user->address}}">
+                            </div>
 
-                        <div class="form-group">
-                            <label class="d-block">Company</label>
-                            <input type="text" class="form-control" readonly value="{{$user->company}}">
+                            <div class="form-group">
+                                <label class="d-block">Ecredits</label>
+                                <input type="number" name="ecredits" class="form-control" value="{{$user->ecredits}}" onclick="select()">
+                            </div>
+
+                            {{-- hidden inputs --}}
+                            <input name="user_id" class="form-control" value="{{$user->id}}" hidden>
+                            
+                            <button class="btn btn-primary btn-sm btn-uppercase" type="submit">Save</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

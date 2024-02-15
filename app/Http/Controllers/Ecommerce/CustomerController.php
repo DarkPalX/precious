@@ -77,4 +77,14 @@ class CustomerController extends Controller
 
         return back()->with('success', __('standard.customers.status_success', ['status' => 'activated']));
     }
+
+    public function update(Request $request)
+    {
+        User::where('id', $request->user_id)
+        ->update([
+            'ecredits' => $request->ecredits
+        ]);
+        
+        return back()->with('success', 'E-Credit successfully updated');
+    }
 }

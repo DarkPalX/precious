@@ -32,6 +32,7 @@ class CreateUsersTable extends Migration
             $table->string('address_municipality', 150)->nullable();
             $table->string('address_province')->nullable();
             $table->string('address_zip', 10)->nullable();
+            $table->double('ecredits')->default(0);
             $table->enum('provider', ['none', 'facebook', 'google'])->default('none');
             $table->string('provider_id')->nullable();
             $table->rememberToken();

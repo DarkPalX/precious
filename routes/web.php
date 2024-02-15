@@ -276,6 +276,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::resource('/admin/customers', CustomerController::class);
                 Route::post('/customer/deactivate', [CustomerController::class, 'deactivate'])->name('customer.deactivate');
                 Route::post('/customer/activate', [CustomerController::class, 'activate'])->name('customer.activate');
+                Route::post('/customer/update', [CustomerController::class, 'update'])->name('customer.update');
             //
 
             // Product Categories
