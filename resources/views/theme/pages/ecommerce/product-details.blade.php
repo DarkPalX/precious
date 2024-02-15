@@ -181,7 +181,7 @@
                         <ul class="tab-nav clearfix">
                             <li><a href="#tabs-1"><i class="icon-align-justify2"></i><span class="d-none d-md-inline-block"> Description</span></a></li>
                             <li><a href="#tabs-2"><i class="icon-info-sign"></i><span class="d-none d-md-inline-block"> Preview</span></a></li>
-                            <li><a href="#tabs-3"><i class="icon-star3"></i><span class="d-none d-md-inline-block"> Reviews (2)</span></a></li>
+                            <li><a href="#tabs-3"><i class="icon-star3"></i><span class="d-none d-md-inline-block"> Reviews ({{ $product_reviews->count() }})</span></a></li>
                         </ul>
 
                         <div class="tab-container border-bottom">
@@ -213,34 +213,39 @@
 
                                     <ol class="commentlist clearfix">
 
-                                        <li class="comment even thread-even depth-1" id="li-comment-1">
-                                            <div id="comment-1" class="comment-wrap clearfix">
+                                        @forelse($product_reviews as $product_review)
+                                            <li class="comment even thread-even depth-1" id="li-comment-1">
+                                                <div id="comment-1" class="comment-wrap clearfix">
 
-                                                <div class="comment-meta">
-                                                    <div class="comment-author vcard">
-                                                        <span class="comment-avatar clearfix">
-                                                        <img alt='Image' src='https://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=60' height='60' width='60' /></span>
+                                                    <div class="comment-meta">
+                                                        <div class="comment-author vcard">
+                                                            <span class="comment-avatar clearfix">
+                                                            <img alt='Image' src='https://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=60' height='60' width='60' /></span>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="comment-content clearfix">
-                                                    <div class="comment-author">John Doe<span><a href="#" title="Permalink to this comment">April 24, 2021 at 10:46AM</a></span></div>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo perferendis aliquid tenetur. Aliquid, tempora, sit aliquam officiis nihil autem eum at repellendus facilis quaerat consequatur commodi laborum saepe non nemo nam maxime quis error tempore possimus est quasi reprehenderit fuga!</p>
-                                                    <div class="review-comment-ratings">
-                                                        <i class="icon-star3"></i>
-                                                        <i class="icon-star3"></i>
-                                                        <i class="icon-star3"></i>
-                                                        <i class="icon-star3"></i>
-                                                        <i class="icon-star-half-full"></i>
+                                                    <div class="comment-content clearfix">
+                                                        <div class="comment-author">{{ $product_review->name }}<span><a href="#" title="Permalink to this comment">{{ Setting::date_for_listing($product_review->updated_at) }}</a></span></div>
+                                                        
+                                                        <p>{{ $product_review->comment }}</p>
+                                                        
+                                                        <div class="review-comment-ratings">
+
+                                                            @for($star = 1; $star <= 5; $star++)
+                                                                <i class="icon-star{{ $star <= $product_review->rating ? '3' : '-empty' }}"></i>
+                                                            @endfor
+                                                        </div>
                                                     </div>
+
+                                                    <div class="clear"></div>
+
                                                 </div>
+                                            </li>
+                                        @empty
+                                            <div class="col-12 text-center mt-4">There are no ratings for this product yet.</div>
+                                        @endforelse
 
-                                                <div class="clear"></div>
-
-                                            </div>
-                                        </li>
-
-                                        <li class="comment even thread-even depth-1" id="li-comment-2">
+                                        {{-- <li class="comment even thread-even depth-1" id="li-comment-2">
                                             <div id="comment-2" class="comment-wrap clearfix">
 
                                                 <div class="comment-meta">
@@ -265,13 +270,13 @@
                                                 <div class="clear"></div>
 
                                             </div>
-                                        </li>
+                                        </li> --}}
 
                                     </ol>
 
                                     <!-- Modal Reviews
                                     ============================================= -->
-                                    <a href="#" class="btn bg-color text-white mb-3 float-end" data-bs-toggle="modal" data-bs-target="#reviewFormModal">Add a Review</a>
+                                    <a href="#" class="btn bg-color text-white mb-3 float-end" data-bs-toggle="modal" data-bs-target="#reviewFormModal" {{ Auth::user() ? '' : 'hidden' }}>Add a Review</a>
 
                                     <div class="modal fade" id="reviewFormModal" tabindex="-1" role="dialog" aria-labelledby="reviewFormModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -281,29 +286,29 @@
                                                     <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form class="row mb-0" id="template-reviewform" name="template-reviewform" action="#" method="post">
-
+                                                    <form class="row mb-0" id="reviewForm" action="{{ route('product_review.store') }}" method="post">
+                                                    @csrf
                                                         <div class="col-6 mb-3">
-                                                            <label for="template-reviewform-name">Name <small>*</small></label>
+                                                            <label for="name">Name <small>*</small></label>
                                                             <div class="input-group">
                                                                 <div class="input-group-text"><i class="icon-user"></i></div>
-                                                                <input type="text" id="template-reviewform-name" name="template-reviewform-name" value="" class="form-control required" />
+                                                                <input type="text" id="name" name="name" value="{{ Auth::user()->firstname .' '. Auth::user()->lastname  }}" class="form-control required" readonly/>
                                                             </div>
                                                         </div>
 
                                                         <div class="col-6 mb-3">
-                                                            <label for="template-reviewform-email">Email <small>*</small></label>
+                                                            <label for="email">Email <small>*</small></label>
                                                             <div class="input-group">
                                                                 <div class="input-group-text">@</div>
-                                                                <input type="email" id="template-reviewform-email" name="template-reviewform-email" value="" class="required email form-control" />
+                                                                <input type="email" id="email" name="email" value="{{ Auth::user()->email }}" class="required email form-control" readonly/>
                                                             </div>
                                                         </div>
 
                                                         <div class="w-100"></div>
 
                                                         <div class="col-12 mb-3">
-                                                            <label for="template-reviewform-rating">Rating</label>
-                                                            <select id="template-reviewform-rating" name="template-reviewform-rating" class="form-select">
+                                                            <label for="rating">Rating</label>
+                                                            <select id="rating" name="rating" class="form-select" required>
                                                                 <option value="">-- Select One --</option>
                                                                 <option value="1">1</option>
                                                                 <option value="2">2</option>
@@ -316,12 +321,18 @@
                                                         <div class="w-100"></div>
 
                                                         <div class="col-12 mb-3">
-                                                            <label for="template-reviewform-comment">Comment <small>*</small></label>
-                                                            <textarea class="required form-control" id="template-reviewform-comment" name="template-reviewform-comment" rows="6" cols="30"></textarea>
+                                                            <label for="comment">Comment <small>*</small></label>
+                                                            <textarea class="required form-control" id="comment" name="comment" rows="6" cols="30" required></textarea>
                                                         </div>
 
+
+                                                        {{-- hidden inputs --}}
+                                                        <input type="text" name="product_id" value="{{ $product->id }}" hidden readonly/>
+                                                        <input type="text" name="user_id" value="{{ Auth::user()->id }}" hidden readonly/>
+
+
                                                         <div class="col-12">
-                                                            <button class="button button-3d m-0" type="submit" id="template-reviewform-submit" name="template-reviewform-submit" value="submit">Submit Review</button>
+                                                            <button class="button button-3d m-0" type="submit" id="submit" name="submit" value="submit">Submit Review</button>
                                                         </div>
 
                                                     </form>

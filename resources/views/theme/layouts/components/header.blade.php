@@ -75,7 +75,7 @@
 									<div class="col-12 mt-4">
 										<!-- <input type="password" id="login-form-password" name="login-form-password" value="" class="form-control not-dark" placeholder="Password" /> -->
 										<div class="input-group show_hide_password" id="show_hide_password">
-                                            <input class="form-control" type="password" name="password">
+                                            <input class="form-control" type="password" name="password" placeholder="Password">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><a href=""><i class="icon icon-eye-slash" aria-hidden="true"></i></a></span>
                                             </div>
@@ -92,7 +92,78 @@
 								</form>
 							</div>
 							<div class="card-footer py-4 center">
-								<p class="mb-0">Don't have an account? <a href="{{ route('customer-front.customer-sign-up') }}"><u>Sign up</u></a></p>
+								{{-- <p class="mb-0">Don't have an account? <a href="{{ route('customer-front.customer-sign-up') }}"><u>Sign up</u></a></p> --}}
+								<p class="mb-0">Don't have an account? <a href="#modal-signup" data-lightbox="inline"><u>Sign up</u></a></p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Signup Modal -->
+					<div class="modal1 mfp-hide" id="modal-signup">
+						<div class="card mx-auto" style="max-width: 540px;">
+							<div class="card-header py-3 bg-transparent center">
+								<h3 class="mb-0 fw-normal">Sign up</h3>
+							</div>
+							<div class="card-body mx-auto py-5" style="max-width: 70%;">
+
+								<form id="register-form" name="register-form" class="row mb-0" action="{{ route('customer-front.customer-sign-up') }}" method="post">
+									@csrf
+
+									<div class="col-12">
+										<input type="text" id="firstname" name="firstname" value="{{ old('firstname') }}" class="form-control not-dark @error('firstname') is-invalid @enderror" placeholder="Firstname" />
+										@error('firstname')
+											<span class="text-danger">{{ $message }}</span>
+										@enderror
+									</div>
+									
+									<div class="col-12 mt-3">
+										<input type="text" id="lastname" name="lastname" value="{{ old('lastname') }}" class="form-control not-dark @error('lastname') is-invalid @enderror" placeholder="Lastname" />
+										@error('lastname')
+											<span class="text-danger">{{ $message }}</span>
+										@enderror
+									</div>
+									
+									<div class="col-12 mt-3">
+										<input type="text" id="email" name="email" value="{{ old('email') }}" class="form-control not-dark @error('email') is-invalid @enderror" placeholder="Email Address" />
+										@error('email')
+											<span class="text-danger">{{ $message }}</span>
+										@enderror
+									</div>
+									
+									<div class="col-12 mt-3">
+										<input type="text" id="mobile" name="mobile" value="{{ old('mobile') }}" class="form-control not-dark @error('mobile') is-invalid @enderror" placeholder="Mobile Number" />
+										@error('mobile')
+											<span class="text-danger">{{ $message }}</span>
+										@enderror
+									</div>
+									
+									{{-- <div class="col-12 mt-3">
+										<input type="text" id="company" name="company" value="{{ old('mobile') }}" class="form-control not-dark @error('company') is-invalid @enderror" placeholder="Company" />
+										@error('company')
+											<span class="text-danger">{{ $message }}</span>
+										@enderror
+									</div>
+									
+									<div class="col-12 mt-3">
+										<input type="password" id="password" name="password" value="{{ old('password') }}" class="form-control not-dark @error('password') is-invalid @enderror" placeholder="Password" />
+										@error('password')
+											<span class="text-danger">{{ $message }}</span>
+										@enderror
+									</div>
+									
+									<div class="col-12 mt-3">
+										<input type="password" id="password_confirmation" name="password_confirmation" value="{{ old('password_confirmation') }}" class="form-control not-dark @error('password_confirmation') is-invalid @enderror" placeholder="Re-enter Password" />
+										@error('password_confirmation')
+											<span class="text-danger">{{ $message }}</span>
+										@enderror
+									</div> --}}
+
+									<div class="col-12 mt-3">
+										<button href="dashboard.htm" class="button w-100 m-0 center" id="" name="" value="login">Sign up</button>
+										
+										<a href="#modal-register" data-lightbox="inline" class="button w-100 m-0 center mt-3 button-dark">Back</a>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -118,3 +189,5 @@
 	</div>
 	<div class="header-wrap-clone"></div>
 </header>
+
+@include('theme.layouts.components.alert')

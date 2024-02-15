@@ -12,7 +12,7 @@ use App\Mail\ProductQuotationRequestMail;
 use App\Helpers\{Setting};
 
 use App\Models\Ecommerce\{
-    ProductCategory, Product
+    ProductCategory, Product, ProductReview
 };
 
 use App\Models\{Page, Brand, BrandProductCategory};
@@ -107,13 +107,14 @@ class ProductFrontController extends Controller
     {
         $product = Product::where('slug', $slug)->first();
         $categories = ProductCategory::where('parent_id', 0)->where('status', 'PUBLISHED')->orderBy('name', 'asc')->get();
+        $product_reviews = ProductReview::where('product_id', $product->id)->get();
 
         $page = new Page();
         $page->name = $product->name;
 
         $relatedProducts = Product::where('category_id',$product->category_id)->where('id','<>',$product->id)->where('status','PUBLISHED')->skip(0)->take(4)->get();
 
-        return view($this->folder.'.product-details',compact('product','page', 'relatedProducts', 'categories'));
+        return view($this->folder.'.product-details',compact('product','page', 'relatedProducts', 'categories', 'product_reviews'));
     }
 
 

@@ -18,7 +18,7 @@ use App\Http\Controllers\Settings\{
 
 // Ecommerce Controller
 use App\Http\Controllers\Ecommerce\{
-    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController
+    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController
 };
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +97,8 @@ use App\Http\Controllers\Ecommerce\{
     Route::get('books/{category?}', [ProductFrontController::class, 'product_list'])->name('product.front.list');
     Route::get('/book-details/{slug}', [ProductFrontController::class, 'product_details'])->name('product.details');
 
+
+
     // ECOMMERCE CUSTOMER AUTH ROUTES
         Route::group(['middleware' => ['authenticated']], function () {
             // MEMBER
@@ -126,6 +128,10 @@ use App\Http\Controllers\Ecommerce\{
 
             Route::get('/get-lbc-city-list', [CartController::class, 'lbc_cities'])->name('checkout.get-lbc-city-list');
             Route::get('/get-lbc-brgy-list', [CartController::class, 'lbc_barangays'])->name('checkout.get-lbc-brgy-list');
+
+            
+            //PRODUCT REVIEW
+            Route::resource('/product_review', ProductReviewController::class)->except(['destroy']);
         });
     //
 

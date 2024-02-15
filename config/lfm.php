@@ -45,11 +45,12 @@ return [
     // You should create routes to serve images if it is not set to public.
     'base_directory' => 'public',
 
-    'images_folder_name' => 'file-manager',
-    'files_folder_name'  => 'file-manager',
+    'images_folder_name' => 'file-manager/images',
+    'files_folder_name'  => 'file-manager/files',
 
-    'shared_folder_name' => 'file-manager',
-    'thumb_folder_name'  => 'file-manager',
+    'shared_folder_name' => 'shared',
+    'thumb_folder_name'  => 'thumbnails',
+
 
     /*
     |--------------------------------------------------------------------------
@@ -96,7 +97,7 @@ return [
     ],
 
     // If true, image thumbnails would be created during upload
-    'should_create_thumbnails' => true,
+    'should_create_thumbnails' => false,
 
     // Create thumbnails automatically only for listed types.
     'raster_mimetypes' => [
