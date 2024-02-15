@@ -98,7 +98,7 @@
                                     <th scope="col" width="15%">Name</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Address</th>
-                                    <th scope="col">Company</th>
+                                    <th scope="col">E-Credits</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Last Date Modified</th>
                                     <th scope="col">Options</th>
@@ -115,7 +115,7 @@
                                         </th>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->address }}</td>
-                                        <td>{{ $user->company }}</td>
+                                        <td>{{ $user->ecredits }}</td>
                                         <td>
                                             @if($user->is_active == 1)
                                                 <span class="badge badge-success">Active</span>
