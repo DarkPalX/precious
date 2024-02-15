@@ -278,71 +278,73 @@
                                     ============================================= -->
                                     <a href="#" class="btn bg-color text-white mb-3 float-end" data-bs-toggle="modal" data-bs-target="#reviewFormModal" {{ Auth::user() ? '' : 'hidden' }}>Add a Review</a>
 
-                                    <div class="modal fade" id="reviewFormModal" tabindex="-1" role="dialog" aria-labelledby="reviewFormModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title" id="reviewFormModalLabel">Submit a Review</h4>
-                                                    <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form class="row mb-0" id="reviewForm" action="{{ route('product_review.store') }}" method="post">
-                                                    @csrf
-                                                        <div class="col-6 mb-3">
-                                                            <label for="name">Name <small>*</small></label>
-                                                            <div class="input-group">
-                                                                <div class="input-group-text"><i class="icon-user"></i></div>
-                                                                <input type="text" id="name" name="name" value="{{ Auth::user()->firstname .' '. Auth::user()->lastname  }}" class="form-control required" readonly/>
+                                    @if(auth()->check())
+                                        <div class="modal fade" id="reviewFormModal" tabindex="-1" role="dialog" aria-labelledby="reviewFormModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="reviewFormModalLabel">Submit a Review</h4>
+                                                        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form class="row mb-0" id="reviewForm" action="{{ route('product_review.store') }}" method="post">
+                                                        @csrf
+                                                            <div class="col-6 mb-3">
+                                                                <label for="name">Name <small>*</small></label>
+                                                                <div class="input-group">
+                                                                    <div class="input-group-text"><i class="icon-user"></i></div>
+                                                                    <input type="text" id="name" name="name" value="{{ Auth::user()->firstname .' '. Auth::user()->lastname  }}" class="form-control required" readonly/>
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="col-6 mb-3">
-                                                            <label for="email">Email <small>*</small></label>
-                                                            <div class="input-group">
-                                                                <div class="input-group-text">@</div>
-                                                                <input type="email" id="email" name="email" value="{{ Auth::user()->email }}" class="required email form-control" readonly/>
+                                                            <div class="col-6 mb-3">
+                                                                <label for="email">Email <small>*</small></label>
+                                                                <div class="input-group">
+                                                                    <div class="input-group-text">@</div>
+                                                                    <input type="email" id="email" name="email" value="{{ Auth::user()->email }}" class="required email form-control" readonly/>
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="w-100"></div>
+                                                            <div class="w-100"></div>
 
-                                                        <div class="col-12 mb-3">
-                                                            <label for="rating">Rating</label>
-                                                            <select id="rating" name="rating" class="form-select" required>
-                                                                <option value="">-- Select One --</option>
-                                                                <option value="1">1</option>
-                                                                <option value="2">2</option>
-                                                                <option value="3">3</option>
-                                                                <option value="4">4</option>
-                                                                <option value="5">5</option>
-                                                            </select>
-                                                        </div>
+                                                            <div class="col-12 mb-3">
+                                                                <label for="rating">Rating</label>
+                                                                <select id="rating" name="rating" class="form-select" required>
+                                                                    <option value="">-- Select One --</option>
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                </select>
+                                                            </div>
 
-                                                        <div class="w-100"></div>
+                                                            <div class="w-100"></div>
 
-                                                        <div class="col-12 mb-3">
-                                                            <label for="comment">Comment <small>*</small></label>
-                                                            <textarea class="required form-control" id="comment" name="comment" rows="6" cols="30" required></textarea>
-                                                        </div>
-
-
-                                                        {{-- hidden inputs --}}
-                                                        <input type="text" name="product_id" value="{{ $product->id }}" hidden readonly/>
-                                                        <input type="text" name="user_id" value="{{ Auth::user()->id }}" hidden readonly/>
+                                                            <div class="col-12 mb-3">
+                                                                <label for="comment">Comment <small>*</small></label>
+                                                                <textarea class="required form-control" id="comment" name="comment" rows="6" cols="30" required></textarea>
+                                                            </div>
 
 
-                                                        <div class="col-12">
-                                                            <button class="button button-3d m-0" type="submit" id="submit" name="submit" value="submit">Submit Review</button>
-                                                        </div>
+                                                            {{-- hidden inputs --}}
+                                                            <input type="text" name="product_id" value="{{ $product->id }}" hidden readonly/>
+                                                            <input type="text" name="user_id" value="{{ Auth::user()->id }}" hidden readonly/>
 
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                </div>
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal-dialog -->
-                                    </div><!-- /.modal -->
+
+                                                            <div class="col-12">
+                                                                <button class="button button-3d m-0" type="submit" id="submit" name="submit" value="submit">Submit Review</button>
+                                                            </div>
+
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+                                    @endif
                                     <!-- Modal Reviews End -->
 
                                 </div>
