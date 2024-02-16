@@ -26,22 +26,22 @@
                     </div>
                     
                     <ul class="quicklinks mb-3">
-                        <li @if($parentPage->id == $page->id) style="background-color: #287f31;" @endif>
+                        <li @if($parentPage->id == $page->id) @endif>{{-- style="background-color: #287f31;" --}}
                             <a @if($parentPage->id == $page->id) class="text-warning" @endif href="{{ $parentPage->get_url() }}"><div>{{ $parentPage->name }}</div></a>
                         </li>
                         @foreach($parentPage->sub_pages as $subPage)
                             <li @if($subPage->id == $page->id || Str::contains(url()->current(), $subPage->get_url())) class="active" @endif>
-                                <a @if($subPage->id == $page->id || Str::contains(url()->current(), $subPage->get_url())) class="text-warning" style="background-color: #287f31; color: #ffc107!important;" @endif href="{{ $subPage->get_url() }}"><div>{{ $subPage->name }}</div></a>
+                                <a @if($subPage->id == $page->id) class="text-warning" @endif href="{{ $subPage->get_url() }}"><div>{{ $subPage->name }}</div></a>{{-- style="color: #ffc107!important;" --}}
                                 @if ($subPage->has_sub_pages())
                                     <ul>
                                         @foreach ($subPage->sub_pages as $subSubPage)
                                         <li @if ($subSubPage->id == $page->id || Str::contains(url()->current(), $subSubPage->get_url())) class="active" @endif>
-                                            <a @if($subSubPage->id == $page->id || Str::contains(url()->current(), $subSubPage->get_url())) class="text-warning" style="background-color: #03500b; color: #ffc107!important;" @endif href="{{ $subSubPage->get_url() }}"><div>{{ $subSubPage->name }}</div></a>
+                                            <a @if($subSubPage->id == $page->id || Str::contains(url()->current(), $subSubPage->get_url())) class="text-warning" @endif href="{{ $subSubPage->get_url() }}"><div>{{ $subSubPage->name }}</div></a>
                                             @if ($subSubPage->has_sub_pages())
                                             <ul>
                                                 @foreach ($subSubPage->sub_pages as $subSubSubPage)
                                                     <li @if ($subSubSubPage->id == $page->id || Str::contains(url()->current(), $subSubSubPage->get_url())) class="active" @endif>
-                                                        <a @if($subSubSubPage->id == $page->id || Str::contains(url()->current(), $subSubSubPage->get_url())) class="text-warning" style="background-color: #03500b; color: #ffc107!important;" @endif href="{{ $subSubSubPage->get_url() }}"><div>{{ $subSubSubPage->name }}</div></a>
+                                                        <a @if($subSubSubPage->id == $page->id || Str::contains(url()->current(), $subSubSubPage->get_url())) class="text-warning" @endif href="{{ $subSubSubPage->get_url() }}"><div>{{ $subSubSubPage->name }}</div></a>
                                                     </li>
                                                 @endforeach
                                             </ul>

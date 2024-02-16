@@ -19,6 +19,7 @@ class CreateSubscribersTable extends Migration
             $table->timestamp('subscription_expiry_date');
             $table->string('type');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

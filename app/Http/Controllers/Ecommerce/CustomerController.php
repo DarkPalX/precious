@@ -46,8 +46,7 @@ class CustomerController extends Controller
 
     public function show($id)
     {
-        $user = User::find($id);
-
+        $user = User::withTrashed()->find($id);
         return view('admin.ecommerce.customers.show', compact('user'));
     }
 

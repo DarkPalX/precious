@@ -98,17 +98,18 @@
 					
 					<div class="col-md-4 form-group">
 						<label>Telephone Number:</label>
-						<input type="text" name="phone" id="" class="form-control required" value="{{$member->phone}}" placeholder="">
+						<input type="number" name="phone" id="" class="form-control required" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$member->phone}}" placeholder="">
 					</div>
 					
 					<div class="col-md-4 form-group">
 						<label>Mobile Number:</label>
-						<input type="text" name="mobile" id="" class="form-control required" value="{{$member->mobile}}" placeholder="">
+						<input type="number" name="mobile" class="form-control required" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$member->mobile}}">
+						
 					</div>
 					
 					<div class="col-md-4 form-group">
 						<label>Fax Number:</label>
-						<input type="text" name="" id="" class="form-control required" value="" placeholder="">
+						<input type="number" name="" id="" class="form-control required" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="" placeholder="">
 					</div>
 					
 				</div>

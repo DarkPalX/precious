@@ -72,18 +72,26 @@ class FrontController extends Controller
         $pageLimit = 10;
 
         $searchtxt = $request->searchtxt; 
-        $pages = Page::where('status','PUBLISHED')
-            ->select('name','slug')
-            ->whereNotIn('slug',['footer','home'])
-            ->where('name','like','%'.$searchtxt.'%')
-            ->orWhere('contents','like','%'.$searchtxt.'%')
-            ->orderBy('name','asc')->get();
+        session(['searchtxt' => $searchtxt]);
 
-        $news = Article::where('status','PUBLISHED')
-            ->select('name','slug')
-            ->where('name','like','%'.$searchtxt.'%')
-            ->orWhere('contents','like','%'.$searchtxt.'%')
-            ->orderBy('name','asc')->get();
+        $pages = Page::where('status', 'PUBLISHED')
+            ->whereNotIn('slug', ['footer', 'home'])
+            ->where(function ($query) use ($searchtxt) {
+                $query->where('name', 'like', '%' . $searchtxt . '%')
+                    ->orWhere('contents', 'like', '%' . $searchtxt . '%');
+            })
+            ->select('name', 'slug')
+            ->orderBy('name', 'asc')
+            ->get();
+
+        $news = Article::where('status', 'PUBLISHED')
+            ->where(function ($query) use ($searchtxt) {
+                $query->where('name', 'like', '%' . $searchtxt . '%')
+                    ->orWhere('contents', 'like', '%' . $searchtxt . '%');
+            })
+            ->select('name', 'slug')
+            ->orderBy('name', 'asc')
+            ->get();
 
         $totalItems = $pages->count()+$news->count();
 

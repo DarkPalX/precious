@@ -46,7 +46,7 @@
 							</tr>
 							<tr>
 								<td><strong>Contact Number</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><input type="text" class="form-control" name="customer_contact_number" id="customer_contact_number" value="{{$customer->mobile}}"></td>
+								<td class="p-2"><input type="number" class="form-control" name="customer_contact_number" id="customer_contact_number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->mobile}}"></td>
 							</tr>
 							<tr>
 								<td><strong>Barangay</strong> <span class="text-danger">*</span></td>
@@ -66,7 +66,7 @@
 							</tr>
 							<tr>
 								<td><strong>Zip Code</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><input type="text" name="customer_delivery_zip" id="customer_delivery_zip" class="form-control" value="{{$customer->address_zip}}"></td>
+								<td class="p-2"><input type="number" name="customer_delivery_zip" id="customer_delivery_zip" class="form-control" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->address_zip}}"></td>
 							</tr>
 							<tr>
 								<td><strong>Notes</td>

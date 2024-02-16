@@ -131,7 +131,7 @@
 									</div>
 									
 									<div class="col-12 mt-3">
-										<input type="text" id="mobile" name="mobile" value="{{ old('mobile') }}" class="form-control not-dark @error('mobile') is-invalid @enderror" placeholder="Mobile Number" />
+										<input type="number" id="mobile" name="mobile" min="0" value="{{ old('mobile') }}" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" class="form-control not-dark @error('mobile') is-invalid @enderror" placeholder="Mobile Number" />
 										@error('mobile')
 											<span class="text-danger">{{ $message }}</span>
 										@enderror
@@ -180,8 +180,9 @@
 					@include('theme.layouts.components.menu')
 				</nav><!-- #primary-menu end -->
 
-				<form class="top-search-form" action="search.html" method="get">
-					<input type="text" name="q" class="form-control" value="" placeholder="Type &amp; Hit Enter.." autocomplete="off">
+				<form method="GET" action="{{route('search.result')}}" class="top-search-form">
+					<input type="text" name="searchtxt" class="form-control" value="" placeholder="Type &amp; Hit Enter.." autocomplete="off" aria-describedby="button-addon2">
+					<button class="btn btn-outline-primary btn-primary" type="submit" id="button-addon2" hidden><i class="icon-search text-white"></i></button>
 				</form>
 
 			</div>

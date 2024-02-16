@@ -65,7 +65,8 @@
 
                             <div class="form-group">
                                 <label class="d-block">Ecredits</label>
-                                <input type="number" name="ecredits" class="form-control" value="{{$user->ecredits}}" onclick="select()">
+                                <input type="number" min="0" name="ecredits" class="form-control" value="{{$user->ecredits}}" oninput="this.value = Math.max(0, this.value);" onclick="select()">
+
                             </div>
 
                             {{-- hidden inputs --}}

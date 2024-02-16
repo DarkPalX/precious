@@ -75,6 +75,33 @@
     }
 </script>
 
+<script>
+    // Select all elements with the class "no-paste"
+    var noPasteElements = document.querySelectorAll('.no-paste');
+
+    // Loop through each element and attach event listener
+    noPasteElements.forEach(function(element) {
+        element.addEventListener('paste', function(event) {
+            event.preventDefault();
+        });
+    });
+
+    // Select all elements with the class "numbers-only"
+    var numbersOnlyElements = document.querySelectorAll('.numbers-only');
+
+    // Loop through each element and attach event listener
+    numbersOnlyElements.forEach(function(element) {
+        element.addEventListener('paste', function(event) {
+            event.preventDefault();
+        });
+
+        element.addEventListener('input', function(event) {
+            this.value = this.value.replace(/\D/g, '');
+        });
+    });
+</script>
+
+
 
 
 
