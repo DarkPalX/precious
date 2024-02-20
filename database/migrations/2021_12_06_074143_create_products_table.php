@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('subtitle')->nullable();
             $table->text('slug');
+            $table->string('file_url');
             $table->text('short_description')->nullable();
             $table->text('description')->nullable();
             $table->decimal('price',16,4)->nullable();
@@ -32,6 +33,8 @@ class CreateProductsTable extends Migration
             $table->string('status',100);
             $table->string('uom',30)->default('PC');
             $table->boolean('is_featured')->default(false);
+            $table->boolean('is_best_seller')->default(false);
+            $table->boolean('is_free')->default(false);
             $table->date('publication_date')->nullable();
             $table->integer('created_by');
             $table->string('meta_title', 150)->nullable();

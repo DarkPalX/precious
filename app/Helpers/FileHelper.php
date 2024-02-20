@@ -45,6 +45,36 @@ class FileHelper
             'url' => $url
         ];
     }
+    
+    public function move_to_product_file_folder($file, $folderPath)
+    {
+        $fileName = $file->getClientOriginalName();
+
+        // Get the full path where the file should be saved
+        $fullPath = public_path($folderPath . '\\' . $fileName);
+
+        // Check if the file already exists in the specified folder
+        if (file_exists($fullPath)) {
+            // Generate a unique filename
+            $fileName = $this->make_unique_file_name($folderPath, $fileName);
+
+            // Update the full path with the new filename
+            $fullPath = public_path($folderPath . '\\' . $fileName);
+        }
+
+        // Move the file to the specified path
+        $file->move(public_path($folderPath), $fileName);
+
+        // Generate the URL for the file in the public folder
+        $url = $folderPath . '/' . $fileName;
+        // dd($url);
+
+        return [
+            'path' => $folderPath . '/' . $fileName,
+            'name' => $fileName,
+            'url' => $url,
+        ];
+    }
 
     public function move_to_folder_random_name($folder, $file)
     {

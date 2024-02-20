@@ -148,6 +148,28 @@
                             </ul>
                         </div>
                     </div>
+                    
+                    <div class="form-group">
+                        <label class="d-block">E-book File (.epub)</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input @error('file_url') is-invalid @enderror" name="file_url" id="file_url" accept=".epub">
+                            <label class="custom-file-label" for="file_url" id="file_name">Choose file</label>
+                        </div>
+                        <p class="tx-10">
+                            Required file type: .epub
+                        </p>
+                        <div id="epub_div" style="display:none;">
+                            <div class="d-flex mb-3">
+                                <div class="card d-inline p-3 position-relative text-center">
+                                    <a href="javascript:void(0)" class="fa fa-times-circle text-secondary position-absolute" style="top: 7%; right: 2%;" onclick="removeEPUB();"></a>
+                                    <a id="file_temp" href="#" target="_blank">
+                                        <i class="fa fa-file fa-2x mr-2 text-danger"></i>
+                                        <span id="epub_file_name" class="text-dark"></span>
+                                    </a>   
+                                </div>                         
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label class="d-block">Tags</label>
@@ -197,6 +219,26 @@
                             <label class="custom-control-label" for="customSwitch2">Featured</label>
                         </div>
                         @error('is_featured')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="d-block">Best Seller</label>
+                        <div class="custom-control custom-switch @error('is_best_seller') is-invalid @enderror">
+                            <input type="checkbox" class="custom-control-input" name="is_best_seller" {{ (old("is_best_seller") ? "checked":"") }} id="customSwitch3">
+                            <label class="custom-control-label" for="customSwitch3">Best Seller</label>
+                        </div>
+                        @error('is_best_seller')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group" id="free_to_read_div" style="display:none;">
+                        <label class="d-block">Free to Read</label>
+                        <div class="custom-control custom-switch @error('is_free') is-invalid @enderror">
+                            <input type="checkbox" class="custom-control-input" name="is_free" {{ (old("is_free") ? "checked":"") }} id="customSwitch4">
+                            <label class="custom-control-label" for="customSwitch4">Free to Read</label>
+                        </div>
+                        @error('is_free')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -343,7 +385,6 @@
                     $('#label_visibility').html('Private');
                 }
             });
-
             
             $(document).on('click', '.upload', function() {
                 objUpload = $(this);
@@ -463,9 +504,61 @@
                 imageId = 0;
             });
 
-            
         });
 
-       
+    </script>
+
+    <script>
+        function readEPUB(file) {
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#file_name').html(file.name);
+                $('#epub_file_name').html(file.name);
+                $('#epub_div').show(); // Show the EPUB display section
+                $('#free_to_read_div').show();
+                $('#file_temp').attr('href', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+        $("#file_url").change(function(evt) {
+            $('#file_name').html('Choose file');
+            $('#epub_file_name').html('');
+            $('#epub_div').hide(); // Hide the EPUB display section
+            $('#free_to_read_div').hide();
+            $('#file_temp').attr('href', '');
+
+            let files = evt.target.files;
+            let validateFileTypes = [".epub"];
+
+            validateFiles(files, readEPUB, validateFileTypes);
+        });
+
+        function removeEPUB() {
+            $('#file_name').html('Choose file');
+            $('#epub_file_name').html('');
+            $('#epub_div').hide();
+            $('#free_to_read_div').hide();
+            $('#file_url').val('');
+            $('#file_temp').attr('href', '');
+        }
+
+        function validateFiles(files, callback, allowedTypes) {
+            // Your validation logic here, if needed.
+            // Call the callback function with the validated files.
+            // For example, you can check file extensions here.
+            for (let i = 0; i < files.length; i++) {
+                let fileExtension = files[i].name.split('.').pop().toLowerCase();
+                if (allowedTypes.includes("." + fileExtension)) {
+                    callback(files[i]);
+                } else {
+                    alert('Invalid file type. Please select a valid EPUB file.');
+                    // You may want to clear the input field or take other actions.
+                    $('#file_url').val('');
+                }
+            }
+        }
     </script>
 @endsection

@@ -27,6 +27,7 @@ class ProductRequest extends FormRequest
             'sku' => 'required|max:150',
             'name' => 'required|max:150',
             'book_type' => 'required',
+            'file_url' => 'nullable',
             'category_id' => 'required|exists:product_categories,id',
             'price' => 'required',
             'long_description' => 'nullable', 

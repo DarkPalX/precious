@@ -24,7 +24,7 @@ class Product extends Model
     use SoftDeletes, HasSlug;
 
     public $table = 'products';
-    protected $fillable = [ 'sku', 'book_type', 'category_id', 'name', 'slug', 'short_description', 'description', 'price', 'size','weight', 'texture', 'status', 'is_featured', 'uom', 'created_by', 'meta_title', 'meta_keyword', 'meta_description','brand_id','reorder_point'];
+    protected $fillable = [ 'sku', 'book_type', 'category_id', 'name', 'slug', 'file_url', 'short_description', 'description', 'price', 'size','weight', 'texture', 'status', 'is_featured', 'is_best_seller', 'is_free', 'uom', 'created_by', 'meta_title', 'meta_keyword', 'meta_description','brand_id','reorder_point'];
 
     /**
      * Get the options for generating the slug.
@@ -326,5 +326,15 @@ class Product extends Model
         $discount = DB::table('promos')->join('promo_products','promos.id','=','promo_products.promo_id')->where('promos.status','ACTIVE')->where('promos.is_expire',0)->where('promo_products.product_id',$this->id)->max('promos.discount');
 
         return $discount;
+    }
+
+    public function getProductName()
+    {
+        $path = explode('/', $this->file_url);
+        $nameIndex = count($path) - 1;
+        if ($nameIndex < 0)
+            return '';
+
+        return $path[$nameIndex];
     }
 }

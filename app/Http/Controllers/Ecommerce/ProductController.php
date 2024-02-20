@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use Facades\App\Helpers\ListingHelper;
+use Facades\App\Helpers\FileHelper;
 use App\Http\Requests\ProductRequest;
 
 
@@ -106,10 +107,13 @@ class ProductController extends Controller
         $requestData = $request->validated();
         $requestData['status'] = $request->has('status') ? 'PUBLISHED' : 'PRIVATE';
         $requestData['is_featured'] = $request->has('is_featured');
+        $requestData['is_best_seller'] = $request->has('is_best_seller');
+        $requestData['is_free'] = $request->has('is_free');
         $requestData['description'] = $request->long_description;
         $requestData['created_by'] = Auth::id();
 
         $product = Product::create($requestData);
+
         $this->tags($product->id, $request->tags);
 
         $newPhotos = $this->set_order(request('photos'));
@@ -128,6 +132,13 @@ class ProductController extends Controller
                 'created_by' => Auth::id()
             ]);
         }
+
+        $updateData['file_url'] = $request->hasFile('file_url') ? FileHelper::move_to_product_file_folder($request->file('file_url'), 'product_files')['url'] : null;
+
+        Product::where('id', $product->id)
+        ->update([
+            'file_url' => $updateData['file_url']
+        ]);
 
         // if($request->hasProductAttribute > 0){
         //     foreach($requestData['productAttribute'] as $key => $attr){
@@ -202,6 +213,8 @@ class ProductController extends Controller
         $requestData['description'] = $request->long_description;
         $requestData['status'] = $request->has('status') ? 'PUBLISHED' : 'PRIVATE';
         $requestData['is_featured'] = $request->has('is_featured');
+        $requestData['is_best_seller'] = $request->has('is_best_seller');
+        $requestData['is_free'] = $request->has('is_free');
         $requestData['created_by'] = Auth::id();
 
         $product->update($requestData);
@@ -228,6 +241,30 @@ class ProductController extends Controller
                 'created_by' => Auth::id()
             ]);
         }
+
+
+        $current_file = explode('/', $request->current_file)[1] ?? '';
+        $is_free = $request->has('is_free');
+
+        if($request->hasFile('file_url')){
+            $updateData['file_url'] = FileHelper::move_to_product_file_folder($request->file('file_url'), 'product_files')['url'];
+        }
+        else{
+            if($current_file){
+                $updateData['file_url'] = $product->file_url;
+            }
+            else{
+                $updateData['file_url'] = null;
+                $is_free = 0;
+            }
+        }
+
+
+        Product::where('id', $product->id)
+        ->update([
+            'file_url' => $updateData['file_url'],
+            'is_free' => $is_free
+        ]);
 
         // if($request->hasProductAttribute > 0){
         //     foreach($requestData['productAttribute'] as $key => $attr){
