@@ -20,6 +20,7 @@ class CreateProductCategoriesTable extends Migration
             $table->text('slug');
             $table->text('description')->nullable();
             $table->string('status', 100);
+            $table->integer('menu_order_no');
             $table->integer('created_by');
             $table->timestamps();
             $table->softDeletes();

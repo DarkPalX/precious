@@ -18,7 +18,7 @@ use App\Http\Controllers\Settings\{
 
 // Ecommerce Controller
 use App\Http\Controllers\Ecommerce\{
-    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController
+    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController
 };
 /*
 |--------------------------------------------------------------------------
@@ -30,10 +30,6 @@ use App\Http\Controllers\Ecommerce\{
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-    
-    Route::get('/search-products', [ProductFrontController::class, 'search_product'])->name('search-product');
-    Route::get('/search-contents', [ProductFrontController::class, 'search_content'])->name('search-content');
 
 // CMS4 Front Pages
     Route::get('/', [FrontController::class, 'home'])->name('home');
@@ -90,12 +86,11 @@ use App\Http\Controllers\Ecommerce\{
 
 
 
-
-
-
-
+    //Products/Books
     Route::get('books/{category?}', [ProductFrontController::class, 'product_list'])->name('product.front.list');
     Route::get('/book-details/{slug}', [ProductFrontController::class, 'product_details'])->name('product.details');
+    Route::get('/search-products', [ProductFrontController::class, 'search_product'])->name('search-product');
+    Route::get('/search-contents', [ProductFrontController::class, 'search_content'])->name('search-content');
 
 
 
@@ -132,6 +127,10 @@ use App\Http\Controllers\Ecommerce\{
             
             //PRODUCT REVIEW
             Route::resource('/product_review', ProductReviewController::class)->except(['destroy']);
+            
+            //CUSTOMER FAVORITES
+            Route::resource('/customer_favorite', CustomerFavoriteController::class)->except(['destroy']);
+
         });
     //
 
@@ -289,7 +288,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::post('/admin/product-categories-multiple-change-status',[ProductCategoryController::class, 'multiple_change_status'])->name('product.category.multiple.change.status');
                 Route::post('/admin/product-category-multiple-delete',[ProductCategoryController::class, 'multiple_delete'])->name('product.category.multiple.delete');
 
-
+                Route::post('reorder-category', [ProductCategoryController::class, 'reorder_category'])->name('reorder-product-category');
             //
 
             // Products

@@ -74,6 +74,7 @@ class ListingHelper
         $perPage = $this->get_count_per_page();
         $orderBy = $this->get_selected_order_by($sortFields);
         $sortBy = $this->get_selected_sort_by();
+        $showFreeOnly = $this->show_free_only();
         $showDeleted = $this->show_delete_data();
         $search =  $this->get_search_string();
 
@@ -86,6 +87,10 @@ class ListingHelper
 
         foreach ($joinTables as $table) {
             $models->leftJoin($table['name'], $table['field1'], $table['field2']);
+        }
+
+        if ($showFreeOnly) {
+            $models->where('is_free', 1);
         }
 
         if ($showDeleted) {
@@ -160,7 +165,12 @@ class ListingHelper
         $perPage = $this->get_count_per_page();
         $orderBy = $this->get_selected_order_by($sortFields);
         $sortBy = $this->get_selected_sort_by();
+        $showFreeOnly = $this->show_free_only();
         $showDeleted = $this->show_delete_data();
+
+        if ($showFreeOnly) {
+            $queryBuilder->where('is_free', 1);
+        }
 
         if ($showDeleted) {
             $queryBuilder = $model::withTrashed();
@@ -240,6 +250,7 @@ class ListingHelper
         $parameters['perPage'] = $this->get_count_per_page();
         $parameters['orderBy'] = $this->get_selected_order_by($sortFields);
         $parameters['sortBy'] = $this->get_selected_sort_by();
+        $parameters['showFreeOnly'] = $this->show_free_only();
         $parameters['showDeleted'] = $this->show_delete_data();
         $parameters['search'] = $this->get_search_string();
 
@@ -296,6 +307,11 @@ class ListingHelper
     private function get_search_string()
     {
         return request('search') ?? '';
+    }
+
+    private function show_free_only()
+    {
+        return (request()->has('showFreeOnly') && (request('showFreeOnly') == 'on') || request('showFreeOnly') == 1) ? true : false;
     }
 
     private function show_delete_data()

@@ -18,7 +18,7 @@ class ProductCategory extends Model
     protected $table = 'product_categories';
     protected $timestamp = true;
 
-    protected $fillable = [ 'parent_id', 'name', 'image_url', 'slug', 'description', 'status', 'created_by'];
+    protected $fillable = [ 'parent_id', 'name', 'slug', 'description', 'status', 'menu_order_no', 'created_by',];
 
     /**
      * Get the options for generating the slug.
@@ -104,6 +104,7 @@ class ProductCategory extends Model
         'name' => 'name',
         'description' => 'description',
         'status' => 'status',
+        'menu_order_no' => 'sequence number'
     ];
     // END Need to change every model
 

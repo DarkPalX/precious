@@ -29,7 +29,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="control-label">Brand</label>
                         <div>
                             <select name="brand_id" class="form-control input-sm">
@@ -39,7 +39,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label class="control-label">Last Modified by</label>
                         <div>
@@ -51,12 +51,12 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="control-label">Short Description</label>
                         <div>
                             <input type="text" class="form-control input-sm" name="short_description" value="{{ $advanceSearchData->short_description }}">
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label class="control-label">Description</label>
                         <div>

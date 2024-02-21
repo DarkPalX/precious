@@ -15,33 +15,65 @@
 					<div class="border-0 mb-5">
 						<h3 class="mb-3">Search</h3>
 						<div class="search">
-							<form class="mb-0" action="{{ route('search-product') }}" method="GET" autocomplete="off">
-								<div class="searchbar">
-									<input type="text" name="search" class="form-control form-input form-search" placeholder="Search a book" aria-label="Search news" aria-describedby="button-addon1" autocomplete="off" />
-									<button class="form-submit-search" type="submit">
-										<i class="icon-line-search"></i>
-									</button>
-								</div>
-							</form>
+							<form action="{{ route('search-product') }}" method="GET">
+                                <div class="searchbar">
+                                    <input type="text" name="keyword" id="keyword" class="form-control form-input form-search" placeholder="Search a book" aria-label="Search a book" aria-describedby="button-addon1" value="@if(request()->has('keyword')) {{ request('keyword') }} @endif"/>
+                                    <button class="form-submit-search" type="submit">
+                                        <i class="icon-line-search"></i>
+                                    </button>
+                                </div>
+								{{-- hidden --}}
+								<input type="text" name="sort_by" value="@if(request()->has('sort_by')){{ request('sort_by') }}@endif" hidden/>
+                            </form>
 						</div>
 					</div>
 					
 					@include('theme.layouts.components.product-categories')
+
 				</div>
 			</div>
 		</div>
 		<div class="col-lg-9">
-			<div class="form-group d-flex">
-				<label for="inputState" class="col-form-label me-2">Sort by</label>
-				<div class="">
-					<select id="inputState" class="form-select">
-						<option selected>Choose...</option>
-						<option>A to Z</option>
-						<option>Z to A</option>
-						<option>By date</option>
-					</select>
+			<form id="sortForm" action="{{ route('search-product') }}" method="GET">
+				<div class="form-group d-flex">
+					<label for="sort_by" class="col-form-label me-2">Sort by</label>
+					<div class="">
+						<select id="sort_by" class="form-select" name="sort_by" onchange="document.getElementById('sortForm').submit()">
+							<option value="">Choose...</option>
+							<option value="name_asc" {{ request('sort_by')== "name_asc"? 'selected' : '' }}>A to Z</option>
+							<option value="name_desc" {{ request('sort_by')== "name_desc"? 'selected' : '' }}>Z to A</option>
+							<option value="price_asc" {{ request('sort_by')== "price_asc"? 'selected' : '' }}>Prices Low - High</option>
+							<option value="price_desc" {{ request('sort_by')== "price_desc"? 'selected' : '' }}>Prices High - Low</option>
+							<option value="date_asc" {{ request('sort_by')== "date_asc"? 'selected' : '' }}>Recent - Old</option>
+							<option value="date_desc" {{ request('sort_by')== "date_desc"? 'selected' : '' }}>Old - Recent</option>
+						</select>
+					</div>
 				</div>
-			</div>
+				{{-- hidden --}}
+				<input type="text" name="keyword" value="@if(request()->has('keyword')){{ request('keyword') }}@endif" hidden/>
+			</form>
+			
+			@if(request()->has('keyword') && request('keyword') != '')
+				@if(count($products) > 0)
+					<div class="style-msg successmsg">
+						<div class="sb-msg"><i class="icon-thumbs-up"></i><strong>Woo hoo!</strong> We found <strong>(<span>{{ count($products) }}</span>)</strong> matching results.</div>
+					</div>
+				@else
+					<div class="style-msg2 errormsg">
+						<div class="msgtitle p-0 border-0">
+							<div class="sb-msg">
+								<i class="icon-thumbs-up"></i><strong>Uh oh</strong>! <span><strong>{{ app('request')->input('keyword') }}</strong></span> you say? Sorry, no results!
+							</div>
+						</div>
+						<div class="sb-msg">
+							<ul>
+								<li>Check the spelling of your keywords.</li>
+								<li>Try using fewer, different or more general keywords.</li>
+							</ul>
+						</div>
+					</div>
+				@endif
+			@endif
 			
 			<div class="row">
 				@forelse($products as $product)

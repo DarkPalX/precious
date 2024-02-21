@@ -1,5 +1,5 @@
 @php
-    $parentCategories = \App\Models\Ecommerce\ProductCategory::where('parent_id', 0)->where('status', 'PUBLISHED')->orderBy('name', 'asc')->get();
+    $parentCategories = \App\Models\Ecommerce\ProductCategory::where('parent_id', 0)->where('status', 'PUBLISHED')->orderBy('menu_order_no', 'asc')->get();
 @endphp
 
 <h3>Category</h3>

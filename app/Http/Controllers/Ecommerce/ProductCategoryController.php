@@ -40,9 +40,24 @@ class ProductCategoryController extends Controller
         // Simple search init data
         $filter = ListingHelper::get_filter($this->searchFields);
         $searchType = 'simple_search';
+        
+        $parentCategories = ProductCategory::where('parent_id', 0)->orderBy('menu_order_no', 'asc')->get();
 
-        return view($this->folder.'.index',compact('categories', 'filter', 'searchType'));
+        return view($this->folder.'.index',compact('categories', 'filter', 'searchType', 'parentCategories'));
 
+    }
+
+    public function reorder_category(Request $request)
+    {
+        $requestData = $request->all();
+
+        foreach($requestData['order_no'] as $key => $catId){
+            ProductCategory::find($catId)->update([
+                'menu_order_no' => $key
+            ]);
+        }
+
+        return back()->with('success', 'Product Category menu sequence has been updated.');
     }
 
     /**
@@ -102,7 +117,7 @@ class ProductCategoryController extends Controller
 
         $productCategories = ProductCategory::where('id','<>', $category->id)->orderBy('name','asc')->get();
 
-        return view('admin.ecommerce.products.category_edit',compact('category', 'productCategories'));
+        return view('admin.ecommerce.product-categories.edit',compact('category', 'productCategories'));
     }
 
     /**
@@ -121,7 +136,7 @@ class ProductCategoryController extends Controller
         ])->validate();
 
         $productCategory = ProductCategory::findOrFail($id);
-        $this->upload_logo($request, $id);
+        // $this->upload_logo($request, $id);
 
         if($productCategory->name == $request->name){
             $slug = $productCategory->slug;

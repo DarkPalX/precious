@@ -12,7 +12,7 @@ use App\Mail\ProductQuotationRequestMail;
 use App\Helpers\{Setting};
 
 use App\Models\Ecommerce\{
-    ProductCategory, Product, ProductReview
+    ProductCategory, Product, ProductReview, CustomerFavorite
 };
 
 use App\Models\{Page, Brand, BrandProductCategory};
@@ -25,7 +25,6 @@ class ProductFrontController extends Controller
 
     public function product_list(Request $request, $category = null)
     {
-        
         $page = new Page();
         $pageLimit = 40;
 
@@ -102,6 +101,55 @@ class ProductFrontController extends Controller
         ));
     }
 
+    
+    public function search_product(Request $request)
+    {
+        $page = new Page();
+        $page->name = 'Search Product';
+        $pageLimit = 20;
+
+        $products = Product::select('products.*')->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
+        ->where('products.status', 'PUBLISHED');
+
+        $searchtxt = $request->get('keyword', false);
+        $sortBy = $request->get('sort_by', false);
+
+        if(!empty($searchtxt)){  
+            $keyword = Str::lower($request->keyword); 
+
+            $products = $products->where(function($query) use ($keyword){
+                $query->orWhereRaw('LOWER(products.name) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(products.description) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(product_additional_infos.value) like LOWER(?)', ["%{$keyword}%"]);
+            });
+        }
+
+        if($sortBy == "name_asc"){
+            $products = $products->orderBy('name','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "name_desc"){
+            $products = $products->orderBy('name','desc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "price_asc"){
+            $products = $products->orderBy('price','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "price_desc"){
+            $products = $products->orderBy('price','desc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "date_asc"){
+            $products = $products->orderBy('updated_at','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "date_desc"){
+            $products = $products->orderBy('updated_at','desc')->paginate($pageLimit);
+        }
+        else{
+            $products = $products->orderBy('name','asc')->paginate($pageLimit);
+        }
+
+
+        return view($this->folder.'.product-list',compact('products','page', 'searchtxt'));
+    }
+
 
     public function product_details($slug)
     {
@@ -141,31 +189,31 @@ class ProductFrontController extends Controller
         return view('theme.pages.ecommerce.product-brands',compact('brands','page','request'));
     }
 
-    public function search_product(Request $request)
-    {
-        $page = new Page();
-        $page->name = 'Search Product';
-        $pageLimit = 20;
+    // public function search_product(Request $request)
+    // {
+    //     $page = new Page();
+    //     $page->name = 'Search Product';
+    //     $pageLimit = 20;
 
-        $products = Product::select('products.*')->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
-        ->where('products.status', 'PUBLISHED');
+    //     $products = Product::select('products.*')->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
+    //     ->where('products.status', 'PUBLISHED');
 
-        $searchtxt = $request->get('keyword', false);
+    //     $searchtxt = $request->get('keyword', false);
 
-        if(!empty($searchtxt)){  
-            $keyword = Str::lower($request->keyword); 
+    //     if(!empty($searchtxt)){  
+    //         $keyword = Str::lower($request->keyword); 
 
-            $products = $products->where(function($query) use ($keyword){
-                $query->orWhereRaw('LOWER(products.name) like LOWER(?)', ["%{$keyword}%"])
-                ->orWhereRaw('LOWER(products.description) like LOWER(?)', ["%{$keyword}%"])
-                ->orWhereRaw('LOWER(product_additional_infos.value) like LOWER(?)', ["%{$keyword}%"]);
-            });
-        }
+    //         $products = $products->where(function($query) use ($keyword){
+    //             $query->orWhereRaw('LOWER(products.name) like LOWER(?)', ["%{$keyword}%"])
+    //             ->orWhereRaw('LOWER(products.description) like LOWER(?)', ["%{$keyword}%"])
+    //             ->orWhereRaw('LOWER(product_additional_infos.value) like LOWER(?)', ["%{$keyword}%"]);
+    //         });
+    //     }
 
-        $products = $products->orderBy('name','asc')->paginate($pageLimit);
+    //     $products = $products->orderBy('name','asc')->paginate($pageLimit);
 
-        return view('theme.pages.ecommerce.product-search',compact('products','page', 'searchtxt'));
-    }
+    //     return view('theme.pages.ecommerce.product-search',compact('products','page', 'searchtxt'));
+    // }
 
 
     public function search_content(Request $request)

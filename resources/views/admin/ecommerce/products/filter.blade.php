@@ -33,6 +33,10 @@
                             </div>
                             <div class="form-group">
                                 <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="showFreeOnly" name="showFreeOnly" class="custom-control-input" @if ($filter->showFreeOnly) checked @endif>
+                                    <label class="custom-control-label" for="showFreeOnly">Show Free Books only</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" id="showDeleted" name="showDeleted" class="custom-control-input" @if ($filter->showDeleted) checked @endif>
                                     <label class="custom-control-label" for="showDeleted">{{__('common.show_deleted')}}</label>
                                 </div>

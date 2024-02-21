@@ -28,9 +28,12 @@
             <form action="{{ route('product-categories.update',$category->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <div class="form-group">
+                    <div class="form-group" hidden>
                         <label class="d-block">Upload Logo *</label>
-                        <input type="file" name="image_url" class="form-control">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input @error('image_url') is-invalid @enderror" name="image_url" id="image_url"  accept="image/*">
+                            <label class="custom-file-label" for="image_url" id="img_name">Choose file</label>
+                        </div>
                         <p class="tx-10">
                             Required image dimension: 400px by 300px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png <br />
                         </p>
@@ -39,9 +42,11 @@
                         @enderror
                     </div>
 
-                    <div>
-                        <img src="{{ $category->image_url }}" height="auto" width="180" alt="Company Logo">
-                    </div>
+                    @if($category->image_url)
+                        <div>
+                            <img src="{{ $category->image_url }}" height="auto" width="180" alt="Company Logo">
+                        </div>
+                    @endif
 
                     <div class="form-group">
                         <label class="d-block">Name *</label>
