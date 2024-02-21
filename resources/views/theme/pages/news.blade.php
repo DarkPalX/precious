@@ -70,20 +70,21 @@
                 <div class="news-desc mb-6">
                     {!! $news->contents !!}
                 </div>
-                <div class="news-share">
+                <div class="news-share mb-5">
                     <h5>Share:</h5>
-                    <a href="#" class="social-icon si-rounded si-facebook">
+                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ route('news.front.show',$news->slug) }}" class="social-icon si-rounded si-facebook">
                         <i class="icon-facebook"></i>
                         <i class="icon-facebook"></i>
                     </a>
-                    <a href="#" class="social-icon si-rounded si-twitter">
+                    <a target="_blank" href="https://twitter.com/intent/tweet?url={{ route('news.front.show',$news->slug) }}&text=text to share" class="social-icon si-rounded si-twitter">
                         <i class="icon-twitter"></i>
                         <i class="icon-twitter"></i>
                     </a>
-                    <a href="#" class="social-icon si-rounded si-linkedin">
+                    <a target="_blank" href="https://www.linkedin.com/uas/login?session_redirect=https://www.linkedin.com/shareArticle?mini=true&url={{ route('news.front.show',$news->slug) }}" class="social-icon si-rounded si-linkedin">
                         <i class="icon-linkedin"></i>
                         <i class="icon-linkedin"></i>
                     </a>
+                    <div style="clear:both;"></div>
                 </div>
             </div>
         </div>
