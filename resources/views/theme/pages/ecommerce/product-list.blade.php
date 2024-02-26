@@ -44,8 +44,8 @@
 							<option value="name_desc" {{ request('sort_by')== "name_desc"? 'selected' : '' }}>Z to A</option>
 							<option value="price_asc" {{ request('sort_by')== "price_asc"? 'selected' : '' }}>Prices Low - High</option>
 							<option value="price_desc" {{ request('sort_by')== "price_desc"? 'selected' : '' }}>Prices High - Low</option>
-							<option value="date_asc" {{ request('sort_by')== "date_asc"? 'selected' : '' }}>Recent - Old</option>
-							<option value="date_desc" {{ request('sort_by')== "date_desc"? 'selected' : '' }}>Old - Recent</option>
+							<option value="date_desc" {{ request('sort_by')== "date_desc"? 'selected' : '' }}>Recent - Old</option>
+							<option value="date_asc" {{ request('sort_by')== "date_asc"? 'selected' : '' }}>Old - Recent</option>
 						</select>
 					</div>
 				</div>
