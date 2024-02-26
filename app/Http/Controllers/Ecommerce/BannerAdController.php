@@ -36,7 +36,7 @@ class BannerAdController extends Controller
 
         $newData = $request->validated();
         
-        $newData['file_url'] = $request->hasFile('file_url') ? FileHelper::move_to_product_file_folder($request->file('file_url'), 'ads/files')['url'] : null;
+        $newData['file_url'] = $request->hasFile('file_url') ? FileHelper::move_to_product_file_folder($request->file('file_url'), 'storage/ads/files')['url'] : null;
         $newData['status'] = $request->status ? 1 : 0;
 
         $ad = BannerAd::create($newData);
@@ -81,7 +81,7 @@ class BannerAdController extends Controller
         //FOR FILE UPDATE VALUE
         $current_file = explode('/', $request->current_file)[1] ?? '';
         if($request->hasFile('file_url')){
-            $updateData['file_url'] = FileHelper::move_to_product_file_folder($request->file('file_url'), 'product_files')['url'];
+            $updateData['file_url'] = FileHelper::move_to_product_file_folder($request->file('file_url'), 'storage/ads/files')['url'];
         }
         else{
             if($current_file){
