@@ -16,7 +16,7 @@
     <div class="row">
         @if($parentPage)
             <div class="col-lg-3">
-                <span onclick="openNav()" class="d-lg-none mb-4 btn btn-primary btn-bg"><i class="icon-list-alt"></i></span>
+                {{-- <span onclick="openNav()" class="d-lg-none mb-4 btn btn-primary btn-bg"><i class="icon-list-alt"></i></span> --}}
                 
                 <div id="mySidenav">
                     <a href="javascript:void(0)" class="closebtn d-lg-none" onclick="closeNav()">&times;</a>
