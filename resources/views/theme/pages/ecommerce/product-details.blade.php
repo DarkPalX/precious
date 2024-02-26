@@ -240,9 +240,10 @@
                                                         <div class="comment-author">{{ $product_review->name }}<span><a href="#" title="Permalink to this comment">{{ Setting::date_for_listing($product_review->updated_at) }}</a></span></div>
                                                         
                                                         <p>{{ $product_review->comment }}</p>
+
+                                                        <a data-bs-toggle="modal" data-bs-target="#editReviewFormModal{{ $product_review->id }}" {{ Auth::user()->is_an_admin() ? '' : 'hidden' }} hidden><i class="fa fa-sm fa-edit"></i></a>
                                                         
                                                         <div class="review-comment-ratings">
-
                                                             @for($star = 1; $star <= 5; $star++)
                                                                 <i class="icon-star{{ $star <= $product_review->rating ? '3' : '-empty' }}"></i>
                                                             @endfor
@@ -253,36 +254,75 @@
 
                                                 </div>
                                             </li>
+
+                                            <div class="modal fade" id="editReviewFormModal{{ $product_review->id }}" tabindex="-1" role="dialog" aria-labelledby="reviewFormModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="reviewFormModalLabel">Edit Review</h4>
+                                                            <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form class="row mb-0" id="editReviewForm" action="{{ route('product_review.update', $product_review->id) }}" method="post">
+                                                            @method('PUT')
+                                                            @csrf
+                                                                <div class="col-6 mb-3">
+                                                                    <label for="name">Name <small>*</small></label>
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-text"><i class="icon-user"></i></div>
+                                                                        <input type="text" id="name" name="name" value="{{ $product_review->name  }}" class="form-control required" readonly/>
+                                                                    </div>
+                                                                </div>
+    
+                                                                <div class="col-6 mb-3">
+                                                                    <label for="email">Email <small>*</small></label>
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-text">@</div>
+                                                                        <input type="email" id="email" name="email" value="{{ $product_review->email }}" class="required email form-control" readonly/>
+                                                                    </div>
+                                                                </div>
+    
+                                                                <div class="w-100"></div>
+    
+                                                                <div class="col-12 mb-3">
+                                                                    <label for="rating">Rating</label>
+                                                                    <select id="rating" name="rating" class="form-select" disabled required>
+                                                                        <option value="">-- Select One --</option>
+                                                                        <option value="1" {{ $product_review->rating == 1 ? 'selected' : '' }}>1</option>
+                                                                        <option value="2" {{ $product_review->rating == 2 ? 'selected' : '' }}>2</option>
+                                                                        <option value="3" {{ $product_review->rating == 3 ? 'selected' : '' }}>3</option>
+                                                                        <option value="4" {{ $product_review->rating == 4 ? 'selected' : '' }}>4</option>
+                                                                        <option value="5" {{ $product_review->rating == 5 ? 'selected' : '' }}>5</option>
+                                                                    </select>
+                                                                </div>
+    
+                                                                <div class="w-100"></div>
+    
+                                                                <div class="col-12 mb-3">
+                                                                    <label for="comment">Comment <small>*</small></label>
+                                                                    <textarea class="required form-control" id="comment" name="comment" rows="6" cols="30" required>{{ $product_review->comment }}</textarea>
+                                                                </div>
+    
+    
+                                                                {{-- hidden inputs --}}
+                                                                <input type="text" name="product_id" value="{{ $product->id }}" hidden readonly/>
+    
+    
+                                                                <div class="col-12">
+                                                                    <button class="button button-3d m-0" type="submit" id="submit" name="submit" value="submit">Edit Review</button>
+                                                                </div>
+    
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                            </div><!-- /.modal -->
                                         @empty
                                             <div class="col-12 text-center mt-4">There are no ratings for this product yet.</div>
                                         @endforelse
-
-                                        {{-- <li class="comment even thread-even depth-1" id="li-comment-2">
-                                            <div id="comment-2" class="comment-wrap clearfix">
-
-                                                <div class="comment-meta">
-                                                    <div class="comment-author vcard">
-                                                        <span class="comment-avatar clearfix">
-                                                        <img alt='Image' src='https://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=60' height='60' width='60' /></span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="comment-content clearfix">
-                                                    <div class="comment-author">Mary Jane<span><a href="#" title="Permalink to this comment">June 16, 2021 at 6:00PM</a></span></div>
-                                                    <p>Quasi, blanditiis, neque ipsum numquam odit asperiores hic dolor necessitatibus libero sequi amet voluptatibus ipsam velit qui harum temporibus cum nemo iste aperiam explicabo fuga odio ratione sint fugiat consequuntur vitae adipisci delectus eum incidunt possimus tenetur excepturi at accusantium quod doloremque reprehenderit aut expedita labore error atque?</p>
-                                                    <div class="review-comment-ratings">
-                                                        <i class="icon-star3"></i>
-                                                        <i class="icon-star3"></i>
-                                                        <i class="icon-star3"></i>
-                                                        <i class="icon-star-empty"></i>
-                                                        <i class="icon-star-empty"></i>
-                                                    </div>
-                                                </div>
-
-                                                <div class="clear"></div>
-
-                                            </div>
-                                        </li> --}}
 
                                     </ol>
 

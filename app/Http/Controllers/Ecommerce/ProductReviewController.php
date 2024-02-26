@@ -45,7 +45,13 @@ class ProductReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product_review = ProductReview::findOrFail($id);
+
+        $updateData['comment'] = $request->comment;
+
+        $product_review->update($updateData);
+
+        return redirect()->back()->with('success', 'Successfully edited a review');
     }
 
     /**
