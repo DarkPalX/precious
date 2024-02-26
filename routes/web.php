@@ -134,6 +134,10 @@ use App\Http\Controllers\Ecommerce\{
         });
     //
 
+    //BANNER ADS
+    
+        Route::get('/ads/click_count/{id}',[BannerAdController::class, 'click_count'])->name('ads.click.count');
+
 
 
 // ADMIN ROUTES
@@ -368,7 +372,6 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::resource('/ads',BannerAdController::class);
                 Route::post('/ads/delete/{id}',[BannerAdController::class, 'delete'])->name('ads.delete');
                 Route::post('/ads/restore/{id}',[BannerAdController::class, 'restore'])->name('ads.restore');
-                Route::get('/ads/click_count/{id}',[BannerAdController::class, 'click_count'])->name('ads.click.count');
             //
 
             // Sales Transaction
