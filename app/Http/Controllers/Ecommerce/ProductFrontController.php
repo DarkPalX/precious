@@ -137,10 +137,10 @@ class ProductFrontController extends Controller
             $products = $products->orderBy('price','desc')->paginate($pageLimit);
         }
         elseif($sortBy == "date_asc"){
-            $products = $products->orderBy('updated_at','asc')->paginate($pageLimit);
+            $products = $products->orderBy('created_at','asc')->paginate($pageLimit);
         }
         elseif($sortBy == "date_desc"){
-            $products = $products->orderBy('updated_at','desc')->paginate($pageLimit);
+            $products = $products->orderBy('created_at','desc')->paginate($pageLimit);
         }
         else{
             $products = $products->orderBy('name','asc')->paginate($pageLimit);

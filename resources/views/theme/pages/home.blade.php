@@ -51,12 +51,14 @@
     
 
 // BEST SELLERS
-    $bestSellers = \App\Models\Ecommerce\ProductReview::select('products.id', 'products.category_id', 'products.book_type', 'products.type', 'products.sku', 'products.name', 'products.subtitle', 'products.slug', 'products.short_description', 'products.description', 'products.price', 'products.reorder_point', 'products.size', 'products.weight', 'products.texture', 'products.status', 'products.uom', 'products.is_featured', 'products.publication_date', 'products.created_by', 'products.meta_title', 'products.meta_keyword', 'products.meta_description', \DB::raw('SUM(product_reviews.rating) as total_rating'))
-        ->where('products.status', 'PUBLISHED')
-        ->rightJoin('products', 'products.id', '=', 'product_reviews.product_id')
-        ->groupBy('products.id', 'products.category_id', 'products.book_type', 'products.type', 'products.sku', 'products.name', 'products.subtitle', 'products.slug', 'products.short_description', 'products.description', 'products.price', 'products.reorder_point', 'products.size', 'products.weight', 'products.texture', 'products.status', 'products.uom', 'products.is_featured', 'products.publication_date', 'products.created_by', 'products.meta_title', 'products.meta_keyword', 'products.meta_description')
-        ->orderByRaw('SUM(product_reviews.rating) DESC')
-        ->get();
+    // $bestSellers = \App\Models\Ecommerce\ProductReview::select('products.id', 'products.category_id', 'products.book_type', 'products.type', 'products.sku', 'products.name', 'products.subtitle', 'products.slug', 'products.short_description', 'products.description', 'products.price', 'products.reorder_point', 'products.size', 'products.weight', 'products.texture', 'products.status', 'products.uom', 'products.is_featured', 'products.publication_date', 'products.created_by', 'products.meta_title', 'products.meta_keyword', 'products.meta_description', \DB::raw('SUM(product_reviews.rating) as total_rating'))
+    //     ->where('products.status', 'PUBLISHED')
+    //     ->rightJoin('products', 'products.id', '=', 'product_reviews.product_id')
+    //     ->groupBy('products.id', 'products.category_id', 'products.book_type', 'products.type', 'products.sku', 'products.name', 'products.subtitle', 'products.slug', 'products.short_description', 'products.description', 'products.price', 'products.reorder_point', 'products.size', 'products.weight', 'products.texture', 'products.status', 'products.uom', 'products.is_featured', 'products.publication_date', 'products.created_by', 'products.meta_title', 'products.meta_keyword', 'products.meta_description')
+    //     ->orderByRaw('SUM(product_reviews.rating) DESC')
+    //     ->get();
+
+    $bestSellers = \App\Models\Ecommerce\Product::where('is_best_seller', 1)->where('status', 'PUBLISHED')->get();
 
     if($bestSellers->count()){
 

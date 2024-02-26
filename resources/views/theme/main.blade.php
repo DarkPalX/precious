@@ -61,6 +61,24 @@
 		============================================= -->
 		<section id="website-content">
 			@yield('content')
+			
+			{{-- BANNER ADS --}}
+			@if(isset($banner_ads))
+				@if(!$banner_ads->isEmpty())
+					@foreach($banner_ads as $banner_ad)
+						<div class="section my-0" style="background-color:white;">
+							<div class="container">
+								<a href="{{ route('ads.click.count', $banner_ad->id) }}" target="blank">
+									<div class="text-center">
+										<img src="{{ asset($banner_ad->file_url) }}"/>
+									</div>
+								</a>
+							</div>
+						</div>		
+					@endforeach	
+				@endif
+			@endif
+			{{-- END BANNER ADS --}}
 
 			<div class="section my-0 pb-0" style="background:#f9f9f9 url('theme/images/misc/dots-1.png') 100% 0 no-repeat;">
                 <div class="container">

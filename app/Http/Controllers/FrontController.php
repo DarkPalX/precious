@@ -19,6 +19,7 @@ use App\Models\User;
 
 use App\Models\TemplateCategory;
 use App\Models\Template;
+use App\Models\Ecommerce\{BannerAd, BannerAdPage};
 
 use Auth;
 
@@ -41,9 +42,6 @@ class FrontController extends Controller
         
         return view('theme.demo',compact('template'));
     }
-
-
-
 
     public function home()
     {
@@ -102,6 +100,7 @@ class FrontController extends Controller
 
     public function page($slug = "home")
     {
+
         if (Auth::guest()) {
             $page = Page::where('slug', $slug)->where('status', 'PUBLISHED')->first();
         } else {
@@ -118,13 +117,17 @@ class FrontController extends Controller
 
             abort(404);
         }
-
         $breadcrumb = $this->breadcrumb($page);
+
+        //FOR BANNER ADS
+        $used_page = BannerAdPage::where('page_id', $page->id)->first();
+        $banner_ads = BannerAd::where('id', $used_page->banner_ad_id ?? 0)->where('status', 1)->where('expiration_date', '>', now())->get();
+        //END BANNER ADS
 
         $footer = Page::where('slug', 'footer')->where('name', 'footer')->first();
 
         if (!empty($page->template)) {
-            return view('theme.pages.'.$page->template, compact('footer', 'page', 'breadcrumb'));
+            return view('theme.pages.'.$page->template, compact('footer', 'page', 'breadcrumb', 'banner_ads'));
         }
 
         $parentPage = null;
@@ -146,7 +149,7 @@ class FrontController extends Controller
             }
         }
 
-        return view('theme.page', compact('footer', 'page', 'parentPage', 'breadcrumb', 'currentPageItems', 'parentPageName'));
+        return view('theme.page', compact('footer', 'page', 'parentPage', 'breadcrumb', 'currentPageItems', 'parentPageName', 'banner_ads'));
     }
 
     public function contact_us(ContactUsRequest $request)

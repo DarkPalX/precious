@@ -68,15 +68,15 @@ class Permission extends Model
             'website_settings' => 'Website Settings',
             'audit_logs' => 'Audit Trail',
             'user' => 'Users',
-
             'customers' => 'Customers',
             'sales_transaction' => 'Sales Transaction',
             'products' => 'Products',
             'product_categories' => 'Product Categories',
             'inventory' => 'Inventory',
             'promos' => 'Promos',
-            // 'delivery_rates' => 'Delivery Rate',
+            'delivery_rates' => 'Delivery Rate',
             'coupons' => 'Coupons',
+            'banner_ads' => 'Banner Ads',
             'ecommerce' => 'E-Commerce',
             'reports' => 'Reports'
         ];

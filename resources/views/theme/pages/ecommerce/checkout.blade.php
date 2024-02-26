@@ -8,21 +8,40 @@
 <div class="container topmargin-lg bottommargin-lg">	
 	<div class="row">
 		<div id="processTabs">
+			{{-- <ul class="process-steps row col-mb-30">
+				<li class="col-sm-6 col-lg-3">
+					<a href="#ptab1" class="i-circled i-bordered i-alt mx-auto">1</a>
+					<h5>Billing Information</h5>
+				</li>
+				<li class="col-sm-6 col-lg-3">
+					<a id="btn_ptab2" href="#ptab1" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top" rel="2">2</a>
+					<h5>Shipping Options</h5>
+				</li>
+				<li class="col-sm-6 col-lg-3">
+					<a id="btn_ptab3" href="#ptab1" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top" rel="2">3</a>
+					<h5>Payment Method</h5>
+				</li>
+				<li class="col-sm-6 col-lg-3">
+					<a id="btn_ptab4" href="#ptab1" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top" rel="2">4</a>
+					<a href="#ptab4" class="i-circled i-bordered i-alt mx-auto tab-linker" rel="2" style="display:none">2</a>
+					<h5>Review and Place Order</h5>
+				</li>
+			</ul> --}}
 			<ul class="process-steps row col-mb-30">
 				<li class="col-sm-6 col-lg-3">
 					<a href="#ptab1" class="i-circled i-bordered i-alt mx-auto">1</a>
 					<h5>Billing Information</h5>
 				</li>
 				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab2" class="i-circled i-bordered i-alt mx-auto">2</a>
+					<a href="#ptab2" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top" rel="2">2</a>
 					<h5>Shipping Options</h5>
 				</li>
 				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab3" class="i-circled i-bordered i-alt mx-auto">3</a>
+					<a href="#ptab3" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top" rel="2">3</a>
 					<h5>Payment Method</h5>
 				</li>
 				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab4" class="i-circled i-bordered i-alt mx-auto">4</a>
+					<a href="#ptab4" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top" rel="2">4</a>
 					<h5>Review and Place Order</h5>
 				</li>
 			</ul>
@@ -34,39 +53,39 @@
 						<tbody>
 							<tr>
 								<td><strong>First Name</strong> <span class="text-danger">*</span></td>
-								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_fname" id="customer_fname" value="{{$customer->firstname}}"></td>
+								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_fname" id="customer_fname" value="{{$customer->firstname}}" required></td>
 							</tr>
 							<tr>
 								<td><strong>Last Name</strong> <span class="text-danger">*</span></td>
-								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_lname" id="customer_lname" value="{{$customer->lastname}}"></td>
+								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_lname" id="customer_lname" value="{{$customer->lastname}}" required></td>
 							</tr>
 							<tr>
 								<td><strong>E-mail Address</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><input type="text" class="form-control" name="customer_email" id="customer_email" value="{{$customer->email}}"></td>
+								<td class="p-2"><input type="text" class="form-control" name="customer_email" id="customer_email" value="{{$customer->email}}" required></td>
 							</tr>
 							<tr>
 								<td><strong>Contact Number</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><input type="number" class="form-control" name="customer_contact_number" id="customer_contact_number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->mobile}}"></td>
+								<td class="p-2"><input type="number" class="form-control" name="customer_contact_number" id="customer_contact_number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->mobile}}" required></td>
 							</tr>
 							<tr>
 								<td><strong>Barangay</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><textarea id="customer_delivery_barangay" id="address_brgy" class="form-control" rows="3">{{$customer->address_street}}</textarea></td>
+								<td class="p-2"><textarea id="customer_delivery_barangay" id="address_brgy" class="form-control" rows="3" required>{{$customer->address_street}}</textarea></td>
 							</tr>
 							<tr>
 								<td><strong>City</strong> <span class="text-danger">*</span></td>
 								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_city" value="{{$customer->address_city}}">
+									<input type="text" class="form-control" id="customer_delivery_city" value="{{$customer->address_city}}" required>
 								</td>
 							</tr>
 							<tr>
 								<td><strong>Province</strong> <span class="text-danger">*</span></td>
 								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_province" value="{{$customer->address_province}}">
+									<input type="text" class="form-control" id="customer_delivery_province" value="{{$customer->address_province}}" required>
 								</td>
 							</tr>
 							<tr>
 								<td><strong>Zip Code</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><input type="number" name="customer_delivery_zip" id="customer_delivery_zip" class="form-control" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->address_zip}}"></td>
+								<td class="p-2"><input type="number" name="customer_delivery_zip" id="customer_delivery_zip" class="form-control" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->address_zip}}" required></td>
 							</tr>
 							<tr>
 								<td><strong>Notes</td>
@@ -302,7 +321,7 @@
 		$( "#processTabs" ).tabs({ show: { effect: "fade", duration: 400 } });
 		$( ".tab-linker" ).click(function() {
 			var nxt_tab = $(this).attr('rel');
-
+			
 			if(nxt_tab == 2){
 				var fname = $('#customer_fname').val();
 				var lname = $('#customer_lname').val();
@@ -315,10 +334,14 @@
 
 				if(fname.length === 0 || lname.length === 0 || contact.length === 0 || IsEmail(email) == false || zipcode.length === 0 || brgy.length === 0 || city.length === 0 || province.length === 0){
                     swal('Oops...', 'Please check required input fields.', 'error');
+					
 		            return false;
 
                 } else {
                     $( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
+					$(".btn_ptab2").attr("href", "#ptab2");
+					$(".btn_ptab3").attr("href", "#ptab3");
+					$(".btn_ptab4").attr("href", "#ptab4");
 					return false;
                 }
 			} else if(nxt_tab == 3){

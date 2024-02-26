@@ -18,7 +18,7 @@ use App\Http\Controllers\Settings\{
 
 // Ecommerce Controller
 use App\Http\Controllers\Ecommerce\{
-    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController
+    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController, BannerAdController
 };
 /*
 |--------------------------------------------------------------------------
@@ -362,6 +362,13 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
                 // Route::get('/get-product-brands', [CouponFrontController::class, 'get_brands'])->name('display.product-brands');
                 Route::get('/coupon-download-template', [CouponController::class, 'download_coupon_template'])->name('coupon.download.template');
+            //
+
+            // BannerAds
+                Route::resource('/ads',BannerAdController::class);
+                Route::post('/ads/delete/{id}',[BannerAdController::class, 'delete'])->name('ads.delete');
+                Route::post('/ads/restore/{id}',[BannerAdController::class, 'restore'])->name('ads.restore');
+                Route::get('/ads/click_count/{id}',[BannerAdController::class, 'click_count'])->name('ads.click.count');
             //
 
             // Sales Transaction

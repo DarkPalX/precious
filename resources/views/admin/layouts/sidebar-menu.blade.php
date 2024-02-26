@@ -187,6 +187,16 @@
         </li>
     @endif
 
+    @if (auth()->user()->has_access_to_module('banner_ads'))
+        <li class="nav-item with-sub @if (request()->routeIs('ads*')) active show @endif">
+            <a href="" class="nav-link"><i data-feather="image"></i> <span>Banner Ads</span></a>
+            <ul>
+                <li @if (\Route::current()->getName() == 'ads.index' || \Route::current()->getName() == 'ads.edit') class="active" @endif><a href="{{ route('ads.index') }}">Manage Ads</a></li>
+                <li @if (\Route::current()->getName() == 'ads.create') class="active" @endif><a href="{{ route('ads.create') }}">Create Ad</a></li>
+            </ul>
+        </li>
+    @endif
+
     <li class="nav-label mg-t-25">Reports</li>
 
     <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
