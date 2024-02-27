@@ -36,4 +36,9 @@ return [
     'update_confirmation_title' => 'Update Item',
     'update_mutiple_confirmation_title' => 'Update Items',
 
+    // reviews
+    'approve_confirmation_title' => 'Approve Review',
+    'approve_confirmation' => 'You are about to approve this item. Do you want to continue?',
+    'approve_mutiple_confirmation_title' => 'Approve Items',
+    'approve_mutiple_confirmation' => 'You are about to delete the selected items. Do you want to continue?',
 ];

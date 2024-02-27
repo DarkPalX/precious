@@ -72,6 +72,7 @@ class Permission extends Model
             'sales_transaction' => 'Sales Transaction',
             'products' => 'Products',
             'product_categories' => 'Product Categories',
+            'product_review' => 'Product Reviews',
             'inventory' => 'Inventory',
             'promos' => 'Promos',
             'delivery_rates' => 'Delivery Rate',

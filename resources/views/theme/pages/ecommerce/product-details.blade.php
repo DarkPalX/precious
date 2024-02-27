@@ -193,7 +193,7 @@
                         <ul class="tab-nav clearfix">
                             <li><a href="#tabs-1"><i class="icon-align-justify2"></i><span class="d-none d-md-inline-block"> Description</span></a></li>
                             <li><a href="#tabs-2"><i class="icon-info-sign"></i><span class="d-none d-md-inline-block"> Preview</span></a></li>
-                            <li><a href="#tabs-3"><i class="icon-star3"></i><span class="d-none d-md-inline-block"> Reviews ({{ $product_reviews->count() }})</span></a></li>
+                            <li><a href="#tabs-3"><i class="icon-star3"></i><span class="d-none d-md-inline-block"> Reviews ({{ $product_reviews->where('status', 1)->count() }})</span></a></li>
                         </ul>
 
                         <div class="tab-container border-bottom">
@@ -226,34 +226,36 @@
                                     <ol class="commentlist clearfix">
 
                                         @forelse($product_reviews as $product_review)
-                                            <li class="comment even thread-even depth-1" id="li-comment-1">
-                                                <div id="comment-1" class="comment-wrap clearfix">
+                                            @if($product_review->status == 1)
+                                                <li class="comment even thread-even depth-1" id="li-comment-1">
+                                                    <div id="comment-1" class="comment-wrap clearfix">
 
-                                                    <div class="comment-meta">
-                                                        <div class="comment-author vcard">
-                                                            <span class="comment-avatar clearfix">
-                                                            <img alt='Image' src='https://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=60' height='60' width='60' /></span>
+                                                        <div class="comment-meta">
+                                                            <div class="comment-author vcard">
+                                                                <span class="comment-avatar clearfix">
+                                                                <img alt='Image' src='https://0.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=60' height='60' width='60' /></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="comment-content clearfix">
-                                                        <div class="comment-author">{{ $product_review->name }}<span><a href="#" title="Permalink to this comment">{{ Setting::date_for_listing($product_review->updated_at) }}</a></span></div>
-                                                        
-                                                        <p>{{ $product_review->comment }}</p>
+                                                        <div class="comment-content clearfix">
+                                                            <div class="comment-author">{{ $product_review->name }}<span><a href="#" title="Permalink to this comment">{{ Setting::date_for_listing($product_review->updated_at) }}</a></span></div>
+                                                            
+                                                            <p>{{ $product_review->comment }}</p>
 
-                                                        <a data-bs-toggle="modal" data-bs-target="#editReviewFormModal{{ $product_review->id }}" {{ Auth::user()->is_an_admin() ? '' : 'hidden' }} hidden><i class="fa fa-sm fa-edit"></i></a>
-                                                        
-                                                        <div class="review-comment-ratings">
-                                                            @for($star = 1; $star <= 5; $star++)
-                                                                <i class="icon-star{{ $star <= $product_review->rating ? '3' : '-empty' }}"></i>
-                                                            @endfor
+                                                            <a data-bs-toggle="modal" data-bs-target="#editReviewFormModal{{ $product_review->id }}" {{ Auth::user()->is_an_admin() ? '' : 'hidden' }}><i class="fa fa-sm fa-edit"></i></a>
+                                                            
+                                                            <div class="review-comment-ratings">
+                                                                @for($star = 1; $star <= 5; $star++)
+                                                                    <i class="icon-star{{ $star <= $product_review->rating ? '3' : '-empty' }}"></i>
+                                                                @endfor
+                                                            </div>
                                                         </div>
+
+                                                        <div class="clear"></div>
+
                                                     </div>
-
-                                                    <div class="clear"></div>
-
-                                                </div>
-                                            </li>
+                                                </li>
+                                            @endif
 
                                             <div class="modal fade" id="editReviewFormModal{{ $product_review->id }}" tabindex="-1" role="dialog" aria-labelledby="reviewFormModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
@@ -263,7 +265,7 @@
                                                             <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form class="row mb-0" id="editReviewForm" action="{{ route('product_review.update', $product_review->id) }}" method="post">
+                                                            <form class="row mb-0" id="editReviewForm" action="{{ route('product-review.update', $product_review->id) }}" method="post">
                                                             @method('PUT')
                                                             @csrf
                                                                 <div class="col-6 mb-3">
@@ -303,9 +305,9 @@
                                                                     <textarea class="required form-control" id="comment" name="comment" rows="6" cols="30" required>{{ $product_review->comment }}</textarea>
                                                                 </div>
     
-    
                                                                 {{-- hidden inputs --}}
                                                                 <input type="text" name="product_id" value="{{ $product->id }}" hidden readonly/>
+                                                                <input type="text" name="product_name" value="{{ $product->name }}" hidden readonly/>
     
     
                                                                 <div class="col-12">
@@ -339,7 +341,7 @@
                                                         <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form class="row mb-0" id="reviewForm" action="{{ route('product_review.store') }}" method="post">
+                                                        <form class="row mb-0" id="reviewForm" action="{{ route('product-review.store') }}" method="post">
                                                         @csrf
                                                             <div class="col-6 mb-3">
                                                                 <label for="name">Name <small>*</small></label>
@@ -381,6 +383,7 @@
 
                                                             {{-- hidden inputs --}}
                                                             <input type="text" name="product_id" value="{{ $product->id }}" hidden readonly/>
+                                                            <input type="text" name="product_name" value="{{ $product->name }}" hidden readonly/>
                                                             <input type="text" name="user_id" value="{{ Auth::user()->id }}" hidden readonly/>
 
 

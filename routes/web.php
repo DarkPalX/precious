@@ -126,7 +126,13 @@ use App\Http\Controllers\Ecommerce\{
 
             
             //PRODUCT REVIEW
-            Route::resource('/product_review', ProductReviewController::class)->except(['destroy']);
+            Route::resource('/product-review', ProductReviewController::class)->except(['destroy']);
+            Route::post('/product-review/single-approve', [ProductReviewController::class, 'single_approve'])->name('product-review.single-approve');
+            Route::post('/product-review/single-delete', [ProductReviewController::class, 'single_delete'])->name('product-review.single-delete');
+            Route::get('/product-review/restore/{id}', [ProductReviewController::class, 'restore'])->name('product-review.restore');
+            Route::post('/product-review-multiple-delete',[ProductReviewController::class, 'multiple_delete'])->name('product-review.multiple.delete');
+            Route::post('/product-review-multiple-approve',[ProductReviewController::class, 'multiple_approve'])->name('product-review.multiple-approve');
+            Route::post('/product-review-update-review',[ProductReviewController::class, 'update_review'])->name('product-review.update-review');
             
             //CUSTOMER FAVORITES
             Route::resource('/customer_favorite', CustomerFavoriteController::class)->except(['destroy']);

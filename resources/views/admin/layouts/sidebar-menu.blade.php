@@ -137,6 +137,9 @@
                         <li @if (\Route::current()->getName() == 'product-categories.create') class="active" @endif><a href="{{ route('product-categories.create') }}">Create a Category</a></li>
                     @endif
                 @endif
+                @if (auth()->user()->has_access_to_module('product-review'))
+                    <li @if (\Route::current()->getName() == 'product-review.index') class="active" @endif><a href="{{ route('product-review.index') }}">Product Reviews</a></li>
+                @endif
 
 
                 {{--<li @if (\Route::current()->getName() == 'product-attributes.index' || \Route::current()->getName() == 'product-attributes.edit') class="active" @endif><a href="{{ route('product-attributes.index') }}">Manage Attibutes</a></li>
