@@ -242,7 +242,9 @@
                                                             
                                                             <p>{{ $product_review->comment }}</p>
 
-                                                            <a data-bs-toggle="modal" data-bs-target="#editReviewFormModal{{ $product_review->id }}" {{ Auth::user()->is_an_admin() ? '' : 'hidden' }}><i class="fa fa-sm fa-edit"></i></a>
+                                                            @if(Auth::user())
+                                                                <a data-bs-toggle="modal" data-bs-target="#editReviewFormModal{{ $product_review->id }}" {{ Auth::user()->is_an_admin() ? '' : 'hidden' }}><i class="fa fa-sm fa-edit"></i></a>
+                                                            @endif
                                                             
                                                             <div class="review-comment-ratings">
                                                                 @for($star = 1; $star <= 5; $star++)
