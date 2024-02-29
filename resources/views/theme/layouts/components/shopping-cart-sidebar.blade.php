@@ -8,7 +8,8 @@
 
 		<div class="top-cart d-flex flex-column h-100">
 			<div class="top-cart-title">
-				<h4>Shopping Cart <small class="bg-color-light icon-stacked text-center rounded-circle color">{{ Setting::EcommerceCartTotalItems() }}</small></h4>
+				<h4>Shopping Cart</h4>
+				{{-- <h4>Shopping Cart <small class="bg-color-light icon-stacked text-center rounded-circle color">{{ Setting::EcommerceCartTotalItems() }}</small></h4> --}}
 			</div>
 
 			<!-- Cart Items
@@ -26,25 +27,62 @@
 
 				@foreach($cartx as $cart)
 
-				@php
-					$carttotal += $cart->product->price*$cart->qty;
-				@endphp
-				<div class="top-cart-item">
-					<div class="top-cart-item-image border-0">
-						<a href="#"><img src="{{ asset('storage/products/'.$cart->product->photoPrimary) }}" alt="Cart Image 1" /></a>
-					</div>
-					<div class="top-cart-item-desc">
-						<div class="top-cart-item-desc-title">
-							<a href="#" class="fw-medium">{{$cart->product->name}}</a>
-							<span class="top-cart-item-price d-block">{{number_format($cart->product->price,2)}}</span>
-							<div class="d-flex mt-2">
-								<a href="#" class="fw-normal text-black-50 text-smaller"><u>Edit</u></a>
-								<a href="javascript:;" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product('{{$cart->id}}');"><u>Remove</u></a>
-							</div>
+					@php
+						$carttotal += $cart->product->price*$cart->qty;
+					@endphp
+
+					<div class="top-cart-item" data-product-id="{{ $cart->product_id }}">
+						<div class="top-cart-item-image border-0">
+							<a href="#"><img src="{{ asset('storage/products/'.$cart->product->photoPrimary) }}" alt="Cart Image 1" /></a>
 						</div>
-						<div class="top-cart-item-quantity">x {{$cart->qty}}</div>
+						<div class="top-cart-item-desc">
+							<div class="top-cart-item-desc-title">
+								<a href="#" class="fw-medium">{{$cart->product->name}}</a>
+								<span class="top-cart-item-price d-block">₱{{number_format($cart->product->price,2)}}</span>
+
+								<div class="d-flex mt-2">
+									<div class="quantity">
+										<input type="button" value="-" class="minus" onclick="minus_qty('{{$cart->id}}');">
+										<input type="text" name="quantity[]" class="qty" value="{{$cart->qty}}" id="quantity{{$cart->id}}"/>
+										<input type="button" value="+" class="plus" onclick="plus_qty('{{$cart->id}}');">
+
+										<input type="hidden" id="orderID{{$cart->id}}" value="{{$cart->product_id}}">
+										<input type="hidden" id="prevqty{{$cart->id}}" value="{{ $cart->qty }}">
+										<input type="hidden" id="maxorder{{$cart->id}}" value="{{ $cart->product->Inventory }}">
+										<input type="hidden" id="cartItemPrice{{$cart->id}}" value="{{ $cart->price }}">
+									</div>
+									
+
+									<div class="cart-product-subtotal">
+										<input type="hidden" id="product_name_{{$cart->id}}" value="{{$cart->product->name}}">
+										<input type="hidden" name="product_price[]" id="input_order{{$cart->id}}_product_price" value="{{$cart->product->discountedprice}}">
+	
+	
+										<input type="hidden" id="price{{$cart->id}}" value="{{number_format($cart->product->discountedprice,2,'.','')}}">
+										<input type="hidden" class="input_product_total_price" data-id="{{$cart->id}}" data-productid="{{$cart->product_id}}" id="input_order{{$cart->id}}_product_total_price" value="{{$cart->product->discountedprice*$cart->qty}}">
+	
+										<!-- Coupon Inputs -->
+										<input type="hidden" class="cart_product_reward" id="cart_product_reward{{$cart->id}}" value="0">
+										<input type="hidden" class="cart_product_discount" id="cart_product_discount{{$cart->id}}" value="0">
+										<span class="amount" id="order{{$cart->id}}_total_price" hidden>₱{{ number_format($cart->product->discountedprice*$cart->qty,2) }}</span>
+									</div>
+								</div>
+
+								<div class="d-flex mt-2">
+									{{-- <a href="javascript:void(0)" class="fw-normal text-black-50 text-smaller" onclick="toggleQuantityInput(this);">Edit</a> --}}
+									<a href="javascript:;" class="fw-normal text-black-50 text-smaller" onclick="top_remove_product('{{$cart->id}}');"><u>Remove</u></a>
+								</div>
+
+								
+								@if(Setting::isThreeDaysOnCart($cart->id))
+									<div class="d-flex mt-2">
+										<small class="badge bg-danger">For removal</small>
+									</div>
+								@endif
+							</div>
+							{{-- <div class="top-cart-item-quantity">x {{$cart->qty}}</div> --}}
+						</div>
 					</div>
-				</div>
 				@endforeach
 			</div>
 
@@ -76,3 +114,138 @@
 	</div>
 
 </div>
+
+
+@section('pagejs')
+<script>
+    
+    // for edit quantity
+	function FormatAmount(number, numberOfDigits) {
+		var amount = parseFloat(number).toFixed(numberOfDigits);
+		var num_parts = amount.toString().split(".");
+		num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+		return num_parts.join(".");
+	}
+
+	function addCommas(nStr){
+		nStr += '';
+		x = nStr.split('.');
+		x1 = x[0];
+		x2 = x.length > 1 ? '.' + x[1] : '';
+		var rgx = /(\d+)(\d{3})/;
+		while (rgx.test(x1)) {
+			x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		}
+		return x1 + x2;
+	}
+
+    function plus_qty(id){
+		var qty = parseFloat($('#quantity'+id).val())+1;
+
+		if(parseInt($('#maxorder'+id).val()) < 1){
+			swal({
+				title: '',
+				text: 'Sorry. Currently, there is no sufficient stocks for the item you wish to order.',
+				icon: 'warning'
+			});
+
+			$('#quantity'+id).val($('#prevqty'+id).val()-1);
+			return false;
+		}
+
+		order_qty(id,qty);
+	}
+
+	function minus_qty(id){
+		var qty = parseFloat($('#quantity'+id).val())-1;
+		order_qty(id,qty);
+	}
+
+	function order_qty(id,qty){
+
+		if(qty == 0){
+			$('#quantity'+id).val(1).val();
+			return false;
+		}
+		
+		var price = $('#cartItemPrice'+id).val();
+		total_price  = parseFloat(price)*parseFloat(qty);
+
+		$('#order'+id+'_total_price').html('₱'+FormatAmount(total_price,2));
+		$('#input_order'+id+'_product_total_price').val(total_price);
+
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		});
+
+		$.ajax({
+			data: { 
+				"quantity": qty, 
+				"orderID": id, 
+				"_token": "{{ csrf_token() }}",
+			},
+			type: "post",
+			url: "{{route('cart.update')}}",
+			
+			success: function(returnData) {
+
+				$('#maxorder'+id).val(returnData.maxOrder);
+				$('.top-cart-number').html(returnData['totalItems']);
+				$('#prevqty'+id).val(qty);
+				// var promo_discount = parseFloat(returnData.total_promo_discount);
+
+				// let subtotal = 0;
+				// $(".input_product_total_price").each(function() {
+				//     if(!isNaN(this.value) && this.value.length!=0) {
+				//         subtotal += parseFloat(this.value);
+				//     }
+				// });
+
+				// $('#subtotal').val(subtotal);
+
+
+				// for the sidebar cart total
+				// var cartotal = parseFloat($('#input-top-cart-total').val());
+				// var productotal = price*qty;
+				// var newtotal = cartotal+total_price;
+				
+				// alert(cartotal);
+
+				// $('#input-top-cart-total').val(newtotal);
+				// $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+				// 
+				
+				// resetCoupons();
+				cart_total();
+			}
+		});
+	}
+
+	function cart_total(){
+		var couponTotalDiscount = parseFloat($('#coupon_total_discount').val());
+		var promoTotalDiscount = 0;
+		var subtotal = 0;
+
+		$(".input_product_total_price").each(function() {
+			if(!isNaN(this.value) && this.value.length!=0) {
+				subtotal += parseFloat(this.value);
+			}
+		});
+
+		if(couponTotalDiscount == 0){
+			$('#couponDiscountDiv').css('display','none');
+		}
+
+		// var totalDeduction = promoTotalDiscount + couponTotalDiscount;
+		// var grandtotal = subtotal - totalDeduction;
+		
+		// $('#subtotal').html('₱'+FormatAmount(subtotal,2));
+
+		$('#top-cart-total').val(subtotal);
+		$('#top-cart-total').html('₱'+subtotal.toFixed(2));
+	}
+</script>
+@endsection

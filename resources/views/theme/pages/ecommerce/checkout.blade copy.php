@@ -10,20 +10,19 @@
 		<div id="processTabs">
 			<ul class="process-steps row col-mb-30">
 				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab1" class="i-circled i-bordered i-alt mx-auto btn_ptab1">1</a>
+					<a href="#ptab1" class="i-circled i-bordered i-alt mx-auto">1</a>
 					<h5>Billing Information</h5>
 				</li>
 				<li class="col-sm-6 col-lg-3">
-					{{-- <a href="#ptab2" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab2" rel="2">2</a> --}}
-					<a href="#ptab2"><button class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab2" rel="2">2</button></a>
+					<a href="#ptab2" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab2" rel="2">2</a>
 					<h5>Shipping Options</h5>
 				</li>
 				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab3"><button type="button" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab3" rel="2">3</button></a>
+					<a href="#ptab3" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab3" rel="2">3</a>
 					<h5>Payment Method</h5>
 				</li>
 				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab4"><button type="button" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab4" rel="2">4</button></a>
+					<a href="#ptab4" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab4" rel="2">4</a>
 					<h5>Review and Place Order</h5>
 				</li>
 			</ul>
@@ -90,7 +89,7 @@
 							<div class="row justify-content-center">
 								<label for="shipping-option-d2d" class="col-sm-6 col-md-4">
 									<div class="pricing-box text-center shadow-none border">
-										<input type="radio" class="mt-3" autocomplete="off" name="devlivery_type" id="shipping-option-d2d" value="d2d" onclick="shipping_type('d2d');" checked>
+										<input type="radio" class="required mt-3" autocomplete="off" name="devlivery_type" id="shipping-option-d2d" value="d2d" onclick="shipping_type('d2d');" checked>
 										<div class="pricing-price">
 											<h3 class="nott ls0 mb-0">Door-to-Door</h3>
 										</div>
@@ -102,7 +101,7 @@
 
 								<label for="shipping-option-pickup" class="col-sm-6 col-md-4">
 									<div class="pricing-box text-center shadow-none border">
-										<input type="radio" class="mt-3" autocomplete="off" name="devlivery_type" id="shipping-option-pickup" value="pickup" onclick="shipping_type('pickup');">
+										<input type="radio" class="required mt-3" autocomplete="off" name="devlivery_type" id="shipping-option-pickup" value="pickup" onclick="shipping_type('pickup');">
 										<div class="pricing-price">
 											<h3 class="nott ls0 mb-0">For Pickup</h3>
 										</div>
@@ -138,36 +137,23 @@
 				<div id="ptab3">
 					<h2>Payment Method</h2>
 					
-					<div class="row justify-content-center">
-						<div class="col-sm-6 col-md-4">
-							<label for="payment-option-card" class="w-100">
-								<div class="pricing-box text-center shadow-none border">
-									<input type="radio" name="payment_method" value="credit" class="required mt-3" autocomplete="off" id="payment-option-card" checked>
-									<div class="pricing-price">
-										<h3 class="nott ls0 mb-0">Credit / Debit Card</h3>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="row justify-content-center">
+								<label for="payment-option-card" class="col-sm-6 col-md-4">
+									<div class="pricing-box text-center shadow-none border">
+										<input type="radio" class="required mt-3" autocomplete="off" id="payment-option-card" checked>
+										<div class="pricing-price">
+											<h3 class="nott ls0 mb-0">Credit / Debit Card</h3>
+										</div>
+										<div class="px-3">
+											<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+										</div>
 									</div>
-									<div class="px-3">
-										<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-									</div>
-								</div>
-							</label>
-						</div>
-						
-						<div class="col-sm-6 col-md-4">
-							<label for="payment-option-card2" class="w-100">
-								<div class="pricing-box text-center shadow-none border">
-									<input type="radio" name="payment_method" value="cod" class="required mt-3" autocomplete="off" id="payment-option-card2">
-									<div class="pricing-price">
-										<h3 class="nott ls0 mb-0">Cash on Delivery</h3>
-									</div>
-									<div class="px-3">
-										<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-									</div>
-								</div>
-							</label>
+								</label>
+							</div>
 						</div>
 					</div>
-					
 					
 					<br>
 					<a href="#" class="btn bg-color text-white tab-linker float-start" rel="2"><i class="icon-arrow-circle-left"></i> Previous</a>
@@ -311,35 +297,6 @@
 	    }
 	}
 
-
-	// $(function() {
-	// 	$("#processTabs").tabs({ show: { effect: "fade", duration: 400 } });
-	// 	$(".tab-linker").click(function() {
-	// 		var current_tab = $(this).attr('rel');
-			
-	// 		if (current_tab == 2) {
-	// 			var fname = $('#customer_fname').val();
-	// 			var lname = $('#customer_lname').val();
-	// 			var email = $('#customer_email').val();
-	// 			var contact = $('#customer_contact_number').val();
-	// 			var brgy = $('#customer_delivery_barangay').val();
-	// 			var city = $('#customer_delivery_city').val();
-	// 			var province = $('#customer_delivery_province').val();
-	// 			var zipcode = $('#customer_delivery_zip').val();
-
-	// 			if (fname.length === 0 || lname.length === 0 || contact.length === 0 || IsEmail(email) == false || zipcode.length === 0 || brgy.length === 0 || city.length === 0 || province.length === 0) {
-					
-	// 				swal('Oops...', 'Please check required input fields.', 'error');
-	// 				return false;
-	// 			}
-	// 		}
-
-	// 		$( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
-	// 		return false;
-	// 	});
-	// });
-
-
 	$(function() {
 
 		$( "#processTabs" ).tabs({ show: { effect: "fade", duration: 400 } });
@@ -363,6 +320,9 @@
 
                 } else {
                     $( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
+					$(".btn_ptab2").attr("href", "#ptab2");
+					$(".btn_ptab3").attr("href", "#ptab3");
+					$(".btn_ptab4").attr("href", "#ptab4");
 					return false;
                 }
 			} else if(nxt_tab == 3){

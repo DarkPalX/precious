@@ -45,7 +45,7 @@ class ProductCartRemoved extends Command
 
         $setting = Setting::first();
 
-        $shoppingCart = Cart::where('created_at', '<', now())->get();
+        $shoppingCart = Cart::where('created_at', '<', now()->subDays(4))->get();
         $arr_productCart = [];
         foreach($shoppingCart as $shcart){
             $pasthour = abs(strtotime(today().' 23:59:59.999') - strtotime($shcart->created_at))/(60*60);

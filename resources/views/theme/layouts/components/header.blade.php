@@ -49,9 +49,14 @@
 						<a href="#" id="top-search-trigger"><i class="icon-line-search"></i><i class="icon-line-cross"></i></a>
 					</div><!-- #top-search end -->
 					
-					<div id="top-cart" class="header-misc-icon">
-						<a href="javascript:;" class="side-panel-trigger"><i class="icon-line-bag"></i><span class="top-cart-number bg-danger">{{ Setting::EcommerceCartTotalItems() }}</span></a>
-					</div>
+					@if(!Str::contains(url()->current(), '/cart'))
+						<div id="top-cart" class="header-misc-icon">
+							<a href="javascript:;" class="side-panel-trigger">
+								<i class="icon-line-bag"></i>
+								<span class="top-cart-number bg-danger">{{ Setting::EcommerceCartTotalItems() }}</span>
+							</a>
+						</div>
+					@endif
 					
 					<!-- Login Modal -->
 					<div class="modal1 mfp-hide" id="modal-register">
@@ -186,6 +191,14 @@
 				</form>
 
 			</div>
+			
+			@if(Setting::hasItemThreeDaysOnCart())
+				<div class="alert alert-warning alert-dismissible alert-xs fade show" role="alert">
+					<strong>Check your cart!</strong> there are items left for 3 days. Please take an action before the system automatically delete the item/s.
+					{{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
+				</div>
+			@endif
+
 		</div>
 	</div>
 	<div class="header-wrap-clone"></div>

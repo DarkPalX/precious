@@ -10,7 +10,9 @@
 	<div class="body-overlay"></div>
 
 
-	@include('theme.layouts.components.shopping-cart-sidebar')
+	@if(!Str::contains(url()->current(), '/cart'))
+		@include('theme.layouts.components.shopping-cart-sidebar')
+	@endif
 
 
 	<!-- Document Wrapper

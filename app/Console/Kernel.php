@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         Commands\PromoValidity::class,
         Commands\ProductCartNotification::class,
         Commands\ProductCartRemoved::class,
+        // Commands\DeleteCartItem::class,
 
     ];
 
@@ -53,6 +54,10 @@ class Kernel extends ConsoleKernel
 
         // Check shopping cartevery minute for inventory / auto delete product on cart.
         $schedule->command('product-cart-removed:cron')
+        ->everyMinute();
+
+        // Check shopping cartevery minute for inventory / auto delete product on cart.
+        $schedule->command('cart-item:cron')
                  ->everyMinute();
     }
 

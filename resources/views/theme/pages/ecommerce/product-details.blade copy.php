@@ -525,7 +525,7 @@
                         cartItem.find('.top-cart-item-quantity').text('x ' + newQty);
                         // cartItem.find('.top-cart-item-price').text('₱' + newTotal.toFixed(2));
                     } else {
-
+                        // If the item doesn't exist in the cart, append it
                         $('#top-cart-items').append(
                             '<div class="top-cart-item" data-product-id="' + product + '">' +
                             '<div class="top-cart-item-image border-0">' +
@@ -537,7 +537,7 @@
                             '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
                             // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
                             '<div class="d-flex mt-2">' +
-                            '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
+                            '<a href="#" class="fw-normal text-black-50 text-smaller"><u>Edit</u></a>' +
                             '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
                             '</div>' +
                             '</div>' +
@@ -571,137 +571,134 @@
         $('#quantity').val(1);
     }
     
-</script>
 
-<script>
-    
     // for edit quantity
-	function FormatAmount(number, numberOfDigits) {
-		var amount = parseFloat(number).toFixed(numberOfDigits);
-		var num_parts = amount.toString().split(".");
-		num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        function FormatAmount(number, numberOfDigits) {
+            var amount = parseFloat(number).toFixed(numberOfDigits);
+            var num_parts = amount.toString().split(".");
+            num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-		return num_parts.join(".");
-	}
+            return num_parts.join(".");
+        }
 
-	function addCommas(nStr){
-		nStr += '';
-		x = nStr.split('.');
-		x1 = x[0];
-		x2 = x.length > 1 ? '.' + x[1] : '';
-		var rgx = /(\d+)(\d{3})/;
-		while (rgx.test(x1)) {
-			x1 = x1.replace(rgx, '$1' + ',' + '$2');
-		}
-		return x1 + x2;
-	}
+        function addCommas(nStr){
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
 
     function plus_qty(id){
-		var qty = parseFloat($('#quantity'+id).val())+1;
+        	var qty = parseFloat($('#quantity'+id).val())+1;
 
-		if(parseInt($('#maxorder'+id).val()) < 1){
-			swal({
-				title: '',
-				text: 'Sorry. Currently, there is no sufficient stocks for the item you wish to order.',
-				icon: 'warning'
-			});
+        	if(parseInt($('#cart_maxorder'+id).val()) < 1){
+                swal({
+                    title: '',
+                    text: 'Sorry. Currently, there is no sufficient stocks for the item you wish to order.',
+                    icon: 'warning'
+                });
 
-			$('#quantity'+id).val($('#prevqty'+id).val()-1);
-			return false;
-		}
+                $('#quantity'+id).val($('#cart_prevqty'+id).val()-1);
+                return false;
+            }
 
-		order_qty(id,qty);
-	}
+        	order_qty(id,qty);
+        }
 
-	function minus_qty(id){
-		var qty = parseFloat($('#quantity'+id).val())-1;
-		order_qty(id,qty);
-	}
+        function minus_qty(id){
+        	var qty = parseFloat($('#quantity'+id).val())-1;
+        	order_qty(id,qty);
+        }
 
-	function order_qty(id,qty){
+        function order_qty(id,qty){
 
-		if(qty == 0){
-			$('#quantity'+id).val(1).val();
-			return false;
-		}
-		
-		var price = $('#cartItemPrice'+id).val();
-		total_price  = parseFloat(price)*parseFloat(qty);
+        	if(qty == 0){
+        		$('#quantity'+id).val(1).val();
+        		return false;
+        	}
+        	
+            var price = $('#cartItemPrice'+id).val();
+            total_price  = parseFloat(price)*parseFloat(qty);
 
-		$('#order'+id+'_total_price').html('₱'+FormatAmount(total_price,2));
-		$('#input_order'+id+'_product_total_price').val(total_price);
+            $('#cart_order'+id+'_total_price').html('₱'+FormatAmount(total_price,2));
+            $('#cart_input_order'+id+'_product_total_price').val(total_price);
 
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-		$.ajax({
-			data: { 
-				"quantity": qty, 
-				"orderID": id, 
-				"_token": "{{ csrf_token() }}",
-			},
-			type: "post",
-			url: "{{route('cart.update')}}",
-			
-			success: function(returnData) {
+            $.ajax({
+                data: { 
+                    "quantity": qty, 
+                    "orderID": id, 
+                    "_token": "{{ csrf_token() }}",
+                },
+                type: "post",
+                url: "{{route('cart.update')}}",
+                
+                success: function(returnData) {
 
-				$('#maxorder'+id).val(returnData.maxOrder);
-				$('.top-cart-number').html(returnData['totalItems']);
-				$('#prevqty'+id).val(qty);
-				// var promo_discount = parseFloat(returnData.total_promo_discount);
+					$('#cart_maxorder'+id).val(returnData.maxOrder);
+                	$('.top-cart-number').html(returnData['totalItems']);
+                	$('#cart_prevqty'+id).val(qty);
+                    // var promo_discount = parseFloat(returnData.total_promo_discount);
 
-				// let subtotal = 0;
-				// $(".input_product_total_price").each(function() {
-				//     if(!isNaN(this.value) && this.value.length!=0) {
-				//         subtotal += parseFloat(this.value);
-				//     }
-				// });
+                    // let subtotal = 0;
+                    // $(".input_product_total_price").each(function() {
+                    //     if(!isNaN(this.value) && this.value.length!=0) {
+                    //         subtotal += parseFloat(this.value);
+                    //     }
+                    // });
 
-				// $('#subtotal').val(subtotal);
+                    // $('#subtotal').val(subtotal);
 
 
-				// for the sidebar cart total
-				// var cartotal = parseFloat($('#input-top-cart-total').val());
-				// var productotal = price*qty;
-				// var newtotal = cartotal+total_price;
-				
-				// alert(cartotal);
+                    // for the sidebar cart total
+                    // var cartotal = parseFloat($('#input-top-cart-total').val());
+                    // var productotal = price*qty;
+                    // var newtotal = cartotal+total_price;
+                    
+                    // alert(cartotal);
 
-				// $('#input-top-cart-total').val(newtotal);
-				// $('#top-cart-total').html('₱'+newtotal.toFixed(2));
-				// 
-				
-				// resetCoupons();
-				cart_total();
-			}
-		});
-	}
+                    // $('#input-top-cart-total').val(newtotal);
+                    // $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+                    // 
+                   
+                    // resetCoupons();
+                    cart_total();
+                }
+            });
+        }
 
-	function cart_total(){
-		var couponTotalDiscount = parseFloat($('#coupon_total_discount').val());
-		var promoTotalDiscount = 0;
-		var subtotal = 0;
+        function cart_total(){
+            var couponTotalDiscount = parseFloat($('#coupon_total_discount').val());
+            var promoTotalDiscount = 0;
+            var subtotal = 0;
 
-		$(".input_product_total_price").each(function() {
-			if(!isNaN(this.value) && this.value.length!=0) {
-				subtotal += parseFloat(this.value);
-			}
-		});
+            $(".input_product_total_price").each(function() {
+                if(!isNaN(this.value) && this.value.length!=0) {
+                    subtotal += parseFloat(this.value);
+                }
+            });
 
-		if(couponTotalDiscount == 0){
-			$('#couponDiscountDiv').css('display','none');
-		}
+            if(couponTotalDiscount == 0){
+                $('#couponDiscountDiv').css('display','none');
+            }
 
-		// var totalDeduction = promoTotalDiscount + couponTotalDiscount;
-		// var grandtotal = subtotal - totalDeduction;
-		
-		// $('#subtotal').html('₱'+FormatAmount(subtotal,2));
+            // var totalDeduction = promoTotalDiscount + couponTotalDiscount;
+            // var grandtotal = subtotal - totalDeduction;
+            
+            // $('#subtotal').html('₱'+FormatAmount(subtotal,2));
 
-		$('#top-cart-total').val(subtotal);
-		$('#top-cart-total').html('₱'+subtotal.toFixed(2));
-	}
+            $('#top-cart-total').val(subtotal);
+            $('#top-cart-total').html('₱'+subtotal.toFixed(2));
+        }
 </script>
 @endsection

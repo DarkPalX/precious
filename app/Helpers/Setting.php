@@ -124,6 +124,21 @@ class Setting {
         }
     }
 
+    public static function hasItemThreeDaysOnCart(){
+        $threeDaysAgo = now()->subDays(3);
+    
+        $isThreeDaysOnCart = Cart::where('created_at', '<', $threeDaysAgo)->where('user_id', auth()->user()->id)->exists();
+        return $isThreeDaysOnCart;
+    }
+
+    public static function isThreeDaysOnCart($id){
+        $threeDaysAgo = now()->subDays(3);
+    
+        $isThreeDaysOnCart = Cart::where('id', $id)->where('created_at', '<', $threeDaysAgo)->where('user_id', auth()->user()->id)->exists();
+        return $isThreeDaysOnCart;
+    }
+    
+
     public static function belowReorderTotal()
     {
         $products = Product::all();
