@@ -79,6 +79,10 @@
 						<label>Zip Code:</label>
 						<input type="text" name="address_zip" id="" class="form-control required" value="{{$member->address_zip}}" placeholder="">
 					</div>
+
+					<div class="col-md-12 form-group">
+						<a href="#" class="button button-border button-rounded ms-0 topmargin-sm button-small">ADD ADDRESS</a>
+					</div>
 					
 					<div class="col-12">
 						<div class="fancy-title title-border-color title-left mt-4">

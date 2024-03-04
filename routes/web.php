@@ -136,6 +136,7 @@ use App\Http\Controllers\Ecommerce\{
             
             //CUSTOMER FAVORITES
             Route::resource('/customer_favorite', CustomerFavoriteController::class)->except(['destroy']);
+            Route::get('/customer_favorite/add-to-favorites/{prd_id}', [CustomerFavoriteController::class, 'add_to_favorites'])->name('add-to-favorites');
 
         });
     //

@@ -9,15 +9,15 @@ use App\Models\Ecommerce\CustomerFavorite;
 
 class CustomerFavoriteController extends Controller
 {
-    public function store(Request $request){
+    public function add_to_favorites(Request $request, $prd_id){
 
-        $favorite_exists = CustomerFavorite::where('product_id', $request->product_id)->where('customer_id', auth()->id())->first();
+        $favorite_exists = CustomerFavorite::where('product_id', $prd_id)->where('customer_id', auth()->id())->first();
         
         if($favorite_exists){
-            CustomerFavorite::where('product_id', $request->product_id)->where('customer_id', auth()->id())->delete();
+            CustomerFavorite::where('product_id', $prd_id)->where('customer_id', auth()->id())->delete();
         }
         else{
-            $newData['product_id'] = $request->product_id;
+            $newData['product_id'] = $prd_id;
             $newData['customer_id'] = auth()->id();
 
             CustomerFavorite::create($newData);

@@ -80,22 +80,16 @@
                     
                     <div class="article-meta">                                  
                         <div class="entry-meta mb-3">
-                            
-                            <form id="addFavoriteForm" class="row mb-0" action="{{ route('customer_favorite.store') }}" method="post">
-                                @csrf
-                                <ul class="small">
-                                    <li>SKU: {{$product->sku}}</li>
-                                    <li>Book Type: {{$product->book_type}}</li>
-                                    <li><i class="icon-folder-open"></i> <a href="#">{{$product->category->name}}</a></li>
-                                    @if(\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id))
-                                        <li><a href="javascript:void(0)" class="me-1 float-end text-danger" title="Remove from Favorites" onclick="document.getElementById('addFavoriteForm').submit()"><i class="icon-heart icon"></i></a></li>
-                                    @else
-                                        <li><a href="javascript:void(0)" class="me-1 float-end text-dark" title="Add to Favorites" onclick="document.getElementById('addFavoriteForm').submit()"><i class="icon-heart-empty icon"></i></a></li>
-                                    @endif
-                                </ul>
-                                {{-- hidden inputs --}}
-                                <input type="text" name="product_id" value="{{ $product->id }}" hidden/>
-                            </form>
+                        
+                            @php($is_favorite = \App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id))
+
+                            <ul class="small">
+                                <li>SKU: {{$product->sku}}</li>
+                                <li>Book Type: {{$product->book_type}}</li>
+                                <li><i class="icon-folder-open"></i> <a href="#">{{$product->category->name}}</a></li>
+                                <li><a href="{{ route('add-to-favorites', [$product->id]) }}" class="me-1 float-end text-danger" title="{{ $is_favorite ? 'Remove from Favorites' : 'Add to Favorites' }}"><i class="{{ $is_favorite ? 'icon-heart icon' : 'icon-heart-empty icon' }}"></i></a></li>
+                            </ul>
+                        
 
                         </div>
                         <hr class="mb-4" />
