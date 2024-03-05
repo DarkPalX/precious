@@ -127,7 +127,7 @@ class Setting {
     public static function hasItemThreeDaysOnCart(){
         $threeDaysAgo = now()->subDays(3);
     
-        $isThreeDaysOnCart = Cart::where('created_at', '<', $threeDaysAgo)->where('user_id', auth()->user()->id ?? 0)->exists();
+        $isThreeDaysOnCart = Cart::where('created_at', '<', $threeDaysAgo)->where('user_id', auth()->user()->id ?? -1)->exists();
         return $isThreeDaysOnCart;
     }
 
