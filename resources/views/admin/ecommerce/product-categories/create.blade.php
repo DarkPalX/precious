@@ -27,7 +27,15 @@
                     @method('POST')
 
                     <div class="form-group">
-                        <label class="d-block">Category *</label>
+                        <label class="d-block">Name *</label>
+                        <input type="text" name="name" id="name" value="{{ old('name')}}" class="form-control @error('name') is-invalid @enderror" maxlength="150">
+                        @error('name')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="d-block">Parent Category *</label>
                         <select name="parent_id" id="parent_id" class="selectpicker mg-b-5" data-style="btn btn-outline-light btn-md btn-block tx-left" title="Select category" data-width="100%" data-live-search="true">
                             @foreach ($parentCategories as $parentCategory)
                                 <option style="font-weight: bold;" value="{{ $parentCategory->id }}">{{ strtoupper($parentCategory->name) }}</option>
@@ -38,14 +46,6 @@
                             <option value="0" selected>- None -</option>
                         </select>
                         @error('parent_id')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="d-block">Name *</label>
-                        <input type="text" name="name" id="name" value="{{ old('name')}}" class="form-control @error('name') is-invalid @enderror" maxlength="150">
-                        @error('name')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>

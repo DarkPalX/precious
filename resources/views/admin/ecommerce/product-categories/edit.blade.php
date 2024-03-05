@@ -67,13 +67,13 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="d-block">Description *</label>
                         <textarea rows="3" class="form-control @error('description') is-invalid @enderror" name="description">{{ old('description',$category->description) }}</textarea>
                         @error('description')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     <div class="form-group">
                         <label class="d-block">Visibility</label>

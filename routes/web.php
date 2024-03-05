@@ -20,6 +20,19 @@ use App\Http\Controllers\Settings\{
 use App\Http\Controllers\Ecommerce\{
     CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController, BannerAdController
 };
+
+
+//FOR STORAGE LINK
+Route::get('/storagelink', function () {
+    Artisan::call('storage:link');
+});
+
+//FOR PHPINFO
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

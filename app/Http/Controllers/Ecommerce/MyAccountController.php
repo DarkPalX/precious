@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Helpers\{PaynamicsHelper};
 use App\Models\Ecommerce\{
-    Cart, SalesHeader, SalesDetail
+    Cart, SalesHeader, SalesDetail, CustomerAddress
 };
 
 use App\Models\{
@@ -28,15 +28,34 @@ class MyAccountController extends Controller
         $member = auth()->user();
         $user = auth()->user();
 
-        return view('theme.pages.customer.manage-account', compact('member', 'user', 'page'));
+        $additional_addresses = CustomerAddress::where('user_id', $user->id)->get();
+
+        return view('theme.pages.customer.manage-account', compact('member', 'user', 'page', 'additional_addresses'));
     }
 
     public function update_personal_info(Request $request)
     {
-        $requestData = $request->except(['_token']);
+        $requestData = $request->except(['_token', 'additional_address']);
         $requestData['name'] = $request->firstname.' '.$request->lastname;
 
         User::whereId(Auth::id())->update($requestData);
+
+        
+        $user_exists = CustomerAddress::where('user_id', Auth::id())->first();
+
+        if($user_exists){
+            CustomerAddress::where('user_id', Auth::id())->delete();
+        }
+        
+        if($request->additional_address){
+            foreach($request->additional_address as $additional_add){
+
+                $additionalInfo['user_id'] = auth()->user()->id;
+                $additionalInfo['additional_address'] = $additional_add;
+
+                CustomerAddress::create($additionalInfo);
+            }
+        }
 
         return redirect()->back()->with('success', 'Account details has been updated');
     }

@@ -81,8 +81,22 @@
 					</div>
 
 					<div class="col-md-12 form-group">
-						<a href="#" class="button button-border button-rounded ms-0 topmargin-sm button-small">ADD ADDRESS</a>
+						<a href="#" id="add-address-btn" class="button button-border button-rounded ms-0 topmargin-sm button-small">ADD ADDRESS</a>
 					</div>
+
+					<div id="additional-fields" class="row">
+						@foreach ($additional_addresses as $additional_address)
+							<div class="col-md-12 form-group">
+								<label>Additional Address {{ $loop->iteration }}:</label>
+								<div class="input-group">
+									<input type="text" name="additional_address[]" class="form-control" value="{{ $additional_address->additional_address }}" required>
+									<button type="button" class="btn btn-transparent text-danger" onclick="removeAddressField(this)"><i class="fa fa-times"></i></button>
+								</div>
+							</div>
+						@endforeach
+						<input id="address_count" value="{{ $additional_addresses->count() }}" hidden/>
+					</div>
+					
 					
 					<div class="col-12">
 						<div class="fancy-title title-border-color title-left mt-4">
@@ -124,5 +138,47 @@
 		</div>
 	</div>
 </div>
+@endsection
+
+@section('pagejs')
+	<script>
+		$(document).ready(function() {
+
+			var additionalAddressCount = parseInt($('#address_count').val());
+
+			$('#add-address-btn').click(function(e) {
+				e.preventDefault();
+
+				var additionalAddressCount = parseInt($('#address_count').val());
+				$('#address_count').val(parseInt($('#address_count').val()) + 1);
+
+				additionalAddressCount++;
+				var additionalFieldsHTML = `
+					<div class="additional-fields-${additionalAddressCount}">
+						<div class="col-md-12 form-group">
+							<label for="additional_address${additionalAddressCount}">Additional Address ${additionalAddressCount}:</label>
+							
+							<div class="input-group">
+								<input type="text" name="additional_address[]" id="additional_address${additionalAddressCount}" class="form-control" placeholder="" required>
+								<button type="button" class="btn btn-transparent text-danger" onclick="removeAddressField(this)"><i class="fa fa-times"></i></button>
+							</div>
+							
+						</div>
+						<!-- Add more fields as needed -->
+					</div>
+				`;
+				$('#additional-fields').append(additionalFieldsHTML);
+			});
+		});
+
+		function removeAddressField(button) {
+
+			$('#address_count').val(parseInt($('#address_count').val()) - 1);
+			var formGroup = button.closest('.form-group');
+			formGroup.remove();
+		}
+
+	</script>
+
 @endsection
 
