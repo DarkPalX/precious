@@ -170,7 +170,7 @@ class SalesController extends Controller
                             $remarks='Order Cancelled';
                         }
                         
-                        $update = SalesHeader::whereId($tran->id)->update([
+                        $update = SalesHeader::whereId((int) $tran->id)->update([
                             'delivery_status' => $status
                         ]);
                     }
@@ -277,7 +277,7 @@ class SalesController extends Controller
         $sales = explode(",", $request->del_id);
         foreach($sales as $sale){
             logger($sale);
-            $update = SalesHeader::whereId($sale)->update([
+            $update = SalesHeader::whereId((int) $sale)->update([
                 'delivery_status' => $request->delivery_status
             ]);
 

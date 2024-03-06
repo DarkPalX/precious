@@ -173,7 +173,7 @@ class FileDownloadController extends Controller
         $files = explode("|",$request->categories);
 
         foreach($files as $file){
-            FileDownload::whereId($file)->delete();
+            FileDownload::whereId((int) $file)->delete();
         }
 
         return back()->with('success', 'Selected files has been deleted permanently.');

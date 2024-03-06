@@ -72,7 +72,7 @@ class CustomerController extends Controller
             'user_id' => Auth::id() 
         ]);
 
-        User::whereId($request->user_id)->restore();
+        User::whereId((int) $request->user_id)->restore();
 
         return back()->with('success', __('standard.customers.status_success', ['status' => 'activated']));
     }

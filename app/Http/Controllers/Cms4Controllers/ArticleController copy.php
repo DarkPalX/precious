@@ -166,7 +166,7 @@ class ArticleController extends Controller
 
         foreach ($pages as $page) {
             Article::where('status', '!=', $request->status)
-            ->whereId($page)
+            ->whereId((int) $page)
             ->update([
                 'status' => $request->status
             ]);
@@ -184,7 +184,7 @@ class ArticleController extends Controller
         $pages = explode("|", $request->pages);
 
         foreach ($pages as $page) {
-            $news = Article::whereId($page);
+            $news = Article::whereId((int) $page);
             $news->update(['status' => 'PRIVATE']);
             $news->delete();
         }
@@ -194,7 +194,7 @@ class ArticleController extends Controller
 
     public function restore($page)
     {
-        Article::whereId($page)->restore();
+        Article::whereId((int) $page)->restore();
 
         return back()->with('success', __('standard.news.article.restore_success'));
     }

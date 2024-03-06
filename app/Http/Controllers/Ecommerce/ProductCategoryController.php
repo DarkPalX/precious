@@ -170,7 +170,7 @@ class ProductCategoryController extends Controller
 
     public function restore($category){
         ProductCategory::withTrashed()->find($category)->update(['created_by' => Auth::id() ]);
-        ProductCategory::whereId($category)->restore();
+        ProductCategory::whereId((int) $category)->restore();
 
         return back()->with('success', __('standard.products.category.restore_category_success'));
     }
@@ -195,8 +195,8 @@ class ProductCategoryController extends Controller
         $categories = explode("|",$request->categories);
 
         foreach($categories as $category){
-            ProductCategory::whereId($category)->update(['created_by' => Auth::id() ]);
-            ProductCategory::whereId($category)->delete();
+            ProductCategory::whereId((int) $category)->update(['created_by' => Auth::id() ]);
+            ProductCategory::whereId((int) $category)->delete();
         }
 
         return back()->with('success', __('standard.products.category.multiple_delete_success'));
@@ -217,7 +217,7 @@ class ProductCategoryController extends Controller
         $categories = explode("|", $request->categories);
 
         foreach ($categories as $category) {
-            $publish = ProductCategory::where('status', '!=', $request->status)->whereId($category)->update([
+            $publish = ProductCategory::where('status', '!=', $request->status)->whereId((int) $category)->update([
                 'status'  => $request->status,
                 'created_by' => Auth::id()
             ]);

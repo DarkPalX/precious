@@ -209,7 +209,7 @@ class ArticleFrontController extends Controller
         $crumbs['News'] = route('news.front.index');
 
         if($article) {
-            $article = Article::whereId($article)->first();
+            $article = Article::whereId((int) $article)->first();
             $crumbs[$article->name] = route('news.front.show',$article->slug);
         }
 

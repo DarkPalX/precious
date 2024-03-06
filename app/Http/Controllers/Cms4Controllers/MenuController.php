@@ -190,7 +190,7 @@ class MenuController extends Controller
 
     public function restore($menu)
     {
-        $restorePage = Menu::whereId($menu)->restore();
+        $restorePage = Menu::whereId((int) $menu)->restore();
 
         return back()->with('success', __('standard.menu.restore_success'));
     }

@@ -277,7 +277,7 @@ class PageController extends Controller
 
         foreach ($pages as $page) {
             Page::where('status', '!=', $request->status)
-            ->whereId($page)
+            ->whereId((int) $page)
             ->update([
                 'status'  => $request->status,
                 'user_id' => Auth::user()->id
@@ -311,7 +311,7 @@ class PageController extends Controller
     public function restore($page)
     {
         Page::withTrashed()->find($page)->update(['user_id' => Auth::id() ]);
-        Page::whereId($page)->restore();
+        Page::whereId((int) $page)->restore();
 
         return back()->with('success', __('standard.pages.restore_success'));
     }

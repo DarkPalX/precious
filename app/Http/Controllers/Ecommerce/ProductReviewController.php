@@ -158,7 +158,7 @@ class ProductReviewController extends Controller
         $reviews = explode("|",$request->reviews);
 
         foreach($reviews as $review){
-            ProductReview::whereId($review)->delete();
+            ProductReview::whereId((int) $review)->delete();
         }
 
         return back()->with('success', __('standard.product-review.multiple_delete_success'));
@@ -169,7 +169,7 @@ class ProductReviewController extends Controller
         $reviews = explode("|",$request->reviews);
 
         foreach($reviews as $review){
-            ProductReview::whereId($review)->update([
+            ProductReview::whereId((int) $review)->update([
                 'status' => 1,
             ]);
         }

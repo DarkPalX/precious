@@ -224,7 +224,7 @@ class PromoController extends Controller
         $promos = explode("|", $request->promos);
 
         foreach ($promos as $promo) {
-            $publish = Promo::where('status', '!=', $request->status)->whereId($promo)->update([
+            $publish = Promo::where('status', '!=', $request->status)->whereId((int) $promo)->update([
                 'status'  => $request->status,
                 'user_id' => Auth::id()
             ]);
@@ -238,11 +238,11 @@ class PromoController extends Controller
         $promos = explode("|",$request->promos);
 
         foreach($promos as $promo){
-            Promo::whereId($promo)->update([
+            Promo::whereId((int) $promo)->update([
                 'status' => 'INACTIVE',
                 'user_id' => Auth::id()
             ]);
-            Promo::whereId($promo)->delete();
+            Promo::whereId((int) $promo)->delete();
         }
 
         return back()->with('success', __('standard.promos.multiple_delete_success'));
@@ -250,7 +250,7 @@ class PromoController extends Controller
 
     public function restore($promo){
         Promo::withTrashed()->find($promo)->update(['status' => 'INACTIVE','user_id' => Auth::id() ]);
-        Promo::whereId($promo)->restore();
+        Promo::whereId((int) $promo)->restore();
 
         return back()->with('success', __('standard.promos.restore_promo_success'));
     }

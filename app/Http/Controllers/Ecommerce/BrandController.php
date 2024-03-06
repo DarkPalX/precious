@@ -352,7 +352,7 @@ class BrandController extends Controller
 
     public function restore($brand){
         Brand::withTrashed()->find($brand)->update(['user_id' => Auth::id() ]);
-        Brand::whereId($brand)->restore();
+        Brand::whereId((int) $brand)->restore();
 
         return back()->with('success', __('standard.brands.restore_success'));
     }
@@ -362,7 +362,7 @@ class BrandController extends Controller
         $brands = explode("|", $request->categories);
 
         foreach ($brands as $brand) {
-            Brand::where('status', '!=', $request->status)->whereId($brand)->update([
+            Brand::where('status', '!=', $request->status)->whereId((int) $brand)->update([
                 'status'  => $request->status,
                 'user_id' => Auth::id()
             ]);
@@ -376,7 +376,7 @@ class BrandController extends Controller
         $brands = explode("|",$request->categories);
 
         foreach($brands as $brand){
-            Brand::whereId($brand)->update(['user_id' => Auth::id() ]);
+            Brand::whereId((int) $brand)->update(['user_id' => Auth::id() ]);
 
             foreach($brand->child_categories as $child_category){
 
@@ -391,7 +391,7 @@ class BrandController extends Controller
                 $child_category->delete();
             }
 
-            Brand::whereId($brand)->delete();
+            Brand::whereId((int) $brand)->delete();
         }
 
         return back()->with('success', __('standard.brands.multiple_delete_success'));

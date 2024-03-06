@@ -530,7 +530,7 @@ class CouponController extends Controller
 
     public function restore($coupon){
         Coupon::withTrashed()->find($coupon)->update(['status' => 'INACTIVE','user_id' => Auth::id() ]);
-        Coupon::whereId($coupon)->restore();
+        Coupon::whereId((int) $coupon)->restore();
 
         return back()->with('success', __('standard.coupons.restore_promo_success'));
     }
@@ -540,7 +540,7 @@ class CouponController extends Controller
         $coupons = explode("|", $request->coupons);
 
         foreach ($coupons as $coupon) {
-            $publish = Coupon::where('status', '!=', $request->status)->whereId($coupon)->update([
+            $publish = Coupon::where('status', '!=', $request->status)->whereId((int) $coupon)->update([
                 'status'  => $request->status,
                 'user_id' => Auth::id()
             ]);
@@ -554,8 +554,8 @@ class CouponController extends Controller
         $coupons = explode("|",$request->coupons);
 
         foreach($coupons as $coupon){
-            Coupon::whereId($coupon)->update(['user_id' => Auth::id() ]);
-            Coupon::whereId($coupon)->delete();
+            Coupon::whereId((int) $coupon)->update(['user_id' => Auth::id() ]);
+            Coupon::whereId((int) $coupon)->delete();
         }
 
         return back()->with('success', __('standard.coupons.multiple_delete_success'));

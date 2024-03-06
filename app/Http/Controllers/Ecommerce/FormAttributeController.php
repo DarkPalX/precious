@@ -120,7 +120,7 @@ class FormAttributeController extends Controller
 
     public function restore($attributeId){
         
-        FormAttribute::whereId($attributeId)->restore();
+        FormAttribute::whereId((int) $attributeId)->restore();
 
         $attr = FormAttribute::findOrFail($attributeId);
         ProductAdditionalInfo::where('attribute_name', $attr->name)->restore();

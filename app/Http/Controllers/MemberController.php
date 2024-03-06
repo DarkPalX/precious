@@ -17,7 +17,7 @@ class MemberController extends Controller
         $categories = explode("|", $request->categories);
 
         foreach ($categories as $category) {
-            $publish = User::where('is_active', '!=', $request->status)->whereId($category)->update([
+            $publish = User::where('is_active', '!=', $request->status)->whereId((int) $category)->update([
                 'is_active'  => $request->status,
                 'user_id' => Auth::id()
             ]);
@@ -31,8 +31,8 @@ class MemberController extends Controller
         $users = explode("|",$request->categories);
 
         foreach($users as $user){
-            User::whereId($user)->update(['user_id' => Auth::id() ]);
-            User::whereId($user)->delete();
+            User::whereId((int) $user)->update(['user_id' => Auth::id() ]);
+            User::whereId((int) $user)->delete();
         }
 
         return back()->with('success', __('standard.members.multiple_delete_success'));
@@ -40,7 +40,7 @@ class MemberController extends Controller
 
     public function restore($category){
         User::withTrashed()->find($category)->update(['user_id' => Auth::id() ]);
-        User::whereId($category)->restore();
+        User::whereId((int) $category)->restore();
 
         return back()->with('success', __('standard.members.restore_category_success'));
     }

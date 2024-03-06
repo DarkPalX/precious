@@ -28,7 +28,7 @@ class SalesHeader extends Model
     }
 
     public static function balance($id){
-        $amount = SalesHeader::whereId($id)->sum('net_amount');        
+        $amount = SalesHeader::whereId((int) $id)->sum('net_amount');        
         $paid = (float) SalesPayment::where('sales_header_id',$id)->whereStatus('PAID')->sum('amount');
         return ($amount - $paid);
     }
@@ -41,9 +41,9 @@ class SalesHeader extends Model
         $paid = SalesPayment::where('sales_header_id',$this->id)->whereStatus('PAID')->sum('amount');
   
         if($paid >= $this->net_amount){
-            $tag_as_paid = SalesHeader::whereId($this->id)->update(['payment_status' => 'PAID']);
+            $tag_as_paid = SalesHeader::whereId((int) $this->id)->update(['payment_status' => 'PAID']);
             if($this->delivery_status == 'Waiting for Payment'){
-                $update_delivery_status = SalesHeader::whereId($this->id)->update(['delivery_status' => 'Processing Stock']);
+                $update_delivery_status = SalesHeader::whereId((int) $this->id)->update(['delivery_status' => 'Processing Stock']);
             }
             return 'PAID';
         }else{

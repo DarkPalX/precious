@@ -38,7 +38,7 @@ class MyAccountController extends Controller
         $requestData = $request->except(['_token', 'additional_address']);
         $requestData['name'] = $request->firstname.' '.$request->lastname;
 
-        User::whereId(Auth::id())->update($requestData);
+        User::whereId((int) Auth::id())->update($requestData);
 
         
         $user_exists = CustomerAddress::where('user_id', Auth::id())->first();

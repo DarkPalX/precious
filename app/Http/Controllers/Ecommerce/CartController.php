@@ -34,7 +34,7 @@ class CartController extends Controller
 {
     public function add_to_cart(Request $request)
 {       
-    $product = Product::whereId($request->product_id)->first();
+    $product = Product::whereId((int) $request->product_id)->first();
 
     $promo = DB::table('promos')
         ->join('promo_products','promos.id','=','promo_products.promo_id')
@@ -120,7 +120,7 @@ class CartController extends Controller
 
     // public function add_to_cart(Request $request)
     // {       
-    //     $product = Product::whereId($request->product_id)->first();
+    //     $product = Product::whereId((int) $request->product_id)->first();
 
     //     $promo = DB::table('promos')->join('promo_products','promos.id','=','promo_products.promo_id')->where('promos.status','ACTIVE')->where('promos.is_expire',0)->where('promo_products.product_id',$request->product_id);
 
@@ -239,7 +239,7 @@ class CartController extends Controller
     public function remove_product(Request $request)
     {
         if (auth()->check()) {
-            Cart::whereId($request->order_id)->delete();
+            Cart::whereId((int) $request->order_id)->delete();
         } else {
             $cart = session('cart', []);
             $index = (int) $request->order_id;

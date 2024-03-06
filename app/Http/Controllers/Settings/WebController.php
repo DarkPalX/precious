@@ -205,7 +205,7 @@ class WebController extends Controller
 
     public function remove_media(Request $request)
     {
-        $media = MediaAccounts::whereId($request->id);
+        $media = MediaAccounts::whereId((int) $request->id);
 
         $media->update([ 'user_id' => Auth::id() ]);
         $media->delete();

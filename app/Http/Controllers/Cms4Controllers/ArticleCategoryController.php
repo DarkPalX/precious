@@ -118,8 +118,8 @@ class ArticleCategoryController extends Controller
         $pages = explode("|",$request->pages);
 
         foreach($pages as $page){
-            ArticleCategory::whereId($page)->update(['user_id' => auth()->user()->id ]);
-            ArticleCategory::whereId($page)->delete();
+            ArticleCategory::whereId((int) $page)->update(['user_id' => auth()->user()->id ]);
+            ArticleCategory::whereId((int) $page)->delete();
         }
 
         return back()->with('success', __('standard.news.category.delete_success'));
@@ -127,7 +127,7 @@ class ArticleCategoryController extends Controller
 
     public function restore($id){
         ArticleCategory::withTrashed()->find($id)->update(['user_id' => auth()->user()->id ]);
-        ArticleCategory::whereId($id)->restore();
+        ArticleCategory::whereId((int) $id)->restore();
 
         return back()->with('success', __('standard.news.category.restore_success'));
 

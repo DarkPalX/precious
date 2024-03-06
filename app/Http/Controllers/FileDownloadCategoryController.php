@@ -143,8 +143,8 @@ class FileDownloadCategoryController extends Controller
         $categories = explode("|",$request->categories);
 
         foreach($categories as $category){
-            FileDownloadCategory::whereId($category)->update(['user_id' => Auth::id() ]);
-            FileDownloadCategory::whereId($category)->delete();
+            FileDownloadCategory::whereId((int) $category)->update(['user_id' => Auth::id() ]);
+            FileDownloadCategory::whereId((int) $category)->delete();
         }
 
         return back()->with('success', __('standard.file-category.multiple_delete_success'));
@@ -152,7 +152,7 @@ class FileDownloadCategoryController extends Controller
 
     public function restore($category){
         FileDownloadCategory::withTrashed()->find($category)->update(['user_id' => Auth::id() ]);
-        FileDownloadCategory::whereId($category)->restore();
+        FileDownloadCategory::whereId((int) $category)->restore();
 
         return back()->with('success', 'File Category has been restored.');
     }
@@ -172,7 +172,7 @@ class FileDownloadCategoryController extends Controller
         $categories = explode("|", $request->categories);
 
         foreach ($categories as $category) {
-            $publish = FileDownloadCategory::where('status', '!=', $request->status)->whereId($category)->update([
+            $publish = FileDownloadCategory::where('status', '!=', $request->status)->whereId((int) $category)->update([
                 'status'  => $request->status,
                 'user_id' => Auth::id()
             ]);

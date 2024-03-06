@@ -116,7 +116,7 @@ class BannerAdController extends Controller
     public function delete(Request $request, $ad_id)
     {
 
-        $banner_ad = BannerAd::whereId($ad_id);
+        $banner_ad = BannerAd::whereId((int) $ad_id);
         $banner_ad->update(['status' => 0]);
         $banner_ad->delete();
 
@@ -125,7 +125,7 @@ class BannerAdController extends Controller
 
     public function restore($ad_id)
     {
-        BannerAd::whereId($ad_id)->restore();
+        BannerAd::whereId((int) $ad_id)->restore();
 
         return back()->with('success', "Ad successfully restored");
     }

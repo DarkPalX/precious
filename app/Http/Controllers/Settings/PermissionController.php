@@ -150,7 +150,7 @@ class PermissionController extends Controller
 
     public function restore($id){
         Permission::withTrashed()->find($id)->update(['user_id' => Auth::id() ]);
-        Permission::whereId($id)->restore();
+        Permission::whereId((int) $id)->restore();
 
         return back()->with('success', __('standard.account_management.permissions.restore_success'));
     }

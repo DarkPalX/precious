@@ -65,7 +65,7 @@ class InventoryReceiverHeaderController extends Controller
 
     public function post($id)
     {
-        $update = InventoryReceiverHeader::whereId($id)->update([
+        $update = InventoryReceiverHeader::whereId((int) $id)->update([
             'posted_at' => date('Y-m-d H:i:s'),
             'posted_by' => Auth::id(),
             'status' => 'POSTED'
@@ -75,7 +75,7 @@ class InventoryReceiverHeaderController extends Controller
     }
     public function cancel($id)
     {
-        $update = InventoryReceiverHeader::whereId($id)->update([
+        $update = InventoryReceiverHeader::whereId((int) $id)->update([
                 'cancelled_at' => date('Y-m-d H:i:s'),
                 'cancelled_by' => Auth::id(),
                 'status' => 'CANCELLED'

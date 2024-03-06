@@ -148,13 +148,13 @@ class DeliverablecitiesController extends Controller
 
     public function delete(Request $request)
     {
-        $delete = Deliverablecities::whereId($request->delete_id)->delete();
+        $delete = Deliverablecities::whereId((int) $request->delete_id)->delete();
         return back()->with('success','The location has been deleted.');
     }
 
     public function restore($id){
         Deliverablecities::withTrashed()->find($id)->update(['user_id' => Auth::id() ]);
-        Deliverablecities::whereId($id)->restore();
+        Deliverablecities::whereId((int) $id)->restore();
 
         return back()->with('success', __('standard.locations.restore_success'));
     }
@@ -165,7 +165,7 @@ class DeliverablecitiesController extends Controller
         $rates = explode("|", $request->rates);
 
         foreach ($rates as $rate) {
-            $publish = Deliverablecities::where('status', '!=', $request->status)->whereId($rate)->update([
+            $publish = Deliverablecities::where('status', '!=', $request->status)->whereId((int) $rate)->update([
                 'status'  => $request->status,
                 'user_id' => Auth::id()
             ]);
@@ -179,8 +179,8 @@ class DeliverablecitiesController extends Controller
         $rates = explode("|",$request->rates);
 
         foreach($rates as $rate){
-            Deliverablecities::whereId($rate)->update(['user_id' => Auth::id() ]);
-            Deliverablecities::whereId($rate)->delete();
+            Deliverablecities::whereId((int) $rate)->update(['user_id' => Auth::id() ]);
+            Deliverablecities::whereId((int) $rate)->delete();
         }
 
         return back()->with('success', __('standard.locations.multiple_delete_success'));

@@ -339,7 +339,7 @@ class ProductController extends Controller
     public function restore($id)
     {
         Product::withTrashed()->find($id)->update(['created_by' => Auth::id() ]);
-        Product::whereId($id)->restore();
+        Product::whereId((int) $id)->restore();
 
         return back()->with('success', __('standard.products.product.restore_product_success'));
     }
@@ -370,7 +370,7 @@ class ProductController extends Controller
 
         foreach ($products as $product) {
             if($product != ""){
-                $publish = Product::where('status', '!=', $request->status)->whereId($product)->update([
+                $publish = Product::where('status', '!=', $request->status)->whereId((int) $product)->update([
                     'status'  => $request->status,
                     'created_by' => Auth::id()
                 ]);  
@@ -387,8 +387,8 @@ class ProductController extends Controller
 
         foreach($products as $product){
             if($product != ""){
-                Product::whereId($product)->update(['created_by' => Auth::id() ]);
-                Product::whereId($product)->delete();
+                Product::whereId((int) $product)->update(['created_by' => Auth::id() ]);
+                Product::whereId((int) $product)->delete();
             }
         }
 
