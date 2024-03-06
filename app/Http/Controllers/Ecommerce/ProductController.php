@@ -26,7 +26,7 @@ use Auth;
 class ProductController extends Controller
 {
     private $searchFields = ['name'];
-    private $advanceSearchFields = ['category_id', 'code', 'name', 'brand_id', 'short_description', 'description', 'status', 'price1', 'price2', 'user_id', 'updated_at1', 'updated_at2'];
+    private $advanceSearchFields = ['category_id', 'sku', 'name', 'brand_id', 'short_description', 'description', 'status', 'price1', 'price2', 'user_id', 'updated_at1', 'updated_at2'];
 
     public function __construct()
     {
