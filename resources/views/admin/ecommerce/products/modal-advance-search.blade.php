@@ -6,12 +6,12 @@
                     <h4 class="modal-title">{{__('common.advance_search')}}</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="control-label">Code</label>
                         <div>
                             <input type="text" class="form-control input-sm" name="code" value="{{ $advanceSearchData->code }}">
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label class="control-label">Name</label>
                         <div>
