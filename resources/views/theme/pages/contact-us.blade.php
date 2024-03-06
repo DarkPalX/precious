@@ -26,7 +26,7 @@
             @endif
             <p><strong>Note:</strong> Please do not leave required fields (*) empty.</p>
             <div class="form-style fs-sm">
-                <form action="{{ route('contact-us') }}" method="POST">
+                <form id="contactUsForm" action="{{ route('contact-us') }}" method="POST">
                     @csrf
                     <div class="form-group">
                         <label for="fullName" class="fs-6 fw-semibold text-initial nols">Full Name <span class="text-danger">*</span></label>
@@ -57,10 +57,10 @@
 
                     <div class="row g-2">
                         <div class="col-md-6">
-                            <a href="#" class="button button-circle border-bottom ms-0 text-initial nols fw-normal button-large d-block text-center">Submit</a>
+                            <a class="button button-circle border-bottom ms-0 text-initial nols fw-normal button-large d-block text-center" href="javascript:void(0)" onclick="document.getElementById('contactUsForm').submit()">Submit</a>
                         </div>
                         <div class="col-md-6">
-                            <a href="#" class="button button-circle button-dark border-bottom ms-0 text-initial nols fw-normal button-large d-block text-center">Reset</a>
+                            <a href="javascript:void(0)" class="button button-circle button-dark border-bottom ms-0 text-initial nols fw-normal button-large d-block text-center" onclick="resetForm();">Reset</a>
                         </div>
                     </div>
                 </form>
@@ -95,5 +95,9 @@
             return false;
         }
     });
+    
+    function resetForm() {
+        document.getElementById("contactUsForm").reset();
+    }
 </script>
 @endsection

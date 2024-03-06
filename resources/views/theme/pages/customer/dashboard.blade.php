@@ -16,7 +16,77 @@
         </div>
 
         <div class="col-lg-9">
-            <h2>Transactions</h2>
+            <h2>Dashboard</h2>
+
+            <div class="fancy-title title-border-color title-left">
+                <h4 class="text-success">Personal Information</h4>
+            </div>
+            
+            <div class="heading-block border-0 mb-0">
+                <h3>{{ auth()->user()->firstname . ' ' . auth()->user()->lastname }}</h3>
+                {{-- <span>Your Profile Bio</span> --}}
+            </div>
+            
+            <div class="m-auto">					
+                <a href="{{ route('customer.manage-account') }}" class="button button-border button-rounded ms-0 topmargin-sm button-small">Edit Information</a>
+            </div>
+            
+            <div class="fancy-title title-border-color title-left mt-4">
+                <h4>Library</h4>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="grid-inner">
+                        <div class="product-image h-translate-y all-ts">
+                            <a href="demo-articles-single.html"><img src="images/products/image1.png" alt="Image 1"></a>
+                        </div>
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="demo-articles-single.html">Our Dreams</a></h3></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="grid-inner">
+                        <div class="product-image h-translate-y all-ts">
+                            <a href="demo-articles-single.html"><img src="images/products/image1.png" alt="Image 1"></a>
+                        </div>
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="demo-articles-single.html">Our Dreams</a></h3></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="grid-inner">
+                        <div class="product-image h-translate-y all-ts">
+                            <a href="demo-articles-single.html"><img src="images/products/image1.png" alt="Image 1"></a>
+                        </div>
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="demo-articles-single.html">Our Dreams</a></h3></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="grid-inner">
+                        <div class="product-image h-translate-y all-ts">
+                            <a href="demo-articles-single.html"><img src="images/products/image1.png" alt="Image 1"></a>
+                        </div>
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="demo-articles-single.html">Our Dreams</a></h3></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-auto">					
+                <a href="#" class="button button-border button-rounded ms-0 topmargin-sm button-small">View Library</a>
+            </div>
+            
+            <div class="fancy-title title-border-color title-left mt-4">
+                <h4>Transactions</h4>
+            </div>
             
             <table class="table table-hover">
                 <thead>
@@ -191,6 +261,22 @@
                 </tbody>
             </table>
             {{ $sales->links('theme.layouts.pagination') }}
+            
+            <div class="m-auto">					
+                <a href="{{ route('profile.sales') }}" class="button button-border button-rounded ms-0 topmargin-sm button-small">View All Transactions</a>
+            </div>
+            
+            <div class="fancy-title title-border-color title-left mt-4">
+                <h4>E-Credit</h4>
+            </div>
+            
+            <div class="col-lg-12">
+                
+                <p>Your current balance</p>
+                <h3>₱ {{ auth()->user()->ecredits }}</h3>
+                
+                <a href="#" class="button button-border button-rounded ms-0 button-small">Add Credits</a>
+            </div>
         </div>
     </div>
 </div>

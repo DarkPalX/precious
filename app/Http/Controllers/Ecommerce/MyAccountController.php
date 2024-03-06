@@ -20,6 +20,20 @@ use Auth;
 
 class MyAccountController extends Controller
 {
+    public function dashboard(Request $request)
+    {
+        $page = new Page;
+        $page->name = 'Dashboard';
+        $sales = SalesHeader::where('user_id',Auth::id())->orderBy('id','desc')->paginate(10);
+
+        $member = auth()->user();
+        $user = auth()->user();
+
+        $additional_addresses = CustomerAddress::where('user_id', $user->id)->get();
+
+        return view('theme.pages.customer.dashboard', compact('member', 'user', 'page', 'additional_addresses', 'sales'));
+    }
+
     public function manage_account(Request $request)
     {
         $page = new Page;
@@ -31,6 +45,45 @@ class MyAccountController extends Controller
         $additional_addresses = CustomerAddress::where('user_id', $user->id)->get();
 
         return view('theme.pages.customer.manage-account', compact('member', 'user', 'page', 'additional_addresses'));
+    }
+
+    public function library(Request $request)
+    {
+        $page = new Page;
+        $page->name = 'My Library';
+
+        $member = auth()->user();
+        $user = auth()->user();
+
+        $additional_addresses = CustomerAddress::where('user_id', $user->id)->get();
+
+        return view('theme.pages.customer.library', compact('member', 'user', 'page', 'additional_addresses'));
+    }
+
+    public function free_ebooks(Request $request)
+    {
+        $page = new Page;
+        $page->name = 'Free E-books';
+
+        $member = auth()->user();
+        $user = auth()->user();
+
+        $additional_addresses = CustomerAddress::where('user_id', $user->id)->get();
+
+        return view('theme.pages.customer.free-ebooks', compact('member', 'user', 'page', 'additional_addresses'));
+    }
+
+    public function ecredits(Request $request)
+    {
+        $page = new Page;
+        $page->name = 'E-Credits';
+
+        $member = auth()->user();
+        $user = auth()->user();
+
+        $additional_addresses = CustomerAddress::where('user_id', $user->id)->get();
+
+        return view('theme.pages.customer.ecredits', compact('member', 'user', 'page', 'additional_addresses'));
     }
 
     public function update_personal_info(Request $request)

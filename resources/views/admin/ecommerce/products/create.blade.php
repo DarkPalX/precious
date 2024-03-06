@@ -133,7 +133,7 @@
 
                     <div class="form-group">
                         <label class="d-block">Upload images</label>
-                        <input type="file" id="upload_image" class="image_path" accept="image/*" multiple>
+                        <input type="file" id="upload_image" class="image_path" accept="image/*" multiple required>
                         <button type="button" class="btn btn-secondary btn-sm upload" id="selectImages">Select images</button>
                         <p class="tx-10">
                             Required image dimension: {{ env('PRODUCT_WIDTH') }}px by {{ env('PRODUCT_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png <br />
