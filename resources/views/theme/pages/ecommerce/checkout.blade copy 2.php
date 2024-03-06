@@ -256,22 +256,6 @@
 												<span class="amount">₱{{ number_format($subtotal,2) }}</span>
 											</td>
 										</tr>
-										
-
-
-
-										<tr class="cart_item">
-											<td class="cart-product-name">
-												<strong>My E-Wallet</strong>
-											</td>
-
-											<td class="cart-product-name text-end">
-												<span class="amount">{{ auth()->user()->ecredits }}</span>
-											</td>
-										</tr>
-
-
-										
 										<tr class="cart_item">
 											<td class="cart-product-name">
 												<strong>Shipping</strong>
