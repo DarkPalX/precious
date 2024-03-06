@@ -14,14 +14,14 @@
             @if(session()->has('success'))
                 <div class="style-msg successmsg">
                     <div class="sb-msg"><i class="icon-thumbs-up"></i><strong>Success!</strong> {{ session()->get('success') }}</div>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{-- <button type="button" class="btn-close btn-sm" data-dismiss="alert" aria-hidden="true">&times;</button> --}}
                 </div>
             @endif
             
             @if(session()->has('error'))
                 <div class="style-msg successmsg">
                     <div class="sb-msg"><i class="icon-thumbs-up"></i><strong>Success!</strong> {{ session()->get('error') }}</div>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{-- <button type="button" class="btn-close btn-sm" data-dismiss="alert" aria-hidden="true">&times;</button> --}}
                 </div>
             @endif
             <p><strong>Note:</strong> Please do not leave required fields (*) empty.</p>
@@ -46,14 +46,14 @@
                         <textarea name="message" id="message" class="form-control form-input textarea" rows="5"></textarea>
                     </div>
                     
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="control-label text-danger" for="g-recaptcha-response" id="catpchaError" style="display:none;font-size: 14px;"><i class="fa fa-times-circle-o"></i>The Captcha field is required.</label></br>
                         @if($errors->has('g-recaptcha-response'))
                             @foreach($errors->get('g-recaptcha-response') as $message)
                                 <label class="control-label text-danger" for="g-recaptcha-response"><i class="fa fa-times-circle-o"></i>{{ $message }}</label></br>
                             @endforeach
                         @endif
-                    </div>
+                    </div> --}}
 
                     <div class="row g-2">
                         <div class="col-md-6">
@@ -63,6 +63,13 @@
                             <a href="javascript:void(0)" class="button button-circle button-dark border-bottom ms-0 text-initial nols fw-normal button-large d-block text-center" onclick="resetForm();">Reset</a>
                         </div>
                     </div>
+                    
+                    {{-- hidden inputs --}}
+                    <div class="form-group" style="display:none;">
+                        <input type="text" id="services" class="form-control form-input" name="services" placeholder="Enter Subject" value="Design" required/>
+                        <input type="text" id="subject" class="form-control form-input" name="subject" placeholder="Enter Subject" value="Design" required/>
+                    </div>
+
                 </form>
             </div>
 
@@ -87,14 +94,14 @@
         });
     });
 
-    $('#contactUsForm').submit(function (evt) {
-        let recaptcha = $("#g-recaptcha-response").val();
-        if (recaptcha === "") {
-            evt.preventDefault();
-            $('#catpchaError').show();
-            return false;
-        }
-    });
+    // $('#contactUsForm').submit(function (evt) {
+    //     let recaptcha = $("#g-recaptcha-response").val();
+    //     if (recaptcha === "") {
+    //         evt.preventDefault();
+    //         $('#catpchaError').show();
+    //         return false;
+    //     }
+    // });
     
     function resetForm() {
         document.getElementById("contactUsForm").reset();

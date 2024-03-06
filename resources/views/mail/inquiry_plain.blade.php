@@ -12,15 +12,6 @@ Contact Number: {{ $clientInfo['contact'] }}
 Services: {{ $clientInfo['services'] }}
 Message: {{ $clientInfo['message'] }}
 
-@if(isset($clientInfo['company_address']))
-Company Address: {{ $clientInfo['company_address'] }}
-@endif
-
-Services: 
-@foreach($clientInfo['services'] as $key => $service)
-    * {{ $service }}<br/>
-@endforeach 
-
 
 Regards,
 {{ $setting->company_name }}

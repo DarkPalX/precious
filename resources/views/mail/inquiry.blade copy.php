@@ -38,18 +38,21 @@
 
     <div style="padding:30px 60px;">
         <div style="text-align: center;padding: 20px 0;">
-            <img src="{{ asset('theme/images/kemc-logo.png') }}" alt="company logo" width="175" />
+            <img src="{{ Setting::get_company_logo_storage_path() }}" alt="company logo" width="175" />
         </div>
 
-        <p style="margin-top: 30px;"><strong>Dear {{ $adminInfo->name }},</strong></p>
-        {{-- <p style="margin-top: 30px;"><strong>Dear {{ $adminInfo->firstname }},</strong></p> --}}
+        <p style="margin-top: 30px;"><strong>Dear {{ $clientInfo['name'] }},</strong></p>
 
         <p>
-            {{ $clientInfo['name'] }} has submitted an inquiry requiring your prompt attention.
+            This is to inform you that your inquiry has been sent to our Admin for action.
         </p>
 
         <p>
-            Please see details of the inquiry below.
+            Please expect a response within 24 hours.
+        </p>
+
+        <p>
+            For your reference, please see details of your inquiry below.
         </p>
 
         <br />
@@ -75,6 +78,21 @@
             <tr>
                 <td><strong>Message</strong></td>
                 <td>{{ $clientInfo['message'] }}</td>
+            </tr>
+            @if(isset($clientInfo['company_address']))
+            <tr>
+                <td><strong>Company Address</strong></td>
+                <td>{{ $clientInfo['company_address'] }}</td>
+            </tr>
+            @endif
+
+            <tr>
+                <td><strong>Services</strong></td>
+                <td>
+                    @foreach($clientInfo['services'] as $key => $service)
+                        * {{ $service }}<br/>
+                    @endforeach
+                </td>
             </tr>
             </tbody>
         </table>

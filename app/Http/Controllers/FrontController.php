@@ -19,6 +19,7 @@ use App\Models\User;
 
 use App\Models\TemplateCategory;
 use App\Models\Template;
+use App\Models\EmailRecipient;
 use App\Models\Ecommerce\{BannerAd, BannerAdPage};
 
 use Auth;
@@ -152,23 +153,40 @@ class FrontController extends Controller
         return view('theme.page', compact('footer', 'page', 'parentPage', 'breadcrumb', 'currentPageItems', 'parentPageName', 'banner_ads'));
     }
 
-    public function contact_us(ContactUsRequest $request)
+    
+    public function contact_us(Request $request)
     {
-        $admins  = User::where('role_id', 1)->get();
+        $email_recipients  = EmailRecipient::all();
         $client = $request->all();
 
-        Mail::to($client['email'])->send(new InquiryMail(Setting::info(), $client));
+        \Mail::to($client['email'])->send(new InquiryMail(Setting::info(), $client));
 
-        foreach ($admins as $admin) {
-            Mail::to($admin->email)->send(new InquiryAdminMail(Setting::info(), $client, $admin));
+        foreach ($email_recipients as $email_recipient) {
+            \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
         }
 
-        if (Mail::failures()) {
-            return redirect()->back()->with('error','Failed to send inquiry. Please try again later.');
-        }
+        session()->flash('success', 'Email sent!');
 
-        return redirect()->back()->with('success','Email sent!');
+        return redirect()->back();
     }
+
+    // public function contact_us(ContactUsRequest $request)
+    // {
+    //     $admins  = User::where('role_id', 1)->get();
+    //     $client = $request->all();
+
+    //     Mail::to($client['email'])->send(new InquiryMail(Setting::info(), $client));
+
+    //     foreach ($admins as $admin) {
+    //         Mail::to($admin->email)->send(new InquiryAdminMail(Setting::info(), $client, $admin));
+    //     }
+
+    //     if (Mail::failures()) {
+    //         return redirect()->back()->with('error','Failed to send inquiry. Please try again later.');
+    //     }
+
+    //     return redirect()->back()->with('success','Email sent!');
+    // }
 
     public function breadcrumb($page)
     {
