@@ -23,7 +23,7 @@
 							<th class="cart-product-thumbnail">&nbsp;</th>
 							<th class="cart-product-name">Product</th>
 							<th class="cart-product-price">Unit Price</th>
-							<th class="cart-product-price">Discounted Price</th>
+							{{-- <th class="cart-product-price">Discounted Price</th> --}}
 							<th class="cart-product-quantity">Quantity</th>
 							<th class="cart-product-subtotal">Total</th>
 						</tr>
@@ -79,9 +79,9 @@
 	                                <a href="{{ route('product.details',$order->product->slug)}}">{{ $order->product->name }}</a>
 	                            </td>
 
-	                            <td class="cart-product-price">
+	                            {{-- <td class="cart-product-price">
 	                                <span class="amount">₱{{ number_format($order->product->discountedprice,2) }}</span>
-	                            </td>
+	                            </td> --}}
 
 	                            <td class="cart-product-price">
 									<span class="amount">₱{{ number_format($order->product->price-$order->product->discountedprice,2) }}</span>
@@ -135,11 +135,11 @@
 	                            </div>
 	                        </div>
 	                        @if(Auth::check())
-	                        <p><a href="#" onclick="myCoupons()" class="btn mb-2 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
-	                        <input type="hidden" id="hasLogin" value="1">
+                                <p><a href="#" onclick="myCoupons()" class="btn mb-2 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
+                                <input type="hidden" id="hasLogin" value="1">
 	                        @else
-	                        <p><a href="#" onclick="login_modal()" class="btn mb-2 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
-	                        <input type="hidden" id="hasLogin" value="0">
+                                <p><a href="#" onclick="login_modal()" class="btn mb-2 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
+                                <input type="hidden" id="hasLogin" value="0">
 	                        @endif
 	                    </div>
 
