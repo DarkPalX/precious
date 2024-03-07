@@ -175,7 +175,7 @@
 	                                        <span class="amount" id="subtotal">₱{{ number_format($grandtotal,2) }}</span>
 	                                    </td>
 	                                </tr>
-	                                <tr class="cart_item" id="couponDiscountDiv" style="display: none;">
+	                                <tr class="cart_item" id="couponDiscountDiv">
 	                                    <td class="cart-product-name">
 	                                        <strong>Coupon Discount</strong>
 	                                    </td>
@@ -184,6 +184,19 @@
 	                                        <span class="amount" id="total_coupon_deduction">₱0.00</span>
 	                                    </td>
 	                                </tr>
+									<tr class="cart_item">
+										<td class="cart-product-name">
+											<strong>My E-Wallet</strong>
+										</td>
+
+										<td class="cart-product-name text-right">
+											<span class="amount">₱{{ number_format(auth()->user()->ecredits ?? 0, 2)}}</span>
+											<div class="switch mt-1 float-end ms-3">
+												<input id="switch-toggle-1" class="switch-toggle switch-rounded-mini switch-toggle-round" type="checkbox">
+												<label for="switch-toggle-1"></label>
+											</div>
+										</td>
+									</tr>
 	                                <tr class="cart_item">
 	                                    <td class="cart-product-name">
 	                                        <strong>Total</strong>
