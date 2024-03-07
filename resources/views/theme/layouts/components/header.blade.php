@@ -143,13 +143,6 @@
 									</div>
 									
 									{{-- <div class="col-12 mt-3">
-										<input type="text" id="company" name="company" value="{{ old('mobile') }}" class="form-control not-dark @error('company') is-invalid @enderror" placeholder="Company" />
-										@error('company')
-											<span class="text-danger">{{ $message }}</span>
-										@enderror
-									</div> --}}
-									
-									<div class="col-12 mt-3">
 										<input type="password" id="password" name="password" value="{{ old('password') }}" class="form-control not-dark @error('password') is-invalid @enderror" placeholder="Password" />
 										@error('password')
 											<span class="text-danger">{{ $message }}</span>
@@ -161,7 +154,7 @@
 										@error('password_confirmation')
 											<span class="text-danger">{{ $message }}</span>
 										@enderror
-									</div>
+									</div> --}}
 
 									<div class="col-12 mt-3">
 										<button href="dashboard.htm" class="button w-100 m-0 center" id="" name="" value="login">Sign up</button>

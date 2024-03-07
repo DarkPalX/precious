@@ -35,42 +35,6 @@ class CustomerFrontController extends Controller
 
     }
 
-    // public function customer_sign_up(Request $request) {
-
-    //     Validator::make($request->all(), [
-    //         'email' => 'required|email|max:191',
-    //         'lastname' => 'required',
-    //         'firstname' => 'required',
-    //         'mobile' => 'required|numeric',
-    //         // 'company' => 'nullable',
-    //         'password' => 'min:8|required_with:password_confirmation|same:password_confirmation',
-    //         'password_confirmation' => 'min:8',
-    //     ])->validate();
-
-    //     $usr = User::withTrashed()->where('email', $request->email);
-    //     if($usr->count() > 0){
-    //         $u = $usr->first();
-    //         if($u->trashed()){
-    //             return back()->with('error', 'Your account has been deactivated. Please contact administrator to activate your account.');
-    //         } else {
-    //             return back()->with('error', 'Account is already in the list.');
-    //         }
-    //     }
-
-    //     $requestData = $request->all();
-    //     $requestData['name'] = $request->firstname.' '.$request->lastname;
-    //     $requestData['password'] = str_random(32);
-    //     $requestData['remember_token'] = str_random(10);
-    //     $requestData['email_verified_at'] =  date('Y-m-d H:i:s');
-    //     $requestData['is_active'] = 1;
-    //     $requestData['role_id'] = 6;
-
-    //     $user = User::create($requestData);
-    //     $this->sendResetLinkEmail($request);
-
-    //     return redirect()->back()->with('success', 'Pending for activation. Please check your email to activate password.');
-    // }
-
     public function customer_sign_up(Request $request) {
 
         Validator::make($request->all(), [
@@ -95,18 +59,54 @@ class CustomerFrontController extends Controller
 
         $requestData = $request->all();
         $requestData['name'] = $request->firstname.' '.$request->lastname;
-        $requestData['password'] = \Hash::make($request->password);
+        $requestData['password'] = str_random(32);
         $requestData['remember_token'] = str_random(10);
         $requestData['email_verified_at'] =  date('Y-m-d H:i:s');
         $requestData['is_active'] = 1;
         $requestData['role_id'] = 6;
 
         $user = User::create($requestData);
-        Auth::login($user);
+        $this->sendResetLinkEmail($request);
 
-        return redirect(env('APP_URL') . '/books')->with('success', 'Registration Successful!');
-        // return redirect(route('product.brands'))->with('success','Registration Successful!');
+        return redirect()->back()->with('success', 'Pending for activation. Please check your email to activate password.');
     }
+
+    // public function customer_sign_up(Request $request) {
+
+    //     Validator::make($request->all(), [
+    //         'email' => 'required|email|max:191',
+    //         'lastname' => 'required',
+    //         'firstname' => 'required',
+    //         'mobile' => 'required|numeric',
+    //         // 'company' => 'nullable',
+    //         'password' => 'min:8|required_with:password_confirmation|same:password_confirmation',
+    //         'password_confirmation' => 'min:8',
+    //     ])->validate();
+
+    //     $usr = User::withTrashed()->where('email', $request->email);
+    //     if($usr->count() > 0){
+    //         $u = $usr->first();
+    //         if($u->trashed()){
+    //             return back()->with('error', 'Your account has been deactivated. Please contact administrator to activate your account.');
+    //         } else {
+    //             return back()->with('error', 'Account is already in the list.');
+    //         }
+    //     }
+
+    //     $requestData = $request->all();
+    //     $requestData['name'] = $request->firstname.' '.$request->lastname;
+    //     $requestData['password'] = \Hash::make($request->password);
+    //     $requestData['remember_token'] = str_random(10);
+    //     $requestData['email_verified_at'] =  date('Y-m-d H:i:s');
+    //     $requestData['is_active'] = 1;
+    //     $requestData['role_id'] = 6;
+
+    //     $user = User::create($requestData);
+    //     Auth::login($user);
+
+    //     return redirect(env('APP_URL') . '/books')->with('success', 'Registration Successful!');
+    //     // return redirect(route('product.brands'))->with('success','Registration Successful!');
+    // }
 
     public function login(Request $request) {
 
