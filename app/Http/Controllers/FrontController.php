@@ -20,7 +20,7 @@ use App\Models\User;
 use App\Models\TemplateCategory;
 use App\Models\Template;
 use App\Models\EmailRecipient;
-use App\Models\Ecommerce\{BannerAd, BannerAdPage};
+use App\Models\Ecommerce\{BannerAd, BannerAdPage, Product};
 
 use Auth;
 
@@ -92,9 +92,12 @@ class FrontController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $totalItems = $pages->count()+$news->count();
+        $products = Product::select('products.*')->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
+        ->where('products.status', 'PUBLISHED')->get();
 
-        $searchResult = collect($pages)->merge($news)->paginate(10);
+        $totalItems = $pages->count()+$news->count()+$products->count();
+
+        $searchResult = collect($pages)->merge($news)->merge($products)->paginate(10);
 
         return view('theme.pages.search-result', compact('searchResult', 'totalItems', 'page','breadcrumb'));
     }
