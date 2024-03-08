@@ -23,7 +23,7 @@ use App\Models\EmailRecipient;
 use App\Models\Ecommerce\{BannerAd, BannerAdPage, Product};
 
 use Auth;
-
+use DB;
 
 
 
@@ -92,8 +92,17 @@ class FrontController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $products = Product::select('products.*')->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
-        ->where('products.status', 'PUBLISHED')->get();
+        $products = Product::where('status', 'PUBLISHED')
+            ->where(function ($query) use ($searchtxt) {
+                $query->where('name', 'like', '%' . $searchtxt . '%');
+            })
+            // ->select('name', "book-details/".'slug')
+            ->select('name', DB::raw("CONCAT('book-details/', slug) as slug"))
+            ->orderBy('name', 'asc')
+            ->get();
+
+        // $products = Product::select('products.*')->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
+        // ->where('products.status', 'PUBLISHED')->get();
 
         $totalItems = $pages->count()+$news->count()+$products->count();
 
