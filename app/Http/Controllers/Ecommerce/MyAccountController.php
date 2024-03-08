@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Helpers\{PaynamicsHelper};
 use App\Models\Ecommerce\{
-    Cart, SalesHeader, SalesDetail, CustomerAddress
+    Cart, SalesHeader, SalesDetail, CustomerAddress, CustomerFavorite, Product
 };
 
 use App\Models\{
@@ -58,6 +58,21 @@ class MyAccountController extends Controller
         $additional_addresses = CustomerAddress::where('user_id', $user->id)->get();
 
         return view('theme.pages.customer.library', compact('member', 'user', 'page', 'additional_addresses'));
+    }
+
+    public function favorites(Request $request)
+    {
+        $page = new Page;
+        $page->name = 'My Favorites';
+
+        $member = auth()->user();
+        $user = auth()->user();
+
+        $customer_favorites = CustomerFavorite::where('customer_id', auth()->user()->id ?? -1)
+        ->with('product') // Eager load the related product
+        ->get();
+
+        return view('theme.pages.customer.favorites', compact('member', 'user', 'page', 'customer_favorites'));
     }
 
     public function free_ebooks(Request $request)

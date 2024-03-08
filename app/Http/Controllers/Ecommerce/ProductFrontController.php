@@ -119,6 +119,7 @@ class ProductFrontController extends Controller
 
             $products = $products->where(function($query) use ($keyword){
                 $query->orWhereRaw('LOWER(products.name) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(products.author) like LOWER(?)', ["%{$keyword}%"])
                 ->orWhereRaw('LOWER(products.description) like LOWER(?)', ["%{$keyword}%"])
                 ->orWhereRaw('LOWER(product_additional_infos.value) like LOWER(?)', ["%{$keyword}%"]);
             });

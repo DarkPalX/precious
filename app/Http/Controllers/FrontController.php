@@ -94,7 +94,8 @@ class FrontController extends Controller
 
         $products = Product::where('status', 'PUBLISHED')
             ->where(function ($query) use ($searchtxt) {
-                $query->where('name', 'like', '%' . $searchtxt . '%');
+                $query->where('name', 'like', '%' . $searchtxt . '%')
+                ->orWhere('author', 'like', '%' . $searchtxt . '%');
             })
             // ->select('name', "book-details/".'slug')
             ->select('name', DB::raw("CONCAT('book-details/', slug) as slug"))

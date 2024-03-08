@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\{User, Brand};
 
 use App\Models\Ecommerce\{
-    ProductTag, ProductCategory, ProductPhoto, PromoProducts, Cart
+    ProductTag, ProductCategory, ProductPhoto, PromoProducts, Cart, CustomerFavorite
 };
 
 use Carbon\Carbon;
@@ -337,4 +337,10 @@ class Product extends Model
 
         return $path[$nameIndex];
     }
+
+    public function customerFavorites()
+    {
+        return $this->hasMany(CustomerFavorite::class, 'product_id');
+    }
+    
 }

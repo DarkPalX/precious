@@ -123,6 +123,7 @@ Route::get('/phpinfo', function () {
             Route::get('/customer/dashboard', [MyAccountController::class, 'dashboard'])->name('customer.dashboard');
             Route::get('/manage-account', [MyAccountController::class, 'manage_account'])->name('customer.manage-account');
             Route::get('/library', [MyAccountController::class, 'library'])->name('customer.library');
+            Route::get('/favorites', [MyAccountController::class, 'favorites'])->name('customer.favorites');
             Route::get('/free-ebooks', [MyAccountController::class, 'free_ebooks'])->name('customer.free-ebooks');
             Route::get('/ecredits', [MyAccountController::class, 'ecredits'])->name('customer.ecredits');
             Route::post('/account-update', [MyAccountController::class, 'update_personal_info'])->name('my-account.update-personal-info');
