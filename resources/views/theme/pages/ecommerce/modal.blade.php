@@ -20,7 +20,7 @@
                         </div>
                         <small><strong>Jan 1, 2021 - Dec 31, 2021</strong></small>
                         <p class="m-0">Maecenas egestas mollis eros, et hendrerit justo aliquam non. Aliquam in accumsan nibh <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg">Terms & Conditions</a></p>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -28,71 +28,51 @@
 </div> --}}
 
 <div class="modal fade my-coupons" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">My Coupon</h4>
                 <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
-                <table class="table small border rounded border-top-warning">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <h3 class="mb-0">16.00% OFF</h3>
-                                For orders over ₱100.00
-                                <br><br>
-                                Code: ph5b11v2
-                                <br>Coupon requirements met, expect to save ₱217.00
-                                <br><br>
-                                <div class="text-secondary">
-                                    <ul class="m-0 ms-3">
-                                        <li>11/04/2023 - 11/11/2023</li>	
-                                        <li>Applies to select products</li>	
-                                    </ul>
-                                </div>
-                            </td>
-                            <td width="10px">
-                                <label>
-                                    <input type="radio" name="car-rental-selected-car" class="required" id="car-rental-cars-creta" autocomplete="off" data-price="30" value="Creta"> 
-                                </label>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <div id="collectibles"></div>
+
+                @foreach($coupons as $coupon)
                 
-                <table class="table small border rounded">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <h3 class="mb-0">₱140.00 OFF</h3>
-                                For orders over ₱3,499.00
-                                <br><br>
-                                Code: ph1111s
-                                <br>Coupon requirements met, expect to save ₱140.00
-                                <br><br>
-                                <div class="text-secondary">
-                                    <ul class="m-0 ms-3">
-                                        <li>11/04/2023 - 11/11/2023</li>	
-                                        <li>Applies to select products</li>	
-                                    </ul>
-                                </div>
-                            </td>
-                            <td width="10px">
-                                <label>
-                                    <input type="radio" name="car-rental-selected-car" class="required" id="car-rental-cars-creta" autocomplete="off" data-price="30" value="Creta"> 
-                                </label>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <table class="table small border rounded border-top-warning">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h3 class="mb-0">{{ $coupon->name }}</h3>
+                                    {{ $coupon->description }}
+                                    <br><br>
+                                    Code: {{ $coupon->coupon_code }}
+                                    <br>Coupon requirements met, expect to save ₱217.00
+                                    <br><br>
+                                    <div class="text-secondary">
+                                        <ul class="m-0 ms-3">
+                                            <li>{{ $coupon->start_date }} - {{ $coupon->end_date }}</li>	
+                                            <li>Applies to selected products</li>	
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td width="10px">
+                                    <label>
+                                        <input type="radio" name="coupon" class="required" id="coupon{{ $coupon->id }}" autocomplete="off" data-price="30" value="Creta"> 
+                                    </label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 
+                @endforeach
                 
             </div>
-            <div class="modal-footer">
+            {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Apply</button>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

@@ -49,10 +49,19 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    
                     <div class="form-group">
                         <label class="d-block">Name *</label>
                         <input required name="name" id="name" value="{{ old('name') }}" type="text" class="form-control @error('name') is-invalid @enderror" maxlength="150">
                         @error('name')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="d-block">Author *</label>
+                        <input required name="author" id="author" value="{{ old('author') }}" type="text" class="form-control @error('author') is-invalid @enderror" maxlength="150">
+                        @error('author')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>

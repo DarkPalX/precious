@@ -224,16 +224,19 @@ class CartController extends Controller
             CouponCart::where('customer_id',Auth::id())->delete();
 
             $cart = Cart::where('user_id',Auth::id())->get();
+            
             $totalProducts = $cart->count();
         } else {
             $cart = session('cart', []);
             $totalProducts = count(session('cart', []));
         }
 
+        $coupons = Coupon::where('status','ACTIVE')->get();
+
         $page = new Page();
         $page->name = 'Cart';
 
-        return view('theme.pages.ecommerce.cart', compact('cart', 'totalProducts','page'));
+        return view('theme.pages.ecommerce.cart', compact('cart', 'coupons', 'totalProducts','page'));
     }
 
     public function remove_product(Request $request)

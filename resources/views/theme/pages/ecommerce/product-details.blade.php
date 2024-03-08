@@ -77,6 +77,7 @@
 
                 <div class="col-md-6 product-desc">
                     <h3 class="mb-2">{{$product->name}}</h3>
+                    <h4>by: {{ $product->author ?? 'Anonymous' }}</h4>
                     
                     <div class="article-meta">                                  
                         <div class="entry-meta mb-3">

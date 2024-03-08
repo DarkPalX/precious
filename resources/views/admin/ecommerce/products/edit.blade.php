@@ -53,6 +53,14 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    
+                    <div class="form-group">
+                        <label class="d-block">Author *</label>
+                        <input required name="author" id="author" value="{{ old('author',$product->author) }}" type="text" class="form-control @error('author') is-invalid @enderror" maxlength="150">
+                        @error('author')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <div class="form-group">
                         <label class="d-block">Book Type</label>
