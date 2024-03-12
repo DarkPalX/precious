@@ -171,7 +171,7 @@ class PageModalController extends Controller
     public function restore($modalId)
     {
         PageModal::withTrashed()->find($modalId)->update(['user_id' => Auth::id()]);
-        PageModal::whereId($modalId)->restore();
+        PageModal::whereId((int)$modalId)->restore();
 
         return back()->with('success', 'Page modal has been restored.');
     }
@@ -181,7 +181,7 @@ class PageModalController extends Controller
         $categories = explode("|", $request->categories);
 
         foreach ($categories as $category) {
-            $publish = PageModal::where('status', '!=', $request->status)->whereId($category)->update([
+            $publish = PageModal::where('status', '!=', $request->status)->whereId((int)$category)->update([
                 'status'  => $request->status,
                 'user_id' => Auth::id()
             ]);
@@ -195,8 +195,8 @@ class PageModalController extends Controller
         $categories = explode("|",$request->categories);
 
         foreach($categories as $category){
-            PageModal::whereId($category)->update(['user_id' => Auth::id() ]);
-            PageModal::whereId($category)->delete();
+            PageModal::whereId((int)$category)->update(['user_id' => Auth::id() ]);
+            PageModal::whereId((int)$category)->delete();
         }
 
         return back()->with('success', __('standard.modals.multiple_delete_success'));

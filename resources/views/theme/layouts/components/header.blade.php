@@ -23,8 +23,8 @@
 						<ul class="dropdown-menu" role="menu">
 							<a class="dropdown-item" href="{{ route('customer.manage-account') }}">Manage my Account</a>
 							<a class="dropdown-item" href="{{ route('profile.sales') }}">My Transactions</a>
-							<a class="dropdown-item" href="#">My Library</a>
-							<a class="dropdown-item" href="#">Contact Us</a>
+							{{-- <a class="dropdown-item" href="#">My Library</a> --}}
+							<a class="dropdown-item" href="{{ env('APP_URL').'/contact-us' }}">Contact Us</a>
 							<a class="dropdown-item" href="javascript:;" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
 						</ul>
 					</li>
