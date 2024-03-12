@@ -31,7 +31,7 @@
                 <a href="{{ route('customer.manage-account') }}" class="button button-border button-rounded ms-0 topmargin-sm button-small">Edit Information</a>
             </div>
             
-            <div class="fancy-title title-border-color title-left mt-4">
+            {{-- <div class="fancy-title title-border-color title-left mt-4">
                 <h4>Library</h4>
             </div>
             
@@ -82,7 +82,7 @@
             </div>
             <div class="m-auto">					
                 <a href="#" class="button button-border button-rounded ms-0 topmargin-sm button-small">View Library</a>
-            </div>
+            </div> --}}
             
             <div class="fancy-title title-border-color title-left mt-4">
                 <h4>Transactions</h4>
