@@ -88,7 +88,7 @@
 									</div>
 
 									<div class="col-12">
-										<a href="#" class="float-end text-dark fw-light mt-2">Forgot Password?</a>
+										<a href="#modal-forgot-password" data-lightbox="inline" class="float-end text-dark fw-light mt-2">Forgot Password?</a>
 									</div>
 
 									<div class="col-12 mt-4">
@@ -99,6 +99,33 @@
 							<div class="card-footer py-4 center">
 								{{-- <p class="mb-0">Don't have an account? <a href="{{ route('customer-front.customer-sign-up') }}"><u>Sign up</u></a></p> --}}
 								<p class="mb-0">Don't have an account? <a href="#modal-signup" data-lightbox="inline"><u>Sign up</u></a></p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Forgot Password Modal -->
+					<div class="modal1 mfp-hide" id="modal-forgot-password">
+						<div class="card mx-auto" style="max-width: 540px;">
+							<div class="card-header py-3 bg-transparent center">
+								<h3 class="mb-0 fw-normal">Recover Password</h3>
+							</div>
+							<div class="card-body mx-auto py-5" style="max-width: 70%;">
+
+								<form id="forgot-password-form" name="forgot-password-form" class="mb-0 row" action="{{ route('customer-front.send_reset_link_email') }}" method="post">
+									@csrf
+									<p>Enter email to reset password.</p>
+									<div class="col-12">
+										<input type="email" id="email" name="email" class="form-control not-dark" placeholder="Email" required/>
+									</div>
+
+									<div class="col-12">
+										<a href="#modal-register" data-lightbox="inline" class="float-end text-dark fw-light mt-2">Back to login</a>
+									</div>
+
+									<div class="col-12 mt-4">
+										<button type="submit" class="button w-100 m-0 center" id="login-form-submit" name="login-form-submit" value="login">Reset</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>
@@ -157,7 +184,7 @@
 									</div> --}}
 
 									<div class="col-12 mt-3">
-										<button href="dashboard.htm" class="button w-100 m-0 center" id="" name="" value="login">Sign up</button>
+										<button class="button w-100 m-0 center" id="" name="" value="login">Sign up</button>
 										
 										<a href="#modal-register" data-lightbox="inline" class="button w-100 m-0 center mt-3 button-dark">Back</a>
 									</div>

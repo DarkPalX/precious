@@ -102,6 +102,22 @@
 </script>
 
 
+<script>
+    $(document).ready(function() {
+        $('#pageModal').modal('show');
+
+        if(localStorage.getItem('popState') != 'shown'){
+            $('#popupPrivacy').delay(1000).fadeIn();
+        }
+    });
+
+    $('#cookieAcceptBarConfirm').click(function() // You are clicking the close button
+    {
+        $('#popupPrivacy').fadeOut(); // Now the pop up is hidden.
+        localStorage.setItem('popState','shown');
+    });
+</script>
+
 
 
 

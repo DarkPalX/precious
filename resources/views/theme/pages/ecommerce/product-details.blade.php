@@ -20,12 +20,21 @@
                         <div class="search">
                             <form class="mb-0" action="{{ route('search-product') }}" method="get">
                                 <div class="searchbar">
-                                    <input type="text" name="search" class="form-control form-input form-search" placeholder="Search news" aria-label="Search news" aria-describedby="button-addon1" />
+                                    <input type="text" name="keyword" class="form-control form-input form-search" placeholder="Search Product" aria-label="Search Product" aria-describedby="button-addon1" />
                                     <button class="form-submit-search" type="submit" name="submit">
                                         <i class="icon-line-search"></i>
                                     </button>
                                 </div>
                             </form>
+
+                            {{-- <form action="{{ route('search-product') }}" method="GET">
+                                <div class="input-group pb-5">
+                                    <input type="text" class="form-control" name="keyword" placeholder="Search Product" aria-label="Search Product" aria-describedby="button-addon2" value="{{$searchtxt}}" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><span class="icon-search"></span></button>
+                                    </div>
+                                </div>
+                            </form> --}}
                         </div>
                     </div>
                     

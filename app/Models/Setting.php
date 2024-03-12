@@ -14,7 +14,10 @@ class Setting extends Model
                             'google_analytics', 'google_recaptcha_sitekey', 'google_recaptcha_secret', 'data_privacy_title', 
                             'data_privacy_popup_content', 'data_privacy_content', 'mobile_no', 'fax_no', 'tel_no', 'email', 
                             'company_about', 'company_address', 'google_map', 'social_media_accounts', 'copyright', 'user_id',
-                            'pickup_is_allowed','delivery_note','review_is_allowed','promo_is_displayed','min_order','min_order_is_allowed','flatrate_is_allowed','delivery_collect_is_allowed', 'coupon_limit', 'coupon_discount_limit', 'contact_us_email_layout', 'cart_notification_duration', 'cart_product_duration'
+                            'pickup_is_allowed','delivery_note','review_is_allowed','promo_is_displayed','min_order','min_order_is_allowed','flatrate_is_allowed','delivery_collect_is_allowed', 'coupon_limit', 'coupon_discount_limit', 'contact_us_email_layout', 'cart_notification_duration', 'cart_product_duration', 
+                            'modal_title',
+                            'modal_content',
+                            'modal_status'
                         ];
 
     public static function getWebsiteName()
@@ -67,7 +70,10 @@ class Setting extends Model
         'coupon_discount_limit' => 'coupon discount limit',
         'coupon_limit' => 'coupon limit',
         'cart_notification_duration' => 'cart notification duration',
-        'cart_product_duration' => 'cart product duration'
+        'cart_product_duration' => 'cart product duration',
+        'modal_title' => 'modal title',
+        'modal_content' => 'modal content',
+        'modal_status' => 'modal status'
 
     ];
     // END Need to change every model

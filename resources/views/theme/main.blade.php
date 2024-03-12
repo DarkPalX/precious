@@ -53,6 +53,26 @@
 		============================================= -->
 		@include('theme.layouts.components.header')<!-- #header end -->
 
+		@php
+			$modal = \Setting::modals($page->name);
+		@endphp
+
+		@if($modal)
+			<div class="modal fade" id="pageModal" tabindex="-1" role="dialog" aria-labelledby="scrollableModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" id="myModalLabel">{{$modal->name}}</h4>
+							<button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
+						</div>
+						<div class="modal-body">					
+							{!!$modal->content!!}
+						</div>
+					</div>
+				</div>
+			</div>
+		@endif
+
 		<!-- Slider
 		============================================= -->
 		@include('theme.layouts.components.banner')

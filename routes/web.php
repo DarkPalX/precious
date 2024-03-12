@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 
 // CMS Controllers
-use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController};
+use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController};
 
 use App\Http\Controllers\Cms4Controllers\{
     ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, PageController, MenuController, FileManagerController
@@ -69,6 +69,7 @@ Route::get('/phpinfo', function () {
     Route::get('/customer-sign-up',       [CustomerFrontController::class, 'sign_up'])->name('customer-front.sign-up');
     Route::post('/customer-sign-up',      [CustomerFrontController::class, 'customer_sign_up'])->name('customer-front.customer-sign-up');
     Route::get('/forgot-password',        [CustomerFrontController::class, 'forgot_password'])->name('customer-front.forgot_password');
+    Route::post('/forgot-password',       [CustomerFrontController::class, 'sendNewUserResetLinkEmail'])->name('customer-front.send_new_user_reset_link_email');
     Route::post('/forgot-password',       [CustomerFrontController::class, 'sendResetLinkEmail'])->name('customer-front.send_reset_link_email');
     Route::get('/reset-password/{token}', [CustomerFrontController::class, 'showResetForm'])->name('customer-front.reset_password');
     Route::post('/reset-password',        [CustomerFrontController::class, 'reset'])->name('customer-front.reset_password_post');
@@ -429,6 +430,14 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::post('product-attribute-delete', [FormAttributeController::class, 'single_delete'])->name('product-attribute.single.delete');
                 Route::get('/attribute-restore/{id}', [FormAttributeController::class, 'restore'])->name('product-attribute.restore');
 
+
+            // Page Modals
+                Route::resource('page-modals', PageModalController::class);
+                Route::get('modal/{id}/{status}', [PageModalController::class, 'update_status'])->name('modal.change-status');
+                Route::post('modal-delete', [PageModalController::class, 'single_delete'])->name('modal.single.delete');
+                Route::get('modal-restore/{id}', [PageModalController::class, 'restore'])->name('modal.restore');
+                Route::post('modals-multiple-change-status',[PageModalController::class, 'multiple_change_status'])->name('modals.multiple.change.status');
+                Route::post('modals-multiple-delete',[PageModalController::class, 'multiple_delete'])->name('modals.multiple.delete');
 
 
             // Reports

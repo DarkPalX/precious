@@ -154,6 +154,7 @@ class ProductFrontController extends Controller
 
     public function product_details($slug)
     {
+        // dd('asd');
         $product = Product::where('slug', $slug)->first();
         $categories = ProductCategory::where('parent_id', 0)->where('status', 'PUBLISHED')->orderBy('name', 'asc')->get();
         $product_reviews = ProductReview::where('product_id', $product->id)->get();

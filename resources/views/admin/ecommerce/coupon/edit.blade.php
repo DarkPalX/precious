@@ -417,7 +417,7 @@
 							</select>
 						</div>
 
-						<div class="form-group">
+						{{-- <div class="form-group">
 							<label class="d-block">Brand</label>
 							<select class="form-control select2" multiple="multiple" name="product_brand[]" id="brand_opt" @if(isset($coupon->purchase_product_cat_id) || isset($coupon->purchase_product_id)) disabled @endif>
 								<option label="Choose one"></option>
@@ -425,7 +425,7 @@
 									<option @if(in_array($brand->id,$arr_brands)) selected @endif value="{{$brand->id}}">{{$brand->name}}</option>
 								@endforeach
 							</select>
-						</div>
+						</div> --}}
 					</div>
 
 					<div class="col-12 mt-3" id="coupon-amount-form" style="display:@if(isset($coupon->purchase_amount) || isset($coupon->purchase_qty)) block @else none @endif">

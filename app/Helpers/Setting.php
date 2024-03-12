@@ -10,7 +10,7 @@ use App\Models\Ecommerce\{
 };
 
 use App\Models\{
-    Option
+    Option, PageModal
 };
 
 class Setting {
@@ -177,5 +177,12 @@ class Setting {
                 'url' => 'https://testpti.payserv.net/webpayment/Default.aspx'
             ];
         //}
+    }
+
+    public static function modals($pageName)
+    {
+        $pages = PageModal::where('status', 'Active')->where('pages', 'like', '%'.$pageName.'%')->first();
+
+        return $pages;
     }
 }

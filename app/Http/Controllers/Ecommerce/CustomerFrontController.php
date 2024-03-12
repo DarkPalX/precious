@@ -66,7 +66,7 @@ class CustomerFrontController extends Controller
         $requestData['role_id'] = 6;
 
         $user = User::create($requestData);
-        $this->sendResetLinkEmail($request);
+        $this->sendNewUserResetLinkEmail($request);
 
         return redirect()->back()->with('success', 'Pending for activation. Please check your email to activate password.');
     }
@@ -191,6 +191,26 @@ class CustomerFrontController extends Controller
 
     }
 
+    public function sendNewUserResetLinkEmail(Request $request)
+    {
+        $request->validate(
+            ['email' => 'required|email|exists:users,email'],
+            ['email.exists' => trans('passwords.user')]
+        );
+
+        $user = User::where('email', $request->email)->first();
+
+        $user->send_reset_temporary_password_email();
+
+        if (\Mail::failures()) {
+            return back()
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => trans('passwords.user')]);
+        }
+
+        return back()->with('status', trans('passwords.sent'));
+    }
+
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate(
@@ -208,7 +228,11 @@ class CustomerFrontController extends Controller
                 ->withErrors(['email' => trans('passwords.user')]);
         }
 
-        return back()->with('status', trans('passwords.sent'));
+        // return back()->with('status', trans('passwords.sent'))->with('success', 'Registration Successful! You are now logged in');
+        return back()
+        ->with('status', trans('passwords.sent'))
+        ->with('success', 'Please check your email for password reset link');
+
     }
 
     public function showResetForm(Request $request, $token = null)
