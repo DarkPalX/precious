@@ -21,6 +21,8 @@ use App\Http\Controllers\Ecommerce\{
     CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController, BannerAdController
 };
 
+use App\Http\Controllers\MailingList\{SubscriberController, GroupController, CampaignController, SubscriberFrontController};
+
 
 //FOR STORAGE LINK
 Route::get('/storagelink', function () {
@@ -61,6 +63,10 @@ Route::get('/phpinfo', function () {
         Route::get('/search-result', [FrontController::class, 'seach_result'])->name('search.result');
     //
 //
+
+
+    Route::post('/subscribe', [SubscriberFrontController::class, 'subscribe'])->name('mailing-list.front.subscribe');
+    Route::get('/unsubscribe/{subscriber}/{code}', [SubscriberFrontController::class, 'unsubscribe'])->name('mailing-list.front.unsubscribe');
 
 
     // Customer Signup - Signin
@@ -430,6 +436,20 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::post('product-attribute-delete', [FormAttributeController::class, 'single_delete'])->name('product-attribute.single.delete');
                 Route::get('/attribute-restore/{id}', [FormAttributeController::class, 'restore'])->name('product-attribute.restore');
 
+            // Mailing List
+                Route::resource('mailing-list/subscribers', SubscriberController::class, ['as' => 'mailing-list']);
+                Route::get('mailing-list/cancelled-subscribers', [SubscriberController::class, 'unsubscribe'])->name('mailing-list.subscribers.unsubscribe');
+                Route::post('mailing-list/subscribers-change-status', [SubscriberController::class, 'change_status'])->name('mailing-list.subscribers.change-status');
+
+                Route::resource('mailing-list/groups', GroupController::class, ['as' => 'mailing-list']);
+                Route::delete('delete/mailing-list/groups', [GroupController::class, 'destroy_many'])->name('mailing-list.groups.destroy_many');
+                Route::post('mailing-list-groups/{id}/restore', [GroupController::class, 'restore'])->name('mailing-list.groups.restore');
+
+                Route::resource('mailing-list/campaigns', CampaignController::class, ['as' => 'mailing-list']);
+                Route::get('mailing-list/sent-campaigns', [CampaignController::class, 'sent_campaigns'])->name('mailing-list.campaigns.sent-campaigns');
+                Route::delete('delete/mailing-list/campaign', [CampaignController::class, 'destroy_many'])->name('mailing-list.campaigns.destroy_many');
+                Route::post('campaigns/{id}/restore', [CampaignController::class, 'restore'])->name('mailing-list.campaigns.restore');
+            //
 
             // Page Modals
                 Route::resource('page-modals', PageModalController::class);

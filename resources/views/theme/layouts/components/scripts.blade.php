@@ -119,6 +119,12 @@
 </script>
 
 
+<script>
+    function getEmail(){
+        var email = $('#widget-subscribe-form-email').val(); // Get the value of the email input field
+        $('#subscriber_email').val(email); // Set the value of the email input field in the modal form
+    }
+</script>
 
 
 @yield('pagejs')

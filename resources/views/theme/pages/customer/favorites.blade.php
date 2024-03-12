@@ -19,7 +19,7 @@
         <div class="col-lg-9">
             <h2>Favorites</h2>
             
-            <div class="form-group d-flex">
+            {{-- <div class="form-group d-flex">
                 <label for="inputState" class="col-form-label me-2">Sort by</label>
                 <div class="">
                     <select id="inputState" class="form-select">
@@ -29,13 +29,55 @@
                         <option>By date</option>
                     </select>
                 </div>
-            </div>
+            </div> --}}
+
+            
+			<form id="sortForm" action="{{ route('customer.favorites') }}" method="GET">
+				<div class="form-group d-flex">
+					<label for="sort_by" class="col-form-label me-2">Sort by</label>
+					<div class="">
+						<select id="sort_by" class="form-select" name="sort_by" onchange="document.getElementById('sortForm').submit()">
+							<option value="">Choose...</option>
+							<option value="name_asc" {{ request('sort_by')== "name_asc"? 'selected' : '' }}>A to Z</option>
+							<option value="name_desc" {{ request('sort_by')== "name_desc"? 'selected' : '' }}>Z to A</option>
+							<option value="price_asc" {{ request('sort_by')== "price_asc"? 'selected' : '' }}>Prices Low - High</option>
+							<option value="price_desc" {{ request('sort_by')== "price_desc"? 'selected' : '' }}>Prices High - Low</option>
+							<option value="date_desc" {{ request('sort_by')== "date_desc"? 'selected' : '' }}>Recent - Old</option>
+							<option value="date_asc" {{ request('sort_by')== "date_asc"? 'selected' : '' }}>Old - Recent</option>
+						</select>
+					</div>
+				</div>
+				{{-- hidden --}}
+				<input type="text" name="keyword" value="@if(request()->has('keyword')){{ request('keyword') }}@endif" hidden/>
+			</form>
             
             <div class="row">
 
                 @forelse($customer_favorites as $customer_favorite)
+                    @php
+                        $imageUrl = asset('storage/products/'.$customer_favorite->photoPrimary);
+                    @endphp
 
-                
+                    <div class="col-md-2">
+                        <div class="grid-inner">
+                            <div class="product-image h-translate-y all-ts">
+                                <a href="{{ env('APP_URL') . '/book-details/' . $customer_favorite->slug }}" target="blamk_"><img src="{{ $imageUrl }}" alt="Image 1"></a>
+                            </div>
+                            <div class="product-desc py-0">
+                                <div class="product-title"><h3><a href="{{ env('APP_URL') . '/book-details/' . $customer_favorite->slug }}" target="blamk_">{{ $customer_favorite->name }}</a></h3></div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                @endforelse
+
+
+            </div>
+
+
+            {{-- <div class="row">
+
+                @forelse($customer_favorites as $customer_favorite)
                     @php
                         $imageUrl = asset('storage/products/'.$customer_favorite->product->photoPrimary);
                     @endphp
@@ -54,9 +96,9 @@
                 @endforelse
 
 
-            </div>
+            </div> --}}
             
-            <ul class="pagination mt-5">
+            {{-- <ul class="pagination mt-5">
                 <li class="page-item"><a class="page-link" href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a></li>
                 <li class="page-item"><a class="page-link" href="#">1</a></li>
                 <li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -64,7 +106,7 @@
                 <li class="page-item"><a class="page-link" href="#">4</a></li>
                 <li class="page-item"><a class="page-link" href="#">5</a></li>
                 <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-            </ul>
+            </ul> --}}
             
         </div>
     </div>

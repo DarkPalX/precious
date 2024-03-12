@@ -55,9 +55,9 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-       if(User::where('name',$request->fname.' '.$request->lname)->exists()){
-           return back()->with('duplicate', __('standard.users.duplicate_email'));
-       } else {
+    //    if(User::where('name',$request->fname.' '.$request->lname)->exists()){
+    //        return back()->with('duplicate', __('standard.users.duplicate_email'));
+    //    } else {
         $user = User::create([
             'firstname'      => $request->fname,
             'lastname'       => $request->lname,
@@ -73,7 +73,7 @@ class UserController extends Controller
         $user->send_reset_temporary_password_email();
 
         return redirect()->route('users.index')->with('success', 'Pending for activation. Please remind the user to check the email and activate the account.');
-       }
+    //    }
     }
 
     public function edit($id)

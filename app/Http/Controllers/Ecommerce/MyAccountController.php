@@ -67,13 +67,68 @@ class MyAccountController extends Controller
 
         $member = auth()->user();
         $user = auth()->user();
+        $pageLimit = 20;
 
-        $customer_favorites = CustomerFavorite::where('customer_id', auth()->user()->id ?? -1)
-        ->with('product') // Eager load the related product
-        ->get();
+        $customer_favorites = Product::select('products.*')
+        ->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
+        ->where('products.status', 'PUBLISHED')
+        ->join('customer_favorites', 'customer_favorites.product_id', '=', 'products.id')
+        ->where('customer_favorites.customer_id', auth()->id());
+
+        $searchtxt = $request->get('keyword', false);
+        $sortBy = $request->get('sort_by', false);
+
+        if(!empty($searchtxt)){  
+            $keyword = Str::lower($request->keyword); 
+
+            $customer_favorites = $customer_favorites->where(function($query) use ($keyword){
+                $query->orWhereRaw('LOWER(products.name) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(products.author) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(products.description) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(product_additional_infos.value) like LOWER(?)', ["%{$keyword}%"]);
+            });
+        }
+
+        if($sortBy == "name_asc"){
+            $customer_favorites = $customer_favorites->orderBy('name','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "name_desc"){
+            $customer_favorites = $customer_favorites->orderBy('name','desc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "price_asc"){
+            $customer_favorites = $customer_favorites->orderBy('price','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "price_desc"){
+            $customer_favorites = $customer_favorites->orderBy('price','desc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "date_asc"){
+            $customer_favorites = $customer_favorites->orderBy('created_at','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "date_desc"){
+            $customer_favorites = $customer_favorites->orderBy('created_at','desc')->paginate($pageLimit);
+        }
+        else{
+            $customer_favorites = $customer_favorites->orderBy('name','asc')->paginate($pageLimit);
+        }
+
 
         return view('theme.pages.customer.favorites', compact('member', 'user', 'page', 'customer_favorites'));
     }
+
+    // public function favorites(Request $request)
+    // {
+    //     $page = new Page;
+    //     $page->name = 'My Favorites';
+
+    //     $member = auth()->user();
+    //     $user = auth()->user();
+
+    //     $customer_favorites = CustomerFavorite::where('customer_id', auth()->user()->id ?? -1)
+    //     ->with('product') // Eager load the related product
+    //     ->get();
+
+    //     return view('theme.pages.customer.favorites', compact('member', 'user', 'page', 'customer_favorites'));
+    // }
 
     public function free_ebooks(Request $request)
     {
