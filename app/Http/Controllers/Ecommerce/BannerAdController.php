@@ -37,6 +37,7 @@ class BannerAdController extends Controller
         $newData = $request->validated();
         
         $newData['file_url'] = $request->hasFile('file_url') ? FileHelper::move_to_product_file_folder($request->file('file_url'), 'storage/ads/files')['url'] : null;
+        $newData['mobile_file_url'] = $request->hasFile('mobile_file_url') ? FileHelper::move_to_product_file_folder($request->file('mobile_file_url'), 'storage/ads/mobile_files')['url'] : null;
         $newData['status'] = $request->status ? 1 : 0;
 
         $ad = BannerAd::create($newData);
@@ -78,7 +79,7 @@ class BannerAdController extends Controller
 
         $updateData['status'] = $request->status ? 1 : 0;
 
-        //FOR FILE UPDATE VALUE
+        //FOR DESKTOP FILE UPDATE VALUE
         $current_file = explode('/', $request->current_file)[1] ?? '';
         if($request->hasFile('file_url')){
             $updateData['file_url'] = FileHelper::move_to_product_file_folder($request->file('file_url'), 'storage/ads/files')['url'];
@@ -89,6 +90,20 @@ class BannerAdController extends Controller
             }
             else{
                 $updateData['file_url'] = null;
+            }
+        }
+
+        //FOR MOBILE FILE UPDATE VALUE
+        $current_mobile_file = explode('/', $request->current_mobile_file)[1] ?? '';
+        if($request->hasFile('mobile_file_url')){
+            $updateData['mobile_file_url'] = FileHelper::move_to_product_file_folder($request->file('mobile_file_url'), 'storage/ads/mobile_files')['url'];
+        }
+        else{
+            if($current_mobile_file){
+                $updateData['mobile_file_url'] = $ad->mobile_file_url;
+            }
+            else{
+                $updateData['mobile_file_url'] = null;
             }
         }
 

@@ -17,6 +17,7 @@ class CreateBannerAdsTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('file_url')->default(null);
+            $table->text('mobile_file_url')->default(null);
             $table->text('url')->default(null);
             $table->tinyInteger('status')->default(0);
             $table->integer('click_counts')->default(0);

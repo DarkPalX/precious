@@ -8,7 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController};
 
 use App\Http\Controllers\Cms4Controllers\{
-    ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, PageController, MenuController, FileManagerController
+    ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, MobileAlbumController, PageController, MenuController, FileManagerController
 };
 
 // Settings
@@ -259,6 +259,15 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::put('/albums/quick/{album}', [AlbumController::class, 'quick_update'])->name('albums.quick_update');
                 Route::post('/albums/{album}/restore', [AlbumController::class, 'restore'])->name('albums.restore');
                 Route::post('/albums/banners/{album}', [AlbumController::class, 'get_album_details'])->name('albums.banners');
+            //
+
+            // Mobile Albums
+                Route::resource('/mobile-albums', MobileAlbumController::class);
+                Route::post('/mobile-albums/upload', [MobileAlbumController::class, 'upload'])->name('mobile-albums.upload');
+                Route::delete('/many/mobile-album', [MobileAlbumController::class, 'destroy_many'])->name('mobile-albums.destroy_many');
+                Route::put('/mobile-albums/quick/{album}', [MobileAlbumController::class, 'quick_update'])->name('mobile-albums.quick_update');
+                Route::post('/mobile-albums/{album}/restore', [MobileAlbumController::class, 'restore'])->name('mobile-albums.restore');
+                Route::post('/mobile-albums/banners/{album}', [MobileAlbumController::class, 'get_album_details'])->name('mobile-albums.banners');
             //
 
             // News

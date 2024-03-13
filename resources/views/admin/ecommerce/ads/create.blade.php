@@ -41,8 +41,9 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    
                     <div class="form-group">
-                        <label class="d-block">Ad Image/Video</label>
+                        <label class="d-block">Desktop Ad Image/Video</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input @error('file_url') is-invalid @enderror" name="file_url" id="file_url" accept="image/jpeg, image/png, image/gif, video/mp4" required>
                             <label class="custom-file-label" for="file_url" id="ad_preview">Choose file</label>
@@ -56,7 +57,7 @@
                         <div id="image_div" style="display:none;">
 
                             {{-- for image --}}
-                            <img src="" id="img_temp" alt="" height="{{ env('IMAGE_DISPLAY_HEIGHT') }}" width="{{ env('IMAGE_DISPLAY_WIDTH') }}">  <br /><br />
+                            <img src="" id="img_temp" alt="" height="{{ env('AD_BANNER_HEIGHT') }}" width="{{ env('AD_BANNER_WIDTH') }}">  <br /><br />
                             
                             {{-- for video --}}
                             <video autoplay="" muted="" loop="" id="vid_temp" style="object-fit:none">
@@ -66,6 +67,33 @@
                             <a href="javascript:void(0)" class="btn btn-xs btn-danger" onclick="remove_image();">Remove Image</a>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="d-block">Mobile Ad Image/Video</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input @error('mobile_file_url') is-invalid @enderror" name="mobile_file_url" id="mobile_file_url" accept="image/jpeg, image/png, image/gif, video/mp4" required>
+                            <label class="custom-file-label" for="mobile_file_url" id="mobile_ad_preview">Choose file</label>
+                        </div>
+                        <p class="tx-10">
+                            Required image dimension: {{ env('MOBILE_AD_BANNER_WIDTH') }}px by {{ env('MOBILE_AD_BANNER_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png .mp4 .gif
+                        </p>
+                        @error('mobile_file_url')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <div id="mobile_image_div" style="display:none;">
+
+                            {{-- for image --}}
+                            <img src="" id="mobile_img_temp" alt="" height="{{ env('MOBILE_AD_BANNER_HEIGHT') }}" width="{{ env('MOBILE_AD_BANNER_WIDTH') }}">  <br /><br />
+                            
+                            {{-- for video --}}
+                            <video autoplay="" muted="" loop="" id="mobile_vid_temp" style="object-fit:none">
+                                <source type="video/mp4">
+                            </video>
+
+                            <a href="javascript:void(0)" class="btn btn-xs btn-danger" onclick="remove_mobile_image();">Remove Image</a>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label class="d-block">Url</label>
                         <input name="url" id="url" value="{{ old('url') }}" type="text" class="form-control @error('url') is-invalid @enderror">
@@ -145,6 +173,7 @@
         });
     </script>
     
+    {{-- DESKTOP AD --}}
     <script>
         function readURL(file) {
             let reader = new FileReader();
@@ -158,7 +187,7 @@
 
             reader.readAsDataURL(file);
             $('#image_div').show();
-            
+
             if (file.type === 'video/mp4') {
                 $('#img_temp').hide();
                 $('#vid_temp').show();
@@ -196,6 +225,61 @@
             $('#file_url').val('');
             $('#img_temp').attr('src', '');
             $('#image_div').hide();
+        }
+    </script>
+
+    {{-- MOBILE AD --}}
+    <script>
+        function mobileReadURL(file) {
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#mobile_ad_preview').html(file.name);
+                $('#mobile_file_url').attr('title', file.name);
+                $('#mobile_img_temp').attr('src', e.target.result);
+                $('#mobile_vid_temp').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+            $('#mobile_image_div').show();
+
+            if (file.type === 'video/mp4') {
+                $('#mobile_img_temp').hide();
+                $('#mobile_vid_temp').show();
+            }
+            else{
+                $('#mobile_img_temp').show();
+                $('#mobile_vid_temp').hide();
+            }
+        }
+
+        $("#mobile_file_url").change(function(evt) {
+
+            $('#mobile_ad_preview').html('Choose file');
+            $('#mobile_img_temp').attr('src', '');
+            $('#mobile_image_div').hide();
+
+            let files = evt.target.files;
+            let maxSize = 5;
+            let validateFileTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4"];
+            let requiredWidth = "{{ env('MOBILE_AD_BANNER_WIDTH') }}";
+            let requiredHeight =  "{{ env('MOBILE_AD_BANNER_HEIGHT') }}";
+
+            validate_files(files, mobileReadURL, maxSize, validateFileTypes, requiredWidth, requiredHeight, empty_mobile_banner_value);
+        });
+
+        function empty_mobile_banner_value()
+        {
+            $('#mobile_file_url').removeAttr('title');
+            $('#mobile_file_url').val('');
+        }
+
+        function remove_mobile_image() {
+            $('#mobile_ad_preview').html('Choose file');
+            $('#mobile_file_url').removeAttr('title');
+            $('#mobile_file_url').val('');
+            $('#mobile_img_temp').attr('src', '');
+            $('#mobile_image_div').hide();
         }
     </script>
 @endsection

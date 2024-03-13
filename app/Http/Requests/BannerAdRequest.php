@@ -26,6 +26,7 @@ class BannerAdRequest extends FormRequest
         return [
             'name' => 'required',
             'file_url' => 'nullable',
+            'mobile_file_url' => 'nullable',
             'url' => 'nullable',
             'pages' => 'required',
             'expiration_date' => 'required',
