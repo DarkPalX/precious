@@ -50,13 +50,21 @@
                             <input type="text" id="current_file" name="current_file" value="{{ $ad->file_url }}" hidden/>
                         </div>
                         <p class="tx-10">
-                            Required image dimension: {{ env('AD_BANNER_WIDTH') }}px by {{ env('AD_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
+                            Required image dimension: {{ env('AD_BANNER_WIDTH') }}px by {{ env('AD_BANNER_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png .mp4 .gif
                         </p>
                         @error('file_url')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <div id="image_div" @if(empty($ad->file_url)) style="display:none;" @endif>
-                            <img src="{{ asset($ad->file_url) }}" id="img_temp" alt="" height="{{ env('IMAGE_DISPLAY_HEIGHT') }}" width="{{ env('IMAGE_DISPLAY_WIDTH') }}">  <br /><br />
+
+                            {{-- for image --}}
+                            <img src="{{ asset($ad->file_url) }}" id="img_temp" alt="" height="{{ env('IMAGE_DISPLAY_HEIGHT') }}" width="{{ env('IMAGE_DISPLAY_WIDTH') }}" style="display: {{ Str::contains($ad->file_url, 'mp4') ? 'none' : 'block' }}">  <br /><br />
+                        
+                            {{-- for video --}}
+                            <video autoplay="" muted="" loop="" id="vid_temp" style="object-fit:none; display: {{ Str::contains($ad->file_url, 'mp4') ? 'block' : 'none' }}">
+                                <source src="{{ asset($ad->file_url) }}" type="video/mp4">
+                            </video>
+
                             <a href="javascript:void(0)" class="btn btn-xs btn-danger" onclick="remove_image();">Remove Image</a>
                         </div>
                     </div>
@@ -156,10 +164,20 @@
                 $('#ad_preview').html(file.name);
                 $('#file_url').attr('title', file.name);
                 $('#img_temp').attr('src', e.target.result);
+                $('#vid_temp').attr('src', e.target.result);
             }
 
             reader.readAsDataURL(file);
             $('#image_div').show();
+            
+            if (file.type === 'video/mp4') {
+                $('#img_temp').hide();
+                $('#vid_temp').show();
+            }
+            else{
+                $('#img_temp').show();
+                $('#vid_temp').hide();
+            }
         }
 
         $("#file_url").change(function(evt) {
@@ -169,7 +187,7 @@
             $('#image_div').hide();
 
             let files = evt.target.files;
-            let maxSize = 1;
+            let maxSize = 5;
             let validateFileTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4"];
             let requiredWidth = "{{ env('AD_BANNER_WIDTH') }}";
             let requiredHeight =  "{{ env('AD_BANNER_HEIGHT') }}";
@@ -187,6 +205,7 @@
             $('#ad_preview').html('Choose file');
             $('#file_url').removeAttr('title');
             $('#file_url').val('');
+            $('#file_url').prop('required', true);
             $('#current_file').val('');
             $('#img_temp').attr('src', '');
             $('#image_div').hide();

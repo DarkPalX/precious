@@ -93,7 +93,13 @@
 							<div class="container">
 								<a href="{{ route('ads.click.count', $banner_ad->id) }}" target="blank">
 									<div class="text-center">
-										<img src="{{ asset($banner_ad->file_url) }}"/>
+										{{-- for image --}}
+										<img src="{{ asset($banner_ad->file_url) }}" id="img_temp" alt="" style="display: {{ Str::contains($banner_ad->file_url, 'mp4') ? 'none' : '' }}">  <br /><br />
+                        
+										{{-- for video --}}
+										<video autoplay="" muted="" loop="" id="vid_temp" style="object-fit:none; display: {{ Str::contains($banner_ad->file_url, 'mp4') ? '' : 'none' }}">
+											<source src="{{ asset($banner_ad->file_url) }}" type="video/mp4">
+										</video>
 									</div>
 								</a>
 							</div>
