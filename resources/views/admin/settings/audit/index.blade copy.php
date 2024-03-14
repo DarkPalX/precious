@@ -80,34 +80,38 @@
 	    </div>
         <div class="col-md-12">
             <div class="mg-b-10">
-                <div class="table-responsive-lg table-audit">
-                    <table class="table mg-b-0 table-light table-hover" style="word-break: break-all;">
+                <div class="table-responsive-lg">
+                    <table class="table mg-b-0 table-light table-hover" style="table-layout: fixed;word-wrap: break-word;">
                         <thead>
                             <tr>
                                 <th scope="col" class="wd-15p">Name</th>
 								<th scope="col" class="wd-10p">Type</th>
-								<th scope="col" class="wd-30p">Description</th>
-								<th scope="col" class="wd-20p">Old Value</th>
-								<th scope="col" class="wd-20p">New Value</th>
-								<th scope="col" class="wd-5p">Module</th>
-                                <th scope="col" class="wd-10p">Activity Date</th>
+								<th scope="col" class="wd-45p">Description</th>
+								<th scope="col" class="wd-15p">Module</th>
+                                <th scope="col" class="wd-15p">Activity Date</th>
                             </tr>
                         </thead>
                         <tbody>
 							@forelse($logs as $log)
-								@if($log->admin != null)
-									<tr>
-										<td>
-											<a href="{{ route('users.show', $log->log_by) }}"><strong>{{ ucwords($log->admin->fullname) }}</strong><br><span class="badge badge-primary">{{ $log->admin->userRole($log->log_by) }}</span></a>
-										</td>
-										<td>{{ $log->activity_type }}</td>
-										<td><a class="log_values" href="#modal-values" data-toggle="modal" data-new="{{$log->new_value}}" data-old="{{$log->old_value}}">{{ \Illuminate\Support\Str::limit($log->activity_desc, 50, $end ='...') }}</a></td>
-										<td>{{ \Illuminate\Support\Str::limit($log->old_value, 30, $end ='...') }}</td>
-										<td>{{ \Illuminate\Support\Str::limit($log->new_value, 30, $end ='...') }}</td>
-										<td>{{ ucwords($log->db_table) }}</td>
-										<td>{{ $log->activity_date }}</td>
-									</tr>
-								@endif
+								<tr>
+									<th>
+										<a href="{{ route('users.show', $log->log_by) }}"><strong>{{ ucwords($log->admin->fullname) }}</strong><br><span class="badge badge-primary">{{ $log->admin->userRole($log->log_by) }}</span></a>
+									</th>
+									<td>{{ $log->activity_type }}</td>
+									<td>
+										@if($log->activity_type == 'update')
+											@if($log->dashboard_activity == 'updated the page contents')
+												{{ $log->dashboard_activity }}
+											@else
+												<a class="log_values" href="javascript:;" onclick="viewChanges('{{$log->old_value}}', '{{$log->new_value}}');">{{ str_limit($log->activity_desc, 80, $end ='...') }}</a>
+											@endif
+										@else
+											{{ str_limit($log->activity_desc, 80, $end ='...') }}
+										@endif
+									</td>
+                                    <td>{{ ucwords($log->db_table) }}</td>
+									<td>{{ $log->activity_date }}</td>
+								</tr>
 							@empty
 								<tr><td colspan="8"><center>Activity not found!</center></td></tr>
 							@endforelse
@@ -165,14 +169,12 @@
         let searchType = "{{ $searchType }}";
     </script>
     <script src="{{ asset('js/listing.js') }}"></script>
-@endsection
 
-@section('customjs')
     <script>
-		$(document).on('click','.log_values', function(){
-			$('#modal-values').show();
-			$('#new_value').html($(this).data('new'));
-			$('#old_value').html($(this).data('old'));
-		});
+    	function viewChanges(oldValue, newValue){
+    		$('#modal-values').modal('show');
+    		$('#new_value').html(oldValue);
+			$('#old_value').html(newValue);
+    	}
     </script>
 @endsection
