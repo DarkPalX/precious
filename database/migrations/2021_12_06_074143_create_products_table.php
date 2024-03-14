@@ -23,9 +23,12 @@ class CreateProductsTable extends Migration
             $table->string('subtitle')->nullable();
             $table->text('slug');
             $table->string('file_url');
+            $table->decimal('ebook_price',16,4)->nullable();
+            $table->decimal('ebook_dicounted_price',16,4)->nullable();
             $table->text('short_description')->nullable();
             $table->text('description')->nullable();
             $table->decimal('price',16,4)->nullable();
+            $table->decimal('dicounted_price',16,4)->nullable();
             $table->decimal('reorder_point',16,2)->default(0.00);
             $table->string('size', 30)->nullable();
             $table->string('weight')->nullable();
@@ -35,6 +38,7 @@ class CreateProductsTable extends Migration
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_best_seller')->default(false);
             $table->boolean('is_free')->default(false);
+            $table->boolean('is_premium')->default(false);
             $table->date('publication_date')->nullable();
             $table->integer('created_by');
             $table->string('meta_title', 150)->nullable();

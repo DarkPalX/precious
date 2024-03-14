@@ -17,8 +17,7 @@ class MobileBanner extends Model
 
     public function album()
     {
-        return $this->belongsTo(MobileAlbum::class);
-        // return $this->belongsTo(MobileAlbum::class, 'album_id');
+        return $this->belongsTo(MobileAlbum::class, 'album_id'); // Specify foreign key
     }
 
     public static function validator()
@@ -47,19 +46,14 @@ class MobileBanner extends Model
 
     public static function totalBanners()
     {
-        $total = MobileBanner::count();
-
-        return $total;
+        return MobileBanner::count();
     }
 
     public function file_name()
     {
         $path = explode('/', $this->image_path);
         $nameIndex = count($path) - 1;
-        if ($nameIndex < 0)
-            return '';
-
-        return $path[$nameIndex];
+        return ($nameIndex >= 0) ? $path[$nameIndex] : '';
     }
 
 
@@ -72,7 +66,7 @@ class MobileBanner extends Model
     // ******** AUDIT LOG ******** //
     // Need to change every model
     static $oldModel;
-    static $tableTitle = 'mobile_banner';
+    static $tableTitle = 'mobile_banners';
     static $name = 'name';
     static $unrelatedFields = ['id', 'alt', 'created_at', 'updated_at', 'deleted_at'];
     static $logName = [

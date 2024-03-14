@@ -84,7 +84,6 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-
                     <div class="form-group">
                         <label class="d-block">Price (in Php) *</label>
                         <input required type="number" class="form-control @error('price') is-invalid @enderror" name="price" id="price" value="{{ old('price', number_format($product->price,2,'.','')) }}" min="0.01" step="0.01">
@@ -92,6 +91,15 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    <div class="form-group">
+                        <label class="d-block">Discounted Price (in Php) *</label>
+                        <input required type="number" class="form-control @error('discount_price') is-invalid @enderror" name="discount_price" id="discount_price" value="{{ old('discount_price', number_format($product->discount_price,2,'.','')) }}" min="0.01" step="0.01">
+                        @error('discount_price')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    
                 </div>
                 <div class="col-lg-12">
                     <div class="form-group">
@@ -205,6 +213,22 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="form-group">
+                        <label class="d-block">Ebook Price (in Php) *</label>
+                        <input type="number" class="form-control @error('ebook_price') is-invalid @enderror" name="ebook_price" id="ebook_price" value="{{ old('ebook_price', number_format($product->ebook_price,2,'.','')) }}" min="0.01" step="0.01">
+                        @error('ebook_price')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="d-block">Ebook Discounted Price (in Php) *</label>
+                        <input type="number" class="form-control @error('ebook_discount_price') is-invalid @enderror" name="ebook_discount_price" id="ebook_discount_price" value="{{ old('ebook_discount_price', number_format($product->ebook_discount_price,2,'.','')) }}" min="0.01" step="0.01">
+                        @error('ebook_discount_price')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <div class="form-group">
                         <label class="d-block">Tags</label>
@@ -288,6 +312,16 @@
                             <label class="custom-control-label" for="customSwitch4">Free to Read</label>
                         </div>
                         @error('is_free')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="d-block">Premium</label>
+                        <div class="custom-control custom-switch @error('is_premium') is-invalid @enderror">
+                            <input type="checkbox" class="custom-control-input" name="is_premium" {{ (old("is_premium") || $product->is_premium ? "checked":"") }} id="customSwitch5">
+                            <label class="custom-control-label" for="customSwitch5">Premium</label>
+                        </div>
+                        @error('is_premium')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>

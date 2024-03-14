@@ -22,8 +22,7 @@ class MobileAlbum extends Model
 
     public function banners()
     {
-        return $this->hasMany(MobileBanner::class)->orderBy('order');
-        // return $this->hasMany(MobileBanner::class, 'album_id')->orderBy('order');
+        return $this->hasMany(MobileBanner::class, 'album_id')->orderBy('order');
     }
 
     public function addBanners($banners)
@@ -137,7 +136,7 @@ class MobileAlbum extends Model
     // ******** AUDIT LOG ******** //
     // Need to change every model
     static $oldModel;
-    static $tableTitle = 'mobile_album';
+    static $tableTitle = 'album';
     static $name = 'name';
     static $unrelatedFields = ['id', 'type', 'banner_type', 'created_at', 'updated_at', 'deleted_at'];
     static $logName = [
