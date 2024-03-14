@@ -93,8 +93,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="d-block">Discounted Price (in Php) *</label>
-                        <input required type="number" class="form-control @error('discount_price') is-invalid @enderror" name="discount_price" id="discount_price" value="{{ old('discount_price', number_format($product->discount_price,2,'.','')) }}" min="0.01" step="0.01">
+                        <label class="d-block">Discounted Price (in Php)</label>
+                        <input type="number" class="form-control @error('discount_price') is-invalid @enderror" name="discount_price" id="discount_price" value="{{ old('discount_price', number_format($product->discount_price,2,'.','')) }}" min="0.01" step="0.01">
                         @error('discount_price')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -130,17 +130,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Weight (grams) *</label>
+                        <label>Weight (grams)</label>
                         <input class="form-control" type="number" name="weight" value="{{ old('wight', $product->weight) }}">
                     </div>
 
                     <div class="form-group">
-                        <label>Texture *</label>
+                        <label>Texture</label>
                         <input class="form-control" type="text" name="texture" value="{{ old('wight', $product->texture) }}">
                     </div>
 
                     <div class="form-group">
-                        <label class="d-block">Unit of Measurement *</label>
+                        <label class="d-block">Unit of Measurement</label>
                         <input required type="text" class="form-control" name="uom" id="uom" value="{{ old('uom', $product->uom) }}">
                     </div>
 
@@ -215,7 +215,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label class="d-block">Ebook Price (in Php) *</label>
+                        <label class="d-block">Ebook Price (in Php)</label>
                         <input type="number" class="form-control @error('ebook_price') is-invalid @enderror" name="ebook_price" id="ebook_price" value="{{ old('ebook_price', number_format($product->ebook_price,2,'.','')) }}" min="0.01" step="0.01">
                         @error('ebook_price')
                             <span class="text-danger">{{ $message }}</span>
@@ -223,7 +223,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="d-block">Ebook Discounted Price (in Php) *</label>
+                        <label class="d-block">Ebook Discounted Price (in Php)</label>
                         <input type="number" class="form-control @error('ebook_discount_price') is-invalid @enderror" name="ebook_discount_price" id="ebook_discount_price" value="{{ old('ebook_discount_price', number_format($product->ebook_discount_price,2,'.','')) }}" min="0.01" step="0.01">
                         @error('ebook_discount_price')
                             <span class="text-danger">{{ $message }}</span>

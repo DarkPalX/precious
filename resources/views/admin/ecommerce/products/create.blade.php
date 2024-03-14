@@ -95,7 +95,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Discounted Price (in Php) *</label>
+                        <label>Discounted Price (in Php)</label>
                         <input class="form-control" type="number" step="0.01" min="0.01" value="{{old('discount_price','0.00')}}" name="discount_price" id="discount_price">
                     </div>
                 </div>
@@ -115,7 +115,7 @@
 
                 <div class="col-lg-6 mg-t-20">
                     <div class="form-group">
-                        <label class="d-block">Reorder Point *</label>
+                        <label class="d-block">Reorder Point</label>
                         <input name="reorder_point" id="reorder_point" value="{{ old('reorder_point',0) }}" type="number" min="0" class="form-control @error('reorder_point') is-invalid @enderror" maxlength="250">
                         @error('reorder_point')
                             <span class="text-danger">{{ $message }}</span>
@@ -123,7 +123,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="d-block">Size *</label>
+                        <label class="d-block">Size</label>
                         <input name="size" id="size" value="{{ old('size') }}" type="text" class="form-control" maxlength="250">
                         @error('size')
                             <span class="text-danger">{{ $message }}</span>
@@ -131,17 +131,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Weight (grams) *</label>
+                        <label>Weight (grams)</label>
                         <input class="form-control" type="number" name="weight">
                     </div>
 
                     <div class="form-group">
-                        <label>Texture *</label>
+                        <label>Texture</label>
                         <input class="form-control" type="text" name="texture">
                     </div>
            
                     <div class="form-group">
-                        <label>Unit of Measurement *</label>
+                        <label>Unit of Measurement</label>
                         <input class="form-control" type="text" name="uom" id="uom" value="{{old('uom')}}">
                     </div>
 
@@ -186,12 +186,12 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Ebook Price (in Php) *</label>
+                        <label>Ebook Price (in Php)</label>
                         <input class="form-control" type="number" step="0.01" min="0.01" value="{{old('ebook_price','0.00')}}" name="ebook_price" id="ebook_price">
                     </div>
                     
                     <div class="form-group">
-                        <label>Ebook Discounted Price (in Php) *</label>
+                        <label>Ebook Discounted Price (in Php)</label>
                         <input class="form-control" type="number" step="0.01" min="0.01" value="{{old('ebook_discount_price','0.00')}}" name="ebook_discount_price" id="ebook_discount_price">
                     </div>
 
