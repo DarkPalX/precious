@@ -131,17 +131,17 @@
 
                     <div class="form-group">
                         <label>Weight (grams) *</label>
-                        <input class="form-control" type="number" name="weight" value="{{ old('wight', $product->weight) }}" required>
+                        <input class="form-control" type="number" name="weight" value="{{ old('wight', $product->weight) }}">
                     </div>
 
                     <div class="form-group">
                         <label>Texture *</label>
-                        <input class="form-control" type="text" name="texture" value="{{ old('wight', $product->texture) }}" required>
+                        <input class="form-control" type="text" name="texture" value="{{ old('wight', $product->texture) }}">
                     </div>
 
                     <div class="form-group">
                         <label class="d-block">Unit of Measurement *</label>
-                        <input required type="text" class="form-control" name="uom" id="uom" value="{{ old('uom', $product->uom) }}" required>
+                        <input required type="text" class="form-control" name="uom" id="uom" value="{{ old('uom', $product->uom) }}">
                     </div>
 
                     

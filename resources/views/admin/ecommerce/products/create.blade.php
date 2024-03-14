@@ -124,7 +124,7 @@
 
                     <div class="form-group">
                         <label class="d-block">Size *</label>
-                        <input name="size" id="size" value="{{ old('size') }}" type="text" class="form-control" maxlength="250" required>
+                        <input name="size" id="size" value="{{ old('size') }}" type="text" class="form-control" maxlength="250">
                         @error('size')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -132,17 +132,17 @@
 
                     <div class="form-group">
                         <label>Weight (grams) *</label>
-                        <input class="form-control" type="number" name="weight" required>
+                        <input class="form-control" type="number" name="weight">
                     </div>
 
                     <div class="form-group">
                         <label>Texture *</label>
-                        <input class="form-control" type="text" name="texture" required>
+                        <input class="form-control" type="text" name="texture">
                     </div>
            
                     <div class="form-group">
                         <label>Unit of Measurement *</label>
-                        <input class="form-control" type="text" name="uom" id="uom" value="{{old('uom')}}" required>
+                        <input class="form-control" type="text" name="uom" id="uom" value="{{old('uom')}}">
                     </div>
 
                     <div class="form-group">
