@@ -55,8 +55,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <label class="d-block">Author *</label>
-                        <input required name="author" id="author" value="{{ old('author',$product->author) }}" type="text" class="form-control @error('author') is-invalid @enderror" maxlength="150">
+                        <label class="d-block">Author</label>
+                        <input name="author" id="author" value="{{ old('author',$product->author) }}" type="text" class="form-control @error('author') is-invalid @enderror" maxlength="150">
                         @error('author')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -86,7 +86,7 @@
                     </div>
                     <div class="form-group">
                         <label class="d-block">Price (in Php) *</label>
-                        <input required type="number" class="form-control @error('price') is-invalid @enderror" name="price" id="price" value="{{ old('price', number_format($product->price,2,'.','')) }}" min="0.01" step="0.01">
+                        <input required type="number" class="form-control @error('price') is-invalid @enderror" name="price" id="price" value="{{ old('price', number_format($product->price,2,'.','')) }}" min="0.00" step="0.01">
                         @error('price')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -94,7 +94,7 @@
 
                     <div class="form-group">
                         <label class="d-block">Discounted Price (in Php)</label>
-                        <input type="number" class="form-control @error('discount_price') is-invalid @enderror" name="discount_price" id="discount_price" value="{{ old('discount_price', number_format($product->discount_price,2,'.','')) }}" min="0.01" step="0.01">
+                        <input type="number" class="form-control @error('discount_price') is-invalid @enderror" name="discount_price" id="discount_price" value="{{ old('discount_price', number_format($product->discount_price,2,'.','')) }}" min="0.00" step="0.01">
                         @error('discount_price')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -216,7 +216,7 @@
                     
                     <div class="form-group">
                         <label class="d-block">Ebook Price (in Php)</label>
-                        <input type="number" class="form-control @error('ebook_price') is-invalid @enderror" name="ebook_price" id="ebook_price" value="{{ old('ebook_price', number_format($product->ebook_price,2,'.','')) }}" min="0.01" step="0.01">
+                        <input type="number" class="form-control @error('ebook_price') is-invalid @enderror" name="ebook_price" id="ebook_price" value="{{ old('ebook_price', number_format($product->ebook_price,2,'.','')) }}" min="0.00" step="0.01">
                         @error('ebook_price')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -224,7 +224,7 @@
 
                     <div class="form-group">
                         <label class="d-block">Ebook Discounted Price (in Php)</label>
-                        <input type="number" class="form-control @error('ebook_discount_price') is-invalid @enderror" name="ebook_discount_price" id="ebook_discount_price" value="{{ old('ebook_discount_price', number_format($product->ebook_discount_price,2,'.','')) }}" min="0.01" step="0.01">
+                        <input type="number" class="form-control @error('ebook_discount_price') is-invalid @enderror" name="ebook_discount_price" id="ebook_discount_price" value="{{ old('ebook_discount_price', number_format($product->ebook_discount_price,2,'.','')) }}" min="0.00" step="0.01">
                         @error('ebook_discount_price')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

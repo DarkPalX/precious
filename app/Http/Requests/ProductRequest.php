@@ -26,7 +26,7 @@ class ProductRequest extends FormRequest
         return [
             'sku' => 'required|max:150',
             'name' => 'required|max:150',
-            'author' => 'required|max:150',
+            'author' => 'nullable|max:150',
             'book_type' => 'nullable',
             'file_url' => 'nullable',
             'ebook_price' => 'nullable',

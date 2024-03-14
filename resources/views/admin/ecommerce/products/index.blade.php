@@ -64,6 +64,7 @@
                                     <td>
                                         <strong @if($product->trashed()) style="text-decoration:line-through;" @endif> {{ $product->name }}</strong><br>
                                         <span class="badge badge-primary" {{ !$product->is_free  ? 'hidden' : '' }}>Free</span>
+                                        <span class="badge badge-danger" {{ !$product->is_premium  ? 'hidden' : '' }}>Premium</span>
                                     </td>
                                     <td>{{ $product->category->name }}</td>
                                     <td>{{ $product->currency }} {{ number_format($product->price,2) }}</td>

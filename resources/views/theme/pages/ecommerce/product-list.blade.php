@@ -81,12 +81,13 @@
 					<div class="grid-inner">
 						<div class="product-image">
 							<a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="{{$product->name}}"></a>
-							<!-- <div class="sale-flash badge bg-secondary p-2">Out of Stock</div> -->
+							@if($product->inventory <= 0)
+								<div class="sale-flash badge bg-danger p-2">Out of Stock</div>
+							@endif
 						</div>
 						<div class="product-desc">
 							<div class="product-title"><h3><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></h3></div>
-							<div class="product-price"><ins>₱{{number_format($product->price,2)}}</ins></div>
-							<!-- <div class="product-price"><del>$24.99</del> <ins>$12.49</ins></div> -->
+							{!! ($product->discount_price > 0 ? '<div class="product-price"><del>' . number_format($product->price, 2) . '</del> <ins>' . number_format($product->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->price, 2) . '</ins></div>') !!}
 							<div class="product-rating">
 								<i class="icon-star3"></i>
 								<i class="icon-star3"></i>

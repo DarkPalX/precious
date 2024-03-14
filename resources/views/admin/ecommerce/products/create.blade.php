@@ -59,8 +59,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <label class="d-block">Author *</label>
-                        <input required name="author" id="author" value="{{ old('author') }}" type="text" class="form-control @error('author') is-invalid @enderror" maxlength="150">
+                        <label class="d-block">Author</label>
+                        <input name="author" id="author" value="{{ old('author') }}" type="text" class="form-control @error('author') is-invalid @enderror" maxlength="150">
                         @error('author')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -91,12 +91,12 @@
                     
                     <div class="form-group">
                         <label>Price (in Php) *</label>
-                        <input required class="form-control" type="number" step="0.01" min="0.01" value="{{old('price','0.00')}}" name="price" id="price">
+                        <input required class="form-control" type="number" step="0.01" min="0.00" value="{{old('price','0.00')}}" name="price" id="price">
                     </div>
                     
                     <div class="form-group">
                         <label>Discounted Price (in Php)</label>
-                        <input class="form-control" type="number" step="0.01" min="0.01" value="{{old('discount_price','0.00')}}" name="discount_price" id="discount_price">
+                        <input class="form-control" type="number" step="0.01" min="0.00" value="{{old('discount_price','0.00')}}" name="discount_price" id="discount_price">
                     </div>
                 </div>
 
@@ -187,12 +187,12 @@
                     
                     <div class="form-group">
                         <label>Ebook Price (in Php)</label>
-                        <input class="form-control" type="number" step="0.01" min="0.01" value="{{old('ebook_price','0.00')}}" name="ebook_price" id="ebook_price">
+                        <input class="form-control" type="number" step="0.01" min="0.00" value="{{old('ebook_price','0.00')}}" name="ebook_price" id="ebook_price">
                     </div>
                     
                     <div class="form-group">
                         <label>Ebook Discounted Price (in Php)</label>
-                        <input class="form-control" type="number" step="0.01" min="0.01" value="{{old('ebook_discount_price','0.00')}}" name="ebook_discount_price" id="ebook_discount_price">
+                        <input class="form-control" type="number" step="0.01" min="0.00" value="{{old('ebook_discount_price','0.00')}}" name="ebook_discount_price" id="ebook_discount_price">
                     </div>
 
                     <div class="form-group">

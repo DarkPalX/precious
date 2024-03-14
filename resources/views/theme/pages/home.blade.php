@@ -30,8 +30,8 @@
                         </div>
                     </div>
                     <div class="product-desc py-0">
-                        <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>
-                        <div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>
+                        <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                        ($product->discount_price > 0 ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
                         <div class="product-rating">
                             <i class="icon-star3"></i>
                             <i class="icon-star3"></i>
@@ -59,7 +59,6 @@
     //     ->get();
 
     $bestSellers = \App\Models\Ecommerce\Product::where('is_best_seller', 1)->where('status', 'PUBLISHED')->get();
-
     if($bestSellers->count()){
 
         $bestSellersHTML = '';
@@ -82,8 +81,8 @@
                         </div>
                     </div>
                     <div class="product-desc py-0">
-                        <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>
-                        <div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>
+                        <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                        ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
                         <div class="product-rating">
                             <i class="icon-star3"></i>
                             <i class="icon-star3"></i>
@@ -126,17 +125,17 @@
                                 <div class="bg-overlay-bg bg-transparent"></div>
                             </div>
                         </div>
-                        <div class="product-desc py-0">
-                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>
-                            <div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>
-                            <div class="product-rating">
-                                <i class="icon-star3"></i>
-                                <i class="icon-star3"></i>
-                                <i class="icon-star3"></i>
-                                <i class="icon-star-half-full"></i>
-                                <i class="icon-star-empty"></i>
-                            </div>
+                    <div class="product-desc py-0">
+                        <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                        ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
+                        <div class="product-rating">
+                            <i class="icon-star3"></i>
+                            <i class="icon-star3"></i>
+                            <i class="icon-star3"></i>
+                            <i class="icon-star-half-full"></i>
+                            <i class="icon-star-empty"></i>
                         </div>
+                    </div>
                     </div>
                 </div>';
             }
