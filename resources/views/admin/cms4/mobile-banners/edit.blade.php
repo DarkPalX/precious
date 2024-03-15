@@ -47,7 +47,7 @@
             <h4 class="mg-b-0 tx-spacing--1">Edit an Album</h4>
         </div>
     </div>
-    <form id="updateForm" method="POST" action="{{ route('mobile-albums.update', $album->id) }}" enctype="multipart/form-data">
+    <form id="updateForm" method="POST" action="{{-- route('mobile-albums.update', $album->id) --}}" enctype="multipart/form-data">
         @foreach (old('remove_banners', []) as $bannerId)
             <input type="hidden" name="remove_banners[]" value="{{ $bannerId }}">
         @endforeach
@@ -214,13 +214,13 @@
             });
 
             $('#previewCarousel').owlCarousel({
-                animateOut: "{{$album->animationOut->value}}",
-                animateIn: "{{$album->animationIn->value}}",
+                animateOut: "{{--$album->animationOut->value--}}",
+                animateIn: "{{--$album->animationIn->value--}}",
                 loop: true,
                 dots: false,
                 margin: 0,
                 autoplay: true,
-                autoplayTimeout: ("{{$album->transition}}")*1000,
+                autoplayTimeout: ("{{--$album->transition--}}")*1000,
                 autoplayHoverPause: false,
                 nav: false,
                 responsive: {

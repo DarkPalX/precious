@@ -39,14 +39,14 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item" aria-current="page"><a href="{{route('dashboard')}}">CMS</a></li>
-                        <li class="breadcrumb-item" aria-current="page"><a href="{{route('albums.index')}}">Albums</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Create an Album</li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="{{route('mobile-albums.index')}}">Albums</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Create Mobile Album</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Create an Album</h4>
+                <h4 class="mg-b-0 tx-spacing--1">Create Mobile Album</h4>
             </div>
         </div>
-        <form id="albumForm" method="POST" action="{{ route('albums.store') }}" enctype="multipart/form-data">
+        <form id="albumForm" method="POST" action="{{ route('mobile-albums.store') }}" enctype="multipart/form-data">
             @method('POST')
             @csrf
             <div class="row row-sm">
@@ -128,7 +128,7 @@
                         <div class="col-lg-12 mg-t-30">
                             <hr>
                             <button type="submit" class="btn btn-primary btn-sm btn-uppercase" type="submit">Save Album</button>
-                            <a href="{{ route('albums.index') }}" class="btn btn-outline-secondary btn-sm btn-uppercase" type="cancel">Cancel</a>
+                            <a href="{{ route('mobile-albums.index') }}" class="btn btn-outline-secondary btn-sm btn-uppercase" type="cancel">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -191,7 +191,7 @@
                 $.ajax({
                     data: data,
                     type: "POST",
-                    url: "{{ route('albums.upload') }}",
+                    url: "{{ route('mobile-albums.upload') }}",
                     cache: false,
                     contentType: false,
                     processData: false,

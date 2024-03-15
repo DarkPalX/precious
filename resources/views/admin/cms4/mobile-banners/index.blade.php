@@ -26,7 +26,7 @@
                         <li class="breadcrumb-item active" aria-current="page">Albums</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Manage Albums</h4>
+                <h4 class="mg-b-0 tx-spacing--1">Manage Mobile Albums</h4>
             </div>
         </div>
 
@@ -185,7 +185,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" style="text-align: center;"> <p class="text-danger">No albums found.</p></td>
+                                    <td colspan="5" style="text-align: center;"> <p class="text-danger">No mobile-albums found.</p></td>
                                 </tr>
                             @endforelse
                             </tbody>
