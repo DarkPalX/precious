@@ -258,6 +258,19 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
+    public function has_access_to($route_address)
+    {
+        if ($this->is_an_admin()) {
+            return true;
+        }
+
+        if (count(array_filter(auth()->user()->get_assigned_routes(), fn($route) => strpos($route, $route_address) === 0)) > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function get_module_routes($module)
     {
         return Permission::where('module', $module)->pluck('name');

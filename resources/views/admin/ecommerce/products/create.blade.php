@@ -148,11 +148,8 @@
                     <div class="form-group">
                         <label class="d-block">Upload images</label>
                         <input type="file" id="upload_image" class="image_path" accept="image/*" multiple>
-                        <button type="button" class="btn btn-secondary btn-sm upload" id="selectImages">Select images</button>
-                        <p class="tx-10">
-                            Required image dimension: {{ env('PRODUCT_WIDTH') }}px by {{ env('PRODUCT_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png <br />
-                        </p>
-                        <div class="prodimg-thumb" id="bannersDiv" style="display: none;">
+                        {{-- <button type="button" class="btn btn-secondary btn-sm upload" id="selectImages">Select images</button> --}}
+                        <div class="prodimg-thumb" id="bannersDiv">
                             <ul id="banners">
                                 <li id="addMoreBanner">
                                     <div class="add-more txt-center upload">
@@ -161,6 +158,9 @@
                                 </li>
                             </ul>
                         </div>
+                        <p class="tx-10 mt-2">
+                            Required image dimension: {{ env('PRODUCT_WIDTH') }}px by {{ env('PRODUCT_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png <br />
+                        </p>
                     </div>
                     
                     <div class="form-group">
@@ -436,9 +436,9 @@
                     return false;
                 }
 
-                if (totalImages == 1) {
-                    $('#addMoreBanner').hide();
-                }
+                // if (totalImages == 1) {
+                //     $('#addMoreBanner').hide();
+                // }
 
                 validate_images(evt, upload_image);
             });

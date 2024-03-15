@@ -148,11 +148,9 @@
                     <div class="form-group">
                         <label class="d-block">Upload images</label>
                         <input type="file" id="upload_image" class="image_path" accept="image/*" multiple>
-                        <button type="button" class="btn btn-secondary btn-sm upload" id="selectImages">Select images</button>
-                        <p class="tx-10">
-                            Required image dimension: {{ env('PRODUCT_WIDTH') }}px by {{ env('PRODUCT_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png <br /> Maximum images: 5
-                        </p>
-                        <div class="prodimg-thumb" id="bannersDiv" @if($product->photos->count() == 0) style="display: none;" @endif>
+                        {{-- <button type="button" class="btn btn-secondary btn-sm upload" id="selectImages">Select images</button> --}}
+                        {{-- <div class="prodimg-thumb" id="bannersDiv" @if($product->photos->count() == 0) style="display: none;" @endif> --}}
+                        <div class="prodimg-thumb" id="bannersDiv">
                             <ul id="banners">
                                 @foreach ($product->photos as $key => $photo)
                                     @php $count = $key + 1; @endphp
@@ -180,15 +178,18 @@
                                         </label>
                                     </li>
                                 @endforeach
-                                @if($product->photos->count() < 1)
+                                {{-- @if($product->photos->count() < 1) --}}
                                     <li id="addMoreBanner">
                                         <div class="add-more txt-center upload">
                                             <i data-feather="plus-circle"></i>
                                         </div>
                                     </li>
-                                @endif
+                                {{-- @endif --}}
                             </ul>
                         </div>
+                        <p class="tx-10 mt-2">
+                            Required image dimension: {{ env('PRODUCT_WIDTH') }}px by {{ env('PRODUCT_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png <br /> Maximum images: 5
+                        </p>
                     </div>
                     
                     <div class="form-group">

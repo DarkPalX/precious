@@ -8,9 +8,9 @@
     <li class="nav-label mg-t-25">CMS</li>
     <li class="nav-item @if (url()->current() == route('dashboard')) active @endif">
         <a href="{{ route('dashboard') }}" class="nav-link"><i data-feather="home"></i><span>Dashboard</span></a>
-    </li>    
+    </li>
     
-    @if (auth()->user()->has_access_to_pages_module() || auth()->user()->has_access_to('pages'))
+    @if (auth()->user()->has_access_to_pages_module())
         <li class="nav-item with-sub @if (request()->routeIs('pages*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="layers"></i> <span>Pages</span></a>
             <ul>
@@ -23,7 +23,7 @@
         </li>
     @endif
 
-    @if (auth()->user()->has_access_to_albums_module() || auth()->user()->has_access_to('albums'))
+    @if (auth()->user()->has_access_to_albums_module())
         <li class="nav-item with-sub @if (request()->routeIs('albums*')) active show @endif">
             <a href="#" class="nav-link"><i data-feather="image"></i> <span>Desktop Banners</span></a>
             <ul>
@@ -36,7 +36,7 @@
         </li>
     @endif
 
-    @if (auth()->user()->has_access_to_albums_module() || auth()->user()->has_access_to('albums'))
+    @if (auth()->user()->has_access_to_albums_module())
         <li class="nav-item with-sub @if (request()->routeIs('mobile-albums*')) active show @endif">
             <a href="#" class="nav-link"><i data-feather="image"></i> <span>Mobile Banners</span></a>
             <ul>
@@ -49,7 +49,7 @@
         </li>
     @endif
 
-    @if (auth()->user()->has_access_to_file_manager_module() || auth()->user()->has_access_to('file-manager'))
+    @if (auth()->user()->has_access_to_file_manager_module())
         <li class="nav-item @if (\Route::current()->getName() == 'file-manager.index') active @endif">
             <a href="{{ route('file-manager.index') }}" class="nav-link"><i data-feather="folder"></i> <span>Files</span></a>
         </li>
@@ -94,6 +94,15 @@
             @endif
         </ul>
     </li>
+    {{-- @if (auth()->user()->is_an_admin())
+        <li class="nav-item with-sub @if (request()->routeIs('users*')) active show @endif">
+            <a href="" class="nav-link"><i data-feather="users"></i> <span>Users</span></a>
+            <ul>
+                <li @if (\Route::current()->getName() == 'users.index' || \Route::current()->getName() == 'users.edit') class="active" @endif><a href="{{ route('users.index') }}">Manage Users</a></li>
+                <li @if (\Route::current()->getName() == 'users.create') class="active" @endif><a href="{{ route('users.create') }}">Create a User</a></li>
+            </ul>
+        </li>
+    @endif --}}
     @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('users'))
         <li class="nav-item with-sub @if (request()->routeIs('users*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="users"></i> <span>Users</span></a>

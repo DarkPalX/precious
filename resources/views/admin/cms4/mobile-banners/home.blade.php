@@ -117,7 +117,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <p class="tx-10">
-                            Required image dimension: {{ env('MAIN_BANNER_WIDTH') }}px by {{ env('MAIN_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
+                            Required image dimension: {{ env('MOBILE_MAIN_BANNER_WIDTH') }}px by {{ env('MOBILE_MAIN_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
                         </p>
                     </div>
                     <div class="form-group mg-b-0" id="videoDiv" @if(is_banner_type($mobile_album, $errors)) style="display: none;" @endif>
@@ -382,8 +382,8 @@
                 let files = evt.target.files;
                 let maxSize = 2;
                 let validateFileTypes = ["image/jpeg", "image/png"];
-                let requiredWidth = "{{ env('MAIN_BANNER_WIDTH') }}";
-                let requiredHeight =  "{{ env('MAIN_BANNER_HEIGHT') }}";
+                let requiredWidth = "{{ env('MOBILE_MAIN_BANNER_WIDTH') }}";
+                let requiredHeight =  "{{ env('MOBILE_MAIN_BANNER_HEIGHT') }}";
 
                 validate_files(files, upload_image, maxSize, validateFileTypes, requiredWidth, requiredHeight);
             });

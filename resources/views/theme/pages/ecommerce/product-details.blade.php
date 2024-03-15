@@ -26,15 +26,6 @@
                                     </button>
                                 </div>
                             </form>
-
-                            {{-- <form action="{{ route('search-product') }}" method="GET">
-                                <div class="input-group pb-5">
-                                    <input type="text" class="form-control" name="keyword" placeholder="Search Product" aria-label="Search Product" aria-describedby="button-addon2" value="{{$searchtxt}}" />
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><span class="icon-search"></span></button>
-                                    </div>
-                                </div>
-                            </form> --}}
                         </div>
                     </div>
                     
@@ -113,8 +104,7 @@
                         <i class="icon-star-empty"></i>
                     </div>
                     
-                    <!-- <ins class="h1 text-decoration-none">$12.49</ins> <del>$24.99</del> -->
-                    <ins class="h1 text-decoration-none">₱{{number_format($product->price,2)}}</ins>
+                    {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
                     <input type="hidden" id="product_price" value="{{$product->price}}">
                     
                     <!-- Product Single - Short Description
@@ -168,6 +158,34 @@
                             </div>
                         @endif
                     @endif
+
+                    <div class="share mt-3">
+                        <h5>Also Available in bundle:</h5>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="product-image">
+                                    <img src="{{ asset('storage/products/'.$product->photoPrimary) }}" />
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <h3 class="mb-2">Fashion waterproof bundle</h3>
+                                 {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
+                                
+                                @if($product->inventory > 0)
+                                    <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                                        <a href="cart.htm" class="btn btn-info text-white vw-100 me-1">Buy Now</a>
+                                        <a href="cart.htm" class="btn bg-color text-white vw-100">Add To Bag</a>
+                                    </div>
+                                @else
+                                    @if(Auth::check())
+                                        <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                                            <a href="#" class="btn btn-secondary text-white vw-100">Add To Wishlist <i class="icon-star"></i></a>
+                                        </div>
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
+                    </div>
 
                     
                     <!-- Product Single - Share
