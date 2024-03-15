@@ -89,7 +89,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <p class="tx-10">
-                            Required image dimension: {{ env('SUB_BANNER_WIDTH') }}px by {{ env('SUB_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
+                            Required image dimension: {{ env('MOBILE_SUB_BANNER_WIDTH') }}px by {{ env('MOBILE_SUB_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
                         </p>
                     </div>
                 </div>
@@ -232,8 +232,8 @@
                 let files = evt.target.files;
                 let maxSize = 1;
                 let validateFileTypes = ["image/jpeg", "image/png"];
-                let requiredWidth = "{{ env('SUB_BANNER_WIDTH') }}";
-                let requiredHeight =  "{{ env('SUB_BANNER_HEIGHT') }}";
+                let requiredWidth = "{{ env('MOBILE_SUB_BANNER_WIDTH') }}";
+                let requiredHeight =  "{{ env('MOBILE_SUB_BANNER_HEIGHT') }}";
 
                 validate_files(files, upload_image, maxSize, validateFileTypes, requiredWidth, requiredHeight);
             });
