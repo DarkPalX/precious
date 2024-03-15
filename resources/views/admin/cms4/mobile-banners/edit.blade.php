@@ -47,7 +47,7 @@
             <h4 class="mg-b-0 tx-spacing--1">Edit an Album</h4>
         </div>
     </div>
-    <form id="updateForm" method="POST" action="{{-- route('mobile-albums.update', $album->id) --}}" enctype="multipart/form-data">
+    <form id="updateForm" method="POST" action="{{ route('mobile-albums.update', $mobile_album->id) }}" enctype="multipart/form-data">
         @foreach (old('remove_banners', []) as $bannerId)
             <input type="hidden" name="remove_banners[]" value="{{ $bannerId }}">
         @endforeach
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <label class="d-block">Album Name *</label>
                     <input name="user_id" type="hidden" value="{{Auth::user()->id}}">
-                    <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" required value="{{ old('name',$album->name) }}">
+                    <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" required value="{{ old('name',$mobile_album->name) }}">
                     @error('name')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -68,7 +68,7 @@
                     <select name="transition_in" class="selectpicker mg-b-5" data-style="btn btn-outline-light btn-sm btn-block tx-left" title="Select transition" data-width="100%">
                         @foreach ($animations as $animation)
                             @if ($animation->is_entrance_field_type())
-                                <option {{ (old("transition_in",$album->transition_in) == $animation->id ? "selected":"") }} value="{{ $animation->id }}">{{ $animation->name }}</option>
+                                <option {{ (old("transition_in",$mobile_album->transition_in) == $animation->id ? "selected":"") }} value="{{ $animation->id }}">{{ $animation->name }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -78,14 +78,14 @@
                     <select name="transition_out" class="selectpicker mg-b-5" data-style="btn btn-outline-light btn-sm btn-block tx-left" title="Select transition" data-width="100%">
                         @foreach ($animations as $animation)
                             @if ($animation->is_exit_field_type())
-                                <option {{ (old("transition_out",$album->transition_out) == $animation->id ? "selected":"") }} value="{{ $animation->id }}">{{ $animation->name }}</option>
+                                <option {{ (old("transition_out",$mobile_album->transition_out) == $animation->id ? "selected":"") }} value="{{ $animation->id }}">{{ $animation->name }}</option>
                             @endif
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label class="d-block">Transition Duration (seconds) *</label>
-                    <input name="transition" type="text" class="js-range-slider" name="my_range" value="{{ old('transition',$album->transition) }}" />
+                    <input name="transition" type="text" class="js-range-slider" name="my_range" value="{{ old('transition',$mobile_album->transition) }}" />
                 </div>
                 <div class="form-group mg-b-0">
                     <input type="file" name="banner" class="d-none" id="upload_image" accept="image/*" multiple>
@@ -93,7 +93,7 @@
                     @error('banners')
                         <span class="text-danger">{{ $message }}</span>
                     @enderror
-                    @if ($album->id == 1)
+                    @if ($mobile_album->id == 1)
                         <p class="tx-10">
                             Required image dimension: {{ env('MAIN_BANNER_WIDTH') }}px by {{ env('MAIN_BANNER_HEIGHT') }}px <br /> Maximum file size: 2MB <br /> Required file type: .jpeg .png
                         </p>
@@ -108,7 +108,7 @@
             <div class="col-md-12">
                 <div class="row draggable-portlets">
                     <div class="col-md-12" id="banners">
-                        @php $banners = old('banners', $album->banners); @endphp
+                        @php $banners = old('banners', $mobile_album->banners); @endphp
                         @foreach ($banners as $key => $banner)
                             @php if(!isset($banner['id'])) {
                                 $banner['id'] = $key;
@@ -214,13 +214,13 @@
             });
 
             $('#previewCarousel').owlCarousel({
-                animateOut: "{{--$album->animationOut->value--}}",
-                animateIn: "{{--$album->animationIn->value--}}",
+                animateOut: "{{$mobile_album->animationOut->value}}",
+                animateIn: "{{$mobile_album->animationIn->value}}",
                 loop: true,
                 dots: false,
                 margin: 0,
                 autoplay: true,
-                autoplayTimeout: ("{{--$album->transition--}}")*1000,
+                autoplayTimeout: ("{{$mobile_album->transition}}")*1000,
                 autoplayHoverPause: false,
                 nav: false,
                 responsive: {

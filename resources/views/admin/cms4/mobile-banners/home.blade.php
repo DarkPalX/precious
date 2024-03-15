@@ -30,24 +30,24 @@
         return $path[$nameIndex];
     }
 
-    function is_video_type($album, $errors) {
+    function is_video_type($mobile_album, $errors) {
         if ($errors->isEmpty()) {
-            return $album->banner_type == 'video';
+            return $mobile_album->banner_type == 'video';
         } else {
             return old('banner_type') == 'video';
         }
     }
 
-    function is_banner_type($album, $errors) {
+    function is_banner_type($mobile_album, $errors) {
         if ($errors->isEmpty()) {
-            return $album->banner_type != 'video';
+            return $mobile_album->banner_type != 'video';
         } else {
             return old('banner_type') != 'video';
         }
     }
 
     if ($errors->isEmpty()) {
-        $banners = $album->banners;
+        $banners = $mobile_album->banners;
     } else {
         $banners = old('banners', []);
     }
@@ -60,14 +60,14 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item" aria-current="page"><a href="{{route('dashboard')}}">CMS</a></li>
-                        <li class="breadcrumb-item" aria-current="page"><a href="{{route('albums.index')}}">Albums</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Edit Home Banner</li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="{{route('mobile-albums.index')}}">Albums</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Mobile Home Banner</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Edit Home Banner</h4>
+                <h4 class="mg-b-0 tx-spacing--1">Edit Mobile Home Banner</h4>
             </div>
         </div>
-        <form id="updateForm" method="POST" action="{{ route('albums.update', $album->id) }}" enctype="multipart/form-data">
+        <form id="updateForm" method="POST" action="{{ route('mobile-albums.update', $mobile_album->id) }}" enctype="multipart/form-data">
             @foreach (old('remove_banners', []) as $bannerId)
                 <input type="hidden" name="remove_banners[]" value="{{ $bannerId }}">
             @endforeach
@@ -77,14 +77,14 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="d-block">Album Name *</label>
-                        <input name="name" type="text" class="form-control" required value="{{ $album->name }}" readonly>
+                        <input name="name" type="text" class="form-control" required value="{{ $mobile_album->name }}" readonly>
                     </div>
                     <div class="form-group">
                         <label class="d-block">Transition In *</label>
                         <select name="transition_in" class="selectpicker mg-b-5" data-style="btn btn-outline-light btn-sm btn-block tx-left" title="Select transition" data-width="100%">
                             @foreach ($animations as $animation)
                                 @if ($animation->is_entrance_field_type())
-                                    <option @if ($album->transition_in == $animation->id) selected @endif value="{{ $animation->id }}">{{ $animation->name }}</option>
+                                    <option @if ($mobile_album->transition_in == $animation->id) selected @endif value="{{ $animation->id }}">{{ $animation->name }}</option>
                                 @endif
                             @endforeach
                         </select>
@@ -94,23 +94,23 @@
                         <select name="transition_out" class="selectpicker mg-b-5" data-style="btn btn-outline-light btn-sm btn-block tx-left" title="Select transition" data-width="100%">
                             @foreach ($animations as $animation)
                                 @if ($animation->is_exit_field_type())
-                                    <option @if ($album->transition_out == $animation->id) selected @endif value="{{ $animation->id }}">{{ $animation->name }}</option>
+                                    <option @if ($mobile_album->transition_out == $animation->id) selected @endif value="{{ $animation->id }}">{{ $animation->name }}</option>
                                 @endif
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="d-block">Transition Duration (seconds) *</label>
-                        <input name="transition" type="text" class="js-range-slider" name="my_range" value="{{ $album->transition }}" />
+                        <input name="transition" type="text" class="js-range-slider" name="my_range" value="{{ $mobile_album->transition }}" />
                     </div>
                     <div class="form-group">
                         <label class="d-block">Banner Type</label>
                         <div class="custom-control custom-switch @error('visibility') is-invalid @enderror">
-                            <input type="checkbox" class="custom-control-input" name="banner_type" value="video" @if(is_video_type($album, $errors)) checked @endif id="banner_type">
-                            <label class="custom-control-label" id="banner_type_label" for="banner_type">@if(is_video_type($album, $errors)) Video @else Image @endif</label>
+                            <input type="checkbox" class="custom-control-input" name="banner_type" value="video" @if(is_video_type($mobile_album, $errors)) checked @endif id="banner_type">
+                            <label class="custom-control-label" id="banner_type_label" for="banner_type">@if(is_video_type($mobile_album, $errors)) Video @else Image @endif</label>
                         </div>
                     </div>
-                    <div class="form-group mg-b-0" id="imageDiv" @if(is_video_type($album, $errors)) style="display: none;" @endif>
+                    <div class="form-group mg-b-0" id="imageDiv" @if(is_video_type($mobile_album, $errors)) style="display: none;" @endif>
                         <input type="file" name="banner" class="d-none" id="upload_image" accept="image/*" multiple>
                         <button type="button" class="btn btn-light btn-xs btn-uppercase upload @error('banners') is-invalid @enderror" type="submit"><i data-feather="upload"></i> Upload images*</button>
                         @error('banners')
@@ -120,7 +120,7 @@
                             Required image dimension: {{ env('MAIN_BANNER_WIDTH') }}px by {{ env('MAIN_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
                         </p>
                     </div>
-                    <div class="form-group mg-b-0" id="videoDiv" @if(is_banner_type($album, $errors)) style="display: none;" @endif>
+                    <div class="form-group mg-b-0" id="videoDiv" @if(is_banner_type($mobile_album, $errors)) style="display: none;" @endif>
                         <input type="file" name="banner" class="d-none" id="upload_video" accept="video/mp4" multiple>
                         <button type="button" class="btn btn-light btn-xs btn-uppercase upload-video @error('banners') is-invalid @enderror" type="submit"><i data-feather="upload"></i> Upload videos*</button>
                         @error('banners')
@@ -131,10 +131,10 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-md-12" id="imageList" @if(is_video_type($album, $errors)) style="display: none;" @endif>
+                <div class="col-md-12" id="imageList" @if(is_video_type($mobile_album, $errors)) style="display: none;" @endif>
                     <div class="row draggable-portlets">
                         <div class="col-md-12" id="banners">
-                            @if(is_banner_type($album, $errors))
+                            @if(is_banner_type($mobile_album, $errors))
                                 @foreach ($banners as $key => $banner)
                                     @php
                                         if(!isset($banner['id'])) {
@@ -147,7 +147,7 @@
                                             <div class="card-header ui-sortable-handle"><i data-feather="move"></i> {{ extract_file_name($banner['image_path']) }}</div>
                                             <div class="card-body">
                                                 <div class="row row-sm">
-                                                    <div class="col-lg-8 col-md-12" @if (is_video_type($album, $errors)) style="display: none;" @endif>
+                                                    <div class="col-lg-8 col-md-12" @if (is_video_type($mobile_album, $errors)) style="display: none;" @endif>
                                                         <div class="form-group upload-image mg-b-0" style="background: url('{{ $banner['image_path'] }}');background-size: cover;">
                                                             <div class="marker pos-absolute t-10 l-20 p-0 bg-transparent">
                                                                 <button type="button" class="btn btn-danger btn-xs btn-uppercase remove-upload" type="button" data-id="{{ $banner['id'] }}"><i data-feather="x"></i> Remove image</button>
@@ -158,7 +158,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-4 col-md-12 imageList" @if (is_video_type($album, $errors)) style="display: none;" @endif>
+                                                    <div class="col-lg-4 col-md-12 imageList" @if (is_video_type($mobile_album, $errors)) style="display: none;" @endif>
                                                         <div class="form-group">
                                                             <input name="banners[{{ $banner['id'] }}][title]" type="text" class="form-control" placeholder="Caption heading" value="{{ $banner['title'] }}">
                                                         </div>
@@ -188,15 +188,15 @@
                         <div class="col-lg-12 mg-t-30">
                             <hr>
                             <button type="submit" class="btn btn-primary btn-sm btn-uppercase" type="submit">Update Album</button>
-                            <a href="{{ route('albums.index') }}" class="btn btn-outline-secondary btn-sm btn-uppercase" type="cancel">Cancel</a>
+                            <a href="{{ route('mobile-albums.index') }}" class="btn btn-outline-secondary btn-sm btn-uppercase" type="cancel">Cancel</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-12" id="videoList" @if(is_banner_type($album, $errors)) style="display: none;" @endif>
+                <div class="col-md-12" id="videoList" @if(is_banner_type($mobile_album, $errors)) style="display: none;" @endif>
                     <div class="row draggable-portlets">
                         <div class="col-md-12" id="videos">
-                            @if(is_video_type($album, $errors))
+                            @if(is_video_type($mobile_album, $errors))
                                 @foreach ($banners as $key => $banner)
                                     @php
                                         if(!isset($banner['id'])) {
@@ -251,7 +251,7 @@
                         <div class="col-lg-12 mg-t-30">
                             <hr>
                             <button type="submit" class="btn btn-primary btn-sm btn-uppercase" type="submit">Update Album</button>
-                            <a href="{{ route('albums.index') }}" class="btn btn-outline-secondary btn-sm btn-uppercase" type="cancel">Cancel</a>
+                            <a href="{{ route('mobile-albums.index') }}" class="btn btn-outline-secondary btn-sm btn-uppercase" type="cancel">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -320,7 +320,7 @@
                 $.ajax({
                     data: data,
                     type: "POST",
-                    url: "{{ route('albums.upload') }}",
+                    url: "{{ route('mobile-albums.upload') }}",
                     cache: false,
                     contentType: false,
                     processData: false,
@@ -460,7 +460,7 @@
                 $.ajax({
                     data: data,
                     type: "POST",
-                    url: "{{ route('albums.upload') }}",
+                    url: "{{ route('mobile-albums.upload') }}",
                     cache: false,
                     contentType: false,
                     processData: false,

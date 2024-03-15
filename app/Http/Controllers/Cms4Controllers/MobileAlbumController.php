@@ -20,7 +20,7 @@ class MobileAlbumController extends Controller
 
     public function __construct()
     {
-        Permission::module_init($this, 'banner');
+        Permission::module_init($this, 'mobile_banner');
     }
 
     public function index()
@@ -28,14 +28,14 @@ class MobileAlbumController extends Controller
         $animations = Option::where('type', 'animation')->get();
 
         $listing = ListingHelper::required_condition('type', '!=', 'main_banner');
-        $albums = $listing->simple_search(MobileAlbum::class, $this->searchFields);
+        $mobile_albums = $listing->simple_search(MobileAlbum::class, $this->searchFields);
         
         $filter = ListingHelper::get_filter($this->searchFields);
         $searchType = 'simple_search';
 
         $this->delete_temporary_banner_folder();
 
-        return view('admin.cms4.mobile-banners.index', compact('albums', 'animations', 'filter', 'searchType'));
+        return view('admin.cms4.mobile-banners.index', compact('mobile_albums', 'animations', 'filter', 'searchType'));
     }
 
     /**
@@ -69,7 +69,7 @@ class MobileAlbumController extends Controller
 
         $requestData['user_id'] = auth()->id();
 
-        $album = MobileAlbum::create($requestData);
+        $mobile_album = MobileAlbum::create($requestData);
 
         $banners = $this->set_order(request('banners'));
 
@@ -77,18 +77,18 @@ class MobileAlbumController extends Controller
 
         $this->delete_temporary_banner_folder();
 
-        $album->addBanners($banners);
+        $mobile_album->addBanners($banners);
 
-        return redirect()->route('albums.index')->with('success', __('standard.banner.create_success'));
+        return redirect()->route('mobile-albums.index')->with('success', __('standard.banner.create_success'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\MobileAlbum  $album
+     * @param  \App\MobileAlbum  $mobile_album
      * @return \Illuminate\Http\Response
      */
-    public function show(MobileAlbum $album)
+    public function show(MobileAlbum $mobile_album)
     {
         abort(404);
     }
@@ -96,28 +96,28 @@ class MobileAlbumController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\MobileAlbum  $album
+     * @param  \App\MobileAlbum  $mobile_album
      * @return \Illuminate\Http\Response
      */
-    public function edit(MobileAlbum $album)
+    public function edit(MobileAlbum $mobile_album)
     {
         $animations = Option::where('type', 'animation')->get();
 
-        if ($album->type == 'main_banner') {
-            return view('admin.cms4.mobile-banners.home', compact('album', 'animations'));
+        if ($mobile_album->type == 'main_banner') {
+            return view('admin.cms4.mobile-banners.home', compact('mobile_album', 'animations'));
         }
 
-        return view('admin.cms4.mobile-banners.edit', compact('album', 'animations'));
+        return view('admin.cms4.mobile-banners.edit', compact('mobile_album', 'animations'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\MobileAlbum  $album
+     * @param  \App\MobileAlbum  $mobile_album
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MobileAlbum $album)
+    public function update(Request $request, MobileAlbum $mobile_album)
     {
 
         if (MobileAlbum::has_invalid_data() || MobileBanner::has_invalid_data()) {
@@ -135,15 +135,15 @@ class MobileAlbumController extends Controller
         $newBanners = $this->get_new_banners($banners);
         $removeBanners = [];
 
-        if ($album->banner_type != $updateData['banner_type'] || ($updateData['banner_type'] == 'video' && count($newBanners))) {
-            if ($album->banners()->count()) {
-                $removeBanners = $album->banners()->pluck('id')->toArray();
+        if ($mobile_album->banner_type != $updateData['banner_type'] || ($updateData['banner_type'] == 'video' && count($newBanners))) {
+            if ($mobile_album->banners()->count()) {
+                $removeBanners = $mobile_album->banners()->pluck('id')->toArray();
             }
         } else {
             $removeBanners = request('remove_banners');
         }
 
-        $album->update($updateData);
+        $mobile_album->update($updateData);
 
         $this->update_banners($this->get_album_banners($banners));
 
@@ -151,24 +151,24 @@ class MobileAlbumController extends Controller
 
         $newBanners = $this->move_banner_to_official_folder($newBanners);
 
-        $album->addBanners($newBanners);
+        $mobile_album->addBanners($newBanners);
 
         return back()->with('success', __('standard.banner.update_success'));
     }
 
-    public function quick_update(Request $request, MobileAlbum $album)
+    public function quick_update(Request $request, MobileAlbum $mobile_album)
     {
         if (MobileAlbum::has_invalid_quick_edit_data()) {
             return back()->withErrors(MobileAlbum::get_quick_edit_error_messages())->withInput();
         }
 
-        $album->update(request()->all());
+        $mobile_album->update(request()->all());
 
-        if($album){
-            return redirect()->route('albums.index')->with('success', __('standard.banner.update_success'));
+        if($mobile_album){
+            return redirect()->route('mobile-albums.index')->with('success', __('standard.banner.update_success'));
         }
 
-        return redirect()->route('albums.index');
+        return redirect()->route('mobile-albums.index');
     }
 
     public function update_banners($banners)
@@ -202,14 +202,14 @@ class MobileAlbumController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\MobileAlbum $album
+     * @param \App\MobileAlbum $mobile_album
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(MobileAlbum $album)
+    public function destroy(MobileAlbum $mobile_album)
     {
-        $album->update(['user_id' => auth()->id()]);
-        if ($album->delete()) {
+        $mobile_album->update(['user_id' => auth()->id()]);
+        if ($mobile_album->delete()) {
             return back()->with('success', __('standard.banner.delete_success'));
         } else {
             return back()->with('error', __('standard.banner.delete_failed'));
@@ -218,9 +218,9 @@ class MobileAlbumController extends Controller
 
     public function destroy_many()
     {
-        $albumIds = explode(',', request('ids'));
-        if (sizeof($albumIds) > 0 ) {
-            $delete = MobileAlbum::whereIn('id', $albumIds)->delete();
+        $mobile_albumIds = explode(',', request('ids'));
+        if (sizeof($mobile_albumIds) > 0 ) {
+            $delete = MobileAlbum::whereIn('id', $mobile_albumIds)->delete();
             if ($delete) {
                 return back()->with('success', __('standard.banner.delete_success'));
             }
@@ -229,24 +229,24 @@ class MobileAlbumController extends Controller
         return back()->with('error', 'Failed to delete an album.');
     }
 
-    public function restore($album)
+    public function restore($mobile_album)
     {
-        MobileAlbum::withTrashed()->findOrFail($album)->restore();
+        MobileAlbum::withTrashed()->findOrFail($mobile_album)->restore();
 
         return back()->with('success', __('standard.banner.restore_success'));
     }
 
-    public function get_album_details(MobileAlbum $album) {
+    public function get_album_details(MobileAlbum $mobile_album) {
 
-        $banner_paths = $album->banners->map(function ($item, $key) {
+        $banner_paths = $mobile_album->banners->map(function ($item, $key) {
             return $item->image_path;
         })->toArray();
 
         $returnData = [
             'banner_paths' => $banner_paths,
-            'transition_in' => $album->animationIn->value,
-            'transition_out' => $album->animationOut->value,
-            'transition' => $album->transition,
+            'transition_in' => $mobile_album->animationIn->value,
+            'transition_out' => $mobile_album->animationOut->value,
+            'transition' => $mobile_album->transition,
         ];
 
         return response()->json($returnData);

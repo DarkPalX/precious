@@ -23,7 +23,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1 mg-b-5">
                         <li class="breadcrumb-item" aria-current="page"><a href="{{route('dashboard')}}">CMS</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Albums</li>
+                        <li class="breadcrumb-item active" aria-current="page">Mobile Albums</li>
                     </ol>
                 </nav>
                 <h4 class="mg-b-0 tx-spacing--1">Manage Mobile Albums</h4>
@@ -132,34 +132,34 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse ($albums as $album)
-                                <tr id="row{{$album->id}}" class="row_cb">
+                            @forelse ($mobile_albums as $mobile_album)
+                                <tr id="row{{$mobile_album->id}}" class="row_cb">
                                     <th>
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input cb" id="cb{{ $album->id }}" data-id="{{ $album->id }}">
-                                            <label class="custom-control-label" for="cb{{ $album->id }}"></label>
+                                            <input type="checkbox" class="custom-control-input cb" id="cb{{ $mobile_album->id }}" data-id="{{ $mobile_album->id }}">
+                                            <label class="custom-control-label" for="cb{{ $mobile_album->id }}"></label>
                                         </div>
                                     </th>
-                                    <td style="overflow: hidden;text-overflow: ellipsis;" title="{{$album->name}}">
-                                        <strong @if($album->trashed()) style="text-decoration:line-through;" @endif title="{{ $album->name }}">{{ $album->name }}</strong>
+                                    <td style="overflow: hidden;text-overflow: ellipsis;" title="{{$mobile_album->name}}">
+                                        <strong @if($mobile_album->trashed()) style="text-decoration:line-through;" @endif title="{{ $mobile_album->name }}">{{ $mobile_album->name }}</strong>
                                     </td>
-                                    <td>{{ $album->banners->count() }}</td>
-                                    <td><span class="text-nowrap">{{ Setting::date_for_listing($album->updated_at) }}</span></td>
+                                    <td>{{ $mobile_album->banners->count() }}</td>
+                                    <td><span class="text-nowrap">{{ Setting::date_for_listing($mobile_album->updated_at) }}</span></td>
                                     <td>
-                                        @if($album->trashed())
+                                        @if($mobile_album->trashed())
                                             @if (auth()->user()->has_access_to_route('mobile-albums.restore'))
                                                 <nav class="nav table-options justify-content-end flex-nowrap">
-                                                    <form id="form{{$album->id}}" method="post" action="{{ route('mobile-albums.restore', $album->id) }}">
+                                                    <form id="form{{$mobile_album->id}}" method="post" action="{{ route('mobile-albums.restore', $mobile_album->id) }}">
                                                         @csrf
                                                         @method('POST')
-                                                        <a class="nav-link" href="#" title="Restore this banner" onclick="document.getElementById('form{{$album->id}}').submit()"><i data-feather="rotate-ccw"></i></a>
+                                                        <a class="nav-link" href="#" title="Restore this banner" onclick="document.getElementById('form{{$mobile_album->id}}').submit()"><i data-feather="rotate-ccw"></i></a>
                                                     </form>
                                                 </nav>
                                             @endif
                                         @else
                                             <nav class="nav table-options justify-content-end flex-nowrap">
                                                 @if(auth()->user()->has_access_to_route('mobile-albums.edit'))
-                                                    <a class="nav-link" title="Edit banner" href="{{ route('mobile-albums.edit', $album->id) }}"><i data-feather="edit"></i></a>
+                                                    <a class="nav-link" title="Edit banner" href="{{ route('mobile-albums.edit', $mobile_album->id) }}"><i data-feather="edit"></i></a>
                                                 @endif
 
                                                 @if (auth()->user()->has_access_to_route('mobile-albums.quick_update') || auth()->user()->has_access_to_route('mobile-albums.destroy'))
@@ -168,11 +168,11 @@
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         @if(auth()->user()->has_access_to_route('mobile-albums.quick_update'))
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#promptQuickEdit" href="#" data-id="{{ $album->id }}" data-name="{{ $album->name }}" data-transition-in="{{ $album->transition_in }}" data-transition-out="{{ $album->transition_out }}" data-transition="{{ $album->transition }}">Quick Edit</a>
+                                                            <a class="dropdown-item" data-toggle="modal" data-target="#promptQuickEdit" href="#" data-id="{{ $mobile_album->id }}" data-name="{{ $mobile_album->name }}" data-transition-in="{{ $mobile_album->transition_in }}" data-transition-out="{{ $mobile_album->transition_out }}" data-transition="{{ $mobile_album->transition }}">Quick Edit</a>
                                                         @endif
                                                         @if(auth()->user()->has_access_to_route('mobile-albums.destroy'))
-                                                            <button type="button" class="dropdown-item" data-target="#prompt-delete" data-toggle="modal" data-animation="effect-scale" data-id="{{ $album->id }}" data-name="{{ $album->name }}">Delete</button>
-                                                            <form id="albumForm{{ $album->id }}" method="POST" action="{{ route('mobile-albums.destroy', $album->id) }}" class="d-none">
+                                                            <button type="button" class="dropdown-item" data-target="#prompt-delete" data-toggle="modal" data-animation="effect-scale" data-id="{{ $mobile_album->id }}" data-name="{{ $mobile_album->name }}">Delete</button>
+                                                            <form id="albumForm{{ $mobile_album->id }}" method="POST" action="{{ route('mobile-albums.destroy', $mobile_album->id) }}" class="d-none">
                                                                 @csrf
                                                                 @method('DELETE')
                                                             </form>
@@ -185,7 +185,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" style="text-align: center;"> <p class="text-danger">No mobile-albums found.</p></td>
+                                    <td colspan="5" style="text-align: center;"> <p class="text-danger">No albums found.</p></td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -196,17 +196,17 @@
             </div>
             <div class="col-md-6">
                 <div class="mg-t-5">
-                    @if ($albums->firstItem() == null)
+                    @if ($mobile_albums->firstItem() == null)
                         <p class="tx-gray-400 tx-12 d-inline">{{__('common.showing_zero_items')}}</p>
                     @else
-                        <p class="tx-gray-400 tx-12 d-inline">Showing {{ $albums->firstItem() }} to {{ $albums->lastItem() }} of {{ $albums->total() }} items</p>
+                        <p class="tx-gray-400 tx-12 d-inline">Showing {{ $mobile_albums->firstItem() }} to {{ $mobile_albums->lastItem() }} of {{ $mobile_albums->total() }} items</p>
                     @endif
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="text-md-right float-md-right mg-t-5">
                     <div>
-                        {{ $albums->appends((array) $filter)->links() }}
+                        {{ $mobile_albums->appends((array) $filter)->links() }}
                     </div>
                 </div>
             </div>

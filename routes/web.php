@@ -265,9 +265,9 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::resource('/mobile-albums', MobileAlbumController::class);
                 Route::post('/mobile-albums/upload', [MobileAlbumController::class, 'upload'])->name('mobile-albums.upload');
                 Route::delete('/many/mobile-album', [MobileAlbumController::class, 'destroy_many'])->name('mobile-albums.destroy_many');
-                Route::put('/mobile-albums/quick/{album}', [MobileAlbumController::class, 'quick_update'])->name('mobile-albums.quick_update');
-                Route::post('/mobile-albums/{album}/restore', [MobileAlbumController::class, 'restore'])->name('mobile-albums.restore');
-                Route::post('/mobile-albums/banners/{album}', [MobileAlbumController::class, 'get_album_details'])->name('mobile-albums.banners');
+                Route::put('/mobile-albums/quick/{mobile_album}', [MobileAlbumController::class, 'quick_update'])->name('mobile-albums.quick_update');
+                Route::post('/mobile-albums/{mobile_album}/restore', [MobileAlbumController::class, 'restore'])->name('mobile-albums.restore');
+                Route::post('/mobile-albums/banners/{mobile_album}', [MobileAlbumController::class, 'get_album_details'])->name('mobile-albums.banners');
             //
 
             // News

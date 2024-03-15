@@ -60,7 +60,7 @@ class Permission extends Model
     {
         return [
             'page' => 'Pages',
-            'banner' => 'Banners',
+            'banner' => 'Desktop Banners',
             'file_manager' => 'Files',
             'menu' => 'Menu',
             'news' => 'News',
@@ -79,7 +79,8 @@ class Permission extends Model
             'coupons' => 'Coupons',
             'banner_ads' => 'Banner Ads',
             'ecommerce' => 'E-Commerce',
-            'reports' => 'Reports'
+            'reports' => 'Reports',
+            'mobile_banner' => 'Mobile Banners',
         ];
     }
 

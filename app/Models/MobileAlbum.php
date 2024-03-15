@@ -22,8 +22,7 @@ class MobileAlbum extends Model
 
     public function banners()
     {
-        return $this->hasMany(MobileBanner::class)->orderBy('order');
-        // return $this->hasMany(MobileBanner::class, 'album_id')->orderBy('order');
+        return $this->hasMany(MobileBanner::class, 'album_id')->orderBy('order');
     }
 
     public function addBanners($banners)

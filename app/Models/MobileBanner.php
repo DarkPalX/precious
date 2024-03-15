@@ -17,8 +17,7 @@ class MobileBanner extends Model
 
     public function album()
     {
-        // return $this->belongsTo(MobileAlbum::class);
-        return $this->belongsTo(MobileAlbum::class, 'album_id');
+        return $this->belongsTo(MobileAlbum::class);
     }
 
     public static function validator()
