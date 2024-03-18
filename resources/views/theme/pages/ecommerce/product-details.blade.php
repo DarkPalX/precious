@@ -665,27 +665,27 @@
 		return x1 + x2;
 	}
 
-    function plus_qty(){
-		var qty = parseFloat($('#quantity').val())+1;
-        var maxorder = parseInt($('#maxorder').val());
+    function plus_qty(id){
+        var qty = parseFloat($('#quantity'+id).val())+1;
 
-		if(maxorder < 1){
-            parseInt($('#maxorder').val())-1;
-			swal({
-				title: '',
-				text: 'Sorry. Currently, there is no sufficient stocks for the item you wish to order.',
-				icon: 'warning'
-			});
-			return false;
-		}
+        if(parseInt($('#cart_maxorder'+id).val()) < 1){
+            swal({
+                title: '',
+                text: 'Sorry. Currently, there is no sufficient stocks for the item you wish to order.',
+                icon: 'warning'
+            });
 
-		// order_qty(id,qty);
-	}
+            $('#quantity'+id).val($('#cart_prevqty'+id).val()-1);
+            return false;
+        }
 
-	function minus_qty(){
-		var qty = parseFloat($('#quantity').val())-1;
-		order_qty(qty);
-	}
+        order_qty(id,qty);
+    }
+
+    function minus_qty(id){
+        var qty = parseFloat($('#quantity'+id).val())-1;
+        order_qty(id,qty);
+    }
 
 	function order_qty(id,qty){
 
