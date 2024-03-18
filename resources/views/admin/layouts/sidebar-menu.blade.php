@@ -80,20 +80,22 @@
         </li> 
     @endif
 
-    <li class="nav-item with-sub @if (request()->routeIs('account*') || request()->routeIs('website-settings*') || request()->routeIs('audit*')) active show @endif">
-        <a href="" class="nav-link"><i data-feather="settings"></i> <span>Settings</span></a>
-        <ul>
-            <li @if (\Route::current()->getName() == 'account.edit') class="active" @endif><a href="{{ route('account.edit') }}">Account Settings</a></li>
+    @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('settings'))
+        <li class="nav-item with-sub @if (request()->routeIs('account*') || request()->routeIs('website-settings*') || request()->routeIs('audit*')) active show @endif">
+            <a href="" class="nav-link"><i data-feather="settings"></i> <span>Settings</span></a>
+            <ul>
+                <li @if (\Route::current()->getName() == 'account.edit') class="active" @endif><a href="{{ route('account.edit') }}">Account Settings</a></li>
 
-            @if (auth()->user()->has_access_to_website_settings_module())
-                <li @if (\Route::current()->getName() == 'website-settings.edit') class="active" @endif><a href="{{ route('website-settings.edit') }}">Website Settings</a></li>
-            @endif
+                @if (auth()->user()->has_access_to_website_settings_module())
+                    <li @if (\Route::current()->getName() == 'website-settings.edit') class="active" @endif><a href="{{ route('website-settings.edit') }}">Website Settings</a></li>
+                @endif
 
-            @if (auth()->user()->has_access_to_audit_logs_module())
-                <li @if (\Route::current()->getName() == 'audit-logs.index') class="active" @endif><a href="{{ route('audit-logs.index') }}">Audit Trail</a></li>
-            @endif
-        </ul>
-    </li>
+                @if (auth()->user()->has_access_to_audit_logs_module())
+                    <li @if (\Route::current()->getName() == 'audit-logs.index') class="active" @endif><a href="{{ route('audit-logs.index') }}">Audit Trail</a></li>
+                @endif
+            </ul>
+        </li>
+    @endif
     @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('users'))
         <li class="nav-item with-sub @if (request()->routeIs('users*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="users"></i> <span>Users</span></a>
@@ -114,7 +116,9 @@
         </li>
     @endif
 
-    <li class="nav-label mg-t-25">E-Commerce</li>
+    @if (auth()->user()->has_access_to_module('ecommerce'))
+        <li class="nav-label mg-t-25">E-Commerce</li>
+    @endif
 
     @if (auth()->user()->has_access_to_module('customer'))
         <li class="nav-item with-sub @if (request()->routeIs('customers*') || \Route::current()->getName() == 'customer.signup-verification')) active show @endif">
@@ -246,7 +250,7 @@
     </li> --}}
 
     
-    @if (auth()->user()->has_access_to_pages_module() || auth()->user()->has_access_to('page_modals'))
+    @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('page_modals'))
         <li class="nav-item with-sub @if (request()->routeIs('page-modals*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="edit"></i> <span>Page Modals</span></a>
             <ul>
@@ -262,18 +266,20 @@
         </li>
     @endif
 
-    <li class="nav-label mg-t-25">Reports</li>
+    @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('reports'))
+        <li class="nav-label mg-t-25">Reports</li>
 
-    <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
-        <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Product List</span></a>
-    </li>
-    {{--<li class="nav-item @if (\Route::current()->getName() == 'report.customer-list')) active show @endif">
-        <a href="{{ route('report.customer-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Customer List</span></a>
-    </li>
-    <li class="nav-item @if (\Route::current()->getName() == 'report.promo-list')) active show @endif">
-        <a href="{{ route('report.promo-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Promo List</span></a>
-    </li>
-    <li class="nav-item @if (\Route::current()->getName() == 'report.payment-list')) active show @endif">
-        <a href="{{ route('report.payment-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Payments</span></a>
-    </li>--}}
+        <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
+            <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Product List</span></a>
+        </li>
+        {{--<li class="nav-item @if (\Route::current()->getName() == 'report.customer-list')) active show @endif">
+            <a href="{{ route('report.customer-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Customer List</span></a>
+        </li>
+        <li class="nav-item @if (\Route::current()->getName() == 'report.promo-list')) active show @endif">
+            <a href="{{ route('report.promo-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Promo List</span></a>
+        </li>
+        <li class="nav-item @if (\Route::current()->getName() == 'report.payment-list')) active show @endif">
+            <a href="{{ route('report.payment-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Payments</span></a>
+        </li>--}}
+    @endif
 </ul>

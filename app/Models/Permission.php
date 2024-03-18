@@ -82,6 +82,7 @@ class Permission extends Model
             'reports' => 'Reports',
             'mobile_banner' => 'Mobile Banners',
             'page_modals' => 'Page Modals',
+            'reports' => 'Reports',
         ];
     }
 
