@@ -141,7 +141,7 @@
 
                     <div class="form-group">
                         <label class="d-block">Unit of Measurement</label>
-                        <input required type="text" class="form-control" name="uom" id="uom" value="{{ old('uom', $product->uom) }}">
+                        <input type="text" class="form-control" name="uom" id="uom" value="{{ old('uom', $product->uom) }}">
                     </div>
 
                     

@@ -134,7 +134,7 @@ class ProductController extends Controller
             ]);
         }
 
-        $updateData['file_url'] = $request->hasFile('file_url') ? FileHelper::move_to_product_file_folder($request->file('file_url'), 'product_files')['url'] : null;
+        $updateData['file_url'] = $request->hasFile('file_url') ? FileHelper::move_to_product_file_folder($request->file('file_url'), 'product_files/epub/' . $product->slug)['url'] : null;
 
         Product::where('id', $product->id)
         ->update([
@@ -249,7 +249,7 @@ class ProductController extends Controller
         $is_free = $request->has('is_free');
 
         if($request->hasFile('file_url')){
-            $updateData['file_url'] = FileHelper::move_to_product_file_folder($request->file('file_url'), 'product_files')['url'];
+            $updateData['file_url'] = FileHelper::move_to_product_file_folder($request->file('file_url'), 'product_files/epub/' . $product->slug)['url'];
         }
         else{
             if($current_file){
