@@ -81,6 +81,7 @@ class Permission extends Model
             'ecommerce' => 'E-Commerce',
             'reports' => 'Reports',
             'mobile_banner' => 'Mobile Banners',
+            'page_modals' => 'Page Modals',
         ];
     }
 

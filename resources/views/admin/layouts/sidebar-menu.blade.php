@@ -245,19 +245,22 @@
         </ul>
     </li> --}}
 
-    <li class="nav-item with-sub @if (request()->routeIs('page-modals*')) active show @endif">
-        <a href="" class="nav-link"><i data-feather="edit"></i> <span>Page Modals</span></a>
-        <ul>
+    
+    @if (auth()->user()->has_access_to_pages_module() || auth()->user()->has_access_to('page_modals'))
+        <li class="nav-item with-sub @if (request()->routeIs('page-modals*')) active show @endif">
+            <a href="" class="nav-link"><i data-feather="edit"></i> <span>Page Modals</span></a>
+            <ul>
 
-            @if(auth()->user()->has_access_to_route('page-modals.index'))
-                <li @if (\Route::current()->getName() == 'page-modals.index' || \Route::current()->getName() == 'page-modals.edit') class="active" @endif><a href="{{ route('page-modals.index') }}">Manage Modals</a></li>
-            @endif
+                @if(auth()->user()->has_access_to_route('page-modals.index'))
+                    <li @if (\Route::current()->getName() == 'page-modals.index' || \Route::current()->getName() == 'page-modals.edit') class="active" @endif><a href="{{ route('page-modals.index') }}">Manage Modals</a></li>
+                @endif
 
-            @if(auth()->user()->has_access_to_route('page-modals.create'))
-                <li @if (\Route::current()->getName() == 'page-modals.create') class="active" @endif><a href="{{ route('page-modals.create') }}">Create Modal</a></li>
-            @endif
-        </ul>
-    </li>
+                @if(auth()->user()->has_access_to_route('page-modals.create'))
+                    <li @if (\Route::current()->getName() == 'page-modals.create') class="active" @endif><a href="{{ route('page-modals.create') }}">Create Modal</a></li>
+                @endif
+            </ul>
+        </li>
+    @endif
 
     <li class="nav-label mg-t-25">Reports</li>
 
