@@ -1,6 +1,7 @@
 @extends('theme.main')
 
 @section('pagecss')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 @endsection
 
 @section('content')
@@ -126,22 +127,33 @@
                         </tr>
                         <tr>
                           <td>Stocks Left:</td>
-                          <td>{{$product->inventory}}</td>
+                          <td><input id="remaining_stock" class="form-control border-0 bg-transparent" readonly value="{{$product->inventory}}" /></td>
                         </tr>
                         <tr>
                           <td>Quantity:</td>
                           <td>
                             <form class=" mb-0 d-flex justify-content-between align-items-center" method="post" enctype='multipart/form-data'>
                                 <div class="quantity clearfix">
-                                    <input type="button" value="-" class="minus">
+                                    <input type="button" value="-" class="minus" onclick="minus_qty();">
                                     <input type="number" step="1" min="1" name="quantity" id="quantity" value="1" title="Qty" class="qty" readonly/>
-                                    <input type="button" value="+" class="plus">
+                                    <input type="button" value="+" class="plus" onclick="plus_qty();">
                                 </div>
                             </form>
                           </td>
                         </tr>
                       </tbody>
                     </table>
+
+                    
+                    <td class="cart-product-quantity" style="display:none;">
+                        <div class="quantity">
+
+                            {{-- <input type="hidden" id="orderID" value="{{$product->id}}"> --}}
+                            {{-- <input type="hidden" id="prevqty" value="{{ $product->qty }}"> --}}
+                            <input type="hidden" id="maxorder" value="{{ $product->inventory }}">
+                        </div>
+                    </td>
+
                     
                     <!-- Product Single - Short Description End -->
                     @if($product->inventory > 0)
@@ -168,13 +180,13 @@
                                 </div>
                             </div>
                             <div class="col-md-7">
-                                <h3 class="mb-2">Fashion waterproof bundle</h3>
+                                <h3 class="mb-2">{{ $product->name }} bundle</h3>
                                  {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
                                 
                                 @if($product->inventory > 0)
                                     <div class="d-flex justify-content-evenly align-content-stretch mb-1">
-                                        <a href="cart.htm" class="btn btn-info text-white vw-100 me-1">Buy Now</a>
-                                        <a href="cart.htm" class="btn bg-color text-white vw-100">Add To Bag</a>
+                                        <a href="#" class="btn btn-info text-white vw-100 me-1">Buy Now</a>
+                                        <a href="#" class="btn bg-color text-white vw-100">Add To Bag</a>
                                     </div>
                                 @else
                                     @if(Auth::check())
@@ -479,10 +491,27 @@
 <script>
 
     function buynow(){
-        var qty = $('#quantity').val();
-        $('#buy_now_qty').val(qty);
+        var qty   = parseFloat($('#quantity').val());
+        var remaining_stock = parseFloat($('#remaining_stock').val());
+        
+        
+        if(qty <= remaining_stock){
+            $('#buy_now_qty').val(qty);
+            $('#buy-now-form').submit();
+        }
+        else{
+            swal({
+                toast: true,
+                position: 'center',
+                title: "Warning!",
+                text: "We have insufficient inventory for this item.",
+                type: "warning",
+                showCancelButton: true,
+                timerProgressBar: true, 
+                closeOnCancel: false
 
-        $('#buy-now-form').submit();
+            });
+        }
     }
 
     function add_to_cart(product){
@@ -495,102 +524,120 @@
 
         var qty   = parseFloat($('#quantity').val());
         var price = parseFloat($('#product_price').val());
+        var remaining_stock = parseFloat($('#remaining_stock').val());
 
-        $.ajax({
-            data: {
-                "product_id": product, 
-                "qty": qty,
-                "_token": "{{ csrf_token() }}",
-            },
-            type: "post",
-            url: "{{route('product.add-to-cart')}}",
-            success: function(returnData) {
-                $("#loading-overlay").hide();
-                if (returnData['success']) {
+        if(qty <= remaining_stock){
 
-                    $('.top-cart-number').html(returnData['totalItems']);
+            $.ajax({
+                data: {
+                    "product_id": product, 
+                    "qty": qty,
+                    "_token": "{{ csrf_token() }}",
+                },
+                type: "post",
+                url: "{{route('product.add-to-cart')}}",
+                success: function(returnData) {
+                    $("#loading-overlay").hide();
+                    if (returnData['success']) {
+
+                        $('.top-cart-number').html(returnData['totalItems']);
 
 
-                    var cartotal = parseFloat($('#input-top-cart-total').val());
-                    var productotal = price*qty;
-                    var newtotal = cartotal+productotal;
+                        var cartotal = parseFloat($('#input-top-cart-total').val());
+                        var productotal = price*qty;
+                        var newtotal = cartotal+productotal;
 
-                    $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+                        $('#top-cart-total').html('₱'+newtotal.toFixed(2));
 
-                    // $('#top-cart-items').append(
-                    //     '<div class="top-cart-item">'+
-                    //         '<div class="top-cart-item-image border-0">'+
-                    //             '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>'+
-                    //         '</div>'+
-                    //         '<div class="top-cart-item-desc">'+
-                    //             '<div class="top-cart-item-desc-title">'+
-                    //                 '<a href="#" class="fw-medium">{{$product->name}}</a>'+
-                    //                 '<span class="top-cart-item-price d-block">'+price.toFixed(2)+'</span>'+
-                    //                 '<div class="d-flex mt-2">'+
-                    //                     '<a href="#" class="fw-normal text-black-50 text-smaller"><u>Edit</u></a>'+
-                    //                     '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product('+returnData['cartId']+');"><u>Remove</u></a>'+
-                    //                 '</div>'+
-                    //             '</div>'+
-                    //             '<div class="top-cart-item-quantity">x '+qty+'</div>'+
-                    //         '</div>'+
-                    //    '</div>'
-                    // );
-                    var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
-                    if (cartItem.length) {
-                        // If the item already exists in the cart, update its quantity and price
-                        var oldQty = parseFloat(cartItem.find('.top-cart-item-quantity').text().trim().replace('x ', ''));
-                        var newQty = oldQty + qty;
-                        var oldPrice = parseFloat(cartItem.find('.top-cart-item-price').text().trim().replace('₱', ''));
-                        var productTotal = price * qty;
-                        var newTotal = oldPrice + productTotal;
+                        // $('#top-cart-items').append(
+                        //     '<div class="top-cart-item">'+
+                        //         '<div class="top-cart-item-image border-0">'+
+                        //             '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>'+
+                        //         '</div>'+
+                        //         '<div class="top-cart-item-desc">'+
+                        //             '<div class="top-cart-item-desc-title">'+
+                        //                 '<a href="#" class="fw-medium">{{$product->name}}</a>'+
+                        //                 '<span class="top-cart-item-price d-block">'+price.toFixed(2)+'</span>'+
+                        //                 '<div class="d-flex mt-2">'+
+                        //                     '<a href="#" class="fw-normal text-black-50 text-smaller"><u>Edit</u></a>'+
+                        //                     '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product('+returnData['cartId']+');"><u>Remove</u></a>'+
+                        //                 '</div>'+
+                        //             '</div>'+
+                        //             '<div class="top-cart-item-quantity">x '+qty+'</div>'+
+                        //         '</div>'+
+                        //    '</div>'
+                        // );
+                        var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
+                        if (cartItem.length) {
+                            // If the item already exists in the cart, update its quantity and price
+                            var oldQty = parseFloat(cartItem.find('.top-cart-item-quantity').text().trim().replace('x ', ''));
+                            var newQty = oldQty + qty;
+                            var oldPrice = parseFloat(cartItem.find('.top-cart-item-price').text().trim().replace('₱', ''));
+                            var productTotal = price * qty;
+                            var newTotal = oldPrice + productTotal;
 
-                        cartItem.find('.top-cart-item-quantity').text('x ' + newQty);
-                        // cartItem.find('.top-cart-item-price').text('₱' + newTotal.toFixed(2));
+                            cartItem.find('.top-cart-item-quantity').text('x ' + newQty);
+                            // cartItem.find('.top-cart-item-price').text('₱' + newTotal.toFixed(2));
+                        } else {
+
+                            $('#top-cart-items').append(
+                                '<div class="top-cart-item" data-product-id="' + product + '">' +
+                                '<div class="top-cart-item-image border-0">' +
+                                '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>' +
+                                '</div>' +
+                                '<div class="top-cart-item-desc">' +
+                                '<div class="top-cart-item-desc-title">' +
+                                '<a href="#" class="fw-medium">{{$product->name}}</a>' +
+                                '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
+                                // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
+                                '<div class="d-flex mt-2">' +
+                                '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
+                                '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
+                                '</div>' +
+                                '</div>'
+                            );
+                        }
+
+                        $.notify("Product Added to your cart",{ 
+                            position:"bottom right", 
+                            className: "success" 
+                        });
+
                     } else {
+                        swal({
+                            toast: true,
+                            position: 'center',
+                            title: "Warning!",
+                            text: "We have insufficient inventory for this item.",
+                            type: "warning",
+                            showCancelButton: true,
+                            timerProgressBar: true, 
+                            closeOnCancel: false
 
-                        $('#top-cart-items').append(
-                            '<div class="top-cart-item" data-product-id="' + product + '">' +
-                            '<div class="top-cart-item-image border-0">' +
-                            '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>' +
-                            '</div>' +
-                            '<div class="top-cart-item-desc">' +
-                            '<div class="top-cart-item-desc-title">' +
-                            '<a href="#" class="fw-medium">{{$product->name}}</a>' +
-                            '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
-                            // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
-                            '<div class="d-flex mt-2">' +
-                            '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
-                            '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
-                            '</div>' +
-                            '</div>' +
-                            '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
-                            '</div>' +
-                            '</div>'
-                        );
+                        });
                     }
-
-                    $.notify("Product Added to your cart",{ 
-                        position:"bottom right", 
-                        className: "success" 
-                    });
-
-                } else {
-                    swal({
-                        toast: true,
-                        position: 'center',
-                        title: "Warning!",
-                        text: "We have insufficient inventory for this item.",
-                        type: "warning",
-                        showCancelButton: true,
-                        timerProgressBar: true, 
-                        closeOnCancel: false
-
-                    });
                 }
-            }
-        });
+            });
 
-        $('#quantity').val(1);
+            $('#quantity').val(1);
+            $('#remaining_stock').val(remaining_stock - qty);
+        }
+        else{
+            swal({
+                toast: true,
+                position: 'center',
+                title: "Warning!",
+                text: "We have insufficient inventory for this item.",
+                type: "warning",
+                showCancelButton: true,
+                timerProgressBar: true, 
+                closeOnCancel: false
+
+            });
+        }
     }
     
 </script>
@@ -618,26 +665,26 @@
 		return x1 + x2;
 	}
 
-    function plus_qty(id){
-		var qty = parseFloat($('#quantity'+id).val())+1;
+    function plus_qty(){
+		var qty = parseFloat($('#quantity').val())+1;
+        var maxorder = parseInt($('#maxorder').val());
 
-		if(parseInt($('#maxorder'+id).val()) < 1){
+		if(maxorder < 1){
+            parseInt($('#maxorder').val())-1;
 			swal({
 				title: '',
 				text: 'Sorry. Currently, there is no sufficient stocks for the item you wish to order.',
 				icon: 'warning'
 			});
-
-			$('#quantity'+id).val($('#prevqty'+id).val()-1);
 			return false;
 		}
 
-		order_qty(id,qty);
+		// order_qty(id,qty);
 	}
 
-	function minus_qty(id){
-		var qty = parseFloat($('#quantity'+id).val())-1;
-		order_qty(id,qty);
+	function minus_qty(){
+		var qty = parseFloat($('#quantity').val())-1;
+		order_qty(qty);
 	}
 
 	function order_qty(id,qty){
