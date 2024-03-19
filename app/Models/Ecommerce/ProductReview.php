@@ -69,4 +69,18 @@ class ProductReview extends Model
         return $count;
 
     }
+
+    public static function getProductRating($product_id)
+    {
+        $rating = ProductReview::where('product_id', $product_id)->where('status', 1)->get();
+
+        $total_rating = 0;
+
+        if($rating->count() > 0){
+            $total_rating = $rating->sum('rating')/$rating->count();
+        }
+
+        return $total_rating;
+    }
+
 }

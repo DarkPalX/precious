@@ -98,11 +98,9 @@
                     </div>
                     
                     <div class="product-rating">
-                        <i class="icon-star3"></i>
-                        <i class="icon-star3"></i>
-                        <i class="icon-star3"></i>
-                        <i class="icon-star-half-full"></i>
-                        <i class="icon-star-empty"></i>
+                        @for($star = 1; $star <= 5; $star++)
+                            <i class="icon-star{{ $star <= App\Models\Ecommerce\ProductReview::getProductRating($product->id) ? '3' : '-empty' }}"></i>
+                        @endfor
                     </div>
                     
                     {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
@@ -460,11 +458,9 @@
                             <div class="product-title"><h3><a href="#">{{$rel->name}}</a></h3></div>
                             <div class="product-price"><ins>₱{{number_format($rel->price,2)}}</ins></div>
                             <div class="product-rating">
-                                <i class="icon-star3"></i>
-                                <i class="icon-star3"></i>
-                                <i class="icon-star3"></i>
-                                <i class="icon-star3"></i>
-                                <i class="icon-star-half-full"></i>
+                                @for($star = 1; $star <= 5; $star++)
+                                    <i class="icon-star{{ $star <= App\Models\Ecommerce\ProductReview::getProductRating($rel->id) ? '3' : '-empty' }}"></i>
+                                @endfor
                             </div>
                         </div>
                     </div>

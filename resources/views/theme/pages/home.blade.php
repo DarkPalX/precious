@@ -7,7 +7,7 @@
     $contents = $page->contents;
 
 // FEATURED BOOKS
-    $featuredProducts = \App\Models\Ecommerce\Product::where('is_featured', 1)->where('status', 'PUBLISHED')->skip(0)->take(4)->get();
+    $featuredProducts = \App\Models\Ecommerce\Product::where('is_featured', 1)->where('status', 'PUBLISHED')->skip(0)->take(4)->orderByDesc('updated_at')->get();
     if($featuredProducts->count()){
 
         $featuredProductsHTML = '';
@@ -32,12 +32,14 @@
                     <div class="product-desc py-0">
                         <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
                         ($product->discount_price > 0 ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
-                        <div class="product-rating">
-                            <i class="icon-star3"></i>
-                            <i class="icon-star3"></i>
-                            <i class="icon-star3"></i>
-                            <i class="icon-star-half-full"></i>
-                            <i class="icon-star-empty"></i>
+                        <div class="product-rating">';
+
+                            for($star = 1; $star <= 5; $star++):
+                                $iconClass = ($star <= \App\Models\Ecommerce\ProductReview::getProductRating($product->id)) ? "3" : "-empty";
+                                $featuredProductsHTML .= '<i class="icon-star'.$iconClass.'"></i>';
+                            endfor;
+
+            $featuredProductsHTML .= '
                         </div>
                     </div>
                 </div>
@@ -83,12 +85,14 @@
                     <div class="product-desc py-0">
                         <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
                         ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
-                        <div class="product-rating">
-                            <i class="icon-star3"></i>
-                            <i class="icon-star3"></i>
-                            <i class="icon-star3"></i>
-                            <i class="icon-star-half-full"></i>
-                            <i class="icon-star-empty"></i>
+                        <div class="product-rating">';
+
+                            for($star = 1; $star <= 5; $star++):
+                                $iconClass = ($star <= \App\Models\Ecommerce\ProductReview::getProductRating($product->id)) ? "3" : "-empty";
+                                $bestSellersHTML .= '<i class="icon-star'.$iconClass.'"></i>';
+                            endfor;
+
+            $bestSellersHTML .= '
                         </div>
                     </div>
                 </div>
@@ -128,12 +132,13 @@
                     <div class="product-desc py-0">
                         <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
                         ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
-                        <div class="product-rating">
-                            <i class="icon-star3"></i>
-                            <i class="icon-star3"></i>
-                            <i class="icon-star3"></i>
-                            <i class="icon-star-half-full"></i>
-                            <i class="icon-star-empty"></i>
+                        <div class="product-rating">';
+
+                            for($star = 1; $star <= 5; $star++):
+                                $iconClass = ($star <= \App\Models\Ecommerce\ProductReview::getProductRating($product->id)) ? "3" : "-empty";
+                                $newProductsHTML .= '<i class="icon-star'.$iconClass.'"></i>';
+                            endfor;
+                $newProductsHTML .= '
                         </div>
                     </div>
                     </div>

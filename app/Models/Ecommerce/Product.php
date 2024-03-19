@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\{User, Brand};
 
 use App\Models\Ecommerce\{
-    ProductTag, ProductCategory, ProductPhoto, PromoProducts, Cart, CustomerFavorite
+    ProductTag, ProductCategory, ProductPhoto, PromoProducts, Cart, CustomerFavorite, ProductReview
 };
 
 use Carbon\Carbon;

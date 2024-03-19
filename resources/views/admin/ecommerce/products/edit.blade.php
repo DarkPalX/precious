@@ -510,6 +510,18 @@
                 }
             });
 
+
+            $("#customSwitch4").change(function() {
+                if (this.checked) {
+                    $('#customSwitch5').prop('checked', false);
+                }
+            });
+
+            $("#customSwitch5").change(function() {
+                if (this.checked) {
+                    $('#customSwitch4').prop('checked', false);
+                }
+            });
             
 
             $(document).on('click', '.upload', function() {
