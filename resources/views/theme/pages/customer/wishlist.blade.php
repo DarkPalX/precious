@@ -1,5 +1,9 @@
 @extends('theme.main')
 
+@section('pagecss')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+@endsection
+
 @section('content')
 @php
     $modals='';
@@ -19,20 +23,7 @@
         <div class="col-lg-9">
             <h2>My Wishlist</h2>
             
-            {{-- <div class="form-group d-flex">
-                <label for="inputState" class="col-form-label me-2">Sort by</label>
-                <div class="">
-                    <select id="inputState" class="form-select">
-                        <option selected>Choose...</option>
-                        <option>A to Z</option>
-                        <option>Z to A</option>
-                        <option>By date</option>
-                    </select>
-                </div>
-            </div> --}}
-
-            
-			<form id="sortForm" action="{{ route('customer.wishlist') }}" method="GET">
+			<form id="sortForm" action="{{ route('customer.wishlist') }}" method="GET" hidden>
 				<div class="form-group d-flex">
 					<label for="sort_by" class="col-form-label me-2">Sort by</label>
 					<div class="">
@@ -51,64 +42,69 @@
 				<input type="text" name="keyword" value="@if(request()->has('keyword')){{ request('keyword') }}@endif" hidden/>
 			</form>
             
-            <div class="row">
+           <table class="table cart mb-5">
+                <tbody>
+                    
+                    @forelse($customer_wishlists as $customer_wishlist)
+                        @php
+                            $imageUrl = asset('storage/products/'.$customer_wishlist->photoPrimary);
+                        @endphp
+                        
+                        <tr class="cart_item">
+                            <td class="cart-product-remove" width="2%">
+                                <a href="{{ route('add-to-wishlist', [$customer_wishlist->id]) }}" class="remove" title="Remove this item"><i class="icon-trash2"></i></a>
+                            </td>
 
-                @forelse($customer_wishlists as $customer_wishlist)
-                    @php
-                        $imageUrl = asset('storage/products/'.$customer_wishlist->photoPrimary);
-                    @endphp
+                            <td width="15%">
+                                <a href="{{ env('APP_URL') . '/book-details/' . $customer_wishlist->slug }}"><img src="{{ $imageUrl }}"></a>
+                            </td>
 
-                    <div class="col-md-2">
-                        <div class="grid-inner">
-                            <div class="product-image h-translate-y all-ts">
-                                <a href="{{ env('APP_URL') . '/book-details/' . $customer_wishlist->slug }}" target="blamk_"><img src="{{ $imageUrl }}" alt="Image 1"></a>
-                            </div>
-                            <div class="product-desc py-0">
-                                <div class="product-title"><h3><a href="{{ env('APP_URL') . '/book-details/' . $customer_wishlist->slug }}" target="blamk_">{{ $customer_wishlist->name }}</a></h3></div>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                @endforelse
+                            <td>
+                                <div class="product-title"><h3><a href="#">{{ $customer_wishlist->name }}</a></h3></div>
+							    {!! ($customer_wishlist->discount_price > 0 ? '<div class="product-price"><del>' . number_format($customer_wishlist->price, 2) . '</del> <ins>' . number_format($customer_wishlist->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($customer_wishlist->price, 2) . '</ins></div>') !!}
+                                <div class="product-rating">
+                                    @for($star = 1; $star <= 5; $star++)
+                                        <i class="icon-star{{ $star <= App\Models\Ecommerce\ProductReview::getProductRating($customer_wishlist->id) ? '3' : '-empty' }}"></i>
+                                    @endfor
+                                </div>
 
+                                <div class="mb-1">
 
-            </div>
+                                    @if($customer_wishlist->inventory > 0)
+                                        <a href="javascript:void(0);" class="btn btn-info text-white me-1" onclick="buynow('{{$customer_wishlist->id}}');">Buy Now</a>
+                                        <a href="javascript:void(0);" class="btn bg-color text-white" onclick="add_to_cart('{{$customer_wishlist->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
 
+                                        {{-- FOR BUY NOW --}}
+                                        <div style="display: none;">
+                                            <form id="buy-now-form{{$customer_wishlist->id}}" method="post" action="{{route('cart.buy-now')}}">
+                                                @csrf
+                                                <input type="text" name="product_id" value="{{ $customer_wishlist->id}}">
+                                                <input type="hidden" id="price{{$customer_wishlist->id}}" name="price" value="{{$customer_wishlist->discount_price > 0 ? $customer_wishlist->discount_price : $customer_wishlist->price}}">
+                                                <input type="text" name="qty" value="1">
+                                            </form>
+                                        </div>
 
-            {{-- <div class="row">
+                                        {{-- FOR ADD TO CART --}}
+                                        <input type="hidden" id="remaining_stock{{$customer_wishlist->id}}" value="{{ $customer_wishlist->inventory }}">
+                                        <input type="hidden" id="product_price{{$customer_wishlist->id}}" value="{{$customer_wishlist->discount_price > 0 ? $customer_wishlist->discount_price : $customer_wishlist->price}}">
+                                    @else
+                                        <a href="javascript:;" class="btn btn-secondary text-white">Out of Stock</a>
+                                    @endif
 
-                @forelse($customer_wishlists as $customer_wishlist)
-                    @php
-                        $imageUrl = asset('storage/products/'.$customer_wishlist->product->photoPrimary);
-                    @endphp
+                                </div>
+                            </td>
+                        </tr>
 
-                    <div class="col-md-2">
-                        <div class="grid-inner">
-                            <div class="product-image h-translate-y all-ts">
-                                <a href="{{ env('APP_URL') . '/book-details/' . $customer_wishlist->product->slug }}" target="blamk_"><img src="{{ $imageUrl }}" alt="Image 1"></a>
-                            </div>
-                            <div class="product-desc py-0">
-                                <div class="product-title"><h3><a href="{{ env('APP_URL') . '/book-details/' . $customer_wishlist->product->slug }}" target="blamk_">{{ $customer_wishlist->product->name }}</a></h3></div>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                @endforelse
+                        
+                    @empty
+                    @endforelse
+                    
+                </tbody>
 
+            </table>
 
-            </div> --}}
-            
-            {{-- <ul class="pagination mt-5">
-                <li class="page-item"><a class="page-link" href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-            </ul> --}}
-            
-        </div>
+            {{ $customer_wishlists->links('theme.layouts.pagination') }}
+
     </div>
 </div>
 
@@ -139,8 +135,8 @@
 @endsection
 
 @section('pagejs')
-	<script>
-		function view_items(salesID){
+    <script>
+        function view_items(salesID){
             $('#detail'+salesID).modal('show');
         }
 
@@ -152,6 +148,272 @@
             $('#orderid').val(id);
             $('#cancel_order').modal('show');
         }
-	</script>
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script>
+
+        function buynow(product){
+            var qty   = 1;
+            var remaining_stock = parseFloat($('#remaining_stock' + product).val());
+            
+            if(qty <= remaining_stock){
+                $('#buy-now-form' + product).submit();
+            }
+            else{
+                swal({
+                    toast: true,
+                    position: 'center',
+                    title: "Warning!",
+                    text: "We have insufficient inventory for this item.",
+                    type: "warning",
+                    showCancelButton: true,
+                    timerProgressBar: true, 
+                    closeOnCancel: false
+
+                });
+            }
+        }
+
+        function add_to_cart(product){
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var qty   = 1;
+            var price = parseFloat($('#product_price' + product).val());
+            var remaining_stock = parseFloat($('#remaining_stock' + product).val());
+
+            if(qty <= remaining_stock){
+
+                $.ajax({
+                    data: {
+                        "product_id": product, 
+                        "qty": qty,
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    type: "post",
+                    url: "{{route('product.add-to-cart')}}",
+                    success: function(returnData) {
+                        $("#loading-overlay").hide();
+                        if (returnData['success']) {
+
+                            $('.top-cart-number').html(returnData['totalItems']);
+
+
+                            var cartotal = parseFloat($('#input-top-cart-total').val());
+                            var productotal = price*qty;
+                            var newtotal = cartotal+productotal;
+
+                            $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+                            var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
+                            if (cartItem.length) {
+                                // If the item already exists in the cart, update its quantity and price
+                                var oldQty = parseFloat(cartItem.find('.top-cart-item-quantity').text().trim().replace('x ', ''));
+                                var newQty = oldQty + qty;
+                                var oldPrice = parseFloat(cartItem.find('.top-cart-item-price').text().trim().replace('₱', ''));
+                                var productTotal = price * qty;
+                                var newTotal = oldPrice + productTotal;
+
+                                cartItem.find('.top-cart-item-quantity').text('x ' + newQty);
+                                // cartItem.find('.top-cart-item-price').text('₱' + newTotal.toFixed(2));
+                            } else {
+
+                                $('#top-cart-items').append(
+                                    '<div class="top-cart-item" data-product-id="' + product + '">' +
+                                    '<div class="top-cart-item-image border-0">' +
+                                    '<a href="#"><img src="{{ asset('storage/products/'.$customer_wishlist->photoPrimary) }}" alt="Cart Image 1" /></a>' +
+                                    '</div>' +
+                                    '<div class="top-cart-item-desc">' +
+                                    '<div class="top-cart-item-desc-title">' +
+                                    '<a href="#" class="fw-medium">{{$customer_wishlist->name}}</a>' +
+                                    '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
+                                    // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
+                                    '<div class="d-flex mt-2">' +
+                                    '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
+                                    '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
+                                    '</div>' +
+                                    '</div>'
+                                );
+                            }
+
+                            $.notify("Product Added to your cart",{ 
+                                position:"bottom right", 
+                                className: "success" 
+                            });
+
+                        } else {
+                            swal({
+                                toast: true,
+                                position: 'center',
+                                title: "Warning!",
+                                text: "We have insufficient inventory for this item.",
+                                type: "warning",
+                                showCancelButton: true,
+                                timerProgressBar: true, 
+                                closeOnCancel: false
+
+                            });
+                        }
+                    }
+                });
+
+                $('#quantity').val(1);
+                $('#remaining_stock'.product).val(remaining_stock - qty);
+            }
+            else{
+                swal({
+                    toast: true,
+                    position: 'center',
+                    title: "Warning!",
+                    text: "We have insufficient inventory for this item.",
+                    type: "warning",
+                    showCancelButton: true,
+                    timerProgressBar: true, 
+                    closeOnCancel: false
+
+                });
+            }
+        }
+        
+    </script>
+    
+    <script>
+        
+        // for edit quantity
+        function FormatAmount(number, numberOfDigits) {
+            var amount = parseFloat(number).toFixed(numberOfDigits);
+            var num_parts = amount.toString().split(".");
+            num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            return num_parts.join(".");
+        }
+
+        function addCommas(nStr){
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
+        function plus_qty(id){
+            var qty = parseFloat($('#quantity'+id).val())+1;
+
+            if(parseInt($('#cart_maxorder'+id).val()) < 1){
+                swal({
+                    title: '',
+                    text: 'Sorry. Currently, there is no sufficient stocks for the item you wish to order.',
+                    icon: 'warning'
+                });
+
+                $('#quantity'+id).val($('#cart_prevqty'+id).val()-1);
+                return false;
+            }
+
+            order_qty(id,qty);
+        }
+
+        function minus_qty(id){
+            var qty = parseFloat($('#quantity'+id).val())-1;
+            order_qty(id,qty);
+        }
+
+        function order_qty(id,qty){
+
+            if(qty == 0){
+                $('#quantity'+id).val(1).val();
+                return false;
+            }
+            
+            var price = $('#cartItemPrice'+id).val();
+            total_price  = parseFloat(price)*parseFloat(qty);
+
+            $('#order'+id+'_total_price').html('₱'+FormatAmount(total_price,2));
+            $('#input_order'+id+'_product_total_price').val(total_price);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                data: { 
+                    "quantity": qty, 
+                    "orderID": id, 
+                    "_token": "{{ csrf_token() }}",
+                },
+                type: "post",
+                url: "{{route('cart.update')}}",
+                
+                success: function(returnData) {
+
+                    $('#maxorder'+id).val(returnData.maxOrder);
+                    $('.top-cart-number').html(returnData['totalItems']);
+                    $('#prevqty'+id).val(qty);
+                    // var promo_discount = parseFloat(returnData.total_promo_discount);
+
+                    // let subtotal = 0;
+                    // $(".input_product_total_price").each(function() {
+                    //     if(!isNaN(this.value) && this.value.length!=0) {
+                    //         subtotal += parseFloat(this.value);
+                    //     }
+                    // });
+
+                    // $('#subtotal').val(subtotal);
+
+
+                    // for the sidebar cart total
+                    // var cartotal = parseFloat($('#input-top-cart-total').val());
+                    // var productotal = price*qty;
+                    // var newtotal = cartotal+total_price;
+                    
+                    // alert(cartotal);
+
+                    // $('#input-top-cart-total').val(newtotal);
+                    // $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+                    // 
+                    
+                    // resetCoupons();
+                    cart_total();
+                }
+            });
+        }
+
+        function cart_total(){
+            var couponTotalDiscount = parseFloat($('#coupon_total_discount').val());
+            var promoTotalDiscount = 0;
+            var subtotal = 0;
+
+            $(".input_product_total_price").each(function() {
+                if(!isNaN(this.value) && this.value.length!=0) {
+                    subtotal += parseFloat(this.value);
+                }
+            });
+
+            if(couponTotalDiscount == 0){
+                $('#couponDiscountDiv').css('display','none');
+            }
+
+            // var totalDeduction = promoTotalDiscount + couponTotalDiscount;
+            // var grandtotal = subtotal - totalDeduction;
+            
+            // $('#subtotal').html('₱'+FormatAmount(subtotal,2));
+
+            $('#top-cart-total').val(subtotal);
+            $('#top-cart-total').html('₱'+subtotal.toFixed(2));
+        }
+    </script>
 @endsection
 

@@ -67,7 +67,7 @@ class MyAccountController extends Controller
 
         $member = auth()->user();
         $user = auth()->user();
-        $pageLimit = 20;
+        $pageLimit = 12;
 
         $customer_wishlists = Product::select('products.*')
         ->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
@@ -122,7 +122,7 @@ class MyAccountController extends Controller
 
         $member = auth()->user();
         $user = auth()->user();
-        $pageLimit = 20;
+        $pageLimit = 12;
 
         $customer_favorites = Product::select('products.*')
         ->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')

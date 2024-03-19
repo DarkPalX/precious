@@ -89,11 +89,9 @@
 							<div class="product-title"><h3><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></h3></div>
 							{!! ($product->discount_price > 0 ? '<div class="product-price"><del>' . number_format($product->price, 2) . '</del> <ins>' . number_format($product->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->price, 2) . '</ins></div>') !!}
 							<div class="product-rating">
-								<i class="icon-star3"></i>
-								<i class="icon-star3"></i>
-								<i class="icon-star3"></i>
-								<i class="icon-star3"></i>
-								<i class="icon-star-half-full"></i>
+								@for($star = 1; $star <= 5; $star++)
+									<i class="icon-star{{ $star <= $product->rating ? '3' : '-empty' }}"></i>
+								@endfor
 							</div>
 						</div>
 					</div>

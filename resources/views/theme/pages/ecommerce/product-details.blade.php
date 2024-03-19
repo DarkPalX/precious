@@ -104,7 +104,7 @@
                     </div>
                     
                     {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
-                    <input type="hidden" id="product_price" value="{{$product->price}}">
+                    <input type="hidden" id="product_price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
                     
                     <!-- Product Single - Short Description
                     ============================================= -->
@@ -167,8 +167,8 @@
                             @php($is_wishlist = \App\Models\Ecommerce\CustomerWishlist::isWishlist($product->id))
 
                             <div class="d-flex justify-content-evenly align-content-stretch mb-1">
-                                <a href="#" class="btn btn-secondary text-white vw-100">Add To Wishlist <i class="icon-star"></i></a>
-                                {{-- <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a> --}}
+                                {{-- <a href="#" class="btn btn-secondary text-white vw-100">Add To Wishlist <i class="icon-star"></i></a> --}}
+                                <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a>
                             </div>
                         @endif
                     @endif

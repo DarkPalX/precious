@@ -74,39 +74,7 @@
 
             </div>
 
-
-            {{-- <div class="row">
-
-                @forelse($customer_favorites as $customer_favorite)
-                    @php
-                        $imageUrl = asset('storage/products/'.$customer_favorite->product->photoPrimary);
-                    @endphp
-
-                    <div class="col-md-2">
-                        <div class="grid-inner">
-                            <div class="product-image h-translate-y all-ts">
-                                <a href="{{ env('APP_URL') . '/book-details/' . $customer_favorite->product->slug }}" target="blamk_"><img src="{{ $imageUrl }}" alt="Image 1"></a>
-                            </div>
-                            <div class="product-desc py-0">
-                                <div class="product-title"><h3><a href="{{ env('APP_URL') . '/book-details/' . $customer_favorite->product->slug }}" target="blamk_">{{ $customer_favorite->product->name }}</a></h3></div>
-                            </div>
-                        </div>
-                    </div>
-                @empty
-                @endforelse
-
-
-            </div> --}}
-            
-            {{-- <ul class="pagination mt-5">
-                <li class="page-item"><a class="page-link" href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-            </ul> --}}
+            {{ $customer_favorites->links('theme.layouts.pagination') }}
             
         </div>
     </div>
