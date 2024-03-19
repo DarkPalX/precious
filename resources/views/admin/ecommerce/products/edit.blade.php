@@ -287,9 +287,9 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="d-block">Display</label>
+                        <label class="d-block">Display (Limit: {{ \App\Models\Ecommerce\Product::get_featured_count() . '/' . env('FEATURED_PRODUCTS_LIMIT') }})</label>
                         <div class="custom-control custom-switch @error('is_featured') is-invalid @enderror">
-                            <input type="checkbox" class="custom-control-input" name="is_featured" {{ (old("visibility") || $product->is_featured ? "checked":"") }} id="customSwitch2">
+                            <input type="checkbox" class="custom-control-input" name="is_featured" {{ (old("visibility") || $product->is_featured ? "checked":"") }} id="customSwitch2" {{ \App\Models\Ecommerce\Product::featured_limit_already() ? $product->is_featured ? '' : 'disabled' : '' }}>
                             <label class="custom-control-label" for="customSwitch2">Featured</label>
                         </div>
                         @error('is_featured')

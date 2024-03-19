@@ -316,6 +316,20 @@ class Product extends Model
         return $checkproduct;
     }
 
+    public static function featured_limit_already()
+    {
+        $featured_count = Product::where('is_featured', 1)->get()->count();
+
+        return $featured_count <= env('FEATURED_PRODUCTS_LIMIT') ? false : true;
+    }
+
+    public static function get_featured_count()
+    {
+        $featured_count = Product::where('is_featured', 1)->get()->count();
+
+        return $featured_count;
+    }
+
     public function on_sale()
     {
         return $this->belongsTo(PromoProducts::class,'id','product_id');
