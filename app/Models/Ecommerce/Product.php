@@ -320,7 +320,7 @@ class Product extends Model
     {
         $featured_count = Product::where('is_featured', 1)->get()->count();
 
-        return $featured_count <= env('FEATURED_PRODUCTS_LIMIT') ? false : true;
+        return $featured_count < env('FEATURED_PRODUCTS_LIMIT') ? false : true;
     }
 
     public static function get_featured_count()
@@ -334,7 +334,7 @@ class Product extends Model
     {
         $best_seller_count = Product::where('is_best_seller', 1)->get()->count();
 
-        return $best_seller_count <= env('BEST_SELLER_LIMIT') ? false : true;
+        return $best_seller_count < env('BEST_SELLER_LIMIT') ? false : true;
     }
 
     public static function get_best_seller_count()
