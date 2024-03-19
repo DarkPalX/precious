@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 use App\Helpers\{PaynamicsHelper};
 use App\Models\Ecommerce\{
-    Cart, SalesHeader, SalesDetail, CustomerAddress, CustomerFavorite, Product
+    Cart, SalesHeader, SalesDetail, CustomerAddress, CustomerFavorite, CustomerWishlist, Product
 };
 
 use App\Models\{
@@ -58,6 +58,61 @@ class MyAccountController extends Controller
         $additional_addresses = CustomerAddress::where('user_id', $user->id)->get();
 
         return view('theme.pages.customer.library', compact('member', 'user', 'page', 'additional_addresses'));
+    }
+
+    public function wishlist(Request $request)
+    {
+        $page = new Page;
+        $page->name = 'My Wishlist';
+
+        $member = auth()->user();
+        $user = auth()->user();
+        $pageLimit = 20;
+
+        $customer_wishlists = Product::select('products.*')
+        ->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
+        ->where('products.status', 'PUBLISHED')
+        ->join('customer_wishlists', 'customer_wishlists.product_id', '=', 'products.id')
+        ->where('customer_wishlists.customer_id', auth()->id());
+
+        $searchtxt = $request->get('keyword', false);
+        $sortBy = $request->get('sort_by', false);
+
+        if(!empty($searchtxt)){  
+            $keyword = Str::lower($request->keyword); 
+
+            $customer_wishlists = $customer_wishlists->where(function($query) use ($keyword){
+                $query->orWhereRaw('LOWER(products.name) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(products.author) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(products.description) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(product_additional_infos.value) like LOWER(?)', ["%{$keyword}%"]);
+            });
+        }
+
+        if($sortBy == "name_asc"){
+            $customer_wishlists = $customer_wishlists->orderBy('name','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "name_desc"){
+            $customer_wishlists = $customer_wishlists->orderBy('name','desc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "price_asc"){
+            $customer_wishlists = $customer_wishlists->orderBy('price','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "price_desc"){
+            $customer_wishlists = $customer_wishlists->orderBy('price','desc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "date_asc"){
+            $customer_wishlists = $customer_wishlists->orderBy('created_at','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "date_desc"){
+            $customer_wishlists = $customer_wishlists->orderBy('created_at','desc')->paginate($pageLimit);
+        }
+        else{
+            $customer_wishlists = $customer_wishlists->orderBy('name','asc')->paginate($pageLimit);
+        }
+
+
+        return view('theme.pages.customer.wishlist', compact('member', 'user', 'page', 'customer_wishlists'));
     }
 
     public function favorites(Request $request)

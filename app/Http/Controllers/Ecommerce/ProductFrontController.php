@@ -12,7 +12,7 @@ use App\Mail\ProductQuotationRequestMail;
 use App\Helpers\{Setting};
 
 use App\Models\Ecommerce\{
-    ProductCategory, Product, ProductReview, CustomerFavorite
+    ProductCategory, Product, ProductReview, CustomerFavorite, CustomerWishlist
 };
 
 use App\Models\{Page, Brand, BrandProductCategory};

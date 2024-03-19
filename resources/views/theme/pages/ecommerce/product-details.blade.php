@@ -163,8 +163,12 @@
                     </div>
                     @else
                         @if(Auth::check())
+
+                            @php($is_wishlist = \App\Models\Ecommerce\CustomerWishlist::isWishlist($product->id))
+
                             <div class="d-flex justify-content-evenly align-content-stretch mb-1">
                                 <a href="#" class="btn btn-secondary text-white vw-100">Add To Wishlist <i class="icon-star"></i></a>
+                                {{-- <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a> --}}
                             </div>
                         @endif
                     @endif

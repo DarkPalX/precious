@@ -18,7 +18,7 @@ use App\Http\Controllers\Settings\{
 
 // Ecommerce Controller
 use App\Http\Controllers\Ecommerce\{
-    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController, BannerAdController
+    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController, CustomerWishlistController, BannerAdController
 };
 
 use App\Http\Controllers\MailingList\{SubscriberController, GroupController, CampaignController, SubscriberFrontController};
@@ -130,6 +130,7 @@ Route::get('/phpinfo', function () {
             Route::get('/customer/dashboard', [MyAccountController::class, 'dashboard'])->name('customer.dashboard');
             Route::get('/manage-account', [MyAccountController::class, 'manage_account'])->name('customer.manage-account');
             Route::get('/library', [MyAccountController::class, 'library'])->name('customer.library');
+            Route::get('/wishlist', [MyAccountController::class, 'wishlist'])->name('customer.wishlist');
             Route::get('/favorites', [MyAccountController::class, 'favorites'])->name('customer.favorites');
             Route::get('/free-ebooks', [MyAccountController::class, 'free_ebooks'])->name('customer.free-ebooks');
             Route::get('/ecredits', [MyAccountController::class, 'ecredits'])->name('customer.ecredits');
@@ -162,6 +163,10 @@ Route::get('/phpinfo', function () {
             //CUSTOMER FAVORITES
             Route::resource('/customer_favorite', CustomerFavoriteController::class)->except(['destroy']);
             Route::get('/customer_favorite/add-to-favorites/{prd_id}', [CustomerFavoriteController::class, 'add_to_favorites'])->name('add-to-favorites');
+            
+            //CUSTOMER WISHLIST
+            Route::resource('/customer_wishlist', CustomerWishlistController::class)->except(['destroy']);
+            Route::get('/customer_wishlist/add-to-wishlist/{prd_id}', [CustomerWishlistController::class, 'add_to_wishlist'])->name('add-to-wishlist');
 
         });
     //
