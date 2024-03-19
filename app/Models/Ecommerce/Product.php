@@ -330,6 +330,20 @@ class Product extends Model
         return $featured_count;
     }
 
+    public static function best_seller_limit_already()
+    {
+        $best_seller_count = Product::where('is_best_seller', 1)->get()->count();
+
+        return $best_seller_count <= env('BEST_SELLER_LIMIT') ? false : true;
+    }
+
+    public static function get_best_seller_count()
+    {
+        $best_seller_count = Product::where('is_best_seller', 1)->get()->count();
+
+        return $best_seller_count;
+    }
+
     public function on_sale()
     {
         return $this->belongsTo(PromoProducts::class,'id','product_id');

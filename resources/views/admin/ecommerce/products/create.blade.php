@@ -247,9 +247,9 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label class="d-block">Best Seller</label>
+                        <label class="d-block">Best Seller (Limit: {{ \App\Models\Ecommerce\Product::get_best_seller_count() . '/' . env('BEST_SELLER_LIMIT') }})</label>
                         <div class="custom-control custom-switch @error('is_best_seller') is-invalid @enderror">
-                            <input type="checkbox" class="custom-control-input" name="is_best_seller" {{ (old("is_best_seller") ? "checked":"") }} id="customSwitch3">
+                            <input type="checkbox" class="custom-control-input" name="is_best_seller" {{ (old("is_best_seller") ? "checked":"") }} id="customSwitch3" {{ \App\Models\Ecommerce\Product::best_seller_limit_already() ? 'disabled' : '' }}>
                             <label class="custom-control-label" for="customSwitch3">Best Seller</label>
                         </div>
                         @error('is_best_seller')
