@@ -28,7 +28,7 @@
 				@foreach($cartx as $cart)
 
 					@php
-						$carttotal += $cart->product->price*$cart->qty;
+						$carttotal += $cart->price*$cart->qty;
 					@endphp
 
 					<div class="top-cart-item" data-product-id="{{ $cart->product_id }}">
@@ -38,7 +38,7 @@
 						<div class="top-cart-item-desc">
 							<div class="top-cart-item-desc-title">
 								<a href="#" class="fw-medium">{{$cart->product->name}}</a>
-								<span class="top-cart-item-price d-block">₱{{number_format($cart->product->price,2)}}</span>
+								<span class="top-cart-item-price d-block">₱{{number_format($cart->price,2)}}</span>
 
 								<div class="d-flex mt-2">
 									<div class="quantity">

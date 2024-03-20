@@ -60,7 +60,7 @@
                             </td>
 
                             <td>
-                                <div class="product-title"><h3><a href="#">{{ $customer_wishlist->name }}</a></h3></div>
+                                <div class="product-title"><h3><a href="{{ env('APP_URL') . '/book-details/' . $customer_wishlist->slug }}">{{ $customer_wishlist->name }}</a></h3></div>
 							    {!! ($customer_wishlist->discount_price > 0 ? '<div class="product-price"><del>' . number_format($customer_wishlist->price, 2) . '</del> <ins>' . number_format($customer_wishlist->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($customer_wishlist->price, 2) . '</ins></div>') !!}
                                 <div class="product-rating">
                                     @for($star = 1; $star <= 5; $star++)

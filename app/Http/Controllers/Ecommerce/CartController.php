@@ -376,9 +376,10 @@ class CartController extends Controller
 
         $coupons = CouponCart::where('customer_id', Auth::id())->get();
 
-        $lbc_provinces = LBCHelper::provinces();
+        // $lbc_provinces = LBCHelper::provinces();
 
-        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'lbc_provinces'));
+        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page'));
+        // return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'lbc_provinces'));
     }
 
     public function lbc_cities(Request $request)

@@ -23,7 +23,7 @@
 							<th class="cart-product-thumbnail">&nbsp;</th>
 							<th class="cart-product-name">Product</th>
 							<th class="cart-product-price">Unit Price</th>
-							<th class="cart-product-price">Discounted Price</th>
+							{{-- <th class="cart-product-price">Discounted Price</th> --}}
 							<th class="cart-product-quantity">Quantity</th>
 							<th class="cart-product-subtotal">Total</th>
 						</tr>
@@ -40,7 +40,7 @@
 	                    @forelse($cart as $key => $order)
 	                        @php 
 	                            $totalproducts += 1;
-	                            $grandtotal += $order->product->discountedprice*$order->qty;
+	                            $grandtotal += $order->price*$order->qty;
 
 	                            if($order->product->inventory == 0){
 	                                $available_stock++;
@@ -80,12 +80,12 @@
 	                            </td>
 
 	                            <td class="cart-product-price">
-	                                <span class="amount">₱{{ number_format($order->product->discountedprice,2) }}</span>
+	                                <span class="amount">₱{{ number_format($order->price,2) }}</span>
 	                            </td>
 
-	                            <td class="cart-product-price">
-									<span class="amount">₱{{ number_format($order->product->price-$order->product->discountedprice,2) }}</span>
-								</td>
+	                            {{-- <td class="cart-product-price">
+									<span class="amount">₱{{ number_format($order->product->price-$order->price,2) }}</span>
+								</td> --}}
 
 	                            <td class="cart-product-quantity">
 	                                <div class="quantity">
@@ -101,17 +101,17 @@
 
 	                            <td class="cart-product-subtotal">
 	                                <input type="hidden" id="product_name_{{$orderID}}" value="{{$order->product->name}}">
-	                                <input type="hidden" name="product_price[]" id="input_order{{$orderID}}_product_price" value="{{$order->product->discountedprice}}">
+	                                <input type="hidden" name="product_price[]" id="input_order{{$orderID}}_product_price" value="{{$order->price}}">
 
 
-	                                <input type="hidden" id="price{{$orderID}}" value="{{number_format($order->product->discountedprice,2,'.','')}}">
-	                                <input type="hidden" class="input_product_total_price" data-id="{{$orderID}}" data-productid="{{$order->product_id}}" id="input_order{{$orderID}}_product_total_price" value="{{$order->product->discountedprice*$order->qty}}">
+	                                <input type="hidden" id="price{{$orderID}}" value="{{number_format($order->price,2,'.','')}}">
+	                                <input type="hidden" class="input_product_total_price" data-id="{{$orderID}}" data-productid="{{$order->product_id}}" id="input_order{{$orderID}}_product_total_price" value="{{$order->price*$order->qty}}">
 
 	                                <!-- Coupon Inputs -->
 	                                <input type="hidden" class="cart_product_reward" id="cart_product_reward{{$orderID}}" value="0">
 	                                <input type="hidden" class="cart_product_discount" id="cart_product_discount{{$orderID}}" value="0">
 
-	                                <span class="amount" id="order{{$orderID}}_total_price">₱{{ number_format($order->product->discountedprice*$order->qty,2) }}</span>
+	                                <span class="amount" id="order{{$orderID}}_total_price">₱{{ number_format($order->price*$order->qty,2) }}</span>
 	                            </td>
 	                        </tr>
 						@empty

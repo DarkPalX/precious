@@ -460,7 +460,8 @@
                         </div>
                         <div class="product-desc">
                             <div class="product-title"><h3><a href="#">{{$rel->name}}</a></h3></div>
-                            <div class="product-price"><ins>₱{{number_format($rel->price,2)}}</ins></div>
+                            {{-- <div class="product-price"><ins>₱{{number_format($rel->price,2)}}</ins></div> --}}
+							{!! ($rel->discount_price > 0 ? '<div class="product-price"><del>' . number_format($rel->price, 2) . '</del> <ins>' . number_format($rel->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($rel->price, 2) . '</ins></div>') !!}
                             <div class="product-rating">
                                 @for($star = 1; $star <= 5; $star++)
                                     <i class="icon-star{{ $star <= App\Models\Ecommerce\ProductReview::getProductRating($rel->id) ? '3' : '-empty' }}"></i>
@@ -479,7 +480,7 @@
     <form id="buy-now-form" method="post" action="{{route('cart.buy-now')}}">
         @csrf
         <input type="text" name="product_id" value="{{ $product->id}}">
-        <input type="text" name="price" value="{{$product->price}}">
+        <input type="text" name="price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
         <input type="text" name="qty" id="buy_now_qty">
     </form>
 </div>
