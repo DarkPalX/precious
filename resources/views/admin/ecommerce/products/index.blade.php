@@ -67,7 +67,12 @@
                                         <span class="badge badge-danger" {{ !$product->is_premium  ? 'hidden' : '' }}>Premium</span>
                                     </td>
                                     <td>{{ $product->category->name }}</td>
-                                    <td>{{ $product->currency }} {{ number_format($product->price,2) }}</td>
+                                    <td>
+                                        @if($product->discount_price > 0)
+                                            <del class="text-secondary">{{ $product->currency }} {{ number_format($product->price,2) }}</del>
+                                        @endif 
+                                        {{ $product->currency }} {{ number_format($product->discount_price > 0 ? $product->discount_price : $product->price,2) }}
+                                    </td>
                                     <td>{{ number_format($product->Inventory,2) }}</td>
                                     <td>{{ $product->status }}</td>
                                     <td>{{ Setting::date_for_listing($product->updated_at) }}</td>
