@@ -26,7 +26,7 @@ class ProductFrontController extends Controller
     public function product_list(Request $request, $category = null)
     {
         $page = new Page();
-        $pageLimit = 40;
+        $pageLimit = 12;
 
         
         $products = Product::where('status','PUBLISHED');
