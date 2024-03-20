@@ -72,7 +72,7 @@
 
                                     @if($customer_wishlist->inventory > 0)
                                         <a href="javascript:void(0);" class="btn btn-info text-white me-1" onclick="buynow('{{$customer_wishlist->id}}');">Buy Now</a>
-                                        <a href="javascript:void(0);" class="btn bg-color text-white" onclick="add_to_cart('{{$customer_wishlist->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
+                                        <a href="javascript:void(0);" class="btn bg-color text-white" onclick="add_to_cart('{{$customer_wishlist->id}}', '{{$customer_wishlist->name}}', '{{$customer_wishlist->photoPrimary}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
 
                                         {{-- FOR BUY NOW --}}
                                         <div style="display: none;">
@@ -175,7 +175,7 @@
             }
         }
 
-        function add_to_cart(product){
+        function add_to_cart(product, name, image){
 
             $.ajaxSetup({
                 headers: {
@@ -225,13 +225,12 @@
                                 $('#top-cart-items').append(
                                     '<div class="top-cart-item" data-product-id="' + product + '">' +
                                     '<div class="top-cart-item-image border-0">' +
-                                    '<a href="#"><img src="{{ asset('storage/products/'.$customer_wishlist->photoPrimary) }}" alt="Cart Image 1" /></a>' +
+                                    '<a href="#"><img src="{{ asset('storage/products/') }}/' + image + '" alt="Cart Image 1" /></a>' +
                                     '</div>' +
                                     '<div class="top-cart-item-desc">' +
                                     '<div class="top-cart-item-desc-title">' +
-                                    '<a href="#" class="fw-medium">{{$customer_wishlist->name}}</a>' +
+                                    '<a href="#" class="fw-medium">' + name + '</a>' +
                                     '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
-                                    // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
                                     '<div class="d-flex mt-2">' +
                                     '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
                                     '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
