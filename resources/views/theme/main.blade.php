@@ -109,7 +109,7 @@
 			@endif
 			{{-- END BANNER ADS --}}
 
-			<div class="section my-0 pb-0" style="background:#f9f9f9 url('theme/images/misc/dots-1.png') 100% 0 no-repeat;">
+			<div class="section my-0 pb-0" style="background:#f9f9f9 url('{{ asset('theme/images/misc/dots-1.png')}}') 100% 0 no-repeat;">
                 <div class="container">
                     <div class="row align-items-center justify-content-between">
 
