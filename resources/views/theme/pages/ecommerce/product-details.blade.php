@@ -199,15 +199,15 @@
                                                             @if(Auth::check())
                                                             <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
                                                             @endif
-                                                            <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$product->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
+                                                            <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$bundle->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
                                                         </div>
                                                     @else
                                                         @if(Auth::check())
-                                                            @php($is_wishlist = \App\Models\Ecommerce\CustomerWishlist::isWishlist($product->id))
+                                                            @php($is_wishlist = \App\Models\Ecommerce\CustomerWishlist::isWishlist($bundle->id))
 
                                                             <div class="d-flex justify-content-evenly align-content-stretch mb-1">
                                                                 {{-- <a href="#" class="btn btn-secondary text-white vw-100">Add To Wishlist <i class="icon-star"></i></a> --}}
-                                                                <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a>
+                                                                <a href="{{ route('add-to-wishlist', [$bundle->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a>
                                                             </div>
                                                         @endif
                                                     @endif
