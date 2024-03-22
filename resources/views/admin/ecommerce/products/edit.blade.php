@@ -203,7 +203,8 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <p class="tx-10">
-                            Required file type: .epub
+                            Required file type: .epub <br>
+                            Maximum Size: 10mb 
                         </p>
                         <div id="epub_div" @if(empty($product->file_url)) style="display:none;" @endif>
                             <div class="d-flex mb-3">

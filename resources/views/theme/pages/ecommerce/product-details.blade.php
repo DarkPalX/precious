@@ -178,7 +178,7 @@
                         <div class="share mt-3">
                             <h5>Also Available in bundle:</h5>
 
-                            {{-- <div id="oc-events" class="owl-carousel events-carousel carousel-widget" data-pagi="true" data-items-md="1" data-items-lg="1" data-items-xl="1">
+                            <div id="oc-events" class="owl-carousel events-carousel carousel-widget" data-pagi="true" data-items-md="1" data-items-lg="1" data-items-xl="1">
 
                                 <div class="oc-item">
                                     <div class="entry mb-3">
@@ -209,10 +209,10 @@
                                     </div>
                                 </div>
                                 
-                            </div> --}}
+                            </div>
 
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-md-5">
                                     <div class="product-image">
                                         <img src="{{ asset('storage/products/'.$product->photoPrimary) }}" />
@@ -235,7 +235,7 @@
                                         @endif
                                     @endif
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
 
                     @endif
