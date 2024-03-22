@@ -180,34 +180,43 @@
 
                             <div id="oc-events" class="owl-carousel events-carousel carousel-widget" data-pagi="true" data-items-md="1" data-items-lg="1" data-items-xl="1">
 
-                                <div class="oc-item">
-                                    <div class="entry mb-3">
-                                        <div class="grid-inner row g-0">
-                                            <div class="col-md-5 mb-md-0">
-                                                <div class="product-image">
-                                                    <img src="{{ asset('storage/products/'.$product->photoPrimary) }}" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-7 ps-md-4">
-                                                <h3 class="mb-2">{{ $product->name }}</h3>
-                                                {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
+                                @foreach(\App\Models\Ecommerce\Product::getBundle($product->id) as $bundle)
 
-                                                @if($product->inventory > 0)
-                                                    <div class="d-flex justify-content-evenly align-content-stretch mb-1">
-                                                        <a href="#" class="btn btn-info text-white vw-100 me-1">Buy Now</a>
-                                                        <a href="#" class="btn bg-color text-white vw-100">Add To Bag</a>
+                                    <div class="oc-item">
+                                        <div class="entry mb-3">
+                                            <div class="grid-inner row g-0">
+                                                <div class="col-md-5 mb-md-0">
+                                                    <div class="product-image">
+                                                        <img src="{{ asset('storage/products/'.$bundle->photoPrimary) }}" />
                                                     </div>
-                                                @else
-                                                    @if(Auth::check())
+                                                </div>
+                                                <div class="col-md-7 ps-md-4">
+                                                    <h3 class="mb-2">{{ $bundle->name }}</h3>
+                                                    {!! ($bundle->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($bundle->discount_price, 2) . '</ins> <del>₱' . number_format($bundle->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($bundle->price, 2) . '</ins>') !!}
+
+                                                    @if($bundle->inventory > 0)
                                                         <div class="d-flex justify-content-evenly align-content-stretch mb-1">
-                                                            <a href="#" class="btn btn-secondary text-white vw-100">Add To Wishlist <i class="icon-star"></i></a>
+                                                            @if(Auth::check())
+                                                            <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
+                                                            @endif
+                                                            <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$product->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
                                                         </div>
+                                                    @else
+                                                        @if(Auth::check())
+                                                            @php($is_wishlist = \App\Models\Ecommerce\CustomerWishlist::isWishlist($product->id))
+
+                                                            <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                                                                {{-- <a href="#" class="btn btn-secondary text-white vw-100">Add To Wishlist <i class="icon-star"></i></a> --}}
+                                                                <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a>
+                                                            </div>
+                                                        @endif
                                                     @endif
-                                                @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+
+                                @endforeach
                                 
                             </div>
 

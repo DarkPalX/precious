@@ -76,6 +76,11 @@ class ListingHelper
         $sortBy = $this->get_selected_sort_by();
         $showFreeOnly = $this->show_free_only();
         $showDeleted = $this->show_delete_data();
+
+        $showApproved = $this->show_approved_data();
+        $showDisapproved = $this->show_disapproved_data();
+        $showPending = $this->show_pending_data();
+
         $search =  $this->get_search_string();
 
         $requiredConditions = $this->requiredConditions;
@@ -95,6 +100,18 @@ class ListingHelper
 
         if ($showDeleted) {
             $models->withTrashed();
+        }
+
+        if ($showApproved) {
+            $models->where('status', 1);
+        }
+
+        if ($showDisapproved) {
+            $models->withTrashed();
+        }
+
+        if ($showPending) {
+            $models->where('status', 0);
         }
 
         foreach ($requiredConditions as $condition) {
@@ -251,6 +268,9 @@ class ListingHelper
         $parameters['orderBy'] = $this->get_selected_order_by($sortFields);
         $parameters['sortBy'] = $this->get_selected_sort_by();
         $parameters['showFreeOnly'] = $this->show_free_only();
+        $parameters['showApproved'] = $this->show_approved_data();
+        $parameters['showDisapproved'] = $this->show_disapproved_data();
+        $parameters['showPending'] = $this->show_pending_data();
         $parameters['showDeleted'] = $this->show_delete_data();
         $parameters['search'] = $this->get_search_string();
 
@@ -312,6 +332,21 @@ class ListingHelper
     private function show_free_only()
     {
         return (request()->has('showFreeOnly') && (request('showFreeOnly') == 'on') || request('showFreeOnly') == 1) ? true : false;
+    }
+
+    private function show_approved_data()
+    {
+        return (request()->has('showApproved') && (request('showApproved') == 'on') || request('showApproved') == 1) ? true : false;
+    }
+
+    private function show_disapproved_data()
+    {
+        return (request()->has('showDisapproved') && (request('showDisapproved') == 'on') || request('showDisapproved') == 1) ? true : false;
+    }
+
+    private function show_pending_data()
+    {
+        return (request()->has('showPending') && (request('showPending') == 'on') || request('showPending') == 1) ? true : false;
     }
 
     private function show_delete_data()

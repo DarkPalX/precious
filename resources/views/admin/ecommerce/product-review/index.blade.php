@@ -42,6 +42,10 @@ Manage Product Reviews
                                     <form id="filterForm" class="pd-20">
                                         <div class="form-group">
                                             <div class="custom-control custom-radio">
+                                                <input type="radio" id="orderBy1" name="orderBy" class="custom-control-input" value="updated_at" @if ($filter->orderBy == 'updated_at') checked @endif>
+                                                <label class="custom-control-label" for="orderBy1">{{__('common.date_modified')}}</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
                                                 <input type="radio" id="orderBy2" name="orderBy" class="custom-control-input" value="product_name" @if ($filter->orderBy == 'product_name') checked @endif>
                                                 <label class="custom-control-label" for="orderBy2">{{__('common.name')}}</label>
                                             </div>
@@ -66,6 +70,21 @@ Manage Product Reviews
                                             <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" id="showDeleted" name="showDeleted" class="custom-control-input" @if ($filter->showDeleted) checked @endif>
                                                 <label class="custom-control-label" for="showDeleted">{{__('common.show_deleted')}}</label>
+                                            </div>
+                                            
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" id="showApproved" name="showApproved" class="custom-control-input" @if ($filter->showApproved) checked @endif>
+                                                <label class="custom-control-label" for="showApproved">Show Approved Only</label>
+                                            </div>
+                                            
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" id="showDisapproved" name="showDisapproved" class="custom-control-input" @if ($filter->showDisapproved) checked @endif>
+                                                <label class="custom-control-label" for="showDisapproved">Show Disapproved Only</label>
+                                            </div>
+                                            
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" id="showPending" name="showPending" class="custom-control-input" @if ($filter->showPending) checked @endif>
+                                                <label class="custom-control-label" for="showPending">Show Pending Only</label>
                                             </div>
                                         </div>
                                         <div class="form-group mg-b-40">
@@ -123,6 +142,7 @@ Manage Product Reviews
                                     <th scope="col" width="30%">Review</th>
                                     <th scope="col" width="5%">Star Rating</th>
                                     <th scope="col" width="10%">Status</th>
+                                    <th scope="col" width="10%">Date Modified</th>
                                     <th scope="col" width="10%">Options</th>
                                 </tr>
                             </thead>
@@ -147,6 +167,7 @@ Manage Product Reviews
                                     </td>
                                     <td>{{ $review->rating }}</td>
                                     <td>{{ ($review->status == 1) ? 'APPROVED' : 'PENDING' }}</td>
+                                    <td><span class="text-nowrap">{{ Setting::date_for_listing($review->updated_at) }}</span></td>
                                     <td>
                                         @if($review->trashed())
                                             <nav class="nav table-options">
