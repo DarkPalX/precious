@@ -91,8 +91,17 @@ class ProductController extends Controller
     {
         $parentCategories  = ProductCategory::where('parent_id', 0)->orderBy('name','asc')->get();
         $attributes = FormAttribute::orderBy('name', 'asc')->get();
+        $products = Product::all();
 
-        return view('admin.ecommerce.products.create',compact('parentCategories', 'attributes'));
+        return view('admin.ecommerce.products.create',compact('parentCategories', 'attributes', 'products'));
+    }
+
+    public function create_bundle()
+    {
+        $parentCategories  = ProductCategory::where('parent_id', 0)->orderBy('name','asc')->get();
+        $attributes = FormAttribute::orderBy('name', 'asc')->get();
+        $products = Product::all();
+        return view('admin.ecommerce.products.create_bundle',compact('parentCategories', 'attributes', 'products'));
     }
 
     /**
@@ -106,12 +115,22 @@ class ProductController extends Controller
 
         $requestData = $request->validated();
         $requestData['status'] = $request->has('status') ? 'PUBLISHED' : 'PRIVATE';
+        $requestData['is_bundle'] = $request->has('is_bundle');
         $requestData['is_featured'] = $request->has('is_featured');
         $requestData['is_best_seller'] = $request->has('is_best_seller');
         $requestData['is_free'] = $request->has('is_free');
         $requestData['is_premium'] = $request->has('is_premium');
         $requestData['description'] = $request->long_description;
         $requestData['created_by'] = Auth::id();
+
+
+        if($request->has('bundle_products')){
+            $bundle_products = "";
+            foreach($request->bundle_products as $bundle_product){
+                $bundle_products .= $bundle_product.',';
+            }
+            $requestData['bundle_products'] = $bundle_products;
+        }
 
         $product = Product::create($requestData);
 
@@ -197,6 +216,16 @@ class ProductController extends Controller
         return view('admin.ecommerce.products.edit',compact('product','parentCategories', 'attributes'));
     }
 
+    public function edit_bundle($id)
+    {
+        $product = Product::findOrFail($id);
+        $parentCategories  = ProductCategory::where('parent_id', 0)->orderBy('name','asc')->get();
+        $products = Product::all();
+        $attributes = FormAttribute::orderBy('name', 'asc')->get();
+
+        return view('admin.ecommerce.products.edit_bundle',compact('product','parentCategories','products','attributes'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -218,6 +247,14 @@ class ProductController extends Controller
         $requestData['is_free'] = $request->has('is_free');
         $requestData['is_premium'] = $request->has('is_premium');
         $requestData['created_by'] = Auth::id();
+
+        if($request->has('bundle_products')){
+            $bundle_products = "";
+            foreach($request->bundle_products as $bundle_product){
+                $bundle_products .= $bundle_product.',';
+            }
+            $requestData['bundle_products'] = $bundle_products;
+        }
 
         $product->update($requestData);
         $this->update_tags($product->id,$request->tags);
@@ -292,7 +329,7 @@ class ProductController extends Controller
         //     }
         // }
 
-        return redirect()->route('products.edit', $product->id)->with('success', __('standard.products.product.update_success'));
+        return redirect()->route($request->has('is_bundle') ? 'product.edit.bundle' : 'products.edit', $product->id)->with('success', __('standard.products.product.update_success'));
     }
 
     public function update_photos($photos)

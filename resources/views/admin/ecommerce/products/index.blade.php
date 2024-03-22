@@ -63,6 +63,7 @@
                                     </th>
                                     <td>
                                         <strong @if($product->trashed()) style="text-decoration:line-through;" @endif> {{ $product->name }}</strong><br>
+                                        <span class="badge badge-success" {{ !$product->is_bundle  ? 'hidden' : '' }}>Bundle</span>
                                         <span class="badge badge-primary" {{ !$product->is_free  ? 'hidden' : '' }}>Free</span>
                                         <span class="badge badge-danger" {{ !$product->is_premium  ? 'hidden' : '' }}>Premium</span>
                                     </td>
@@ -88,7 +89,7 @@
                                                 <a class="nav-link" target="_blank" href="{{ route('product.details', $product->slug) }}" title="View Product Profile"><i data-feather="eye"></i></a>
 
                                                 @if (auth()->user()->has_access_to_route('products.edit'))
-                                                    <a class="nav-link" href="{{ route('products.edit',$product->id) }}" title="Edit Product"><i data-feather="edit"></i></a>
+                                                    <a class="nav-link" href="{{ route($product->is_bundle  ? 'product.edit.bundle' : 'products.edit',$product->id) }}" title="Edit Product"><i data-feather="edit"></i></a>
                                                 @endif
 
                                                 @if (auth()->user()->has_access_to_route('product.single.delete'))

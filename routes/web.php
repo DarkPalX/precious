@@ -340,6 +340,12 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
                 Route::post('reorder-category', [ProductCategoryController::class, 'reorder_category'])->name('reorder-product-category');
             //
+            
+
+            //Product Bundles
+                Route::get('/admin/products/create-bundle', [ProductController::class, 'create_bundle'])->name('product.create.bundle');
+                Route::get('/admin/products/edit-bundle/{id}', [ProductController::class, 'edit_bundle'])->name('product.edit.bundle');
+            // 
 
             // Products
                 Route::resource('/admin/products', ProductController::class);
@@ -359,6 +365,9 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
                 Route::get('/product-download-template',[ProductController::class, 'download_template'])->name('product.download.template');
                 Route::post('/product-upload-template',[ProductController::class, 'upload_template'])->name('product.upload.template');
+
+
+
             //
 
             // Brands

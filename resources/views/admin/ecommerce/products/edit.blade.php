@@ -199,6 +199,9 @@
                             <label class="custom-file-label" for="file_url" id="file_name">@if (empty($product->file_url)) Choose file @else {{$product->getProductName()}} @endif</label>
                             <input type="text" id="current_file" name="current_file" value="{{ $product->file_url }}" hidden/>
                         </div>
+                        @error('file_url')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                         <p class="tx-10">
                             Required file type: .epub
                         </p>
@@ -684,8 +687,10 @@
             $('#file_temp').attr('href', '');
 
             let files = evt.target.files;
+            // let maxSize = 10;
             let validateFileTypes = [".epub"];
 
+            // validateFiles(files, maxSize, readEPUB, validateFileTypes);
             validateFiles(files, readEPUB, validateFileTypes);
         });
 

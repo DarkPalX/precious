@@ -146,6 +146,7 @@
                     <li @if (\Route::current()->getName() == 'products.index' || \Route::current()->getName() == 'products.edit') class="active" @endif><a href="{{ route('products.index') }}">Manage Products</a></li>
                     @if(auth()->user()->has_access_to_route('products.create'))
                         <li @if (\Route::current()->getName() == 'products.create') class="active" @endif><a href="{{ route('products.create') }}">Create a Product</a></li>
+                        <li @if (\Route::current()->getName() == 'product.create.bundle') class="active" @endif><a href="{{ route('product.create.bundle') }}">Create a Bundle</a></li>
                     @endif
                 @endif
                 @if (auth()->user()->has_access_to_module('product_categories'))

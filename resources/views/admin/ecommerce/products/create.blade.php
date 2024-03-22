@@ -169,6 +169,9 @@
                             <input type="file" class="custom-file-input @error('file_url') is-invalid @enderror" name="file_url" id="file_url" accept=".epub">
                             <label class="custom-file-label" for="file_url" id="file_name">Choose file</label>
                         </div>
+                        @error('file_url')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                         <p class="tx-10">
                             Required file type: .epub
                         </p>
@@ -577,8 +580,10 @@
             $('#file_temp').attr('href', '');
 
             let files = evt.target.files;
+            // let maxSize = 10;
             let validateFileTypes = [".epub"];
 
+            // validateFiles(files, maxSize, readEPUB, validateFileTypes);
             validateFiles(files, readEPUB, validateFileTypes);
         });
 

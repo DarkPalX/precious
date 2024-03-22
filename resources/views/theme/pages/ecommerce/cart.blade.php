@@ -135,15 +135,14 @@
 	                            </div>
 	                        </div>
 	                        @if(Auth::check())
-	                        <p><a href="#" onclick="myCoupons()" class="btn mb-2 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
+	                        <p><a href="#" onclick="myCoupons()" class="btn mb-1 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
 	                        <input type="hidden" id="hasLogin" value="1">
 	                        @else
-	                        <p><a href="#" onclick="login_modal()" class="btn mb-2 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
+	                        <p><a href="#" onclick="login_modal()" class="btn mb-1 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
 	                        <input type="hidden" id="hasLogin" value="0">
 	                        @endif
 	                    </div>
 
-	                    <br><br>
 	                    <div id="couponList"></div>
 	                    <div id="discount_list"></div>
 	                    <div id="manual-coupons"></div>
@@ -165,41 +164,58 @@
 
 	                    <div class="table-responsive">
 	                        <table class="table cart cart-totals">
-	                            <tbody>
-	                                <tr class="cart_item">
-	                                    <td class="cart-product-name">
-	                                        <strong>Cart Subtotal</strong>
-	                                    </td>
+                                <tbody>
+									<tr class="cart_item">
+										<td class="cart-product-name">
+											<strong>Cart Subtotal</strong>
+										</td>
 
-	                                    <td class="cart-product-name text-right">
+										<td class="cart-product-name text-end">
 	                                        <span class="amount" id="subtotal">₱{{ number_format($grandtotal,2) }}</span>
-	                                    </td>
-	                                </tr>
+										</td>
+									</tr>
+									<tr class="cart_item">
+										<td class="cart-product-name">
+											<strong>My E-Wallet</strong>
+										</td>
+
+										<td class="cart-product-name text-end">
+											<span class="amount">₱{{ number_format(auth()->user()->ecredits,2) }}</span>
+											<div class="switch mt-1 float-end ms-3">
+												<input id="switch-toggle-1" class="switch-toggle switch-rounded-mini switch-toggle-round" type="checkbox">
+												<label for="switch-toggle-1"></label>
+											</div>
+										</td>
+									</tr>
 	                                <tr class="cart_item" id="couponDiscountDiv" style="display: none;">
 	                                    <td class="cart-product-name">
 	                                        <strong>Coupon Discount</strong>
 	                                    </td>
 
-	                                    <td class="cart-product-name text-right">
+	                                    <td class="cart-product-name text-end">
 	                                        <span class="amount" id="total_coupon_deduction">₱0.00</span>
 	                                    </td>
 	                                </tr>
-	                                <tr class="cart_item">
-	                                    <td class="cart-product-name">
-	                                        <strong>Total</strong>
-	                                    </td>
+									<tr class="cart_item">
+										<td class="cart-product-name">
+											<strong>Total</strong>
+										</td>
 
-	                                    <td class="cart-product-name text-right">
+										<td class="cart-product-name text-end">
 	                                        <span class="amount color lead"><strong id="grandtotal">₱{{ number_format($grandtotal,2) }}</strong></span>
-	                                    </td>
-	                                </tr>
-	                            </tbody>
+										</td>
+									</tr>
+									<tr class="cart_item">
+										<td class="cart-product-name">
+											
+										</td>
+
+										<td class="text-end">				
+                                            <button type="submit" class="btn btn-dark">Proceed to Checkout</button>
+										</td>
+									</tr>
+								</tbody>
 	                        </table>
-	                    </div>
-	                    <div class="row justify-content-end py-2 col-mb-30">
-	                        <div class="col-lg-auto pe-lg-0">
-	                            <button type="submit" class="button button-3d mt-2 mt-sm-0 me-0">Proceed to Checkout</button>
-	                        </div>
 	                    </div>
 	                </div>
 	            </div>
@@ -948,25 +964,65 @@
 						'</div>'+
 					'</div>');
 
-	                $('#couponList').append(
-	            	'<div class="alert alert-info mt-3" id="appliedCoupon'+cid+'">'+
+	                // $('#couponList').append(
+	            	// '<div class="alert alert-info mt-3" id="appliedCoupon'+cid+'">'+
 
-	            		'<input type="hidden" name="couponUsage[]" value="0">'+
-	                    '<input type="hidden" id="coupon_combination'+cid+'" value="'+combination+'">'+
-	                    '<input type="hidden" name="couponid[]" value="'+cid+'">'+
-	                    '<input type="hidden" name="coupon_productid[]" value="0">'+
+	            	// 	'<input type="hidden" name="couponUsage[]" value="0">'+
+	                //     '<input type="hidden" id="coupon_combination'+cid+'" value="'+combination+'">'+
+	                //     '<input type="hidden" name="couponid[]" value="'+cid+'">'+
+	                //     '<input type="hidden" name="coupon_productid[]" value="0">'+
 
-						'<div class="row no-gutters">'+
-							'<div class="col-11">'+
-								'<div class="fancy-title title-bottom-border mb-3">'+
-									'<h4>'+name+'</h4>'+
-								'</div>'+
-							'</div>'+
-							'<div class="col-1"><button type="button" class="close couponRemove" data-dismiss="alert" aria-hidden="true" id="'+cid+'">&times;</button></div>'+
-						'</div>'+
-						'<small><strong>'+validity+'</strong></small>'+
-					    '<p class="m-0">'+desc+' <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg'+cid+'">Terms & Conditions</a></p>'+
-					'</div>' );
+					// 	'<div class="row no-gutters">'+
+					// 		'<div class="col-11">'+
+					// 			'<div class="fancy-title title-bottom-border mb-3">'+
+					// 				'<h4>'+name+'</h4>'+
+					// 			'</div>'+
+					// 		'</div>'+
+					// 		'<div class="col-1"><button type="button" class="close couponRemove" data-dismiss="alert" aria-hidden="true" id="'+cid+'">&times;</button></div>'+
+					// 	'</div>'+
+					// 	'<small><strong>'+validity+'</strong></small>'+
+					//     '<p class="m-0">'+desc+' <a href="#" data-toggle="modal" data-target=".bs-example-modal-lg'+cid+'">Terms & Conditions</a></p>'+
+					// '</div>' );
+
+                    $('#couponList').append(
+                        '<table class="table small border rounded border-top-warning alert" id="appliedCoupon'+cid+'">' +
+                            '<tbody>' +
+                                '<tr>' +
+                                    '<td>' +
+
+                                        '<input type="hidden" name="couponUsage[]" value="0">'+
+                                        '<input type="hidden" id="coupon_combination'+cid+'" value="'+combination+'">'+
+                                        '<input type="hidden" name="couponid[]" value="'+cid+'">'+
+                                        '<input type="hidden" name="coupon_productid[]" value="0">'+
+                                        
+                                        '<h3 class="mb-0">'+name+'</h3>' +
+                                        ''+desc+'' +
+                                        '<br><br>' +
+                                        'Code: '+ combination +'' +
+                                        '<br>Coupon requirements met, expect to save ₱217.00' +
+                                        '<br><br>' +
+                                        '<div class="text-secondary">' +
+                                            '<ul class="m-0 ms-3">' +
+                                                '<li>'+ validity +'</li>' +
+                                            '</ul>' +
+                                        '</div>' +
+                                    '</td>' +
+                                    '<td width="10px">' +
+							            '<div class="col-1"><button type="button" class="close couponRemove btn btn-transparent" data-dismiss="alert" aria-hidden="true" id="'+cid+'">&times;</button></div>'+
+                                    '</td>' +
+                                '</tr>' +
+                            '</tbody>' +
+                        '</table>'
+                    );
+
+                    
+            var name  = $('#couponname'+cid).val();
+            var desc = $('#coupondesc'+cid).val();
+            var terms = $('#couponterms'+cid).val();
+            var combination = $('#couponcombination'+cid).val();
+            var validity = $('#couponvalidity'+cid).val();
+
+
 
 					$('#discount_list').append('<input type="hidden" name="discount[]" id="discount'+cid+'" value="'+amountdiscount+'"/>');
 

@@ -24,7 +24,7 @@ class Product extends Model
     use SoftDeletes, HasSlug;
 
     public $table = 'products';
-    protected $fillable = [ 'sku', 'book_type', 'category_id', 'name', 'author', 'slug', 'file_url', 'ebook_price', 'ebook_discount_price', 'short_description', 'description', 'price', 'discount_price', 'size','weight', 'texture', 'status', 'is_featured', 'is_best_seller', 'is_free', 'is_premium', 'uom', 'created_by', 'meta_title', 'meta_keyword', 'meta_description','brand_id','reorder_point'];
+    protected $fillable = [ 'sku', 'book_type', 'category_id', 'name', 'author', 'slug', 'file_url', 'ebook_price', 'ebook_discount_price', 'short_description', 'description', 'price', 'mobile_price', 'discount_price', 'mobile_discount_price', 'size','weight', 'texture', 'status', 'bundle_products', 'is_bundle', 'is_featured', 'is_best_seller', 'is_free', 'is_premium', 'uom', 'created_by', 'meta_title', 'meta_keyword', 'meta_description','brand_id','reorder_point'];
 
     /**
      * Get the options for generating the slug.
@@ -184,6 +184,20 @@ class Product extends Model
 
         return $inventory;
       
+    }
+
+    public static function has_bundle($id){
+        
+        $bundles = Product::whereStatus('PUBLISHED')->where('is_bundle', 1)->whereRaw("FIND_IN_SET(?, bundle_products)", [$id])->first();
+
+        return $bundles ? true : false;
+    }
+
+    public static function getBundle($id){
+        
+        $bundles = Product::whereStatus('PUBLISHED')->where('is_bundle', 1)->whereRaw("FIND_IN_SET(?, bundle_products)", [$id])->get();
+
+        return $bundles;
     }
 
     public static function related_products($id){
