@@ -77,25 +77,47 @@
 			
 			<div class="row">
 				@forelse($products as $product)
-				<div class="product col-md-4 col-sm-6 sf-dress bottommargin-sm">
-					<div class="grid-inner">
-						<div class="product-image">
-							<a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="{{$product->name}}"></a>
-							@if($product->inventory <= 0)
-								<div class="sale-flash badge bg-danger p-2">Out of Stock</div>
-							@endif
+					@if(\App\Models\Ecommerce\Product::has_ebook($product->id))
+
+						<div class="product col-md-4 col-sm-6 sf-dress bottommargin-sm">
+							<div class="grid-inner">
+								<div class="product-image">
+									<a href="{{ route('ebook.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="{{$product->name}}"></a>
+									<div class="sale-flash badge bg-success p-2">Ebook</div>
+								</div>
+								<div class="product-desc">
+									<div class="product-title"><h3><a href="{{ route('ebook.details',$product->slug) }}">{{$product->name}}</a></h3></div>
+									{!! ($product->ebook_discount_price > 0 ? '<div class="product-price"><del>' . number_format($product->ebook_price, 2) . '</del> <ins>' . number_format($product->ebook_discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->ebook_price, 2) . '</ins></div>') !!}
+									<div class="product-rating">
+										@for($star = 1; $star <= 5; $star++)
+											<i class="icon-star{{ $star <= $product->rating ? '3' : '-empty' }}"></i>
+										@endfor
+									</div>
+								</div>
+							</div>
 						</div>
-						<div class="product-desc">
-							<div class="product-title"><h3><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></h3></div>
-							{!! ($product->discount_price > 0 ? '<div class="product-price"><del>' . number_format($product->price, 2) . '</del> <ins>' . number_format($product->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->price, 2) . '</ins></div>') !!}
-							<div class="product-rating">
-								@for($star = 1; $star <= 5; $star++)
-									<i class="icon-star{{ $star <= $product->rating ? '3' : '-empty' }}"></i>
-								@endfor
+
+					@endif
+
+					<div class="product col-md-4 col-sm-6 sf-dress bottommargin-sm">
+						<div class="grid-inner">
+							<div class="product-image">
+								<a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="{{$product->name}}"></a>
+								@if($product->inventory <= 0)
+									<div class="sale-flash badge bg-danger p-2">Out of Stock</div>
+								@endif
+							</div>
+							<div class="product-desc">
+								<div class="product-title"><h3><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></h3></div>
+								{!! ($product->discount_price > 0 ? '<div class="product-price"><del>' . number_format($product->price, 2) . '</del> <ins>' . number_format($product->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->price, 2) . '</ins></div>') !!}
+								<div class="product-rating">
+									@for($star = 1; $star <= 5; $star++)
+										<i class="icon-star{{ $star <= $product->rating ? '3' : '-empty' }}"></i>
+									@endfor
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 				@empty
 					<div class="alert alert-info">
                         No books found.

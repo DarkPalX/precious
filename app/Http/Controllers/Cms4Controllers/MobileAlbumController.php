@@ -68,6 +68,7 @@ class MobileAlbumController extends Controller
         $requestData = request()->all();
 
         $requestData['user_id'] = auth()->id();
+        $requestData['status'] = $request->has('status') ? 'PUBLISHED' : 'PRIVATE';
 
         $mobile_album = MobileAlbum::create($requestData);
 
@@ -131,6 +132,7 @@ class MobileAlbumController extends Controller
 
         $updateData = request()->all();
         $updateData['banner_type'] = $request->has('banner_type') ? 'video' : 'image';
+        $updateData['status'] = $request->has('status') ? 'PUBLISHED' : 'PRIVATE';
 
         $newBanners = $this->get_new_banners($banners);
         $removeBanners = [];
@@ -154,6 +156,28 @@ class MobileAlbumController extends Controller
         $mobile_album->addBanners($newBanners);
 
         return back()->with('success', __('standard.banner.update_success'));
+    }
+
+    public function change_status($id)
+    {
+
+        $album = MobileAlbum::where('id', $id)->first();
+
+        if($album->status == "PRIVATE"){
+            MobileAlbum::whereId((int) $id)
+            ->update([
+                'status'  => "PUBLISHED"
+            ]);
+        }
+        else{
+            MobileAlbum::whereId((int) $id)
+            ->update([
+                'status'  => "PRIVATE"
+            ]);
+        }
+
+
+        return back()->with('success', "Successfully updated an album");
     }
 
     public function quick_update(Request $request, MobileAlbum $mobile_album)

@@ -103,8 +103,8 @@
                         @endfor
                     </div>
                     
-                    {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
-                    <input type="hidden" id="product_price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
+                    {!! ($product->ebook_discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->ebook_discount_price, 2) . '</ins> <del>₱' . number_format($product->ebook_price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->ebook_price, 2) . '</ins>') !!}
+                    <input type="hidden" id="product_price" value="{{$product->ebook_discount_price > 0 ? $product->ebook_discount_price : $product->ebook_price}}">
                     
                     <!-- Product Single - Short Description
                     ============================================= -->
@@ -112,22 +112,14 @@
                     <table class="table">
                       <tbody>
                         <tr>
+                          <td colspan="2"><span class="bg-success text-white rounded p-1">E-book</span></td>
+                        </tr>
+                        <tr>
                           <td width="35%">Category:</td>
                           <td>{{$product->category->name}}</td>
                         </tr>
-                        <tr>
-                          <td>Weight:</td>
-                          <td>{{$product->weight}} grams</td>
-                        </tr>
-                        <tr>
-                          <td>Texture:</td>
-                          <td>{{$product->texture}}</td>
-                        </tr>
-                        <tr>
-                          <td>Stocks Left:</td>
-                          <td><input id="remaining_stock" class="form-control border-0 bg-transparent" readonly value="{{$product->inventory}}" /></td>
-                        </tr>
-                        <tr>
+                        
+                        <tr hidden>
                           <td>Quantity:</td>
                           <td>
                             <form class=" mb-0 d-flex justify-content-between align-items-center" method="post" enctype='multipart/form-data'>
@@ -148,13 +140,21 @@
 
                             {{-- <input type="hidden" id="orderID" value="{{$product->id}}"> --}}
                             {{-- <input type="hidden" id="prevqty" value="{{ $product->qty }}"> --}}
-                            <input type="hidden" id="maxorder" value="{{ $product->inventory }}">
+                            <input type="hidden" id="maxorder" value="9999999">
                         </div>
                     </td>
 
                     
+                    <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                        @if(Auth::check())
+                        <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
+                        @endif
+                        <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$product->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
+                    </div>
+
+                    
                     <!-- Product Single - Short Description End -->
-                    @if($product->inventory > 0)
+                    {{-- @if($product->inventory > 0)
                     <div class="d-flex justify-content-evenly align-content-stretch mb-1">
                         @if(Auth::check())
                         <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
@@ -170,7 +170,14 @@
                                 <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a>
                             </div>
                         @endif
-                    @endif
+                    @endif --}}
+                    
+                    {{-- FOR EBOOK
+					@if(\App\Models\Ecommerce\Product::has_ebook($product->id))
+                        <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                            <a href="javascript:;" class="btn btn-success text-white vw-100" onclick="add_to_cart('{{$product->id}}');"> Purchase E-book for {{ number_format($product->ebook_discount_price, 2) }} <i class="icon-star"></i></a>
+                        </div>
+                    @endif --}}
 
                     @if(\App\Models\Ecommerce\Product::has_bundle($product->id))
 
@@ -191,7 +198,7 @@
                                                 </div>
                                                 <div class="col-md-7 ps-md-4">
                                                     <h3 class="mb-2">{{ $bundle->name }}</h3>
-                                                    {!! ($bundle->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($bundle->discount_price, 2) . '</ins> <del>₱' . number_format($bundle->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($bundle->price, 2) . '</ins>') !!}
+                                                    {!! ($bundle->ebook_discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($bundle->ebook_discount_price, 2) . '</ins> <del>₱' . number_format($bundle->ebook_price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($bundle->ebook_price, 2) . '</ins>') !!}
 
                                                     @if($bundle->inventory > 0)
                                                         <div class="d-flex justify-content-evenly align-content-stretch mb-1">
@@ -228,7 +235,7 @@
                                 </div>
                                 <div class="col-md-7">
                                     <h3 class="mb-2">{{ $product->name }} bundle</h3>
-                                    {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
+                                    {!! ($product->ebook_discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->ebook_discount_price, 2) . '</ins> <del>₱' . number_format($product->ebook_price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->ebook_price, 2) . '</ins>') !!}
                                     
                                     @if($product->inventory > 0)
                                         <div class="d-flex justify-content-evenly align-content-stretch mb-1">
@@ -507,8 +514,8 @@
                         </div>
                         <div class="product-desc">
                             <div class="product-title"><h3><a href="#">{{$rel->name}}</a></h3></div>
-                            {{-- <div class="product-price"><ins>₱{{number_format($rel->price,2)}}</ins></div> --}}
-							{!! ($rel->discount_price > 0 ? '<div class="product-price"><del>' . number_format($rel->price, 2) . '</del> <ins>' . number_format($rel->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($rel->price, 2) . '</ins></div>') !!}
+                            {{-- <div class="product-price"><ins>₱{{number_format($rel->ebook_price,2)}}</ins></div> --}}
+							{!! ($rel->ebook_discount_price > 0 ? '<div class="product-price"><del>' . number_format($rel->ebook_price, 2) . '</del> <ins>' . number_format($rel->ebook_discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($rel->ebook_price, 2) . '</ins></div>') !!}
                             <div class="product-rating">
                                 @for($star = 1; $star <= 5; $star++)
                                     <i class="icon-star{{ $star <= App\Models\Ecommerce\ProductReview::getProductRating($rel->id) ? '3' : '-empty' }}"></i>
@@ -527,7 +534,7 @@
     <form id="buy-now-form" method="post" action="{{route('cart.buy-now')}}">
         @csrf
         <input type="text" name="product_id" value="{{ $product->id}}">
-        <input type="text" name="price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
+        <input type="text" name="price" value="{{$product->ebook_discount_price > 0 ? $product->ebook_discount_price : $product->ebook_price}}">
         <input type="text" name="qty" id="buy_now_qty">
     </form>
 </div>
@@ -540,7 +547,7 @@
 
     function buynow(){
         var qty   = parseFloat($('#quantity').val());
-        var remaining_stock = parseFloat($('#remaining_stock').val());
+        var remaining_stock = 1000;
         
         
         if(qty <= remaining_stock){
@@ -572,7 +579,7 @@
 
         var qty   = parseFloat($('#quantity').val());
         var price = parseFloat($('#product_price').val());
-        var remaining_stock = parseFloat($('#remaining_stock').val());
+        var remaining_stock = 1000;
 
         if(qty <= remaining_stock){
 
@@ -584,7 +591,7 @@
                     "_token": "{{ csrf_token() }}",
                 },
                 type: "post",
-                url: "{{route('product.add-to-cart')}}",
+                url: "{{route('ebook.add-to-cart')}}",
                 success: function(returnData) {
                     $("#loading-overlay").hide();
                     if (returnData['success']) {

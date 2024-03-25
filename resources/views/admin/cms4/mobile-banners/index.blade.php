@@ -127,6 +127,7 @@
                                 </th>
                                 <th scope="col" width="60%">Album Name</th>
                                 <th scope="col">Total images</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Date Updated</th>
                                 <th scope="col" class="text-right">Options</th>
                             </tr>
@@ -144,6 +145,7 @@
                                         <strong @if($mobile_album->trashed()) style="text-decoration:line-through;" @endif title="{{ $mobile_album->name }}">{{ $mobile_album->name }}</strong>
                                     </td>
                                     <td>{{ $mobile_album->banners->count() }}</td>
+                                    <td>{{ $mobile_album->status }}</td>
                                     <td><span class="text-nowrap">{{ Setting::date_for_listing($mobile_album->updated_at) }}</span></td>
                                     <td>
                                         @if($mobile_album->trashed())
@@ -167,6 +169,13 @@
                                                         <i data-feather="settings"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
+                                                        
+                                                        @if($mobile_album->status == "PRIVATE")
+                                                            <a class="dropdown-item" href="{{ route('mobile-albums.change-status', $mobile_album->id) }}" onclick="change_status('PUBLISHED')">{{__('common.publish')}}</a>
+                                                        @else
+                                                            <a class="dropdown-item" href="{{ route('mobile-albums.change-status', $mobile_album->id) }}" onclick="change_status('PRIVATE')">{{__('common.private')}}</a>
+                                                        @endif
+
                                                         @if(auth()->user()->has_access_to_route('mobile-albums.quick_update'))
                                                             <a class="dropdown-item" data-toggle="modal" data-target="#promptQuickEdit" href="#" data-id="{{ $mobile_album->id }}" data-name="{{ $mobile_album->name }}" data-transition-in="{{ $mobile_album->transition_in }}" data-transition-out="{{ $mobile_album->transition_out }}" data-transition="{{ $mobile_album->transition }}">Quick Edit</a>
                                                         @endif

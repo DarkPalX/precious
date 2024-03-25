@@ -154,7 +154,6 @@ class ProductFrontController extends Controller
 
     public function product_details($slug)
     {
-        // dd('asd');
         $product = Product::where('slug', $slug)->first();
         $categories = ProductCategory::where('parent_id', 0)->where('status', 'PUBLISHED')->orderBy('name', 'asc')->get();
         $product_reviews = ProductReview::where('product_id', $product->id)->get();
@@ -165,6 +164,21 @@ class ProductFrontController extends Controller
         $relatedProducts = Product::where('category_id',$product->category_id)->where('id','<>',$product->id)->where('status','PUBLISHED')->skip(0)->take(4)->get();
 
         return view($this->folder.'.product-details',compact('product','page', 'relatedProducts', 'categories', 'product_reviews'));
+    }
+
+
+    public function ebook_details($slug)
+    {
+        $product = Product::where('slug', $slug)->first();
+        $categories = ProductCategory::where('parent_id', 0)->where('status', 'PUBLISHED')->orderBy('name', 'asc')->get();
+        $product_reviews = ProductReview::where('product_id', $product->id)->get();
+
+        $page = new Page();
+        $page->name = $product->name;
+
+        $relatedProducts = Product::where('category_id',$product->category_id)->where('id','<>',$product->id)->where('status','PUBLISHED')->skip(0)->take(4)->get();
+
+        return view($this->folder.'.ebook-details',compact('product','page', 'relatedProducts', 'categories', 'product_reviews'));
     }
 
 

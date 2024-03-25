@@ -200,6 +200,13 @@ class Product extends Model
         return $bundles;
     }
 
+    public static function has_ebook($id){
+        
+        $ebook = Product::where('id', $id)->whereStatus('PUBLISHED')->whereNotNull('file_url')->first();
+
+        return $ebook !== null;
+    }
+
     public static function related_products($id){
 
         $products = Product::whereStatus('PUBLISHED')->where('id','<>',$id)->take(3)->get();

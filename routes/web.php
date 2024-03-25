@@ -96,6 +96,7 @@ Route::get('/phpinfo', function () {
     // Cart Management
     Route::get('/cart',                [CartController::class, 'cart'])->name('cart.front.show');
     Route::post('add-to-cart',         [CartController::class, 'add_to_cart'])->name('product.add-to-cart');
+    Route::post('ebbok-add-to-cart',         [CartController::class, 'ebook_add_to_cart'])->name('ebook.add-to-cart');
     Route::post('buy-now',             [CartController::class, 'buy_now'])->name('cart.buy-now');
     Route::post('cart-update',         [CartController::class, 'cart_update'])->name('cart.update');
     Route::post('cart-remove-product', [CartController::class, 'remove_product'])->name('cart.remove_product');
@@ -109,6 +110,7 @@ Route::get('/phpinfo', function () {
     //Products/Books
     Route::get('books/{category?}', [ProductFrontController::class, 'product_list'])->name('product.front.list');
     Route::get('/book-details/{slug}', [ProductFrontController::class, 'product_details'])->name('product.details');
+    Route::get('/ebook-details/{slug}', [ProductFrontController::class, 'ebook_details'])->name('ebook.details');
     Route::get('/search-products', [ProductFrontController::class, 'search_product'])->name('search-product');
     Route::get('/search-contents', [ProductFrontController::class, 'search_content'])->name('search-content');
 
@@ -273,6 +275,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::put('/mobile-albums/quick/{mobile_album}', [MobileAlbumController::class, 'quick_update'])->name('mobile-albums.quick_update');
                 Route::post('/mobile-albums/{mobile_album}/restore', [MobileAlbumController::class, 'restore'])->name('mobile-albums.restore');
                 Route::post('/mobile-albums/banners/{mobile_album}', [MobileAlbumController::class, 'get_album_details'])->name('mobile-albums.banners');
+                Route::get('/mobile-albums/change-status/{id}', [MobileAlbumController::class, 'change_status'])->name('mobile-albums.change-status');
             //
 
             // News

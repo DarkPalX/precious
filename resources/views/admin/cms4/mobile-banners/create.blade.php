@@ -82,6 +82,13 @@
                         <label class="d-block">Transition Duration (seconds) *</label>
                         <input name="transition" type="integer" class="js-range-slider" value="{{ old('transition') }}" required @error('transition') is-invalid @enderror/>
                     </div>
+                    <div class="form-group">
+                        <label class="d-block">Visibility</label>
+                        <div class="custom-control custom-switch @error('status') is-invalid @enderror">
+                            <input type="checkbox" class="custom-control-input" name="status" id="customSwitch1">
+                            <label class="custom-control-label" id="label_visibility" for="customSwitch1">Private</label>
+                        </div>
+                    </div>
                     <div class="form-group mg-b-0">
                         <input type="file" id="upload_image" class="image_path" accept="image/*" multiple>
                         <button type="button" class="btn btn-light btn-xs btn-uppercase upload @error('banners') is-invalid @enderror" type="submit"><i data-feather="upload"></i> Upload banner*</button>
@@ -269,6 +276,16 @@
             }
             dragInit();
             /* End Draggable */
+        });
+
+        
+        $("#customSwitch1").change(function() {
+            if(this.checked) {
+                $('#label_visibility').html('Published');
+            }
+            else{
+                $('#label_visibility').html('Private');
+            }
         });
     </script>
 @endsection

@@ -92,7 +92,7 @@ class PageController extends Controller
         $newData = $request->validated();
         $newData['album_id'] = empty($newData['album_id']) ? 0 : $newData['album_id'];
         $newData['parent_page_id'] = empty($newData['parent_page_id']) ? 0 : $newData['parent_page_id'];
-        $newData['status'] = $request->has('visibility') ? 'PUBLISHED' : 'PRIVATE';
+        $newData['status'] = $request->has('status') ? 'PUBLISHED' : 'PRIVATE';
         $newData['page_type'] = 'standard';
         $newData['slug'] = ModelHelper::convert_to_slug(Page::class, $newData['name'], $newData['parent_page_id']);
         $newData['user_id'] = auth()->id();
