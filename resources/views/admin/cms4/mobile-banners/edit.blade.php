@@ -89,9 +89,9 @@
                 </div>
                 <div class="form-group">
                     <label class="d-block">Visibility</label>
-                    <div class="custom-control custom-switch @error('status') is-invalid @enderror">
-                        <input type="checkbox" class="custom-control-input" name="status" {{ (old("status") == "ON" || $mobile_album->status == "PUBLISHED" ? "checked":"") }} id="customSwitch1">
-                        <label class="custom-control-label" id="label_visibility" for="customSwitch1">{{ucfirst(strtolower($mobile_album->status))}}</label>
+                    <div class="custom-control custom-switch @error('is_active') is-invalid @enderror">
+                        <input type="checkbox" class="custom-control-input" name="is_active" {{ (old("is_active") == "ON" || $mobile_album->is_active == 1 ? "checked":"") }} id="customSwitch1">
+                        <label class="custom-control-label" id="label_visibility" for="customSwitch1">{{ucfirst(strtolower($mobile_album->is_active ? 'PUBLISHED' : 'PRIVATE'))}}</label>
                     </div>
                 </div>
                 <div class="form-group mg-b-0">

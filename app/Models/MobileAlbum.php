@@ -13,7 +13,7 @@ class MobileAlbum extends Model
     use SoftDeletes;
 
     protected $table = 'mobile_albums';
-    protected $fillable = ['name', 'transition_in', 'transition_out', 'transition', 'type', 'banner_type', 'user_id', 'status', 'updated_at'];
+    protected $fillable = ['name', 'transition_in', 'transition_out', 'transition', 'type', 'banner_type', 'user_id', 'is_active', 'updated_at'];
 
     public function pages()
     {
@@ -138,7 +138,7 @@ class MobileAlbum extends Model
     static $oldModel;
     static $tableTitle = 'mobile_album';
     static $name = 'name';
-    static $unrelatedFields = ['id', 'type', 'banner_type', 'status', 'created_at', 'updated_at', 'deleted_at'];
+    static $unrelatedFields = ['id', 'type', 'banner_type', 'is_active', 'created_at', 'updated_at', 'deleted_at'];
     static $logName = [
         'name' => 'name',
         'transition_in' => 'transition-in',

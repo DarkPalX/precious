@@ -145,7 +145,7 @@
                                         <strong @if($mobile_album->trashed()) style="text-decoration:line-through;" @endif title="{{ $mobile_album->name }}">{{ $mobile_album->name }}</strong>
                                     </td>
                                     <td>{{ $mobile_album->banners->count() }}</td>
-                                    <td>{{ $mobile_album->status }}</td>
+                                    <td>{{ $mobile_album->is_active ? 'PUBLISHED' : 'PRIVATE' }}</td>
                                     <td><span class="text-nowrap">{{ Setting::date_for_listing($mobile_album->updated_at) }}</span></td>
                                     <td>
                                         @if($mobile_album->trashed())
@@ -170,10 +170,10 @@
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         
-                                                        @if($mobile_album->status == "PRIVATE")
-                                                            <a class="dropdown-item" href="{{ route('mobile-albums.change-status', $mobile_album->id) }}" onclick="change_status('PUBLISHED')">{{__('common.publish')}}</a>
+                                                        @if($mobile_album->is_active == 0)
+                                                            <a class="dropdown-item" href="{{ route('mobile-albums.change-status', $mobile_album->id) }}" >{{__('common.publish')}}</a>
                                                         @else
-                                                            <a class="dropdown-item" href="{{ route('mobile-albums.change-status', $mobile_album->id) }}" onclick="change_status('PRIVATE')">{{__('common.private')}}</a>
+                                                            <a class="dropdown-item" href="{{ route('mobile-albums.change-status', $mobile_album->id) }}" >{{__('common.private')}}</a>
                                                         @endif
 
                                                         @if(auth()->user()->has_access_to_route('mobile-albums.quick_update'))
