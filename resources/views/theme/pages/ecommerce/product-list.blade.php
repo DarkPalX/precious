@@ -77,7 +77,7 @@
 			
 			<div class="row">
 				@forelse($products as $product)
-					@if(\App\Models\Ecommerce\Product::has_ebook($product->id))
+					{{-- @if(\App\Models\Ecommerce\Product::has_ebook($product->id))
 
 						<div class="product col-md-4 col-sm-6 sf-dress bottommargin-sm">
 							<div class="grid-inner">
@@ -97,7 +97,7 @@
 							</div>
 						</div>
 
-					@endif
+					@endif --}}
 
 					<div class="product col-md-4 col-sm-6 sf-dress bottommargin-sm">
 						<div class="grid-inner">
