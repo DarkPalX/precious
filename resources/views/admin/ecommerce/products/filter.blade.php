@@ -80,8 +80,8 @@
                 </form>
             </div>
             <div class="mg-t-10">
-                {{-- <a class="btn btn-info btn-sm mg-b-20" href="{{ route('product.download.template') }}">Download Template</a>
-                <a class="btn btn-warning btn-sm mg-b-20" href="javascript:void(0)" onclick="$('#prompt-upload').modal('show');">Upload Product</a> --}}
+                <a class="btn btn-info btn-sm mg-b-20" href="{{ route('product.download.template') }}">Download Template</a>
+                <a class="btn btn-warning btn-sm mg-b-20" href="javascript:void(0)" onclick="$('#prompt-upload').modal('show');">Upload Product</a>
                 @if (auth()->user()->has_access_to_route('products.create'))
                     <a class="btn btn-primary btn-sm mg-b-20" href="{{ route('products.create') }}">{{__('standard.products.product.create')}}</a>
                 @endif

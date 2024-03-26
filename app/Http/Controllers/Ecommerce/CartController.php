@@ -317,7 +317,7 @@ class CartController extends Controller
             $totalProducts = count(session('cart', []));
         }
 
-        $coupons = Coupon::where('status','ACTIVE')->get();
+        $coupons = Coupon::where('status','ACTIVE')->where('activation_type','<>','manual')->get();
 
         $page = new Page();
         $page->name = 'Cart';

@@ -182,9 +182,10 @@
 										<td class="cart-product-name text-end">
 											<span class="amount">₱{{ number_format(auth()->user()->ecredits,2) }}</span>
 											<div class="switch mt-1 float-end ms-3">
-												<input id="switch-toggle-1" class="switch-toggle switch-rounded-mini switch-toggle-round" type="checkbox">
-												<label for="switch-toggle-1"></label>
+												<input id="ecredit_toggle" class="switch-toggle switch-rounded-mini switch-toggle-round" type="checkbox">
+												<label for="ecredit_toggle"></label>
 											</div>
+                                            <input id="ecredit_balance" value="{{ auth()->user()->ecredits }}" hidden />
 										</td>
 									</tr>
 	                                <tr class="cart_item" id="couponDiscountDiv" style="display: none;">
@@ -734,6 +735,24 @@
                 }
             });
         }
+
+        $('#ecredit_toggle').change(function(){
+            var grandTotalInput = $('#grandTotal');
+            var grandTotalDisplay = $('#grandtotal');
+            var ecreditBalanceInput = $('#ecredit_balance');
+            
+            var grandtotal = parseFloat(grandTotalInput.val());
+            var ecredit_balance = parseFloat(ecreditBalanceInput.val());
+
+            if (!isNaN(grandtotal) && !isNaN(ecredit_balance)) {
+                var newGrandTotal = this.checked ? grandtotal - ecredit_balance : grandtotal + ecredit_balance;
+
+                grandTotalInput.val(newGrandTotal.toFixed(2));
+                grandTotalDisplay.html('₱' + FormatAmount(newGrandTotal, 2)); // FormatAmount is a function for formatting the amount
+            } else {
+                console.error('Invalid input values');
+            }
+        });
 
         $('#couponManualBtn').click(function(){
 
