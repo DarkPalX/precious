@@ -7,7 +7,7 @@
 @section('content')
 <div class="container topmargin-lg bottommargin-lg">	
 	<div class="row">
-		<div id="processTabs">
+		<!-- <div id="processTabs">
 			<ul class="process-steps row col-mb-30">
 				<li class="col-sm-6 col-lg-3">
 					<a href="#ptab1" class="i-circled i-bordered i-alt mx-auto btn_ptab1">1</a>
@@ -205,7 +205,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							@php $subtotal = 0; $totalqty = 0; $grandtotal = 0; $ecredit_balance = $use_ecredit ? auth()->user()->ecredits : 0; @endphp
+							@php $subtotal = 0; $totalqty = 0; $grandtotal = 0; @endphp
 							@foreach($orders as $order)
 								@php
 									$subtotal += $order->price*$order->qty;
@@ -289,7 +289,7 @@
 													<strong>Total Coupon Discount</strong>
 												</td>
 
-												<td class="cart-product-name text-end">
+												<td class="cart-product-name text-right">
 													<span class="amount">₱{{ number_format($cart->coupon_discount,2) }}</span>
 												</td>
 											</tr>
@@ -318,15 +318,17 @@
 										{{--  --}}
 
 
-										<tr class="cart_item" style="display: {{ !$use_ecredit ? 'none' : ''}}">
+										<tr class="cart_item">
 											<td class="cart-product-name">
 												<strong>My E-Wallet</strong>
 											</td>
 
 											<td class="cart-product-name text-end">
-												<span class="amount">₱{{ number_format(auth()->user()->ecredits,2) }}</span>
+												<span class="amount">{{ auth()->user()->ecredits }}</span>
 											</td>
 										</tr>
+
+
 										
 										<tr class="cart_item">
 											<td class="cart-product-name">
@@ -343,9 +345,8 @@
 											</td>
 
 											<td class="cart-product-name text-end">
-												<input type="hidden" name="total_amount" id="total_amount" value="{{ ($subtotal - $cart->coupon_discount) - $ecredit_balance }}">
-												<span class="amount color lead" id="span_total_amount"><strong>₱{{ number_format(($subtotal - $cart->coupon_discount) - $ecredit_balance ,2) }}</strong></span>
-												<input id="ecredit_balance" name="ecredit_amount" value="{{ $use_ecredit ? auth()->user()->ecredits : 0 }}" hidden />
+												<input type="hidden" name="total_amount" id="total_amount" value="{{$subtotal}}">
+												<span class="amount color lead"><strong>₱{{ number_format($subtotal,2) }}</strong></span>
 											</td>
 										</tr>
 									</tbody>
@@ -355,14 +356,14 @@
 					</div>
 
 
-					{{-- <input type="hidden" id="coupon_total_discount" name="coupon_total_discount" value="0"> --}}
+					<input type="hidden" id="coupon_total_discount" name="coupon_total_discount" value="0">
 
 					<br>
 					<a href="#" class="btn bg-color text-white tab-linker float-start" rel="3"><i class="icon-arrow-circle-left"></i> Previous</a>
 					<a href="javascript:;" class="btn bg-color text-white float-end" onclick="place_order();">Complete Order <i class="icon-check-circle"></i></a>
 				</div>
 			</form>
-		</div>
+		</div> -->
 	</div>	
 </div>
 @endsection
@@ -492,9 +493,8 @@
 
         var orderAmount = parseFloat($('#totalAmountWithoutCoupon').val());
         var couponDiscount = parseFloat($('#coupon_total_discount').val());
-        var ecreditBalance = parseFloat($('#ecredit_balance').val());
 
-        var orderTotal  = (orderAmount-couponDiscount) - ecreditBalance;
+        var orderTotal  = orderAmount-couponDiscount;
         var deliveryFee = delivery_fee-delivery_discount;
 
         var grandTotal = parseFloat(orderTotal)+parseFloat(deliveryFee);

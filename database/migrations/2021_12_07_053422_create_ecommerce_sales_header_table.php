@@ -35,6 +35,7 @@ class CreateEcommerceSalesHeaderTable extends Migration
             $table->decimal('tax_amount',16,4)->default(0);
             $table->decimal('net_amount',16,4)->default(0);
             $table->decimal('discount_amount',16,4)->default(0);
+            $table->decimal('ecredit_amount',16,4)->default(0);
             $table->string('payment_status',250)->default('UNPAID');            
             $table->string('status', 100)->default('active');
             $table->text('other_instruction')->nullable();

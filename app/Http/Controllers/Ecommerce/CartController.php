@@ -404,6 +404,7 @@ class CartController extends Controller
                 abort(403, 'Administrator accounts are not authorized to create sales transactions.');
             }
 
+            $use_ecredit = $request->ecredit_toggle ? 1 : 0;
 
             $data   = $request->all();
             $cartId = $data['cart_id'];
@@ -445,7 +446,10 @@ class CartController extends Controller
                 'coupon_discount' => $request->coupon_total_discount
             ]);
 
+            session(['use_ecredit' => $use_ecredit]);
+
             return redirect()->route('cart.front.checkout');
+
         } else {
             return redirect()->route('customer-front.login');
         }
@@ -462,9 +466,11 @@ class CartController extends Controller
 
         $coupons = CouponCart::where('customer_id', Auth::id())->get();
 
+        $use_ecredit = session('use_ecredit');
+
         // $lbc_provinces = LBCHelper::provinces();
 
-        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page'));
+        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'use_ecredit'));
         // return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'lbc_provinces'));
     }
 
@@ -511,8 +517,21 @@ class CartController extends Controller
         $totalPrice  = number_format($request->total_amount,2,'.','');
         $orderNumber = $this->next_order_number();  
 
-
         $customerAddress = $request->customer_delivery_barangay.' '.$request->customer_delivery_city.' '.$request->customer_delivery_province.' '.$request->customer_delivery_zip;
+
+        //FOR THE ECREDIT
+        
+        $current_ecredit = number_format($request->ecredit_amount,2,'.','');
+        $new_ecredit = ($current_ecredit - $totalPrice) > 0 ? $current_ecredit - $totalPrice : 0;
+
+        User::where('id', Auth::user()->id)
+        ->update([
+            'ecredits' => $new_ecredit
+        ]);
+
+        //
+        
+        $ecredit_amount = ($current_ecredit - $totalPrice) < 0 ? $current_ecredit : $totalPrice;
 
         $requestData = $request->all();
         $requestData['user_id'] = Auth::id();
@@ -526,16 +545,15 @@ class CartController extends Controller
         $requestData['gross_amount'] = number_format($totalPrice,2,'.','');
         $requestData['net_amount'] = number_format($totalPrice,2,'.','');
         $requestData['discount_amount'] = $coupon_total_discount;
+        $requestData['ecredit_amount'] = $ecredit_amount;
         $requestData['payment_method'] = $request->payment_method;
         $salesHeader = SalesHeader::create($requestData);
         session::put('shid', $salesHeader->id); 
 
-
         $this->store_items($salesHeader->id);
 
-
         Cart::where('user_id', Auth::id())->delete();
-        //Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
+        Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
 
         return redirect(route('profile.sales'))->with('success', 'Order has been placed.');
     }

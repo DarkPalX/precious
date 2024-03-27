@@ -182,7 +182,7 @@
 										<td class="cart-product-name text-end">
 											<span class="amount">₱{{ number_format(auth()->user()->ecredits,2) }}</span>
 											<div class="switch mt-1 float-end ms-3">
-												<input id="ecredit_toggle" class="switch-toggle switch-rounded-mini switch-toggle-round" type="checkbox">
+												<input id="ecredit_toggle" name="ecredit_toggle" class="switch-toggle switch-rounded-mini switch-toggle-round" type="checkbox" {{ auth()->user()->ecredits > 0 ? '' : 'disabled'}}>
 												<label for="ecredit_toggle"></label>
 											</div>
                                             <input id="ecredit_balance" value="{{ auth()->user()->ecredits }}" hidden />
