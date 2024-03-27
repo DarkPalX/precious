@@ -648,7 +648,7 @@ class ProductController extends Controller
         );
 
         $products = Product::all();
-        $columns = array('SKU', 'Name', 'Author', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'UoM', 'Reorder Point');
+        $columns = array('SKU', 'Name', 'Author', 'Book Type', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point');
 
         foreach($attributes as $attr){
             array_push($columns, $attr->name);
@@ -682,7 +682,7 @@ class ProductController extends Controller
                 // number of fields in the csv
                 $col_count = count($data);
 
-                $excel_columns = array('SKU', 'Name', 'Author', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'UoM', 'Reorder Point');
+                $excel_columns = array('SKU', 'Name', 'Author', 'Book Type', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point');
 
                 $attributes = FormAttribute::orderBy('name', 'asc')->get();
                 foreach($attributes as $attr){
@@ -700,14 +700,16 @@ class ProductController extends Controller
                         'sku' => str_replace('?',' ',$code),
                         'name' => str_replace('?',' ',$name),
                         'author' => $data[2],
+                        'book_type' => $data[3],
                         'slug' => $slug,
-                        'description' => '<p>' . $data[3] . '</p>',
-                        'price' => str_replace(',','',$data[4]),
-                        'discount_price' => str_replace(',','',$data[5]),
-                        'size' => $data[6],
-                        'weight' => $data[7],
-                        'uom' => $data[8],
-                        'reorder_point' => $data[9] ?: 0,
+                        'description' => '<p>' . $data[4] . '</p>',
+                        'price' => str_replace(',','',$data[5]),
+                        'discount_price' => str_replace(',','',$data[6]),
+                        'size' => $data[7],
+                        'weight' => $data[8],
+                        'texture' => $data[9],
+                        'uom' => $data[10],
+                        'reorder_point' => $data[11] ?: 0,
                         'status' => 'PRIVATE',
                         'created_by' => Auth::id()
                     ]);
