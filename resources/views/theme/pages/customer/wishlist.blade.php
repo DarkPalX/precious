@@ -182,7 +182,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
+            
             var qty   = 1;
             var price = parseFloat($('#product_price' + product).val());
             var remaining_stock = parseFloat($('#remaining_stock' + product).val());
@@ -193,6 +193,7 @@
                     data: {
                         "product_id": product, 
                         "qty": qty,
+                        "price": price,
                         "_token": "{{ csrf_token() }}",
                     },
                     type: "post",
@@ -264,7 +265,7 @@
                 });
 
                 $('#quantity').val(1);
-                $('#remaining_stock'.product).val(remaining_stock - qty);
+                $('#remaining_stock').val(remaining_stock - qty);
             }
             else{
                 swal({
@@ -280,6 +281,112 @@
                 });
             }
         }
+
+        // function add_to_cart(product, name, image){
+
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+
+        //     var qty   = 1;
+        //     var price = parseFloat($('#product_price' + product).val());
+        //     var remaining_stock = parseFloat($('#remaining_stock' + product).val());
+
+        //     if(qty <= remaining_stock){
+
+        //         $.ajax({
+        //             data: {
+        //                 "product_id": product, 
+        //                 "qty": qty,
+        //                 "_token": "{{ csrf_token() }}",
+        //             },
+        //             type: "post",
+        //             url: "{{route('product.add-to-cart')}}",
+        //             success: function(returnData) {
+        //                 $("#loading-overlay").hide();
+        //                 if (returnData['success']) {
+
+        //                     $('.top-cart-number').html(returnData['totalItems']);
+
+
+        //                     var cartotal = parseFloat($('#input-top-cart-total').val());
+        //                     var productotal = price*qty;
+        //                     var newtotal = cartotal+productotal;
+
+        //                     $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+        //                     var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
+        //                     if (cartItem.length) {
+        //                         // If the item already exists in the cart, update its quantity and price
+        //                         var oldQty = parseFloat(cartItem.find('.top-cart-item-quantity').text().trim().replace('x ', ''));
+        //                         var newQty = oldQty + qty;
+        //                         var oldPrice = parseFloat(cartItem.find('.top-cart-item-price').text().trim().replace('₱', ''));
+        //                         var productTotal = price * qty;
+        //                         var newTotal = oldPrice + productTotal;
+
+        //                         cartItem.find('.top-cart-item-quantity').text('x ' + newQty);
+        //                         // cartItem.find('.top-cart-item-price').text('₱' + newTotal.toFixed(2));
+        //                     } else {
+
+        //                         $('#top-cart-items').append(
+        //                             '<div class="top-cart-item" data-product-id="' + product + '">' +
+        //                             '<div class="top-cart-item-image border-0">' +
+        //                             '<a href="#"><img src="{{ asset('storage/products/') }}/' + image + '" alt="Cart Image 1" /></a>' +
+        //                             '</div>' +
+        //                             '<div class="top-cart-item-desc">' +
+        //                             '<div class="top-cart-item-desc-title">' +
+        //                             '<a href="#" class="fw-medium">' + name + '</a>' +
+        //                             '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
+        //                             '<div class="d-flex mt-2">' +
+        //                             '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
+        //                             '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
+        //                             '</div>' +
+        //                             '</div>' +
+        //                             '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
+        //                             '</div>' +
+        //                             '</div>'
+        //                         );
+        //                     }
+
+        //                     $.notify("Product Added to your cart",{ 
+        //                         position:"bottom right", 
+        //                         className: "success" 
+        //                     });
+
+        //                 } else {
+        //                     swal({
+        //                         toast: true,
+        //                         position: 'center',
+        //                         title: "Warning!",
+        //                         text: "We have insufficient inventory for this item.",
+        //                         type: "warning",
+        //                         showCancelButton: true,
+        //                         timerProgressBar: true, 
+        //                         closeOnCancel: false
+
+        //                     });
+        //                 }
+        //             }
+        //         });
+
+        //         $('#quantity').val(1);
+        //         $('#remaining_stock'.product).val(remaining_stock - qty);
+        //     }
+        //     else{
+        //         swal({
+        //             toast: true,
+        //             position: 'center',
+        //             title: "Warning!",
+        //             text: "We have insufficient inventory for this item.",
+        //             type: "warning",
+        //             showCancelButton: true,
+        //             timerProgressBar: true, 
+        //             closeOnCancel: false
+
+        //         });
+        //     }
+        // }
         
     </script>
     

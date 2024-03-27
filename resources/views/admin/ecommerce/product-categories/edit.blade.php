@@ -28,7 +28,7 @@
             <form action="{{ route('product-categories.update',$category->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <div class="form-group" hidden>
+                    {{-- <div class="form-group" hidden>
                         <label class="d-block">Upload Logo *</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input @error('image_url') is-invalid @enderror" name="image_url" id="image_url"  accept="image/*">
@@ -46,7 +46,7 @@
                         <div>
                             <img src="{{ $category->image_url }}" height="auto" width="180" alt="Company Logo">
                         </div>
-                    @endif
+                    @endif --}}
 
                     <div class="form-group">
                         <label class="d-block">Name *</label>
@@ -65,6 +65,33 @@
                                 <option value="{{ $productCategory->id }}" @if ($productCategory->id == $category->parent_id) selected @endif>{{ $productCategory->name }}</option>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="d-block">Upload Image</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input @error('mobile_file_url') is-invalid @enderror" name="mobile_file_url" id="mobile_file_url" accept="image/jpeg, image/png, image/gif, video/mp4" title="{{ $category->get_image_file_name() }}">
+                            <label class="custom-file-label" for="mobile_file_url" id="mobile_ad_preview">@if (empty($category->mobile_file_url)) Choose file @else {{$category->get_mobile_image_file_name()}} @endif</label>
+                            <input type="text" id="current_mobile_file" name="current_mobile_file" value="{{ $category->mobile_file_url }}" hidden/>
+                        </div>
+                        <p class="tx-10">
+                            Required image dimension: {{ env('CATEGORY_IMAGE_WIDTH') }}px by {{ env('CATEGORY_IMAGE_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png .gif
+                        </p>
+                        @error('mobile_file_url')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <div id="mobile_image_div" @if(empty($category->mobile_file_url)) style="display:none;" @endif>
+                            
+                            {{-- for image --}}
+                            <img src="{{ asset($category->mobile_file_url) }}" id="mobile_img_temp" alt="" height="{{ env('CATEGORY_IMAGE_HEIGHT') }}" width="{{ env('CATEGORY_IMAGE_WIDTH') }}" style="display: {{ Str::contains($category->mobile_file_url, 'mp4') ? 'none' : '' }}">  <br /><br />
+                        
+                            {{-- for video --}}
+                            <video autoplay="" muted="" loop="" id="mobile_vid_temp" style="object-fit:none; display: {{ Str::contains($category->mobile_file_url, 'mp4') ? '' : 'none' }}">
+                                <source src="{{ asset($category->mobile_file_url) }}" type="video/mp4">
+                            </video>
+
+                            <a href="javascript:void(0)" class="btn btn-xs btn-danger" onclick="remove_mobile_image();">Remove Image</a>
+                        </div>
                     </div>
 
                     {{-- <div class="form-group">
@@ -97,6 +124,7 @@
 
 @section('pagejs')
     <script src="{{ asset('lib/bselect/dist/js/bootstrap-select.js') }}"></script>
+    <script src="{{ asset('js/file-upload-validation.js') }}"></script>
 @endsection
 
 @section('customjs')
@@ -136,5 +164,60 @@
                 $('#category_slug').html("<a target='_blank' href='"+slug_url+"'>"+slug_url+"</a>");
             });
         });
+    </script>
+    
+    <script>
+        function mobileReadURL(file) {
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#mobile_ad_preview').html(file.name);
+                $('#mobile_file_url').attr('title', file.name);
+                $('#mobile_img_temp').attr('src', e.target.result);
+                $('#mobile_vid_temp').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+            $('#mobile_image_div').show();
+
+            if (file.type === 'video/mp4') {
+                $('#mobile_img_temp').hide();
+                $('#mobile_vid_temp').show();
+            }
+            else{
+                $('#mobile_img_temp').show();
+                $('#mobile_vid_temp').hide();
+            }
+        }
+
+        $("#mobile_file_url").change(function(evt) {
+
+            $('#mobile_ad_preview').html('Choose file');
+            $('#mobile_img_temp').attr('src', '');
+            $('#mobile_image_div').hide();
+
+            let files = evt.target.files;
+            let maxSize = 5;
+            let validateFileTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4"];
+            let requiredWidth = "{{ env('CATEGORY_IMAGE_WIDTH') }}";
+            let requiredHeight =  "{{ env('CATEGORY_IMAGE_HEIGHT') }}";
+
+            validate_files(files, mobileReadURL, maxSize, validateFileTypes, requiredWidth, requiredHeight, empty_mobile_banner_value);
+        });
+
+        function empty_mobile_banner_value()
+        {
+            $('#mobile_file_url').removeAttr('title');
+            $('#mobile_file_url').val('');
+        }
+
+        function remove_mobile_image() {
+            $('#mobile_ad_preview').html('Choose file');
+            $('#mobile_file_url').removeAttr('title');
+            $('#mobile_file_url').val('');
+            $('#current_mobile_file').val('');
+            $('#mobile_img_temp').attr('src', '');
+            $('#mobile_image_div').hide();
+        }
     </script>
 @endsection

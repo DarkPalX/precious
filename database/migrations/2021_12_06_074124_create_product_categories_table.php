@@ -19,6 +19,7 @@ class CreateProductCategoriesTable extends Migration
             $table->string('name', 250);
             $table->text('slug');
             $table->text('description')->nullable();
+            $table->text('mobile_file_url')->nullable();
             $table->string('status', 100);
             $table->integer('menu_order_no');
             $table->integer('created_by');

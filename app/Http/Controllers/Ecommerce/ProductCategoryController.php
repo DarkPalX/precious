@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 use Facades\App\Helpers\ListingHelper;
+use Facades\App\Helpers\FileHelper;
 
 use App\Models\Ecommerce\ProductCategory;
 use App\Models\{
@@ -82,10 +83,12 @@ class ProductCategoryController extends Controller
     {
         Validator::make($request->all(), [
             'category_id' => 'nullable',
+            'mobile_file_url' => 'nullable',
             'name' => 'required',
         ])->validate();
 
         $requestData = $request->all();
+        $requestData['mobile_file_url'] = $request->hasFile('mobile_file_url') ? FileHelper::move_to_product_file_folder($request->file('mobile_file_url'), 'storage/product_category')['url'] : null;
         $requestData['status'] = isset($request->visibility) ? 'PUBLISHED' : 'PRIVATE';
         $requestData['created_by'] = Auth::id();
 
@@ -130,9 +133,9 @@ class ProductCategoryController extends Controller
     public function update(Request $request, $id)
     {
         Validator::make($request->all(), [
+            'category_id' => 'nullable',
+            'mobile_file_url' => 'nullable',
             'name' => 'required',
-            'description' => 'required|min:3|max:1000',
-            'image_url' => 'mimes:png,jpg,jpeg|max:1000|dimensions:width=400,height=300'
         ])->validate();
 
         $productCategory = ProductCategory::findOrFail($id);
@@ -144,17 +147,35 @@ class ProductCategoryController extends Controller
         else{
             $slug = Page::convert_to_slug($request->name);
         }
+        
+        
+        //FOR MOBILE FILE UPDATE VALUE
+        $updateData['mobile_file_url'] = null;
+
+        $current_mobile_file = explode('/', $request->current_mobile_file)[1] ?? '';
+        if($request->hasFile('mobile_file_url')){
+            $updateData['mobile_file_url'] = FileHelper::move_to_product_file_folder($request->file('mobile_file_url'), 'storage/product_category')['url'];
+        }
+        else{
+            if($current_mobile_file){
+                $updateData['mobile_file_url'] = $productCategory->mobile_file_url;
+            }
+            else{
+                $updateData['mobile_file_url'] = null;
+            }
+        }
 
         $productCategory->update([
             'name' => $request->name,
             'parent_id' => $request->parent_page,
             'slug' => $slug,
             'status' => (isset($request->visibility) ? 'PUBLISHED' : 'PRIVATE'),
+            'mobile_file_url' => $updateData['mobile_file_url'],
             'description' => $request->description,
             'created_by' => auth()->user()->id
         ]);
 
-        return redirect()->route('product-categories.index')->with('success', __('standard.products.category.update_success'));
+        return redirect()->back()->with('success', __('standard.products.category.update_success'));
     }
 
     /**

@@ -18,7 +18,7 @@ class ProductCategory extends Model
     protected $table = 'product_categories';
     protected $timestamp = true;
 
-    protected $fillable = [ 'parent_id', 'name', 'slug', 'description', 'status', 'menu_order_no', 'created_by',];
+    protected $fillable = [ 'parent_id', 'name', 'slug', 'description', 'mobile_file_url', 'status', 'menu_order_no', 'created_by',];
 
     /**
      * Get the options for generating the slug.
@@ -85,6 +85,26 @@ class ProductCategory extends Model
 
         return $counter;
     }
+    
+    public function get_image_file_name()
+    {
+        $path = explode('/', $this->file_url);
+        $nameIndex = count($path) - 1;
+        if ($nameIndex < 0)
+            return '';
+
+        return $path[$nameIndex];
+    }
+
+    public function get_mobile_image_file_name()
+    {
+        $path = explode('/', $this->mobile_file_url);
+        $nameIndex = count($path) - 1;
+        if ($nameIndex < 0)
+            return '';
+
+        return $path[$nameIndex];
+    }
 
     // public function sub_category($categoryParentId)
     // {
@@ -103,6 +123,7 @@ class ProductCategory extends Model
         'parent_id' => 'parent id',
         'name' => 'name',
         'description' => 'description',
+        'mobile_file_url' => 'mobile_file_url',
         'status' => 'status',
         'menu_order_no' => 'sequence number'
     ];

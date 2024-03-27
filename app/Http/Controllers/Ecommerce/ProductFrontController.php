@@ -156,7 +156,7 @@ class ProductFrontController extends Controller
     {
         $product = Product::where('slug', $slug)->first();
         $categories = ProductCategory::where('parent_id', 0)->where('status', 'PUBLISHED')->orderBy('name', 'asc')->get();
-        $product_reviews = ProductReview::where('product_id', $product->id)->get();
+        $product_reviews = ProductReview::where('product_id', $product->id)->orderByDesc('updated_at')->get();
 
         $page = new Page();
         $page->name = $product->name;
@@ -171,7 +171,7 @@ class ProductFrontController extends Controller
     {
         $product = Product::where('slug', $slug)->first();
         $categories = ProductCategory::where('parent_id', 0)->where('status', 'PUBLISHED')->orderBy('name', 'asc')->get();
-        $product_reviews = ProductReview::where('product_id', $product->id)->get();
+        $product_reviews = ProductReview::where('product_id', $product->id)->orderByDesc('updated_at')->get();
 
         $page = new Page();
         $page->name = $product->name;
