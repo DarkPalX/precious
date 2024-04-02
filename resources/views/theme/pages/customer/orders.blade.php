@@ -170,6 +170,12 @@
 
                                                                 <td>'.number_format($total_sales-$sale->discount_amount,2).'</td>
                                                             </tr>
+
+                                                            <tr style="font-weight:bold;">
+                                                                <td colspan="3">E-Wallet Payment</td>
+                                                                <td>'.number_format($sale->ecredit_amount,2).'</td>
+                                                            </tr>
+
                                                         </tbody>
                                                     </table>
                                                 </div>

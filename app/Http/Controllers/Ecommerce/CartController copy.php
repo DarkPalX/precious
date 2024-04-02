@@ -514,9 +514,9 @@ class CartController extends Controller
     {
         $coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
 
-        $totalPrice  = number_format($request->payment_method == 'ecredit' ? 0 : ($request->total_amount < 0 ? 0 : $request->total_amount), 2,'.','');
+        $totalPrice  = number_format($request->total_amount < 0 ? 0 : $request->total_amount, 2,'.','');
         $realTotalPrice  = number_format($request->total_amount < 0 ? $request->total_amount + $request->ecredit_amount : $request->total_amount, 2,'.','');
-        $orderNumber = $this->next_order_number(); 
+        $orderNumber = $this->next_order_number();  
 
         $customerAddress = $request->customer_delivery_barangay.' '.$request->customer_delivery_city.' '.$request->customer_delivery_province.' '.$request->customer_delivery_zip;
 

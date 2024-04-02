@@ -78,8 +78,8 @@
                 <tr class="pd-20">
                     <td class="tx-nowrap">{{$details->product_name}}</td>
                     <td class="tx-right">{{number_format($details->qty, 0)}}</td>
-                    <td class="tx-right">{{number_format($details->product->price, 2)}}</td>
-                    <td class="tx-right">{{number_format($details->product->discount_price, 2)}}</td>
+                    <td class="tx-right">{{number_format($details->price+$details->discount_amount, 2)}}</td>
+                    <td class="tx-right">{{number_format($details->price, 2)}}</td>
                     <td class="tx-right">{{number_format($details->discount_amount, 2)}}</td>
                     <td class="tx-right">{{number_format($product_subtotal, 2)}}</td>
                 </tr>
@@ -122,16 +122,8 @@
 
                 <tr>
                     <td  class="tx-right" colspan="5"><strong>Grand Total:</strong></td>
-                    <td class="tx-right"><strong>{{ number_format($sales->net_amount + $sales->ecredit_amount, 2) }}</strong></td>
-                    {{-- <td class="tx-right"><strong>{{ number_format($sales->net_amount, 2) }}</strong></td> --}}
+                    <td class="tx-right"><strong>{{ number_format($net_amount, 2) }}</strong></td>
                 </tr>
-
-                @if($sales->ecredit_amount > 0)
-                <tr>
-                    <td  class="tx-right" colspan="5"><strong>E-Wallet Payment:</strong></td>
-                    <td class="tx-right"><strong>{{number_format($sales->ecredit_amount, 2)}}</strong></td>
-                </tr>
-                @endif
             </tbody>
         </table>
     </div>

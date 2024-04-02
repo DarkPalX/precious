@@ -218,20 +218,25 @@ class CustomerFrontController extends Controller
             ['email.exists' => trans('passwords.user')]
         );
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->withTrashed()->first();
 
-        $user->send_reset_password_email();
-
-        if (\Mail::failures()) {
+        if ($user->trashed()) {
             return back()
-                ->withInput($request->only('email'))
-                ->withErrors(['email' => trans('passwords.user')]);
-        }
+            ->with('error', 'Your account has been disabled, please contact an administrator.');
+        } else {
+            $user->send_reset_password_email();
 
-        // return back()->with('status', trans('passwords.sent'))->with('success', 'Registration Successful! You are now logged in');
-        return back()
-        ->with('status', trans('passwords.sent'))
-        ->with('success', 'Please check your email for password reset link');
+            if (\Mail::failures()) {
+                return back()
+                    ->withInput($request->only('email'))
+                    ->withErrors(['email' => trans('passwords.user')]);
+            }
+
+            // return back()->with('status', trans('passwords.sent'))->with('success', 'Registration Successful! You are now logged in');
+            return back()
+            ->with('status', trans('passwords.sent'))
+            ->with('success', 'Please check your email for password reset link');
+        }
 
     }
 

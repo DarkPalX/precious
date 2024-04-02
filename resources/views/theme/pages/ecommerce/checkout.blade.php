@@ -139,24 +139,10 @@
 					<h2>Payment Method</h2>
 					
 					<div class="row justify-content-center">
-						<div class="col-sm-6 col-md-4">
-							<label for="payment-option-card" class="w-100">
-								<div class="pricing-box text-center shadow-none border">
-									<input type="radio" name="payment_method" value="credit" class="required mt-3" autocomplete="off" id="payment-option-card" checked>
-									<div class="pricing-price">
-										<h3 class="nott ls0 mb-0">Credit / Debit Card</h3>
-									</div>
-									<div class="px-3">
-										<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-									</div>
-								</div>
-							</label>
-						</div>
-						
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-4 col-md-4">
 							<label for="payment-option-card2" class="w-100">
 								<div class="pricing-box text-center shadow-none border">
-									<input type="radio" name="payment_method" value="cod" class="required mt-3" autocomplete="off" id="payment-option-card2">
+									<input type="radio" name="payment_method" value="cod" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card1" checked>
 									<div class="pricing-price">
 										<h3 class="nott ls0 mb-0">Cash on Delivery</h3>
 									</div>
@@ -166,6 +152,50 @@
 								</div>
 							</label>
 						</div>
+
+						<div class="col-sm-4 col-md-4">
+							<label for="payment-option-card" class="w-100">
+								<div class="pricing-box text-center shadow-none border">
+									<input type="radio" name="payment_method" value="credit" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card2">
+									<div class="pricing-price">
+										<h3 class="nott ls0 mb-0">Credit / Debit Card</h3>
+									</div>
+									<div class="px-3">
+										<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+									</div>
+								</div>
+							</label>
+						</div>
+
+						{{-- FOR ECREDIT --}}
+
+						@php $cartsubtotal = 0; @endphp
+
+						@foreach($orders as $order)
+							@php
+								$cartsubtotal += $order->price*$order->qty;
+							@endphp
+						@endforeach
+
+						@php 
+							$ordersubtotal = ($cartsubtotal - $cart->coupon_discount) - auth()->user()->ecredits;
+						@endphp
+
+						@if(auth()->user()->ecredits > $ordersubtotal)
+							<div class="col-sm-4 col-md-4">
+								<label for="payment-option-card" class="w-100">
+									<div class="pricing-box text-center shadow-none border">
+										<input type="radio" name="payment_method" value="ecredit" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card3">
+										<div class="pricing-price">
+											<h3 class="nott ls0 mb-0">E-Wallet</h3>
+										</div>
+										<div class="px-3">
+											<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+										</div>
+									</div>
+								</label>
+							</div>
+						@endif
 					</div>
 					
 					
@@ -318,13 +348,17 @@
 										{{--  --}}
 
 
-										<tr class="cart_item" style="display: {{ !$use_ecredit ? 'none' : ''}}">
+										<tr id="ecredit_div" class="cart_item" style="display: none">
 											<td class="cart-product-name">
 												<strong>My E-Wallet</strong>
 											</td>
-
+											
 											<td class="cart-product-name text-end">
 												<span class="amount">₱{{ number_format(auth()->user()->ecredits,2) }}</span>
+												<div class="switch mt-1 float-end ms-3">
+													<input id="ecredit_toggle" name="ecredit_toggle" class="switch-toggle switch-rounded-mini switch-toggle-round" type="checkbox" checked disabled>
+													<label for="ecredit_toggle"></label>
+												</div>
 											</td>
 										</tr>
 										
@@ -345,7 +379,8 @@
 											<td class="cart-product-name text-end">
 												<input type="hidden" name="total_amount" id="total_amount" value="{{ ($subtotal - $cart->coupon_discount) - $ecredit_balance }}">
 												<span class="amount color lead" id="span_total_amount"><strong>₱{{ number_format(($subtotal - $cart->coupon_discount) - $ecredit_balance ,2) }}</strong></span>
-												<input id="ecredit_balance" name="ecredit_amount" value="{{ $use_ecredit ? auth()->user()->ecredits : 0 }}" hidden />
+												<input id="ecredit_balance" name="ecredit_amount" value="0"  hidden/>
+												{{-- <input id="ecredit_balance" name="ecredit_amount" value="{{ $use_ecredit ? auth()->user()->ecredits : 0 }}" hidden /> --}}
 											</td>
 										</tr>
 									</tbody>
@@ -947,5 +982,17 @@
             return false;
         }
     }
+
+	$(document).on('change', '.payment-option', function() {  
+
+		if($('#payment-option-card3').is(':checked')) {
+			$('#ecredit_balance').val({{ auth()->user()->ecredits }});
+			$('#ecredit_div').show();
+		} else {
+			$('#ecredit_balance').val(0);
+			$('#ecredit_div').hide();
+		}
+	});
+
 </script>
 @endsection

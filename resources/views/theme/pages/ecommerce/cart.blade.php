@@ -174,7 +174,7 @@
 	                                        <span class="amount" id="subtotal">₱{{ number_format($grandtotal,2) }}</span>
 										</td>
 									</tr>
-									<tr class="cart_item">
+									{{-- <tr class="cart_item">
 										<td class="cart-product-name">
 											<strong>My E-Wallet</strong>
 										</td>
@@ -187,7 +187,7 @@
 											</div>
                                             <input id="ecredit_balance" value="{{ auth()->user()->ecredits }}" hidden />
 										</td>
-									</tr>
+									</tr> --}}
 	                                <tr class="cart_item" id="couponDiscountDiv" style="display: none;">
 	                                    <td class="cart-product-name">
 	                                        <strong>Coupon Discount</strong>
