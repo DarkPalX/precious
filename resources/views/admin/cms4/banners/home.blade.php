@@ -127,7 +127,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <p class="tx-10">
-                            Maximum file size: 30MB <br /> Required file type: .mp4
+                            Required image dimension: {{ env('MAIN_BANNER_WIDTH') }}px by {{ env('MAIN_BANNER_HEIGHT') }}px <br /> Maximum file size: 30MB <br /> Required file type: .mp4
                         </p>
                     </div>
                 </div>
