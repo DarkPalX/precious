@@ -178,10 +178,11 @@
 						@endforeach
 
 						@php 
-							$ordersubtotal = ($cartsubtotal - $cart->coupon_discount) - auth()->user()->ecredits;
+							$ordersubtotal = ($cartsubtotal - $cart->coupon_discount);
 						@endphp
 
-						@if(auth()->user()->ecredits > $ordersubtotal)
+
+						@if(auth()->user()->ecredits >= $ordersubtotal)
 							<div class="col-sm-4 col-md-4">
 								<label for="payment-option-card" class="w-100">
 									<div class="pricing-box text-center shadow-none border">
