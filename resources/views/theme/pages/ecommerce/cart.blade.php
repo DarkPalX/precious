@@ -211,8 +211,12 @@
 											
 										</td>
 
-										<td class="text-end">				
-                                            <button type="submit" class="btn btn-dark">Proceed to Checkout</button>
+										<td class="text-end">		
+                                            @if(!$cart->isEmpty())		
+                                                <button type="submit" class="btn btn-dark">Proceed to Checkout</button>
+                                            @else
+                                                <button type="button" class="btn btn-dark">Proceed to Checkout</button>
+                                            @endif
 										</td>
 									</tr>
 								</tbody>

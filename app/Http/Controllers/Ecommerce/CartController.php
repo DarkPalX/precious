@@ -309,7 +309,7 @@ class CartController extends Controller
             CouponCartDiscount::where('customer_id',Auth::id())->delete();
             CouponCart::where('customer_id',Auth::id())->delete();
 
-            $cart = Cart::where('user_id',Auth::id())->get();
+            $cart = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();
             
             $totalProducts = $cart->count();
         } else {
@@ -461,7 +461,7 @@ class CartController extends Controller
         $page->name = 'Checkout';
 
         $customer  = User::find(Auth::id());
-        $orders    = Cart::where('user_id',Auth::id())->get();      
+        $orders    = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();      
         $cart      = CouponCartDiscount::where('customer_id',Auth::id())->first();
 
         $coupons = CouponCart::where('customer_id', Auth::id())->get();

@@ -16,24 +16,48 @@
         foreach($featuredProducts as $key => $product) {
             $imageUrl = asset('storage/products/'.$product->photoPrimary);
 
-            $featuredProductsHTML .= '
-            <div class="product">
-                <div class="grid-inner">
-                    <div class="product-image h-translate-y all-ts">
-                        <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
-                        <div class="bg-overlay">
-                            <div class="bg-overlay-content align-items-end justify-content-start flex-column">
-                                <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
-                                <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="'. route('add-to-favorites', [$product->id])  .'" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
-                                <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
+            if(auth()->user()){
+
+                $featuredProductsHTML .= '
+                <div class="product">
+                    <div class="grid-inner">
+                        <div class="product-image h-translate-y all-ts">
+                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                            <div class="bg-overlay">
+                                <div class="bg-overlay-content align-items-end justify-content-start flex-column">
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="'. route('add-to-favorites', [$product->id])  .'" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
+                                    <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
+                                </div>
+                                <div class="bg-overlay-bg bg-transparent"></div>
                             </div>
-                            <div class="bg-overlay-bg bg-transparent"></div>
                         </div>
-                    </div>
-                    <div class="product-desc py-0">
-                        <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
-                        ($product->discount_price > 0 ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
-                        <div class="product-rating">';
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            ($product->discount_price > 0 ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
+                            <div class="product-rating">';
+            }
+            else{
+                
+                $featuredProductsHTML .= '
+                <div class="product">
+                    <div class="grid-inner">
+                        <div class="product-image h-translate-y all-ts">
+                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                            <div class="bg-overlay">
+                                <div class="bg-overlay-content align-items-end justify-content-start flex-column">
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="#modal-register" data-lightbox="inline" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#modal-register" data-lightbox="inline" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
+                                    <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
+                                </div>
+                                <div class="bg-overlay-bg bg-transparent"></div>
+                            </div>
+                        </div>
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            ($product->discount_price > 0 ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
+                            <div class="product-rating">';
+            }
 
                             for($star = 1; $star <= 5; $star++):
                                 $iconClass = ($star <= \App\Models\Ecommerce\ProductReview::getProductRating($product->id)) ? "3" : "-empty";
@@ -69,24 +93,49 @@
         foreach($bestSellers as $key => $product) {
             $imageUrl = asset('storage/products/'.$product->photoPrimary);
 
-            $bestSellersHTML .= '
-            <div class="product">
-                <div class="grid-inner">
-                    <div class="product-image h-translate-y all-ts">
-                        <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
-                        <div class="bg-overlay">
-                            <div class="bg-overlay-content align-items-end justify-content-start flex-column">
-                                <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
-                                <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="'. route('add-to-favorites', [$product->id])  .'" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
-                                <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
+            if(auth()->user()){
+
+                $bestSellersHTML .= '
+                <div class="product">
+                    <div class="grid-inner">
+                        <div class="product-image h-translate-y all-ts">
+                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                            <div class="bg-overlay">
+                                <div class="bg-overlay-content align-items-end justify-content-start flex-column">
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="'. route('add-to-favorites', [$product->id])  .'" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
+                                    <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
+                                </div>
+                                <div class="bg-overlay-bg bg-transparent"></div>
                             </div>
-                            <div class="bg-overlay-bg bg-transparent"></div>
                         </div>
-                    </div>
-                    <div class="product-desc py-0">
-                        <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
-                        ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
-                        <div class="product-rating">';
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
+                            <div class="product-rating">';
+                }
+                else{
+
+                $bestSellersHTML .= '
+                <div class="product">
+                    <div class="grid-inner">
+                        <div class="product-image h-translate-y all-ts">
+                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                            <div class="bg-overlay">
+                                <div class="bg-overlay-content align-items-end justify-content-start flex-column">
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="#modal-register" data-lightbox="inline" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#modal-register" data-lightbox="inline" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
+                                    <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
+                                </div>
+                                <div class="bg-overlay-bg bg-transparent"></div>
+                            </div>
+                        </div>
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
+                            <div class="product-rating">';
+
+            }
 
                             for($star = 1; $star <= 5; $star++):
                                 $iconClass = ($star <= \App\Models\Ecommerce\ProductReview::getProductRating($product->id)) ? "3" : "-empty";
@@ -116,24 +165,48 @@
             foreach($newProducts as $key => $product) {
                 $imageUrl = asset('storage/products/'.$product->photoPrimary);
 
-                $newProductsHTML .= '
-                <div class="product">
-                    <div class="grid-inner">
-                        <div class="product-image h-translate-y all-ts">
-                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
-                            <div class="bg-overlay">
-                                <div class="bg-overlay-content align-items-end justify-content-start flex-column">
-                                <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
-                                <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="'. route('add-to-favorites', [$product->id])  .'" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
+                
+                if(auth()->user()){
+                    $newProductsHTML .= '
+                    <div class="product">
+                        <div class="grid-inner">
+                            <div class="product-image h-translate-y all-ts">
+                                <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                                <div class="bg-overlay">
+                                    <div class="bg-overlay-content align-items-end justify-content-start flex-column">
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="'. route('add-to-favorites', [$product->id])  .'" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
                                     <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
+                                    </div>
+                                    <div class="bg-overlay-bg bg-transparent"></div>
                                 </div>
-                                <div class="bg-overlay-bg bg-transparent"></div>
                             </div>
-                        </div>
-                    <div class="product-desc py-0">
-                        <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
-                        ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
-                        <div class="product-rating">';
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
+                            <div class="product-rating">';
+                }
+                else{
+                    $newProductsHTML .= '
+                    <div class="product">
+                        <div class="grid-inner">
+                            <div class="product-image h-translate-y all-ts">
+                                <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                                <div class="bg-overlay">
+                                    <div class="bg-overlay-content align-items-end justify-content-start flex-column">
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="#modal-register" data-lightbox="inline" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
+                                    <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#modal-register" data-lightbox="inline" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
+                                    <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
+                                    </div>
+                                    <div class="bg-overlay-bg bg-transparent"></div>
+                                </div>
+                            </div>
+                        <div class="product-desc py-0">
+                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
+                            <div class="product-rating">';
+                }
+
 
                             for($star = 1; $star <= 5; $star++):
                                 $iconClass = ($star <= \App\Models\Ecommerce\ProductReview::getProductRating($product->id)) ? "3" : "-empty";

@@ -157,9 +157,11 @@
                     @if($product->inventory > 0)
                     <div class="d-flex justify-content-evenly align-content-stretch mb-1">
                         @if(Auth::check())
-                        <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
+                            <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
+                            <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$product->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
+                        @else
+                            <a class="btn bg-color text-white vw-100" href="#modal-register" data-lightbox="inline">Add To Bag <i class="icon-shopping-bag"></i></a>
                         @endif
-                        <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$product->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
                     </div>
                     @else
                         @if(Auth::check())
