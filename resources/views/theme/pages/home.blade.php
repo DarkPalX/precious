@@ -1,6 +1,7 @@
 @extends('theme.main')
 
 @section('pagecss')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 @endsection
 
 @php
@@ -22,7 +23,7 @@
                         <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
                         <div class="bg-overlay">
                             <div class="bg-overlay-content align-items-end justify-content-start flex-column">
-                                <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
                                 <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="'. route('add-to-favorites', [$product->id])  .'" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
                                 <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
                             </div>
@@ -75,7 +76,7 @@
                         <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
                         <div class="bg-overlay">
                             <div class="bg-overlay-content align-items-end justify-content-start flex-column">
-                                <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
                                 <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="'. route('add-to-favorites', [$product->id])  .'" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
                                 <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
                             </div>
@@ -122,7 +123,7 @@
                             <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
                             <div class="bg-overlay">
                                 <div class="bg-overlay-content align-items-end justify-content-start flex-column">
-                                    <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
+                                <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
                                 <a data-bs-toggle="tooltip" data-bs-placement="left" title="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'Remove from Favorites' : 'Add to favorites') . '" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="'. route('add-to-favorites', [$product->id])  .'" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="'. (\App\Models\Ecommerce\CustomerFavorite::isFavorite($product->id) ? 'icon-heart3 text-danger' : 'icon-heart3') . '"></i></a>
                                     <a hidden data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Wishlist" data-hover-animate="fadeInRightSmall" data-hover-delay="100" href="#" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-star"></i></a>
                                 </div>
@@ -215,7 +216,8 @@
         $('#buy-now-form').submit();
     }
 
-    function add_to_cart(product, price){
+    
+    function add_to_cart(product, price, remaining_stock, name, image){
 
         $.ajaxSetup({
             headers: {
@@ -223,94 +225,242 @@
             }
         });
 
-        var qty   = 1
-        // var qty   = parseFloat($('#quantity').val());
+        var qty   = 1;
         // var price = parseFloat($('#product_price').val());
+        // var remaining_stock = parseFloat($('#remaining_stock').val());
 
-        $.ajax({
-            data: {
-                "product_id": product, 
-                "qty": qty,
-                "_token": "{{ csrf_token() }}",
-            },
-            type: "post",
-            url: "{{route('product.add-to-cart')}}",
-            success: function(returnData) {
-                $("#loading-overlay").hide();
-                if (returnData['success']) {
+        if(qty <= remaining_stock){
 
-                    $('.top-cart-number').html(returnData['totalItems']);
+            $.ajax({
+                data: {
+                    "product_id": product, 
+                    "qty": qty,
+                    "price": price,
+                    "_token": "{{ csrf_token() }}",
+                },
+                type: "post",
+                url: "{{route('product.add-to-cart')}}",
+                success: function(returnData) {
+                    $("#loading-overlay").hide();
+                    if (returnData['success']) {
+
+                        $('.top-cart-number').html(returnData['totalItems']);
 
 
-                    var cartotal = parseFloat($('#input-top-cart-total').val());
-                    var productotal = price*qty;
-                    var newtotal = cartotal+productotal;
+                        var cartotal = parseFloat($('#input-top-cart-total').val());
+                        var productotal = price*qty;
+                        var newtotal = cartotal+productotal;
 
-                    $('#top-cart-total').html('₱'+newtotal.toFixed(2));
-                    var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
-                    // if (cartItem.length) {
-                    //     // If the item already exists in the cart, update its quantity and price
-                    //     var oldQty = parseFloat(cartItem.find('.top-cart-item-quantity').text().trim().replace('x ', ''));
-                    //     var newQty = oldQty + qty;
-                    //     var oldPrice = parseFloat(cartItem.find('.top-cart-item-price').text().trim().replace('₱', ''));
-                    //     var productTotal = price * qty;
-                    //     var newTotal = oldPrice + productTotal;
 
-                    //     cartItem.find('.top-cart-item-quantity').text('x ' + newQty);
-                    //     // cartItem.find('.top-cart-item-price').text('₱' + newTotal.toFixed(2));
-                    // } else {
+                        $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+				        $('#input-top-cart-total').val(newtotal);
 
-                    //     $('#top-cart-items').append(
-                    //         '<div class="top-cart-item" data-product-id="' + product + '">' +
-                    //         '<div class="top-cart-item-image border-0">' +
-                    //         '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>' +
-                    //         '</div>' +
-                    //         '<div class="top-cart-item-desc">' +
-                    //         '<div class="top-cart-item-desc-title">' +
-                    //         '<a href="#" class="fw-medium">{{$product->name}}</a>' +
-                    //         '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
-                    //         // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
-                    //         '<div class="d-flex mt-2">' +
-                    //         '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
-                    //         '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
-                    //         '</div>' +
-                    //         '</div>' +
-                    //         '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
-                    //         '</div>' +
-                    //         '</div>'
-                    //     );
+                        // $('#top-cart-items').append(
+                        //     '<div class="top-cart-item">'+
+                        //         '<div class="top-cart-item-image border-0">'+
+                        //             '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>'+
+                        //         '</div>'+
+                        //         '<div class="top-cart-item-desc">'+
+                        //             '<div class="top-cart-item-desc-title">'+
+                        //                 '<a href="#" class="fw-medium">{{$product->name}}</a>'+
+                        //                 '<span class="top-cart-item-price d-block">'+price.toFixed(2)+'</span>'+
+                        //                 '<div class="d-flex mt-2">'+
+                        //                     '<a href="#" class="fw-normal text-black-50 text-smaller"><u>Edit</u></a>'+
+                        //                     '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product('+returnData['cartId']+');"><u>Remove</u></a>'+
+                        //                 '</div>'+
+                        //             '</div>'+
+                        //             '<div class="top-cart-item-quantity">x '+qty+'</div>'+
+                        //         '</div>'+
+                        //    '</div>'
+                        // );
+                        var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
+                        if (cartItem.length) {
+                            // If the item already exists in the cart, update its quantity and price
+                            var oldQty = parseFloat(cartItem.find('.top-cart-item-quantity').text().trim().replace('x ', ''));
+                            var newQty = oldQty + qty;
+                            var oldPrice = parseFloat(cartItem.find('.top-cart-item-price').text().trim().replace('₱', ''));
+                            var productTotal = price * qty;
+                            var newTotal = oldPrice + productTotal;
 
-                    // }
-                    
-                    $('#top-cart-items').append(
-                        '<div class="top-cart-item" data-product-id="' + product + '">' +
-                            '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>New item added. Reload to Edit</u></a>' +
-                        '</div>'
-                    );
+                            cartItem.find('.top-cart-item-quantity').text('x ' + newQty);
+                            // cartItem.find('.top-cart-item-price').text('₱' + newTotal.toFixed(2));
+                        } else {
 
-                    $.notify("Product Added to your cart",{ 
-                        position:"bottom right", 
-                        className: "success" 
-                    });
+                            $('#top-cart-items').append(
+                                '<div class="top-cart-item" data-product-id="' + product + '">' +
+                                '<div class="top-cart-item-image border-0">' +
+                                '<a href="#"><img src="{{ asset('storage/products/') }}/' + image + '" alt="Cart Image 1" /></a>' +
+                                '</div>' +
+                                '<div class="top-cart-item-desc">' +
+                                '<div class="top-cart-item-desc-title">' +
+                                '<a href="#" class="fw-medium">' + name + '</a>' +
+                                '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
+                                '<div class="d-flex mt-2">' +
+                                '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
+                                '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
+                                '</div>' +
+                                '</div>'
+                            );
 
-                } else {
-                    swal({
-                        toast: true,
-                        position: 'center',
-                        title: "Warning!",
-                        text: "We have insufficient inventory for this item.",
-                        type: "warning",
-                        showCancelButton: true,
-                        timerProgressBar: true, 
-                        closeOnCancel: false
+                            // $('#top-cart-items').append(
+                            //     '<div class="top-cart-item" data-product-id="' + product + '">' +
+                            //     '<div class="top-cart-item-image border-0">' +
+                            //     '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>' +
+                            //     '</div>' +
+                            //     '<div class="top-cart-item-desc">' +
+                            //     '<div class="top-cart-item-desc-title">' +
+                            //     '<a href="#" class="fw-medium">{{$product->name}}</a>' +
+                            //     '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
+                            //     // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
+                            //     '<div class="d-flex mt-2">' +
+                            //     '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
+                            //     '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
+                            //     '</div>' +
+                            //     '</div>' +
+                            //     '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
+                            //     '</div>' +
+                            //     '</div>'
+                            // );
+                        }
 
-                    });
+                        $.notify("Product Added to your cart",{ 
+                            position:"bottom right", 
+                            className: "success" 
+                        });
+
+                    } else {
+                        swal({
+                            toast: true,
+                            position: 'center',
+                            title: "Warning!",
+                            text: "We have insufficient inventory for this item.",
+                            type: "warning",
+                            showCancelButton: true,
+                            timerProgressBar: true, 
+                            closeOnCancel: false
+
+                        });
+                    }
                 }
-            }
-        });
+            });
 
-        $('#quantity').val(1);
+            $('#quantity').val(1);
+            $('#remaining_stock').val(remaining_stock - qty);
+        }
+        else{
+            swal({
+                toast: true,
+                position: 'center',
+                title: "Warning!",
+                text: "We have insufficient inventory for this item.",
+                type: "warning",
+                showCancelButton: true,
+                timerProgressBar: true, 
+                closeOnCancel: false
+
+            });
+        }
     }
+
+    // function add_to_cart(product, price){
+
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         }
+    //     });
+
+    //     var qty   = 1
+    //     // var qty   = parseFloat($('#quantity').val());
+    //     // var price = parseFloat($('#product_price').val());
+
+    //     $.ajax({
+    //         data: {
+    //             "product_id": product, 
+    //             "qty": qty,
+    //             "_token": "{{ csrf_token() }}",
+    //         },
+    //         type: "post",
+    //         url: "{{route('product.add-to-cart')}}",
+    //         success: function(returnData) {
+    //             $("#loading-overlay").hide();
+    //             if (returnData['success']) {
+
+    //                 $('.top-cart-number').html(returnData['totalItems']);
+
+
+    //                 var cartotal = parseFloat($('#input-top-cart-total').val());
+    //                 var productotal = price*qty;
+    //                 var newtotal = cartotal+productotal;
+
+    //                 $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+    //                 var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
+    //                 // if (cartItem.length) {
+    //                 //     // If the item already exists in the cart, update its quantity and price
+    //                 //     var oldQty = parseFloat(cartItem.find('.top-cart-item-quantity').text().trim().replace('x ', ''));
+    //                 //     var newQty = oldQty + qty;
+    //                 //     var oldPrice = parseFloat(cartItem.find('.top-cart-item-price').text().trim().replace('₱', ''));
+    //                 //     var productTotal = price * qty;
+    //                 //     var newTotal = oldPrice + productTotal;
+
+    //                 //     cartItem.find('.top-cart-item-quantity').text('x ' + newQty);
+    //                 //     // cartItem.find('.top-cart-item-price').text('₱' + newTotal.toFixed(2));
+    //                 // } else {
+
+    //                 //     $('#top-cart-items').append(
+    //                 //         '<div class="top-cart-item" data-product-id="' + product + '">' +
+    //                 //         '<div class="top-cart-item-image border-0">' +
+    //                 //         '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>' +
+    //                 //         '</div>' +
+    //                 //         '<div class="top-cart-item-desc">' +
+    //                 //         '<div class="top-cart-item-desc-title">' +
+    //                 //         '<a href="#" class="fw-medium">{{$product->name}}</a>' +
+    //                 //         '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
+    //                 //         // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
+    //                 //         '<div class="d-flex mt-2">' +
+    //                 //         '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
+    //                 //         '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
+    //                 //         '</div>' +
+    //                 //         '</div>' +
+    //                 //         '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
+    //                 //         '</div>' +
+    //                 //         '</div>'
+    //                 //     );
+
+    //                 // }
+                    
+    //                 $('#top-cart-items').append(
+    //                     '<div class="top-cart-item" data-product-id="' + product + '">' +
+    //                         '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>New item added. Reload to Edit</u></a>' +
+    //                     '</div>'
+    //                 );
+
+    //                 $.notify("Product Added to your cart",{ 
+    //                     position:"bottom right", 
+    //                     className: "success" 
+    //                 });
+
+    //             } else {
+    //                 swal({
+    //                     toast: true,
+    //                     position: 'center',
+    //                     title: "Warning!",
+    //                     text: "We have insufficient inventory for this item.",
+    //                     type: "warning",
+    //                     showCancelButton: true,
+    //                     timerProgressBar: true, 
+    //                     closeOnCancel: false
+
+    //                 });
+    //             }
+    //         }
+    //     });
+
+    //     $('#quantity').val(1);
+    // }
     
 </script>
 

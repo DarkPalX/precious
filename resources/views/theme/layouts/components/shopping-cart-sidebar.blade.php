@@ -17,7 +17,7 @@
 			<div class="top-cart-items" id="top-cart-items">
 				@php
 					if(Auth::check()){
-						$cartx = \App\Models\Ecommerce\Cart::where('user_id', auth()->user()->id)->get();
+						$cartx = \App\Models\Ecommerce\Cart::where('user_id', auth()->user()->id)->where('qty', '>', 0)->get();
 					} else {
 						$cartx = session('cart', []);
 					}

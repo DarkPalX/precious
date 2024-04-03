@@ -210,6 +210,8 @@
                             var newtotal = cartotal+productotal;
 
                             $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+                            $('#input-top-cart-total').val(newtotal);
+                            
                             var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
                             if (cartItem.length) {
                                 // If the item already exists in the cart, update its quantity and price

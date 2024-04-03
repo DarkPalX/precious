@@ -604,6 +604,7 @@
                         var newtotal = cartotal+productotal;
 
                         $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+                        $('#input-top-cart-total').val(newtotal);
 
                         // $('#top-cart-items').append(
                         //     '<div class="top-cart-item">'+
