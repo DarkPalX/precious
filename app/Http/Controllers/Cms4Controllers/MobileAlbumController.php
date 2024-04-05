@@ -68,7 +68,7 @@ class MobileAlbumController extends Controller
         $requestData = request()->all();
 
         $requestData['user_id'] = auth()->id();
-        $requestData['is_active'] = $request->has('is_active') ? 1 : 0;
+        $requestData['status'] = $request->has('status') ? 1 : 0;
 
         $mobile_album = MobileAlbum::create($requestData);
 
@@ -132,7 +132,7 @@ class MobileAlbumController extends Controller
 
         $updateData = request()->all();
         $updateData['banner_type'] = $request->has('banner_type') ? 'video' : 'image';
-        $updateData['is_active'] = $request->has('is_active') ? 1 : 0;
+        $updateData['status'] = $request->has('status') ? 1 : 0;
 
         $newBanners = $this->get_new_banners($banners);
         $removeBanners = [];
@@ -163,16 +163,16 @@ class MobileAlbumController extends Controller
 
         $album = MobileAlbum::where('id', $id)->first();
 
-        if($album->is_active == 1){
+        if($album->status == 1){
             MobileAlbum::whereId((int) $id)
             ->update([
-                'is_active'  => 0
+                'status'  => 0
             ]);
         }
         else{
             MobileAlbum::whereId((int) $id)
             ->update([
-                'is_active'  => 1
+                'status'  => 1
             ]);
         }
 

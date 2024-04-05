@@ -106,7 +106,8 @@
                         <tr>
                             <td>{{$sale->order_number}}</td>
                             <td>{{$sale->created_at}}</td>
-                            <td>{{number_format($sale->gross_amount-$sale->discount_amount,2)}}</td>
+                            <td>{{number_format($sale->gross_amount,2)}}</td>
+                            {{-- <td>{{number_format($sale->gross_amount-$sale->discount_amount,2)}}</td> --}}
                             <td>{{$sale->delivery_status}}</td>
                             <td>
                                 <ul class="nav nav-pills">

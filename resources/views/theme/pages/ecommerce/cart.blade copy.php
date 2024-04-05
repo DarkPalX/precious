@@ -61,7 +61,6 @@
 
 	                            <input type="hidden" id="iteration{{$order->product_id}}" value="{{$orderID}}">
 	                            <input type="hidden" id="record_id{{$orderID}}" name="record_id[{{$orderID}}]" value="{{$orderID}}">
-	                            <input type="hidden" id="cproducts" name="cproducts" value="{{$cproducts}}">
 
 	                            <input type="hidden" name="productid[]" id="pp{{$orderID}}" value="{{$order->product_id}}">
 	                            <input type="hidden" name="productbrand[]" data-productid="{{$order->product_id}}" id="pp{{$orderID}}" value="{{$order->product->brand}}">
@@ -666,7 +665,7 @@
                                         '<input type="hidden" id="couponcategories'+coupon.id+'" value="'+coupon.purchase_product_cat_id+'">'+
                                         '<input type="hidden" id="couponbrands'+coupon.id+'" value="'+coupon.purchase_product_brand+'">'+
 
-                                        '<input type="hidden" id="couponcombination'+coupon.id+'" value="'+coupon.coupon_code+'">'+
+                                        '<input type="hidden" id="couponcombination'+coupon.id+'" value="'+coupon.combination+'">'+
                                         '<input type="hidden" id="remainingusage'+coupon.id+'" value="'+response.remaining[key]+'">'+
                                         '<input type="hidden" id="purchaseqty'+coupon.id+'" value="'+coupon.purchase_qty+'">'+
                                         '<input type="hidden" id="productdiscount'+coupon.id+'" value="'+coupon.product_discount+'">'+
@@ -1023,6 +1022,7 @@
                                         ''+desc+'' +
                                         '<br><br>' +
                                         'Code: '+ combination +'' +
+                                        '<br>Coupon requirements met, expect to save ₱217.00' +
                                         '<br><br>' +
                                         '<div class="text-secondary">' +
                                             '<ul class="m-0 ms-3">' +
