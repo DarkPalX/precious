@@ -23,7 +23,7 @@
             <p>Your current balance</p>
             <h3>₱ {{ auth()->user()->ecredits }}</h3>
             
-            <a href="#" class="button button-border button-rounded ms-0 button-small">Add Credits</a>
+            <a href="{{ env('APP_URL') }}/contact-us" target="_blank" class="button button-border button-rounded ms-0 button-small">Add Credits</a>
             
         </div>
     </div>

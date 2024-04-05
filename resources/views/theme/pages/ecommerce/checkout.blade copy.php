@@ -7,14 +7,14 @@
 @section('content')
 <div class="container topmargin-lg bottommargin-lg">	
 	<div class="row">
-			<div id="processTabs" data-plugin="tabs" class="customjs">
-			{{-- <div id="processTabs"> --}}
-			{{-- <ul class="process-steps row col-mb-30">
+		<!-- <div id="processTabs">
+			<ul class="process-steps row col-mb-30">
 				<li class="col-sm-6 col-lg-3">
 					<a href="#ptab1" class="i-circled i-bordered i-alt mx-auto btn_ptab1">1</a>
 					<h5>Billing Information</h5>
 				</li>
 				<li class="col-sm-6 col-lg-3">
+					{{-- <a href="#ptab2" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab2" rel="2">2</a> --}}
 					<a href="#ptab2"><button class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab2" rel="2">2</button></a>
 					<h5>Shipping Options</h5>
 				</li>
@@ -26,72 +26,71 @@
 					<a href="#ptab4"><button type="button" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab4" rel="2">4</button></a>
 					<h5>Review and Place Order</h5>
 				</li>
-			</ul> --}}
-			<ul class="process-steps row col-mb-30">
-				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab1" class="i-circled i-bordered tab-linker i-alt mx-auto">1</a>
-					<h5>Billing Information</h5>
-				</li>
-				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab2" class="i-circled i-bordered tab-linker i-alt mx-auto">2</a>
-					<h5>Shipping Options</h5>
-				</li>
-				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab3" class="i-circled i-bordered tab-linker i-alt mx-auto">3</a>
-					<h5>Payment Method</h5>
-				</li>
-				<li class="col-sm-6 col-lg-3">
-					<a href="#ptab4" class="i-circled i-bordered tab-linker i-alt mx-auto">4</a>
-					<h5>Review and Place Order</h5>
-				</li>
 			</ul>
 			<form method="post" action="{{ route('cart.temp_sales') }}" id="chk_form">
 				@csrf
 				<div id="ptab1">
 					<h2>Billing Information</h2>
-
-					<table class="table table-hover">
+					<table class="table table-borderless">
 						<tbody>
 							<tr>
-								<td width="20%">Name</td>
-								<td>{{$customer->firstname}} {{$customer->lastname}}</td>
+								<td><strong>First Name</strong> <span class="text-danger">*</span></td>
+								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_fname" id="customer_fname" value="{{$customer->firstname}}" required></td>
 							</tr>
 							<tr>
-								<td>Email Address</td>
-								<td>{{$customer->email}}</td>
+								<td><strong>Last Name</strong> <span class="text-danger">*</span></td>
+								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_lname" id="customer_lname" value="{{$customer->lastname}}" required></td>
 							</tr>
 							<tr>
-								<td>Contact Number</td>
-								<td>{{$customer->mobile}}</td>
+								<td><strong>E-mail Address</strong> <span class="text-danger">*</span></td>
+								<td class="p-2"><input type="text" class="form-control" name="customer_email" id="customer_email" value="{{$customer->email}}" required></td>
 							</tr>
 							<tr>
-								<td>Address</td>
-								<td>{{$customer->address_street}}, {{$customer->address_city}}, {{$customer->address_province}}</td>
+								<td><strong>Contact Number</strong> <span class="text-danger">*</span></td>
+								<td class="p-2"><input type="number" class="form-control" name="customer_contact_number" id="customer_contact_number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->mobile}}" required></td>
 							</tr>
 							<tr>
-								<td>Zip Code</td>
-								<td>{{$customer->address_zip}}</td>
+								<td><strong>Barangay</strong> <span class="text-danger">*</span></td>
+								<td class="p-2"><textarea id="customer_delivery_barangay" id="address_brgy" class="form-control" rows="3" required>{{$customer->address_street}}</textarea></td>
+							</tr>
+							<tr>
+								<td><strong>City</strong> <span class="text-danger">*</span></td>
+								<td class="p-2">
+									<input type="text" class="form-control" id="customer_delivery_city" value="{{$customer->address_city}}" required>
+								</td>
+							</tr>
+							<tr>
+								<td><strong>Province</strong> <span class="text-danger">*</span></td>
+								<td class="p-2">
+									<input type="text" class="form-control" id="customer_delivery_province" value="{{$customer->address_province}}" required>
+								</td>
+							</tr>
+							<tr>
+								<td><strong>Zip Code</strong> <span class="text-danger">*</span></td>
+								<td class="p-2"><input type="number" name="customer_delivery_zip" id="customer_delivery_zip" class="form-control" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->address_zip}}" required></td>
+							</tr>
+							<tr>
+								<td><strong>Notes</td>
+								<td class="p-2">
+									<textarea name="other_instruction" id="other_instruction" class="form-control" rows="3"></textarea>
+								</td>
 							</tr>
 						</tbody>
 					</table>
 
 					<br>
-					<a href="{{ env('APP_URL') }}/checkout" class="btn btn-dark float-end tab-linker" rel="2">
-						Next <i class="icon icon-circle-arrow-right"></i>
-					</a>
-					{{-- <a href="#" class="btn bg-color text-white tab-linker float-end" rel="2" onclick="update_details();">Next <i class="icon-arrow-circle-right"></i></a> --}}
+					<a href="#" class="btn bg-color text-white tab-linker float-end" rel="2" onclick="update_details();">Next <i class="icon-arrow-circle-right"></i></a>
 				</div>
 
-				
 				<div id="ptab2">
 					<h2>Shipping Options</h2>
 					
 					<div class="row">
-						<div class="col-md-8">
+						<div class="col-md-12">
 							<div class="row justify-content-center">
-								<label for="data-plan-starter" class="col-sm-6 col-md-4">
+								<label for="shipping-option-d2d" class="col-sm-6 col-md-4">
 									<div class="pricing-box text-center shadow-none border">
-										<input type="radio" name="data-plans-selected" class="required mt-3" id="data-plan-starter" autocomplete="off" data-price="30" value="Starter">
+										<input type="radio" class="mt-3" autocomplete="off" name="devlivery_type" id="shipping-option-d2d" value="d2d" onclick="shipping_type('d2d');" checked>
 										<div class="pricing-price">
 											<h3 class="nott ls0 mb-0">Door-to-Door</h3>
 										</div>
@@ -101,9 +100,9 @@
 									</div>
 								</label>
 
-								<label for="data-plan-professional" class="col-sm-6 col-md-4">
+								<label for="shipping-option-pickup" class="col-sm-6 col-md-4">
 									<div class="pricing-box text-center shadow-none border">
-										<input type="radio" name="data-plans-selected" class="required mt-3" id="data-plan-professional" autocomplete="off" data-price="30" value="Professional">
+										<input type="radio" class="mt-3" autocomplete="off" name="devlivery_type" id="shipping-option-pickup" value="pickup" onclick="shipping_type('pickup');">
 										<div class="pricing-price">
 											<h3 class="nott ls0 mb-0">For Pickup</h3>
 										</div>
@@ -113,193 +112,88 @@
 									</div>
 								</label>
 
-								<label for="data-plan-business" class="col-sm-6 col-md-4">
-									
-								</label>
+								<input type="hidden" name="shippingOption" id="shippingOption" value="d2d">
 							</div>
 						</div>
 						
-						<div class="col-md-4">
+						{{--<div class="col-md-4">
 							<div id="row">
-								<div class="input-group">
+								<div class="input-group mb-3">
 									<input type="text" class="form-control m-input" placeholder="Enter Coupon Code..">
 								</div>
-								<a href="#" class="small mb-3 d-inline-block" data-bs-toggle="modal" data-bs-target="#myModal">Apply Coupon</a>
-
-								<!-- Modal -->
-								<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-									<div class="modal-dialog modal-dialog-centered modal-sm">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h4 class="modal-title" id="myModalLabel">My Coupon</h4>
-												<button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></button>
-											</div>
-											<div class="modal-body">
-												<table class="table small border rounded border-top-warning">
-													<tbody>
-														<tr>
-															<td>
-																<h3 class="mb-0">16.00% OFF</h3>
-																For orders over ₱100.00
-																<br><br>
-																Code: ph5b11v2
-																<br>Coupon requirements met, expect to save ₱217.00
-																<br><br>
-																<div class="text-secondary">
-																	<ul class="m-0 ms-3">
-																		<li>11/04/2023 - 11/11/2023</li>	
-																		<li>Applies to select products</li>	
-																	</ul>
-																</div>
-															</td>
-															<td width="10px">
-																<label>
-																	<input type="radio" name="car-rental-selected-car" class="required" id="car-rental-cars-creta" autocomplete="off" data-price="30" value="Creta"> 
-																</label>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-
-												<table class="table small border rounded">
-													<tbody>
-														<tr>
-															<td>
-																<h3 class="mb-0">₱140.00 OFF</h3>
-																For orders over ₱3,499.00
-																<br><br>
-																Code: ph1111s
-																<br>Coupon requirements met, expect to save ₱140.00
-																<br><br>
-																<div class="text-secondary">
-																	<ul class="m-0 ms-3">
-																		<li>11/04/2023 - 11/11/2023</li>	
-																		<li>Applies to select products</li>	
-																	</ul>
-																</div>
-															</td>
-															<td width="10px">
-																<label>
-																	<input type="radio" name="car-rental-selected-car" class="required" id="car-rental-cars-creta" autocomplete="off" data-price="30" value="Creta"> 
-																</label>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-
-
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-												<button type="button" class="btn btn-primary">Apply</button>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<table class="table small border rounded border-top-warning">
-									<tbody>
-										<tr>
-											<td>
-												<h3 class="mb-0">16.00% OFF</h3>
-												For orders over ₱100.00
-												<br><br>
-												Code: ph5b11v2
-												<br>Coupon requirements met, expect to save ₱217.00
-												<br><br>
-												<div class="text-secondary">
-													<ul class="m-0 ms-3">
-														<li>11/04/2023 - 11/11/2023</li>	
-														<li>Applies to select products</li>	
-													</ul>
-												</div>
-											</td>
-											<td width="10px">
-												<a href="#"><span class="icon icon-times"></span></a>
-											</td>
-										</tr>
-									</tbody>
-								</table>
 							</div>
 
 							<div id="newinput"></div>
 							<button id="rowAdder" type="button" class="btn btn-dark">
 								<span class="icon icon-plus-square1"></span> Add Coupon
 							</button>
-						</div>
+						</div>--}}
 					</div>
 					
 					<br>
-					<a href="checkout.htm" class="btn btn-dark tab-linker " rel="1">
-						<i class="icon icon-circle-arrow-left"></i> Previous 
-					</a>
-					<a href="checkout.htm" class="btn btn-dark float-end tab-linker " rel="3">
-						Next <i class="icon icon-circle-arrow-right"></i>
-					</a>
-					
+					<a href="#" class="btn bg-color text-white tab-linker float-start" rel="1"><i class="icon-arrow-circle-left"></i> Previous</a>
+					<a href="#" class="btn bg-color text-white tab-linker float-end" rel="3">Next <i class="icon-arrow-circle-right"></i></a>
 				</div>
 
 				<div id="ptab3">
 					<h2>Payment Method</h2>
 					
-					<div class="tabs tabs-responsive clearfix">
-
-						<ul class="tab-nav clearfix">
-							<li><a href="#tab-responsive-1">Credit / Debit Card</a></li>
-							<li><a href="#tab-responsive-2">Gcash</a></li>
-							<li><a href="#tab-responsive-3">Alipay</a></li>
-							<li class="d-none d-md-block"><a href="#tab-responsive-4">Beep Card</a></li>
-						</ul>
-
-						<div class="tab-container">
-
-							<div class="tab-content clearfix" id="tab-responsive-1">
-								Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.
-							</div>
-							<div class="tab-content clearfix" id="tab-responsive-2">
-								Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.
-							</div>
-							<div class="tab-content clearfix" id="tab-responsive-3">
-								<p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
-								Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.
-							</div>
-							<div class="tab-content clearfix" id="tab-responsive-4">
-								Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.
-							</div>
-
+					<div class="row justify-content-center">
+						<div class="col-sm-6 col-md-4">
+							<label for="payment-option-card" class="w-100">
+								<div class="pricing-box text-center shadow-none border">
+									<input type="radio" name="payment_method" value="credit" class="required mt-3" autocomplete="off" id="payment-option-card" checked>
+									<div class="pricing-price">
+										<h3 class="nott ls0 mb-0">Credit / Debit Card</h3>
+									</div>
+									<div class="px-3">
+										<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+									</div>
+								</div>
+							</label>
 						</div>
-
+						
+						<div class="col-sm-6 col-md-4">
+							<label for="payment-option-card2" class="w-100">
+								<div class="pricing-box text-center shadow-none border">
+									<input type="radio" name="payment_method" value="cod" class="required mt-3" autocomplete="off" id="payment-option-card2">
+									<div class="pricing-price">
+										<h3 class="nott ls0 mb-0">Cash on Delivery</h3>
+									</div>
+									<div class="px-3">
+										<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+									</div>
+								</div>
+							</label>
+						</div>
 					</div>
 					
+					
 					<br>
-					<a href="checkout.htm" class="btn btn-dark tab-linker " rel="2">
-						<i class="icon icon-circle-arrow-left"></i> Previous 
-					</a>
-					<a href="checkout.htm" class="btn btn-dark float-end tab-linker " rel="4">
-						Next <i class="icon icon-circle-arrow-right"></i>
-					</a>
+					<a href="#" class="btn bg-color text-white tab-linker float-start" rel="2"><i class="icon-arrow-circle-left"></i> Previous</a>
+					<a href="#" class="btn bg-color text-white tab-linker float-end" rel="4">Next <i class="icon-arrow-circle-right"></i></a>
 				</div>
 
 				<div id="ptab4">
 					<h2>Review and Place Order</h2>
-					
+
 					<table class="table">
-						<tbody>
-						<tr>
-							<td width="20%"><small>Billed to</small></td>
-						</tr>
-						<tr>
-							<td>
-								<h3 class="m-0">Stephen Curry</h3>
-								curry@emailaddress.com
-								<br>123-4567
-								<br>Lorem ipsum dolor sit amet, consectetur adipisicing elit
-								<br>1611
-							</td>
-						</tr>
-						</tbody>
+					  	<tbody>
+							<tr>
+						  		<td width="20%"><small>Billed to</small></td>
+							</tr>
+							<tr>
+						  		<td>
+							  		<h3 class="m-0"><strong id="ck_billed_to"></strong></h3>
+							  		<span id="ck_email"></span>
+									<br><span id="ck_contact"></span>
+									<br><span id="ck_address"></span>
+									<br><span id="ck_zip"></span>
+						  		</td>
+							</tr>
+					  </tbody>
 					</table>
-					
+
 					<table class="table cart mb-5">
 						<thead>
 							<tr>
@@ -311,82 +205,41 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr class="cart_item">
-								<td class="cart-product-thumbnail">
-									<a href="#"><img width="64" height="64" src="images/products/image1.png" alt="Pink Printed Dress"></a>
-								</td>
+							@php $subtotal = 0; $totalqty = 0; $grandtotal = 0; @endphp
+							@foreach($orders as $order)
+								@php
+									$subtotal += $order->price*$order->qty;
+									$totalqty += $order->qty;
+								@endphp
+								<tr class="cart_item">
+									<td class="cart-product-thumbnail">
+										<a href="javascript:;"><img width="64" height="64" src="{{ asset('storage/products/'.$order->product->photoPrimary) }}" alt="{{$order->product->name}}"></a>
+									</td>
 
-								<td class="cart-product-name">
-									<a href="#">Pink Printed Dress</a>
-								</td>
+									<td class="cart-product-name">
+										<a href="#">{{ $order->product->name }}</a>
+									</td>
 
-								<td class="cart-product-price">
-									<span class="amount">$19.99</span>
-								</td>
+									<td class="cart-product-price">
+										<span class="amount">₱{{ number_format($order->price,2) }}</span>
+									</td>
 
-								<td class="cart-product-quantity">
-									<div class="quantity">
-										2
-									</div>
-								</td>
+									<td class="cart-product-quantity">
+										<span>{{$order->qty}}</span> pc(s).
+									</td>
 
-								<td class="cart-product-subtotal">
-									<span class="amount">$39.98</span>
-								</td>
-							</tr>
-							<tr class="cart_item">
-								<td class="cart-product-thumbnail">
-									<a href="#"><img width="64" height="64" src="images/products/image2.png" alt="Checked Canvas Shoes"></a>
-								</td>
-
-								<td class="cart-product-name">
-									<a href="#">Checked Canvas Shoes</a>
-								</td>
-
-								<td class="cart-product-price">
-									<span class="amount">$24.99</span>
-								</td>
-
-								<td class="cart-product-quantity">
-									<div class="quantity">
-										2
-									</div>
-								</td>
-
-								<td class="cart-product-subtotal">
-									<span class="amount">$24.99</span>
-								</td>
-							</tr>
-							<tr class="cart_item">
-								<td class="cart-product-thumbnail">
-									<a href="#"><img width="64" height="64" src="images/products/image3.png" alt="Pink Printed Dress"></a>
-								</td>
-
-								<td class="cart-product-name">
-									<a href="#">Blue Men Tshirt</a>
-								</td>
-
-								<td class="cart-product-price">
-									<span class="amount">$13.99</span>
-								</td>
-
-								<td class="cart-product-quantity">
-									<div class="quantity">
-										2
-									</div>
-								</td>
-
-								<td class="cart-product-subtotal">
-									<span class="amount">$41.97</span>
-								</td>
-							</tr>
+									<td class="cart-product-subtotal">
+										<span class="amount">₱{{ number_format($order->price*$order->qty,2) }}</span>
+									</td>
+								</tr>
+							@endforeach
 						</tbody>
 					</table>
-					
+
 					<div class="row">
 						<div class="col-md-6">
 							<p class="text-danger">Notes</p>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+							<p id="ck_notes"></p>
 						</div>
 						<div class="col-md-6">
 							<h4>Cart Totals</h4>
@@ -400,45 +253,83 @@
 											</td>
 
 											<td class="cart-product-name text-end">
-												<span class="amount">$106.94</span>
+												<span class="amount">₱{{ number_format($subtotal,2) }}</span>
 											</td>
 										</tr>
-										<tr class="cart_item">
-											<td class="cart-product-name">
-												<strong>Voucher</strong>
-											</td>
 
-											<td class="cart-product-name text-end"></td>
-										</tr>
-										<tr class="cart_item">
-											<td colspan="2">
-												<table class="table m-0">
-													<tbody>
-														<tr>
-															<td>dsfdsfsd</td>
-															<td class="text-end">300</td>
-														</tr>
-														<tr>
-															<td>dsfdsfsd</td>
-															<td class="text-end">300</td>
-														</tr>
-														<tr>
-															<td>dsfdsfsd</td>
-															<td class="text-end">300</td>
-														</tr>
-													</tbody>
-												</table>
-											</td>
-										</tr>
+
+
+										{{-- for discount  --}}
+										@if($cart->coupon_discount > 0)
+											<tr class="cart_item">
+												<td class="cart-product-name" colspan="2">
+													<strong>Coupon Code(s)</strong>
+												</td>
+											</tr>
+											<tr class="cart_item">
+												<td class="cart-product-name" colspan="2">
+													<ul class="pl-3">
+														@foreach($coupons as $cpn)
+															<li>{{ $cpn->details->name }}</li>
+
+															<input type="hidden" name="couponUsage[]" value="0">
+															<input type="hidden" id="coupon_combination" value="{{$cpn->details->combination}}">
+															<input type="hidden" name="couponid[]" value="{{$cpn->coupon_id}}">
+															<input type="hidden" name="coupon_productid[]" value="{{$cpn->product_id}}">
+
+															@if(isset($cpn->details->free_product_id))
+															<input type="hidden" name="freeproductid[]" value="{{$cpn->details->free_product_id}}">
+															@endif
+														@endforeach
+													</ul>
+												</td>
+											</tr>
+											<tr class="cart_item">
+												<td class="cart-product-name">
+													<strong>Total Coupon Discount</strong>
+												</td>
+
+												<td class="cart-product-name text-right">
+													<span class="amount">₱{{ number_format($cart->coupon_discount,2) }}</span>
+												</td>
+											</tr>
+										@endif
+
+										@php $counter = 0; $soloCouponCounter = 0; @endphp
+										@foreach($coupons as $cpn)
+										@php 
+											$counter++; 
+
+											if($cpn->details->combination == 0){
+												$soloCouponCounter++;
+											}
+										@endphp
+										@endforeach
+										
+										<input type="hidden" name="shippingOption" id="shippingOption" value="xde">
+										<input type="hidden" name="shippingRate" id="shippingRate" value="0">
+										<input type="hidden" name="shippingFeeDiscount" id="sf_discount_amount" value="0">
+							
+										<input type="hidden" id="coupon_total_discount" name="coupon_total_discount" value="{{$cart->coupon_discount}}">
+										<input type="hidden" id="sf_discount_coupon" value="0">
+
+										<input type="hidden" id="solo_coupon_counter" name="solo_coupon_counter" value="{{$soloCouponCounter}}">
+										<input type="hidden" id="coupon_counter" name="coupon_counter" value="{{$counter}}">
+										{{--  --}}
+
+
 										<tr class="cart_item">
 											<td class="cart-product-name">
-												<strong>Total Voucher</strong>
+												<strong>My E-Wallet</strong>
 											</td>
 
 											<td class="cart-product-name text-end">
-												<span class="amount">$106.94</span>
+												<span class="amount">{{ auth()->user()->ecredits }}</span>
 											</td>
 										</tr>
+
+
+										
 										<tr class="cart_item">
 											<td class="cart-product-name">
 												<strong>Shipping</strong>
@@ -449,77 +340,36 @@
 											</td>
 										</tr>
 										<tr class="cart_item">
-											<td colspan="2">
-												<table class="table m-0">
-													<tbody>
-														<tr>
-															<td>dsfdsfsd</td>
-															<td class="text-end">300</td>
-														</tr>
-													</tbody>
-												</table>
-											</td>
-										</tr>
-										<tr class="cart_item">
-											<td class="cart-product-name">
-												<strong>Total Shipping Voucher</strong>
-											</td>
-
-											<td class="cart-product-name text-end">
-												<span class="amount">$106.94</span>
-											</td>
-										</tr>
-										<tr class="cart_item">
-											<td class="cart-product-name">
-												<strong>My E-Wallet</strong>
-											</td>
-
-											<td class="cart-product-name text-end">
-												<span class="amount">$106.94</span>
-											</td>
-										</tr>
-										<tr class="cart_item">
 											<td class="cart-product-name">
 												<strong>Total</strong>
 											</td>
 
 											<td class="cart-product-name text-end">
-												<span class="amount color lead"><strong>$106.94</strong></span>
+												<input type="hidden" name="total_amount" id="total_amount" value="{{$subtotal}}">
+												<span class="amount color lead"><strong>₱{{ number_format($subtotal,2) }}</strong></span>
 											</td>
 										</tr>
 									</tbody>
-
 								</table>
 							</div>
 						</div>
 					</div>
-					
-					<br>								
-					<a href="checkout.htm" class="btn btn-dark tab-linker " rel="3">
-						<i class="icon icon-circle-arrow-left"></i> Previous 
-					</a>
-					<a href="success.htm" class="btn btn-dark float-end">
-						Complete Order <i class="icon icon-circle-arrow-right"></i>
-					</a>
+
+
+					<input type="hidden" id="coupon_total_discount" name="coupon_total_discount" value="0">
+
+					<br>
+					<a href="#" class="btn bg-color text-white tab-linker float-start" rel="3"><i class="icon-arrow-circle-left"></i> Previous</a>
+					<a href="javascript:;" class="btn bg-color text-white float-end" onclick="place_order();">Complete Order <i class="icon-check-circle"></i></a>
 				</div>
 			</form>
-		</div>
+		</div> -->
 	</div>	
 </div>
 @endsection
 
 @section('pagejs')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-
-<script>
-	jQuery(window).on( 'pluginTabsReady', function(){
-		$( "#processTabs" ).tabs({ show: { effect: "fade", duration: 400 } });
-		$( ".tab-linker" ).click(function() {
-			$( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
-			return false;
-		});
-	});
-</script>
 
 <script>
 	$(document).ready(function(){
@@ -537,12 +387,11 @@
 
 
 	// $(function() {
-
-	// 	$( "#processTabs" ).tabs({ show: { effect: "fade", duration: 400 } });
-	// 	$( ".tab-linker" ).click(function() {
-	// 		var nxt_tab = $(this).attr('rel');
+	// 	$("#processTabs").tabs({ show: { effect: "fade", duration: 400 } });
+	// 	$(".tab-linker").click(function() {
+	// 		var current_tab = $(this).attr('rel');
 			
-	// 		if(nxt_tab == 2){
+	// 		if (current_tab == 2) {
 	// 			var fname = $('#customer_fname').val();
 	// 			var lname = $('#customer_lname').val();
 	// 			var email = $('#customer_email').val();
@@ -552,28 +401,57 @@
 	// 			var province = $('#customer_delivery_province').val();
 	// 			var zipcode = $('#customer_delivery_zip').val();
 
-	// 			if(fname.length === 0 || lname.length === 0 || contact.length === 0 || IsEmail(email) == false || zipcode.length === 0 || brgy.length === 0 || city.length === 0 || province.length === 0){
-    //                 swal('Oops...', 'Please check required input fields.', 'error');
+	// 			if (fname.length === 0 || lname.length === 0 || contact.length === 0 || IsEmail(email) == false || zipcode.length === 0 || brgy.length === 0 || city.length === 0 || province.length === 0) {
 					
-	// 	            return false;
-
-    //             } else {
-    //                 $( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
+	// 				swal('Oops...', 'Please check required input fields.', 'error');
 	// 				return false;
-    //             }
-	// 		} else if(nxt_tab == 3){
+	// 			}
+	// 		}
 
-	//    			var sfOption = $('#shippingOption').val();
-
-	//             $( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
-	// 			return false;
-
-	// 		} else {
-	// 			$( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
-	// 			return false;
-	// 		}	
+	// 		$( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
+	// 		return false;
 	// 	});
 	// });
+
+
+	$(function() {
+
+		$( "#processTabs" ).tabs({ show: { effect: "fade", duration: 400 } });
+		$( ".tab-linker" ).click(function() {
+			var nxt_tab = $(this).attr('rel');
+			
+			if(nxt_tab == 2){
+				var fname = $('#customer_fname').val();
+				var lname = $('#customer_lname').val();
+				var email = $('#customer_email').val();
+				var contact = $('#customer_contact_number').val();
+				var brgy = $('#customer_delivery_barangay').val();
+				var city = $('#customer_delivery_city').val();
+				var province = $('#customer_delivery_province').val();
+				var zipcode = $('#customer_delivery_zip').val();
+
+				if(fname.length === 0 || lname.length === 0 || contact.length === 0 || IsEmail(email) == false || zipcode.length === 0 || brgy.length === 0 || city.length === 0 || province.length === 0){
+                    swal('Oops...', 'Please check required input fields.', 'error');
+					
+		            return false;
+
+                } else {
+                    $( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
+					return false;
+                }
+			} else if(nxt_tab == 3){
+
+	   			var sfOption = $('#shippingOption').val();
+
+	            $( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
+				return false;
+
+			} else {
+				$( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
+				return false;
+			}	
+		});
+	});
 
 	function update_details(){
 		var customer = $('#customer_fname').val()+' '+$('#customer_lname').val();
@@ -628,5 +506,446 @@
     function place_order() {   
 	    $('#chk_form').submit();
 	}
+
+	$('#province').change(function(){
+		var province = $(this).val();
+		var x = province.split('|');
+
+		$('#cities').empty();
+		$('#cities').append(
+    		'<option value="">--- Select City ---</option>'
+    	);
+
+		$.ajax({
+            type: "GET",
+            url: "{{ route('checkout.get-lbc-city-list') }}",
+            data: {
+                'provinceId' : x[0],
+                'area' : x[1]
+            },
+            success: function( response ) {
+
+            	$.each(response.cities, function(key, city) {
+                    $('#cities').append(
+	            		'<option value="'+city.CityId+'|'+city.CityName+'">'+city.CityName+'</option>'
+	            	);
+                });
+                
+                // var deliveryFee = parseFloat(response.lbcrate);
+                var deliveryFee = 100;
+
+                $('#shippingRate').val(deliveryFee);
+                $('#delivery_fee').html('₱'+deliveryFee.toFixed(2));
+                
+                compute_total();
+        	}
+        });
+	});
+
+	$('#cities').change(function(){
+		var city = $(this).val();
+		var x = city.split('|');
+
+		$('#barangay').empty();
+		$('#barangay').append(
+    		'<option value="">--- Select Barangay ---</option>'
+    	);
+
+		$.ajax({
+            type: "GET",
+            url: "{{ route('checkout.get-lbc-brgy-list') }}",
+            data: {
+                'cityId' : x[0]
+            },
+            success: function( response ) {
+
+            	$.each(response.barangays, function(key, brgy) {
+                    $('#barangay').append(
+	            		'<option value="'+brgy.BarangayId+'|'+brgy.BarangayName+'">'+brgy.BarangayName+'</option>'
+	            	);
+                });
+        	}
+        });
+	});
+	
+	
+	
+	$('#couponManualBtn').click(function(){
+        var couponCode = $('#coupon_code').val();
+        var grandtotal = parseFloat($('#input_total_due').val());
+
+        if($('#location').val() == ''){
+            swal({
+                title: '',
+                text: "Please select a municipality!",         
+            });
+            return false;
+        }
+
+        $.ajax({
+            data: {
+                "couponcode": couponCode,
+                "_token": "{{ csrf_token() }}",
+            },
+            type: "post",
+            url: "{{route('add-manual-coupon')}}",
+            success: function(returnData) {
+
+                if(returnData['not_allowed']){
+                    swal({
+                        title: '',
+                        text: "Sorry, you are not authorized to use this coupon.",         
+                    });
+                    return false;
+                }
+                
+                if(returnData['exist']){
+                    swal({
+                        title: '',
+                        text: "Coupon already used.",         
+                    }); 
+                    return false;
+                }
+
+                if(returnData['not_exist']){
+                    swal({
+                        title: '',
+                        text: "Coupon not found.",         
+                    }); 
+                    return false;
+                }
+
+                if(returnData['expired']){
+                    swal({
+                        title: '',
+                        text: "Coupon is already expired.",         
+                    }); 
+                    return false;
+                }
+
+                if (returnData['success']) {
+
+                    // coupon validity label
+                        if(returnData.coupon_details['start_time'] == null){
+                            var couponStartDate = returnData.coupon_details['start_date'];
+                        } else {
+                            var couponStartDate = returnData.coupon_details['start_date']+' '+returnData.coupon_details['start_time'];
+                        }
+                        
+                        if(returnData.coupon_details['end_date'] == null){
+                            var couponEndDate = '';
+                        } else {
+                            if(returnData.coupon_details['end_time'] == null){
+                                var couponEndDate = ' - '+returnData.coupon_details['end_date'];
+                            } else {
+                                var couponEndDate = ' - '+returnData.coupon_details['end_date']+' '+returnData.coupon_details['end_time'];
+                            }
+                        }
+                        var couponValidity = couponStartDate+''+couponEndDate;
+                    //
+
+                    $('#manual-coupon-details').append(
+                        '<div id="manual_details'+returnData.coupon_details['id']+'">'+
+                        // coupons input
+                            '<input type="hidden" id="couponcombination'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['combination']+'">'+
+                            '<input type="hidden" id="sfarea'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['area']+'">'+
+                            '<input type="hidden" class="text-uppercase" id="sflocation'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['location']+'">'+
+                            '<input type="hidden" id="sfdiscountamount'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['location_discount_amount']+'">'+
+                            '<input type="hidden" id="sfdiscounttype'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['location_discount_type']+'">'+
+                            '<input type="hidden" id="discountpercentage'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['percentage']+'">'+
+                            '<input type="hidden" id="discountamount'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['amount']+'">'+
+                            '<input type="hidden" id="couponname'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['name']+'">'+
+                            '<input type="hidden" id="couponcode'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['coupon_code']+'">'+
+                            '<input type="hidden" id="couponterms'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['terms_and_conditions']+'">'+
+                            '<input type="hidden" id="coupondesc'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['description']+'">'+
+                            '<input type="hidden" id="couponvalidity'+returnData.coupon_details['id']+'" value="'+couponValidity+'">'+
+                        //
+                        '</div>'
+                    );
+
+                    if(returnData.coupon_details['location'] == null){
+                        swal({
+                            title: '',
+                            text: "Only shipping fee coupon is allowed.",         
+                        });
+
+                    } else {
+                        if(returnData.coupon_details['amount'] > 0){ 
+                            var amountdiscount = parseFloat(returnData.coupon_details['amount']);
+                        }
+
+                        if(returnData.coupon_details['percentage'] > 0){
+                            var percent  = parseFloat(returnData.coupon_details['percentage'])/100;
+                            var discount = parseFloat(grandtotal)*percent;
+
+                            var amountdiscount = parseFloat(discount);
+                        }
+
+                        var total = grandtotal-amountdiscount;
+                        if(total.toFixed(2) < 1){
+                            swal({
+                                title: '',
+                                text: "The total amount is less than the coupon discount.",         
+                            });
+
+                            return false;
+                        }
+                        
+                        use_sf_coupon(returnData.coupon_details['id']);
+                    }
+                } 
+            }
+        });
+    });
+    
+    
+    
+    function isInArrayCaseInsensitive(value, array) {
+        return array.some(function(item) {
+          return item.toLowerCase() === value.toLowerCase();
+        });
+    }
+
+    function use_sf_coupon(cid){
+    	var sf_discount = parseFloat($('#sfdiscountamount'+cid).val());
+        // check total use shipping fee coupons
+        var sfcoupon = parseFloat($('#sf_discount_coupon').val());
+        var delivery_fee = parseFloat($('#shippingRate').val());
+
+        if(sfcoupon == 1){
+            swal({
+                title: '',
+                text: "Only one (1) coupon for shipping fee discount.",         
+            });
+            return false;
+        }
+        
+        if(coupon_counter(cid)){
+        	
+            var selectedLocation = $('#province').val();
+            var loc = selectedLocation.split('|');
+
+            var couponLocation = $('#sflocation'+cid).val();
+            var cLocation = couponLocation.split('|');
+
+            var arr_coupon_location = [];
+            $.each(cLocation, function(key, value) {
+                arr_coupon_location.push(value);
+            });
+
+            console.log(arr_coupon_location);
+
+            if(isInArrayCaseInsensitive(loc[2], arr_coupon_location) || jQuery.inArray('all', arr_coupon_location) !== -1){
+
+                var name  = $('#couponname'+cid).val();
+                var terms = $('#couponterms'+cid).val();
+                var desc = $('#coupondesc'+cid).val();
+                var combination = $('#couponcombination'+cid).val();
+                
+                $('#couponList').append(
+                	'<div class="alert alert-dismissible alert-info mt-3" id="appliedCoupon'+cid+'">'+
+                        '<div class="title-bottom-border mb-3">'+
+                            '<h4>'+name+'</h4>'+
+                        '</div>'+
+                        '<p class="mb-3">'+desc+'</p>'+
+
+                        '<input type="hidden" id="coupon_combination'+cid+'" value="'+combination+'">'+
+                        '<input type="hidden" name="sfeecouponid" value="'+cid+'">'+
+                        '<input type="hidden" name="coupon_productid[]" value="0">'+
+
+                        '<button type="button" class="btn btn-danger btn-sm sfCouponRemove" id="'+cid+'">Remove</button>&nbsp;'+
+                        '<button type="button" class="btn btn-secondary btn-sm me-2" data-container="body" data-toggle="popover" data-placement="right" data-content="'+terms+'">Terms & Condition</button>'+
+                    '</div>'
+                );
+
+                $('[data-toggle="popover"]').popover();
+
+                
+
+                $('#sf_discount_coupon').val(1);
+                var sf_type = $('#sfdiscounttype'+cid).val();
+                //var sf_discount = parseFloat($('#sfdiscountamount'+cid).val());
+
+                if(sf_type == 'full'){
+                    dfee = parseFloat($('#delivery_fee').val());
+
+                    $('#sf_discount_amount').val(dfee);
+
+                    $('#tr_sf_discount').css('display','table-row');
+                    $('#shipping_fee_disocunt').html('₱'+addCommas(dfee.toFixed(2)));
+                }
+
+                if(sf_type == 'partial'){
+                    $('#sf_discount_amount').val(sf_discount.toFixed(2));
+
+                    $('#tr_sf_discount').css('display','table-row');
+                    $('#shipping_fee_disocunt').html('-₱'+addCommas(sf_discount.toFixed(2)));
+                }
+
+                $('#couponBtn'+cid).prop('disabled',true);
+                $('#btnCpnTxt'+cid).html('Applied');
+
+                compute_total();
+            } else {
+                swal({
+                    title: '',
+                    text: "Selected delivery location is not in the coupon location.",         
+                });
+            } 
+        }
+    }
+
+    $(document).on('click', '.sfCouponRemove', function(){  
+        var id = $(this).attr("id");  
+
+        $('#tr_sf_discount').css('display','none');
+        
+        $('#sf_discount_amount').val(0);
+        var totalsfdiscoutcounter = $('#sf_discount_coupon').val();
+        $('#sf_discount_coupon').val(parseInt(totalsfdiscoutcounter)-1);
+
+        var counter = $('#coupon_counter').val();
+        $('#coupon_counter').val(parseInt(counter)-1);
+
+        var combination = $('#coupon_combination'+id).val();
+        if(combination == 0){
+            $('#solo_coupon_counter').val(0);
+        }
+
+        $('#appliedCoupon'+id+'').remove();
+
+        compute_total();
+    });
+
+
+    function myCoupons(){
+        var totalAmount = $('#totalAmountWithoutCoupon').val();
+        var totalQty = $('#totalQty').val();
+
+        $.ajax({
+            type: "GET",
+            url: "{{ route('show-coupons') }}",
+            data: {
+                'total_amount' : totalAmount,
+                'total_qty' : totalQty,
+                'page_name' : 'checkout',
+            },
+            success: function( response ) {
+                $('#collectibles').empty();
+
+                var arr_selected_coupons = [];
+                $("input[name='couponid[]']").each(function() {
+                    arr_selected_coupons.push(parseInt($(this).val()));
+                });
+
+                $.each(response.coupons, function(key, coupon) {
+                    if(coupon.end_date == null){
+                        var validity = '';  
+                    } else {
+                        if(coupon.end_time == null){
+                            var validity = ' Valid Till '+coupon.end_date;
+                        } else {
+                            var validity = ' Valid Till '+coupon.end_date+' '+coupon.end_time;
+                        }
+                    }
+
+                    if(jQuery.inArray(coupon.id, response.availability) !== -1){
+
+                        if(jQuery.inArray(coupon.id, arr_selected_coupons) !== -1){
+                            var usebtn = '<button class="btn btn-success btn-sm" disabled>Applied</button>';
+                        } else {
+                            var usebtn = '<button class="btn btn-success btn-sm" id="couponBtn'+coupon.id+'" onclick="use_sf_coupon('+coupon.id+')"><span id="btnCpnTxt'+coupon.id+'">Use Coupon</span></button>';
+                        }
+
+                        $('#collectibles').append(
+                        	'<div class="alert alert-dismissible alert-info mt-3" id="coupondiv'+coupon.id+'">'+
+
+                                '<input type="hidden" id="couponcombination'+coupon.id+'" value="'+coupon.combination+'">'+
+                                '<input type="hidden" id="sflocation'+coupon.id+'" value="'+coupon.location+'">'+
+                                '<input type="hidden" id="sfdiscountamount'+coupon.id+'" value="'+coupon.location_discount_amount+'">'+
+                                '<input type="hidden" id="sfdiscounttype'+coupon.id+'" value="'+coupon.location_discount_type+'">'+
+                                '<input type="hidden" id="discountpercentage'+coupon.id+'" value="'+coupon.percentage+'">'+
+                                '<input type="hidden" id="discountamount'+coupon.id+'" value="'+coupon.amount+'">'+
+                                '<input type="hidden" id="couponname'+coupon.id+'" value="'+coupon.name+'">'+
+                                '<input type="hidden" id="couponcode'+coupon.id+'" value="'+coupon.coupon_code+'">'+
+                                '<input type="hidden" id="couponterms'+coupon.id+'" value="'+coupon.terms_and_conditions+'">'+
+                                '<input type="hidden" id="coupondesc'+coupon.id+'" value="'+coupon.description+'">'+
+
+
+                                '<div class="title-bottom-border mb-3">'+
+                                    '<h4>'+coupon.name+'</h4>'+
+                                '</div>'+
+                                '<small><strong>'+validity+'</strong></small>'+
+                                '<p class="mb-3">'+coupon.description+'</p>'+
+
+                                usebtn+'&nbsp;'+
+                                '<button type="button" class="btn btn-secondary btn-sm me-2" data-bs-container="body" data-toggle="popover" data-placement="right" data-content="'+coupon.terms_and_conditions+'">Terms & Condition</button>'+
+                            '</div>'
+                        );
+                    } else {
+                        $('#collectibles').append(
+                        	'<div class="alert alert-dismissible alert-secondary mt-3">'+
+                                '<div class="title-bottom-border mb-3">'+
+                                    '<h4>'+coupon.name+'</h4>'+
+                                '</div>'+
+                                '<small><strong>'+validity+'</strong></small>'+
+                                '<p class="mb-3">'+coupon.description+'</p>'+
+
+                                '<button class="btn btn-warning btn-sm disabled">T&C Not Met</button>&nbsp;'+
+                                '<button type="button" class="btn btn-secondary btn-sm me-2" data-bs-container="body" data-toggle="popover" data-placement="right" data-content="'+coupon.terms_and_conditions+'">Terms & Condition</button>'+
+                            '</div>'
+                        );
+                    }
+
+                    $('[data-toggle="popover"]').popover();
+                    
+                });
+
+                $('#couponModal').modal('show');
+            }
+        });
+    }
+    
+    
+    function coupon_counter(cid){
+        var limit = $('#coupon_limit').val();
+        var counter = $('#coupon_counter').val();
+        var solo_coupon_counter = $('#solo_coupon_counter').val();
+
+        var combination = $('#couponcombination'+cid).val();
+        if(parseInt(counter) < parseInt(limit)){
+
+            if(combination == 0){
+                if(counter > 0){
+                    swal({
+                        title: '',
+                        text: "Coupon cannot be used together with other coupons.",         
+                    });
+                    return false;
+                } else {
+                    $('#solo_coupon_counter').val(1);
+                    $('#coupon_counter').val(parseInt(counter)+1);
+                    return true;
+                }
+            } else {
+                if(solo_coupon_counter > 0){
+                    swal({
+                        title: '',
+                        text: "Unable to use this coupon. A coupon that cannot be used together with other coupon is already been selected.",         
+                    });
+                    return false;
+                } else {
+                    $('#coupon_counter').val(parseInt(counter)+1);
+                    return true;
+                }
+            }
+        } else {
+            swal({
+                title: '',
+                text: "Maximum of "+limit+" coupon(s) only.",         
+            });
+            return false;
+        }
+    }
 </script>
 @endsection
