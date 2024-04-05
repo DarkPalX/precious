@@ -145,7 +145,7 @@
                                         <strong @if($mobile_album->trashed()) style="text-decoration:line-through;" @endif title="{{ $mobile_album->name }}">{{ $mobile_album->name }}</strong>
                                     </td>
                                     <td>{{ $mobile_album->banners->count() }}</td>
-                                    <td>{{ $mobile_album->is_active ? 'PUBLISHED' : 'PRIVATE' }}</td>
+                                    <td>{{ $mobile_album->status ? 'PUBLISHED' : 'PRIVATE' }}</td>
                                     <td><span class="text-nowrap">{{ Setting::date_for_listing($mobile_album->updated_at) }}</span></td>
                                     <td>
                                         @if($mobile_album->trashed())
@@ -170,7 +170,7 @@
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         
-                                                        @if($mobile_album->is_active == 0)
+                                                        @if($mobile_album->status == 0)
                                                             <a class="dropdown-item" href="{{ route('mobile-albums.change-status', $mobile_album->id) }}" >{{__('common.publish')}}</a>
                                                         @else
                                                             <a class="dropdown-item" href="{{ route('mobile-albums.change-status', $mobile_album->id) }}" >{{__('common.private')}}</a>

@@ -84,8 +84,8 @@
                     </div>
                     <div class="form-group">
                         <label class="d-block">Visibility</label>
-                        <div class="custom-control custom-switch @error('is_active') is-invalid @enderror">
-                            <input type="checkbox" class="custom-control-input" name="is_active" id="customSwitch1">
+                        <div class="custom-control custom-switch @error('status') is-invalid @enderror">
+                            <input type="checkbox" class="custom-control-input" name="status" id="customSwitch1">
                             <label class="custom-control-label" id="label_visibility" for="customSwitch1">Private</label>
                         </div>
                     </div>
