@@ -7,9 +7,9 @@
             </div>
             <div class="modal-body">
 
-                <div id="collectibles"></div>
+                {{-- <div id="collectibles"></div> --}}
 
-                {{-- @foreach($coupons as $coupon)
+                @foreach($coupons as $coupon)
                 
                     <table class="table small border rounded border-top-warning">
                         <tbody>
@@ -37,7 +37,7 @@
                         </tbody>
                     </table>
                 
-                @endforeach --}}
+                @endforeach
                 
             </div>
             {{-- <div class="modal-footer">
