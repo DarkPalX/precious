@@ -171,6 +171,10 @@ class CouponFrontController extends Controller
     }
 
     public function collectibles(Request $request){
+
+        //to check update coupon availability
+        Coupon::checkCouponAvailability();
+
         // Total Purchase Amount Only
             $couponsMinTotalAmount = Coupon::couponPurchaseValue('purchase_amount','purchase_amount_type',$request->total_amount,'min','<=');
             $couponsMaxTotalAmount = Coupon::couponPurchaseValue('purchase_amount','purchase_amount_type',$request->total_amount,'max','>=');

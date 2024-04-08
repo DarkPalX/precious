@@ -681,84 +681,54 @@
                                         '<input type="hidden" id="couponfreeproductid'+coupon.id+'" value="'+coupon.free_product_id+'">'+
                                         '<input type="hidden" id="couponvalidity'+coupon.id+'" value="'+validity+'">'+
 
-                                        '<table class="table small border rounded border-top-warning">' +
-                                            '<tbody>' +
-                                                '<tr>' +
-                                                    '<td>' +
-                                                        '<h3 class="mb-0">'+coupon.name+'</h3>' +
-                                                        coupon.description +
-                                                        '<br><br>' +
-                                                        'Code: '+coupon.coupon_code+
-                                                        '<br><br>' +
-                                                        '<div class="text-secondary">' +
-                                                            '<ul class="m-0 ms-3">' +
-                                                                '<li>' + coupon.terms_and_conditions + '</li>' +
-                                                                '<li>' + coupon.start_date + ' - ' + (coupon.end_date ? coupon.end_date : '∞') + '</li>' +
-                                                            '</ul>' +
-                                                        '</div>' +
-                                                    '</td>' +
-                                                '</tr>' +
-                                            '</tbody>' +
-                                        '</table>'+
-                                        usebtn+'&nbsp;'+
+				                        '<div class="row no-gutters">'+
+				                            '<div class="col-11">'+
+				                                '<div class="fancy-title title-bottom-border mb-3">'+
+				                                    '<h4>'+coupon.name+'</h4>'+
+				                                '</div>'+
+				                            '</div>'+
+				                        '</div>'+
+				                        '<small><strong>'+validity+'</strong></small>'+
+				                        '<p class="m-0">'+coupon.description+'</p><br/>'+
 
+				                        usebtn+'&nbsp;'+
+                                        '<button type="button" class="btn btn-secondary btn-sm me-2" data-container="body" data-toggle="popover" data-placement="right" data-content="'+coupon.terms_and_conditions+'">Terms & Condition</button>'+
 				                    '</div>'
                                 );
                             } else {
                                 $('#collectibles').append(
                                 	'<div class="alert alert-secondary mt-3">'+
+				                        '<div class="row no-gutters">'+
+				                            '<div class="col-11">'+
+				                                '<div class="fancy-title title-bottom-border mb-3">'+
+				                                    '<h4>'+coupon.name+'</h4>'+
+				                                '</div>'+
+				                            '</div>'+
+				                        '</div>'+
+				                        '<small><strong>'+validity+'</strong></small>'+
+				                        '<p class="m-0">'+coupon.description+'</p><br/>'+
 
-                                        '<table class="table small border rounded border-top-warning">' +
-                                            '<tbody>' +
-                                                '<tr>' +
-                                                    '<td>' +
-                                                        '<h3 class="mb-0">'+coupon.name+'</h3>' +
-                                                        coupon.description +
-                                                        '<br><br>' +
-                                                        'Code: '+coupon.coupon_code+
-                                                        '<br><br>' +
-                                                        '<div class="text-secondary">' +
-                                                            '<ul class="m-0 ms-3">' +
-                                                                '<li>' + coupon.terms_and_conditions + '</li>' +
-                                                                '<li>' + coupon.start_date + ' - ' + (coupon.end_date ? coupon.end_date : '∞') + '</li>' +
-                                                            '</ul>' +
-                                                        '</div>' +
-                                                    '</td>' +
-                                                '</tr>' +
-                                            '</tbody>' +
-                                        '</table>'+
-                                        usebtn+'&nbsp;'+
-
-                                    '</div>'
+				                        usebtn+'&nbsp;'+
+                                        '<button type="button" class="btn btn-secondary btn-sm me-2" data-container="body" data-toggle="popover" data-placement="right" data-content="'+coupon.terms_and_conditions+'">Terms & Condition</button>'+
+				                    '</div>'
                                 );
                             }
                             
                         } else {
                             $('#collectibles').append(
                             	'<div class="alert alert-secondary mt-3">'+
+			                        '<div class="row no-gutters">'+
+			                            '<div class="col-11">'+
+			                                '<div class="fancy-title title-bottom-border mb-3">'+
+			                                    '<h4>'+coupon.name+'</h4>'+
+			                                '</div>'+
+			                            '</div>'+
+			                        '</div>'+
+			                        '<small><strong>'+validity+'</strong></small>'+
+			                        '<p class="m-0">'+coupon.description+'</p><br/>'+
 
-
-                                    '<table class="table small border rounded border-top-warning">' +
-                                        '<tbody>' +
-                                            '<tr>' +
-                                                '<td>' +
-                                                    '<h3 class="mb-0">'+coupon.name+'</h3>' +
-                                                    coupon.description +
-                                                    '<br><br>' +
-                                                    'Code: '+coupon.coupon_code+
-                                                    '<br><br>' +
-                                                    '<div class="text-secondary">' +
-                                                        '<ul class="m-0 ms-3">' +
-                                                            '<li>' + coupon.terms_and_conditions + '</li>' +
-                                                            '<li>' + coupon.start_date + ' - ' + (coupon.end_date ? coupon.end_date : '∞') + '</li>' +
-                                                        '</ul>' +
-                                                    '</div>' +
-                                                '</td>' +
-                                            '</tr>' +
-                                        '</tbody>' +
-                                    '</table>'+
-			                        '<button class="btn btn-warning btn-sm disabled">T&C Not Met</button>&nbsp;'+
-
+			                        '<button class="btn btn-success btn-sm disabled">Use Coupon</button>&nbsp;'+
+                                    '<button type="button" class="btn btn-secondary btn-sm me-2" data-container="body" data-toggle="popover" data-placement="right" data-content="'+coupon.terms_and_conditions+'">Terms & Condition</button>'+
 			                    '</div>'
                             );
                         }

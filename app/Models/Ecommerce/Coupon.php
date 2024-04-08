@@ -110,4 +110,27 @@ class Coupon extends Model
 
         return $coupons;
     }
+
+    public static function checkCouponAvailability(){
+        
+        $coupons = Coupon::whereNotNull('start_date')->where('status','ACTIVE')->get();
+        foreach($coupons as $coupon){
+
+            if(isset($coupon->endtime)){
+                $time = $coupon->end_time;
+            } else {
+                $time = '00:00:00';
+            }
+
+            $startdate = $coupon->start_date.' '.$time;
+
+            // if(Carbon::parse(now()->format('Y-m-d H:i:s')) >= Carbon::parse($startdate)){
+            //     Coupon::find($coupon->id)->update(['availability' => 1]);
+            // }
+            // else{
+            //     Coupon::find($coupon->id)->update(['availability' => 0]);
+            // }
+        }
+
+    }
 }

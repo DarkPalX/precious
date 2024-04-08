@@ -303,6 +303,9 @@ class CartController extends Controller
 
     public function cart()
     {   
+        //to check update coupon availability
+        Coupon::checkCouponAvailability();
+
         if (auth()->check()) {
 
             // reset coupon carts of customer
