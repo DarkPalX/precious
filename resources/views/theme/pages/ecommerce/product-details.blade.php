@@ -30,24 +30,16 @@
                         </div>
                     </div>
                     
-                    <h3>Category</h3>
+					@include('theme.layouts.components.product-categories')
+                    
+                    {{-- <h3>Category</h3>
                     <div class="side-menu">
                         <ul class="mb-0 pb-0">
                             @foreach($categories as $category)
                                 <li class="active"><a href="#"><div>{{$category->name}}</div></a></li>
                             @endforeach
-
-                            <li>
-                                <a href="#"><div>Corporate Governance</div></a>
-                                <ul>
-                                    <li><a href="#"><div>Annual Report</div></a></li>
-                                    <li><a href="#"><div>Manual on Corporate Governance</div></a></li>
-                                    <li><a href="#"><div>MLPP</div></a></li>
-                                    <li><a href="#"><div>RPT</div></a></li>
-                                </ul>
-                            </li>
                         </ul>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
