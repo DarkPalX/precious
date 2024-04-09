@@ -124,12 +124,12 @@ class Coupon extends Model
 
             $startdate = $coupon->start_date.' '.$time;
 
-            // if(Carbon::parse(now()->format('Y-m-d H:i:s')) >= Carbon::parse($startdate)){
-            //     Coupon::find($coupon->id)->update(['availability' => 1]);
-            // }
-            // else{
-            //     Coupon::find($coupon->id)->update(['availability' => 0]);
-            // }
+            if(Carbon::parse(now()->format('Y-m-d H:i:s')) >= Carbon::parse($startdate)){
+                Coupon::find($coupon->id)->update(['availability' => 1]);
+            }
+            else{
+                Coupon::find($coupon->id)->update(['availability' => 0]);
+            }
         }
 
     }

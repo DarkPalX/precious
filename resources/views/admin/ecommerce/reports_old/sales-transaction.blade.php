@@ -91,9 +91,7 @@
                 <td>Item/Purchase Description</td>
                 <td>Quantity</td>
                 <td>Unit Price</td>
-                <td>Gross</td>
-                <td>Discount</td>
-                <td>Net Price</td>
+                <td>Total</td>
                 <td>Payment Method</td>
                 <td>Status</td>
             </tr>
@@ -108,10 +106,8 @@
                     <td>{{$sale->header->customer_delivery_adress}}</td>
                     <td>{{$sale->product->name}}</td>
                     <td class="text-right">{{$sale->qty}}</td>
-                    <td class="text-right">{{number_format($sale->price,2)}}</td>
-                    <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
-                    <td class="text-right">{{number_format($sale->discount_amount,2)}}</td>
-                    <td class="text-right">{{number_format(($sale->price*$sale->qty) - $sale->discount_amount,2)}}</td>
+                    <td class="text-right">₱{{number_format($sale->price,2)}}</td>
+                    <td class="text-right">₱{{number_format($sale->price*$sale->qty,2)}}</td>
                     <td>{{$sale->payment_method}}</td>
                     <td>{{$sale->header->delivery_status}}</td>
                 </tr>

@@ -270,10 +270,28 @@
     @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('reports'))
         <li class="nav-label mg-t-25">Reports</li>
 
+        
+
         <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
+            <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Best Sellers</span></a>
+        </li>
+
+        <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
+            <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Sales</span></a>
+        </li>
+
+        <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
+            <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Buyers</span></a>
+        </li>
+
+        <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
+            <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Rated Products</span></a>
+        </li>
+
+        {{-- <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
             <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Product List</span></a>
         </li>
-        {{--<li class="nav-item @if (\Route::current()->getName() == 'report.customer-list')) active show @endif">
+        <li class="nav-item @if (\Route::current()->getName() == 'report.customer-list')) active show @endif">
             <a href="{{ route('report.customer-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Customer List</span></a>
         </li>
         <li class="nav-item @if (\Route::current()->getName() == 'report.promo-list')) active show @endif">
@@ -281,6 +299,13 @@
         </li>
         <li class="nav-item @if (\Route::current()->getName() == 'report.payment-list')) active show @endif">
             <a href="{{ route('report.payment-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Payments</span></a>
-        </li>--}}
+        </li>
+        <li class="nav-item @if (\Route::current()->getName() == 'report.wishlist')) active show @endif">
+            <a href="{{ route('report.wishlist') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Customer Wishlist</span></a>
+        </li>
+        <li class="nav-item @if (\Route::current()->getName() == 'report.favorites')) active show @endif">
+            <a href="{{ route('report.favorites') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Customer Favorites</span></a>
+        </li> --}}
+        
     @endif
 </ul>

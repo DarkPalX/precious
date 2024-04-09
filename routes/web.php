@@ -487,6 +487,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
 
             // Reports
+
                 Route::get('/admin/report/sales_summary', [ReportsController::class, 'sales_summary'])->name('report.sales.summary');
                 Route::get('/admin/report/delivery_status', [ReportsController::class, 'delivery_status'])->name('admin.report.delivery_status');
                 Route::get('/admin/report/delivery_report/{id}', [ReportsController::class, 'delivery_report'])->name('admin.report.delivery_report');
@@ -499,6 +500,9 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
                 Route::get('/report/promo-list', [ReportsController::class, 'promo_list'])->name('report.promo-list');
                 Route::get('/report/payment-list', [ReportsController::class, 'payment_list'])->name('report.payment-list');
+
+                Route::get('/report/wishlist', [ReportsController::class, 'wishlist'])->name('report.wishlist');
+                Route::get('/report/favorites', [ReportsController::class, 'favorites'])->name('report.favorites');
             //
         ###### Ecommerce Routes ######
     });

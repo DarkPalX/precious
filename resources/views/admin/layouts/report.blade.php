@@ -11,7 +11,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Lorenzana') }}</title>
+    <title>{{ App\Models\Setting::getWebsiteName(); }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage').'/icons/'.Setting::getFaviconLogo()->website_favicon }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
@@ -32,7 +32,6 @@
         <div class="content-body">
 
             @yield('content')
-
 
         </div>
 
@@ -58,8 +57,6 @@
 
     <!--Put your external scripts here -->
     @yield('pagejs')
-
-
 
 
     @yield('customjs')
