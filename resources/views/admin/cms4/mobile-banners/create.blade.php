@@ -96,7 +96,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <p class="tx-10">
-                            Required image dimension: {{ env('MOBILE_SUB_BANNER_WIDTH') }}px by {{ env('MOBILE_SUB_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
+                            Required image dimension: {{ env('MOBILE_SUB_BANNER_HEIGHT') }}px by {{ env('MOBILE_SUB_BANNER_WIDTH') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
                         </p>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                                         <div class="card-body">
                                             <div class="row row-sm">
                                                 <div class="col-lg-12">
-                                                    <div class="form-group upload-image mg-b-0" style="background: url('{{ $banner['image_path'] }}');background-size: cover;">
+                                                    <div class="form-group upload-image mg-b-0" style="background: url('{{ $banner['image_path'] }}'); background-size: cover; height: {{ env('MOBILE_SUB_BANNER_HEIGHT') }}px; width: {{ env('MOBILE_SUB_BANNER_WIDTH') }}px;">
                                                         <div class="marker pos-absolute t-10 l-20 p-0 bg-transparent">
                                                             {{--                                                    <button class="btn btn-light btn-xs btn-uppercase" type="submit"><i data-feather="upload"></i> Upload image</button>--}}
                                                             <button type="button" class="btn btn-danger btn-xs btn-uppercase remove-upload" type="button" data-id="{{ $banner['id'] }}"><i data-feather="x"></i> Remove image</button>
@@ -214,7 +214,7 @@
                                                     <div class="card-body">
                                                         <div class="row row-sm">
                                                             <div class="col-lg-12">
-                                                                <div class="form-group upload-image mg-b-0" style="background: url('`+returnData.image_url+`');background-size: cover;">
+                                                                <div class="form-group upload-image mg-b-0" style="background: url('`+returnData.image_url+`');background-size: cover; height: {{ env('MOBILE_SUB_BANNER_HEIGHT') }}px; width: {{ env('MOBILE_SUB_BANNER_WIDTH') }}px;">
                                                                     <div class="marker pos-absolute t-10 l-20 p-0 bg-transparent">
                                                                     <button type="button" class="btn btn-danger btn-xs btn-uppercase remove-upload" type="submit" data-image-path="`+returnData.image_url+`"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove image</button>
                                                                     <input name="banners[`+image_count+`][image_path]" class="image_path" type="text" value="`+returnData.image_url+`" required onvalid="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Please upload image.')" oninput="this.setCustomValidity('')"/>

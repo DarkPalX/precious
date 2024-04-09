@@ -480,7 +480,7 @@
                                 var validity = '';  
                             } else {
                                 if(coupon.end_time == null){
-                                    var validity = ' Valid Till '+coupon.end_date;
+                                    var validity = ' Valid Till '+ (coupon.end_date ?? '∞');
                                 } else {
                                     var validity = ' Valid Till '+coupon.end_date+' '+coupon.end_time;
                                 }
@@ -849,10 +849,11 @@
                             '<input type="hidden" id="discountpercentage'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['percentage']+'">'+
                             '<input type="hidden" id="discountamount'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['amount']+'">'+
                             '<input type="hidden" id="couponname'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['name']+'">'+
-                            '<input type="hidden" id="couponcode'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['coupon_code']+'">'+
+                            '<input type="hidden" id="couponcombination'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['coupon_code']+'">'+
                             '<input type="hidden" id="couponterms'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['terms_and_conditions']+'">'+
                             '<input type="hidden" id="coupondesc'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['description']+'">'+
-                            '<input type="hidden" id="couponfreeproductid'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['free_product_id']+'">'
+                            '<input type="hidden" id="couponfreeproductid'+returnData.coupon_details['id']+'" value="'+returnData.coupon_details['free_product_id']+'">'+
+                            '<input type="hidden" id="couponvalidity'+returnData.coupon_details['id']+'" value="Valid till '+ (returnData.coupon_details['end_date'] ?? '∞') +'">'
                         );
 
                         if(returnData.coupon_details['amount_discount_type'] == 1){
