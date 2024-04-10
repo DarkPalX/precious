@@ -19,7 +19,7 @@
         <tbody>
             @forelse($rs as $r)
             <tr>
-                <td>{{$r->product->name}}</td>
+                <td>{{$r->product->name ?? $r->product_name}}</td>
                 <td>{{number_format($r->average_rating,2)}}</td>
                 <td>{{$r->review_count}}</td>
             </tr>
