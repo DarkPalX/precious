@@ -69,7 +69,7 @@ class ReportsController extends Controller
             $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
         }
 
-        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
+        $sales = $sales->where('qty','<>', 0)->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
 
         return view('admin.ecommerce.reports.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'status'));
 
@@ -81,6 +81,7 @@ class ReportsController extends Controller
                          DB::raw('SUM(net_amount) as total_net_amount'), 
                          DB::raw('COUNT(*) as order_count'))
                  ->where('status', 'active')
+                 ->where('order_source','<>', 'Android')
                  ->groupBy('user_id')
                  ->get();
 
@@ -94,8 +95,8 @@ class ReportsController extends Controller
         $rs = ProductReview::select('product_id',
                             DB::raw('AVG(rating) as average_rating'), 
                             DB::raw('COUNT(*) as review_count'))
-                   ->groupBy('product_id')
-                   ->get();  
+                 ->groupBy('product_id')
+                 ->get();  
 
         return view('admin.ecommerce.reports.top-products',compact('rs'));
 
@@ -317,7 +318,7 @@ class ReportsController extends Controller
             $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
         }
 
-        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
+        $sales = $sales->where('qty', 0)->where('order_source', 'Android')->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
 
         return view('admin.ecommerce.reports-mobile.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'status'));
 
@@ -329,6 +330,7 @@ class ReportsController extends Controller
                          DB::raw('SUM(net_amount) as total_net_amount'), 
                          DB::raw('COUNT(*) as order_count'))
                  ->where('status', 'active')
+                 ->where('order_source', 'Android')
                  ->groupBy('user_id')
                  ->get();
 
