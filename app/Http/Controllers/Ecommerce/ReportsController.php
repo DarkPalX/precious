@@ -81,10 +81,10 @@ class ReportsController extends Controller
                          DB::raw('SUM(net_amount) as total_net_amount'), 
                          DB::raw('COUNT(*) as order_count'))
                  ->where('status', 'active')
-                 ->where('order_source','<>', 'Android')
+                 ->where('order_source', '<>', 'Android')
+                 ->orWhereNull('order_source')
                  ->groupBy('user_id')
                  ->get();
-
 
         return view('admin.ecommerce.reports.top-buyers',compact('rs'));
 
