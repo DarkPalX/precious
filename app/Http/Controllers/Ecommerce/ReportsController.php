@@ -69,7 +69,7 @@ class ReportsController extends Controller
             $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
         }
 
-        $sales = $sales->where('qty','>', 0)->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
+        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
 
         return view('admin.ecommerce.reports.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'status'));
 
@@ -318,7 +318,7 @@ class ReportsController extends Controller
             $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
         }
 
-        $sales = $sales->where('qty', 0.00)->where('order_source', 'Android')->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
+        $sales = $sales->where('order_source', 'Android')->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
 
         return view('admin.ecommerce.reports-mobile.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'status'));
 
