@@ -270,7 +270,6 @@
     @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('reports'))
         <li class="nav-label mg-t-25">Reports</li>
 
-        
 
         <li class="nav-item @if (\Route::current()->getName() == 'report.best-sellers')) active show @endif">
             <a href="{{ route('report.best-sellers') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Best Sellers</span></a>
@@ -306,6 +305,29 @@
         <li class="nav-item @if (\Route::current()->getName() == 'report.favorites')) active show @endif">
             <a href="{{ route('report.favorites') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Customer Favorites</span></a>
         </li> --}}
+        
+    @endif
+
+
+    @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('reports'))
+        <li class="nav-label mg-t-25">Mobile Reports</li>
+
+    
+        <li class="nav-item @if (\Route::current()->getName() == 'report.best-sellers.mobile')) active show @endif">
+            <a href="{{ route('report.best-sellers.mobile') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Best Sellers</span></a>
+        </li>
+
+        <li class="nav-item @if (\Route::current()->getName() == 'report.sales-transaction.mobile')) active show @endif">
+            <a href="{{ route('report.sales-transaction.mobile') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Sales</span></a>
+        </li>
+
+        <li class="nav-item @if (\Route::current()->getName() == 'report.top-buyers.mobile')) active show @endif">
+            <a href="{{ route('report.top-buyers.mobile') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Buyers</span></a>
+        </li>
+
+        <li class="nav-item @if (\Route::current()->getName() == 'report.top-products.mobile')) active show @endif">
+            <a href="{{ route('report.top-products.mobile') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Rated Products</span></a>
+        </li>
         
     @endif
 </ul>

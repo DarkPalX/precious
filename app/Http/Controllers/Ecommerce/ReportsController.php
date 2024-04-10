@@ -33,6 +33,46 @@ class ReportsController extends Controller
         return view('admin.ecommerce.reports.best-sellers',compact('rs'));
 
     }
+
+    public function sales_list(Request $request)
+    {
+        $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', 'ecommerce_sales_headers.id')
+            ->whereNotNull('ecommerce_sales_headers.id');
+
+
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+        $customer  = $request->get('customer', false);
+        $product   = $request->get('product', false);
+        $category   = $request->get('category', false);
+        $status    = $request->get('del_status', false);
+
+
+        if(isset($customer) && $customer <> ''){
+            $sales->where('ecommerce_sales_headers.customer_name', $customer);
+        }
+
+        if(isset($product) && $product <> ''){
+            $sales->where('ecommerce_sales_details.product_name', $product);
+        }
+
+        if(isset($category) && $category <> ''){
+            $sales->where('ecommerce_sales_details.product_category', $category);
+        }
+
+        if(isset($status) && $status <> ''){
+            $sales->where('ecommerce_sales_headers.delivery_status', $status);
+        }
+      
+        if(isset($startDate) && strlen($startDate)>=1){
+            $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
+        }
+
+        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
+
+        return view('admin.ecommerce.reports.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'status'));
+
+    }
     
     public function top_buyers(Request $request)
     {       
@@ -94,48 +134,6 @@ class ReportsController extends Controller
         
 
         return view('admin.ecommerce.reports.inventory.list',compact('rs'));
-
-    }
-
-    public function sales_list(Request $request)
-    {
-        $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', 'ecommerce_sales_headers.id')
-            ->whereNotNull('ecommerce_sales_headers.id');
-
-
-        $startDate = $request->get('start', false);
-        $endDate   = $request->get('end', false);
-        $customer  = $request->get('customer', false);
-        $product   = $request->get('product', false);
-        $category   = $request->get('category', false);
-        $status    = $request->get('del_status', false);
-
-        // dd($category);
-
-
-        if(isset($customer) && $customer <> ''){
-            $sales->where('ecommerce_sales_headers.customer_name', $customer);
-        }
-
-        if(isset($product) && $product <> ''){
-            $sales->where('ecommerce_sales_details.product_name', $product);
-        }
-
-        if(isset($category) && $category <> ''){
-            $sales->where('ecommerce_sales_details.product_category', $category);
-        }
-
-        if(isset($status) && $status <> ''){
-            $sales->where('ecommerce_sales_headers.delivery_status', $status);
-        }
-      
-        if(isset($startDate) && strlen($startDate)>=1){
-            $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
-        }
-
-        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
-
-        return view('admin.ecommerce.reports.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'status'));
 
     }
 
@@ -264,5 +262,91 @@ class ReportsController extends Controller
 
         return view('admin.ecommerce.reports.payment-list', compact('payments', 'startDate', 'endDate'));
     }
+
+
+    
+
+    // FOR MOBILE REPORTS
+    
+    public function best_sellers_mobile(Request $request)
+    {
+        $rs = SalesDetail::select('product_id',
+                          DB::raw('COUNT(product_id) as total_quantity'),
+                          DB::raw('SUM(net_amount) as total_net_amount'))
+                 ->where('qty', 0)
+                 ->groupBy('product_id')
+                 ->get();
+
+
+        return view('admin.ecommerce.reports-mobile.best-sellers',compact('rs'));
+
+    }
+
+    public function sales_list_mobile(Request $request)
+    {
+        $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', 'ecommerce_sales_headers.id')
+            ->whereNotNull('ecommerce_sales_headers.id');
+
+
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+        $customer  = $request->get('customer', false);
+        $product   = $request->get('product', false);
+        $category   = $request->get('category', false);
+        $status    = $request->get('del_status', false);
+
+
+        if(isset($customer) && $customer <> ''){
+            $sales->where('ecommerce_sales_headers.customer_name', $customer);
+        }
+
+        if(isset($product) && $product <> ''){
+            $sales->where('ecommerce_sales_details.product_name', $product);
+        }
+
+        if(isset($category) && $category <> ''){
+            $sales->where('ecommerce_sales_details.product_category', $category);
+        }
+
+        if(isset($status) && $status <> ''){
+            $sales->where('ecommerce_sales_headers.delivery_status', $status);
+        }
+      
+        if(isset($startDate) && strlen($startDate)>=1){
+            $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
+        }
+
+        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
+
+        return view('admin.ecommerce.reports-mobile.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'status'));
+
+    }
+    
+    public function top_buyers_mobile(Request $request)
+    {       
+        $rs = SalesHeader::select('user_id', 
+                         DB::raw('SUM(net_amount) as total_net_amount'), 
+                         DB::raw('COUNT(*) as order_count'))
+                 ->where('status', 'active')
+                 ->groupBy('user_id')
+                 ->get();
+
+
+        return view('admin.ecommerce.reports-mobile.top-buyers',compact('rs'));
+
+    }
+    
+    public function top_products_mobile(Request $request)
+    {
+        $rs = ProductReview::select('product_id',
+                            DB::raw('AVG(rating) as average_rating'), 
+                            DB::raw('COUNT(*) as review_count'))
+                   ->groupBy('product_id')
+                   ->get();  
+
+        return view('admin.ecommerce.reports-mobile.top-products',compact('rs'));
+
+    }
+
 
 }

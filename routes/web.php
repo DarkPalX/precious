@@ -488,6 +488,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
             // Reports
                 Route::get('/report/best-sellers', [ReportsController::class, 'best_sellers'])->name('report.best-sellers');
+                Route::get('/report/sales-transaction', [ReportsController::class, 'sales_list'])->name('report.sales-transaction');
                 Route::get('/report/top-buyers', [ReportsController::class, 'top_buyers'])->name('report.top-buyers');
                 Route::get('/report/top-products', [ReportsController::class, 'top_products'])->name('report.top-products');
 
@@ -497,7 +498,6 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
                 Route::get('/report/inventory_reorder_point', [ReportsController::class, 'inventory_reorder_point'])->name('report.inventory.reorder_point');
                 Route::get('/report/coupon_list', [ReportsController::class, 'coupon_list'])->name('report.coupon.list');
-                Route::get('/report/sales-transaction', [ReportsController::class, 'sales_list'])->name('report.sales-transaction');
                 Route::get('/report/product-list', [ReportsController::class, 'product_list'])->name('report.product-list');
                 Route::get('/report/customer-list', [ReportsController::class, 'customer_list'])->name('report.customer-list');
 
@@ -506,6 +506,12 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
                 Route::get('/report/wishlist', [ReportsController::class, 'wishlist'])->name('report.wishlist');
                 Route::get('/report/favorites', [ReportsController::class, 'favorites'])->name('report.favorites');
+
+            // Mobile Reports
+                Route::get('/report/best-sellers/mobile', [ReportsController::class, 'best_sellers_mobile'])->name('report.best-sellers.mobile');
+                Route::get('/report/sales-transaction/mobile', [ReportsController::class, 'sales_list_mobile'])->name('report.sales-transaction.mobile');
+                Route::get('/report/top-buyers/mobile', [ReportsController::class, 'top_buyers_mobile'])->name('report.top-buyers.mobile');
+                Route::get('/report/top-products/mobile', [ReportsController::class, 'top_products_mobile'])->name('report.top-products.mobile');
             //
         ###### Ecommerce Routes ######
     });
