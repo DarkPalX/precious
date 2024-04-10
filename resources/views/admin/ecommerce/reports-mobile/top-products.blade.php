@@ -5,7 +5,7 @@
 
 @section('content')
 <div style="margin: 40px 40px 200px 40px;font-family:Arial;">
-    <h4 class="mg-b-0 tx-spacing--1">Top Rated Products</h4>
+    <h4 class="mg-b-0 tx-spacing--1">Mobile Top Rated Products</h4>
     @if($rs <>'')
     <br><br>
     <table id="example" class="display nowrap" style="width:100%;font: normal 13px/150% Arial, sans-serif, Helvetica;">

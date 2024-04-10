@@ -8,7 +8,7 @@
 
 <div style="margin:0px 40px 200px 40px;font-family:Arial;">
     <br><br>
-    <h4 class="mg-b-0 tx-spacing--1">Sales Transaction Report</h4>
+    <h4 class="mg-b-0 tx-spacing--1">Mobile Sales Transaction Report</h4>
     <form action="{{route('report.sales-transaction')}}" method="get">
         <input type="hidden" name="act" value="go">
         @csrf
