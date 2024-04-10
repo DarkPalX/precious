@@ -26,6 +26,7 @@ class ReportsController extends Controller
         $rs = SalesDetail::select('product_id',
                           DB::raw('SUM(qty) as total_quantity'),
                           DB::raw('SUM(net_amount) as total_net_amount'))
+                 ->where('qty','<>', 0)
                  ->groupBy('product_id')
                  ->get();
 
