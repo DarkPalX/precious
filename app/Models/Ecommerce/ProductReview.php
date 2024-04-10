@@ -22,9 +22,14 @@ class ProductReview extends Model
         return $product_name->name;
     }
 
+    // public function product()
+    // {
+    //     return $this->belongsTo('App\EcommerceModel\Product');
+    // }
+
     public function product()
     {
-        return $this->belongsTo('App\EcommerceModel\Product');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     public static function review_counter($productId,$rating)

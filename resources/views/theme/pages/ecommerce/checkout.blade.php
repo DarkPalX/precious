@@ -51,18 +51,18 @@
 							</tr>
 							<tr>
 								<td><strong>Barangay</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><textarea id="customer_delivery_barangay" id="address_brgy" class="form-control" rows="3" required>{{$customer->address_street}}</textarea></td>
+								<td class="p-2"><textarea id="customer_delivery_barangay" name="customer_delivery_barangay" id="address_brgy" class="form-control" rows="3" required>{{$customer->address_street}}</textarea></td>
 							</tr>
 							<tr>
 								<td><strong>City</strong> <span class="text-danger">*</span></td>
 								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_city" value="{{$customer->address_city}}" required>
+									<input type="text" class="form-control" id="customer_delivery_city" name="customer_delivery_city" value="{{$customer->address_city}}" required>
 								</td>
 							</tr>
 							<tr>
 								<td><strong>Province</strong> <span class="text-danger">*</span></td>
 								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_province" value="{{$customer->address_province}}" required>
+									<input type="text" class="form-control" id="customer_delivery_province" name="customer_delivery_province" value="{{$customer->address_province}}" required>
 								</td>
 							</tr>
 							<tr>

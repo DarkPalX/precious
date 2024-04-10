@@ -10,7 +10,7 @@ use App\Helpers\ListingHelper;
 
 
 use App\Models\Ecommerce\{
-    ProductCategory, DeliveryStatus, SalesPayment, SalesDetail, SalesHeader, CouponSale, Product, Promo
+    ProductCategory, DeliveryStatus, SalesPayment, SalesDetail, SalesHeader, CouponSale, Product, Promo, ProductReview
 };
 
 use App\Models\User;
@@ -21,6 +21,45 @@ use DB;
 
 class ReportsController extends Controller
 {
+    public function best_sellers(Request $request)
+    {
+        $rs = SalesDetail::select('product_id',
+                          DB::raw('SUM(qty) as total_quantity'),
+                          DB::raw('SUM(net_amount) as total_net_amount'))
+                 ->groupBy('product_id')
+                 ->get();
+
+
+        return view('admin.ecommerce.reports.best-sellers',compact('rs'));
+
+    }
+    
+    public function top_buyers(Request $request)
+    {       
+        $rs = SalesHeader::select('user_id', 
+                         DB::raw('SUM(net_amount) as total_net_amount'), 
+                         DB::raw('COUNT(*) as order_count'))
+                 ->where('status', 'active')
+                 ->groupBy('user_id')
+                 ->get();
+
+
+        return view('admin.ecommerce.reports.top-buyers',compact('rs'));
+
+    }
+    
+    public function top_products(Request $request)
+    {
+        $rs = ProductReview::select('product_id',
+                            DB::raw('AVG(rating) as average_rating'), 
+                            DB::raw('COUNT(*) as review_count'))
+                   ->groupBy('product_id')
+                   ->get();  
+
+        return view('admin.ecommerce.reports.top-products',compact('rs'));
+
+    }
+
     public function product_list(Request $request)
     {
         $rs = Product::all();        
@@ -68,7 +107,10 @@ class ReportsController extends Controller
         $endDate   = $request->get('end', false);
         $customer  = $request->get('customer', false);
         $product   = $request->get('product', false);
+        $category   = $request->get('category', false);
         $status    = $request->get('del_status', false);
+
+        // dd($category);
 
 
         if(isset($customer) && $customer <> ''){
@@ -77,6 +119,10 @@ class ReportsController extends Controller
 
         if(isset($product) && $product <> ''){
             $sales->where('ecommerce_sales_details.product_name', $product);
+        }
+
+        if(isset($category) && $category <> ''){
+            $sales->where('ecommerce_sales_details.product_category', $category);
         }
 
         if(isset($status) && $status <> ''){

@@ -18,6 +18,7 @@
                 <td>End Date</td>
                 <td>Client/Customer Name</td>
                 <td>Item/Purchase Description</td>
+                <td>Product Category</td>
                 <td>Status</td>
             </tr>
             <tr>
@@ -60,6 +61,22 @@
                     </select>
                 </td>
                 <td>
+                    <select style="font-size:12px;width: 140px;" name="category" id="category" class="form-control input-sm">
+                        <option value="">Select</option>
+                        @php
+                        $categories = \App\Models\Ecommerce\ProductCategory::orderBy('name')->get();
+                        @endphp
+                        @forelse($categories as $c)
+                        <option value="{{$c->id}}"
+                            @if(isset($category) and $category == $c->name) selected="selected" @endif 
+                            >
+                            {{$c->name}}
+                        </option>
+                        @empty
+                        @endforelse
+                    </select>
+                </td>
+                <td>
                     <select style="font-size:12px;width: 140px;" name="del_status" id="del_status" class="form-control input-sm">
                         <option value="">Select</option>
                         <option @if(isset($status) && $status == 'Waiting for Payment') selected="selected" @endif value="Waiting for Payment">Waiting for Payment</option>
@@ -89,6 +106,7 @@
                 <td>Client/Customer Name</td>
                 <td>Delivery Address</td>
                 <td>Item/Purchase Description</td>
+                <td>Category</td>
                 <td>Quantity</td>
                 <td>Unit Price</td>
                 <td>Gross</td>
@@ -107,6 +125,7 @@
                     <td>{{$sale->header->user->fullname}}</td>
                     <td>{{$sale->header->customer_delivery_adress}}</td>
                     <td>{{$sale->product->name}}</td>
+                    <td>{{$sale->product->category->name}}</td>
                     <td class="text-right">{{$sale->qty}}</td>
                     <td class="text-right">{{number_format($sale->price,2)}}</td>
                     <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>

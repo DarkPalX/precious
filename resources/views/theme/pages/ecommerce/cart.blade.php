@@ -213,7 +213,7 @@
 										</td>
 
 										<td class="text-end">		
-                                            @if(!$cart->isEmpty())		
+                                            @if(!empty($cart))		
                                                 <button type="submit" class="btn btn-dark">Proceed to Checkout</button>
                                             @else
                                                 <button type="button" class="btn btn-dark">Proceed to Checkout</button>

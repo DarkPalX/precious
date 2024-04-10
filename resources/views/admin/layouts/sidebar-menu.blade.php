@@ -272,20 +272,20 @@
 
         
 
-        <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
-            <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Best Sellers</span></a>
+        <li class="nav-item @if (\Route::current()->getName() == 'report.best-sellers')) active show @endif">
+            <a href="{{ route('report.best-sellers') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Best Sellers</span></a>
         </li>
 
-        <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
-            <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Sales</span></a>
+        <li class="nav-item @if (\Route::current()->getName() == 'report.sales-transaction')) active show @endif">
+            <a href="{{ route('report.sales-transaction') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Sales</span></a>
         </li>
 
-        <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
-            <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Buyers</span></a>
+        <li class="nav-item @if (\Route::current()->getName() == 'report.top-buyers')) active show @endif">
+            <a href="{{ route('report.top-buyers') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Buyers</span></a>
         </li>
 
-        <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">
-            <a href="{{ route('report.product-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Rated Products</span></a>
+        <li class="nav-item @if (\Route::current()->getName() == 'report.top-products')) active show @endif">
+            <a href="{{ route('report.top-products') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Rated Products</span></a>
         </li>
 
         {{-- <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">

@@ -521,7 +521,7 @@ class CartController extends Controller
         $realTotalPrice  = number_format($request->total_amount < 0 ? $request->total_amount + $request->ecredit_amount : $request->total_amount, 2,'.','');
         $orderNumber = $this->next_order_number(); 
 
-        $customerAddress = $request->customer_delivery_barangay.' '.$request->customer_delivery_city.' '.$request->customer_delivery_province.' '.$request->customer_delivery_zip;
+        $customerAddress = $request->customer_delivery_barangay.', '.$request->customer_delivery_city.', '.$request->customer_delivery_province.', '.$request->customer_delivery_zip;
 
         $use_ecredit = $request->payment_method == 'ecredit' ? 1 : 0;
         

@@ -487,6 +487,9 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
 
             // Reports
+                Route::get('/report/best-sellers', [ReportsController::class, 'best_sellers'])->name('report.best-sellers');
+                Route::get('/report/top-buyers', [ReportsController::class, 'top_buyers'])->name('report.top-buyers');
+                Route::get('/report/top-products', [ReportsController::class, 'top_products'])->name('report.top-products');
 
                 Route::get('/admin/report/sales_summary', [ReportsController::class, 'sales_summary'])->name('report.sales.summary');
                 Route::get('/admin/report/delivery_status', [ReportsController::class, 'delivery_status'])->name('admin.report.delivery_status');
