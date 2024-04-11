@@ -117,7 +117,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <p class="tx-10">
-                            Required image dimension: {{ env('MOBILE_MAIN_BANNER_HEIGHT') }}px by {{ env('MOBILE_MAIN_BANNER_WIDTH') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
+                            Required image dimension: {{ env('MOBILE_MAIN_BANNER_WIDTH') }}px by {{ env('MOBILE_MAIN_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
                         </p>
                     </div>
                     <div class="form-group mg-b-0" id="videoDiv" @if(is_banner_type($mobile_album, $errors)) style="display: none;" @endif>
@@ -127,7 +127,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <p class="tx-10">
-                            Required image dimension: {{ env('MOBILE_MAIN_BANNER_HEIGHT') }}px by {{ env('MOBILE_MAIN_BANNER_WIDTH') }}px <br /> Maximum file size: 30MB <br /> Required file type: .mp4
+                            Required image dimension: {{ env('MOBILE_MAIN_BANNER_WIDTH') }}px by {{ env('MOBILE_MAIN_BANNER_HEIGHT') }}px <br /> Maximum file size: 30MB <br /> Required file type: .mp4
                         </p>
                     </div>
                 </div>
@@ -147,8 +147,8 @@
                                             <div class="card-header ui-sortable-handle"><i data-feather="move"></i> {{ extract_file_name($banner['image_path']) }}</div>
                                             <div class="card-body">
                                                 <div class="row row-sm">
-                                                    <div class="col-lg-8 col-md-12" @if (is_video_type($mobile_album, $errors)) style="display: none;" @endif>
-                                                        <div class="form-group upload-image mg-b-0" style="background: url('{{ $banner['image_path'] }}');background-size: cover;">
+                                                    <div class="col-lg-4 col-md-12" @if (is_video_type($mobile_album, $errors)) style="display: none; height: {{ env('MOBILE_MAIN_BANNER_HEIGHT') }}px; width: {{ env('MOBILE_MAIN_BANNER_WIDTH') }}px;" @endif>
+                                                        <div class="form-group upload-image mg-b-0" style="background: url('{{ $banner['image_path'] }}');background-size: cover; height: {{ env('MOBILE_MAIN_BANNER_HEIGHT') }}px; width: {{ env('MOBILE_MAIN_BANNER_WIDTH') }}px;">
                                                             <div class="marker pos-absolute t-10 l-20 p-0 bg-transparent">
                                                                 <button type="button" class="btn btn-danger btn-xs btn-uppercase remove-upload" type="button" data-id="{{ $banner['id'] }}"><i data-feather="x"></i> Remove image</button>
                                                                 @if(!isset($banner['new']))
@@ -158,7 +158,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-4 col-md-12 imageList" @if (is_video_type($mobile_album, $errors)) style="display: none;" @endif>
+                                                    <div class="col-lg-8 col-md-12 imageList" @if (is_video_type($mobile_album, $errors)) style="display: none;" @endif>
                                                         <div class="form-group">
                                                             <input name="banners[{{ $banner['id'] }}][title]" type="text" class="form-control" placeholder="Caption heading" value="{{ $banner['title'] }}">
                                                         </div>
@@ -336,7 +336,7 @@
                                                     <div class="card-body">
                                                         <div class="row row-sm">
                                                             <div class="col-lg-8 col-md-12">
-                                                                <div class="form-group upload-image mg-b-0" style="background: url('`+returnData.image_url+`');background-size: cover;">
+                                                                <div class="form-group upload-image mg-b-0" style="background: url('`+returnData.image_url+`');background-size: cover; height: {{ env('MOBILE_MAIN_BANNER_HEIGHT') }}px; width: {{ env('MOBILE_MAIN_BANNER_WIDTH') }}px;">
                                                                     <div class="marker pos-absolute t-10 l-20 p-0 bg-transparent">
                                                                     <button type="button" class="btn btn-danger btn-xs btn-uppercase remove-upload" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove image</button>
                                                                     <input name="banners[`+image_count+`][image_path]" class="image_path" type="text" value="`+returnData.image_url+`" required onvalid="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Please upload image.')" oninput="this.setCustomValidity('')"/>

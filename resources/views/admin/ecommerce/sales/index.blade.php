@@ -149,7 +149,8 @@
 
                                                 @if($sale->status<>'CANCELLED')
                                                     @if (auth()->user()->has_access_to_route('sales-transaction.delivery_status'))
-                                                        <a class="dropdown-item" href="javascript:void(0);" onclick="change_delivery_status({{$sale->id}})" title="Update Delivery Status" data-id="{{$sale->id}}">Update Delivery Status</a>
+                                                        <a class="dropdown-item" href="javascript:void(0);" onclick="$('#prompt-change-delivery-status{{ $sale->id }}').modal('show');" title="Update Delivery Status" data-id="{{$sale->id}}">Update Delivery Status</a>
+                                                        {{-- <a class="dropdown-item" href="javascript:void(0);" onclick="change_delivery_status({{$sale->id}})" title="Update Delivery Status" data-id="{{$sale->id}}">Update Delivery Status</a> --}}
                                                     @endif
                                                 @endif
                                                 <a class="dropdown-item disallow_when_multiple_selected" href="javascript:void(0);" onclick="show_delivery_history({{$sale->id}})" title="Update Delivery Status" data-id="{{$sale->id}}">Show Delivery History</a>
@@ -166,6 +167,58 @@
 
                                 </td>
                             </tr>
+
+
+                            {{-- Delivery Status Update --}}
+                            <div class="modal effect-scale" id="prompt-change-delivery-status{{ $sale->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">{{__('Delivery Status')}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form id="dd_form" method="POST" action="{{route('sales-transaction.delivery_status')}}">
+                                            @csrf
+                                            @method('POST')
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="delivery_status">Status</label>
+                                                    <select id="delivery_status" class="custom-select mg-b-5" name="delivery_status" data-style="btn btn-outline-light btn-md btn-block tx-left" title="- None -" data-width="100%" required="required">
+                                                        <option value="Scheduled for Processing">Scheduled for Processing</option>
+                                                        <option value="Processing">Processing</option>
+                                                        <option value="Ready For delivery">Ready For delivery</option>
+                                                        <option value="In Transit">In Transit</option>
+                                                        <option value="Delivered">Delivered</option>
+                                                        
+                                                    @if($sale->delivery_status != "In Transit" && $sale->delivery_status != "Delivered")
+                                                        <option value="Returned">Returned</option>
+                                                        <option value="Cancelled">Cancelled</option>
+                                                    @endif
+                                                    
+                                                    </select>
+                                                    <p class="tx-10 text-danger" id="error">
+                                                        @error('delivery_status')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="delivery_status">Remarks</label>
+                                                    <textarea name="del_remarks" class="form-control" id="del_remarks" cols="30" rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" id="del_id" name="del_id" value="{{ $sale->id }}">
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </form>
+                            
+                                    </div>
+                                </div>
+                            </div>
                         @empty
                             <tr>
                                 <th colspan="17" style="text-align: center;"> <p class="text-danger">No Sales Transaction found.</p></th>
