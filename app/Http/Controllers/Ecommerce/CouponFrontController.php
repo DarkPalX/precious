@@ -333,37 +333,37 @@ class CouponFrontController extends Controller
 
             foreach($purchasetype as $type){
                 // Check Products
-                    if($type == 'product'){
-                        if(isset($coupon->purchase_product_id)){
-                            $products   = explode('|',$coupon->purchase_product_id);
-                            foreach($products as $prodid){
-                                if(in_array($prodid, $arr_products)){
-                                    $combination_counter .= 'product|';
-                                    break;
-                                }
-                            }
-                        }
-
-                        if(isset($coupon->purchase_product_cat_id)) {
-                            $categories = explode('|',$coupon->purchase_product_cat_id);
-                            foreach($categories as $catid){
-                                if(in_array($catid, $arr_categories)){
-                                    $combination_counter .= 'product|';
-                                    break;
-                                }
-                            }
-                        }
-
-                        if(isset($coupon->purchase_product_brand)) {
-                            $brands     = explode('|',$coupon->purchase_product_brand);
-                            foreach($brands as $brand){
-                                if(in_array($brand, $arr_brands)){
-                                    $combination_counter .= 'product|';
-                                    break;
-                                }
+                if($type == 'product'){
+                    if(isset($coupon->purchase_product_id)){
+                        $products   = explode('|',$coupon->purchase_product_id);
+                        foreach($products as $prodid){
+                            if(in_array($prodid, $arr_products)){
+                                $combination_counter .= 'product|';
+                                break;
                             }
                         }
                     }
+
+                    if(isset($coupon->purchase_product_cat_id)) {
+                        $categories = explode('|',$coupon->purchase_product_cat_id);
+                        foreach($categories as $catid){
+                            if(in_array($catid, $arr_categories)){
+                                $combination_counter .= 'product|';
+                                break;
+                            }
+                        }
+                    }
+
+                    if(isset($coupon->purchase_product_brand)) {
+                        $brands     = explode('|',$coupon->purchase_product_brand);
+                        foreach($brands as $brand){
+                            if(in_array($brand, $arr_brands)){
+                                $combination_counter .= 'product|';
+                                break;
+                            }
+                        }
+                    }
+                }
                 //
 
                 $arr_prod = [];
