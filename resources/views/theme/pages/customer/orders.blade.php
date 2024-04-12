@@ -53,7 +53,7 @@
                                                 @endif
 
                                                 <a class="dropdown-item" href="#" onclick="view_deliveries('{{$sale->id}}');">View Deliveries</a>
-                                                <a class="dropdown-item" href="#" onclick="cancel_unpaid_order('{{$sale->id}}')" @if($sale->delivery_status != "Waiting for Payment") hidden @endif>Cancel Order</a>
+                                                <a class="dropdown-item" href="#" onclick="cancel_unpaid_order('{{$sale->id}}')" @if($sale->delivery_status == "In Transit" || $sale->delivery_status == "Delivered" || $sale->delivery_status == "Cancelled") hidden @endif>Cancel Order</a>
                                             @endif
                                         </ul>
                                     </li>
