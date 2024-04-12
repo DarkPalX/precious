@@ -268,7 +268,7 @@ class CouponFrontController extends Controller
             }
         //
         
-    // Purchase Product, Category, Brand Only
+        // Purchase Product, Category, Brand Only
         $purchasedCoupons = 
             Coupon::where('status','ACTIVE')
             ->where('availability',1)
@@ -310,9 +310,9 @@ class CouponFrontController extends Controller
         }
 
         $purchased_coupons = Coupon::whereIn('id',$arr_coupons)->get();
-    //
+        //
 
-    // Purchase Combination = Product ID or Product Category or Product Brand + total amount + total quantity
+        // Purchase Combination = Product ID or Product Category or Product Brand + total amount + total quantity
         $purchasedCombinationCoupons = 
         Coupon::where('status','ACTIVE')
         ->where('availability',1)
@@ -452,7 +452,7 @@ class CouponFrontController extends Controller
 
         $purchased_combined_coupons = Coupon::whereIn('id',$arr_purchase_combination_coupons)->get();
         
-    //
+        //
 
         $collectibles = collect($couponsMinTotalAmount)
             ->merge($couponsMaxTotalAmount)
