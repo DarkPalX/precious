@@ -408,13 +408,10 @@ class CouponFrontController extends Controller
                         array_push($arr_prod, $cartProduct->product_id);
                     }
                 }
-                
 
                 $products = Product::whereIn('id',$arr_prod)->get();
 
                 if($type == 'qty'){
-                    \Log::error($products);
-
                     foreach($products as $prod){
                         $cartData = Cart::where('user_id',Auth::id())->where('product_id',$prod->id);
                         // check if product exist on cart
