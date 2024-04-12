@@ -367,11 +367,15 @@ class CouponFrontController extends Controller
                 //
 
                 $arr_prod = [];
+                $has_specific_products = false;
+                
                 if(isset($coupon->purchase_product_id)){
                     $prod   = explode('|',$coupon->purchase_product_id);
                     foreach($prod as $p){
                         array_push($arr_prod, $p);
                     }
+
+                    $has_specific_products = true;
                 }
 
                 if(isset($coupon->purchase_product_cat_id)) {
@@ -382,6 +386,8 @@ class CouponFrontController extends Controller
                             array_push($arr_prod, $x->id);
                         }
                     }
+                    
+                    $has_specific_products = true;
                 }
 
                 if(isset($coupon->purchase_product_brand)) {
@@ -392,11 +398,23 @@ class CouponFrontController extends Controller
                             array_push($arr_prod, $x->id);
                         }
                     }
+
+                    $has_specific_products = true;
                 }
+
+                if(!$has_specific_products){    
+                    $cartProducts = Cart::where('user_id',Auth::id())->get();
+                    foreach($cartProducts as $cartProduct){
+                        array_push($arr_prod, $cartProduct->product_id);
+                    }
+                }
+                
 
                 $products = Product::whereIn('id',$arr_prod)->get();
 
                 if($type == 'qty'){
+                    \Log::error($products);
+
                     foreach($products as $prod){
                         $cartData = Cart::where('user_id',Auth::id())->where('product_id',$prod->id);
                         // check if product exist on cart
@@ -533,34 +551,34 @@ class CouponFrontController extends Controller
         ]);
     }
 
-    // public function get_brands(Request $request)
-    // {
-    //     $categories = explode('|',$request->categories);
+    public function get_brands(Request $request)
+    {
+        $categories = explode('|',$request->categories);
 
-    //     $arr_categories = []; 
-    //     foreach($categories as $category) {
-    //         if($category != ''){
-    //             array_push($arr_categories, $category);    
-    //         }
-    //     }
+        $arr_categories = []; 
+        foreach($categories as $category) {
+            if($category != ''){
+                array_push($arr_categories, $category);    
+            }
+        }
 
-    //     $products = Product::whereIn('category_id', $arr_categories)->get();
+        $products = Product::whereIn('category_id', $arr_categories)->get();
 
-    //     $arr_brands = [];
-    //     foreach($products as $product){
-    //         if(!in_array($product->brand_id, $arr_brands)){
-    //             array_push($arr_brands, $product->brand_id);
-    //         }
-    //     }
+        $arr_brands = [];
+        foreach($products as $product){
+            if(!in_array($product->brand_id, $arr_brands)){
+                array_push($arr_brands, $product->brand_id);
+            }
+        }
 
-    //     $brands = Brand::whereIn('id',$arr_brands)->get();
+        $brands = Brand::whereIn('id',$arr_brands)->get();
 
-    //     if(count($brands)){
-    //         return response()->json(['success' => true, 'brands' => $brands]);
-    //     } else {
-    //         return response()->json(['success' => false]);
-    //     }
+        if(count($brands)){
+            return response()->json(['success' => true, 'brands' => $brands]);
+        } else {
+            return response()->json(['success' => false]);
+        }
         
-    // }
+    }
 
 }
