@@ -116,18 +116,36 @@
 							</div>
 						</div>
 						
-						{{--<div class="col-md-4">
-							<div id="row">
+						<div class="col-md-4" hidden>
+
+							<div class="col-lg-auto ps-lg-0">
+								<div class="row">
+									<div class="col-md-8">
+										<input type="text" value="" id="coupon_code" class="sm-form-control text-center text-md-start text-uppercase" placeholder="Enter Coupon Code.." />
+									</div>
+									<div class="col-md-4 mt-3 mt-md-0">
+										<button type="button" class="button button-3d button-black m-0" id="couponManualBtn">Apply Coupon</button>
+									</div>
+								</div>
+								<p><a href="#" onclick="myCoupons()" class="btn mb-2 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
+
+								<div id="manual-coupon-details"></div>
+
+								<div id="couponList"></div>
+							</div>
+
+							{{-- <div id="row">
 								<div class="input-group mb-3">
 									<input type="text" class="form-control m-input" placeholder="Enter Coupon Code..">
 								</div>
+								<a href="#" class="small mb-3 d-inline-block" data-bs-toggle="modal" data-bs-target="#myModal">Apply Coupon</a>
 							</div>
 
 							<div id="newinput"></div>
 							<button id="rowAdder" type="button" class="btn btn-dark">
 								<span class="icon icon-plus-square1"></span> Add Coupon
-							</button>
-						</div>--}}
+							</button> --}}
+						</div>
 					</div>
 					
 					<br>
@@ -401,6 +419,16 @@
 		</div>
 	</div>	
 </div>
+
+
+@include('theme.pages.ecommerce.modal')
+
+<input type="hidden" id="totalAmountWithoutCoupon" value="{{number_format($subtotal,2,'.','')}}">
+<input type="hidden" id="totalQty" value="{{$totalqty}}">
+
+<input type="hidden" id="coupon_limit" value="{{ Setting::info()->coupon_limit }}">
+<input type="hidden" id="solo_coupon_counter" value="{{$soloCouponCounter}}">
+
 @endsection
 
 @section('pagejs')
