@@ -561,6 +561,8 @@ class CartController extends Controller
 
         $this->store_items($salesHeader->id);
 
+        $this->update_coupon_status($request, $salesHeader->id);
+
         Cart::where('user_id', Auth::id())->delete();
         Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
 
