@@ -75,7 +75,7 @@
                             <input type="text" id="current_mobile_file" name="current_mobile_file" value="{{ $category->mobile_file_url }}" hidden/>
                         </div>
                         <p class="tx-10">
-                            Required image dimension: {{ env('CATEGORY_IMAGE_WIDTH') }}px by {{ env('CATEGORY_IMAGE_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png .gif
+                            Required image dimension: {{ env('CATEGORY_IMAGE_WIDTH') }}px by {{ env('CATEGORY_IMAGE_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png
                         </p>
                         @error('mobile_file_url')
                             <span class="text-danger">{{ $message }}</span>

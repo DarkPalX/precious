@@ -57,7 +57,7 @@
                             <label class="custom-file-label" for="mobile_file_url" id="mobile_ad_preview">Choose file</label>
                         </div>
                         <p class="tx-10">
-                            Required image dimension: {{ env('CATEGORY_IMAGE_WIDTH') }}px by {{ env('CATEGORY_IMAGE_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png .mp4 .gif
+                            Required image dimension: {{ env('CATEGORY_IMAGE_WIDTH') }}px by {{ env('CATEGORY_IMAGE_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png
                         </p>
                         @error('mobile_file_url')
                             <span class="text-danger">{{ $message }}</span>
