@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Models;
+
+use \Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+use Session;
+use Hash;
+use View;
+use Input;
+use Image;
+use DB;
+
+use App\Models\Misc;
+use App\Models\Email;
+
+class Contact extends Model{
+  
+  public function doSendInquiry($data) {
+
+    $Misc  = New Misc();
+    $TODAY = date("Y-m-d H:i:s");
+
+    $Platform=$data['Platform'];
+
+    $UserID=$data['UserID'];
+    $Subject=$data['Purpose'];
+    $FullName=$data['FullName'];
+    $EmailAddress=$data['EmailAddress'];
+    $MobileNo=$data['MobileNo'];
+    $Message=$data['Message'];
+    
+    //===================================
+    $param["FullName"] = $FullName;
+    $param["Subject"] = $Subject;
+    $param["EmailAddress"] = $EmailAddress;
+    $param["MobileNo"] = $MobileNo;
+    $param["Message"] = $Message;
+        
+    $Email = new Email();
+    $Email->SendContactUsEmail($param);
+
+    return 'Success';
+
+  }
+
+
+}
