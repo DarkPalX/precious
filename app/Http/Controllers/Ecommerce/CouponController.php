@@ -27,6 +27,7 @@ class CouponController extends Controller
      */
     public function index()
     {
+        Coupon::update_coupon_order_status();
         $listing = new ListingHelper('desc', 10, 'updated_at');
 
         $coupons = $listing->simple_search(Coupon::class, $this->searchFields);

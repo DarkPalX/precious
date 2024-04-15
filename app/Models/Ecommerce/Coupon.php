@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 use App\Models\User;
 use App\Models\Ecommerce\{
-    Product, CouponSale
+    Product, CouponSale, SalesHeader
 };
 
 
@@ -47,9 +47,23 @@ class Coupon extends Model
 
     public static function coupon_total_usage($couponid)
     {
-        $total = CouponSale::where('coupon_id',$couponid)->count();
+        $total = CouponSale::where('coupon_id',$couponid)->where('order_status','PAID')->count();
 
         return $total;
+    }
+
+    public static function update_coupon_order_status()
+    {
+        $coupon_sales = CouponSale::all();
+
+        foreach($coupon_sales as $coupon_sale){
+            $payment_status = SalesHeader::where('id', $coupon_sale->sales_header_id)->first()->payment_status;
+
+            CouponSale::where('id', $coupon_sale->id)
+            ->update([
+                'order_status' => $payment_status
+            ]);
+        }
     }
 
     public static function coupon_usage($couponid)
