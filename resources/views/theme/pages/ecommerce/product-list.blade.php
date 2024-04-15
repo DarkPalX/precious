@@ -99,7 +99,7 @@
 
 					@endif --}}
 
-					<div class="product col-md-4 col-sm-6 sf-dress bottommargin-sm" @if($product->book_type == 'Ebook') hidden @endif>
+					<div class="product col-md-4 col-sm-6 sf-dress bottommargin-sm" @if(strtolower($product->book_type) == 'ebook') hidden @endif>
 						<div class="grid-inner">
 							<div class="product-image">
 								<a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="{{$product->name}}"></a>
