@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="d-block">Book Type</label>
+                        <label class="d-block">Book Type <span class="text-danger">(if E-book only, you may type 'Ebook' or 'E-book' any capitalization is ok)</span></label>
                         <input name="book_type" id="book_type" value="{{ old('book_type') }}" type="text" class="form-control" maxlength="150">
                         @error('book_type')
                             <span class="text-danger">{{ $message }}</span>
