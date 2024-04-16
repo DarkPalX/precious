@@ -122,7 +122,7 @@
 
                 <tr>
                     <td  class="tx-right" colspan="5"><strong>Grand Total:</strong></td>
-                    <td class="tx-right"><strong>{{ number_format($sales->net_amount + $sales->ecredit_amount, 2) }}</strong></td>
+                    <td class="tx-right"><strong>{{ number_format(@if($sales->product_id == 0) $sales->net_amount + $sales->ecredit_amount @else $sales->net_amount @endif, 2) }}</strong></td>
                     {{-- <td class="tx-right"><strong>{{ number_format($sales->net_amount, 2) }}</strong></td> --}}
                 </tr>
 
