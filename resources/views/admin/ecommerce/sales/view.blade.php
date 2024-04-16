@@ -78,8 +78,8 @@
                 <tr class="pd-20">
                     <td class="tx-nowrap">{{$details->product_name}}</td>
                     <td class="tx-right">{{number_format($details->qty, 0)}}</td>
-                    <td class="tx-right">{{number_format($details->product->price, 2)}}</td>
-                    <td class="tx-right">{{number_format($details->product->discount_price, 2)}}</td>
+                    <td class="tx-right">{{number_format($details->product->price ?? $details->price, 2)}}</td>
+                    <td class="tx-right">{{number_format($details->product->discount_price ?? 0, 2)}}</td>
                     <td class="tx-right">{{number_format($details->discount_amount, 2)}}</td>
                     <td class="tx-right">{{number_format($product_subtotal, 2)}}</td>
                 </tr>
