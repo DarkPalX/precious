@@ -130,8 +130,15 @@
 								<p><a href="#" onclick="myCoupons()" class="btn mb-2 text-primary px-0"> <small>or click here to  Select from My Coupons</small></a></p>
 
 								<div id="manual-coupon-details"></div>
-
 								<div id="couponList"></div>
+								<div id="discount_list"></div>
+								<div id="manual-coupons"></div>
+								
+								<input type="hidden" id="coupon_limit" value="{{ Setting::info()->coupon_limit }}">
+								<input type="hidden" id="coupon_counter" name="coupon_counter" value="0">
+								<input type="hidden" id="solo_coupon_counter" value="0">
+								<input type="hidden" id="total_amount_discount_counter" value="0">
+								<input type="hidden" id="coupon_merge_not_allowed" value="0">
 							</div>
 
 							{{-- <div id="row">
@@ -356,7 +363,7 @@
 										@endforeach
 										
 										<input type="hidden" name="shippingOption" id="shippingOption" value="xde">
-										<input type="hidden" name="shippingRate" id="shippingRate" value="0">
+										<input type="hidden" name="shippingRate" id="shippingRate" value="500">
 										<input type="hidden" name="shippingFeeDiscount" id="sf_discount_amount" value="0">
 							
 										<input type="hidden" id="coupon_total_discount" name="coupon_total_discount" value="{{$cart->coupon_discount}}">
@@ -387,7 +394,7 @@
 											</td>
 
 											<td class="cart-product-name text-end">
-												<span class="amount">Free Delivery</span>
+												<span class="amount" id="delivery_fee" value="0"></span>
 											</td>
 										</tr>
 										<tr class="cart_item">
@@ -548,24 +555,41 @@
 		$('#shippingOption').val(stype);
 	}
 
-    function compute_total(){
+    // function compute_total(){
 
-        var delivery_fee = parseFloat($('#delivery_fee').val());
-        var delivery_discount = parseFloat($('#sf_discount_amount').val());
+    //     var delivery_fee = parseFloat($('#delivery_fee').val());
+    //     var delivery_discount = parseFloat($('#sf_discount_amount').val());
 
 
-        var orderAmount = parseFloat($('#totalAmountWithoutCoupon').val());
-        var couponDiscount = parseFloat($('#coupon_total_discount').val());
-        var ecreditBalance = parseFloat($('#ecredit_balance').val());
+    //     var orderAmount = parseFloat($('#totalAmountWithoutCoupon').val());
+    //     var couponDiscount = parseFloat($('#coupon_total_discount').val());
+    //     var ecreditBalance = parseFloat($('#ecredit_balance').val());
 
-        var orderTotal  = (orderAmount-couponDiscount) - ecreditBalance;
-        var deliveryFee = delivery_fee-delivery_discount;
+    //     var orderTotal  = (orderAmount-couponDiscount) - ecreditBalance;
+    //     var deliveryFee = delivery_fee-delivery_discount;
 
-        var grandTotal = parseFloat(orderTotal)+parseFloat(deliveryFee);
+    //     var grandTotal = parseFloat(orderTotal)+parseFloat(deliveryFee);
 
-        $('#span_total_amount').html(addCommas(parseFloat(grandTotal).toFixed(2)));
-        $('#total_amount').val(grandTotal.toFixed(2));
-    }
+    //     $('#span_total_amount').html(addCommas(parseFloat(grandTotal).toFixed(2)));
+    //     $('#total_amount').val(grandTotal.toFixed(2));
+    // }
+	function compute_total(){
+
+		var delivery_fee = parseFloat($('#shippingRate').val());
+		var delivery_discount = parseFloat($('#sf_discount_amount').val());
+
+		var orderAmount = parseFloat($('#totalAmountWithoutCoupon').val());
+		var couponDiscount = parseFloat($('#coupon_total_discount').val());
+
+		var orderTotal  = orderAmount-couponDiscount;
+		var deliveryFee = delivery_fee-delivery_discount;
+
+		var grandTotal = parseFloat(orderTotal)+parseFloat(deliveryFee);
+
+		$('#delivery_fee').html('₱' + addCommas(parseFloat(deliveryFee).toFixed(2)));
+		$('#span_total_amount').html('₱' + addCommas(parseFloat(grandTotal).toFixed(2)));
+		$('#total_amount').val(grandTotal.toFixed(2));
+	}
 
     function place_order() {   
 	    $('#chk_form').submit();
@@ -631,8 +655,6 @@
         	}
         });
 	});
-	
-	
 	
 	$('#couponManualBtn').click(function(){
         var couponCode = $('#coupon_code').val();
@@ -762,13 +784,19 @@
         });
     });
     
-    
-    
+    // function isInArrayCaseInsensitive(value, array) {
+    //     return array.some(function(item) {
+    //       return item.toLowerCase() === value.toLowerCase();
+    //     });
+    // }
+	
     function isInArrayCaseInsensitive(value, array) {
-        return array.some(function(item) {
-          return item.toLowerCase() === value.toLowerCase();
-        });
-    }
+		if (typeof value === 'string') { // Check if value is a string
+			return array.some(item => item.toLowerCase() === value.toLowerCase());
+		}
+		return false; // Return false if value is not a string
+	}
+
 
     function use_sf_coupon(cid){
     	var sf_discount = parseFloat($('#sfdiscountamount'+cid).val());
@@ -786,7 +814,7 @@
         
         if(coupon_counter(cid)){
         	
-            var selectedLocation = $('#province').val();
+            var selectedLocation = $('#customer_delivery_province').val();
             var loc = selectedLocation.split('|');
 
             var couponLocation = $('#sflocation'+cid).val();
@@ -797,9 +825,7 @@
                 arr_coupon_location.push(value);
             });
 
-            console.log(arr_coupon_location);
-
-            if(isInArrayCaseInsensitive(loc[2], arr_coupon_location) || jQuery.inArray('all', arr_coupon_location) !== -1){
+            if(isInArrayCaseInsensitive(loc, arr_coupon_location) || jQuery.inArray('all', arr_coupon_location) !== -1){
 
                 var name  = $('#couponname'+cid).val();
                 var terms = $('#couponterms'+cid).val();
@@ -814,11 +840,11 @@
                         '<p class="mb-3">'+desc+'</p>'+
 
                         '<input type="hidden" id="coupon_combination'+cid+'" value="'+combination+'">'+
-                        '<input type="hidden" name="sfeecouponid" value="'+cid+'">'+
+                        '<input type="hidden" name="couponid[]" value="'+cid+'">'+
                         '<input type="hidden" name="coupon_productid[]" value="0">'+
 
                         '<button type="button" class="btn btn-danger btn-sm sfCouponRemove" id="'+cid+'">Remove</button>&nbsp;'+
-                        '<button type="button" class="btn btn-secondary btn-sm me-2" data-container="body" data-toggle="popover" data-placement="right" data-content="'+terms+'">Terms & Condition</button>'+
+                        '<button hidden type="button" class="btn btn-secondary btn-sm me-2" data-container="body" data-toggle="popover" data-placement="right" data-content="'+terms+'">Terms & Condition</button>'+
                     '</div>'
                 );
 
@@ -831,7 +857,7 @@
                 //var sf_discount = parseFloat($('#sfdiscountamount'+cid).val());
 
                 if(sf_type == 'full'){
-                    dfee = parseFloat($('#delivery_fee').val());
+                    dfee = parseFloat($('#shippingRate').val());
 
                     $('#sf_discount_amount').val(dfee);
 
@@ -943,7 +969,7 @@
                                 '<p class="mb-3">'+coupon.description+'</p>'+
 
                                 usebtn+'&nbsp;'+
-                                '<button type="button" class="btn btn-secondary btn-sm me-2" data-bs-container="body" data-toggle="popover" data-placement="right" data-content="'+coupon.terms_and_conditions+'">Terms & Condition</button>'+
+                                '<button hidden type="button" class="btn btn-secondary btn-sm me-2" data-bs-container="body" data-toggle="popover" data-placement="right" data-content="'+coupon.terms_and_conditions+'">Terms & Condition</button>'+
                             '</div>'
                         );
                     } else {
@@ -956,7 +982,7 @@
                                 '<p class="mb-3">'+coupon.description+'</p>'+
 
                                 '<button class="btn btn-warning btn-sm disabled">T&C Not Met</button>&nbsp;'+
-                                '<button type="button" class="btn btn-secondary btn-sm me-2" data-bs-container="body" data-toggle="popover" data-placement="right" data-content="'+coupon.terms_and_conditions+'">Terms & Condition</button>'+
+                                '<button hidden type="button" class="btn btn-secondary btn-sm me-2" data-bs-container="body" data-toggle="popover" data-placement="right" data-content="'+coupon.terms_and_conditions+'">Terms & Condition</button>'+
                             '</div>'
                         );
                     }

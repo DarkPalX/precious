@@ -169,10 +169,10 @@
                                                 <td width="25%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> -₱{{number_format($h->discount_amount,2)}} </td>
                                             </tr>
                                             @endif
-                                            {{--<tr>
+                                            <tr>
                                                 <td colspan="3" width="75%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> DELIVERY FEE: </td>
                                                 <td width="25%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> ₱{{number_format($h->delivery_fee_amount,2)}} </td>
-                                            </tr>--}}
+                                            </tr>
 
                                             @php
                                                 $delivery_discount = \App\Models\Ecommerce\CouponSale::total_discount_delivery($h->id);
@@ -188,7 +188,7 @@
                                             <tr>
                                                 <td colspan="3" width="75%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> GRAND TOTAL: </td>
                                                 {{-- <td width="25%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> ₱{{number_format(($subtotal - $h->discount_amount) - $h->ecredit_amount,2)}} </td> --}}
-                                                <td width="25%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> ₱{{number_format($subtotal - $h->discount_amount,2)}} </td>
+                                                <td width="25%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> ₱{{number_format($subtotal - $h->discount_amount + ($h->delivery_fee_amount - $delivery_discount ),2)}} </td>
                                             </tr>
                                             
                                             @if(session('use_ecredit'))

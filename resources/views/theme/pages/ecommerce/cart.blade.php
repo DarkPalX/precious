@@ -152,6 +152,7 @@
 	                    <input type="hidden" id="coupon_counter" name="coupon_counter" value="0">
 	                    <input type="hidden" id="solo_coupon_counter" value="0">
 	                    <input type="hidden" id="total_amount_discount_counter" value="0">
+	                    <input type="hidden" id="coupon_merge_not_allowed" value="0">
 
 	                    <!-- coupon discounts -->
 	                    <input type="hidden" id="coupon_total_discount" name="coupon_total_discount" value="0">
@@ -679,6 +680,7 @@
                                         '<input type="hidden" id="couponterms'+coupon.id+'" value="'+coupon.terms_and_conditions+'">'+
                                         '<input type="hidden" id="coupondesc'+coupon.id+'" value="'+coupon.description+'">'+
                                         '<input type="hidden" id="couponfreeproductid'+coupon.id+'" value="'+coupon.free_product_id+'">'+
+                                        '<input type="hidden" id="couponmerge'+coupon.id+'" value="'+coupon.combination+'">'+
                                         '<input type="hidden" id="couponvalidity'+coupon.id+'" value="'+validity+'">'+
 
                                         '<table class="table small border rounded border-top-warning">' +
@@ -965,19 +967,57 @@
             var desc = $('#coupondesc'+cid).val();
             var terms = $('#couponterms'+cid).val();
             var combination = $('#couponcombination'+cid).val();
+            var couponmerge = $('#couponmerge'+cid).val();
             var validity = $('#couponvalidity'+cid).val();
+            var coupon_merge_not_allowed = $('#coupon_merge_not_allowed').val();
 
             if(coupon_counter(cid)){
+
+                // if(parseInt(totalAmountDiscountCounter) == 1){
+                //     swal({
+                //         title: '',
+                //         text: "Only one (1) coupon with discount amount/percentage per transaction.",         
+                //     });
+
+                //     var counter = $('#coupon_counter').val();
+                //     $('#coupon_counter').val(parseInt(counter)-1);
+
+                //     return false;
+                // }
+
+                
                 if(parseInt(totalAmountDiscountCounter) == 1){
-                    swal({
-                        title: '',
-                        text: "Only one (1) coupon with discount amount/percentage per transaction.",         
-                    });
 
-                    var counter = $('#coupon_counter').val();
-                    $('#coupon_counter').val(parseInt(counter)-1);
+                    if(couponmerge == 0){
+                        swal({
+                            title: '',
+                            text: "Coupon cannot be used with other coupons.",         
+                        });
 
-                    return false;
+                        var counter = $('#coupon_counter').val();
+                        $('#coupon_counter').val(parseInt(counter)-1);
+
+                        return false;
+                    }
+                    else{
+
+                        if(coupon_merge_not_allowed > 0){
+                            swal({
+                                title: '',
+                                text: "A coupon that cannot be used with other coupons is already applied.",         
+                            });
+                            
+                            var counter = $('#coupon_counter').val();
+                            $('#coupon_counter').val(parseInt(counter)-1);
+
+                            return false;
+                        }
+                    }
+                }
+                else if(parseInt(totalAmountDiscountCounter) == 0){
+                    if(couponmerge == 0){
+                	    $('#coupon_merge_not_allowed').val(1);
+                    }
                 }
 
                 var grandTotal = $('#grandTotal').val();
@@ -1069,12 +1109,12 @@
                         '</table>'
                     );
 
-                    
-            var name  = $('#couponname'+cid).val();
-            var desc = $('#coupondesc'+cid).val();
-            var terms = $('#couponterms'+cid).val();
-            var combination = $('#couponcombination'+cid).val();
-            var validity = $('#couponvalidity'+cid).val();
+                            
+                    var name  = $('#couponname'+cid).val();
+                    var desc = $('#coupondesc'+cid).val();
+                    var terms = $('#couponterms'+cid).val();
+                    var combination = $('#couponcombination'+cid).val();
+                    var validity = $('#couponvalidity'+cid).val();
 
 
 

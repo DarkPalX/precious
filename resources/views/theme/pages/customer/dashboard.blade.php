@@ -237,9 +237,14 @@
                                                             </tr>
 
                                                             <tr style="font-weight:bold;">
+                                                                <td colspan="3">Delivery Fee</td>
+                                                                <td>'.number_format(($sale->delivery_fee_amount - $sale->delivery_fee_discount), 2).'</td>
+                                                            </tr>
+
+                                                            <tr style="font-weight:bold;">
                                                                 <td colspan="3">Grand total</td>
 
-                                                                <td>'.number_format($total_sales-$sale->discount_amount,2).'</td>
+                                                                <td>'.number_format($total_sales - $sale->discount_amount + ($sale->delivery_fee_amount - $sale->delivery_fee_discount),2).'</td>
                                                             </tr>
 
                                                             <tr style="font-weight:bold;">
