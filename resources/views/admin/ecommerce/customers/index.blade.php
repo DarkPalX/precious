@@ -99,6 +99,7 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">E-Credits</th>
+                                    {{-- <th scope="col">Subscription</th> --}}
                                     <th scope="col">Status</th>
                                     <th scope="col">Last Date Modified</th>
                                     <th scope="col">Options</th>
@@ -107,6 +108,7 @@
                             <tbody>
                                 @forelse($users as $user)
                                     @php 
+                                        $user_sub = '\App\Models\UsersSubscription';
                                         $files = explode('|',$user->business_proof);
                                     @endphp
                                     <tr>
@@ -116,6 +118,7 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->address }}</td>
                                         <td>{{ $user->ecredits }}</td>
+                                        {{-- <td>{{ $user_sub::getSubscriptions($user->id) }}</td> --}}
                                         <td>
                                             @if($user->is_active == 1)
                                                 <span class="badge badge-success">Active</span>
