@@ -19,7 +19,7 @@ class UsersSubscription extends Model
 
     public static function getSubscriptions($id){
 
-        $subs = UsersSubscription::where('user_id', $id)->where('is_subscribe', 1)->where('is_expired', 0)->first();
+        $subs = UsersSubscription::where('user_id', $id)->get();
 
         return $subs;
     }

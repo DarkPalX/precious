@@ -1,4 +1,4 @@
-<section id="slider" class="slick-carousel clearfix sub-banner">
+{{-- <section id="slider" class="slick-carousel clearfix sub-banner">
     <div id="page-title" class="bg-transparent border-0">
         <div class="container clearfix">
             <div class="title-head">
@@ -27,9 +27,9 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 
-{{-- <section id="slider" class="slick-carousel clearfix sub-banner">
+<section id="slider" class="slick-carousel clearfix sub-banner">
     <div class="banner-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -63,4 +63,4 @@
             </div>
         </div>
     </div>
-</section> --}}
+</section>

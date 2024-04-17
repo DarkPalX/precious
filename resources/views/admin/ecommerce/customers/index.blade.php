@@ -108,7 +108,7 @@
                             <tbody>
                                 @forelse($users as $user)
                                     @php 
-                                        $user_sub = '\App\Models\UsersSubscription';
+                                        $user_subs = \App\Models\UsersSubscription::getSubscriptions($user->id);
                                         $files = explode('|',$user->business_proof);
                                     @endphp
                                     <tr>
@@ -118,7 +118,13 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->address }}</td>
                                         <td>{{ $user->ecredits }}</td>
-                                        {{-- <td>{{ $user_sub::getSubscriptions($user->id) }}</td> --}}
+                                        {{-- <td>
+                                            @forelse($user_subs as $user_sub)
+                                                {{ $user_sub->subscription->title }}
+                                            @empty
+                                                {{ 'Not Subscribed' }}
+                                            @endforelse
+                                        </td> --}}
                                         <td>
                                             @if($user->is_active == 1)
                                                 <span class="badge badge-success">Active</span>
