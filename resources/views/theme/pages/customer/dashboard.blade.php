@@ -216,7 +216,7 @@
                                                                 $modals.='
                                                                 <tr>
                                                                     <td>'.$item->product_name.'</td>
-                                                                    <td>'.$item->qty.' '.$item->uom.'</td>
+                                                                    <td>'.$item->qty.'</td>
                                                                     <td>'.number_format($item->price,2).'</td>
                                                                     <td>'.number_format(($item->price * $item->qty),2).'</td>
                                                                 </tr>';

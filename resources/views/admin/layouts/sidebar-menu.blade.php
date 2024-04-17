@@ -41,10 +41,10 @@
             <a href="#" class="nav-link"><i data-feather="image"></i> <span>Mobile Banners</span></a>
             <ul>
                 <li @if (url()->current() == route('mobile-albums.edit', 1)) class="active" @endif><a href="{{ route('mobile-albums.edit', 1) }}">Manage Home Banner</a></li>
-                <li @if (\Route::current()->getName() == 'mobile-albums.index' || (\Route::current()->getName() == 'mobile-albums.edit' && url()->current() != route('mobile-albums.edit', 1))) class="active" @endif><a href="{{ route('mobile-albums.index') }}">Manage Subpage Banners</a></li>
+                {{-- <li @if (\Route::current()->getName() == 'mobile-albums.index' || (\Route::current()->getName() == 'mobile-albums.edit' && url()->current() != route('mobile-albums.edit', 1))) class="active" @endif><a href="{{ route('mobile-albums.index') }}">Manage Subpage Banners</a></li>
                 @if(auth()->user()->has_access_to_route('mobile-albums.create'))
                     <li @if (\Route::current()->getName() == 'mobile-albums.create') class="active" @endif><a href="{{ route('mobile-albums.create') }}">Create an Album</a></li>
-                @endif
+                @endif --}}
             </ul>
         </li>
     @endif

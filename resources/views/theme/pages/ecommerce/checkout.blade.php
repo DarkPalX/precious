@@ -390,7 +390,7 @@
 										
 										<tr class="cart_item">
 											<td class="cart-product-name">
-												<strong>Shipping</strong>
+												<strong>Shipping Fee</strong>
 											</td>
 
 											<td class="cart-product-name text-end">
@@ -399,7 +399,7 @@
 										</tr>
 										<tr class="cart_item">
 											<td class="cart-product-name">
-												<strong>Total</strong>
+												<strong>Grand Total</strong>
 											</td>
 
 											<td class="cart-product-name text-end">
