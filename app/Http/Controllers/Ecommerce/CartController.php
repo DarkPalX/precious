@@ -781,31 +781,33 @@ class CartController extends Controller
             }
         }
 
-        $coupons = $data['couponid'];
-        foreach($coupons as $c){
-            $coupon = Coupon::find($c);
-
-            $cart = CouponCart::where('customer_id',Auth::id())->where('coupon_id',$coupon->id);
-
-            if($cart->exists()){
-                $ct = $cart->first();
-
-                if(isset($ct->product_id)){
-                    $productid = $ct->product_id;
+        if(isset($data['couponid'])){
+            $coupons = $data['couponid'];
+            foreach($coupons as $c){
+                $coupon = Coupon::find($c);
+    
+                $cart = CouponCart::where('customer_id',Auth::id())->where('coupon_id',$coupon->id);
+    
+                if($cart->exists()){
+                    $ct = $cart->first();
+    
+                    if(isset($ct->product_id)){
+                        $productid = $ct->product_id;
+                    } else {
+                        $productid = NULL;
+                    }            
                 } else {
                     $productid = NULL;
-                }            
-            } else {
-                $productid = NULL;
+                }
+    
+                CouponSale::create([
+                    'customer_id' => Auth::id(),
+                    'coupon_id' => $c,
+                    'coupon_code' => $coupon->coupon_code,
+                    'sales_header_id' => $salesid,
+                    'product_id' => $productid
+                ]);   
             }
-
-            CouponSale::create([
-                'customer_id' => Auth::id(),
-                'coupon_id' => $c,
-                'coupon_code' => $coupon->coupon_code,
-                'sales_header_id' => $salesid,
-                'product_id' => $productid
-            ]);   
         }
     }
 }
