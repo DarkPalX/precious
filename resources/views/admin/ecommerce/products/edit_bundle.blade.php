@@ -129,7 +129,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label class="d-block">Mobile Price (in Php) *</label>
                         <input required type="number" class="form-control @error('mobile_price') is-invalid @enderror" name="mobile_price" id="mobile_price" value="{{ old('mobile_price', number_format($product->mobile_price,2,'.','')) }}" min="0.00" step="0.01">
                         @error('mobile_price')
@@ -143,7 +143,7 @@
                         @error('mobile_discount_price')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> --}}
                     
                 </div>
                 <div class="col-lg-12">

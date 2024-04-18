@@ -132,7 +132,7 @@
                     <td class="text-right">{{number_format($sale->discount_amount,2)}}</td>
                     <td class="text-right">{{number_format(($sale->price*$sale->qty) - $sale->discount_amount,2)}}</td>
                     <td>{{$sale->payment_method}}</td>
-                    <td>{{$sale->header->delivery_status}}</td>
+                    <td>{{$sale->header->delivery_status}} @if($sale->cancellation_request == 1) | {{ $sale->cancellation_reason }} : {{ $sale->cancellation_remarks }} @else {{ optional($sale->header->deliveries->last())->remarks != '' ? ' | '. optional($sale->header->deliveries->last())->remarks : '' }} @endif</td>
                 </tr>
             @empty
                 <tr>

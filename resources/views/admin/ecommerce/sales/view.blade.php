@@ -40,6 +40,10 @@
             <p class="mg-b-3">Delivery Type: {{ strtoupper($sales->delivery_type) }}</p>
             <p class="mg-b-3">Order Status: <span class="tx-success tx-semibold">{{$status}}</span></p>
             <p class="mg-b-3">Delivery Status: <span class="tx-success tx-semibold tx-uppercase">{{$sales->delivery_status}}</span></p>
+            @if($sales->cancellation_request === 1)
+                <p class="mg-b-3">Cancellation Reason: <span class="tx-success tx-semibold">{{$sales->cancellation_reason}}</span></p>
+                <p class="mg-b-3">Cancellation Remark: <span class="tx-success tx-semibold">{{$sales->cancellation_remarks}}</span></p>
+            @endif
 
             <p class="mg-b-3 mg-t-20">Delivery Address: {{$sales->customer_delivery_adress}}</p>
             <p class="mg-b-3 mg-t-10">Notes: {{$sales->other_instruction}}</p>

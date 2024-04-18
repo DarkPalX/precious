@@ -178,7 +178,7 @@
 							</label>
 						</div>
 
-						<div class="col-sm-4 col-md-4">
+						{{-- <div class="col-sm-4 col-md-4">
 							<label for="payment-option-card" class="w-100">
 								<div class="pricing-box text-center shadow-none border">
 									<input type="radio" name="payment_method" value="credit" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card2">
@@ -190,7 +190,7 @@
 									</div>
 								</div>
 							</label>
-						</div>
+						</div> --}}
 
 						{{-- FOR ECREDIT --}}
 

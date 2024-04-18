@@ -36,9 +36,8 @@
                         <tr>
                             <td>{{$sale->order_number}}</td>
                             <td>{{$sale->created_at}}</td>
-                            <td>{{number_format($sale->gross_amount,2)}}</td>
-                            {{-- <td>{{number_format($sale->gross_amount-$sale->discount_amount,2)}}</td> --}}
-                            <td>{{$sale->delivery_status}}</td>
+                            <td>{{number_format($sale->gross_amount - $sale->discount_amount + $sale->ecredit_amount,2)}}</td>
+                            <td>{{$sale->delivery_status}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif</td> 
                             <td>
                                 <ul class="nav nav-pills">
                                     <li class="nav-item dropdown">
@@ -120,6 +119,7 @@
                                                     <span><strong>Payment Status:</strong> '.$sale->payment_status.'</span><br>
                                                     <span><strong>Delivery Courier:</strong> '.strtoupper($sale->delivery_type).'</span><br>
                                                     <span><strong>Delivery Status:</strong> '.$sale->delivery_status.'</span><br>
+                                                    <span><strong>Delivery Remarks:</strong> '. ($sale->cancellation_request == 1 ? $sale->cancellation_reason . ' / ' . $sale->cancellation_remarks : optional($sale->deliveries->last())->remarks) .'</span><br>
                                                     <span><strong>Delivery Tracking #:</strong> '.$sale->delivery_tracking_number.'</span><br>
                                                 </div>
                                                 <div class="gap-20"></div>
@@ -210,6 +210,38 @@
 {!!$modals!!}
 
 <div class="modal fade bs-example-modal-centered" id="cancel_order" tabindex="-1" role="dialog" aria-labelledby="centerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable ">
+        <div class="modal-content">
+            <form action="{{route('my-account.cancel-order')}}" method="post">
+                @csrf
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to cancel this order. If you wish to continue, please enter a reason for cancelling this order. </p>
+                    <select class="form-control" name="reason" required>
+                        <option value="Change of Delivery Address">Change of Delivery Address</option>
+                        <option value="Change / Combine Order">Change / Combine Order</option>
+                        <option value="Duplicate Order">Duplicate Order</option>
+                        <option value="Change of Mind">Change of Mind</option>
+                        <option value="Decided on another Product">Decided on another Product</option>
+                    </select>
+                    <input type="hidden" id="orderid" name="orderid">
+                    <br>
+                    <label>Reason <span class="text-danger">*</span></label>
+                    <textarea class="form-control" name="remarks" rows="5" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- <div class="modal fade bs-example-modal-centered" id="cancel_order" tabindex="-1" role="dialog" aria-labelledby="centerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <form action="{{ route('my-account.cancel-order') }}" method="post">
@@ -229,7 +261,7 @@
             </form>
         </div>
     </div>
-</div>
+</div> --}}
 
 
 @endsection

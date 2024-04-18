@@ -116,7 +116,7 @@
                         <input class="form-control" type="number" step="0.01" min="0.00" value="{{old('discount_price','0.00')}}" name="discount_price" id="discount_price">
                     </div>
                     
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label>Mobile Price (in Php)</label>
                         <input class="form-control" type="number" step="0.01" min="0.00" value="{{old('mobile_price','0.00')}}" name="mobile_price" id="mobile_price">
                     </div>
@@ -124,7 +124,7 @@
                     <div class="form-group">
                         <label>Mobile Discounted Price (in Php)</label>
                         <input class="form-control" type="number" step="0.01" min="0.00" value="{{old('mobile_discount_price','0.00')}}" name="mobile_discount_price" id="mobile_discount_price">
-                    </div>
+                    </div> --}}
                 </div>
 
                 <div class="col-lg-12">

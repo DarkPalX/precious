@@ -103,6 +103,8 @@ class CartController extends Controller
 
         $inventory_remark = true;
 
+        //FOR AUTO APPLY COUPONS CONTINUE HERE
+
         if ($inventory_remark) {
             return response()->json([
                 'success' => true,

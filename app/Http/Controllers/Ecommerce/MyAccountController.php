@@ -285,10 +285,24 @@ class MyAccountController extends Controller
     public function cancel_order(Request $request){
 
         $sales = SalesHeader::find($request->orderid);
-        $sales->update(['status' => 'CANCELLED', 'delivery_status' => 'CANCELLED']);
+        $sales->update([
+            'cancellation_request' => 1,
+            'cancellation_reason' => $request->reason,
+            'cancellation_remarks' => $request->remarks,
+            'delivery_status' => 'CANCELLED',
+            'status' => 'CANCELLED'
+        ]);
 
         return back()->with('success','Order #:'.$sales->order_number.' has been cancelled.');
     }
+
+    // public function cancel_order(Request $request){
+
+    //     $sales = SalesHeader::find($request->orderid);
+    //     $sales->update(['status' => 'CANCELLED', 'delivery_status' => 'CANCELLED']);
+
+    //     return back()->with('success','Order #:'.$sales->order_number.' has been cancelled.');
+    // }
 
     public function pay_again($id){
         $r = SalesHeader::findOrFail($id);

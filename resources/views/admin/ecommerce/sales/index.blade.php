@@ -121,14 +121,23 @@
                                 <td>{{ $sale->customer_name }}</td>
                                 <td>
                                     @if(\App\Models\Ecommerce\SalesPayment::check_if_has_added_payments($sale->id) == 1)
-                                        <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount,2) }}</a>
+                                        <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount - $sale->discount_amount + $sale->ecredit_amount,2) }}</a>
                                         {{-- <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount-$sale->discount_amount,2) }}</a> --}}
                                     @else
-                                        {{ number_format($sale->net_amount,2) }}
+                                        {{ number_format($sale->net_amount - $sale->discount_amount + $sale->ecredit_amount,2) }}
                                         {{-- {{ number_format($sale->net_amount-$sale->discount_amount,2) }} --}}
                                     @endif
                                 </td>
-                                <td><a href="{{route('admin.report.delivery_report',$sale->id)}}" target="_blank">{{$sale->delivery_status}}</a></td>
+                                {{-- <td><a href="{{route('admin.report.delivery_report',$sale->id)}}" target="_blank">{{$sale->delivery_status}}</a></td> --}}
+                                <td>
+                                    @if($sale->cancellation_request == 1)
+                                        <a href="{{route('admin.report.delivery_report',$sale->id)}}" target="_blank">CANCELLED <span class="text-danger">| {{$sale->cancellation_reason}}</span></a>
+                                    @else
+                                        {{-- <a href="{{ route('admin.report.delivery_report', $sale->id) }}" target="_blank">{{ $sale->delivery_status }} | <span class="text-dark">{{ optional($sale->deliveries->last())->remarks }}</span></a> --}}
+                                        <a href="{{ route('admin.report.delivery_report', $sale->id) }}" target="_blank">{{ $sale->delivery_status }} @if(optional($sale->deliveries->last())->remarks) <span class="text-dark"> |  {{ optional($sale->deliveries->last())->remarks }}</span> @endif</a>
+                                        
+                                    @endif
+                                </td>
                                 <td>{{ $sale->Paymentstatus }}</td>
                                 <td>
                                     <nav class="nav table-options">
