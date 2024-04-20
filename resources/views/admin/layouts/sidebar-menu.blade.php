@@ -139,7 +139,7 @@
     @endif
 
     @if(auth()->user()->has_access_to_module('products') || auth()->user()->has_access_to_module('product_categories') || auth()->user()->has_access_to_module('brands'))
-        <li class="nav-item with-sub @if (request()->routeIs('products*') || request()->routeIs('product-categories*') || request()->routeIs('brands*')) active show @endif">
+        <li class="nav-item with-sub @if (request()->routeIs('products*') || request()->routeIs('product-categories*') || request()->routeIs('product-review*') || request()->routeIs('product-catalog*') || request()->routeIs('brands*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="box"></i> <span>Products</span></a>
             <ul>
                 @if (auth()->user()->has_access_to_module('products'))
@@ -158,7 +158,9 @@
                 @if (auth()->user()->has_access_to_module('product-review'))
                     <li @if (\Route::current()->getName() == 'product-review.index') class="active" @endif><a href="{{ route('product-review.index') }}">Product Reviews</a></li>
                 @endif
-
+                @if (auth()->user()->has_access_to_module('product-catalog'))
+                    <li @if (\Route::current()->getName() == 'product-catalog.index') class="active" @endif><a href="{{ route('product-catalog.index') }}">Catalog List</a></li>
+                @endif
 
                 {{--<li @if (\Route::current()->getName() == 'product-attributes.index' || \Route::current()->getName() == 'product-attributes.edit') class="active" @endif><a href="{{ route('product-attributes.index') }}">Manage Attibutes</a></li>
                 

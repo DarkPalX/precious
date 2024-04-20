@@ -7,7 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-use App\Helpers\{PaynamicsHelper};
+use App\Mail\DeliveryStatusMail;
+use Illuminate\Support\Facades\Mail;
+
+use App\Helpers\{ListingHelper, Setting, PaynamicsHelper, XDEHelper, LBCHelper};
+
 use App\Models\Ecommerce\{
     Cart, SalesHeader, SalesDetail, CustomerAddress, CustomerFavorite, CustomerWishlist, Product
 };
@@ -292,6 +296,8 @@ class MyAccountController extends Controller
             'delivery_status' => 'CANCELLED',
             'status' => 'CANCELLED'
         ]);
+
+        Mail::to(Auth::user())->send(new DeliveryStatusMail($sales, Setting::info()));  
 
         return back()->with('success','Order #:'.$sales->order_number.' has been cancelled.');
     }

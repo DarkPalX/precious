@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Ecommerce;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Mail\DeliveryStatusMail;
+use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\Validator;
-use App\Helpers\{ListingHelper, XDEHelper};
+
+use App\Helpers\{ListingHelper, Setting, PaynamicsHelper, XDEHelper, LBCHelper};
 
 
 use App\Models\Ecommerce\{
@@ -304,6 +308,8 @@ class SalesController extends Controller
         }
 
         $order = SalesHeader::findOrFail($request->del_id);
+        
+        Mail::to(Auth::user())->send(new DeliveryStatusMail($order, Setting::info()));  
 
         return back()->with('success','Successfully updated delivery status!');
 

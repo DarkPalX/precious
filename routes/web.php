@@ -18,7 +18,7 @@ use App\Http\Controllers\Settings\{
 
 // Ecommerce Controller
 use App\Http\Controllers\Ecommerce\{
-    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController, CustomerWishlistController, BannerAdController
+    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController, CustomerWishlistController, BannerAdController, ProductCatalogHeaderController
 };
 
 use App\Http\Controllers\MailingList\{SubscriberController, GroupController, CampaignController, SubscriberFrontController};
@@ -161,7 +161,15 @@ Route::get('/phpinfo', function () {
             Route::post('/product-review-multiple-delete',[ProductReviewController::class, 'multiple_delete'])->name('product-review.multiple.delete');
             Route::post('/product-review-multiple-approve',[ProductReviewController::class, 'multiple_approve'])->name('product-review.multiple-approve');
             Route::post('/product-review-update-review',[ProductReviewController::class, 'update_review'])->name('product-review.update-review');
-            
+
+            //PRODUCT CATALOG
+            Route::resource('/product-catalog', ProductCatalogHeaderController::class)->except(['destroy']);
+            Route::get('/product-catalog/restore/{id}', [ProductCatalogHeaderController::class, 'restore'])->name('product-catalog.restore');
+            Route::get('/product-catalog/{id}/{status}', [ProductCatalogHeaderController::class, 'update_status'])->name('product-catalog.change-status');
+            Route::post('/product-catalog/single-delete', [ProductCatalogHeaderController::class, 'single_delete'])->name('product-catalog.single.delete');
+            Route::post('/product-catalog/multiple-change-status',[ProductCatalogHeaderController::class, 'multiple_change_status'])->name('product-catalog.multiple.change.status');
+            Route::post('/product-catalog/multiple-delete',[ProductCatalogHeaderController::class, 'multiple_delete'])->name('product-catalog.multiple.delete');
+
             //CUSTOMER FAVORITES
             Route::resource('/customer_favorite', CustomerFavoriteController::class)->except(['destroy']);
             Route::get('/customer_favorite/add-to-favorites/{prd_id}', [CustomerFavoriteController::class, 'add_to_favorites'])->name('add-to-favorites');
