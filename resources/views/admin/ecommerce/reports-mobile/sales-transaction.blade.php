@@ -80,9 +80,7 @@
                     <select style="font-size:12px;width: 140px;" name="del_status" id="del_status" class="form-control input-sm">
                         <option value="">Select</option>
                         <option @if(isset($status) && $status == 'Pending') selected="selected" @endif value="Pending">Pending</option>
-                        <option @if(isset($status) && $status == 'Pending') selected="selected" @endif value="Pending">Pending</option>
                         <option @if(isset($status) && $status == 'Processing') selected="selected" @endif value="Processing">Processing</option>
-                        <option @if(isset($status) && $status == 'Ready For delivery') selected="selected" @endif value="Ready For delivery">Ready For delivery</option>
                         <option @if(isset($status) && $status == 'In Transit') selected="selected" @endif value="In Transit">In Transit</option>
                         <option @if(isset($status) && $status == 'Delivered') selected="selected" @endif value="Delivered">Delivered</option>
                         <option @if(isset($status) && $status == 'Returned') selected="selected" @endif value="Returned">Returned</option>
