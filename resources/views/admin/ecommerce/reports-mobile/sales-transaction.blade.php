@@ -9,7 +9,7 @@
 <div style="margin:0px 40px 200px 40px;font-family:Arial;">
     <br><br>
     <h4 class="mg-b-0 tx-spacing--1">Mobile Sales Transaction Report</h4>
-    <form action="{{route('report.sales-transaction')}}" method="get">
+    <form action="{{route('report.sales-transaction.mobile')}}" method="get">
         <input type="hidden" name="act" value="go">
         @csrf
         <table style="font-size:12px;">
@@ -68,7 +68,7 @@
                         @endphp
                         @forelse($categories as $c)
                         <option value="{{$c->id}}"
-                            @if(isset($category) and $category == $c->name) selected="selected" @endif 
+                            @if(isset($category) && $category == $c->id) selected="selected" @endif 
                             >
                             {{$c->name}}
                         </option>
@@ -90,7 +90,7 @@
                     </select>
                 </td>
                 <td><button type="submit" class="btn btn-sm btn-primary" style="margin:0px 0px 0px 10px;">Generate</button></td>
-                <td><a href="{{ route('report.sales-transaction') }}" class="btn btn-sm btn-success" style="margin:0px 0px 0px 5px;">Reset</a></td>
+                <td><a href="{{ route('report.sales-transaction.mobile') }}" class="btn btn-sm btn-success" style="margin:0px 0px 0px 5px;">Reset</a></td>
             </tr>
         </table>
     </form>

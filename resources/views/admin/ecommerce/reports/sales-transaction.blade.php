@@ -68,7 +68,7 @@
                         @endphp
                         @forelse($categories as $c)
                         <option value="{{$c->id}}"
-                            @if(isset($category) and $category == $c->name) selected="selected" @endif 
+                            @if(isset($category) && $category == $c->id) selected="selected" @endif 
                             >
                             {{$c->name}}
                         </option>
