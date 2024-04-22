@@ -791,6 +791,10 @@
             }
         });
 
+        
+        // Array to store applied coupon codes
+        var appliedCoupons = [];
+
         $('#couponManualBtn').click(function(){
 
             var hasLogin = parseFloat($('#hasLogin').val());
@@ -804,6 +808,16 @@
 
             var couponCode = $('#coupon_code').val();
             var grandtotal = parseFloat($('#grandTotal').val());
+
+            if (appliedCoupons.includes(couponCode)) {
+                swal({
+                    title: '',
+                    text: "The coupon is already applied.",
+                });
+                return false;
+            } else {
+                appliedCoupons.push(couponCode);
+            }
 
             $.ajax({
                 data: {

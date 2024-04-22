@@ -114,7 +114,21 @@ class CouponFrontController extends Controller
 
     public function add_manual_coupon(Request $request)
     {   
+        
+        foreach($allCoupons as $coupon){
+            $totalusage = CouponSale::where('order_status','PAID')->where('coupon_id',$coupon->id)->count();
+            $remaining = $coupon->customer_limit-$totalusage;
+
+            array_push($arr_coupon_usage_limit, $remaining);
+        }
+
         $coupon = Coupon::where('coupon_code',$request->couponcode)->where('activation_type','manual');
+
+        //check coupon usage
+        $totalusage = CouponSale::where('order_status','PAID')->where('coupon_id',$coupon->first()->id)->count();
+        $coupon = $coupon->where('customer_limit', '>=', $totalusage);
+        
+
         if($coupon->exists()){
             $c = $coupon->first();
             

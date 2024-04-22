@@ -179,13 +179,13 @@
     @endif
 
     @if(auth()->user()->has_access_to_module('promos'))
-        {{--<li class="nav-item with-sub @if (request()->routeIs('promos*')) active show @endif">
+        <li class="nav-item with-sub @if (request()->routeIs('promos*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="users"></i> <span>Promos</span></a>
             <ul>
                 <li @if (\Route::current()->getName() == 'promos.index'|| \Route::current()->getName() == 'promos.edit') class="active" @endif><a href="{{ route('promos.index') }}">Manage Promos</a></li>
                 <li @if (\Route::current()->getName() == 'promos.create') class="active" @endif><a href="{{ route('promos.create') }}">Create a Promo</a></li>
             </ul>
-        </li>--}}
+        </li>
     @endif
 
     @if (auth()->user()->has_access_to_module('delivery_flat_rate'))

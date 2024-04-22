@@ -16,7 +16,7 @@ use App\Helpers\{ListingHelper, Setting, PaynamicsHelper, XDEHelper, LBCHelper};
 
 
 use App\Models\Ecommerce\{
-    DeliveryStatus, SalesPayment, SalesHeader, SalesDetail
+    DeliveryStatus, SalesPayment, SalesHeader, SalesDetail, Coupon
 };
 
 use App\Models\{
@@ -37,6 +37,8 @@ class SalesController extends Controller
 
     public function index(Request $request)
     {
+        //to check update coupon availability
+        Coupon::checkCouponAvailability();
 
         $customConditions = [
             [
@@ -310,6 +312,9 @@ class SalesController extends Controller
         $order = SalesHeader::findOrFail($request->del_id);
         
         Mail::to($order->customer_email)->send(new DeliveryStatusMail($order, Setting::info()));
+        
+        //to check update coupon availability
+        Coupon::checkCouponAvailability();
 
         return back()->with('success','Successfully updated delivery status!');
 

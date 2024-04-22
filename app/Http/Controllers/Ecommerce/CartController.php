@@ -568,7 +568,19 @@ class CartController extends Controller
         Cart::where('user_id', Auth::id())->delete();
         Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
 
-        return redirect(route('profile.sales'))->with('success', 'Order has been placed.');
+        //to check update coupon availability
+        Coupon::checkCouponAvailability();
+
+        return redirect(route('cart.success'));
+    }
+    
+    public function success(){
+        
+        $page = new Page();
+        $page->name = 'Success';
+
+        return view('theme.pages.ecommerce.success', compact('page'));
+
     }
 
     public function store_items($headerId)

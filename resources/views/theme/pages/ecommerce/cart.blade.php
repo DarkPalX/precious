@@ -31,7 +31,7 @@
 					<tbody>
 
 						@php 
-	                        $grandtotal = 0; $totalproducts = 0; $available_stock = 0; 
+	                        $grandtotal = 0; $totalproducts = 0; $available_stock = 0;
 
 	                        $cproducts  = '';
 	                        $totalCartProducts = 0;
@@ -659,7 +659,9 @@
                                 }
                             //
 
-                            if(qty_counter > 0){
+                            var remaining_usage_limit = response.remaining[key];
+
+                            if(qty_counter > 0 && remaining_usage_limit > 0){
                                 $('#collectibles').append(
                                 	'<div class="alert alert-info mt-3">'+
 
@@ -707,32 +709,34 @@
 				                    '</div>'
                                 );
                             } else {
-                                $('#collectibles').append(
-                                	'<div class="alert alert-secondary mt-3">'+
+                                if(remaining_usage_limit > 0){
+                                    $('#collectibles').append(
+                                        '<div class="alert alert-secondary mt-3">'+
 
-                                        '<table class="table small border rounded border-top-warning">' +
-                                            '<tbody>' +
-                                                '<tr>' +
-                                                    '<td>' +
-                                                        '<h3 class="mb-0">'+coupon.name+'</h3>' +
-                                                        coupon.description +
-                                                        '<br><br>' +
-                                                        'Code: '+coupon.coupon_code+
-                                                        '<br><br>' +
-                                                        '<div class="text-secondary">' +
-                                                            '<ul class="m-0 ms-3">' +
-                                                                '<li>' + coupon.terms_and_conditions + '</li>' +
-                                                                '<li>' + coupon.start_date + ' - ' + (coupon.end_date ? coupon.end_date : '∞') + '</li>' +
-                                                            '</ul>' +
-                                                        '</div>' +
-                                                    '</td>' +
-                                                '</tr>' +
-                                            '</tbody>' +
-                                        '</table>'+
-                                        usebtn+'&nbsp;'+
+                                            '<table class="table small border rounded border-top-warning">' +
+                                                '<tbody>' +
+                                                    '<tr>' +
+                                                        '<td>' +
+                                                            '<h3 class="mb-0">'+coupon.name+'</h3>' +
+                                                            coupon.description +
+                                                            '<br><br>' +
+                                                            'Code: '+coupon.coupon_code+
+                                                            '<br><br>' +
+                                                            '<div class="text-secondary">' +
+                                                                '<ul class="m-0 ms-3">' +
+                                                                    '<li>' + coupon.terms_and_conditions + '</li>' +
+                                                                    '<li>' + coupon.start_date + ' - ' + (coupon.end_date ? coupon.end_date : '∞') + '</li>' +
+                                                                '</ul>' +
+                                                            '</div>' +
+                                                        '</td>' +
+                                                    '</tr>' +
+                                                '</tbody>' +
+                                            '</table>'+
+                                            usebtn+'&nbsp;'+
 
-                                    '</div>'
-                                );
+                                        '</div>'
+                                    );
+                                }
                             }
                             
                         } else {

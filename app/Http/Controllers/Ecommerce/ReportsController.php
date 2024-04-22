@@ -211,26 +211,29 @@ class ReportsController extends Controller
 
     public function coupon_list(Request $request)
     {
-        $qry = "SELECT h.*, c.*, cs.coupon_code, cs.customer_id
-                FROM `coupon_sales` cs 
-                LEFT JOIN `ecommerce_sales_headers` h ON h.id = cs.sales_header_id 
-                LEFT JOIN `coupons` c ON c.id = cs.coupon_id
-                WHERE cs.id > 0";
+        $qry = "SELECT h.*,c.*, cs.coupon_code, cs.customer_id FROM `coupon_sales` cs 
+            left join ecommerce_sales_headers h on h.id = cs.sales_header_id 
+            left join coupons c on c.id = cs.coupon_id
+            where cs.id > 0";
 
-        if(isset($_GET['coupon_code']) && $_GET['coupon_code'] <> ''){
-            $qry .= " AND cs.coupon_code = '".$_GET['coupon_code']."' ";
+       
+        // if(isset($_GET['coupon_code']) && $_GET['coupon_code']<>''){
+        //     $qry.= " and cs.coupon_code = '".$_GET['coupon_code']."' ";
+        // }
+        
+        if(isset($_GET['coupon_code']) && $_GET['coupon_code']<>''){
+            $qry.= " and cs.coupon_code = '".$_GET['coupon_code']."' and cs.order_status = 'PAID' ";
         }
 
-        if(isset($_GET['customer']) && strlen($_GET['customer']) >= 1){
-            $qry .= " AND cs.customer_id = '".$_GET['customer']."' ";
+        if(isset($_GET['customer']) && strlen($_GET['customer'])>=1){
+            $qry.= " and cs.customer_id = '".$_GET['customer']."' ";
         }
 
-        if(isset($_GET['start']) && strlen($_GET['start']) >= 1 && isset($_GET['end']) && strlen($_GET['end']) >= 1){
-            $qry .= " AND h.created_at >= '".$_GET['start']."' AND h.created_at <= '".$_GET['end']."'";
+        if(isset($_GET['start']) && strlen($_GET['start'])>=1){
+            $qry.= " and h.created_at >='".$_GET['start']."' and h.created_at <='".$_GET['end']."'";
         }
-
-        $qry .= " ORDER BY cs.sales_header_id DESC";
-
+   
+      
         $rs = DB::select($qry);
 
         return view('admin.ecommerce.reports.coupon.list',compact('rs'));

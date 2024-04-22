@@ -148,6 +148,7 @@ Route::get('/phpinfo', function () {
 
             Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.front.checkout');
             Route::post('/temp_save',[CartController::class, 'save_sales'])->name('cart.temp_sales');
+            Route::get('/success',[CartController::class, 'success'])->name('cart.success');
 
             Route::get('/get-lbc-city-list', [CartController::class, 'lbc_cities'])->name('checkout.get-lbc-city-list');
             Route::get('/get-lbc-brgy-list', [CartController::class, 'lbc_barangays'])->name('checkout.get-lbc-brgy-list');
