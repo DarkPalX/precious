@@ -118,22 +118,24 @@
         </thead>
         <tbody>
             @forelse($sales as $sale)
-                <tr>
-                    <td>{{SettingHelper::datetimeFormat2($sale->header->created_at)}}</td>
-                    <td>{{$sale->order_number}}</td>
-                    <td>{{str_pad(($sale->header->user->id), 8, '0', STR_PAD_LEFT)}}</td>
-                    <td>{{$sale->header->user->fullname}}</td>
-                    <td>{{$sale->header->customer_delivery_adress}}</td>
-                    <td>{{$sale->product->name}}</td>
-                    <td>{{$sale->product->category->name}}</td>
-                    <td class="text-right">{{$sale->qty}}</td>
-                    <td class="text-right">{{number_format($sale->price,2)}}</td>
-                    <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
-                    <td class="text-right">{{number_format($sale->discount_amount,2)}}</td>
-                    <td class="text-right">{{number_format(($sale->price*$sale->qty) - $sale->discount_amount,2)}}</td>
-                    <td>{{$sale->payment_method}}</td>
-                    <td>{{$sale->header->delivery_status}}</td>
-                </tr>
+                @if($sale->product && $sale->product->sku)
+                    <tr>
+                        <td>{{SettingHelper::datetimeFormat2($sale->header->created_at)}}</td>
+                        <td>{{$sale->order_number}}</td>
+                        <td>{{str_pad(($sale->header->user->id), 8, '0', STR_PAD_LEFT)}}</td>
+                        <td>{{$sale->header->user->fullname}}</td>
+                        <td>{{$sale->header->customer_delivery_adress}}</td>
+                        <td>{{$sale->product->name}}</td>
+                        <td>{{$sale->product->category->name}}</td>
+                        <td class="text-right">{{$sale->qty}}</td>
+                        <td class="text-right">{{number_format($sale->price,2)}}</td>
+                        <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
+                        <td class="text-right">{{number_format($sale->discount_amount,2)}}</td>
+                        <td class="text-right">{{number_format(($sale->price*$sale->qty) - $sale->discount_amount,2)}}</td>
+                        <td>{{$sale->payment_method}}</td>
+                        <td>{{$sale->header->delivery_status}}</td>
+                    </tr>
+                @endif
             @empty
                 <tr>
                     <td colspan="10">No sales transaction found.</td>

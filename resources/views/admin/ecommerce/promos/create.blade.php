@@ -76,7 +76,7 @@
                         <table class="table table-borderless" style="width:100%;">
                             <thead>
                             <tr>
-                                <td width="50%"><strong>Select Categories</strong></td>
+                                <td width="50%"><strong>Select All Categories</strong></td>
                                 <td class="text-right">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="checkbox_all">

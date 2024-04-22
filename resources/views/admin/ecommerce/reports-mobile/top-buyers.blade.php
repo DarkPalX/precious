@@ -18,11 +18,13 @@
         </thead>
         <tbody>
             @forelse($rs as $r)
-            <tr>
-                <td>{{$r->user->name}}</td>
-                <td>{{$r->order_count}}</td>
-                <td>{{number_format($r->total_net_amount,2)}}</td>
-            </tr>
+                @if($r->product && $r->product->sku)
+                    <tr>
+                        <td>{{$r->user->name}}</td>
+                        <td>{{$r->order_count}}</td>
+                        <td>{{number_format($r->total_net_amount,2)}}</td>
+                    </tr>
+                @endif
             @empty
             <tr>
                 <td colspan="3" class="text-center">No item.</td>
