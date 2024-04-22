@@ -309,7 +309,7 @@ class SalesController extends Controller
 
         $order = SalesHeader::findOrFail($request->del_id);
         
-        Mail::to(Auth::user())->send(new DeliveryStatusMail($order, Setting::info()));  
+        Mail::to($order->customer_email)->send(new DeliveryStatusMail($order, Setting::info()));
 
         return back()->with('success','Successfully updated delivery status!');
 
