@@ -49,10 +49,8 @@
                                     <div class="mg-b-10">
                                         <select name="del_status" id="del_status" class="form-control" style="font-size:12px;width: 150px;">
                                             <option value="">All</option>
-                                            <option @if($deliveryStatus == 'Waiting for Payment') selected @endif value="Waiting for Payment">Waiting for Payment</option>
-                                            <option @if($deliveryStatus == 'Scheduled for Processing') selected @endif value="Scheduled for Processing">Scheduled for Processing</option>
+                                            <option @if($deliveryStatus == 'Pending') selected @endif value="Pending">Pending</option>
                                             <option @if($deliveryStatus == 'Processing') selected @endif value="Processing">Processing</option>
-                                            <option @if($deliveryStatus == 'Ready For delivery') selected @endif value="Ready For delivery">Ready For delivery</option>
                                             <option @if($deliveryStatus == 'In Transit') selected @endif value="In Transit">In Transit</option>
                                             <option @if($deliveryStatus == 'Delivered') selected @endif value="Delivered">Delivered</option>
                                             <option @if($deliveryStatus == 'Returned') selected @endif value="Returned">Returned</option>

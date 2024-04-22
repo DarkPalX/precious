@@ -77,10 +77,10 @@ Manage Product Reviews
                                                 <label class="custom-control-label" for="showApproved">Show Approved Only</label>
                                             </div>
                                             
-                                            <div class="custom-control custom-checkbox">
+                                            {{-- <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" id="showDisapproved" name="showDisapproved" class="custom-control-input" @if ($filter->showDisapproved) checked @endif>
                                                 <label class="custom-control-label" for="showDisapproved">Show Disapproved Only</label>
-                                            </div>
+                                            </div> --}}
                                             
                                             <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" id="showPending" name="showPending" class="custom-control-input" @if ($filter->showPending) checked @endif>

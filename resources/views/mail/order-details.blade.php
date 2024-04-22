@@ -168,6 +168,14 @@
                                                 <td colspan="3" width="75%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> COUPON DISCOUNT: </td>
                                                 <td width="25%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> -₱{{number_format($h->discount_amount,2)}} </td>
                                             </tr>
+                                            <tr>
+                                                <td colspan="3" width="75%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> COUPONS: </td>
+                                                <td width="25%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;">
+                                                    @foreach($h->coupons as $couponSale)
+                                                        {{ $couponSale->details->name }}<br>
+                                                    @endforeach
+                                                </td>
+                                            </tr>
                                             @endif
                                             <tr>
                                                 <td colspan="3" width="75%" align="right" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;"> DELIVERY FEE: </td>

@@ -552,7 +552,7 @@ class CartController extends Controller
         $requestData['delivery_type'] = $request->shippingOption;
         $requestData['delivery_fee_amount'] = $request->shippingRate;
         $requestData['delivery_fee_discount'] = $request->shippingFeeDiscount;
-        $requestData['delivery_status'] = $request->payment_method == 'cod' || 'ecredit' ? 'Pending' : 'Waiting for Payment';
+        $requestData['delivery_status'] = $request->payment_method == 'cod' || 'ecredit' ? 'Pending' : 'Pending';
         $requestData['gross_amount'] = number_format($totalPrice,2,'.','');
         $requestData['net_amount'] = number_format($totalPrice,2,'.','');
         $requestData['discount_amount'] = $coupon_total_discount;

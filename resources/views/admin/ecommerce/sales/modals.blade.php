@@ -80,7 +80,7 @@
                     <div class="form-group">
                         <label for="delivery_status">Status</label>
                         <select id="delivery_status" class="custom-select mg-b-5" name="delivery_status" data-style="btn btn-outline-light btn-md btn-block tx-left" title="- None -" data-width="100%" required="required">
-                            <option value="Scheduled for Processing">Scheduled for Processing</option>
+                            <option value="Pending">Pending</option>
                             <option value="Processing">Processing</option>
                             <option value="Ready For delivery">Ready For delivery</option>
                             <option value="In Transit">In Transit</option>

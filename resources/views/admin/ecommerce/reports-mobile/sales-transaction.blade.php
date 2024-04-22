@@ -79,8 +79,8 @@
                 <td>
                     <select style="font-size:12px;width: 140px;" name="del_status" id="del_status" class="form-control input-sm">
                         <option value="">Select</option>
-                        <option @if(isset($status) && $status == 'Waiting for Payment') selected="selected" @endif value="Waiting for Payment">Waiting for Payment</option>
-                        <option @if(isset($status) && $status == 'Scheduled for Processing') selected="selected" @endif value="Scheduled for Processing">Scheduled for Processing</option>
+                        <option @if(isset($status) && $status == 'Pending') selected="selected" @endif value="Pending">Pending</option>
+                        <option @if(isset($status) && $status == 'Pending') selected="selected" @endif value="Pending">Pending</option>
                         <option @if(isset($status) && $status == 'Processing') selected="selected" @endif value="Processing">Processing</option>
                         <option @if(isset($status) && $status == 'Ready For delivery') selected="selected" @endif value="Ready For delivery">Ready For delivery</option>
                         <option @if(isset($status) && $status == 'In Transit') selected="selected" @endif value="In Transit">In Transit</option>

@@ -30,7 +30,7 @@ class CreateEcommerceSalesHeaderTable extends Migration
             $table->string('delivery_type',250);            
             $table->decimal('delivery_fee_amount',16,4)->default(0);
             $table->decimal('delivery_fee_discount',16,2)->nullable();
-            $table->string('delivery_status',250)->default('Waiting for Payment');
+            $table->string('delivery_status',250)->default('Pending');
             $table->decimal('gross_amount',16,4)->default(0);
             $table->decimal('tax_amount',16,4)->default(0);
             $table->decimal('net_amount',16,4)->default(0);

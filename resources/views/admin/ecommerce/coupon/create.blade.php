@@ -74,6 +74,17 @@
 						<span class="text-danger">{{ $message }}</span>
                     @enderror
 				</div>
+				<div class="form-group">
+					<label class="d-block">Applicable Product Type *</label>
+					<select class="custom-select @error('applicable_product_type') is-invalid @enderror" id="applicable_product_type" name="applicable_product_type">
+						<option @if(old('applicable_product_type') == 'all') selected @endif value="all">All</option>
+						<option @if(old('applicable_product_type') == 'physical') selected @endif value="physical">Physical Books</option>
+						<option @if(old('applicable_product_type') == 'ebook') selected @endif value="ebook">E-Books</option>
+					</select>
+					@error('applicable_product_type')
+						<span class="text-danger">{{ $message }}</span>
+                    @enderror
+				</div>
 
 				<div class="form-group">
 					<label class="d-block">Distribution Type *</label>
@@ -98,31 +109,31 @@
 				<div class="form-group">
 					<div id="coupon-code" style="display: @if(old('coupon_activation') == 'manual') block @else none @endif;">
 						<label class="d-block">No. of Coupons *</label>
-							<div class="row" style="padding-bottom: 10px;">
-								<div class="col-6">
-									<div class="custom-control custom-radio">
-										<input @if(old('coupon_activation') == 'auto') checked @endif checked type="radio" id="single_create" name="creation_type" class="custom-control-input" value="single"  onclick="ShowHideDiv()">
-										<label class="custom-control-label" for="single_create">Single Coupon</label>
-									</div>
-								</div>
-								<div class="col-6">
-									<div class="custom-control custom-radio">
-										<input @if(old('coupon_activation') == 'manual') checked @endif type="radio" id="multiple_create" name="creation_type" class="custom-control-input" value="multiple" onclick="ShowHideDiv()">
-										<label class="custom-control-label" for="multiple_create">Multiple Coupons</label>
-									</div>
+						<div class="row" style="padding-bottom: 10px;">
+							<div class="col-6">
+								<div class="custom-control custom-radio">
+									<input @if(old('coupon_activation') == 'auto') checked @endif checked type="radio" id="single_create" name="creation_type" class="custom-control-input" value="single"  onclick="ShowHideDiv()">
+									<label class="custom-control-label" for="single_create">Single Coupon</label>
 								</div>
 							</div>
-							<div class="mb-3" id="coupon-code">
-								<label class="d-block">Coupon Code *</label>
-								<input type="text" name="code" id="ccode" class="form-control @error('code') is-invalid @enderror" value="{{ old('code') }}" placeholder="Enter Coupon Code">
-								@error('code')
-									<span class="text-danger">{{ $message }}</span>
-		                    	@enderror
+							<div class="col-6">
+								<div class="custom-control custom-radio">
+									<input @if(old('coupon_activation') == 'manual') checked @endif type="radio" id="multiple_create" name="creation_type" class="custom-control-input" value="multiple" onclick="ShowHideDiv()">
+									<label class="custom-control-label" for="multiple_create">Multiple Coupons</label>
+								</div>
+							</div>
+						</div>
+						<div class="mb-3" id="coupon-code">
+							<label class="d-block">Coupon Code *</label>
+							<input type="text" name="code" id="ccode" class="form-control @error('code') is-invalid @enderror" value="{{ old('code') }}" placeholder="Enter Coupon Code">
+							@error('code')
+								<span class="text-danger">{{ $message }}</span>
+							@enderror
 
-								<input type="file" name="csv" class="form-control" id="csv" style="display:none;">
-								<a style="display:none;" id="download_btn" class="float-right mg-b-20" href="{{ route('coupon.download.template') }}">Download Template</a>
-								<small id="span_csv" style="display:none;">Upload .csv file</small>
-							</div>
+							<input type="file" name="csv" class="form-control" id="csv" style="display:none;">
+							<a style="display:none;" id="download_btn" class="float-right mg-b-20" href="{{ route('coupon.download.template') }}">Download Template</a>
+							<small id="span_csv" style="display:none;">Upload .csv file</small>
+						</div>
 					</div>
 				</div>
 

@@ -547,7 +547,7 @@ class CartController extends Controller
         $requestData['delivery_type'] = $request->shippingOption;
         $requestData['delivery_fee_amount'] = 0;
         $requestData['delivery_fee_discount'] = 0;
-        $requestData['delivery_status'] = $request->payment_method == 'cod' || 'ecredit' ? 'Scheduled for Processing' : 'Waiting for Payment';
+        $requestData['delivery_status'] = $request->payment_method == 'cod' || 'ecredit' ? 'Pending' : 'Pending';
         $requestData['gross_amount'] = number_format($totalPrice,2,'.','');
         $requestData['net_amount'] = number_format($totalPrice,2,'.','');
         $requestData['discount_amount'] = $coupon_total_discount;
@@ -663,7 +663,7 @@ class CartController extends Controller
 
                     $sales->update([
                         'payment_status' => 'PAID',
-                        'delivery_status' => 'Scheduled for Processing',
+                        'delivery_status' => 'Pending',
                         'payment_method' => 'Paynamics-'.$application->ptype
                     ]);
 

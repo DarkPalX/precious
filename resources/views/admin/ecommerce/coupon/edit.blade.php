@@ -76,6 +76,18 @@
                     @enderror
 				</div>
 				<div class="form-group">
+					<label class="d-block">Applicable Product Type *</label>
+					<select class="custom-select @error('applicable_product_type') is-invalid @enderror" id="applicable_product_type" name="applicable_product_type">
+						<option @if(old('applicable_product_type') == 'all' || $coupon->applicable_product_type == 'all') selected @endif value="all">All</option>
+						<option @if(old('applicable_product_type') == 'physical' || $coupon->applicable_product_type == 'physical') selected @endif value="physical">Physical Books</option>
+						<option @if(old('applicable_product_type') == 'ebook' || $coupon->applicable_product_type == 'ebook') selected @endif value="ebook">E-Books</option>
+					</select>
+					@error('applicable_product_type')
+						<span class="text-danger">{{ $message }}</span>
+                    @enderror
+				</div>
+
+				<div class="form-group">
 					<label class="d-block">Distribution Type</label>
 					<div class="row" style="padding-bottom: 10px;">
 						<div class="col-6">

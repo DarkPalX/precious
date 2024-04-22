@@ -19,12 +19,14 @@
         </thead>
         <tbody>
             @forelse($rs as $r)
-            <tr>
-                <td>{{$r->product->sku}}</td>
-                <td>{{$r->product->name}}</td>
-                <td>{{$r->total_quantity}}</td>
-                <td>{{number_format($r->total_net_amount,2)}}</td>
-            </tr>
+                @if($r->product && $r->product->sku)
+                    <tr>
+                        <td>{{$r->product->sku}}</td>
+                        <td>{{$r->product->name}}</td>
+                        <td>{{$r->total_quantity}}</td>
+                        <td>{{number_format($r->total_net_amount,2)}}</td>
+                    </tr>
+                @endif
             @empty
             <tr>
                 <td colspan="6">No products found.</td>

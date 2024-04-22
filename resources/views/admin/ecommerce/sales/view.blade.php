@@ -108,14 +108,24 @@
                     <td  class="tx-right" colspan="5"><strong>Coupon Discount:</strong></td>
                     <td class="tx-right"><strong>{{number_format($sales->discount_amount, 2)}}</strong></td>
                 </tr>
+                <tr>
+                    <td  class="tx-right border-0" colspan="5">
+                        <strong>Coupons:</strong>
+                    </td>
+                    <td  class="tx-right border-0">
+                        @foreach($sales->coupons as $couponSale)
+                            <span class="badge badge-light p-2" style="font-size: 14px;">{{ $couponSale->details->name }}</span><br>
+                        @endforeach                    
+                    </td>
+                </tr>
                 @endif
 
-                @if($sales->delivery_fee_amount > 0)
+                {{-- @if($sales->delivery_fee_amount > 0) --}}
                 <tr>
                     <td  class="tx-right" colspan="5"><strong>Delivery Fee:</strong></td>
                     <td class="tx-right"><strong>{{number_format($sales->delivery_fee_amount, 2)}}</strong></td>
                 </tr>
-                @endif
+                {{-- @endif --}}
 
                 @if($delivery_discount > 0)
                 <tr>

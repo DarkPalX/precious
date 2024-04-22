@@ -19,7 +19,7 @@ class Coupon extends Model
 {
 	use SoftDeletes;
 
-    protected $fillable = [ 'coupon_code', 'name', 'description', 'terms_and_conditions', 'activation_type', 'customer_scope', 'scope_customer_id', 'scope_subscriber_group_id', 'area', 'location','location_discount_type','location_discount_amount', 'amount', 'percentage', 'free_product_id', 'status', 'start_date', 'end_date', 'start_time', 'end_time', 'event_name', 'event_date', 'repeat_annually', 'purchase_product_id', 'purchase_product_cat_id', 'purchase_product_brand', 'purchase_amount', 'purchase_amount_type', 'amount_discount_type', 'purchase_qty', 'purchase_qty_type', 'purchase_combination_counter','purchase_combination', 'activity_type', 'customer_limit', 'usage_limit', 'usage_limit_no', 'combination', 'availability', 'user_id','product_discount', 'discount_product_id'];
+    protected $fillable = [ 'coupon_code', 'name', 'description', 'terms_and_conditions', 'applicable_product_type', 'activation_type', 'customer_scope', 'scope_customer_id', 'scope_subscriber_group_id', 'area', 'location','location_discount_type','location_discount_amount', 'amount', 'percentage', 'free_product_id', 'status', 'start_date', 'end_date', 'start_time', 'end_time', 'event_name', 'event_date', 'repeat_annually', 'purchase_product_id', 'purchase_product_cat_id', 'purchase_product_brand', 'purchase_amount', 'purchase_amount_type', 'amount_discount_type', 'purchase_qty', 'purchase_qty_type', 'purchase_combination_counter','purchase_combination', 'activity_type', 'customer_limit', 'usage_limit', 'usage_limit_no', 'combination', 'availability', 'user_id','product_discount', 'discount_product_id'];
     
     public $timestamps = true;
 
@@ -33,6 +33,11 @@ class Coupon extends Model
         }
 
         return $randomString;
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class, 'coupon_id');
     }
 
     private static function generate_random_string($length = 8) {

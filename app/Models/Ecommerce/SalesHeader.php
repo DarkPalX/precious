@@ -43,7 +43,7 @@ class SalesHeader extends Model
   
         if($paid >= $this->net_amount){
             $tag_as_paid = SalesHeader::whereId((int) $this->id)->update(['payment_status' => 'PAID']);
-            if($this->delivery_status == 'Waiting for Payment'){
+            if($this->delivery_status == 'Pending'){
                 $update_delivery_status = SalesHeader::whereId((int) $this->id)->update(['delivery_status' => 'Processing Stock']);
             }
             return 'PAID';
@@ -63,6 +63,11 @@ class SalesHeader extends Model
 
     public function customer_details(){
         return $this->belongsTo(User::class, 'user_id')->withTrashed();
+    }
+    
+    public function coupons()
+    {
+        return $this->hasMany(CouponSale::class, 'sales_header_id');
     }
 
     public static function payment_status($order_num){
