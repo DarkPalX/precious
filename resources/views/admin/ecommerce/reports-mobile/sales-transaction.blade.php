@@ -118,7 +118,7 @@
         </thead>
         <tbody>
             @forelse($sales as $sale)
-                @if($sale->product && $sale->product->sku)
+                @if($sale->product && $sale->product->sku && $sale->header->user->id)
                     <tr>
                         <td>{{SettingHelper::datetimeFormat2($sale->header->created_at)}}</td>
                         <td>{{$sale->order_number}}</td>
