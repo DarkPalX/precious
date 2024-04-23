@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
-use \Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Routing\UrlGenerator;
@@ -17,8 +17,8 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\UserAccount;
-use App\Models\ContentManagement;
+use App\Models\APIModels\UserAccount;
+use App\Models\APIModels\ContentManagement;
 
 class Misc extends Model
 {
