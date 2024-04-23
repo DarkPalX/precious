@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +17,7 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
+use App\Models\APIModels\Misc;
 
 class Library extends Model
 {
@@ -32,8 +32,8 @@ class Library extends Model
     $Limit=$data['Limit'];
     $PageNo=$data['PageNo'];
     
-    $query = DB::table('products as prds')
-      ->join('customer_libraries as lib', 'prds.id', '=', 'lib.product_id') 
+    $query = DB::table('customer_libraries as lib')
+      ->join('products as prds', 'prds.id', '=', 'lib.product_id') 
     
        ->selectraw("
           prds.id as book_ID,
@@ -59,15 +59,16 @@ class Library extends Model
           COALESCE(prds.is_best_seller,0) as is_best_seller,
           COALESCE(prds.is_free,0) as is_free,
 
-          COALESCE(prds.price,0) as price,      
-          COALESCE(prds.discount_price,0) as discount_price,   
+          COALESCE(prds.ebook_price,0) as price,      
+          COALESCE(prds.ebook_discount_price,0) as discount_price,   
+          
           COALESCE(prds.reorder_point,0) as reorder_point,
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,  
 
           COALESCE((
                SELECT 
-                  prod_img.path FROM )
+                  prod_img.path FROM 
                       product_photos as prod_img                  
                   LEFT JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = lib.product_id
@@ -89,18 +90,19 @@ class Library extends Model
           
         ");    
 
-      $query->where("lib.user_id",'=',$UserID);    
+    $query->where("lib.user_id",'=',$UserID);    
    
-      if($Status!='' && $Status!='All'){
+      // if($Status!='' && $Status!='All'){
 
-        if($Status=='Epub'){
-          $query->where("prds.file_url","!=",null);    
-        }
+      //   if($Status=='Epub'){
+      //     $query->where("prds.file_url","!=",null);    
+      //   }
 
-        if($Status=='Physical'){
-          $query->where("prds.file_url","==",null);    
-        }      
-      }    
+      //   if($Status=='Physical'){
+      //     $query->where("prds.file_url","==",null);    
+      //   } 
+
+      // }    
                                   
       if($SearchText != ''){
         $arSearchText = explode(" ",$SearchText);
