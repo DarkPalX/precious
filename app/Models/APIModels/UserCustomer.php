@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
-use \Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Routing\UrlGenerator;
@@ -17,8 +17,8 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
-use App\Models\Email;
+use App\Models\APIModels\Misc;
+use App\Models\APIModels\Email;
 
 
 class UserCustomer extends Model
@@ -45,7 +45,8 @@ class UserCustomer extends Model
           COALESCE(usrs.phone,'') as phone,
 
           COALESCE(usrs.birth_date,'') as birth_date,
-          DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_format,
+          DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+          DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
 
           COALESCE(usrs.address_street,'') as address_street,
           COALESCE(usrs.address_city,'') as address_city,
@@ -128,7 +129,8 @@ class UserCustomer extends Model
           COALESCE(usrs.phone,'') as phone,
 
           COALESCE(usrs.birth_date,'') as birth_date,
-          DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_format,
+          DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+          DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
 
           COALESCE(usrs.address_street,'') as address_street,
           COALESCE(usrs.address_city,'') as address_city,
@@ -475,6 +477,15 @@ class UserCustomer extends Model
               'created_at' => $TODAY             
             ]);
 
+          // SAVE SYSTEM 
+             //Send Notification Message
+               $MessageNotificationID = DB::table('message_notification')
+                    ->insertGetId([                                            
+                      'user_id' => $UserID,                                                         
+                      'message_notification' => 'Welcome to Precious Pages Corp. & thank you for your for signing-up. Enjoy & explore our wide variety of books from best seller to premium books or any books that you have been looking for.',
+                      'created_at' => $TODAY             
+                  ]);    
+
           // CALL EMAIL HERE FOR REGISTRATION W/ ACTIVATION
           if(!empty($EmailAddress)){      
              $param['FullName']=trim($FullName);
@@ -514,7 +525,8 @@ class UserCustomer extends Model
           COALESCE(usrs.phone,'') as phone,
 
           COALESCE(usrs.birth_date,'') as birth_date,
-          DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_format,
+          DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+          DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
 
           COALESCE(usrs.address_street,'') as address_street,
           COALESCE(usrs.address_city,'') as address_city,
@@ -593,7 +605,23 @@ class UserCustomer extends Model
     $ZipCode=$data['ZipCode'];
  
     if($UserID > 0){
-        DB::table('users')
+        if($BirthDate=='Not Set 00:00:00'){
+            DB::table('users')
+          ->where('id',$UserID)
+          ->update([      
+            'firstname' => trim(ucwords($FirstName)),              
+            'lastname' => trim(ucwords($LastName)),              
+            'name' => trim(ucwords($FullName)),              
+            'email' => trim($EmailAddress), 
+            'mobile' => trim($MobileNo),
+            'address_street' => $StreetAddress,                                      
+            'address_city' => $CityName,
+            'address_zip' => $ZipCode,                                       
+            'updated_at' => $TODAY
+        ]);     
+            
+        }else{
+            DB::table('users')
           ->where('id',$UserID)
           ->update([      
             'firstname' => trim(ucwords($FirstName)),              
@@ -606,7 +634,9 @@ class UserCustomer extends Model
             'address_city' => $CityName,
             'address_zip' => $ZipCode,                                       
             'updated_at' => $TODAY
-        ]);        
+        ]);     
+        }
+           
     }
 
     return 'Success';
