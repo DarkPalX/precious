@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
-use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Routing\UrlGenerator;
@@ -17,9 +16,9 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
-use App\Models\Book;
-use App\Models\UserCustomer;
+use App\Models\APIModels\Misc;
+use App\Models\APIModels\Book;
+use App\Models\APIModels\UserCustomer;
 
 class Review extends Model
 {
