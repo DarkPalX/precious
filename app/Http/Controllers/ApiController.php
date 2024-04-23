@@ -20,21 +20,21 @@ use DB;
 use Excel;
 use PDF;
 
-use App\Models\Misc;
-use App\Models\Book;
-use App\Models\City;
-use App\Models\Cart;
-use App\Models\Order;
-use App\Models\EWallet;
-use App\Models\Review;
-use App\Models\Contact;
-use App\Models\Library;
-use App\Models\Voucher;
-use App\Models\Messages;
-use App\Models\BannerAds;
-use App\Models\Favorites;
-use App\Models\Subscription;
-use App\Models\UserCustomer;
+use App\Models\APIModels\Misc;
+use App\Models\APIModels\Book;
+use App\Models\APIModels\City;
+use App\Models\APIModels\Cart;
+use App\Models\APIModels\Order;
+use App\Models\APIModels\Review;
+use App\Models\APIModels\EWallet;
+use App\Models\APIModels\Contact;
+use App\Models\APIModels\Library;
+use App\Models\APIModels\Voucher;
+use App\Models\APIModels\Messages;
+use App\Models\APIModels\BannerAds;
+use App\Models\APIModels\Favorites;
+use App\Models\APIModels\Subscription;
+use App\Models\APIModels\UserCustomer;
 
 class ApiController extends Controller {
 
@@ -457,7 +457,8 @@ class ApiController extends Controller {
 
     $response=$UserCustomer->doResendVerificationCode($data); 
     
-    if($response=='Success'){      
+    if($response=='Success'){   
+       
       $VerficationCode=$UserCustomer->getVerificationCodeByID($data);
         return response()->json([                  
          'response' => $response,
@@ -1736,6 +1737,7 @@ public function validateCouponCode(Request $request){
   $result=$EWallet->getEWalletHistoryList($data);  
 
   return response()->json($result); 
+
   }
 
 //MESSAGE NOTIFICATION===============================================================
@@ -1760,6 +1762,58 @@ public function validateCouponCode(Request $request){
   return response()->json($result); 
   }
 
+  //Set Read Message===================================================
+  public function openSetReadMessageNotification(Request $request){
+
+  $Messages = new Messages();
+
+  $response = "Failed";
+  $responseMessage = "";
+
+  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+  $data['MessageID'] = $request->post('MessageID');
+
+  $data['Status'] = '';
+  $data['SearchText'] = '';
+
+  $data["PageNo"] = 0;
+  $data["Limit"] = 0;
+
+  $result=$Messages->openSetReadMessageNotification($data);  
+
+   return response()->json([                  
+     'response' => $response,
+     'message' => "Message has successfully set to read.",
+   ]);    
+
+  }
+
+  //Set Deleted Message===================================================
+  public function deleteReadMessageNotification(Request $request){
+
+  $Messages = new Messages();
+
+  $response = "Failed";
+  $responseMessage = "";
+
+  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+  $data['MessageID'] = $request->post('MessageID');
+
+  $data['Status'] = '';
+  $data['SearchText'] = '';
+
+  $data["PageNo"] = 0;
+  $data["Limit"] = 0;
+
+  $result=$Messages->deleteReadMessageNotification($data);  
+
+   return response()->json([                  
+     'response' => $response,
+     'message' => "Message has successfully deleted.",
+   ]);    
+
+  }
+
 //CITY LIST==================================================================
  public function getCityList(Request $request){
 
@@ -1774,8 +1828,7 @@ public function validateCouponCode(Request $request){
   }
 
   //EPUB VIEWER================================================================
-
-   public function getShowViewerEpub(Request $request){
+   public function showViewerEpub(Request $request){
      
    $Book= new Book();
    
@@ -1787,17 +1840,16 @@ public function validateCouponCode(Request $request){
        $info=$Book->getBookInfoByID($data['doc_id']);
        if(isset($info)>0){
            $Epub_file=$info->file_url;
-           $Document_URL_File='https://beta.ebooklat.phr.com.ph/public/'.$Epub_file;
-           $data['epub_doc']=$Document_URL_File;
-          return View::make('front/viewer')->with($data);    
+           $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
+          return View::make('api/epub_viewer')->with($data);    
        }else{
            $data['epub_doc']='';
-           return View::make('front/viewer')->with($data);    
+           return View::make('api/epub_viewer')->with($data);    
        }
       
    }else{
        $data['epub_doc']='';
-       return View::make('front/viewer')->with($data);    
+       return View::make('api/epub_viewer')->with($data);    
    }
   
  }
