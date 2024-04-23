@@ -26,12 +26,12 @@
    }
    #viewer{
     padding-top:30px;
-    padding-bottom:50px;
+/*    padding-bottom:50px;*/
    }
-   .spreads{
+ /*  .spreads{
       padding-bottom:20px;
    }
-
+*/
 .sidenav {
     height: 100%;
     width: 310px;
