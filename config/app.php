@@ -267,21 +267,28 @@ return [
         // Laravel File-manager
         'Image' => Intervention\Image\Facades\Image::class,
 
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-        
-
-
-
     ],
+
+
+
+     //API USE
+     //Company Information
+    'CompanyName' => 'PRECIOUS PAGES CORP',
+    'CompanyEmail'=>'info@preciouspages.com.ph',
+    'CompanySupportEmail'=>'',
+    'CompanyNoReplyEmail'=>'no-reply@beta.ebooklat.phr.com.ph',
+    'CompanyMobileNo' => '0922 868 4362',
+    'CompanyTelephoneNo' => '8518-7610',
+    'CompanyAddress' => '16 JRich Building, Santo Domingo Avenue, corner Pasig City',
+    'CompanyShortAddress' => '',
+
+    //Site is On Debug Mode
+    'DebugMode' => '0',
+    'EmailDebugMode' => '0',
+
+    //PLATFORM
+    'PLATFORM_ANDROID' => 'Android',
+    'PLATFORM_IOS' => 'iOS',
+
 
 ];
