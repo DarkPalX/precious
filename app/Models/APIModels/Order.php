@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,10 +17,10 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
-use App\Models\Email;
-use App\Models\Cart;
-use App\Models\UserCustomer;
+use App\Models\APIModels\Misc;
+use App\Models\APIModels\Email;
+use App\Models\APIModels\Cart;
+use App\Models\APIModels\UserCustomer;
 
 class Order extends Model
 {
@@ -198,7 +198,8 @@ class Order extends Model
           'gross_amount' => $GrossAmount, 
           'payment_method' => $PaymentMethod,
           'payment_status' => $PaymentStatus, 
-          'ecredit_amount' => $UsedECredit,           
+          'ecredit_amount' => $UsedECredit, 
+          'delivery_type' => 'd2d', 
           'delivery_status' => 'Delivered', 
           'delivery_fee_amount' => 0, 
           'delivery_fee_discount' => 0, 
@@ -217,7 +218,8 @@ class Order extends Model
           'amount' => $NetAmount,                                            
           'status' => $PaymentStatus, 
           'payment_date' => $PaymentDate, 
-          'receipt_number' => $ReceiptNo,      
+          'receipt_number' => $ReceiptNo,
+          'created_by' => $UserID,
           'created_at' => $TODAY             
         ]); 
 
@@ -243,7 +245,8 @@ class Order extends Model
               'tax_amount' =>0,  
               'discount_amount' => $item_list->discount_amount,                        
               'gross_amount' => $GrossAmount,                                                        
-              'net_amount' => $NetAmount,                        
+              'net_amount' => $NetAmount,
+              'created_by' => $UserID,                        
               'created_at' => $TODAY             
           ]); 
 
@@ -373,6 +376,7 @@ class Order extends Model
 
     $query = DB::table('ecommerce_sales_details as sls_dtls')
            ->leftjoin('products as prod', 'prod.id', '=', 'sls_dtls.product_id') 
+           ->leftjoin('subscriptions as subs', 'subs.id', '=', 'sls_dtls.subscription_plan_id') 
 
        ->selectraw("
           sls_dtls.id as SalesDetailID,
@@ -380,6 +384,10 @@ class Order extends Model
           COALESCE(sls_dtls.sales_header_id,0) as sales_header_id,          
           COALESCE(sls_dtls.product_id,0) as product_id,          
           COALESCE(sls_dtls.product_name,'') as product_name,
+          
+          COALESCE(sls_dtls.subscription_plan_id,0) as subscription_plan_id,
+          COALESCE(subs.title,'') as plan_title,
+          COALESCE(subs.short_description,'') as plan_description,
           
           COALESCE(sls_dtls.product_category,'') as product_category,
           COALESCE(sls_dtls.price,0) as price,
