@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
-use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Routing\UrlGenerator;
@@ -17,7 +16,7 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
+use App\Models\APIModels\Misc;
 
 class Book extends Model
 {
@@ -92,7 +91,6 @@ class Book extends Model
       $query->where("prds.file_url","!=",null);    
       $query->where("prds.deleted_at","=",null); 
         
-
       if($Status!='' && $Status!='All'){
 
           if($Status=='Featured'){
@@ -347,10 +345,10 @@ class Book extends Model
         $query->orderBy("prds.is_featured","DESC");   
        }
        if($Filter_Sort=='Low-High'){
-        $query->orderBy("prds.price","ASC");   
+        $query->orderBy("prds.ebook_price","ASC");   
        }
         if($Filter_Sort=='High-Low'){
-        $query->orderBy("prds.price","DESC");   
+        $query->orderBy("prds.ebook_price","DESC");   
        }
        if($Filter_Sort=='Publication Date'){
         $query->orderBy("prds.publication_date","ASC");   
