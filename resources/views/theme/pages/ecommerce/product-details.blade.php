@@ -95,7 +95,7 @@
                         @endfor
                     </div>
                     
-                    {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
+                    {!! ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
                     <input type="hidden" id="product_price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
                     
                     <!-- Product Single - Short Description
@@ -185,7 +185,7 @@
                                                 </div>
                                                 <div class="col-md-7 ps-md-4">
                                                     <h3 class="mb-2">{{ $bundle->name }}</h3>
-                                                    {!! ($bundle->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($bundle->discount_price, 2) . '</ins> <del>₱' . number_format($bundle->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($bundle->price, 2) . '</ins>') !!}
+                                                    {!! ($bundle->discount_price > 0 || $bundle->discountedprice != $bundle->price ? '<ins class="h1 text-decoration-none">₱' . number_format($bundle->discountedprice != $bundle->price ? $bundle->discountedprice : $bundle->discount_price, 2) . '</ins> <del>₱' . number_format($bundle->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($bundle->price, 2) . '</ins>') !!}
 
                                                     @if($bundle->inventory > 0)
                                                         <div class="d-flex justify-content-evenly align-content-stretch mb-1">

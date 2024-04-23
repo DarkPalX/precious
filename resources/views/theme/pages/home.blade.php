@@ -34,7 +34,7 @@
                         </div>
                         <div class="product-desc py-0">
                             <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
-                            ($product->discount_price > 0 ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
+                            ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating">';
             }
             else{
@@ -55,7 +55,7 @@
                         </div>
                         <div class="product-desc py-0">
                             <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
-                            ($product->discount_price > 0 ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
+                            ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating">';
             }
 
@@ -111,7 +111,7 @@
                         </div>
                         <div class="product-desc py-0">
                             <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
-                            ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
+                            ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating">';
                 }
                 else{
@@ -132,7 +132,7 @@
                         </div>
                         <div class="product-desc py-0">
                             <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
-                            ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
+                            ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating">';
 
             }
@@ -183,7 +183,7 @@
                             </div>
                         <div class="product-desc py-0">
                             <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
-                            ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
+                            ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating">';
                 }
                 else{
@@ -203,7 +203,7 @@
                             </div>
                         <div class="product-desc py-0">
                             <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
-                            ($product->discount_price > 0 ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
+                            ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del>'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating">';
                 }
 

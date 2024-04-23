@@ -221,7 +221,7 @@
     @endif
 
     
-    {{-- <li class="nav-item with-sub @if (request()->routeIs('mailing-list*')) active show @endif">
+    <li class="nav-item with-sub @if (request()->routeIs('mailing-list*')) active show @endif">
         <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Mailing List</span></a>
         <ul>
             @if (auth()->user()->has_access_to_subscriber_module())
@@ -250,7 +250,7 @@
                 <li @if (\Route::current()->getName() == 'mailing-list.campaigns.sent-campaigns') class="active" @endif><a href="{{ route('mailing-list.campaigns.sent-campaigns') }}">Sent Items</a></li>
             @endif
         </ul>
-    </li> --}}
+    </li>
 
     
     @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('page_modals'))

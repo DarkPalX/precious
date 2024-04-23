@@ -109,7 +109,7 @@
 							</div>
 							<div class="product-desc">
 								<div class="product-title"><h3><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></h3></div>
-								{!! ($product->discount_price > 0 ? '<div class="product-price"><del>' . number_format($product->price, 2) . '</del> <ins>' . number_format($product->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->price, 2) . '</ins></div>') !!}
+								{!! ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"><del>' . number_format($product->price, 2) . '</del> <ins>' . number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->price, 2) . '</ins></div>') !!}
 								<div class="product-rating">
 									@for($star = 1; $star <= 5; $star++)
 										<i class="icon-star{{ $star <= $product->rating ? '3' : '-empty' }}"></i>

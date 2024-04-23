@@ -31,7 +31,7 @@
 					<tbody>
 
 						@php 
-	                        $grandtotal = 0; $totalproducts = 0; $available_stock = 0; 
+	                        $grandtotal = 0; $totalproducts = 0; $available_stock = 0;
 
 	                        $cproducts  = '';
 	                        $totalCartProducts = 0;
@@ -152,6 +152,7 @@
 	                    <input type="hidden" id="coupon_counter" name="coupon_counter" value="0">
 	                    <input type="hidden" id="solo_coupon_counter" value="0">
 	                    <input type="hidden" id="total_amount_discount_counter" value="0">
+	                    <input type="hidden" id="coupon_merge_not_allowed" value="0">
 
 	                    <!-- coupon discounts -->
 	                    <input type="hidden" id="coupon_total_discount" name="coupon_total_discount" value="0">
@@ -658,7 +659,9 @@
                                 }
                             //
 
-                            if(qty_counter > 0){
+                            var remaining_usage_limit = response.remaining[key];
+
+                            if(qty_counter > 0 && remaining_usage_limit > 0){
                                 $('#collectibles').append(
                                 	'<div class="alert alert-info mt-3">'+
 
@@ -679,6 +682,7 @@
                                         '<input type="hidden" id="couponterms'+coupon.id+'" value="'+coupon.terms_and_conditions+'">'+
                                         '<input type="hidden" id="coupondesc'+coupon.id+'" value="'+coupon.description+'">'+
                                         '<input type="hidden" id="couponfreeproductid'+coupon.id+'" value="'+coupon.free_product_id+'">'+
+                                        '<input type="hidden" id="couponmerge'+coupon.id+'" value="'+coupon.combination+'">'+
                                         '<input type="hidden" id="couponvalidity'+coupon.id+'" value="'+validity+'">'+
 
                                         '<table class="table small border rounded border-top-warning">' +
@@ -705,32 +709,34 @@
 				                    '</div>'
                                 );
                             } else {
-                                $('#collectibles').append(
-                                	'<div class="alert alert-secondary mt-3">'+
+                                if(remaining_usage_limit > 0){
+                                    $('#collectibles').append(
+                                        '<div class="alert alert-secondary mt-3">'+
 
-                                        '<table class="table small border rounded border-top-warning">' +
-                                            '<tbody>' +
-                                                '<tr>' +
-                                                    '<td>' +
-                                                        '<h3 class="mb-0">'+coupon.name+'</h3>' +
-                                                        coupon.description +
-                                                        '<br><br>' +
-                                                        'Code: '+coupon.coupon_code+
-                                                        '<br><br>' +
-                                                        '<div class="text-secondary">' +
-                                                            '<ul class="m-0 ms-3">' +
-                                                                '<li>' + coupon.terms_and_conditions + '</li>' +
-                                                                '<li>' + coupon.start_date + ' - ' + (coupon.end_date ? coupon.end_date : '∞') + '</li>' +
-                                                            '</ul>' +
-                                                        '</div>' +
-                                                    '</td>' +
-                                                '</tr>' +
-                                            '</tbody>' +
-                                        '</table>'+
-                                        usebtn+'&nbsp;'+
+                                            '<table class="table small border rounded border-top-warning">' +
+                                                '<tbody>' +
+                                                    '<tr>' +
+                                                        '<td>' +
+                                                            '<h3 class="mb-0">'+coupon.name+'</h3>' +
+                                                            coupon.description +
+                                                            '<br><br>' +
+                                                            'Code: '+coupon.coupon_code+
+                                                            '<br><br>' +
+                                                            '<div class="text-secondary">' +
+                                                                '<ul class="m-0 ms-3">' +
+                                                                    '<li>' + coupon.terms_and_conditions + '</li>' +
+                                                                    '<li>' + coupon.start_date + ' - ' + (coupon.end_date ? coupon.end_date : '∞') + '</li>' +
+                                                                '</ul>' +
+                                                            '</div>' +
+                                                        '</td>' +
+                                                    '</tr>' +
+                                                '</tbody>' +
+                                            '</table>'+
+                                            usebtn+'&nbsp;'+
 
-                                    '</div>'
-                                );
+                                        '</div>'
+                                    );
+                                }
                             }
                             
                         } else {
@@ -789,6 +795,10 @@
             }
         });
 
+        
+        // Array to store applied coupon codes
+        var appliedCoupons = [];
+
         $('#couponManualBtn').click(function(){
 
             var hasLogin = parseFloat($('#hasLogin').val());
@@ -802,6 +812,16 @@
 
             var couponCode = $('#coupon_code').val();
             var grandtotal = parseFloat($('#grandTotal').val());
+
+            if (appliedCoupons.includes(couponCode)) {
+                swal({
+                    title: '',
+                    text: "The coupon is already applied.",
+                });
+                return false;
+            } else {
+                appliedCoupons.push(couponCode);
+            }
 
             $.ajax({
                 data: {
@@ -965,19 +985,57 @@
             var desc = $('#coupondesc'+cid).val();
             var terms = $('#couponterms'+cid).val();
             var combination = $('#couponcombination'+cid).val();
+            var couponmerge = $('#couponmerge'+cid).val();
             var validity = $('#couponvalidity'+cid).val();
+            var coupon_merge_not_allowed = $('#coupon_merge_not_allowed').val();
 
             if(coupon_counter(cid)){
+
+                // if(parseInt(totalAmountDiscountCounter) == 1){
+                //     swal({
+                //         title: '',
+                //         text: "Only one (1) coupon with discount amount/percentage per transaction.",         
+                //     });
+
+                //     var counter = $('#coupon_counter').val();
+                //     $('#coupon_counter').val(parseInt(counter)-1);
+
+                //     return false;
+                // }
+
+                
                 if(parseInt(totalAmountDiscountCounter) == 1){
-                    swal({
-                        title: '',
-                        text: "Only one (1) coupon with discount amount/percentage per transaction.",         
-                    });
 
-                    var counter = $('#coupon_counter').val();
-                    $('#coupon_counter').val(parseInt(counter)-1);
+                    if(couponmerge == 0){
+                        swal({
+                            title: '',
+                            text: "Coupon cannot be used with other coupons.",         
+                        });
 
-                    return false;
+                        var counter = $('#coupon_counter').val();
+                        $('#coupon_counter').val(parseInt(counter)-1);
+
+                        return false;
+                    }
+                    else{
+
+                        if(coupon_merge_not_allowed > 0){
+                            swal({
+                                title: '',
+                                text: "A coupon that cannot be used with other coupons is already applied.",         
+                            });
+                            
+                            var counter = $('#coupon_counter').val();
+                            $('#coupon_counter').val(parseInt(counter)-1);
+
+                            return false;
+                        }
+                    }
+                }
+                else if(parseInt(totalAmountDiscountCounter) == 0){
+                    if(couponmerge == 0){
+                	    $('#coupon_merge_not_allowed').val(1);
+                    }
                 }
 
                 var grandTotal = $('#grandTotal').val();
@@ -997,7 +1055,6 @@
 
                 var discountChecker = grandTotal-amountdiscount;
                 if(discountChecker > 0){
-                	// $('#total_amount_discount_counter').val(0); //THE ORIGINAL IS (1) CHANGED TO (0) FOR MULTIPLE COUPONS BASED ON SETTINGS
                 	$('#total_amount_discount_counter').val(1);
 	                // Modal Btns
 	                $('#couponBtn'+cid).prop('disabled',true);
@@ -1070,12 +1127,12 @@
                         '</table>'
                     );
 
-                    
-            var name  = $('#couponname'+cid).val();
-            var desc = $('#coupondesc'+cid).val();
-            var terms = $('#couponterms'+cid).val();
-            var combination = $('#couponcombination'+cid).val();
-            var validity = $('#couponvalidity'+cid).val();
+                            
+                    var name  = $('#couponname'+cid).val();
+                    var desc = $('#coupondesc'+cid).val();
+                    var terms = $('#couponterms'+cid).val();
+                    var combination = $('#couponcombination'+cid).val();
+                    var validity = $('#couponvalidity'+cid).val();
 
 
 
