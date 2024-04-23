@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
-use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Routing\UrlGenerator;
@@ -17,7 +16,7 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
+use App\Models\APIModels\Misc;
 
 class BannerAds extends Model
 {
@@ -45,7 +44,8 @@ class BannerAds extends Model
        
        $query->where("mob_alb.status","=",1);  
        $query->where("mob_alb.type","=",'sub_banner');    
-       $query->where("mob_alb.banner_type","=",'image');    
+       $query->where("mob_alb.banner_type","=",'image');   
+       $query->where("mob_ban.deleted_at","=",null);  
 
      
     $query->orderBy("mob_ban.order","ASC");     
