@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +17,7 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
+use App\Models\APIModels\Misc;
 
 class City extends Model
 {
