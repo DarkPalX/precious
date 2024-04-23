@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +17,7 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
+use App\Models\APIModels\Misc;
 
 class Voucher extends Model
 {
@@ -39,6 +39,9 @@ class Voucher extends Model
 
           COALESCE(coup.description,'') as coupon_description,
           COALESCE(coup.terms_and_conditions,'') as terms_and_conditions,
+          
+          COALESCE(coup.customer_scope,'') as customer_scope,
+          COALESCE(coup.scope_customer_id,'') as scope_customer_id,
 
           COALESCE(coup.percentage,0) as percentage,
           COALESCE(coup.purchase_amount,0) as min_purchsae_amount,
@@ -55,7 +58,9 @@ class Voucher extends Model
  
       $query->where("coup.location","=",null);                
       $query->where("coup.status","=",'ACTIVE');
+      $query->where("coup.deleted_at","=",null);            
       $query->where("coup.activation_type","!=",'manual');
+      $query->orWhereRaw("coup.scope_customer_id LIKE '%zira0814@gmail.com%'");
 
                                  
       if($SearchText != ''){
@@ -95,7 +100,10 @@ class Voucher extends Model
 
           COALESCE(coup.description,'') as coupon_description,
           COALESCE(coup.terms_and_conditions,'') as terms_and_conditions,
-
+          
+          COALESCE(coup.customer_scope,'') as customer_scope,
+          COALESCE(coup.scope_customer_id,'') as scope_customer_id,
+          
           COALESCE(coup.percentage,0) as percentage,
           COALESCE(coup.purchase_amount,0) as min_purchsae_amount,
           COALESCE(coup.purchase_qty,0) as purchase_qty,
