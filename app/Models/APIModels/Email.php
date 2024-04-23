@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\APIModels;
 
 use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -18,8 +18,7 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
-use App\Models\Code;
+use App\Models\APIModels\Misc;
 
 class Email extends Model
 {
@@ -31,7 +30,7 @@ class Email extends Model
 	    $EmailAddress = $param['EmailAddress'];
 	    if (filter_var($EmailAddress, FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 	      Mail::send(
-	        'emails/member-registration',
+	        'api/member-registration',
 	        [
               'FullName'=> $param['FullName'],
               'VerificationCode'=> $param['VerificationCode']
@@ -47,11 +46,11 @@ class Email extends Model
   	
 
   	 public function reSendVerificationCodeEmail($param){
-
+  	     
 	     $EmailAddress = $param['EmailAddress'];
 	    if (filter_var($EmailAddress, FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 	      Mail::send(
-	        'emails/resend-verification-code',
+	        'api/resend-verification-code',
 	        [                  
                  'VerificationCode'=> $param['VerificationCode']
 	        ],
@@ -66,11 +65,11 @@ class Email extends Model
 
 
 	public function SendPasswordResetEmail($param){
-
+        
 	     $EmailAddress = $param['EmailAddress'];
 	    if (filter_var($EmailAddress, FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 	      Mail::send(
-	        'emails/reset-password-email',
+	        'api/reset-password-email',
 	        [                  
                   'Password'=> $param['Password']
 	        ],
@@ -90,7 +89,7 @@ class Email extends Model
 
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 	      Mail::send(
-	        'emails/contact-us-email',
+	        'api/contact-us-email',
 	        [                  
              'FullName'=> $param['FullName'],
              'Subject'=> $param['Subject'],
@@ -110,12 +109,11 @@ class Email extends Model
   	
     public function SendOrderReceivedEmail($param){
               
-	   //$param["CompanyEmailAddress"]=config('app.CompanyEmail');
     	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
 
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 	      Mail::send(
-	         'emails/send-order-receive-email',
+	         'api/send-order-receive-email',
 	        [                  
                   'OrderInfo'=> $param['OrderInfo'],
 	                'OrderItem'=> $param['OrderItem']	
