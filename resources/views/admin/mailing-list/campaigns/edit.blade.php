@@ -42,9 +42,15 @@
                 <div class="form-group">
                     <label class="d-block">Recipient </label>
                     <select id="recipients" name="recipients[]" class="form-control @error('recipients') is-invalid @enderror" data-style="btn btn-outline-light btn-md btn-block tx-left" multiple>
+
+                        @php($recipientIds = $campaign_recipients->pluck('subscriber_id')->toArray())
+
                         @foreach ($subscribers as $subscriber)
-                            <option value="{{ $subscriber->id }}" @if (in_array($subscriber->id, old('recipients', []))) selected @endif>{{ $subscriber->email_with_name() }}</option>
+                            <option value="{{ $subscriber->id }}" @if (in_array($subscriber->id, old('recipients', [])) || in_array($subscriber->id, $recipientIds)) selected @endif>
+                                {{ $subscriber->email_with_name() }}
+                            </option>
                         @endforeach
+
                     </select>
                     @error('recipients')
                         <span class="text-danger">{{ $message }}</span>
@@ -57,8 +63,13 @@
                 <div class="form-group">
                     <label class="d-block">Recipient Group</label>
                     <select id="recipientGroups" name="recipient_groups[]" class="form-control @error('recipient_groups') is-invalid @enderror" data-style="btn btn-outline-light btn-md btn-block tx-left" multiple>
+                        
+                        @php($groupIds = $campaign_recipients->pluck('group_id')->toArray())
+
                         @foreach ($groups as $group)
-                            <option value="{{ $group->id }}" @if (in_array($group->id, old('recipient_groups', []))) selected @endif>{{ $group->name }}</option>
+                            <option value="{{ $group->id }}" @if (in_array($group->id, old('recipient_groups', []))  || in_array($group->id, $groupIds)) selected @endif>
+                                {{ $group->name }}
+                            </option>
                         @endforeach
                     </select>
                     @error('recipient_groups')

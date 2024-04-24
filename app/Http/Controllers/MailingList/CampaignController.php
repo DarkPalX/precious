@@ -11,7 +11,7 @@ use App\Jobs\SendCampaignToSubscriberJob;
 
 use Illuminate\Validation\Rule;
 
-use App\Models\{Permission, Campaign, Group, Subscriber, SentCampaign, SentCampaignSubscriber};
+use App\Models\{Permission, Campaign, CampaignRecipient, Group, Subscriber, SentCampaign, SentCampaignSubscriber};
 
 class CampaignController extends Controller
 {
@@ -78,28 +78,55 @@ class CampaignController extends Controller
         $newCampaign = $this->validate_data($request);
 
         $campaign = Campaign::create($newCampaign);
-
+        
+        //TO SEND MAIL
         if ($request->submit == 'save and send') {
-
             $newCampaign['sender_id'] = auth()->id();
             $newCampaign['campaign_id'] = $campaign->id;
 
             $sentCampaign = SentCampaign::create($newCampaign);
+        }
+        
+        ############ FOR INDIVIDUAL SUBSCRIBERS ##############
 
-            $recipients = $request->has('recipients') ? $request->recipients : [];
-            foreach ($recipients as $recipientId) {
+        //set recipient array
+        $campaignRecipientData = [];
+        $campaignRecipientData['campaign_id'] = $campaign->id;
+
+        $recipients = $request->has('recipients') ? $request->recipients : [];
+        foreach ($recipients as $recipientId) {
+
+            $campaignRecipientData['subscriber_id'] = $recipientId;
+            CampaignRecipient::create($campaignRecipientData);
+
+            
+            if ($request->submit == 'save and send') {
                 $subscriber = Subscriber::find($recipientId);
-//                Mail::to($subscriber)->send(new CampaignMail(Setting::info(), $campaign, $subscriber));
                 $this->send_campaign_to_subscriber($campaign, $subscriber, $sentCampaign);
             }
+        }
 
-            $recipientGroups = $request->has('recipient_groups') ? $request->recipient_groups : [];
-            foreach ($recipientGroups as $groupId) {
+
+        ############ FOR GROUPS ##############
+
+        //to reset the recipient array
+        $campaignRecipientData = [];
+        $campaignRecipientData['campaign_id'] = $campaign->id;
+
+        $recipientGroups = $request->has('recipient_groups') ? $request->recipient_groups : [];
+        foreach ($recipientGroups as $groupId) {
+
+            $campaignRecipientData['group_id'] = $groupId;
+            CampaignRecipient::create($campaignRecipientData);
+
+            if ($request->submit == 'save and send') {
                 $group = Group::find($groupId);
+
                 foreach ($group->subscribers as $subscriber) {
                     $this->send_campaign_to_subscriber($campaign, $subscriber, $sentCampaign, $groupId);
                 }
             }
+
         }
 
         if ($campaign) {
@@ -131,8 +158,9 @@ class CampaignController extends Controller
     {
         $groups = Group::all();
         $subscribers = Subscriber::all();
+        $campaign_recipients = CampaignRecipient::where('campaign_id', $campaign->id)->get();
 
-        return view('admin.mailing-list.campaigns.edit', compact('campaign', 'groups', 'subscribers'));
+        return view('admin.mailing-list.campaigns.edit', compact('campaign', 'groups', 'subscribers', 'campaign_recipients'));
     }
 
     /**
@@ -147,22 +175,50 @@ class CampaignController extends Controller
         $campaignData = $this->validate_data($request);
 
         $campaign->update($campaignData);
-
+        
+        //TO SEND MAIL
         if ($request->submit == 'save and send') {
-
             $campaignData['sender_id'] = auth()->id();
             $campaignData['campaign_id'] = $campaign->id;
 
             $sentCampaign = SentCampaign::create($campaignData);
+        }
 
-            $recipients = $request->has('recipients') ? $request->recipients : [];
-            foreach ($recipients as $recipientId) {
+        CampaignRecipient::where('campaign_id', $campaign->id)->delete();
+        
+        ############ FOR INDIVIDUAL SUBSCRIBERS ##############
+
+        //set recipient array
+        $campaignRecipientData = [];
+        $campaignRecipientData['campaign_id'] = $campaign->id;
+
+
+        $recipients = $request->has('recipients') ? $request->recipients : [];
+        foreach ($recipients as $recipientId) {
+
+            $campaignRecipientData['subscriber_id'] = $recipientId;
+            CampaignRecipient::create($campaignRecipientData);
+
+            if ($request->submit == 'save and send') {
                 $subscriber = Subscriber::find($recipientId);
                 $this->send_campaign_to_subscriber($campaign, $subscriber, $sentCampaign);
             }
+        }
 
-            $recipientGroups = $request->has('recipient_groups') ? $request->recipient_groups : [];
-            foreach ($recipientGroups as $groupId) {
+        
+         ############ FOR GROUPS ##############
+
+        //to reset the recipient array
+        $campaignRecipientData = [];
+        $campaignRecipientData['campaign_id'] = $campaign->id;
+
+        $recipientGroups = $request->has('recipient_groups') ? $request->recipient_groups : [];
+        foreach ($recipientGroups as $groupId) {
+
+            $campaignRecipientData['group_id'] = $groupId;
+            CampaignRecipient::create($campaignRecipientData);
+
+            if ($request->submit == 'save and send') {
                 $group = Group::find($groupId);
                 foreach ($group->subscribers as $subscriber) {
                     $this->send_campaign_to_subscriber($campaign, $subscriber, $sentCampaign, $groupId);
@@ -170,8 +226,9 @@ class CampaignController extends Controller
             }
         }
 
+
         if ($campaign) {
-            return redirect()->route('mailing-list.campaigns.index')->with(['success' => 'The campaign has been added and send to the recipient/s.']);
+            return redirect()->back()->with(['success' => 'The campaign has been added and send to the recipient/s.']);
         } else {
             return redirect()->route('mailing-list.campaigns.create')->with(['error' => 'Failed to add campaign. Please try again.']);
         }
