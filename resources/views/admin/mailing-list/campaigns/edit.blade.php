@@ -87,7 +87,7 @@
             </div>
             <div class="col-lg-12 mg-t-10 pd-b-40">
                 <input class="btn btn-primary btn-sm tx-uppercase tx-semibold" name="submit" type="submit" value="save only">
-                {{--<input class="btn btn-primary btn-sm tx-uppercase tx-semibold" name="submit" type="submit" value="save and send">--}}
+                <input class="btn btn-primary btn-sm tx-uppercase tx-semibold" name="submit" type="submit" value="save and send">
                 <a  href="{{ route('mailing-list.campaigns.index') }}" class="btn btn-outline-secondary btn-sm tx-uppercase tx-semibold">Cancel</a>
             </div>
         </form>

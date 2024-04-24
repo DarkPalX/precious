@@ -45,15 +45,26 @@ class ProductCartRemoved extends Command
 
         $setting = Setting::first();
 
-        $shoppingCart = Cart::where('created_at', '<', now()->subDays(4))->get();
+        $shoppingCarts = Cart::where('created_at', '<', now()->subHours($setting->cart_product_duration))->get();
         $arr_productCart = [];
-        foreach($shoppingCart as $shcart){
-            $pasthour = abs(strtotime(today().' 23:59:59.999') - strtotime($shcart->created_at))/(60*60);
 
-            if($pasthour >= $setting->cart_product_duration){
-                array_push($arr_productCart, $shcart->id);
+        foreach ($shoppingCarts as $cart) {
+            $pastHours = now()->diffInHours($cart->created_at);
+
+            if ($pastHours >= $setting->cart_product_duration) {
+                $arr_productCart[] = $cart->id;
             }
         }
+
+        // $shoppingCart = Cart::where('created_at', '<', now()->subDays(4))->get();
+        // $arr_productCart = [];
+        // foreach($shoppingCart as $shcart){
+        //     $pasthour = abs(strtotime(today().' 23:59:59.999') - strtotime($shcart->created_at))/(60*60);
+
+        //     if($pasthour >= $setting->cart_product_duration){
+        //         array_push($arr_productCart, $shcart->id);
+        //     }
+        // }
 
         Cart::whereIn('id', $arr_productCart)->delete();
     }

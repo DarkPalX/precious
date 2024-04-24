@@ -124,6 +124,17 @@ class Setting {
         }
     }
 
+    public static function hasItemsLeftOnCart(){
+
+        $setting = \App\Models\Setting::first();
+
+        $hoursAgo = now()->subHours($setting->cart_notification_duration);
+    
+        $isLeftOnCart = Cart::where('created_at', '<', $hoursAgo )->where('user_id', auth()->user()->id ?? -1)->exists();
+
+        return $isLeftOnCart;
+    }
+
     public static function hasItemThreeDaysOnCart(){
         $threeDaysAgo = now()->subDays(3);
     

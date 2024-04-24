@@ -54,11 +54,11 @@ class Kernel extends ConsoleKernel
 
         // Check shopping cartevery minute for inventory / auto delete product on cart.
         $schedule->command('product-cart-removed:cron')
-        ->everyMinute();
+        ->everyFiveMinutes();
 
         // Check shopping cartevery minute for inventory / auto delete product on cart.
-        $schedule->command('cart-item:cron')
-                 ->everyMinute();
+        // $schedule->command('cart-item:cron')
+        //          ->everyMinute();
     }
 
     /**

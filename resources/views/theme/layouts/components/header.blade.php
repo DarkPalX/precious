@@ -215,9 +215,14 @@
 			@if(Setting::hasItemThreeDaysOnCart())
 				<div class="alert alert-warning alert-dismissible alert-xs fade show mt-2" role="alert">
 					<strong>Check your cart!</strong> there are items left for 3 days. Please take an action before the system automatically delete the item/s.
-					{{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
 				</div>
 			@endif
+			
+			{{-- @if(Setting::hasItemsLeftOnCart())
+				<div class="alert alert-warning alert-dismissible alert-xs fade show mt-2" role="alert">
+					<strong>Check your cart!</strong> there are items left for ({{  \App\Models\Setting::first()->cart_notification_duration }}) hours. Please take an action before the system automatically delete the item/s.
+				</div>
+			@endif --}}
 
 		</div>
 	</div>
