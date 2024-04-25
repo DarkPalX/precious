@@ -1949,7 +1949,7 @@ public function validateCouponCode(Request $request){
        $info=$Book->getBookInfoByID($data['doc_id']);
        if(isset($info)>0){
            $Epub_file=$info->file_url;
-           $data['epub_doc']='https://beta.ebooklat.phr.com.ph/public/'.$Epub_file;
+           $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
           return View::make('api/epub_viewer')->with($data);    
        }else{
            $data['epub_doc']='';
