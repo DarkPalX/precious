@@ -283,6 +283,11 @@ Route::post('/check-subscription-status',[
    'as'=> 'check-subscription-status'
 ]);
 
+Route::post('/cancel-subscription-plan',[
+   'uses'=>'App\Http\Controllers\ApiController@cancelSubscriptionPlan',
+   'as'=> 'cancel-subscription-plan'
+]);
+
 // CONTACT US FORM================================
 Route::post('/send-inquiry',[
    'uses'=>'App\Http\Controllers\ApiController@doSendInquiry',
