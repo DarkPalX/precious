@@ -84,6 +84,29 @@ class Cart extends Model
               )
         ,0) as rating,
 
+        COALESCE((
+               SELECT 
+                  promo.discount FROM 
+                        promos as promo                  
+                  INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = cart.product_id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_percent,
+
+        COALESCE((
+               SELECT 
+                   (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
+                        promos as promo                  
+                  INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = cart.product_id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_price,
+
+
           COALESCE(prds.status,'') as status          
           
         ");    
@@ -141,10 +164,21 @@ class Cart extends Model
     $UserID=$data['UserID'];
     $ProductID=$data['ProductID'];
     // $ProductQty=$data['ProductQty'];
+
+    $ProductQty=0;    
+    $ProductActualDiscountPrice=0;
     
-    $ProductQty=0;
     $ProductPrice=$data['ProductPrice'];
     $ProductDiscount=$data['ProductDiscount'];
+
+    $PromoDiscountPercent=$data['PromoDiscountPercent'];
+    $PromoDiscountPrice=$data['PromoDiscountPrice'];
+
+    if($PromoDiscountPercent>0){        
+        $ProductActualDiscountPrice=$PromoDiscountPrice;
+    }else{        
+        $ProductActualDiscountPrice=$ProductDiscount;
+    }
     
     if($UserID> 0 && $ProductID>0){
        
@@ -155,7 +189,7 @@ class Cart extends Model
           'product_id' => $ProductID, 
           'qty' => $ProductQty,                                            
           'price' => $ProductPrice,                                            
-          'discount_amount' => $ProductDiscount,
+          'discount_amount' => $ProductActualDiscountPrice,
           'created_at' => $TODAY             
         ]);          
 
@@ -210,6 +244,7 @@ class Cart extends Model
           COALESCE(cart.user_id,0) as user_id,
           COALESCE(cart.product_id,0) as product_id,
           COALESCE(cart.qty,0) as qty,
+
           COALESCE(cart.price,0) as price,
           COALESCE(cart.discount_amount,0) as discount_amount    
           
