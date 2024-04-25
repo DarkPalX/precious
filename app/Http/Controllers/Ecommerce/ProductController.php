@@ -697,7 +697,7 @@ class ProductController extends Controller
                     $slug = Page::convert_to_slug($data[1]);
                                         
                     // Format Description
-                    $description = nl2br(iconv(mb_detect_encoding($data[4], mb_detect_order(), true), "UTF-8", $data[4]));
+                    $description = nl2br(iconv(mb_detect_encoding($data[4], mb_detect_order(), true), "UTF-8//IGNORE", $data[4]));
 
 
                     $product = Product::create([
