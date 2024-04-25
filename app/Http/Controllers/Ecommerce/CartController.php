@@ -572,7 +572,7 @@ class CartController extends Controller
             $salesHeader->update(['payment_status' => 'PAID']);
             SalesPayment::create([
                 'sales_header_id' => $salesHeader->id,
-                'payment_type' => 'E-Wallet',
+                'payment_type' => 'EWallet',
                 'amount' => $salesHeader->gross_amount,
                 'status' => 'PAID',
                 'payment_date' => today(),
