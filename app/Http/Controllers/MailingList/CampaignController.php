@@ -270,6 +270,25 @@ class CampaignController extends Controller
         return back()->with('success', 'The download manager category has been restored');
     }
 
+    public function delete_sent_campaign($id){
+
+        SentCampaign::where('id', $id)->delete();
+        
+        return back()->with('success', 'An item was deleted successfully');
+    }
+
+    public function forward_campaign($id){
+
+        $campaign = Campaign::where('id', $id)->first();
+        
+        $groups = Group::all();
+        $subscribers = Subscriber::all();
+        $campaign_recipients = CampaignRecipient::where('campaign_id', $campaign->id)->get();
+
+        return view('admin.mailing-list.campaigns.forward', compact('campaign', 'groups', 'subscribers', 'campaign_recipients'));
+    }
+
+
     /**
      * @param Campaign $campaign
      * @param Subscriber $subscriber

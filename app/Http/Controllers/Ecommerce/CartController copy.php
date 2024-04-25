@@ -103,6 +103,8 @@ class CartController extends Controller
 
         $inventory_remark = true;
 
+        //FOR AUTO APPLY COUPONS CONTINUE HERE
+
         if ($inventory_remark) {
             return response()->json([
                 'success' => true,
@@ -303,13 +305,16 @@ class CartController extends Controller
 
     public function cart()
     {   
+        //to check update coupon availability
+        Coupon::checkCouponAvailability();
+
         if (auth()->check()) {
 
             // reset coupon carts of customer
             CouponCartDiscount::where('customer_id',Auth::id())->delete();
             CouponCart::where('customer_id',Auth::id())->delete();
 
-            $cart = Cart::where('user_id',Auth::id())->get();
+            $cart = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();
             
             $totalProducts = $cart->count();
         } else {
@@ -461,7 +466,7 @@ class CartController extends Controller
         $page->name = 'Checkout';
 
         $customer  = User::find(Auth::id());
-        $orders    = Cart::where('user_id',Auth::id())->get();      
+        $orders    = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();      
         $cart      = CouponCartDiscount::where('customer_id',Auth::id())->first();
 
         $coupons = CouponCart::where('customer_id', Auth::id())->get();
@@ -514,11 +519,11 @@ class CartController extends Controller
     {
         $coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
 
-        $totalPrice  = number_format($request->total_amount < 0 ? 0 : $request->total_amount, 2,'.','');
+        $totalPrice  = number_format($request->payment_method == 'ecredit' ? 0 : ($request->total_amount < 0 ? 0 : $request->total_amount), 2,'.','');
         $realTotalPrice  = number_format($request->total_amount < 0 ? $request->total_amount + $request->ecredit_amount : $request->total_amount, 2,'.','');
-        $orderNumber = $this->next_order_number();  
+        $orderNumber = $this->next_order_number(); 
 
-        $customerAddress = $request->customer_delivery_barangay.' '.$request->customer_delivery_city.' '.$request->customer_delivery_province.' '.$request->customer_delivery_zip;
+        $customerAddress = $request->customer_delivery_barangay.', '.$request->customer_delivery_city.', '.$request->customer_delivery_province.', '.$request->customer_delivery_zip;
 
         $use_ecredit = $request->payment_method == 'ecredit' ? 1 : 0;
         
@@ -545,8 +550,8 @@ class CartController extends Controller
         $requestData['customer_delivery_adress'] = $customerAddress;
         $requestData['customer_address'] = $customerAddress;
         $requestData['delivery_type'] = $request->shippingOption;
-        $requestData['delivery_fee_amount'] = 0;
-        $requestData['delivery_fee_discount'] = 0;
+        $requestData['delivery_fee_amount'] = $request->shippingRate;
+        $requestData['delivery_fee_discount'] = $request->shippingFeeDiscount;
         $requestData['delivery_status'] = $request->payment_method == 'cod' || 'ecredit' ? 'Pending' : 'Pending';
         $requestData['gross_amount'] = number_format($totalPrice,2,'.','');
         $requestData['net_amount'] = number_format($totalPrice,2,'.','');
@@ -558,10 +563,24 @@ class CartController extends Controller
 
         $this->store_items($salesHeader->id);
 
+        $this->update_coupon_status($request, $salesHeader->id);
+
         Cart::where('user_id', Auth::id())->delete();
         Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
 
-        return redirect(route('profile.sales'))->with('success', 'Order has been placed.');
+        //to check update coupon availability
+        Coupon::checkCouponAvailability();
+
+        return redirect(route('cart.success'));
+    }
+    
+    public function success(){
+        
+        $page = new Page();
+        $page->name = 'Success';
+
+        return view('theme.pages.ecommerce.success', compact('page'));
+
     }
 
     public function store_items($headerId)
@@ -774,31 +793,33 @@ class CartController extends Controller
             }
         }
 
-        $coupons = $data['couponid'];
-        foreach($coupons as $c){
-            $coupon = Coupon::find($c);
-
-            $cart = CouponCart::where('customer_id',Auth::id())->where('coupon_id',$coupon->id);
-
-            if($cart->exists()){
-                $ct = $cart->first();
-
-                if(isset($ct->product_id)){
-                    $productid = $ct->product_id;
+        if(isset($data['couponid'])){
+            $coupons = $data['couponid'];
+            foreach($coupons as $c){
+                $coupon = Coupon::find($c);
+    
+                $cart = CouponCart::where('customer_id',Auth::id())->where('coupon_id',$coupon->id);
+    
+                if($cart->exists()){
+                    $ct = $cart->first();
+    
+                    if(isset($ct->product_id)){
+                        $productid = $ct->product_id;
+                    } else {
+                        $productid = NULL;
+                    }            
                 } else {
                     $productid = NULL;
-                }            
-            } else {
-                $productid = NULL;
+                }
+    
+                CouponSale::create([
+                    'customer_id' => Auth::id(),
+                    'coupon_id' => $c,
+                    'coupon_code' => $coupon->coupon_code,
+                    'sales_header_id' => $salesid,
+                    'product_id' => $productid
+                ]);   
             }
-
-            CouponSale::create([
-                'customer_id' => Auth::id(),
-                'coupon_id' => $c,
-                'coupon_code' => $coupon->coupon_code,
-                'sales_header_id' => $salesid,
-                'product_id' => $productid
-            ]);   
         }
     }
 }

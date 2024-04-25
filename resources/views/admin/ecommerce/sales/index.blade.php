@@ -119,10 +119,10 @@
                                 <td>{{ $sale->customer_name }}</td>
                                 <td>
                                     @if(\App\Models\Ecommerce\SalesPayment::check_if_has_added_payments($sale->id) == 1)
-                                        <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount + $sale->ecredit_amount,2) }}</a>
+                                        <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount,2) }}</a>
                                         {{-- <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount - $sale->discount_amount + $sale->ecredit_amount,2) }}</a> --}}
                                     @else
-                                        {{ number_format($sale->net_amount + $sale->ecredit_amount,2) }}
+                                        {{ number_format($sale->net_amount, 2) }}
                                         {{-- {{ number_format($sale->net_amount - $sale->discount_amount + $sale->ecredit_amount,2) }} --}}
                                     @endif
                                 </td>

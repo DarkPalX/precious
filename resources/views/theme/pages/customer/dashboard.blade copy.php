@@ -100,10 +100,13 @@
                 </thead>
                 <tbody>
                     @forelse($sales as $sale)
+                        @php
+                            $balance = \App\Models\Ecommerce\SalesHeader::balance($sale->id);
+                        @endphp
                         <tr>
                             <td>{{$sale->order_number}}</td>
                             <td>{{$sale->created_at}}</td>
-                            <td>{{number_format($sale->net_amount,2)}}</td>
+                            <td>{{number_format($sale->gross_amount - $sale->discount_amount + $sale->ecredit_amount,2)}}</td>
                             <td>{{$sale->delivery_status}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif</td> 
                             <td>
                                 <ul class="nav nav-pills">
@@ -127,7 +130,7 @@
                             </td>
                         </tr>
                         @php
-                            $modals .= '
+                            $modals .='
                                 <div class="modal fade" id="delivery'.$sale->id.'" tabindex="-1" role="dialog" aria-labelledby="centerModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
@@ -151,7 +154,7 @@
                                                         <tbody>';
                                                             if($sale->deliveries){
                                                                 foreach($sale->deliveries as $delivery){
-                                                                $modals.='
+                                                                 $modals.='
                                                                     <tr>
                                                                         <td>'.$delivery->created_at.'</td>
                                                                         <td>'.$delivery->status.'</td>
@@ -203,74 +206,63 @@
                                                         </thead>
                                                         <tbody>';
 
-                                                            $total_qty = 0;
-                                                            $total_sales = 0;
+                                                                $total_qty = 0;
+                                                                $total_sales = 0;
 
-                                                        foreach($sale->items as $item){
+                                                            foreach($sale->items as $item){
 
-                                                            $total_qty += $item->qty;
-                                                            $total_sales += $item->qty * $item->price;
+                                                                $total_qty += $item->qty;
+                                                                $total_sales += $item->qty * $item->price;
+                                                                $modals.='
+                                                                <tr>
+                                                                    <td>'.$item->product_name.'</td>
+                                                                    <td>'.$item->qty.'</td>
+                                                                    <td>'.number_format($item->price,2).'</td>
+                                                                    <td>'.number_format(($item->price * $item->qty),2).'</td>
+                                                                </tr>';
+                                                            }
+
+
                                                             $modals.='
-                                                            <tr>
-                                                                <td>'.$item->product_name.'</td>
-                                                                <td>'.$item->qty.'</td>
-                                                                <td>'.number_format($item->price,2).'</td>
-                                                                <td>'.number_format(($item->price * $item->qty),2).'</td>
-                                                            </tr>';
-                                                        }
+                                                            <tr style="font-weight:bold;">
+                                                                <td>Sub total</td>
+                                                                <td>'.number_format($total_qty,2).'</td>
+                                                                <td>&nbsp;</td>
+                                                                <td>'.number_format($total_sales,2).'</td>
+                                                            </tr>
 
+                                                            <tr style="font-weight:bold;">
+                                                                <td colspan="3">Coupon Discount</td>
+                                                                <td>- '.number_format($sale->discount_amount,2).'</td>
+                                                            </tr>
 
-                                                        $modals.='
-                                                        <tr style="font-weight:bold;">
-                                                            <td>Sub total</td>
-                                                            <td>'.number_format($total_qty,2).'</td>
-                                                            <td>&nbsp;</td>
-                                                            <td>'.number_format($total_sales,2).'</td>
-                                                        </tr>
+                                                            <tr style="font-weight:bold;">
+                                                                <td colspan="3">Delivery Fee</td>
+                                                                <td>'.number_format(($sale->delivery_fee_amount - $sale->delivery_fee_discount), 2).'</td>
+                                                            </tr>
 
-                                                        <tr style="font-weight:bold;">
-                                                            <td colspan="3">Coupon Discount</td>
-                                                            <td>- '.number_format($sale->discount_amount,2).'</td>
-                                                        </tr>
+                                                            <tr style="font-weight:bold;">
+                                                                <td colspan="3">Grand total</td>
 
-                                                        <tr style="font-weight:bold;">
-                                                            <td colspan="3">Coupons</td>
-                                                            <td>';
+                                                                <td>'.number_format($total_sales - $sale->discount_amount + ($sale->delivery_fee_amount - $sale->delivery_fee_discount),2).'</td>
+                                                            </tr>
 
-                                                                foreach($sale->coupons as $couponSale) {
-                                                                    $modals .= '<i>'.$couponSale->details->name.'</i><br>';
-                                                                }
+                                                            <tr style="font-weight:bold;">
+                                                                <td colspan="3">E-Wallet Payment</td>
+                                                                <td>'.number_format($sale->ecredit_amount,2).'</td>
+                                                            </tr>
 
-                                                $modals .='</td>
-                                                        </tr>
-
-                                                        <tr style="font-weight:bold;">
-                                                            <td colspan="3">Delivery Fee</td>
-                                                            <td>'.number_format(($sale->delivery_fee_amount - $sale->delivery_fee_discount), 2).'</td>
-                                                        </tr>
-
-                                                        <tr style="font-weight:bold;">
-                                                            <td colspan="3">Grand total</td>
-
-                                                            <td>'.number_format($total_sales - $sale->discount_amount + ($sale->delivery_fee_amount - $sale->delivery_fee_discount),2).'</td>
-                                                        </tr>
-
-                                                        <tr style="font-weight:bold;">
-                                                            <td colspan="3">E-Wallet Payment</td>
-                                                            <td>'.number_format($sale->ecredit_amount,2).'</td>
-                                                        </tr>
-
-                                                    </tbody>
-                                                </table>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="gap-20"></div>
                                             </div>
-                                            <div class="gap-20"></div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             ';
                         @endphp
                         {{-- @php

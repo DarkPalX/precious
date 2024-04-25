@@ -695,6 +695,10 @@ class ProductController extends Controller
                     $code = mb_convert_encoding($data[0], "UTF-8");
                     $name = mb_convert_encoding($data[1], "UTF-8");
                     $slug = Page::convert_to_slug($data[1]);
+                                        
+                    // Format Description
+                    $description = nl2br(iconv(mb_detect_encoding($data[4], mb_detect_order(), true), "UTF-8", $data[4]));
+
 
                     $product = Product::create([
                         'sku' => str_replace('?',' ',$code),
@@ -702,7 +706,7 @@ class ProductController extends Controller
                         'author' => $data[2],
                         'book_type' => $data[3],
                         'slug' => $slug,
-                        'description' => '<p>' . $data[4] . '</p>',
+                        'description' => '<p>' . $description . '</p>',
                         'price' => str_replace(',','',$data[5]) < 0 ? 0.0000 : str_replace(',','',$data[5]),
                         'discount_price' => str_replace(',','',$data[6]) < 0 ? 0.0000 : str_replace(',','',$data[6]),
                         'size' => $data[7],

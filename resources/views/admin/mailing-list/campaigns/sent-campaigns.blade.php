@@ -85,6 +85,7 @@
                                 <th scope="col">Recipient</th>
                                 <th scope="col">Total Recipient</th>
                                 <th scope="col">Date Sent</th>
+                                {{-- <th class="tx-right" scope="col">Actions</th> --}}
                             </tr>
                             </thead>
                             <tbody>
@@ -96,6 +97,12 @@
                                     <td>{{ $sentCampaign->total_subscriber() }}</td>
                                     <td>{{ $sentCampaign->all_subscribers->count() }}</td>
                                     <td>{{ Setting::date_for_listing($sentCampaign->updated_at) }}</td>
+                                    {{-- <td>
+                                        <nav class="nav table-options justify-content-end flex-nowrap">
+                                            <a class="nav-link" target="_blank" href="{{route('mailing-list.forward-campaign',$sentCampaign->campaign_id)}}" title="Share Campaign"><i data-feather="share"></i></a>
+                                            <a class="nav-link" href="javascript:void(0);" onclick="delete_one_page({{$sentCampaign->id}},'{{$sentCampaign->name}}');" title="Delete Campaign"><i data-feather="trash"></i></a>
+                                        </nav>
+                                    </td> --}}
                                 </tr>
                             @empty
                                 <tr>
@@ -127,6 +134,56 @@
         <!-- row -->
     </div>
     <!-- container -->
+
+    
+    {{-- modals --}}
+
+    <div class="modal effect-scale" id="prompt-delete-many" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">{{__('common.delete_mutiple_confirmation_title')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{__('common.delete_mutiple_confirmation')}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-danger" id="btnDeleteMany">Yes, Delete</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal effect-scale" id="prompt-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">{{__('common.delete_confirmation_title')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{__('common.delete_confirmation')}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-danger" id="btnDelete">Yes, Delete</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="" id="posting_form" style="display:none;" method="post">
+        @csrf
+        <input type="text" id="pages" name="pages">
+        <input type="text" id="status" name="status">
+    </form>
+
 @endsection
 
 @section('pagejs')
@@ -141,4 +198,24 @@
 
 
 @section('customjs')
+    <script>
+        function delete_one_page(id, page) {
+            $('#prompt-delete').modal('show');
+            $('#btnDelete').on('click', function() {
+                var route = "{{ route('mailing-list.sent-campaigns.delete', ['id' => 'ID']) }}";
+                route = route.replace('ID', id);
+                post_form(route, '', id);
+            });
+        }
+
+        function post_form(url,status,pages){
+
+            $('#posting_form').attr('action',url);
+            $('#pages').val(pages);
+            $('#status').val(status);
+            $('#posting_form').submit();
+
+        }
+
+    </script>
 @endsection

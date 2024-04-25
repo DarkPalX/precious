@@ -36,7 +36,7 @@
                         <tr>
                             <td>{{$sale->order_number}}</td>
                             <td>{{$sale->created_at}}</td>
-                            <td>{{number_format($sale->net_amount,2)}}</td>
+                            <td>{{number_format($sale->gross_amount - $sale->discount_amount + $sale->ecredit_amount,2)}}</td>
                             <td>{{$sale->delivery_status}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif</td> 
                             <td>
                                 <ul class="nav nav-pills">

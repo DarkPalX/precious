@@ -299,7 +299,7 @@ class SalesController extends Controller
                 $order->update(['payment_status' => 'PAID']);
                 SalesPayment::create([
                     'sales_header_id' => $sale,
-                    'payment_type' => 'Cash',
+                    'payment_type' => $order->payment_method == 'ecredit' ? 'E-Wallet' : 'Cash',
                     'amount' => $order->gross_amount,
                     'status' => 'PAID',
                     'payment_date' => today(),
