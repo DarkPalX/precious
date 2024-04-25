@@ -55,7 +55,7 @@ class Library extends Model
           COALESCE(prds.texture,'') as texture,
           COALESCE(prds.uom,'') as uom,
 
-        COALESCE(prds.is_featured,0) as is_featured,
+          COALESCE(prds.is_featured,0) as is_featured,
           COALESCE(prds.is_best_seller,0) as is_best_seller,
           COALESCE(prds.is_free,0) as is_free,
           COALESCE(prds.is_premium,0) as is_premium,
