@@ -1556,8 +1556,15 @@ public function getPopUpBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$BannerAds->getRandomPopUpBanner($data);  
-    return response()->json($result); 
+    $Info=$BannerAds->getRandomPopUpBanner($data);  
+
+    return response()->json([
+      'response' => 'Success',
+      'data' => $Info,
+      'message' => "Successfully get pop up banner.",
+    ]); 
+
+    // return response()->json($result); 
     
 }
 
@@ -1936,6 +1943,7 @@ public function validateCouponCode(Request $request){
   return response()->json($result); 
   }
 
+ 
   //EPUB VIEWER================================================================
    public function showViewerEpub(Request $request){
      
@@ -1962,6 +1970,5 @@ public function validateCouponCode(Request $request){
    }
   
  }
-
 
 }
