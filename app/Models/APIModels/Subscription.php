@@ -147,7 +147,7 @@ class Subscription extends Model
       $checkCustomerSubscriptionPlanIDExist=0;
       $checkCustomerSubscriptionPlanIDExist=$this->checkCustomerSubscriptionIfExist($UserID);
 
-      if($checkCustomerSubscriptionPlanExist<=0){
+      if($checkCustomerSubscriptionPlanIDExist<=0){
           // save subscription
          $User_Subscription_ID = DB::table('users_subscriptions')
             ->insertGetId([                                            
@@ -163,6 +163,14 @@ class Subscription extends Model
               'created_at' => $TODAY             
             ]); 
 
+          //Send Notification Message
+           $MessageNotificationID = DB::table('message_notification')
+                ->insertGetId([                                            
+                  'user_id' => $UserID,                                                         
+                  'message_notification' => 'You have successfully subscribe to a '.$TitlePlan. " plan & it will expire on ".$EndDateFormatted. " .",
+                  'created_at' => $TODAY             
+              ]);  
+
       }else{
            
            $User_Subscription_ID=$checkCustomerSubscriptionPlanIDExist;
@@ -173,33 +181,52 @@ class Subscription extends Model
            $OldNoOfDays=0;
            $NewNoOfDays=0;
 
-           $info=getCustomerCurrentSubscriptionInfo($UserID);
+           $info=$this->getCustomerCurrentSubscriptionInfo($UserID);
            if(isset($info)>0){
                 $StartDate=$info->start_date;
-                $OldExpirationDate=$info->end_date;
+                $EndDate=$info->end_date;
+
+                // $OldExpirationDate=$info->end_date;
                 $OldNoOfDays=$info->no_days;
 
                 $NewNoOfDays=$PlanNoDays+$OldNoOfDays;
 
+                $DatePlanNoDaysExtended=$PlanNoDays." days";
+
+                $new_date_extended=date_create($EndDate);
+                date_add($new_date_extended,date_interval_create_from_date_string($DatePlanNoDaysExtended));            
+                $NewExpiryEndDate=date("Y-m-d", strtotime(date_format($new_date_extended,"Y-m-d")));
+            
+
            }
 
-           DB::table('users_subscriptions')
-                ->where('id',$User_Subscription_ID)
-                ->update([                              
-                  'user_id' => $UserID,                                                                          
-                  'plan_id' => $SubscriptionPlanID, 
-                  'no_days' => $NewNoOfDays, 
-                  'mode_payment' => $PaymentMethod, 
-                  'amount_paid' => $SubTotal,           
-                  'start_date' => $StartDate, 
-                  'end_date' => $EndDate, 
-                  'is_subscribe' => 1, 
-                  'is_expired' => 0, 
-                  'is_cancelled' => 0, 
-                  'cancel_reason' => '', 
-                  'remarks' => 'Exnted to a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
-                  'created_at' => $TODAY  
-              ]);  
+             DB::table('users_subscriptions')
+                  ->where('id',$User_Subscription_ID)
+                  ->update([                              
+                    'user_id' => $UserID,                                                                          
+                    'plan_id' => $SubscriptionPlanID, 
+                    'no_days' => $NewNoOfDays, 
+                    'mode_payment' => $PaymentMethod, 
+                    'amount_paid' => $SubTotal,           
+                    'start_date' => $StartDate, 
+                    'end_date' => $NewExpiryEndDate, 
+                    'is_subscribe' => 1, 
+                    'is_extended' => 1, 
+                    'is_expired' => 0, 
+                    'is_cancelled' => 0, 
+                    'cancel_reason' => null, 
+                       'remarks' => 'Exnted a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
+                    'created_at' => $TODAY  
+                ]); 
+
+
+                //Send Notification Message
+               $MessageNotificationID = DB::table('message_notification')
+                    ->insertGetId([                                            
+                      'user_id' => $UserID,                                                         
+                      'message_notification' => 'You have successfully extended your current plan to a '.$PlanNoDays.' days subscription & will expired on '.$NewExpiryEndDate, 
+                      'created_at' => $TODAY             
+                  ]);  
 
       }
      
@@ -293,15 +320,7 @@ class Subscription extends Model
                     'ecredits' => $BalanceEWalletCredit,                                                            
                     'updated_at' => $TODAY
                 ]);  
-               
-               //Send Notification Message
-               $MessageNotificationID = DB::table('message_notification')
-                    ->insertGetId([                                            
-                      'user_id' => $UserID,                                                         
-                      'message_notification' => 'You have successfully subscribe to a '.$TitlePlan. " plan & it will expire on ".$EndDateFormatted. " .",
-                      'created_at' => $TODAY             
-                  ]);   
-
+                         
              }
          }  
      }
@@ -465,7 +484,7 @@ class Subscription extends Model
 
          if(isset($customer_info)>0){     
             $IsSubcscribe=$customer_info->is_subscribe; 
-            $TitlePlan=$customer_info->title_plan;                   
+            $SubscriptionPlanID=$customer_info->plan_id;                   
             $TitlePlan=$customer_info->title_plan;                   
             $PlanNoDays=$customer_info->no_days;                       
             $EndDate=$customer_info->end_date; 
