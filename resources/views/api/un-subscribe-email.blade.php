@@ -37,8 +37,8 @@
 <div style="max-width: 700px; width: 100%; background: #fff;margin: 30px auto;">
 
     <div style="padding:30px 60px;">
-        <div style="text-align: center;padding: 20px 0;">            
-            <img src="https://beta.ebooklat.phr.com.ph/storage/logos/1707185818_webfocus-logo.png" alt="company logo" width="175" />
+        <div style="text-align: center;padding: 20px 0;">
+             <img src="https://beta.ebooklat.phr.com.ph/storage/logos/1707185818_webfocus-logo.png" style="height:140px;width:184px;">
         </div>
 
         <p>You will be missed!</p>
