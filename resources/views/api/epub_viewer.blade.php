@@ -106,7 +106,7 @@
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="light-theme" style="vertical-align: middle;display: flex;background: white;color: black;cursor: pointer">
-                            <img  src="https://www.api.ebooklat.phr.com.ph/public/api/img/light-mode.png" alt="light-mode" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Light Theme</span>
+                            <img  src="https://www.api.ebooklat.phr.com.ph/public/api/img/light-mode.png" alt="light-mode" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Light/Default Theme</span>
                         </td>
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
