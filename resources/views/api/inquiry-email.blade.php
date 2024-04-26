@@ -15,7 +15,7 @@
             <table role="presentation" width="100%" align="center" cellpadding="0" cellspacing="0" border="0"  style="margin:0px auto;width:100%!important;min-width:100%!important"> 
             <tbody> 
             <tr> 
-              <td dir="rtl" style="text-align:center;font-size:0;background:#2e3c5f"> 
+              <td dir="rtl" style="text-align:center;font-size:0;background:#fff"> 
               <div  bgcolor="#ffffff" style="max-width:200px;width:100%;display:inline-block;vertical-align:top" dir="ltr"> 
               <table width="100%" bgcolor="#ffffff" valign="top" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse"> 
                   <tbody> 
@@ -128,15 +128,12 @@
               This is a system generated email. Please do not reply.
             </div> 
 
-            <div>
-             Add us to your address book msnowcorporation@gmail.com
-            </div>
-
+            
             <br>
 
              <div>
-             <a target="_blanlk" href="https://www.msnowcorporation.com/privacy-policy">Privacy Policy </a> | 
-             <a target="_blanlk" href="https://www.msnowcorporation.com/terms-condition">Terms & Condition </a> | 
+             <a target="_blanlk" href="#">Privacy Policy </a> | 
+             <a target="_blanlk" href="#">Terms & Condition </a> | 
               <a target="_blanlk" href="#">Unsubscribe </a> 
             </div> 
 
