@@ -82,7 +82,7 @@ class BannerAds extends Model
        $query->where("mob_ban.deleted_at","=",null); 
        $query->whereRaw('RAND()');   
       
-    $list = $query->get();
+    $list = $query->first();
                              
      return $list;  
 
