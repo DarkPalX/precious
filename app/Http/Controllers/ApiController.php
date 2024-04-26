@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
+use URL;
 use Mail;
 use Session;
 use Hash;
@@ -1949,22 +1950,32 @@ public function validateCouponCode(Request $request){
      
    $Book= new Book();
    
-   $data['Page'] = 'Home';   
+   $data['epub_file_exist']=false;
    $data['doc_id'] =  $request->input('doc_id');
    
    if($data['doc_id']>0){
        $Epub_file='';
        $info=$Book->getBookInfoByID($data['doc_id']);
        if(isset($info)>0){
-           $Epub_file=$info->file_url;
-           $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
+           $Epub_file=$info->file_url;                              
+            
+            $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
+
+             if(file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$Epub_file)){
+                $data['epub_file_exist']=true;
+             }else{
+                $data['epub_file_exist']=false;
+             }
+                             
           return View::make('api/epub_viewer')->with($data);    
+
        }else{
            $data['epub_doc']='';
            return View::make('api/epub_viewer')->with($data);    
        }
       
    }else{
+
        $data['epub_doc']='';
        return View::make('api/epub_viewer')->with($data);    
    }
