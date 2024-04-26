@@ -114,7 +114,9 @@ class Email extends Model
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 	      Mail::send(
 	        'api/subscribe-email',
-	        [],
+	        [
+	            'EmailAddress'=> $param['EmailAddress']
+	        ],
 	        function($message) use ($param){
 	          $message->from($param['CompanyNoReplyEmail']);
 	          $message->to($param["EmailAddress"]);	          
@@ -132,7 +134,9 @@ class Email extends Model
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 	      Mail::send(
 	        'api/un-subscribe-email',
-	        [],
+	        [
+	            'EmailAddress'=> $param['EmailAddress']
+	        ],
 	        function($message) use ($param){
 	          $message->from($param['CompanyNoReplyEmail']);
 	          $message->to($param["EmailAddress"]);	          
