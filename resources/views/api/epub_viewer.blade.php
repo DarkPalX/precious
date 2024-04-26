@@ -204,7 +204,7 @@
   @else
    <div class="container" style="position: relative; width: 100%px;height: 30%;">
     <center style="position: absolute; top: 50%;width: 300px;left: 13%;">
-        <p>Sorry! No ePub book files found nor attached to the books you are reading.</p>
+        <p>Sorry! No ePub book files found nor attached to the books that you are reading.</p>
     </center>
   </div>
   @endif
