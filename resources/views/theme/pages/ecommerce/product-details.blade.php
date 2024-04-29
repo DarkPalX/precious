@@ -68,7 +68,8 @@
 
                 </div>
 
-                <div class="col-md-6 product-desc">
+                <div class="col-md-6 product-desc pt-0">
+                    <div class="badge bg-success p-2">Pre Order</div>
                     <h3 class="mb-2">{{$product->name}}</h3>
                     <h4>by: {{ $product->author ?? 'Anonymous' }}</h4>
                     
@@ -89,13 +90,13 @@
                         <hr class="mb-4" />
                     </div>
                     
-                    <div class="product-rating">
+                    <div class="product-rating text-warning">
                         @for($star = 1; $star <= 5; $star++)
                             <i class="icon-star{{ $star <= App\Models\Ecommerce\ProductReview::getProductRating($product->id) ? '3' : '-empty' }}"></i>
                         @endfor
                     </div>
                     
-                    {!! ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
+                    {!! ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) . '</ins> <del class="text-danger">₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
                     <input type="hidden" id="product_price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
                     
                     <!-- Product Single - Short Description
@@ -185,7 +186,7 @@
                                                 </div>
                                                 <div class="col-md-7 ps-md-4">
                                                     <h3 class="mb-2">{{ $bundle->name }}</h3>
-                                                    {!! ($bundle->discount_price > 0 || $bundle->discountedprice != $bundle->price ? '<ins class="h1 text-decoration-none">₱' . number_format($bundle->discountedprice != $bundle->price ? $bundle->discountedprice : $bundle->discount_price, 2) . '</ins> <del>₱' . number_format($bundle->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($bundle->price, 2) . '</ins>') !!}
+                                                    {!! ($bundle->discount_price > 0 || $bundle->discountedprice != $bundle->price ? '<ins class="h1 text-decoration-none">₱' . number_format($bundle->discountedprice != $bundle->price ? $bundle->discountedprice : $bundle->discount_price, 2) . '</ins> <del class="text-danger">₱' . number_format($bundle->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($bundle->price, 2) . '</ins>') !!}
 
                                                     @if($bundle->inventory > 0)
                                                         <div class="d-flex justify-content-evenly align-content-stretch mb-1">
@@ -222,7 +223,7 @@
                                 </div>
                                 <div class="col-md-7">
                                     <h3 class="mb-2">{{ $product->name }} bundle</h3>
-                                    {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del>₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
+                                    {!! ($product->discount_price > 0 ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discount_price, 2) . '</ins> <del class="text-danger">₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
                                     
                                     @if($product->inventory > 0)
                                         <div class="d-flex justify-content-evenly align-content-stretch mb-1">
@@ -502,8 +503,8 @@
                         <div class="product-desc">
                             <div class="product-title"><h3><a href="{{ route('product.details',$rel->slug) }}">{{$rel->name}}</a></h3></div>
                             {{-- <div class="product-price"><ins>₱{{number_format($rel->price,2)}}</ins></div> --}}
-							{!! ($rel->discount_price > 0 ? '<div class="product-price"><del>' . number_format($rel->price, 2) . '</del> <ins>' . number_format($rel->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($rel->price, 2) . '</ins></div>') !!}
-                            <div class="product-rating">
+							{!! ($rel->discount_price > 0 ? '<div class="product-price"><del class="text-danger">' . number_format($rel->price, 2) . '</del> <ins>' . number_format($rel->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($rel->price, 2) . '</ins></div>') !!}
+                            <div class="product-rating text-warning">
                                 @for($star = 1; $star <= 5; $star++)
                                     <i class="icon-star{{ $star <= App\Models\Ecommerce\ProductReview::getProductRating($rel->id) ? '3' : '-empty' }}"></i>
                                 @endfor
