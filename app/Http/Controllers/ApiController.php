@@ -81,25 +81,32 @@ class ApiController extends Controller {
          'message' => $ResponseMessage,
         ]);
     }
-
+      
+     $getUserID=0;
      $getPassword=''; 
      $chkIsActive=0;
      $info=$UserCustomer->getUserLoginPassword($data['EmailAddress']);
      
      $Subcriber_Status=0;
      if(isset($info)>0){         
+
+         $getUserID=$info->user_ID;
          $getPassword= $info->password;
          $chkIsActive= $info->is_active;
+
          //check bycrypt
          if (Hash::check($data['Password'], $getPassword)){
                 if($chkIsActive==1){
-
                   
-                  $Subcriber_Status=$UserCustomer->getSubsciberStatus($data['EmailAddress']);
+                  //Subscription Plan
+                   $Subcription_Plan_Status=$UserCustomer->getSubscriptionPlanStatus($getUserID);
+                   //News Letter Status
+                   $Subcriber_Status=$UserCustomer->getNewsLettrSubsciberStatus($data['EmailAddress']);
 
                     return response()->json([
                       'data' => $info,
-                      'subscriber_status' => $Subcriber_Status,
+                      'subscription_status' => $Subcription_Plan_Status,
+                      'subscriber_status' => $Subcriber_Status,                      
                       'response' => 'Success',
                       'message' => "Naa tama ang password..",
                      ]);  
@@ -108,6 +115,7 @@ class ApiController extends Controller {
 
                     return response()->json([
                       'data' => null,
+                      'subscription_status'=> null,
                       'subscriber_status' => null,
                       'response' => 'Failed',
                       'message' => "Your account is in-acative. To activate, just email our admin & staff. ",                      
@@ -118,6 +126,7 @@ class ApiController extends Controller {
          }else{
             return response()->json([
                     'data' => null,
+                    'subscription_status'=> null,
                     'subscriber_status' => null,
                     'response' => 'Failed',
                     'message' => "Invalid login credentials.",
@@ -126,6 +135,7 @@ class ApiController extends Controller {
      }else{
           return response()->json([
                 'data' => null,
+                'subscription_status'=> null,
                 'response' => 'Failed',
                 // 'message' => "Your account is in-acative. To activate, just email our admin & staff. ",
                 'message' => "Invalid login credentials.",
@@ -617,41 +627,41 @@ class ApiController extends Controller {
     } 
   }
 
-   // GET CUSTOMER INFORMATION WITH PRIMARY ADDRESS========================================================================
- public function getCustomerInformationWithPrimaryAddress(Request $request){
+ //   // GET CUSTOMER INFORMATION WITH PRIMARY ADDRESS========================================================================
+ // public function getCustomerInformationWithPrimaryAddress(Request $request){
 
-    $Misc = new Misc();
-    $UserCustomer = new UserCustomer();
+ //    $Misc = new Misc();
+ //    $UserCustomer = new UserCustomer();
 
-    $response = "Failed";
-    $responseMessage = "";
+ //    $response = "Failed";
+ //    $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
-    $data['CustomerID'] = $request->post('UserID');
+ //    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+ //    $data['CustomerID'] = $request->post('UserID');
                 
-    $Info=$UserCustomer->getCustomerInformation($data);
+ //    $Info=$UserCustomer->getCustomerInformation($data);
 
-    if(isset($Info)>0){     
+ //    if(isset($Info)>0){     
 
-        $Subcriber_Status=0;
-        $Subcriber_Status=$UserCustomer->getSubsciberStatus($Info->emailaddress);
+ //        $Subcriber_Status=0;
+ //        $Subcriber_Status=$UserCustomer->getNewsLettrSubsciberStatus($Info->emailaddress);
 
-        return response()->json([                  
-         'response' => 'Success',
-         'data' => $Info,
-         'subscriber_status' => $Subcriber_Status,
-         'message' => "Customer with ID ". $data['CustomerID']. " has profile data.",
-       ]);    
+ //        return response()->json([                  
+ //         'response' => 'Success',
+ //         'data' => $Info,
+ //         'subscriber_status' => $Subcriber_Status,
+ //         'message' => "Customer with ID ". $data['CustomerID']. " has profile data.",
+ //       ]);    
 
-    }else{
-        return response()->json([
-          'response' => 'Failed',
-          'data' => null,
-          'subscriber_status' => null,
-          'message' => "Customer does not exist.",
-       ]); 
-    } 
-  }
+ //    }else{
+ //        return response()->json([
+ //          'response' => 'Failed',
+ //          'data' => null,
+ //          'subscriber_status' => null,
+ //          'message' => "Customer does not exist.",
+ //       ]); 
+ //    } 
+ //  }
 
   // UPDATE CUSTOMER PROFILE======================================
   public function doUpdateCustomerProfile(Request $request){
@@ -872,8 +882,7 @@ public function getSubscribedReadBooksList(Request $request){
     $responseMessage = "";
 
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
-    //$data['UserID']=$request->post('UserID');
-    $data['UserID']=59;
+    $data['UserID']=$request->post('UserID');    
 
     $data["SearchText"] = '';
     $data["Status"] = '';
@@ -885,7 +894,7 @@ public function getSubscribedReadBooksList(Request $request){
     
 }
 
-public function saveReadBooks(Request $request){
+public function saveReadSubscribedBooks(Request $request){
     
     $Misc = new Misc();
     $Library = new Library();
@@ -906,7 +915,7 @@ public function saveReadBooks(Request $request){
         ]);    
     }
               
-    $retVal=$Library->saveReadBooks($data);
+    $retVal=$Library->saveReadSubscribedBooks($data);
      return response()->json([
       'response' => 'Success',
       'message' => "Sucessfully open & read book.",
