@@ -210,12 +210,22 @@ Route::post('/add-to-library',[
    'as'=> 'add-to-library'
 ]);
 
+//SUBSCRIBED OPEN READ BOOKS
+Route::post('/get-subscribed-read-books-list',[
+   'uses'=>'App\Http\Controllers\ApiController@getSubscribedReadBooksList',
+   'as'=> 'get-subscribed-read-books-list'
+]);
+
+Route::post('/save-read-books',[
+   'uses'=>'App\Http\Controllers\ApiController@saveReadBooks',
+   'as'=> 'save-read-books'
+]);
+
 // CART TRANS CHECK OUT =================================
 Route::post('/proceed-to-checkout',[
    'uses'=>'App\Http\Controllers\ApiController@proceedToCheckOut',
    'as'=> 'proceed-to-checkout'
 ]);
-
 
 // ORDER TRANSACTION ================================
 Route::post('/get-order-history-list',[
