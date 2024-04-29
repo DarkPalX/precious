@@ -89,7 +89,9 @@ class Cart extends Model
                   promo.discount FROM 
                         promos as promo                  
                   INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = cart.product_id                        
+                       WHERE promo_prods.product_id = cart.product_id        
+                       AND promo.applicable_product_type !='physical'                
+                       AND promo.status = 'ACTIVE'
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -100,7 +102,9 @@ class Cart extends Model
                    (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
                         promos as promo                  
                   INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = cart.product_id                        
+                       WHERE promo_prods.product_id = cart.product_id 
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                       
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
