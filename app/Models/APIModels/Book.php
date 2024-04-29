@@ -455,6 +455,7 @@ class Book extends Model
           COALESCE(prds.is_featured,0) as is_featured,
           COALESCE(prds.is_best_seller,0) as is_best_seller,
           COALESCE(prds.is_free,0) as is_free,
+          COALESCE(prds.is_premium,0) as is_premium,
 
           COALESCE(prds.ebook_price,0) as price,   
           COALESCE(prds.ebook_discount_price,0) as discount_price,      
@@ -489,8 +490,8 @@ class Book extends Model
                         promos as promo                  
                   LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
                        WHERE promo_prods.product_id = prds.id  
-                       AND promo_prods.applicable_product_type !='physical'
-                       AND promo_prods.status = 'ACTIVE'                     
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                     
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -502,8 +503,8 @@ class Book extends Model
                         promos as promo                  
                   LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
                        WHERE promo_prods.product_id = prds.id  
-                       AND promo_prods.applicable_product_type !='physical'
-                       AND promo_prods.status = 'ACTIVE'                     
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                    
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -546,4 +547,126 @@ class Book extends Model
      return $list;  
 
   }
+
+ //HEADER CATALOGUE 
+  public function getHeaderCatalogueList(){
+
+      $query = DB::table('product_catalog_headers as prod_hdrs_cat')    
+
+       ->selectraw("
+          prod_hdrs_cat.id  as prod_hdrs_cat_ID,
+
+          COALESCE(prod_hdrs_cat.name,'') as CatalogueName,          
+          COALESCE(prod_hdrs_cat.status,'') as status
+        ");
+
+       $query->where("prod_hdrs_cat.status","=",1); 
+         
+      $list = $query->get();
+                             
+     return $list;  
+
+  }
+
+ // DETAILS
+ public function getDetailsCatalogueList($data){
+
+      $HeaderID=$data['HeaderID'];
+
+      $query = DB::table('product_catalog_details as prod_det_cat')  
+      ->join('product_catalog_headers as prod_hdrs_cat', 'prod_hdrs_cat.id', '=', 'prod_det_cat.product_catalog_header_id')   
+      ->join('products as prds', 'prds.id', '=', 'prod_det_cat.product_id')   
+
+       ->selectraw("    
+          prod_hdrs_cat.name  as header_name,
+
+          prds.id as book_ID,
+
+          COALESCE(prds.name,'') as name,
+          COALESCE(prds.author,'') as author,
+          COALESCE(prds.subtitle,'') as subtitle,
+          COALESCE(prds.short_description,'') as short_description,
+          
+          COALESCE(prds.slug,'') as slug,
+          COALESCE(prds.file_url,'') as file_url,          
+
+          COALESCE(prds.category_id,0) as category_id,
+          COALESCE(prds.book_type,'') as book_type,          
+      
+          COALESCE(prds.sku,'') as sku,          
+          COALESCE(prds.size,'') as size,
+          COALESCE(prds.weight,'') as weight,
+          COALESCE(prds.texture,'') as texture,
+          COALESCE(prds.uom,'') as uom,
+
+          COALESCE(prds.is_featured,0) as is_featured,
+          COALESCE(prds.is_best_seller,0) as is_best_seller,
+          COALESCE(prds.is_free,0) as is_free,
+          COALESCE(prds.is_premium,0) as is_premium,
+
+          COALESCE(prds.ebook_price,0) as price,   
+          COALESCE(prds.ebook_discount_price,0) as discount_price,      
+          
+          COALESCE(prds.reorder_point,0) as reorder_point,  
+
+          CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
+
+          COALESCE((
+               SELECT 
+                  prod_img.path FROM 
+                      product_photos as prod_img                  
+                  LEFT JOIN products as prods ON prods.id = prod_img.product_id
+                      WHERE prod_img.product_id = prod_det_cat.product_id   
+                      AND prod_img.is_primary = 1    
+                  LIMIT 1                                
+              )
+        ,'') as image_path,
+
+         COALESCE((
+             SELECT ROUND(avg(rating))
+                  FROM product_reviews as rev
+                WHERE rev.product_id = prod_det_cat.product_id   
+                AND rev.status = 1 
+             LIMIT 1                                
+              )
+        ,0) as rating,
+
+        COALESCE((
+               SELECT 
+                  promo.discount FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prod_det_cat.product_id  
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                     
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_percent,
+
+        COALESCE((
+               SELECT 
+                   (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prod_det_cat.product_id  
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                     
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_price,
+
+          COALESCE(prds.status,'') as status        
+
+        ");
+
+       $query->whereRaw("prod_det_cat.product_catalog_header_id =?",[$HeaderID]); 
+         
+      $list = $query->get();
+                             
+     return $list;  
+
+  }
+
 }
