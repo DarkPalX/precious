@@ -26,7 +26,7 @@
    }
    #viewer{
     padding-top:30px;
-    padding-bottom:50px;
+/*    padding-bottom:50px;*/
    }
  /*  .spreads{
       padding-bottom:20px;
