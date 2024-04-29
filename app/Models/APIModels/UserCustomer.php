@@ -27,9 +27,7 @@ class UserCustomer extends Model
   public function getUserLoginPassword($EmailAddress){
      
     $info = DB::table('users as usrs')      
-    ->leftjoin('users_subscriptions as usrs_sub', 'usrs_sub.user_id', '=', 'usrs.id')    
-    ->leftjoin('subscriptions as subs', 'subs.id', '=', 'usrs_sub.plan_id')    
-
+    
        ->selectraw("
           usrs.id as user_ID,
 
@@ -58,18 +56,6 @@ class UserCustomer extends Model
           COALESCE(usrs.password,'') as password,
           COALESCE(usrs.verification_code,'') as verification_code,
           COALESCE(usrs.remember_token,'') as remember_token,
-
-          COALESCE(subs.id ,'') as plan_id,
-          COALESCE(subs.title,'') as title_plan,
-
-          COALESCE(usrs_sub.plan_id,0) as plan_id,
-          COALESCE(usrs_sub.no_days,'') as no_days,
-
-          COALESCE(usrs_sub.start_date,'') as start_date,
-          COALESCE(usrs_sub.end_date,'') as end_date,
-          
-          COALESCE(usrs_sub.is_subscribe,0) as is_subscribe,
-          COALESCE(usrs_sub.is_expired,0) as is_expired,
 
           COALESCE((
                SELECT 
@@ -112,9 +98,7 @@ class UserCustomer extends Model
     $UserPassword = bcrypt($data['Password']);
 
     $info = DB::table('users as usrs')   
-    ->leftjoin('users_subscriptions as usrs_sub', 'usrs_sub.user_id', '=', 'usrs.id')   
-    ->leftjoin('subscriptions as subs', 'subs.id', '=', 'usrs_sub.plan_id')     
-
+    
        ->selectraw("
           usrs.id as user_ID,
 
@@ -142,19 +126,7 @@ class UserCustomer extends Model
           COALESCE(usrs.ecredits,0) as ecredits,
           COALESCE(usrs.verification_code,'') as verification_code,
           COALESCE(usrs.remember_token,'') as remember_token,
-
-          COALESCE(subs.id ,'') as plan_id,
-          COALESCE(subs.title,'') as title_plan,
-          
-          COALESCE(usrs_sub.plan_id,0) as plan_id,
-          COALESCE(usrs_sub.no_days,'') as no_days,
-
-          COALESCE(usrs_sub.start_date,'') as start_date,
-          COALESCE(usrs_sub.end_date,'') as end_date,
-          
-          COALESCE(usrs_sub.is_subscribe,0) as is_subscribe,
-          COALESCE(usrs_sub.is_expired,0) as is_expired,
-
+      
           COALESCE((
                SELECT 
                    COUNT(cart.qty) FROM 
@@ -509,9 +481,7 @@ class UserCustomer extends Model
     $UserID = $data['UserID'];   
 
     $info = DB::table('users as usrs')              
-    ->leftjoin('users_subscriptions as usrs_sub', 'usrs_sub.user_id', '=', 'usrs.id') 
-    ->leftjoin('subscriptions as subs', 'subs.id', '=', 'usrs_sub.plan_id') 
-
+    
        ->selectraw("
           usrs.id as user_ID,
 
@@ -539,20 +509,8 @@ class UserCustomer extends Model
           COALESCE(usrs.ecredits,0) as ecredits,
           COALESCE(usrs.verification_code,'') as verification_code,
           COALESCE(usrs.remember_token,'') as remember_token,
-
-          COALESCE(subs.id ,'') as plan_id,
-          COALESCE(subs.title,'') as title_plan,
-
-          COALESCE(usrs_sub.plan_id,0) as plan_id,
-          COALESCE(usrs_sub.no_days,'') as no_days,
-
-          COALESCE(usrs_sub.start_date,'') as start_date,
-          COALESCE(usrs_sub.end_date,'') as end_date,
-         
-          COALESCE(usrs_sub.is_subscribe,0) as is_subscribe,
-          COALESCE(usrs_sub.is_expired,0) as is_expired,
-
-            COALESCE((
+          
+          COALESCE((
                SELECT 
                    COUNT(cart.qty) FROM 
                       ecommerce_shopping_cart as cart                                    
@@ -584,8 +542,43 @@ class UserCustomer extends Model
     return $info;
 
   }
+
+  //subscription plan status
+  public function getSubscriptionPlanStatus($UserID){
+   
+    $info = DB::table('users_subscriptions as usrs_sub')              
+    ->leftjoin('subscriptions as subs', 'subs.id', '=', 'usrs_sub.plan_id') 
+
+       ->selectraw("          
+ 
+          COALESCE(subs.id ,'') as plan_id,
+          COALESCE(subs.title,'') as title_plan,
+
+          COALESCE(usrs_sub.plan_id,0) as plan_id,
+          COALESCE(usrs_sub.no_days,'') as no_days,
+
+          COALESCE(usrs_sub.start_date,'') as start_date,
+          COALESCE(usrs_sub.end_date,'') as end_date,
+          
+          COALESCE(usrs_sub.is_subscribe,0) as is_subscribe,
+          COALESCE(usrs_sub.is_expired,0) as is_expired,
+          COALESCE(usrs_sub.is_extended,0) as is_extended,
+          COALESCE(usrs_sub.is_cancelled,0) as is_cancelled,
+          COALESCE(usrs_sub.cancel_reason,'') as cancel_reason
+
+          ")
+
+          ->whereRaw('usrs_sub.user_id=?',[$UserID])                                                      
+          ->where('usrs_sub.is_subscribe',"=",1)   
+          ->orderBy("usrs_sub.id","DESC")  
+
+          ->first();
+ 
+    return  $info;
+ }
   
- public function getSubsciberStatus($EmailAddress){
+  //news letter subscription status
+ public function getNewsLettrSubsciberStatus($EmailAddress){
 
   $Status=0;
 
