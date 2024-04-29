@@ -32,6 +32,7 @@
       padding-bottom:20px;
    }
 */
+   
 .sidenav {
     height: 100%;
     width: 310px;
@@ -51,6 +52,7 @@
 <body>
   <!-- <div id="title"></div> -->
   
+@if($epub_file_exist)
 
   <div style="display:flex;position: fixed; width: 100%;background: #2e3c5f;height: 40px;z-index: 99999;">
     <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>
@@ -104,7 +106,7 @@
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="light-theme" style="vertical-align: middle;display: flex;background: white;color: black;cursor: pointer">
-                            <img  src="https://www.api.ebooklat.phr.com.ph/public/api/img/light-mode.png" alt="light-mode" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Light Theme</span>
+                            <img  src="https://www.api.ebooklat.phr.com.ph/public/api/img/light-mode.png" alt="light-mode" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Light/Default Theme</span>
                         </td>
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
@@ -197,7 +199,15 @@
            </table>                        
           </div>
       </div>        
-      </div>
+  </div>
+
+  @else
+   <div class="container" style="position: relative; width: 100%px;height: 30%;">
+    <center style="position: absolute; top: 50%;width: 300px;left: 13%;">
+        <p>Sorry! No ePub book files found nor attached to the books that you are reading.</p>
+    </center>
+  </div>
+  @endif
 
 
   <script>
@@ -461,5 +471,6 @@
     document.getElementById("CartPanel").style.right = "-315px";
    }
   </script>
+
   </body>
 </html>

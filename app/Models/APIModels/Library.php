@@ -58,11 +58,12 @@ class Library extends Model
           COALESCE(prds.is_featured,0) as is_featured,
           COALESCE(prds.is_best_seller,0) as is_best_seller,
           COALESCE(prds.is_free,0) as is_free,
+          COALESCE(prds.is_premium,0) as is_premium,
 
-          COALESCE(prds.ebook_price,0) as price,      
-          COALESCE(prds.ebook_discount_price,0) as discount_price,   
+          COALESCE(prds.ebook_price,0) as price,   
+          COALESCE(prds.ebook_discount_price,0) as discount_price,      
           
-          COALESCE(prds.reorder_point,0) as reorder_point,
+          COALESCE(prds.reorder_point,0) as reorder_point,  
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,  
 
@@ -85,6 +86,29 @@ class Library extends Model
              LIMIT 1                                
               )
         ,0) as rating,
+
+        COALESCE((
+               SELECT 
+                  promo.discount FROM 
+                        promos as promo                  
+                  INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = lib.product_id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_percent,
+
+
+        COALESCE((
+               SELECT 
+                   (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
+                        promos as promo                  
+                  INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = lib.product_id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_price,
 
           COALESCE(prds.status,'') as status          
           

@@ -59,6 +59,7 @@ class UserCustomer extends Model
           COALESCE(usrs.verification_code,'') as verification_code,
           COALESCE(usrs.remember_token,'') as remember_token,
 
+          COALESCE(subs.id ,'') as plan_id,
           COALESCE(subs.title,'') as title_plan,
 
           COALESCE(usrs_sub.plan_id,0) as plan_id,
@@ -142,6 +143,7 @@ class UserCustomer extends Model
           COALESCE(usrs.verification_code,'') as verification_code,
           COALESCE(usrs.remember_token,'') as remember_token,
 
+          COALESCE(subs.id ,'') as plan_id,
           COALESCE(subs.title,'') as title_plan,
           
           COALESCE(usrs_sub.plan_id,0) as plan_id,
@@ -538,6 +540,7 @@ class UserCustomer extends Model
           COALESCE(usrs.verification_code,'') as verification_code,
           COALESCE(usrs.remember_token,'') as remember_token,
 
+          COALESCE(subs.id ,'') as plan_id,
           COALESCE(subs.title,'') as title_plan,
 
           COALESCE(usrs_sub.plan_id,0) as plan_id,
@@ -570,7 +573,8 @@ class UserCustomer extends Model
                                               
               )
          ,0) as item_message,
-        
+
+
           COALESCE(usrs.is_active,0) as is_active         
           
         ")        
@@ -581,8 +585,25 @@ class UserCustomer extends Model
 
   }
   
+ public function getSubsciberStatus($EmailAddress){
 
-  public function doUpdateCustomerProfile($data) {
+  $Status=0;
+
+  $info = DB::table('subscribers')   
+            ->where('deleted_at',"=",null)          
+            ->whereRaw('email=?',[$EmailAddress])                                                      
+            ->first();
+ 
+     if(isset($info)>0){
+        $Status=1;
+     }else{
+        $Status=0;
+     }
+
+    return  $Status;
+ }
+
+ public function doUpdateCustomerProfile($data) {
 
     $Misc  = New Misc();
     $TODAY = date("Y-m-d H:i:s");
@@ -603,40 +624,124 @@ class UserCustomer extends Model
     $StreetAddress=$data['StreetAddress'];
     $CityName=$data['CityName'];
     $ZipCode=$data['ZipCode'];
+
+    $Is_Subscribe=$data['Is_Subscribe'];
  
     if($UserID > 0){
         if($BirthDate=='Not Set 00:00:00'){
             DB::table('users')
-          ->where('id',$UserID)
-          ->update([      
-            'firstname' => trim(ucwords($FirstName)),              
-            'lastname' => trim(ucwords($LastName)),              
-            'name' => trim(ucwords($FullName)),              
-            'email' => trim($EmailAddress), 
-            'mobile' => trim($MobileNo),
-            'address_street' => $StreetAddress,                                      
-            'address_city' => $CityName,
-            'address_zip' => $ZipCode,                                       
-            'updated_at' => $TODAY
+            ->where('id',$UserID)
+            ->update([      
+              'firstname' => trim(ucwords($FirstName)),              
+              'lastname' => trim(ucwords($LastName)),              
+              'name' => trim(ucwords($FullName)),              
+              'email' => trim($EmailAddress), 
+              'mobile' => trim($MobileNo),
+              'address_street' => $StreetAddress,                                      
+              'address_city' => $CityName,
+              'address_zip' => $ZipCode,                                       
+              'updated_at' => $TODAY
         ]);     
             
         }else{
             DB::table('users')
-          ->where('id',$UserID)
-          ->update([      
-            'firstname' => trim(ucwords($FirstName)),              
-            'lastname' => trim(ucwords($LastName)),              
-            'name' => trim(ucwords($FullName)),              
-            'email' => trim($EmailAddress), 
-            'birth_date' => $BirthDate, 
-            'mobile' => trim($MobileNo),
-            'address_street' => $StreetAddress,                                      
-            'address_city' => $CityName,
-            'address_zip' => $ZipCode,                                       
-            'updated_at' => $TODAY
-        ]);     
-        }
+            ->where('id',$UserID)
+            ->update([      
+              'firstname' => trim(ucwords($FirstName)),              
+              'lastname' => trim(ucwords($LastName)),              
+              'name' => trim(ucwords($FullName)),              
+              'email' => trim($EmailAddress), 
+              'birth_date' => $BirthDate, 
+              'mobile' => trim($MobileNo),
+              'address_street' => $StreetAddress,                                      
+              'address_city' => $CityName,
+              'address_zip' => $ZipCode,                                       
+              'updated_at' => $TODAY
+          ]);     
+      }
            
+    }
+
+    if($Is_Subscribe){
+
+        $IsExist = false; 
+    
+        $list = DB::table('subscribers')                            
+            ->whereRaw('email=?',[$EmailAddress])                                          
+            ->get();
+
+        if(count($list)>0){
+            
+              DB::table('subscribers')
+               ->where('email',$EmailAddress)
+                  ->update([                          
+                    'is_active' => 1,
+                    'updated_at' => $TODAY,
+                    'deleted_at' => null
+                ]);   
+
+
+        }else{
+            $IsExist=false;
+
+            $SubscriberUserID = DB::table('subscribers')
+              ->insertGetId([                                    
+                'email' => $EmailAddress,
+                'code' => '90Ty34uKK0thCgyrzleCYyH9xAGCFX6AXTCoJzrakAWHxJk478Uy9bvQkJAyg3JQv3rZaVuTiKxVXDWMzFsczhzp0jnSoBtNryOdyzRMWFjeBYxnawr',
+                'name' => trim(ucwords($FullName)),                              
+                'created_at' => $TODAY             
+              ]);
+
+              //SEND SUBSRIBE EMAIL  HERE 1 TIME ONLY
+              $param['EmailAddress']=$EmailAddress;
+              $Email = new Email();
+              $Email->SendSubscribedEmail($param);
+
+
+              //send system notif 
+               $MessageNotificationID = DB::table('message_notification')
+                  ->insertGetId([                                            
+                    'user_id' => $UserID,   
+                    'message_notification' => 'You have subscribe for a monhtly news letter & you will recived a regular email notifications of news letter, promos & events.',                                                                          
+                    'created_at' => $TODAY             
+                ]); 
+
+        }
+
+    }else if(!$Is_Subscribe){
+
+        $IsExist = false; 
+        $list = DB::table('subscribers')                          
+            ->whereRaw('email=?',[$EmailAddress])                                          
+            ->get();
+
+        if(count($list)>0){
+
+            $IsExist=true;
+
+              DB::table('subscribers')
+               ->where('email',$EmailAddress)
+                  ->update([                          
+                    'is_active' => 0,
+                    'updated_at' => $TODAY,
+                    'deleted_at' => $TODAY
+                ]);   
+
+                // SEND UNSUBSCRIBE EMAIL HERE 1 TIME ONLY
+                  $param['EmailAddress']=$EmailAddress;
+                $Email = new Email();
+                $Email->SendUnSubscribedEmail($param);    
+
+
+               //send system notif 
+               $MessageNotificationID = DB::table('message_notification')
+                  ->insertGetId([                                            
+                    'user_id' => $UserID,                                                         
+                    'message_notification' => 'You have successfully un-subscribe for monthly news letter. You will not able to received email notification of new letter, promos & events.',
+                    'created_at' => $TODAY             
+                ]); 
+ 
+        }
     }
 
     return 'Success';

@@ -23,7 +23,6 @@ use App\Models\APIModels\Misc;
 class Email extends Model
 {
 
-
   //CUSTOMER NOTIF-----------------------------
   	public function SendCustomerRegistrationEmail($param){
 
@@ -106,8 +105,48 @@ class Email extends Model
 	      );
 	    }
   	}
+
+  	public function SendSubscribedEmail($param){
+
+	    $param["AdminEmailAddress"]=config('app.CompanyEmail');
+    	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
+
+	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
+	      Mail::send(
+	        'api/subscribe-email',
+	        [
+	            'EmailAddress'=> $param['EmailAddress']
+	        ],
+	        function($message) use ($param){
+	          $message->from($param['CompanyNoReplyEmail']);
+	          $message->to($param["EmailAddress"]);	          
+	          $message->subject('Subscirbe To News Letter');
+	        }
+	      );
+	    }
+  	}
+
+  public function SendUnSubscribedEmail($param){
+
+	    $param["AdminEmailAddress"]=config('app.CompanyEmail');
+    	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
+
+	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
+	      Mail::send(
+	        'api/un-subscribe-email',
+	        [
+	            'EmailAddress'=> $param['EmailAddress']
+	        ],
+	        function($message) use ($param){
+	          $message->from($param['CompanyNoReplyEmail']);
+	          $message->to($param["EmailAddress"]);	          
+	          $message->subject('Un-Subscirbe To News Letter');
+	        }
+	      );
+	    }
+  	}
   	
-    public function SendOrderReceivedEmail($param){
+  public function SendOrderReceivedEmail($param){
               
     	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
 

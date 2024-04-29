@@ -84,12 +84,37 @@ class Book extends Model
               )
         ,0) as rating,
 
+        COALESCE((
+               SELECT 
+                  promo.discount FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prds.id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_percent,
+
+
+        COALESCE((
+               SELECT 
+                   (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prds.id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_price,
+
+
           COALESCE(prds.status,'') as status          
           
         ");    
 
       $query->where("prds.file_url","!=",null);    
       $query->where("prds.deleted_at","=",null); 
+      $query->where("prds.status","=",'PUBLISHED'); 
         
       if($Status!='' && $Status!='All'){
 
@@ -99,16 +124,16 @@ class Book extends Model
 
           if($Status=='Premium'){
             $query->where("prds.is_premium","=",1);    
-            $query->where("prds.is_free","=",0);        
+            // $query->where("prds.is_free","=",0);        
           } 
 
           if($Status=='Best Seller'){
-            $query->where("prds.is_best_seller","=",1);
-            $query->where("prds.is_free","=",0);        
+             $query->where("prds.is_best_seller","=",1);
+             // $query->where("prds.is_free","=",0);        
           } 
 
           if($Status=='Free'){
-            $query->where("prds.is_free","=",1);    
+             $query->where("prds.is_free","=",1);    
           } 
 
           if($Status=='New Release'){
@@ -210,6 +235,28 @@ class Book extends Model
              LIMIT 1                                
               )
         ,0) as rating,
+
+        COALESCE((
+               SELECT 
+                  promo.discount FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prds.id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_percent,
+
+          COALESCE((
+               SELECT 
+                   (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prds.id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_price,
 
           COALESCE(prds.status,'') as status          
           
@@ -427,6 +474,28 @@ class Book extends Model
              LIMIT 1                                
               )
         ,0) as rating,
+
+        COALESCE((
+               SELECT 
+                  promo.discount FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prds.id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_percent,
+
+        COALESCE((
+               SELECT 
+                   (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prds.id                        
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_price,
 
           COALESCE(prds.status,'') as status          
           

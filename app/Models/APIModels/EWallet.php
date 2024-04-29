@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Model\APIModels;
+namespace App\Models\APIModels;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Routing\UrlGenerator;
@@ -18,8 +17,6 @@ use Image;
 use DB;
 
 use App\Models\APIModels\Misc;
-use App\Models\APIModels\Book;
-use App\Models\APIModels\UserCustomer;
 
 class EWallet extends Model
 {

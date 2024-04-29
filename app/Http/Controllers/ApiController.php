@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
+use URL;
 use Mail;
 use Session;
 use Hash;
@@ -85,21 +86,29 @@ class ApiController extends Controller {
      $chkIsActive=0;
      $info=$UserCustomer->getUserLoginPassword($data['EmailAddress']);
      
+     $Subcriber_Status=0;
      if(isset($info)>0){         
          $getPassword= $info->password;
          $chkIsActive= $info->is_active;
          //check bycrypt
          if (Hash::check($data['Password'], $getPassword)){
                 if($chkIsActive==1){
+
+                  
+                  $Subcriber_Status=$UserCustomer->getSubsciberStatus($data['EmailAddress']);
+
                     return response()->json([
                       'data' => $info,
+                      'subscriber_status' => $Subcriber_Status,
                       'response' => 'Success',
                       'message' => "Naa tama ang password..",
                      ]);  
+
                 }else{
 
                     return response()->json([
                       'data' => null,
+                      'subscriber_status' => null,
                       'response' => 'Failed',
                       'message' => "Your account is in-acative. To activate, just email our admin & staff. ",                      
                    ]); 
@@ -109,6 +118,7 @@ class ApiController extends Controller {
          }else{
             return response()->json([
                     'data' => null,
+                    'subscriber_status' => null,
                     'response' => 'Failed',
                     'message' => "Invalid login credentials.",
                  ]); 
@@ -621,17 +631,24 @@ class ApiController extends Controller {
     $data['CustomerID'] = $request->post('UserID');
                 
     $Info=$UserCustomer->getCustomerInformation($data);
-    if(isset($Info)>0){      
+
+    if(isset($Info)>0){     
+
+        $Subcriber_Status=0;
+        $Subcriber_Status=$UserCustomer->getSubsciberStatus($Info->emailaddress);
+
         return response()->json([                  
          'response' => 'Success',
          'data' => $Info,
+         'subscriber_status' => $Subcriber_Status,
          'message' => "Customer with ID ". $data['CustomerID']. " has profile data.",
        ]);    
 
     }else{
         return response()->json([
           'response' => 'Failed',
-          'data' => '',
+          'data' => null,
+          'subscriber_status' => null,
           'message' => "Customer does not exist.",
        ]); 
     } 
@@ -662,6 +679,8 @@ class ApiController extends Controller {
     $data['StreetAddress'] = $request->post('StreetAddress'); 
     $data['CityName'] = $request->post('CityName');      
     $data['ZipCode'] = $request->post('ZipCode'); 
+
+    $data['Is_Subscribe'] = $request->post('Is_Subscribe'); 
     
 
     if(empty($data['FirstName'])){
@@ -981,9 +1000,13 @@ public function addToCart(Request $request){
 
     $data['UserID'] = $request->post('UserID');
     $data['ProductID'] = $request->post('ProductID');
+
     $data['ProductQty'] = $request->post('ProductQty');
     $data['ProductPrice'] = $request->post('ProductPrice');
     $data['ProductDiscount'] = $request->post('ProductDiscount');
+
+    $data['PromoDiscountPercent'] = $request->post('PromoDiscountPercent');
+    $data['PromoDiscountPrice'] = $request->post('PromoDiscountPrice');
 
     if($data['ProductID']<=0){
       $ResponseMessage ='Select a book to add into your cart.';
@@ -1013,6 +1036,7 @@ public function addToCart(Request $request){
      
     $total_item_cart=0;
     $response=$Cart->addToCart($data);
+    
     if($response=='Success'){      
  
         $total_item_cart=$Cart->getCustomerCartItemCount($data['UserID']);
@@ -1533,30 +1557,15 @@ public function getPopUpBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$BannerAds->getRandomPopUpBanner($data);  
-    return response()->json($result); 
-    
-}
+    $Info=$BannerAds->getRandomPopUpBanner($data);  
 
+    return response()->json([
+      'response' => 'Success',
+      'data' => $Info,
+      'message' => "Successfully get pop up banner.",
+    ]); 
 
-//SUBSCRIPTION PLAN=====================================================================
-public function getSubscriptionPlanList(Request $request){
-    
-    $Misc = new Misc();
-    $Subscription = new Subscription();
-
-    $response = "Failed";
-    $responseMessage = "";
-
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
-    
-    $data["SearchText"] = '';
-    $data["Status"] = '';
-    $data["PageNo"] = 0;
-    $data["Limit"] = 0;
-
-    $result=$Subscription->getSubscriptionPlanList($data);  
-    return response()->json($result); 
+    // return response()->json($result); 
     
 }
 
@@ -1594,7 +1603,115 @@ public function proceedToSubscribe(Request $request){
 
 }
 
-// PROCEED TO CHECK OUT==========================================================
+//SUBSCRIPTION PLAN=====================================================================
+public function getSubscriptionPlanList(Request $request){
+    
+    $Misc = new Misc();
+    $Subscription = new Subscription();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
+    $data["SearchText"] = '';
+    $data["Status"] = '';
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+
+    $result=$Subscription->getSubscriptionPlanList($data);  
+    return response()->json($result); 
+    
+}
+
+// CANCEL SUBSCRIPTION STATUS==========================================================
+public function cancelSubscriptionPlan(Request $request){
+    
+    $Misc = new Misc();
+    $Subscription = new Subscription();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');    
+        
+    $data['UserID'] = $request->post('UserID');
+    $data['FullName'] = $request->post('FullName');
+    $data['EmailAddress'] = $request->post('EmailAddress');      
+    $data['MobileNo'] = $request->post('MobileNo');
+    $data['Reason'] = $request->post('Reason'); 
+    
+    if(empty($data['FullName'])){
+      $ResponseMessage = 'Full name is required.';
+       return response()->json([
+           'response' => 'Failed',
+           'message' => $ResponseMessage,
+       ]);
+    }
+
+    if(empty($data['EmailAddress'])){
+      $ResponseMessage ='Email address is required.';    
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+    if(empty($data['MobileNo'])){
+      $ResponseMessage ='Mobile number is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+    
+     if(empty($data['Reason'])){
+      $ResponseMessage ='Reason for cancellation is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+    if($Misc->IsValidEmail($data['EmailAddress'])==false){
+      $ResponseMessage ='Enter current & valid email address.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+    //SUCCESS CANCEL SUBSCRIPTION
+    $retVal=$Subscription->cancelSubscriptionPlan($data); 
+     return response()->json([
+      'response' => 'Success',
+      'message' => "You have successfully cancelled your subscription plan & will end today. ",
+    ]);   
+    
+}
+
+public function extendSubscriptionPlan(Request $request){
+    
+    $Misc = new Misc();
+    $Subscription = new Subscription();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['UserID'] = $request->post('UserID'); 
+
+    $data["SearchText"] = '';
+    $data["Status"] = '';
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+
+    $result=$Subscription->getSubscriptionPlanList($data);  
+    return response()->json($result); 
+    
+}
+
+// CHECK SUBSCRIPTION STATUS==========================================================
 public function checkSubscriptionStatus(Request $request){
     
     $Cart = new Cart();
@@ -1827,32 +1944,42 @@ public function validateCouponCode(Request $request){
   return response()->json($result); 
   }
 
+ 
   //EPUB VIEWER================================================================
    public function showViewerEpub(Request $request){
      
    $Book= new Book();
    
-   $data['Page'] = 'Home';   
+   $data['epub_file_exist']=false;
    $data['doc_id'] =  $request->input('doc_id');
    
    if($data['doc_id']>0){
        $Epub_file='';
        $info=$Book->getBookInfoByID($data['doc_id']);
        if(isset($info)>0){
-           $Epub_file=$info->file_url;
-           $data['epub_doc']='https://beta.ebooklat.phr.com.ph/public/'.$Epub_file;
+           $Epub_file=$info->file_url;                              
+            
+            $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
+
+             if(file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$Epub_file)){
+                $data['epub_file_exist']=true;
+             }else{
+                $data['epub_file_exist']=false;
+             }
+                             
           return View::make('api/epub_viewer')->with($data);    
+
        }else{
            $data['epub_doc']='';
            return View::make('api/epub_viewer')->with($data);    
        }
       
    }else{
+
        $data['epub_doc']='';
        return View::make('api/epub_viewer')->with($data);    
    }
   
  }
-
 
 }
