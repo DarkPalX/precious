@@ -1326,6 +1326,47 @@ public function getAllBookCategoryList(Request $request){
   return response()->json($result); 
   }
 
+//CATALOGUE BOOK LIST==================================================================
+public function getAllBookHeaderCatalogueList(Request $request){
+
+  $Books = new Book();
+
+  $response = "Failed";
+  $responseMessage = "";
+
+  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+  $data['Status'] = 'All';
+  $data['SearchText'] = '';
+
+  $data["PageNo"] = 0;
+  $data["Limit"] = 0;
+
+  $result=$Books->getHeaderCatalogueList();  
+
+  return response()->json($result); 
+  }
+
+public function getAllBookDetailsCatalogueList(Request $request){
+
+  $Books = new Book();
+
+  $response = "Failed";
+  $responseMessage = "";
+
+  $data['Platform'] = config('app.PLATFORM_ANDROID');   
+  $data['HeaderID'] = $request->post('HeaderID');
+
+  $data['Status'] = 'All';
+  $data['SearchText'] = '';
+
+  $data["PageNo"] = 0;
+  $data["Limit"] = 0;
+
+  $result=$Books->getDetailsCatalogueList($data);  
+
+  return response()->json($result); 
+  }
+
 //ORDER TRANSACTION===============================================================
 
   public function getCustomerOrderHistory(Request $request){
