@@ -89,7 +89,9 @@ class Book extends Model
                   promo.discount FROM 
                         promos as promo                  
                   LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = prds.id                        
+                       WHERE promo_prods.product_id = prds.id  
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                     
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -101,7 +103,9 @@ class Book extends Model
                    (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
                         promos as promo                  
                   LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = prds.id                        
+                       WHERE promo_prods.product_id = prds.id 
+                       AND promo.applicable_product_type !='physical'                                              
+                       AND promo.status = 'ACTIVE'
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -241,7 +245,9 @@ class Book extends Model
                   promo.discount FROM 
                         promos as promo                  
                   LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = prds.id                        
+                       WHERE promo_prods.product_id = prds.id  
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                     
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -252,7 +258,9 @@ class Book extends Model
                    (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
                         promos as promo                  
                   LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = prds.id                        
+                       WHERE promo_prods.product_id = prds.id  
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                     
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -480,7 +488,9 @@ class Book extends Model
                   promo.discount FROM 
                         promos as promo                  
                   LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = prds.id                        
+                       WHERE promo_prods.product_id = prds.id  
+                       AND promo_prods.applicable_product_type !='physical'
+                       AND promo_prods.status = 'ACTIVE'                     
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -491,7 +501,9 @@ class Book extends Model
                    (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
                         promos as promo                  
                   LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = prds.id                        
+                       WHERE promo_prods.product_id = prds.id  
+                       AND promo_prods.applicable_product_type !='physical'
+                       AND promo_prods.status = 'ACTIVE'                     
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -510,8 +522,7 @@ class Book extends Model
      return $info;             
            
   }
-
- 
+  
  // BOOK CATEGORY
   public function getAllBookCatergoryList(){
 
