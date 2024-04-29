@@ -253,8 +253,7 @@ class ApiController extends Controller {
          'message' => $ResponseMessage,
         ]);
     }          
-  
-    //SUCCESS SAVE USER 
+      
     $retVal=$UserCustomer->doRegisterCustomer($data);
      return response()->json([
       'response' => 'Success',
@@ -772,8 +771,7 @@ class ApiController extends Controller {
     //      'message' => $ResponseMessage,
     //     ]);
     // }
-
-    //SUCCESS SAVE USER 
+    
     $retVal=$UserCustomer->doUpdateCustomerProfile($data);
      return response()->json([
       'response' => 'Success',
@@ -781,35 +779,6 @@ class ApiController extends Controller {
     ]);                     
            
   }
-
-// GET CUSTOMER ADDRESS====================================================
-// public function getCustomerAddressInformation(Request $request){
-
-//     $Misc = new Misc();
-//     $UserCustomer = new UserCustomer();
-
-//     $response = "Failed";
-//     $responseMessage = "";
-
-//     $data['Platform'] = config('app.PLATFORM_ANDROID');   
-//     $data['CustomerID'] = $request->post('UserID');
-                
-//     $Info=$UserCustomer->getCustomerAddressInformation($data);
-//     if(isset($Info)>0){      
-//         return response()->json([                  
-//          'response' => 'Success',
-//          'data' => $Info,
-//          'message' => "Customer with ID ". $data['CustomerID']. " has address data.",
-//        ]);    
-
-//     }else{
-//         return response()->json([
-//           'response' => 'Failed',
-//           'data' => '',
-//           'message' => "Customer does not exist.",
-//        ]); 
-//     } 
-//  }
 
 // UPDATE CUSTOMER ADDRESS======================================
   public function doUpdateCustomerAddress(Request $request){
@@ -851,8 +820,7 @@ class ApiController extends Controller {
          'message' => $ResponseMessage,
         ]);
     }
-
-    //SUCCESS SAVE USER 
+    
     $retVal=$UserCustomer->doUpdateCustomerAddress($data);
      return response()->json([
       'response' => 'Success',
@@ -892,6 +860,57 @@ public function getCustomerLibraryList(Request $request){
 
     $result=$Library->getLibraryList($data);  
     return response()->json($result); 
+    
+}
+
+public function getSubscribedReadBooksList(Request $request){
+    
+    $Misc = new Misc();
+    $Library = new Library();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    //$data['UserID']=$request->post('UserID');
+    $data['UserID']=59;
+
+    $data["SearchText"] = '';
+    $data["Status"] = '';
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+
+    $result=$Library->getSubscribedReadBooksList($data);  
+    return response()->json($result); 
+    
+}
+
+public function saveReadBooks(Request $request){
+    
+    $Misc = new Misc();
+    $Library = new Library();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['UserID']=$request->post('UserID');
+    $data['ProductID']=$request->post('ProductID');
+    $data['IsSubscribe']=$request->post('IsSubscribe');
+
+    if($Library->checkProductsIfExistInSubscribedBooks($data['ProductID'],$data['UserID'])){
+       $ResponseMessage ='You already have this book in your subscribed book sections';
+       return response()->json([
+         'response' => 'Failed',         
+         'message' => $ResponseMessage,
+        ]);    
+    }
+              
+    $retVal=$Library->saveReadBooks($data);
+     return response()->json([
+      'response' => 'Success',
+      'message' => "Sucessfully open & read book.",
+    ]);  
     
 }
 
@@ -1454,8 +1473,7 @@ public function getAllBookCategoryList(Request $request){
          'message' => $ResponseMessage,
         ]);
     }
-
-    //SUCCESS SAVE CONTACT 
+    
     $retVal=$Contact->doSendInquiry($data);
      return response()->json([
       'response' => 'Success',
@@ -1509,8 +1527,7 @@ public function doPostCommentReview(Request $request){
            'message' => $ResponseMessage,
        ]);
     }
-
-    //SUCCESS SAVE CONTACT 
+    
     $retVal=$Review->doPostComment($data);
      return response()->json([
       'response' => 'Success',
@@ -1680,8 +1697,7 @@ public function cancelSubscriptionPlan(Request $request){
          'message' => $ResponseMessage,
         ]);
     }
-
-    //SUCCESS CANCEL SUBSCRIPTION
+    
     $retVal=$Subscription->cancelSubscriptionPlan($data); 
      return response()->json([
       'response' => 'Success',
