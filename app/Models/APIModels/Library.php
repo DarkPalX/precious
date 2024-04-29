@@ -92,7 +92,9 @@ class Library extends Model
                   promo.discount FROM 
                         promos as promo                  
                   INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = lib.product_id                        
+                       WHERE promo_prods.product_id = lib.product_id 
+                       AND promo.applicable_product_type !='physical'                   
+                       AND promo.status = 'ACTIVE'
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -104,7 +106,9 @@ class Library extends Model
                    (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
                         promos as promo                  
                   INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = lib.product_id                        
+                       WHERE promo_prods.product_id = lib.product_id 
+                       AND promo.applicable_product_type !='physical'                   
+                       AND promo.status = 'ACTIVE'
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -224,7 +228,9 @@ class Library extends Model
                   promo.discount FROM 
                         promos as promo                  
                   INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = rbooks.product_id                        
+                       WHERE promo_prods.product_id = rbooks.product_id  
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                      
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -236,7 +242,9 @@ class Library extends Model
                    (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
                         promos as promo                  
                   INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = rbooks.product_id                        
+                       WHERE promo_prods.product_id = rbooks.product_id     
+                       AND promo.applicable_product_type !='physical'                   
+                       AND promo.status = 'ACTIVE'
                        AND promo_prods.deleted_at IS NULL                     
                   LIMIT 1                                
               )
@@ -307,7 +315,7 @@ class Library extends Model
     return $IsExist;
   }
 
-  public function saveReadBooks($data){
+  public function saveReadSubscribedBooks($data){
 
     $TODAY = date("Y-m-d H:i:s");
     $PaymentDate = date("Y-m-d");
