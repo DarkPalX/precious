@@ -153,6 +153,17 @@ Route::post('/get-premium-list',[
    'as'=> 'get-premium-list'
 ]);
 
+//CATALOGUE================================
+Route::post('/get-all-header-catalogue-list',[
+   'uses'=>'App\Http\Controllers\ApiController@getAllBookHeaderCatalogueList',
+   'as'=> 'get-all-header-catalogue-list'
+]);
+
+Route::post('/get-all-details-catalogue-list',[
+   'uses'=>'App\Http\Controllers\ApiController@getAllBookDetailsCatalogueList',
+   'as'=> 'get-all-details-catalogue-list'
+]);
+
 
 // CITY LIST =========================================================================
 Route::post('/get-city-list',[
