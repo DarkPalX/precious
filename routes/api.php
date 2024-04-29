@@ -217,7 +217,7 @@ Route::post('/get-subscribed-read-books-list',[
 ]);
 
 Route::post('/save-read-books',[
-   'uses'=>'App\Http\Controllers\ApiController@saveReadBooks',
+   'uses'=>'App\Http\Controllers\ApiController@saveReadSubscribedBooks',
    'as'=> 'save-read-books'
 ]);
 
