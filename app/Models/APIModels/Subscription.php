@@ -215,7 +215,7 @@ class Subscription extends Model
                     'is_expired' => 0, 
                     'is_cancelled' => 0, 
                     'cancel_reason' => null, 
-                       'remarks' => 'Exnted a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
+                       'remarks' => 'Extended a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
                     'created_at' => $TODAY  
                 ]); 
 
@@ -419,7 +419,15 @@ class Subscription extends Model
                     'is_subscribe' => 0,                                                 
                     'is_expired' => 1,                                                          
                     'updated_at' => $TODAY
-                ]); 
+                ]);
+
+                //Dalete All Subscribed Read Books after Expired Subscription
+                  DB::table('read_books')
+                    ->where('user_id',$UserID)
+                    ->where('is_subscribed',1)
+                    ->update([                                  
+                      'deleted_at' => $TODAY
+                  ]);  
 
                  $MessageNotificationID = DB::table('message_notification')
                     ->insertGetId([                                            
@@ -502,6 +510,13 @@ class Subscription extends Model
                 'updated_at' => $TODAY
             ]); 
             
+            //Dalete All Subscribed Read Books after Cancelled Subscription
+            DB::table('read_books')
+              ->where('user_id',$UserID)
+              ->where('is_subscribed',1)
+              ->update([                                  
+                'deleted_at' => $TODAY
+            ]);  
 
             //send cancel notif 
            $MessageNotificationID = DB::table('message_notification')
