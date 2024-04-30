@@ -96,6 +96,7 @@ class ApiController extends Controller {
 
          //check bycrypt
          if (Hash::check($data['Password'], $getPassword)){
+          
                 if($chkIsActive==1){
                   
                   //Subscription Plan
@@ -136,8 +137,8 @@ class ApiController extends Controller {
           return response()->json([
                 'data' => null,
                 'subscription_status'=> null,
-                'response' => 'Failed',
-                // 'message' => "Your account is in-acative. To activate, just email our admin & staff. ",
+                'subscriber_status' => null,
+                'response' => 'Failed',                
                 'message' => "Invalid login credentials.",
              ]); 
      }
@@ -2052,8 +2053,8 @@ public function validateCouponCode(Request $request){
 
        $data['epub_doc']='';
        return View::make('api/epub_viewer')->with($data);    
-   }
-  
+    }  
  }
+
 
 }
