@@ -907,6 +907,14 @@ public function saveReadSubscribedBooks(Request $request){
     $data['ProductID']=$request->post('ProductID');
     $data['IsSubscribe']=$request->post('IsSubscribe');
 
+     if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
+       $ResponseMessage ='Bokk is already in library section';
+       return response()->json([
+         'response' => 'Failed',         
+         'message' => $ResponseMessage,
+        ]);    
+    }
+
     if($Library->checkProductsIfExistInSubscribedBooks($data['ProductID'],$data['UserID'])){
        $ResponseMessage ='You already have this book in your subscribed book sections';
        return response()->json([
