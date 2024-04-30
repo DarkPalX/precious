@@ -120,6 +120,7 @@ class ProductController extends Controller
         $requestData['is_best_seller'] = $request->has('is_best_seller');
         $requestData['is_free'] = $request->has('is_free');
         $requestData['is_premium'] = $request->has('is_premium');
+        $requestData['is_preorder'] = $request->has('is_preorder');
         $requestData['description'] = $request->long_description;
         $requestData['created_by'] = Auth::id();
 
@@ -246,6 +247,7 @@ class ProductController extends Controller
         $requestData['is_best_seller'] = $request->has('is_best_seller');
         $requestData['is_free'] = $request->has('is_free');
         $requestData['is_premium'] = $request->has('is_premium');
+        $requestData['is_preorder'] = $request->has('is_preorder');
         $requestData['created_by'] = Auth::id();
 
         if($request->has('bundle_products')){

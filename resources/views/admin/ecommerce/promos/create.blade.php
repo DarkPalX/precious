@@ -59,6 +59,18 @@
                     @enderror
                 </div>
 
+				<div class="form-group">
+					<label class="d-block">Applicable Product Type *</label>
+					<select class="custom-select @error('applicable_product_type') is-invalid @enderror" id="applicable_product_type" name="applicable_product_type">
+						<option @if(old('applicable_product_type') == 'all') selected @endif value="all">All</option>
+						<option @if(old('applicable_product_type') == 'physical') selected @endif value="physical">Physical Books</option>
+						<option @if(old('applicable_product_type') == 'ebook') selected @endif value="ebook">E-Books</option>
+					</select>
+					@error('applicable_product_type')
+						<span class="text-danger">{{ $message }}</span>
+                    @enderror
+				</div>
+
                 <div class="form-group">
                     <label class="d-block">Status</label>
                     <div class="custom-control custom-switch @error('status') is-invalid @enderror">
@@ -70,8 +82,13 @@
                     </div>
                 </div>
 
-
                 <div class="access-table-head" id="div_products">
+                    
+                    {{-- SEARCH BOX --}}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search products" aria-label="Search products" id="searchInput">
+                    </div>
+
                     <div class="table-responsive-lg text-nowrap">
                         <table class="table table-borderless" style="width:100%;">
                             <thead>
@@ -91,7 +108,7 @@
 
                 <table class="table table-hover" style="width:100%;">
                     <thead></thead>
-                    <tbody>
+                    <tbody id="productTableBody">
                     @foreach($categories as $category)
                         @if(count($category->published_products) > 0)
                             <tr>
@@ -102,7 +119,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2" class="hiddenRow">
-                                    <div class="accordian-body collapse div_products" id="product_category{{$category->id}}">
+                                    <div class="accordian-body collapse div_products collapsed_items" id="product_category{{$category->id}}">
                                         <div>
                                             <table class="table" cellpadding="0">
                                                 <thead></thead>
@@ -294,6 +311,33 @@
                 return true;
 
             });
+        });
+        
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchText = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#productTableBody tr');
+
+            rows.forEach(function(row) {
+                let productName = row.querySelector('td:first-child').textContent.toLowerCase();
+                if (productName.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Collapse all categories if the search box is empty
+            let collapsedItems = document.querySelectorAll('.collapsed_items');
+            if (searchText === '') {
+                collapsedItems.forEach(function(item) {
+                    item.classList.add('collapse');
+                });
+            } else {
+                collapsedItems.forEach(function(item) {
+                    item.classList.remove('collapse');
+                });
+            }
+
         });
 	</script>
 @endsection

@@ -61,7 +61,8 @@ class PromoController extends Controller
             $request,[
                 'name' => 'required|max:150|unique:promos,name',
                 'promotion_dt' => 'required',
-                'discount' => 'required'
+                'applicable_product_type' => 'required',
+                'discount' => 'nullable'
             ],
             [
                 'name.unique' => 'This promo is already in the list.',
@@ -77,6 +78,7 @@ class PromoController extends Controller
             'promo_start' => $date[0].':00.000',
             'promo_end' => $date[1].':00.000',
             'discount' => $request->discount,
+            'applicable_product_type' => $request->applicable_product_type,
             'status' => ($request->has('status') ? 'ACTIVE' : 'INACTIVE'),
             'is_expire' => 0,
             'type' => $request->type,
@@ -140,6 +142,7 @@ class PromoController extends Controller
             'promo_start' => $date[0].':00.000',
             'promo_end' => $date[1].':00.000',
             'discount' => $request->discount,
+            'applicable_product_type' => $request->applicable_product_type,
             'status' => ($request->has('status') ? 'ACTIVE' : 'INACTIVE'),
             'type' => $request->type,
             'user_id' => Auth::id()

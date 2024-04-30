@@ -212,17 +212,17 @@
 
 			</div>
 			
-			@if(Setting::hasItemThreeDaysOnCart())
+			{{-- @if(Setting::hasItemThreeDaysOnCart())
 				<div class="alert alert-warning alert-dismissible alert-xs fade show mt-2" role="alert">
 					<strong>Check your cart!</strong> there are items left for 3 days. Please take an action before the system automatically delete the item/s.
 				</div>
-			@endif
+			@endif --}}
 			
-			{{-- @if(Setting::hasItemsLeftOnCart())
+			@if(Setting::hasItemsLeftOnCart())
 				<div class="alert alert-warning alert-dismissible alert-xs fade show mt-2" role="alert">
 					<strong>Check your cart!</strong> there are items left for ({{  \App\Models\Setting::first()->cart_notification_duration }}) hours. Please take an action before the system automatically delete the item/s.
 				</div>
-			@endif --}}
+			@endif
 
 		</div>
 	</div>

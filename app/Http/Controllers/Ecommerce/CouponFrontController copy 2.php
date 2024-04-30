@@ -114,20 +114,20 @@ class CouponFrontController extends Controller
 
     public function add_manual_coupon(Request $request)
     {   
-
-        // foreach($allCoupons as $coupon){
-        //     $totalusage = CouponSale::where('order_status','PAID')->where('coupon_id',$coupon->id)->count();
-        //     $remaining = $coupon->customer_limit-$totalusage;
-
-        //     array_push($arr_coupon_usage_limit, $remaining);
-        // }
-
-        $coupon = Coupon::where('coupon_code',$request->couponcode)->where('activation_type','manual')->where('applicable_product_type','<>', 'ebook');
         
-        //check coupon usage
-        $totalusage = CouponSale::where('order_status','PAID')->where('coupon_id',$coupon->first()->id ?? 0)->count();
-        $coupon = $coupon->where('customer_limit', '>=', $totalusage);
+        foreach($allCoupons as $coupon){
+            $totalusage = CouponSale::where('order_status','PAID')->where('coupon_id',$coupon->id)->count();
+            $remaining = $coupon->customer_limit-$totalusage;
 
+            array_push($arr_coupon_usage_limit, $remaining);
+        }
+
+        $coupon = Coupon::where('coupon_code',$request->couponcode)->where('activation_type','manual');
+
+        //check coupon usage
+        $totalusage = CouponSale::where('order_status','PAID')->where('coupon_id',$coupon->first()->id)->count();
+        $coupon = $coupon->where('customer_limit', '>=', $totalusage);
+        
 
         if($coupon->exists()){
             $c = $coupon->first();
@@ -168,12 +168,6 @@ class CouponFrontController extends Controller
                             'expired' => true,               
                         ]);
                     } else {
-                        
-                        // CouponCart::create([
-                        //     'customer_id' => Auth::id(),
-                        //     'coupon_id' => $c->id
-                        // ]);
-
                         return response()->json([
                             'success' => true, 
                             'coupon_details' => $c              
@@ -189,78 +183,6 @@ class CouponFrontController extends Controller
         }
         
     }
-
-    // public function add_manual_coupon(Request $request)
-    // {   
-        
-    //     // foreach($allCoupons as $coupon){
-    //     //     $totalusage = CouponSale::where('order_status','PAID')->where('coupon_id',$coupon->id)->count();
-    //     //     $remaining = $coupon->customer_limit-$totalusage;
-
-    //     //     array_push($arr_coupon_usage_limit, $remaining);
-    //     // }
-
-    //     $coupon = Coupon::where('coupon_code',$request->couponcode)->where('activation_type','manual')->where('applicable_product_type','<>', 'ebook');
-
-    //     //check coupon usage
-    //     $totalusage = CouponSale::where('order_status','PAID')->where('coupon_id',$coupon->first()->id)->count();
-    //     $coupon = $coupon->where('customer_limit', '>=', $totalusage);
-        
-
-    //     if($coupon->exists()){
-    //         $c = $coupon->first();
-            
-    //         if($request->totalqty < $c->purchase_qty){
-    //             return response()->json([
-    //                 'min_purchase_not_met' => true,               
-    //             ]); 
-    //         }
-
-    //         if($c->customer_scope == 'specific'){
-    //             $customer_id = explode('|',$c->scope_customer_id);
-    //             $arr_customer_id = [];
-    //             foreach($customer_id as $id){
-    //                 array_push($arr_customer_id, $id);
-    //             }
-
-    //             if(in_array(auth()->user()->email, $arr_customer_id)){
-    //                 return response()->json([
-    //                     'success' => true, 
-    //                     'coupon_details' => $c              
-    //                 ]);
-    //             } else {
-    //                 return response()->json([
-    //                     'not_allowed' => true,               
-    //                 ]);
-    //             }
-
-    //         } else {
-    //             $couponCart = CouponCart::where('customer_id',Auth::id())->where('coupon_id',$c->id)->exists();
-    //             if($couponCart){
-    //                 return response()->json([
-    //                     'exist' => true,               
-    //                 ]);
-    //             } else {
-    //                 if($c->status == 'EXPIRED' || $c->status == 'INACTIVE'){
-    //                     return response()->json([
-    //                         'expired' => true,               
-    //                     ]);
-    //                 } else {
-    //                     return response()->json([
-    //                         'success' => true, 
-    //                         'coupon_details' => $c              
-    //                     ]);
-    //                 }
-    //             }
-
-    //         }
-    //     } else {
-    //         return response()->json([
-    //             'not_exist' => true,               
-    //         ]);
-    //     }
-        
-    // }
 
     public function collectibles(Request $request){
 
@@ -280,7 +202,6 @@ class CouponFrontController extends Controller
         // Coupon All Customer Events
             $couponEvents = Coupon::where('status','ACTIVE')
                 ->where('availability',1)
-                ->where('applicable_product_type','<>', 'ebook')
                 ->whereNotNull('event_date')
                 ->where('customer_scope','all')
                 ->where('event_date',today())
@@ -291,7 +212,6 @@ class CouponFrontController extends Controller
             $couponEventSpecific = 
                 Coupon::where('status','ACTIVE')
                 ->where('availability',1)
-                ->where('applicable_product_type','<>', 'ebook')
                 ->whereNotNull('event_date')
                 ->where('customer_scope','specific')
                 ->where('event_date',today())
@@ -366,7 +286,6 @@ class CouponFrontController extends Controller
         $purchasedCoupons = 
             Coupon::where('status','ACTIVE')
             ->where('availability',1)
-            ->where('applicable_product_type','<>', 'ebook')
             ->where('purchase_combination_counter',1)
             ->where('activation_type','auto')
             ->where(function ($orWhereQuery){
@@ -411,7 +330,6 @@ class CouponFrontController extends Controller
         $purchasedCombinationCoupons = 
         Coupon::where('status','ACTIVE')
         ->where('availability',1)
-        ->where('applicable_product_type','<>', 'ebook')
         ->where('purchase_combination_counter','>',1)
         ->where('activation_type','auto')
         ->where(function ($orWhereQuery){
@@ -580,7 +498,7 @@ class CouponFrontController extends Controller
             array_push($arr_coupon_availability,$coupon->id);
         }
 
-        $coupons = Coupon::where('status','ACTIVE')->where('availability',1)->where('applicable_product_type','<>', 'ebook')->where('activation_type','auto')->where('customer_scope','all');
+        $coupons = Coupon::where('status','ACTIVE')->where('availability',1)->where('activation_type','auto')->where('customer_scope','all');
         if($request->page_name == 'cart'){
             $coupons = $coupons->whereNull('location')->orderBy('name','asc');
             $coupon_customer = Coupon::where('status','ACTIVE')->where('availability',1)->where('activation_type','auto')->where('customer_scope','specific')->whereNull('location')->get();
@@ -600,7 +518,7 @@ class CouponFrontController extends Controller
 
         $coupons = $coupons->get();
 
-        $coupon_customer = Coupon::where('status','ACTIVE')->where('availability',1)->where('applicable_product_type','<>', 'ebook')->where('activation_type','auto')->where('customer_scope','specific')->get();
+        $coupon_customer = Coupon::where('status','ACTIVE')->where('availability',1)->where('activation_type','auto')->where('customer_scope','specific')->get();
 
         $arr_customer_coupons = [];
         $arr_customer_id = [];
@@ -618,7 +536,7 @@ class CouponFrontController extends Controller
         if(empty($arr_customer_coupons)){
             $allCoupons = $coupons;
         } else {
-            $customerCoupons = Coupon::where('status','ACTIVE')->where('availability',1)->where('applicable_product_type','<>', 'ebook')->where('activation_type','auto')->whereIn('id',$arr_customer_coupons)->get();
+            $customerCoupons = Coupon::where('status','ACTIVE')->where('availability',1)->where('activation_type','auto')->whereIn('id',$arr_customer_coupons)->get();
             // all or specific coupons
             $allCoupons = collect($customerCoupons)->merge($coupons);
         }

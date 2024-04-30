@@ -8,7 +8,7 @@
     $contents = $page->contents;
 
 // FEATURED BOOKS
-    $featuredProducts = \App\Models\Ecommerce\Product::where('is_featured', 1)->where('status', 'PUBLISHED')->skip(0)->take(10)->orderByDesc('updated_at')->get();
+    $featuredProducts = \App\Models\Ecommerce\Product::where('is_featured', 1)->where('status', 'PUBLISHED')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])->skip(0)->take(10)->orderByDesc('updated_at')->get();
     if($featuredProducts->count()){
 
         $featuredProductsHTML = '';
@@ -85,7 +85,7 @@
     //     ->orderByRaw('SUM(product_reviews.rating) DESC')
     //     ->get();
 
-    $bestSellers = \App\Models\Ecommerce\Product::where('is_best_seller', 1)->where('status', 'PUBLISHED')->take(10)->get();
+    $bestSellers = \App\Models\Ecommerce\Product::where('is_best_seller', 1)->where('status', 'PUBLISHED')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])->take(10)->get();
     if($bestSellers->count()){
 
         $bestSellersHTML = '';
@@ -156,7 +156,7 @@
 
 
 // NEW RELEASES
-    $newProducts = \App\Models\Ecommerce\Product::whereDate('updated_at', '>=', Carbon\Carbon::now()->subDays(30))->where('status', 'PUBLISHED')->orderBy('updated_at', 'desc')->take(10)->get();
+    $newProducts = \App\Models\Ecommerce\Product::whereDate('updated_at', '>=', Carbon\Carbon::now()->subDays(30))->where('status', 'PUBLISHED')->orderBy('updated_at', 'desc')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])->take(10)->get();
     if($newProducts->count()){
 
         $newProductsHTML = '';

@@ -11,7 +11,7 @@ class Promo extends Model
 {
 	use SoftDeletes;
 
-    protected $fillable = [ 'name', 'promo_start', 'promo_end', 'discount', 'status', 'is_expire', 'user_id', 'type'];
+    protected $fillable = [ 'name', 'promo_start', 'promo_end', 'discount', 'applicable_product_type', 'status', 'is_expire', 'user_id', 'type'];
     public $timestamps = true;
 
     public function products()
@@ -43,6 +43,7 @@ class Promo extends Model
         'promo_start' => 'start',
         'promo_end' => 'end',
         'discount' => 'discount',
+        'applicable_product_type' => 'applicable_product_type',
         'status' => 'status',
         'type' => 'type'
     ];

@@ -28,8 +28,7 @@ class ProductFrontController extends Controller
         $page = new Page();
         $pageLimit = 12;
 
-        
-        $products = Product::where('status','PUBLISHED');
+        $products = Product::where('status','PUBLISHED')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book']);
 
         if($category){
             $productCategory  = ProductCategory::where('slug', $category)->first();
@@ -109,7 +108,8 @@ class ProductFrontController extends Controller
         $pageLimit = 20;
 
         $products = Product::select('products.*')->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
-        ->where('products.status', 'PUBLISHED');
+        ->where('products.status', 'PUBLISHED')
+        ->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book']);
 
         $searchtxt = $request->get('keyword', false);
         $sortBy = $request->get('sort_by', false);

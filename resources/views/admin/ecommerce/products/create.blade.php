@@ -280,6 +280,16 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <label class="d-block">Preorder</label>
+                        <div class="custom-control custom-switch @error('is_preorder') is-invalid @enderror">
+                            <input type="checkbox" class="custom-control-input" name="is_preorder" {{ (old("is_preorder") ? "checked":"") }} id="customSwitch6">
+                            <label class="custom-control-label" id="label_is_preorder" for="customSwitch6">No</label>
+                        </div>
+                        @error('is_preorder')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="col-lg-12 mg-t-30">
@@ -433,6 +443,15 @@
             $("#customSwitch5").change(function() {
                 if (this.checked) {
                     $('#customSwitch4').prop('checked', false);
+                }
+            });
+
+            $("#customSwitch6").change(function() {
+                if(this.checked) {
+                    $('#label_is_preorder').html('Yes');
+                }
+                else{
+                    $('#label_is_preorder').html('No');
                 }
             });
 

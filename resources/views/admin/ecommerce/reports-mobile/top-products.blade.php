@@ -6,6 +6,28 @@
 @section('content')
 <div style="margin: 40px 40px 200px 40px;font-family:Arial;">
     <h4 class="mg-b-0 tx-spacing--1">Mobile Top Rated Products</h4>
+    
+    <form action="{{route('report.top-products.mobile')}}" method="get">
+        <input type="hidden" name="act" value="go">
+        @csrf
+        <table style="font-size:12px;">
+            <tr>
+                <td>Start Date</td>
+                <td>End Date</td>
+            </tr>
+            <tr>
+                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="start" autocomplete="off"
+                    value="{{$startDate}}">
+                </td>
+                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="end" autocomplete="off"
+                    value="{{$endDate}}">
+                </td>
+                <td><button type="submit" class="btn btn-sm btn-primary" style="margin:0px 0px 0px 10px;">Generate</button></td>
+                <td><a href="{{ route('report.top-products.mobile') }}" class="btn btn-sm btn-success" style="margin:0px 0px 0px 5px;">Reset</a></td>
+            </tr>
+        </table>
+    </form>
+
     @if($rs <>'')
     <br><br>
     <table id="example" class="display nowrap" style="width:100%;font: normal 13px/150% Arial, sans-serif, Helvetica;">

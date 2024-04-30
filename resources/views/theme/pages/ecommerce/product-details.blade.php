@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="col-md-6 product-desc pt-0">
-                    <div class="badge bg-success p-2">Pre Order</div>
+                    <div class="badge bg-success p-2" {{ $product->is_preorder ? '' : 'hidden' }}>Pre Order</div>
                     <h3 class="mb-2">{{$product->name}}</h3>
                     <h4>by: {{ $product->author ?? 'Anonymous' }}</h4>
                     

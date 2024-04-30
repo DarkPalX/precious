@@ -93,6 +93,7 @@ class FrontController extends Controller
             ->get();
 
         $products = Product::where('status', 'PUBLISHED')
+            ->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])
             ->where(function ($query) use ($searchtxt) {
                 $query->where('name', 'like', '%' . $searchtxt . '%')
                 ->orWhere('author', 'like', '%' . $searchtxt . '%');

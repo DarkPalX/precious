@@ -79,7 +79,7 @@
 				@forelse($products as $product)
 					{{-- @if(\App\Models\Ecommerce\Product::has_ebook($product->id))
 
-						<div class="product col-md-4 col-sm-6 sf-dress bottommargin-sm">
+						<div class="product col-md-3 col-sm-6 sf-dress bottommargin-sm">
 							<div class="grid-inner">
 								<div class="product-image">
 									<a href="{{ route('ebook.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="{{$product->name}}"></a>
@@ -99,7 +99,7 @@
 
 					@endif --}}
 
-					<div class="product col-md-4 col-sm-6 sf-dress bottommargin-sm" @if(strtolower($product->book_type) == 'ebook' || strtolower($product->book_type) == 'e-book') hidden @endif>
+					<div class="product col-md-3 col-sm-6 sf-dress bottommargin-sm">
 						<div class="grid-inner">
 							<div class="product-image">
 								<a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="{{$product->name}}"></a>
@@ -119,9 +119,9 @@
 						</div>
 					</div>
 				@empty
-					<div class="alert alert-info">
+					{{-- <div class="alert alert-info">
                         No books found.
-                    </div>
+                    </div> --}}
 				@endforelse
 			</div>
 			

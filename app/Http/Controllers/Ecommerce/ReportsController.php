@@ -21,18 +21,25 @@ use DB;
 
 class ReportsController extends Controller
 {
+    
     public function best_sellers(Request $request)
     {
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+
         $rs = SalesDetail::select('product_id',
                           DB::raw('SUM(qty) as total_quantity'),
                           DB::raw('SUM(net_amount) as total_net_amount'))
-                 ->where('qty','<>', 0)
-                 ->groupBy('product_id')
-                 ->get();
+                 ->where('qty','<>', 0);
 
+      
+        if ($startDate && $endDate) {
+            $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+        }
+        
+        $rs = $rs->groupBy('product_id')->get();
 
-        return view('admin.ecommerce.reports.best-sellers',compact('rs'));
-
+        return view('admin.ecommerce.reports.best-sellers',compact('rs', 'startDate', 'endDate'));
     }
 
     public function sales_list(Request $request)
@@ -79,29 +86,42 @@ class ReportsController extends Controller
 
     public function top_buyers(Request $request)
     {       
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+
         $rs = SalesHeader::select('user_id', 
                          DB::raw('SUM(net_amount) as total_net_amount'), 
                          DB::raw('COUNT(*) as order_count'))
                  ->where('status', 'active')
                  ->where('order_source', '<>', 'Android')
-                 ->orWhereNull('order_source')
-                 ->groupBy('user_id')
-                 ->get();
+                 ->orWhereNull('order_source');
+      
+        if ($startDate && $endDate) {
+            $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+        }
+        
+        $rs = $rs->groupBy('user_id')->get();
 
-        return view('admin.ecommerce.reports.top-buyers',compact('rs'));
+        return view('admin.ecommerce.reports.top-buyers',compact('rs', 'startDate', 'endDate'));
 
     }
     
     public function top_products(Request $request)
     {
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+
         $rs = ProductReview::select('product_id',
                             DB::raw('AVG(rating) as average_rating'), 
-                            DB::raw('COUNT(*) as review_count'))
-                 ->groupBy('product_id')
-                 ->get();  
+                            DB::raw('COUNT(*) as review_count'));
+      
+        if ($startDate && $endDate) {
+            $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+        }
+        
+        $rs = $rs->groupBy('product_id')->get();
 
-        return view('admin.ecommerce.reports.top-products',compact('rs'));
-
+        return view('admin.ecommerce.reports.top-products',compact('rs', 'startDate', 'endDate'));
     }
 
     public function product_list(Request $request)
@@ -304,15 +324,22 @@ class ReportsController extends Controller
     
     public function best_sellers_mobile(Request $request)
     {
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+
         $rs = SalesDetail::select('product_id',
-                          DB::raw('COUNT(product_id) as total_quantity'),
+                          DB::raw('SUM(qty) as total_quantity'),
                           DB::raw('SUM(net_amount) as total_net_amount'))
-                 ->where('qty', 0)
-                 ->groupBy('product_id')
-                 ->get();
+                 ->where('qty', 0);
 
+      
+        if ($startDate && $endDate) {
+            $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+        }
+        
+        $rs = $rs->groupBy('product_id')->get();
 
-        return view('admin.ecommerce.reports-mobile.best-sellers',compact('rs'));
+        return view('admin.ecommerce.reports-mobile.best-sellers',compact('rs', 'startDate', 'endDate'));
 
     }
 
@@ -359,29 +386,43 @@ class ReportsController extends Controller
     
     public function top_buyers_mobile(Request $request)
     {       
+
+                 
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+
         $rs = SalesHeader::select('user_id', 
                          DB::raw('SUM(net_amount) as total_net_amount'), 
                          DB::raw('COUNT(*) as order_count'))
                  ->where('status', 'active')
-                 ->where('order_source', 'Android')
-                 ->groupBy('user_id')
-                 ->get();
+                 ->where('order_source', 'Android');
+      
+        if ($startDate && $endDate) {
+            $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+        }
+        
+        $rs = $rs->groupBy('user_id')->get();
 
 
-        return view('admin.ecommerce.reports-mobile.top-buyers',compact('rs'));
-
+        return view('admin.ecommerce.reports-mobile.top-buyers',compact('rs','startDate','endDate'));
     }
     
     public function top_products_mobile(Request $request)
     {
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+
         $rs = ProductReview::select('product_id',
                             DB::raw('AVG(rating) as average_rating'), 
-                            DB::raw('COUNT(*) as review_count'))
-                   ->groupBy('product_id')
-                   ->get();  
+                            DB::raw('COUNT(*) as review_count'));
+      
+        if ($startDate && $endDate) {
+            $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+        }
+        
+        $rs = $rs->groupBy('product_id')->get();
 
-        return view('admin.ecommerce.reports-mobile.top-products',compact('rs'));
-
+        return view('admin.ecommerce.reports-mobile.top-products',compact('rs','startDate','endDate'));
     }
 
 

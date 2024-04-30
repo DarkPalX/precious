@@ -60,11 +60,11 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                         <li class="breadcrumb-item" aria-current="page"><a href="{{route('dashboard')}}">CMS</a></li>
-                        <li class="breadcrumb-item" aria-current="page"><a href="{{route('mobile-albums.index')}}">Mobile Albums</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Edit Popup Banners</li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="{{route('mobile-albums.index')}}">Albums</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Mobile Home Banner</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Edit Popup Banners</h4>
+                <h4 class="mg-b-0 tx-spacing--1">Edit Mobile Home Banner</h4>
             </div>
         </div>
         <form id="updateForm" method="POST" action="{{ route('mobile-albums.update', $mobile_album->id) }}" enctype="multipart/form-data">
