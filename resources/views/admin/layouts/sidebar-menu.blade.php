@@ -41,22 +41,13 @@
             <a href="#" class="nav-link"><i data-feather="image"></i> <span>Mobile Banners</span></a>
             <ul>
                 <li @if (url()->current() == route('mobile-albums.edit', 1)) class="active" @endif><a href="{{ route('mobile-albums.edit', 1) }}">Manage Popup Banners</a></li>
-            </ul>
-        </li>
-    @endif
-
-    {{-- @if (auth()->user()->has_access_to_albums_module() || auth()->user()->has_access_to('albums'))
-        <li class="nav-item with-sub @if (request()->routeIs('mobile-albums*')) active show @endif">
-            <a href="#" class="nav-link"><i data-feather="image"></i> <span>Mobile Banners</span></a>
-            <ul>
-                <li @if (url()->current() == route('mobile-albums.edit', 1)) class="active" @endif><a href="{{ route('mobile-albums.edit', 1) }}">Manage Home Banner</a></li>
                 <li @if (\Route::current()->getName() == 'mobile-albums.index' || (\Route::current()->getName() == 'mobile-albums.edit' && url()->current() != route('mobile-albums.edit', 1))) class="active" @endif><a href="{{ route('mobile-albums.index') }}">Manage Subpage Banners</a></li>
                 @if(auth()->user()->has_access_to_route('mobile-albums.create'))
                     <li @if (\Route::current()->getName() == 'mobile-albums.create') class="active" @endif><a href="{{ route('mobile-albums.create') }}">Create an Album</a></li>
                 @endif
             </ul>
         </li>
-    @endif --}}
+    @endif
 
     @if (auth()->user()->has_access_to_file_manager_module() || auth()->user()->has_access_to('file-manager'))
         <li class="nav-item @if (\Route::current()->getName() == 'file-manager.index') active @endif">
@@ -219,7 +210,7 @@
         </li>
     @endif
 
-    @if (auth()->user()->has_access_to_module('banner_ads'))
+    {{-- @if (auth()->user()->has_access_to_module('banner_ads'))
         <li class="nav-item with-sub @if (request()->routeIs('ads*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="image"></i> <span>Banner Ads</span></a>
             <ul>
@@ -227,7 +218,7 @@
                 <li @if (\Route::current()->getName() == 'ads.create') class="active" @endif><a href="{{ route('ads.create') }}">Create Ad</a></li>
             </ul>
         </li>
-    @endif
+    @endif --}}
 
     
     <li class="nav-item with-sub @if (request()->routeIs('mailing-list*')) active show @endif">
