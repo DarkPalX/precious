@@ -447,6 +447,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::post('/admin/sales-transaction/{sales}', [SalesController::class, 'quick_update'])->name('sales-transaction.quick_update');
                 Route::get('/admin/sales-transaction/view/{sales}', [SalesController::class, 'show'])->name('sales-transaction.view');
                 Route::post('/admin/change-delivery-status', [SalesController::class, 'delivery_status'])->name('sales-transaction.delivery_status');
+                Route::get('/admin/sales-transaction/print/{sales}', [SalesController::class, 'print'])->name('sales-transaction.print');
 
 
                 Route::get('/admin/sales-transaction/view-payment/{sales}', [SalesController::class, 'view_payment'])->name('sales-transaction.view_payment');

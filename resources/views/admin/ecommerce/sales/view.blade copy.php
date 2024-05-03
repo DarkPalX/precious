@@ -40,6 +40,10 @@
             <p class="mg-b-3">Delivery Type: {{ strtoupper($sales->delivery_type) }}</p>
             <p class="mg-b-3">Order Status: <span class="tx-success tx-semibold">{{$status}}</span></p>
             <p class="mg-b-3">Delivery Status: <span class="tx-success tx-semibold tx-uppercase">{{$sales->delivery_status}}</span></p>
+            @if($sales->cancellation_request === 1)
+                <p class="mg-b-3">Cancellation Reason: <span class="tx-success tx-semibold">{{$sales->cancellation_reason}}</span></p>
+                <p class="mg-b-3">Cancellation Remark: <span class="tx-success tx-semibold">{{$sales->cancellation_remarks}}</span></p>
+            @endif
 
             <p class="mg-b-3 mg-t-20">Delivery Address: {{$sales->customer_delivery_adress}}</p>
             <p class="mg-b-3 mg-t-10">Notes: {{$sales->other_instruction}}</p>
@@ -78,8 +82,8 @@
                 <tr class="pd-20">
                     <td class="tx-nowrap">{{$details->product_name}}</td>
                     <td class="tx-right">{{number_format($details->qty, 0)}}</td>
-                    <td class="tx-right">{{number_format($details->price+$details->discount_amount, 2)}}</td>
-                    <td class="tx-right">{{number_format($details->price, 2)}}</td>
+                    <td class="tx-right">{{number_format($details->product->price ?? $details->price, 2)}}</td>
+                    <td class="tx-right">{{number_format($details->product->discount_price ?? 0, 2)}}</td>
                     <td class="tx-right">{{number_format($details->discount_amount, 2)}}</td>
                     <td class="tx-right">{{number_format($product_subtotal, 2)}}</td>
                 </tr>
@@ -104,14 +108,24 @@
                     <td  class="tx-right" colspan="5"><strong>Coupon Discount:</strong></td>
                     <td class="tx-right"><strong>{{number_format($sales->discount_amount, 2)}}</strong></td>
                 </tr>
+                <tr>
+                    <td  class="tx-right border-0" colspan="5">
+                        <strong>Coupons:</strong>
+                    </td>
+                    <td  class="tx-right border-0">
+                        @foreach($sales->coupons as $couponSale)
+                            <span class="badge badge-light p-2" style="font-size: 14px;">{{ $couponSale->details->name }}</span><br>
+                        @endforeach                    
+                    </td>
+                </tr>
                 @endif
 
-                @if($sales->delivery_fee_amount > 0)
+                {{-- @if($sales->delivery_fee_amount > 0) --}}
                 <tr>
                     <td  class="tx-right" colspan="5"><strong>Delivery Fee:</strong></td>
                     <td class="tx-right"><strong>{{number_format($sales->delivery_fee_amount, 2)}}</strong></td>
                 </tr>
-                @endif
+                {{-- @endif --}}
 
                 @if($delivery_discount > 0)
                 <tr>
@@ -122,8 +136,16 @@
 
                 <tr>
                     <td  class="tx-right" colspan="5"><strong>Grand Total:</strong></td>
-                    <td class="tx-right"><strong>{{ number_format($net_amount, 2) }}</strong></td>
+                    <td class="tx-right"><strong>{{ number_format(($sales->product_id != 0 ? $sales->net_amount + $sales->ecredit_amount : $sales->net_amount), 2) }}</strong></td>
+                    {{-- <td class="tx-right"><strong>{{ number_format($sales->net_amount, 2) }}</strong></td> --}}
                 </tr>
+
+                @if($sales->ecredit_amount > 0)
+                <tr>
+                    <td  class="tx-right" colspan="5"><strong>E-Wallet Payment:</strong></td>
+                    <td class="tx-right"><strong>{{number_format($sales->ecredit_amount, 2)}}</strong></td>
+                </tr>
+                @endif
             </tbody>
         </table>
     </div>

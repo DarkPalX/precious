@@ -266,6 +266,20 @@ class SalesController extends Controller
         return view('admin.ecommerce.sales.view',compact('sales','salesPayments','salesDetails','status'));
     }
 
+    public function print($id)
+    {
+        $sales = SalesHeader::where('id',$id)->first();
+        $salesPayments = SalesPayment::where('sales_header_id',$id)->get();
+        $salesDetails = SalesDetail::where('sales_header_id',$id)->get();
+        $totalPayment = SalesPayment::where('sales_header_id',$id)->sum('amount');
+        $totalNet = SalesHeader::where('id',$id)->sum('net_amount');
+        if($totalNet <= $totalPayment)
+        $status = 'PAID';
+        else $status = 'UNPAID';
+
+        return view('admin.ecommerce.sales.print',compact('sales','salesPayments','salesDetails','status'));
+    }
+
     public function quick_update(Request $request)
     {
         $update = SalesHeader::findOrFail($request->pages)->update([
