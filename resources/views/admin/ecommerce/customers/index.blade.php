@@ -99,7 +99,7 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Address</th>
                                     <th scope="col">E-Credits</th>
-                                    {{-- <th scope="col">Subscription</th> --}}
+                                    <th scope="col">Subscription</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Last Date Modified</th>
                                     <th scope="col">Options</th>
@@ -118,13 +118,13 @@
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->address }}</td>
                                         <td>{{ $user->ecredits }}</td>
-                                        {{-- <td>
+                                        <td>
                                             @forelse($user_subs as $user_sub)
-                                                {{ $user_sub->subscription->title }}
+                                                {{ $user_sub->subscription }}
                                             @empty
                                                 {{ 'Not Subscribed' }}
                                             @endforelse
-                                        </td> --}}
+                                        </td>
                                         <td>
                                             @if($user->is_active == 1)
                                                 <span class="badge badge-success">Active</span>
