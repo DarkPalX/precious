@@ -120,7 +120,8 @@
                                         <td>{{ $user->ecredits }}</td>
                                         <td>
                                             @forelse($user_subs as $user_sub)
-                                                {{ $user_sub->subscription }}
+                                                {{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}<br>
+                                                <span class="text-secondary">expires on {{ Setting::date_for_listing($user_sub->end_date) }}</span>
                                             @empty
                                                 {{ 'Not Subscribed' }}
                                             @endforelse
