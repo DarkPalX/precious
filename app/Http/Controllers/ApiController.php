@@ -1842,14 +1842,14 @@ public function getAvailableCouponList(Request $request){
 //VALIDATE COUPON CODE=====================================================================
 public function validateCouponCode(Request $request){
     
-    $Misc = new Misc();
-    $Voucher = new Voucher();
+     $Voucher = new Voucher();
 
     $response = "Failed";
     $responseMessage = "";
 
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
     $data['VoucherCode']=$request->post('VoucherCode');
+    $data['UserID']=$request->post('UserID');
 
     if($data['VoucherCode']!=''){       
 
@@ -1857,7 +1857,10 @@ public function validateCouponCode(Request $request){
       $getVoucherAmountDiscount=0;
       $getRequiredQty=0;
       $getMinPurchase=0;
-      $getScopeCustomerEmail=0;
+
+      $getScopeCustomerScope='';
+      $getScopeCustomerID=0;
+
       $voucher_info=$Voucher->getVoucherInfoByCode($data['VoucherCode']);
 
       if(isset($voucher_info)>0){
@@ -1867,17 +1870,64 @@ public function validateCouponCode(Request $request){
           $getRequiredQty=$voucher_info->purchase_qty;
           $getMinPurchase=$voucher_info->min_purchsae_amount;
 
-          // $getScopeCustomerEmail=$voucher_info->scope_customer_id;
-                  
-           return response()->json([
+          $getScopeCustomerScope=$voucher_info->customer_scope;  
+          $getScopeCustomerID=$voucher_info->scope_customer_id;
+          
+          $IsCustomerAllowToUse=false;
+          
+
+          if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
+              
+              $list = DB::table('coupons')
+                     ->where('coupon_code','=',$data['VoucherCode'])
+                     ->whereraw ("CONCAT('|',scope_customer_id,'|') LIKE CONCAT('%|',". $data['UserID'].",'|%')")
+                     ->get();
+                     
+                     if(count($list)>0){
+                         $IsCustomerAllowToUse=true;
+                     }else{
+                         $IsCustomerAllowToUse=false;
+                     }
+                         
+                         
+                     if($IsCustomerAllowToUse){
+                          return response()->json([
+                             'response' => 'Success',         
+                             'percent_discount' => $getVoucherPercentDiscount,         
+                             'amount_discount' => $getVoucherAmountDiscount,   
+                             'required_qty' => $getRequiredQty, 
+                             'min_purchase' => $getMinPurchase, 
+                             'message' => 'Voucher Discount is '.$getVoucherPercentDiscount. '%',
+                            ]); 
+                    }else{
+                          $ResponseMessage ='Sorry you are not qualify to use this coupon code.';
+                             return response()->json([
+                              'response' => 'Failed',     
+                              'percent_discount' => null,      
+                              'amount_discount' => null,  
+                              'required_qty' => null,  
+                              'min_purchase' => null, 
+                              'message' => $ResponseMessage,
+                              ]); 
+                    }
+
+            
+          }else{
+              
+             return response()->json([
              'response' => 'Success',         
              'percent_discount' => $getVoucherPercentDiscount,         
              'amount_discount' => $getVoucherAmountDiscount,   
              'required_qty' => $getRequiredQty, 
              'min_purchase' => $getMinPurchase, 
              'message' => 'Voucher Discount is '.$getVoucherPercentDiscount. '%',
+             
             ]); 
-
+ 
+          }
+          
+                  
+       
       }else{
 
         $ResponseMessage ='Invalid coupon code.';
@@ -1907,7 +1957,8 @@ public function validateCouponCode(Request $request){
 
     
     return response()->json($result);     
-}
+
+  }
 
  //EWALLET CREDITS HISTORY===============================================================
   public function getEWalletCreditsHistory(Request $request){
