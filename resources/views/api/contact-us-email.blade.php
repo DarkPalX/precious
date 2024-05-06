@@ -76,17 +76,17 @@
             <td  style="padding-top:40px;padding-bottom:0px;padding-left:50px;padding-right:50px;font-family:sans-serif;font-size:12px;line-height:20px;color:#232323;text-align:left;font-weight:normal">
          
                                                       
-                  Inuqiry Information:
-                  <br><br>
-
-                   Name : <span style="color:#0b389d;font-weight:bold;"><b>{{ $FullName }}</b></span>
+                   Inquiry Information:
+                   <br><br>
+                   Name: <span style="color:#0b389d;font-weight:bold;"><b>{{ $FullName }}</b></span>
                    <br>                   
-                   Contact No : <span style="color:#0b389d;font-weight:bold;"><b>{{ $MobileNo }}</b></span>
+                   Contact No: <span style="color:#0b389d;font-weight:bold;"><b>{{ $MobileNo }}</b></span>
                    <br>
                    Email Address: <span style="color:#0b389d;font-weight:bold;"><b>{{ $EmailAddress }}</b></span>                  
+
                   <br><br>
                    Subject: <span style="color:#0b389d;font-weight:bold;"><b>{{ $Subject }}</b></span>
-                  <br>
+                  <br><br>                  
                    Message Inquiry: 
                   <br>
                   <span style="color:#0b389d;font-weight:bold;"><b>{{ $Message }}</b></span>
