@@ -91,8 +91,9 @@ class Subscription extends Model
     $TODAY = date("Y-m-d H:i:s");
     $PaymentDate = date("Y-m-d");
     
-    $StartDate = date("Y-m-d");
-    $EndDate = date("Y-m-d");
+    $StartDate = date("Y-m-d H:i:s");
+    $EndDate = date("Y-m-d H:i:s");
+
     $EndDateFormatted="";
 
     $Platform=$data['Platform'];
@@ -138,7 +139,7 @@ class Subscription extends Model
        if(isset($plan_info)>0){
           $TitlePlan=$plan_info->title;                   
           $PlanNoDays=$plan_info->no_days;  
-          $EndDate = date('Y-m-d', strtotime("+".$PlanNoDays." day"));          
+          $EndDate = date('Y-m-d H:i:s', strtotime("+".$PlanNoDays." day"));          
           $EndDateFormatted=date_format(date_create($EndDate),'M. j, Y ');
        } 
      
@@ -195,7 +196,7 @@ class Subscription extends Model
 
                 $new_date_extended=date_create($EndDate);
                 date_add($new_date_extended,date_interval_create_from_date_string($DatePlanNoDaysExtended));            
-                $NewExpiryEndDate=date("Y-m-d", strtotime(date_format($new_date_extended,"Y-m-d")));
+                $NewExpiryEndDate=date("Y-m-d H:i:s", strtotime(date_format($new_date_extended,"Y-m-d H:i:s")));
             
 
            }
@@ -334,7 +335,8 @@ class Subscription extends Model
  
     $UserCustomer= new UserCustomer();
     $TODAY = date("Y-m-d H:i:s");
-    $CurrentDay = date("Y-m-d"); 
+
+    $CurrentDay = date("Y-m-d H:i:s"); 
 
     $CurrentDayFormatted=date_format(date_create($CurrentDay),'M. j, Y ');
 
@@ -365,7 +367,7 @@ class Subscription extends Model
           
          if($IsSubcscribe=1){ 
                          
-            //get success days of 3,2,1 days before the actual expiration day.             
+            //get the successeding days of 3,2,1 days before the actual expiration day. then send message notification             
             $date1=date_create($EndDate);
             date_sub($date1,date_interval_create_from_date_string("1 days"));            
             $ExpiryDateOneDayBefore=date("Y-m-d", strtotime(date_format($date1,"Y-m-d")));
