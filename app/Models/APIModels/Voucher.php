@@ -53,14 +53,14 @@ class Voucher extends Model
              
           COALESCE(coup.status,'') as status          
           
-        ");    
-
+        ")    
  
-      $query->where("coup.location","=",null);                
-      $query->where("coup.status","=",'ACTIVE');
-      $query->where("coup.deleted_at","=",null);            
-      $query->where("coup.activation_type","!=",'manual');
-      $query->orWhereRaw("coup.scope_customer_id LIKE '%zira0814@gmail.com%'");
+      ->where("coup.status","=",'ACTIVE')
+      ->where("coup.location","=",null)                     
+      ->where("coup.deleted_at","=",null)
+      ->where("coup.activation_type","!=",'manual');
+      
+    //   ->orWhereRaw("CONCAT('|',coup.scope_customer_id,'|') LIKE CONCAT('%|',". $SearchText.",'|%')");
 
                                  
       if($SearchText != ''){
