@@ -390,7 +390,7 @@ class ReportsController extends Controller
         $startDate = $request->get('start', false);
         $endDate   = $request->get('end', false);
 
-        $rs = SalesHeader::select('user_id', 
+        $rs = SalesHeader::select('user_id', 'customer_name',
                          DB::raw('SUM(net_amount) as total_net_amount'), 
                          DB::raw('COUNT(*) as order_count'))
                  ->where('status', 'active')
@@ -400,23 +400,7 @@ class ReportsController extends Controller
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
         }
         
-        $rs = $rs->groupBy('user_id')->get();
-
-                 
-        // $startDate = $request->get('start', false);
-        // $endDate   = $request->get('end', false);
-
-        // $rs = SalesHeader::select('user_id', 
-        //                  DB::raw('SUM(net_amount) as total_net_amount'))
-        //          ->where('status', 'active')
-        //          ->where('order_source', 'Android');
-      
-        // if ($startDate && $endDate) {
-        //     $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
-        // }
-        
-        // $rs = $rs->groupBy('user_id')->get();
-
+        $rs = $rs->groupBy('user_id', 'customer_name')->get();
 
         return view('admin.ecommerce.reports-mobile.top-buyers',compact('rs','startDate','endDate'));
     }
