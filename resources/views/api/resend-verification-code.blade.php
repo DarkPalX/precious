@@ -15,7 +15,7 @@
             <table role="presentation" width="100%" align="center" cellpadding="0" cellspacing="0" border="0"  style="margin:0px auto;width:100%!important;min-width:100%!important"> 
             <tbody> 
             <tr> 
-              <td dir="rtl" style="text-align:center;font-size:0;background:#fff"> 
+              <td dir="rtl" style="text-align:center;font-size:0;background:#2e3c5f"> 
               <div  bgcolor="#ffffff" style="max-width:200px;width:100%;display:inline-block;vertical-align:top" dir="ltr"> 
               <table bgcolor="#2e3c5f" width="100%" bgcolor="#ffffff" valign="top" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse"> 
                   <tbody> 
