@@ -196,7 +196,7 @@ class Subscription extends Model
 
                 $new_date_extended=date_create($EndDate);
                 date_add($new_date_extended,date_interval_create_from_date_string($DatePlanNoDaysExtended));            
-                $NewExpiryEndDate=date("Y-m-d H:i:s", strtotime(date_format($new_date_extended,"Y-m-d")));
+                $NewExpiryEndDate=date("Y-m-d H:i:s", strtotime(date_format($new_date_extended,"Y-m-d H:i:s")));
             
 
            }
