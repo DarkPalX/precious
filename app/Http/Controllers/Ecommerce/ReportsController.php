@@ -392,8 +392,7 @@ class ReportsController extends Controller
         $endDate   = $request->get('end', false);
 
         $rs = SalesHeader::select('user_id', 
-                         DB::raw('SUM(net_amount) as total_net_amount'), 
-                         DB::raw('COUNT(*) as order_count'))
+                         DB::raw('SUM(net_amount) as total_net_amount'))
                  ->where('status', 'active')
                  ->where('order_source', 'Android');
       
