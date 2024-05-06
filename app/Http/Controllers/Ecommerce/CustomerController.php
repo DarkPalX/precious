@@ -17,7 +17,7 @@ use App\Http\Requests\UserRequest;
 use App\Mail\{AddNewUserMail, UpdatePasswordMail};
 
 use App\Models\{
-    Permission, Role, User, ActivityLog
+    Permission, Role, User, ActivityLog, UsersSubscription
 };
 
 use Illuminate\Support\Facades\Storage;
@@ -79,11 +79,23 @@ class CustomerController extends Controller
 
     public function update(Request $request)
     {
+
         User::where('id', $request->user_id)
         ->update([
             'ecredits' => $request->ecredits
         ]);
+
+        $i = 0;
+        if($request->has('user_sub_id')){
+            foreach($request->user_sub_id as $sub_id){
+                UsersSubscription::where('id', $sub_id)
+                ->update([
+                    'end_date' => $request->end_date[$i] . ' ' . $request->end_time[$i]
+                ]);
+                $i++;
+            }
+        }
         
-        return back()->with('success', 'E-Credit successfully updated');
+        return back()->with('success', 'Customer Account successfully updated');
     }
 }

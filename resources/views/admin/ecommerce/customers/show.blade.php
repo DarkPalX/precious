@@ -6,6 +6,7 @@
 
 @section('pagecss')
     <link rel="stylesheet" href="{{ asset('css/dashforge.profile.css') }}">
+	<link href="{{ asset('lib/clockpicker/bootstrap-clockpicker.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -65,9 +66,40 @@
 
                             <div class="form-group">
                                 <label class="d-block">Ecredits</label>
-                                <input type="number" min="0" name="ecredits" class="form-control" value="{{$user->ecredits}}" oninput="this.value = Math.max(0, this.value);" onclick="select()">
-
+                                <input type="decimal" min="0" name="ecredits" class="form-control" value="{{$user->ecredits}}" oninput="this.value = Math.max(0, this.value);" onclick="select()">
                             </div>
+
+                            @php 
+                                $user_subs = \App\Models\UsersSubscription::getSubscriptions($user->id);
+                                $files = explode('|',$user->business_proof);
+                            @endphp
+
+                            @if(!$user_subs->isEmpty()) 
+
+                                <br>
+                                <h5 class="mg-b-0 tx-spacing--1">Subscriptions</h5>
+                                <hr>
+
+                                <div class="col-12" id="coupon-date-time-form" style="display:block;">
+
+                                    @foreach($user_subs as $user_sub)
+
+                                        <h6 class="mt-1 text-success">{{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}</h6>
+                                        <div class="row mt-1">
+                                            <div class="col-6">
+                                                <label class="d-block">Expiry Date</label>
+                                                <input name="end_date[]" type="text" id="dateTo" class="form-control" placeholder="To" autocomplete="off" value="{{ \Carbon\Carbon::parse($user_sub->end_date)->format('Y-m-d') }}">
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="d-block">Time</label>
+                                                <input name="end_time[]" type="time" class="form-control" autocomplete="off" value="{{ \Carbon\Carbon::parse($user_sub->end_date)->format('H:i:s') }}">
+                                            </div>
+                                            <input name="user_sub_id[]" value="{{ $user_sub->id }}" hidden>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                            @endif
 
                             {{-- hidden inputs --}}
                             <input name="user_id" class="form-control" value="{{$user->id}}" hidden>
@@ -96,6 +128,9 @@
 
 @section('pagejs')
     <script src="{{ asset('scripts/account/update.js') }}"></script>
+	<script src="{{ asset('lib/bselect/dist/js/i18n/defaults-en_US.js') }}"></script>
+	<script src="{{ asset('lib/jqueryui/jquery-ui.min.js') }}"></script>
+	<script src="{{ asset('lib/clockpicker/bootstrap-clockpicker.min.js') }}"></script>
 
     {{--    Image validation--}}
     <script>
@@ -121,6 +156,23 @@
 
         $("#user_image").change(function(evt) {
             validate_images(evt, readURL);
+        });
+        
+
+        $('.datetime').clockpicker();
+
+        $('.singlecalendar').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+
+        var dateToday = new Date(); 
+        $('#dateFrom').datepicker({
+            dateFormat: 'yy-mm-dd',
+            minDate: dateToday,
+        });
+        $('#dateTo').datepicker({
+            dateFormat: 'yy-mm-dd',
+            minDate: dateToday,
         });
     </script>
 @endsection

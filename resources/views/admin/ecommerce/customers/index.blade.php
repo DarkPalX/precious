@@ -136,7 +136,7 @@
                                         <td>{{ Setting::date_for_listing($user->updated_at) }}</td>
                                         <td>
                                             <nav class="nav table-options justify-content-begin">
-                                                <a class="nav-link" href="{{ route('customers.show',$user->id) }}" title="View Customer Details"><i data-feather="eye"></i></a>
+                                                <a class="nav-link" href="{{ route('customers.show',$user->id) }}" title="View Customer Details"><i data-feather="edit"></i></a>
                                                 @if($user->is_active == 1)
                                                     @if (auth()->user()->has_access_to_route('customer.deactivate'))
                                                         <a class="nav-link deactivate_user" data-user_id="{{ $user->id }}" href="#" title="Deactivate Customer" data-toggle="modal" data-target="#modalUserDeactivate"><i data-feather="user-x"></i></a>
