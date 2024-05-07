@@ -492,13 +492,15 @@ class Subscription extends Model
 
     if($UserID>0){
 
-       $customer_info=$UserCustomer->getCustomerInformation($data);
+       $customer_info=$this->getCustomerCurrentSubscriptionInfo();
 
          if(isset($customer_info)>0){     
             $IsSubcscribe=$customer_info->is_subscribe; 
-            $SubscriptionPlanID=$customer_info->plan_id;                   
+            $SubscriptionPlanID=$customer_info->plan_id;
+
             $TitlePlan=$customer_info->title_plan;                   
             $PlanNoDays=$customer_info->no_days;                       
+            
             $EndDate=$customer_info->end_date; 
             $EndDateFormatted=date_format(date_create($EndDate),'M. j, Y ');
           }
