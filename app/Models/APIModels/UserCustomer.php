@@ -546,6 +546,8 @@ class UserCustomer extends Model
   //subscription plan status
   public function getSubscriptionPlanStatus($UserID){
    
+   $TODAY = date("Y-m-d H:i:s");
+   
    $info = DB::table('users_subscriptions as usrs_sub')              
      ->leftjoin('subscriptions as subs', 'subs.id', '=', 'usrs_sub.plan_id') 
 
@@ -574,7 +576,8 @@ class UserCustomer extends Model
           ->first();
 
           if(isset($info)<=0){
-              //Dalete All Subscribed Read Books after Cancelled Subscription
+
+                //Dalete All Subscribed Read Books after Cancelled Subscription
                 DB::table('read_books')
                   ->where('user_id',$UserID)
                   ->where('is_subscribed',1)
