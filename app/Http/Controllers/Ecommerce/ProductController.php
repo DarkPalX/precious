@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Facades\App\Helpers\ListingHelper;
 use Facades\App\Helpers\FileHelper;
 use App\Http\Requests\ProductRequest;
+use Illuminate\Support\Facades\Log;
 
 
 use App\Models\Ecommerce\{
@@ -691,21 +692,22 @@ class ProductController extends Controller
                     array_push($excel_columns, $attr->name);
                 }
 
-
                 if($row > 1){
 
                     $code = mb_convert_encoding($data[0], "UTF-8");
-                    $name = mb_convert_encoding($data[1], "UTF-8");
+                    // $name = mb_convert_encoding($data[1], "UTF-8");
                     $slug = Page::convert_to_slug($data[1]);
                                         
                     // Format Description
+                    $name = nl2br(iconv(mb_detect_encoding($data[1], mb_detect_order(), true), "UTF-8//IGNORE", $data[1]));
+                    $author = nl2br(iconv(mb_detect_encoding($data[2], mb_detect_order(), true), "UTF-8//IGNORE", $data[2]));
                     $description = nl2br(iconv(mb_detect_encoding($data[4], mb_detect_order(), true), "UTF-8//IGNORE", $data[4]));
 
 
                     $product = Product::create([
                         'sku' => str_replace('?',' ',$code),
-                        'name' => str_replace('?',' ',$name),
-                        'author' => $data[2],
+                        'name' => $name,
+                        'author' => $author,
                         'book_type' => $data[3],
                         'slug' => $slug,
                         'description' => '<p>' . $description . '</p>',
