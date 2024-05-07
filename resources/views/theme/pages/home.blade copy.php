@@ -327,7 +327,25 @@
 
                         $('#top-cart-total').html('₱'+newtotal.toFixed(2));
 				        $('#input-top-cart-total').val(newtotal);
-                        
+
+                        // $('#top-cart-items').append(
+                        //     '<div class="top-cart-item">'+
+                        //         '<div class="top-cart-item-image border-0">'+
+                        //             '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>'+
+                        //         '</div>'+
+                        //         '<div class="top-cart-item-desc">'+
+                        //             '<div class="top-cart-item-desc-title">'+
+                        //                 '<a href="#" class="fw-medium">{{$product->name}}</a>'+
+                        //                 '<span class="top-cart-item-price d-block">'+price.toFixed(2)+'</span>'+
+                        //                 '<div class="d-flex mt-2">'+
+                        //                     '<a href="#" class="fw-normal text-black-50 text-smaller"><u>Edit</u></a>'+
+                        //                     '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product('+returnData['cartId']+');"><u>Remove</u></a>'+
+                        //                 '</div>'+
+                        //             '</div>'+
+                        //             '<div class="top-cart-item-quantity">x '+qty+'</div>'+
+                        //         '</div>'+
+                        //    '</div>'
+                        // );
                         var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
                         if (cartItem.length) {
                             // If the item already exists in the cart, update its quantity and price
