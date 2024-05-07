@@ -129,7 +129,8 @@ class Review extends Model
               'comment' => trim($Comment), 
               'rating' => $Rating, 
               'status' => 0, 
-              'created_at' => $TODAY             
+              'created_at' => $TODAY,             
+              'updated_at' => $TODAY,             
             ]);
 
        }

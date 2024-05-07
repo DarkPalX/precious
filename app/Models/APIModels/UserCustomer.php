@@ -547,7 +547,7 @@ class UserCustomer extends Model
   public function getSubscriptionPlanStatus($UserID){
    
    $TODAY = date("Y-m-d H:i:s");
-
+   
    $info = DB::table('users_subscriptions as usrs_sub')              
      ->leftjoin('subscriptions as subs', 'subs.id', '=', 'usrs_sub.plan_id') 
 
@@ -576,7 +576,8 @@ class UserCustomer extends Model
           ->first();
 
           if(isset($info)<=0){
-              //Dalete All Subscribed Read Books after Cancelled Subscription
+
+                //Dalete All Subscribed Read Books after Cancelled Subscription
                 DB::table('read_books')
                   ->where('user_id',$UserID)
                   ->where('is_subscribed',1)
@@ -632,6 +633,7 @@ class UserCustomer extends Model
     $Is_Subscribe=$data['Is_Subscribe'];
  
     if($UserID > 0){
+
         if($BirthDate=='Not Set 00:00:00'){
             DB::table('users')
             ->where('id',$UserID)
@@ -685,14 +687,31 @@ class UserCustomer extends Model
                 ]);   
 
 
+              //SEND SUBSRIBE EMAIL  HERE 1 TIME ONLY
+              $param['EmailAddress']=$EmailAddress;
+              $Email = new Email();
+              $Email->SendSubscribedEmail($param);
+
+
+              //send system notif 
+               $MessageNotificationID = DB::table('message_notification')
+                  ->insertGetId([                                            
+                    'user_id' => $UserID,   
+                    'message_notification' => 'You have subscribe for a monthly news letter & you will recived a regular email notifications of news letter, promos & events.',                                                                          
+                    'created_at' => $TODAY             
+                ]); 
+
+
         }else{
+
             $IsExist=false;
 
             $SubscriberUserID = DB::table('subscribers')
               ->insertGetId([                                    
                 'email' => $EmailAddress,
                 'code' => '90Ty34uKK0thCgyrzleCYyH9xAGCFX6AXTCoJzrakAWHxJk478Uy9bvQkJAyg3JQv3rZaVuTiKxVXDWMzFsczhzp0jnSoBtNryOdyzRMWFjeBYxnawr',
-                'name' => trim(ucwords($FullName)),                              
+                'name' => trim(ucwords($FullName)),   
+                'is_active' => 1,                           
                 'created_at' => $TODAY             
               ]);
 
@@ -706,7 +725,7 @@ class UserCustomer extends Model
                $MessageNotificationID = DB::table('message_notification')
                   ->insertGetId([                                            
                     'user_id' => $UserID,   
-                    'message_notification' => 'You have subscribe for a monhtly news letter & you will recived a regular email notifications of news letter, promos & events.',                                                                          
+                    'message_notification' => 'You have subscribe for a monthly news letter & you will recived a regular email notifications of news letter, promos & events.',                                                                          
                     'created_at' => $TODAY             
                 ]); 
 
@@ -732,7 +751,7 @@ class UserCustomer extends Model
                 ]);   
 
                 // SEND UNSUBSCRIBE EMAIL HERE 1 TIME ONLY
-                  $param['EmailAddress']=$EmailAddress;
+                $param['EmailAddress']=$EmailAddress;
                 $Email = new Email();
                 $Email->SendUnSubscribedEmail($param);    
 
