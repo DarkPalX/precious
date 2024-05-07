@@ -328,6 +328,24 @@
                         $('#top-cart-total').html('₱'+newtotal.toFixed(2));
 				        $('#input-top-cart-total').val(newtotal);
 
+                        // $('#top-cart-items').append(
+                        //     '<div class="top-cart-item">'+
+                        //         '<div class="top-cart-item-image border-0">'+
+                        //             '<a href="#"><img src="{{-- asset('storage/products/'.$product->photoPrimary) --}}" alt="Cart Image 1" /></a>'+
+                        //         '</div>'+
+                        //         '<div class="top-cart-item-desc">'+
+                        //             '<div class="top-cart-item-desc-title">'+
+                        //                 '<a href="#" class="fw-medium">{{$product->name}}</a>'+
+                        //                 '<span class="top-cart-item-price d-block">'+price.toFixed(2)+'</span>'+
+                        //                 '<div class="d-flex mt-2">'+
+                        //                     '<a href="#" class="fw-normal text-black-50 text-smaller"><u>Edit</u></a>'+
+                        //                     '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product('+returnData['cartId']+');"><u>Remove</u></a>'+
+                        //                 '</div>'+
+                        //             '</div>'+
+                        //             '<div class="top-cart-item-quantity">x '+qty+'</div>'+
+                        //         '</div>'+
+                        //    '</div>'
+                        // );
                         var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
                         if (cartItem.length) {
                             // If the item already exists in the cart, update its quantity and price
@@ -360,6 +378,25 @@
                                 '</div>'
                             );
 
+                            // $('#top-cart-items').append(
+                            //     '<div class="top-cart-item" data-product-id="' + product + '">' +
+                            //     '<div class="top-cart-item-image border-0">' +
+                            //     '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>' +
+                            //     '</div>' +
+                            //     '<div class="top-cart-item-desc">' +
+                            //     '<div class="top-cart-item-desc-title">' +
+                            //     '<a href="#" class="fw-medium">{{$product->name}}</a>' +
+                            //     '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
+                            //     // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
+                            //     '<div class="d-flex mt-2">' +
+                            //     '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
+                            //     '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
+                            //     '</div>' +
+                            //     '</div>' +
+                            //     '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
+                            //     '</div>' +
+                            //     '</div>'
+                            // );
                         }
 
                         $.notify("Product Added to your cart",{ 
@@ -400,6 +437,103 @@
             });
         }
     }
+
+    // function add_to_cart(product, price){
+
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         }
+    //     });
+
+    //     var qty   = 1
+    //     // var qty   = parseFloat($('#quantity').val());
+    //     // var price = parseFloat($('#product_price').val());
+
+    //     $.ajax({
+    //         data: {
+    //             "product_id": product, 
+    //             "qty": qty,
+    //             "_token": "{{ csrf_token() }}",
+    //         },
+    //         type: "post",
+    //         url: "{{route('product.add-to-cart')}}",
+    //         success: function(returnData) {
+    //             $("#loading-overlay").hide();
+    //             if (returnData['success']) {
+
+    //                 $('.top-cart-number').html(returnData['totalItems']);
+
+
+    //                 var cartotal = parseFloat($('#input-top-cart-total').val());
+    //                 var productotal = price*qty;
+    //                 var newtotal = cartotal+productotal;
+
+    //                 $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+    //                 var cartItem = $('#top-cart-items').find('[data-product-id="' + product + '"]');
+    //                 // if (cartItem.length) {
+    //                 //     // If the item already exists in the cart, update its quantity and price
+    //                 //     var oldQty = parseFloat(cartItem.find('.top-cart-item-quantity').text().trim().replace('x ', ''));
+    //                 //     var newQty = oldQty + qty;
+    //                 //     var oldPrice = parseFloat(cartItem.find('.top-cart-item-price').text().trim().replace('₱', ''));
+    //                 //     var productTotal = price * qty;
+    //                 //     var newTotal = oldPrice + productTotal;
+
+    //                 //     cartItem.find('.top-cart-item-quantity').text('x ' + newQty);
+    //                 //     // cartItem.find('.top-cart-item-price').text('₱' + newTotal.toFixed(2));
+    //                 // } else {
+
+    //                 //     $('#top-cart-items').append(
+    //                 //         '<div class="top-cart-item" data-product-id="' + product + '">' +
+    //                 //         '<div class="top-cart-item-image border-0">' +
+    //                 //         '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>' +
+    //                 //         '</div>' +
+    //                 //         '<div class="top-cart-item-desc">' +
+    //                 //         '<div class="top-cart-item-desc-title">' +
+    //                 //         '<a href="#" class="fw-medium">{{$product->name}}</a>' +
+    //                 //         '<span class="top-cart-item-price d-block">₱' + price + '</span>' +
+    //                 //         // '<span class="top-cart-item-price d-block">₱' + (price * qty).toFixed(2) + '</span>' +
+    //                 //         '<div class="d-flex mt-2">' +
+    //                 //         '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>Reload to Edit</u></a>' +
+    //                 //         '<a href="#" class="fw-normal text-black-50 text-smaller ms-3" onclick="top_remove_product(' + returnData['cartId'] + ');"><u>Remove</u></a>' +
+    //                 //         '</div>' +
+    //                 //         '</div>' +
+    //                 //         '<div class="top-cart-item-quantity">x ' + qty + '</div>' +
+    //                 //         '</div>' +
+    //                 //         '</div>'
+    //                 //     );
+
+    //                 // }
+                    
+    //                 $('#top-cart-items').append(
+    //                     '<div class="top-cart-item" data-product-id="' + product + '">' +
+    //                         '<a href="javascript:void()" onclick="location.reload();" class="fw-normal text-black-50 text-smaller"><u>New item added. Reload to Edit</u></a>' +
+    //                     '</div>'
+    //                 );
+
+    //                 $.notify("Product Added to your cart",{ 
+    //                     position:"bottom right", 
+    //                     className: "success" 
+    //                 });
+
+    //             } else {
+    //                 swal({
+    //                     toast: true,
+    //                     position: 'center',
+    //                     title: "Warning!",
+    //                     text: "We have insufficient inventory for this item.",
+    //                     type: "warning",
+    //                     showCancelButton: true,
+    //                     timerProgressBar: true, 
+    //                     closeOnCancel: false
+
+    //                 });
+    //             }
+    //         }
+    //     });
+
+    //     $('#quantity').val(1);
+    // }
     
 </script>
 
@@ -481,6 +615,30 @@
 				$('#maxorder'+id).val(returnData.maxOrder);
 				$('.top-cart-number').html(returnData['totalItems']);
 				$('#prevqty'+id).val(qty);
+				// var promo_discount = parseFloat(returnData.total_promo_discount);
+
+				// let subtotal = 0;
+				// $(".input_product_total_price").each(function() {
+				//     if(!isNaN(this.value) && this.value.length!=0) {
+				//         subtotal += parseFloat(this.value);
+				//     }
+				// });
+
+				// $('#subtotal').val(subtotal);
+
+
+				// for the sidebar cart total
+				// var cartotal = parseFloat($('#input-top-cart-total').val());
+				// var productotal = price*qty;
+				// var newtotal = cartotal+total_price;
+				
+				// alert(cartotal);
+
+				// $('#input-top-cart-total').val(newtotal);
+				// $('#top-cart-total').html('₱'+newtotal.toFixed(2));
+				// 
+				
+				// resetCoupons();
 				cart_total();
 			}
 		});
@@ -500,6 +658,11 @@
 		if(couponTotalDiscount == 0){
 			$('#couponDiscountDiv').css('display','none');
 		}
+
+		// var totalDeduction = promoTotalDiscount + couponTotalDiscount;
+		// var grandtotal = subtotal - totalDeduction;
+		
+		// $('#subtotal').html('₱'+FormatAmount(subtotal,2));
 
 		$('#top-cart-total').val(subtotal);
 		$('#top-cart-total').html('₱'+subtotal.toFixed(2));
