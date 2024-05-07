@@ -471,10 +471,11 @@ class Subscription extends Model
 
   public function getCustomerCurrentSubscriptionInfo($CustomerID){
       
-    $info = DB::table('users_subscriptions') 
-         ->whereRaw('user_id=?',[$CustomerID])                   
-        ->where('is_subscribe',"=",1)                                   
-        ->first();
+    $info = DB::table('users_subscriptions as usrs_sub') 
+         ->leftjoin('subscriptions as subs', 'subs.id', '=', 'usrs_sub.plan_id') 
+         ->whereRaw('usrs_sub.user_id=?',[$CustomerID])                   
+         ->where('usrs_sub.is_subscribe',"=",1)                                   
+         ->first();
        
     return $info;
   }
@@ -492,16 +493,16 @@ class Subscription extends Model
 
     if($UserID>0){
 
-       $customer_info=$this->getCustomerCurrentSubscriptionInfo($UserID);
+       $plan_info=$this->getCustomerCurrentSubscriptionInfo($UserID);
 
-         if(isset($customer_info)>0){     
-            $IsSubcscribe=$customer_info->is_subscribe; 
-            $SubscriptionPlanID=$customer_info->plan_id;
+         if(isset($plan_info)>0){     
+            $IsSubcscribe=$plan_info->is_subscribe; 
+            $SubscriptionPlanID=$plan_info->plan_id;
 
-            $TitlePlan=$customer_info->title_plan;                   
-            $PlanNoDays=$customer_info->no_days;                       
-            
-            $EndDate=$customer_info->end_date; 
+            $TitlePlan=$plan_info->title;                   
+            $PlanNoDays=$plan_info->no_days;                       
+
+            $EndDate=$plan_info->end_date; 
             $EndDateFormatted=date_format(date_create($EndDate),'M. j, Y ');
           }
 
