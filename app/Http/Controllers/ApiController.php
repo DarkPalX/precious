@@ -898,18 +898,35 @@ public function getSubscribedReadBooksList(Request $request){
 public function saveReadSubscribedBooks(Request $request){
     
     $Misc = new Misc();
+    $Book = new Book();
     $Library = new Library();
 
     $response = "Failed";
     $responseMessage = "";
+
+    $IsFreeBook=0;
 
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
     $data['IsSubscribe']=$request->post('IsSubscribe');
 
-     if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
-       $ResponseMessage ='Bokk is already in library section';
+    $info=$Book->getBookInfoByID($data['ProductID']);
+
+    if(isset($info)>0){
+        $IsFreeBook=$info->is_free;
+    }
+
+    if($IsFreeBook==1){
+        $ResponseMessage ='This book is a free book.';
+         return response()->json([
+           'response' => 'Failed',         
+           'message' => $ResponseMessage,
+          ]);    
+    }
+
+    if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
+       $ResponseMessage ='Book is already in library section';
        return response()->json([
          'response' => 'Failed',         
          'message' => $ResponseMessage,
