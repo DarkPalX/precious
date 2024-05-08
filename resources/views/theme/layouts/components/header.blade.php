@@ -5,8 +5,8 @@
 			<!-- Logo
 			============================================= -->
 			<div id="logo">
-				<a href="{{ route('home') }}" class="standard-logo" data-dark-logo="{{ Setting::get_company_logo_storage_path() }}"><img src="{{ Setting::get_company_logo_storage_path() }}" alt="Precious Pages Logo"></a>
-				<a href="{{ route('home') }}" class="retina-logo" data-dark-logo="{{ Setting::get_company_logo_storage_path() }}"><img src="{{ Setting::get_company_logo_storage_path() }}" alt="Precious Pages Logo"></a>
+				<a href="{{ route('home') }}" class="standard-logo" data-dark-logo="{{ Setting::get_company_logo_storage_path() }}"><img src="{{ Setting::get_company_logo_storage_path() }}" alt="{{ Setting::info()->company_name }} Logo"></a>
+				<a href="{{ route('home') }}" class="retina-logo" data-dark-logo="{{ Setting::get_company_logo_storage_path() }}"><img src="{{ Setting::get_company_logo_storage_path() }}" alt="{{ Setting::info()->company_name }} Logo"></a>
 			</div><!-- #logo end -->
 
 			@if(Auth::check())
