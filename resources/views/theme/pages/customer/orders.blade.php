@@ -228,7 +228,7 @@
                 @csrf
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
                     <p>You are about to cancel this order. If you wish to continue, please enter a reason for cancelling this order. </p>
@@ -245,7 +245,7 @@
                     <textarea class="form-control" name="remarks" rows="5" required></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success">Continue</button>
                 </div>
             </form>
