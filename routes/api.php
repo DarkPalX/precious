@@ -232,6 +232,17 @@ Route::post('/save-read-books',[
    'as'=> 'save-read-books'
 ]);
 
+//DOWNLOADED BOOKS
+Route::post('/get-subscribed-downloaded-books-list',[
+   'uses'=>'App\Http\Controllers\ApiController@getSubscribedReadBooksList',
+   'as'=> 'get-subscribed-downloaded-books-list'
+]);
+
+Route::post('/save-download-books',[
+   'uses'=>'App\Http\Controllers\ApiController@saveDownloadedSubscribedBooks',
+   'as'=> 'save-download-books'
+]);
+
 // CART TRANS CHECK OUT =================================
 Route::post('/proceed-to-checkout',[
    'uses'=>'App\Http\Controllers\ApiController@proceedToCheckOut',
