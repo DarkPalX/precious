@@ -895,6 +895,7 @@ public function getSubscribedReadBooksList(Request $request){
     
 }
 
+//LIBRARY SUBSCRIBED SECTION========================================
 public function saveReadSubscribedBooks(Request $request){
     
     $Misc = new Misc();
@@ -909,7 +910,7 @@ public function saveReadSubscribedBooks(Request $request){
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
-    $data['IsSubscribe']=$request->post('IsSubscribe');
+    $data['IsRead']=$request->post('IsRead');
 
     $info=$Book->getBookInfoByID($data['ProductID']);
 
@@ -945,6 +946,84 @@ public function saveReadSubscribedBooks(Request $request){
      return response()->json([
       'response' => 'Success',
       'message' => "Sucessfully open & read book.",
+    ]);  
+    
+}
+
+// DOWNLOADED BOOKS====================================================
+public function getSubscribedDownloadedBooksList(Request $request){
+    
+    $Misc = new Misc();
+    $Library = new Library();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['UserID']=$request->post('UserID');    
+
+    $data["SearchText"] = '';
+    $data["Status"] = '';
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+
+    $result=$Library->getSubscribedDownloadedBooksList($data);  
+    return response()->json($result); 
+    
+}
+
+//DOWNLOADED SECTION======================================================
+public function saveDownloadedSubscribedBooks(Request $request){
+    
+    $Misc = new Misc();
+    $Book = new Book();
+    $Library = new Library();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $IsFreeBook=0;
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['UserID']=$request->post('UserID');
+    $data['ProductID']=$request->post('ProductID');
+    $data['IsSubscribed']=$request->post('IsSubscribed');
+    $data['IsDownloaded']=$request->post('IsDownloaded');
+
+    // $info=$Book->getBookInfoByID($data['ProductID']);
+
+    // if(isset($info)>0){
+    //     $IsFreeBook=$info->is_free;
+    // }
+
+    // if($IsFreeBook==1){
+    //     $ResponseMessage ='Sorry. Cannot download free books.';
+    //      return response()->json([
+    //        'response' => 'Failed',         
+    //        'message' => $ResponseMessage,
+    //       ]);    
+    // }
+
+    // if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
+    //    $ResponseMessage ='Sorry. Cannot download library books.';
+    //    return response()->json([
+    //      'response' => 'Failed',         
+    //      'message' => $ResponseMessage,
+    //     ]);    
+    // }
+
+    if($Library->checkProductsIfExistInDownloadSubscribedBooks($data['ProductID'],$data['UserID'])){
+       $ResponseMessage ='This book is already in your downloaded list.';
+       return response()->json([
+         'response' => 'Failed',         
+         'message' => $ResponseMessage,
+        ]);    
+    }
+              
+    $retVal=$Library->saveDownloadSubscribedBooks($data);
+     return response()->json([
+      'response' => 'Success',
+      'message' => "Book has sucessfully added to downloaded books.",
     ]);  
     
 }
