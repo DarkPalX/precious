@@ -578,9 +578,8 @@ class UserCustomer extends Model
           if(isset($info)<=0){
 
                 //Dalete All Subscribed Read Books after Cancelled Subscription
-                DB::table('read_books')
-                  ->where('user_id',$UserID)
-                  ->where('is_subscribed',1)
+                DB::table('subscribed_books')
+                  ->where('user_id',$UserID)                  
                   ->update([                                  
                     'deleted_at' => $TODAY
                 ]);  
