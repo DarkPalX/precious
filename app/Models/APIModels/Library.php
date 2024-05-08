@@ -445,6 +445,7 @@ class Library extends Model
           'user_id' => $UserID,              
           'product_id' => $ProductID,                                            
           'is_read' => $IsRead,                                                      
+          'is_downloaded' => 0,                                                      
           'created_at' => $TODAY             
         ]);
 
