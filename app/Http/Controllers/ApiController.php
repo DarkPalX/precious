@@ -1895,22 +1895,23 @@ public function checkSubscriptionStatus(Request $request){
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
     $data['UserID'] = $request->post('UserID');    
      
-    $response=$Subscription->checkSubscriptionStatus($data);
-    if($response=='Success'){   
-        $Info=$UserCustomer->getCustomerInformation($data);
-        return response()->json([                  
-         'response' => $response,
-         'data' => $Info,
-         'message' => "You have successfully check customer subscription plan."
-       ]);    
-
-    }else{
-        return response()->json([
+     $info=$Subscription->getCustomerCurrentSubscriptionInfo($data);
+     if(isset($info)>0){
+          $Info=$UserCustomer->getCustomerInformation($data['UserID']);   
+          return response()->json([                  
+           'response' => $response,
+           'data' => $Info,
+           'subscription' => $subs,
+           'message' => "You have successfully check customer subscription plan."
+         ]);   
+     }else{
+       return response()->json([
           'response' => $response,
           'data' => null,
+          'subscription' => null,
           'message' => "Something wrong while checking subscription plan.",
        ]); 
-    } 
+     }
 
 }
 
