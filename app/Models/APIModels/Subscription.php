@@ -427,8 +427,7 @@ class Subscription extends Model
 
                 //Dalete All Subscribed Read Books after Expired Subscription
                   DB::table('subscribed_books')
-                    ->where('user_id',$UserID)
-                    ->where('is_subscribed',1)
+                    ->where('user_id',$UserID)                    
                     ->update([                                  
                       'deleted_at' => $TODAY
                   ]);  
@@ -523,8 +522,7 @@ class Subscription extends Model
             
             //Dalete All Subscribed Read Books after Cancelled Subscription
             DB::table('subscribed_books')
-              ->where('user_id',$UserID)
-              ->where('is_subscribed',1)
+              ->where('user_id',$UserID)              
               ->update([                                  
                 'deleted_at' => $TODAY
             ]);  
