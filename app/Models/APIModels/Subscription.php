@@ -485,7 +485,8 @@ class Subscription extends Model
     $UserCustomer= new UserCustomer();
     $TODAY = date("Y-m-d H:i:s");
     $CurrentDay = date("Y-m-d"); 
-
+     
+    $PlanNoDays=0;
     $CurrentDayFormatted=date_format(date_create($CurrentDay),'M. j, Y ');
 
     $UserID=$data['UserID'];
@@ -495,7 +496,8 @@ class Subscription extends Model
 
        $plan_info=$this->getCustomerCurrentSubscriptionInfo($UserID);
 
-         if(isset($plan_info)>0){     
+         if(isset($plan_info)>0){   
+
             $IsSubcscribe=$plan_info->is_subscribe; 
             $SubscriptionPlanID=$plan_info->plan_id;
 
