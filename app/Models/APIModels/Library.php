@@ -484,6 +484,7 @@ class Library extends Model
       ->where('product_id',$ProductID)
       ->update([                                  
             'is_downloaded' => $IsDownloaded,
+            'updated_at' => $TODAY,            
        ]);  
 
   }
