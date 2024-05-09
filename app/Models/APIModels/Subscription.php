@@ -486,7 +486,9 @@ class Subscription extends Model
     $TODAY = date("Y-m-d H:i:s");
     $CurrentDay = date("Y-m-d"); 
      
+     $TitlePlan="";
     $PlanNoDays=0;
+    $SubscriptionPlanID=0;
     $CurrentDayFormatted=date_format(date_create($CurrentDay),'M. j, Y ');
 
     $UserID=$data['UserID'];
