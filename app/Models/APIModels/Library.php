@@ -479,14 +479,12 @@ class Library extends Model
     $IsSubscribe=$data['IsSubscribed'];    
     $IsDownloaded=$data['IsDownloaded'];
     
-    $ReadBookID = DB::table('subscribed_books')
-        ->insertGetId([                                            
-          'user_id' => $UserID,              
-          'product_id' => $ProductID,                                                                                                        
-          'is_read' => 0,
-          'is_downloaded' => $IsDownloaded,
-          'created_at' => $TODAY             
-        ]);
+    DB::table('subscribed_books')
+      ->where('user_id',$UserID)                  
+      ->where('product_id',$ProductID)
+      ->update([                                  
+            'is_downloaded' => $IsDownloaded,
+       ]);  
 
   }
 
