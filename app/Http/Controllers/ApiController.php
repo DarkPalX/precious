@@ -866,6 +866,41 @@ public function getCustomerLibraryList(Request $request){
     
 }
 
+  //LIBRARY=====================================================================
+public function checkCustomerLibraryBookExist(Request $request){
+    
+    $Misc = new Misc();
+    $Library = new Library();
+
+    $checkLibraryBook=false;
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['UserID']=$request->post('UserID');
+    $data['ProductID']=$request->post('ProductID');
+
+   $checkLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])
+
+   if($checkLibraryBook){
+       $ResponseMessage ='Book is already in library section';
+       return response()->json([
+         'response' => 'Success',         
+         'is_exist' => true         
+         'message' => $ResponseMessage,
+        ]);    
+
+    }else{
+         return response()->json([
+         'response' => 'Failed',         
+         'is_exist' => false         
+         'message' => $ResponseMessage,
+        ]);  
+    }
+
+}
+
 public function getSubscribedReadBooksList(Request $request){
     
     $Misc = new Misc();
@@ -1902,6 +1937,39 @@ public function checkSubscriptionStatus(Request $request){
           'response' => 'Failed',
           'data' => null,          
           'message' => "Something wrong while checking subscription plan.",
+       ]); 
+     }
+
+}
+
+
+// CHECK SUBSCRIBER STATUS==========================================================
+public function checkSubscriberStatus(Request $request){
+    
+    $Cart = new Cart();
+    $UserCustomer = new UserCustomer();
+
+    $Subscription = new Subscription();
+    
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['UserID'] = $request->post('UserID');     
+     
+     $info=$UserCustomer->getCustomerCurrentSubscriberInfo($data['UserID']);
+
+     if(isset($info)>0){          
+          return response()->json([                  
+           'response' => 'Success',
+           'data' => $info,                     
+           'message' => "You have successfully check customer subscriber plan."
+         ]);   
+     }else{
+       return response()->json([
+          'response' => 'Failed',
+          'data' => null,          
+          'message' => "Something wrong while checking subscriber.",
        ]); 
      }
 
