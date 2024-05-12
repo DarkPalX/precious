@@ -197,8 +197,9 @@ class Subscription extends Model
                 $new_date_extended=date_create($EndDate);
                 date_add($new_date_extended,date_interval_create_from_date_string($DatePlanNoDaysExtended));            
                 $NewExpiryEndDate=date("Y-m-d H:i:s", strtotime(date_format($new_date_extended,"Y-m-d H:i:s")));
-            
 
+                $NewExpiryEndDateFormatted=date_format(date_create($NewExpiryEndDate),'M. j, Y ');
+                          
            }
 
              DB::table('users_subscriptions')
@@ -225,7 +226,7 @@ class Subscription extends Model
                $MessageNotificationID = DB::table('message_notification')
                     ->insertGetId([                                            
                       'user_id' => $UserID,                                                         
-                      'message_notification' => 'You have successfully extended your current plan to a '.$PlanNoDays.' days subscription & will expired on '.$NewExpiryEndDate, 
+                      'message_notification' => 'You have successfully extended your current plan to a '.$PlanNoDays.' days subscription & will expired on '.$NewExpiryEndDateFormatted, 
                       'created_at' => $TODAY             
                   ]);  
 
