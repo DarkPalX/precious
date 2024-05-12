@@ -1888,19 +1888,18 @@ public function checkSubscriptionStatus(Request $request){
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
     $data['UserID'] = $request->post('UserID');     
 
-     $Subscription->checkSubscriptionStatus($data);  
-
+     $Subscription->checkSubscriptionStatus($data);//check plan subscription
      $info=$UserCustomer->getCustomerCurrentSubscriptionInfo($data['UserID']);
 
      if(isset($info)>0){          
           return response()->json([                  
-           'response' => $response,
+           'response' => 'Success',
            'data' => $info,                     
            'message' => "You have successfully check customer subscription plan."
          ]);   
      }else{
        return response()->json([
-          'response' => $response,
+          'response' => 'Failed',
           'data' => null,          
           'message' => "Something wrong while checking subscription plan.",
        ]); 
