@@ -561,10 +561,14 @@ class UserCustomer extends Model
 
           COALESCE(usrs_sub.start_date,'') as start_date,
           COALESCE(usrs_sub.end_date,'') as end_date,
+
+          DATE_FORMAT(usrs_sub.start_date,'%m/%d/%Y') as start_date_proper_format,
+          DATE_FORMAT(usrs_sub.end_date,'%m/%d/%Y') as end_date_proper_format,
           
           COALESCE(usrs_sub.is_subscribe,0) as is_subscribe,
           COALESCE(usrs_sub.is_expired,0) as is_expired,
           COALESCE(usrs_sub.is_extended,0) as is_extended,
+          
           COALESCE(usrs_sub.is_cancelled,0) as is_cancelled,
           COALESCE(usrs_sub.cancel_reason,'') as cancel_reason
 
