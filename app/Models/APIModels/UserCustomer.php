@@ -544,7 +544,7 @@ class UserCustomer extends Model
   }
 
   //subscription plan status
-  public function getSubscriptionPlanStatus($UserID){
+  public function getCustomerCurrentSubscriptionInfo($UserID){
    
    $TODAY = date("Y-m-d H:i:s");
    
