@@ -49,12 +49,14 @@ class ApiController extends Controller {
    
     $Misc = new Misc();
     $UserCustomer = new UserCustomer();
+    $Subscription = new Subscription();
 
     $response = "Failed";
     $responseMessage = "";
-
+    
+    $data['UserID']=0;
     $data['Platform'] = config('app.PLATFORM_ANDROID');
-
+   
     $data['EmailAddress'] =  $request->post('EmailAddress');
     $data['Password'] =  $request->post('Password');
 
@@ -93,13 +95,19 @@ class ApiController extends Controller {
          $getUserID=$info->user_ID;
          $getPassword= $info->password;
          $chkIsActive= $info->is_active;
-
+         
          //check bycrypt
          if (Hash::check($data['Password'], $getPassword)){
           
                 if($chkIsActive==1){
                   
                   //Subscription Plan
+                   $subscription_info=$UserCustomer->getSubscriptionPlanStatus($getUserID);
+                   if(isset($subscription_info)>0){
+                      $data['UserID']=$getUserID;
+                      $Subscription->checkSubscriptionStatus($data);
+                   }
+
                    $Subcription_Plan_Status=$UserCustomer->getSubscriptionPlanStatus($getUserID);
                    //News Letter Status
                    $Subcriber_Status=$UserCustomer->getNewsLettrSubsciberStatus($data['EmailAddress']);
