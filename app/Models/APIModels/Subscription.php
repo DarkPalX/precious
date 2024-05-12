@@ -182,7 +182,7 @@ class Subscription extends Model
            $OldNoOfDays=0;
            $NewNoOfDays=0;
 
-           $info=$this->getCustomerCurrentSubscriptionInfo($UserID);
+           $info=$UserCustomer->getCustomerCurrentSubscriptionInfo($UserID);
            if(isset($info)>0){
                 $StartDate=$info->start_date;
                 $EndDate=$info->end_date;
@@ -468,20 +468,10 @@ class Subscription extends Model
     return $CustomerSubscriptionPlanID;
   }
 
-  public function getCustomerCurrentSubscriptionInfo($CustomerID){
-      
-    $info = DB::table('users_subscriptions as usrs_sub') 
-         ->leftjoin('subscriptions as subs', 'subs.id', '=', 'usrs_sub.plan_id') 
-         ->whereRaw('usrs_sub.user_id=?',[$CustomerID])                   
-         ->where('usrs_sub.is_subscribe',"=",1)                                   
-         ->first();
-       
-    return $info;
-  }
-
   public function cancelSubscriptionPlan($data){
 
     $UserCustomer= new UserCustomer();
+
     $TODAY = date("Y-m-d H:i:s");
     $CurrentDay = date("Y-m-d"); 
      
@@ -495,7 +485,7 @@ class Subscription extends Model
 
     if($UserID>0){
 
-       $plan_info=$this->getCustomerCurrentSubscriptionInfo($UserID);
+       $plan_info=$UserCustomer->getCustomerCurrentSubscriptionInfo($UserID);
 
          if(isset($plan_info)>0){   
 
