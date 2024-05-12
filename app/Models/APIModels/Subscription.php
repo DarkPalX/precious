@@ -492,7 +492,7 @@ class Subscription extends Model
             $IsSubcscribe=$plan_info->is_subscribe; 
             $SubscriptionPlanID=$plan_info->plan_id;
 
-            $TitlePlan=$plan_info->title;                   
+            $TitlePlan=$plan_info->title_plan;                   
             $PlanNoDays=$plan_info->no_days;                       
 
             $EndDate=$plan_info->end_date; 
