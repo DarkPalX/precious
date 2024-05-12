@@ -884,7 +884,7 @@ public function checkCustomerLibraryBookExist(Request $request){
    $checkLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID']);
 
    if($checkLibraryBook){
-       $ResponseMessage ='Book is already in library section';
+       $responseMessage ='Book is already in library section';
        return response()->json([
          'response' => 'Success',         
          'is_allow_post' => true,         
@@ -895,7 +895,7 @@ public function checkCustomerLibraryBookExist(Request $request){
          return response()->json([
          'response' => 'Failed',         
          'is_allow_post' => false,         
-         'message' => $responseMessage,
+         'message' => "This book is not in listed in your library.",
         ]);  
     }
 
