@@ -351,7 +351,7 @@ class Subscription extends Model
     
      if($UserID>0){
 
-       $customer_info=$UserCustomer->getSubscriptionPlanStatus($UserID);
+       $customer_info=$UserCustomer->getCustomerCurrentSubscriptionInfo($UserID);
 
        if(isset($customer_info)>0){  
         
