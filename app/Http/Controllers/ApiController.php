@@ -881,7 +881,7 @@ public function checkCustomerLibraryBookExist(Request $request){
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
 
-   $checkLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])
+   $checkLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID']);
 
    if($checkLibraryBook){
        $ResponseMessage ='Book is already in library section';
