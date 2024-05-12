@@ -101,21 +101,23 @@ class ApiController extends Controller {
           
                 if($chkIsActive==1){
                   
-                  //Subscription Plan
-                   $subscription_info=$UserCustomer->getSubscriptionPlanStatus($getUserID);
-                   if(isset($subscription_info)>0){
-                      $data['UserID']=$getUserID;
-                      $Subscription->checkSubscriptionStatus($data);
-                   }
 
-                   $Subcription_Plan_Status=$UserCustomer->getSubscriptionPlanStatus($getUserID);
-                   //News Letter Status
-                   $Subcriber_Status=$UserCustomer->getNewsLettrSubsciberStatus($data['EmailAddress']);
+                  $data['UserID']=$getUserID;
+                  $Subscription->checkSubscriptionStatus($data);
+
+                  // //Subscription Plan
+                  //  $subscription_info=$UserCustomer->getSubscriptionPlanStatus($getUserID);
+                  //  if(isset($subscription_info)>0){
+                  //     $data['UserID']=$getUserID;
+                  //     $Subscription->checkSubscriptionStatus($data);
+                  //  }
+
+                  //   $Subcription_Plan_Status=$UserCustomer->getSubscriptionPlanStatus($getUserID);
+                  //  //News Letter Status
+                  //  $Subcriber_Status=$UserCustomer->getNewsLettrSubsciberStatus($data['EmailAddress']);
 
                     return response()->json([
-                      'data' => $info,
-                      'subscription_status' => $Subcription_Plan_Status,
-                      'subscriber_status' => $Subcriber_Status,                      
+                      'data' => $info,                      
                       'response' => 'Success',
                       'message' => "Naa tama ang password..",
                      ]);  
@@ -123,9 +125,7 @@ class ApiController extends Controller {
                 }else{
 
                     return response()->json([
-                      'data' => null,
-                      'subscription_status'=> null,
-                      'subscriber_status' => null,
+                      'data' => null,                      
                       'response' => 'Failed',
                       'message' => "Your account is in-acative. To activate, just email our admin & staff. ",                      
                    ]); 
@@ -134,18 +134,14 @@ class ApiController extends Controller {
              
          }else{
             return response()->json([
-                    'data' => null,
-                    'subscription_status'=> null,
-                    'subscriber_status' => null,
+                    'data' => null,                    
                     'response' => 'Failed',
                     'message' => "Invalid login credentials.",
                  ]); 
          }
      }else{
           return response()->json([
-                'data' => null,
-                'subscription_status'=> null,
-                'subscriber_status' => null,
+                'data' => null,                
                 'response' => 'Failed',                
                 'message' => "Invalid login credentials.",
              ]); 
@@ -1901,22 +1897,22 @@ public function checkSubscriptionStatus(Request $request){
     $responseMessage = "";
 
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
-    $data['UserID'] = $request->post('UserID');    
-     
-     $Info=$Subscription->getCustomerCurrentSubscriptionInfo($data);
-     if(isset($info)>0){
-          $data=$UserCustomer->getCustomerInformation($data['UserID']);   
+    $data['UserID'] = $request->post('UserID');     
+
+     $Subscription->checkSubscriptionStatus($data);  
+        
+     $info=$UserCustomer->getCustomerCurrentSubscriptionInfo($data);
+
+     if(isset($info)>0){          
           return response()->json([                  
-           'response' => $response,
-           'data' => $data,
-           'subscription' => $Info,
+          'response' => $response,
+           'data' => $info,                     
            'message' => "You have successfully check customer subscription plan."
          ]);   
      }else{
        return response()->json([
           'response' => $response,
-          'data' => null,
-          'subscription' => null,
+          'data' => null,          
           'message' => "Something wrong while checking subscription plan.",
        ]); 
      }
