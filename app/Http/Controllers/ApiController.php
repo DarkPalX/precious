@@ -1891,6 +1891,7 @@ public function checkSubscriptionStatus(Request $request){
     
     $Cart = new Cart();
     $UserCustomer = new UserCustomer();
+
     $Subscription = new Subscription();
     
     $response = "Failed";
@@ -1900,12 +1901,12 @@ public function checkSubscriptionStatus(Request $request){
     $data['UserID'] = $request->post('UserID');     
 
      $Subscription->checkSubscriptionStatus($data);  
-        
-     $info=$UserCustomer->getCustomerCurrentSubscriptionInfo($data);
+
+     $info=$UserCustomer->getCustomerCurrentSubscriptionInfo($data['UserID']);
 
      if(isset($info)>0){          
           return response()->json([                  
-          'response' => $response,
+           'response' => $response,
            'data' => $info,                     
            'message' => "You have successfully check customer subscription plan."
          ]);   
