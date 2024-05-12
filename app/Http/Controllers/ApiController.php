@@ -888,14 +888,14 @@ public function checkCustomerLibraryBookExist(Request $request){
        return response()->json([
          'response' => 'Success',         
          'is_allow_post' => true,         
-         'message' => $ResponseMessage,
+         'message' => $responseMessage,
         ]);    
 
     }else{
          return response()->json([
          'response' => 'Failed',         
          'is_allow_post' => false,         
-         'message' => $ResponseMessage,
+         'message' => $responseMessage,
         ]);  
     }
 
