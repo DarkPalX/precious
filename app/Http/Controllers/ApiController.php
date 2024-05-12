@@ -101,20 +101,8 @@ class ApiController extends Controller {
           
                 if($chkIsActive==1){
                   
-
                   $data['UserID']=$getUserID;
                   $Subscription->checkSubscriptionStatus($data);
-
-                  // //Subscription Plan
-                  //  $subscription_info=$UserCustomer->getSubscriptionPlanStatus($getUserID);
-                  //  if(isset($subscription_info)>0){
-                  //     $data['UserID']=$getUserID;
-                  //     $Subscription->checkSubscriptionStatus($data);
-                  //  }
-
-                  //   $Subcription_Plan_Status=$UserCustomer->getSubscriptionPlanStatus($getUserID);
-                  //  //News Letter Status
-                  //  $Subcriber_Status=$UserCustomer->getNewsLettrSubsciberStatus($data['EmailAddress']);
 
                     return response()->json([
                       'data' => $info,                      
