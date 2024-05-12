@@ -177,6 +177,11 @@ Route::post('/get-library-list',[
    'as'=> 'get-library-list'
 ]);
 
+Route::post('/check-library-book',[
+   'uses'=>'App\Http\Controllers\ApiController@checkCustomerLibraryBookExist',
+   'as'=> 'check-library-book'
+]);
+
 Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
    'as'=> 'add-to-favorites'
@@ -318,6 +323,11 @@ Route::post('/check-subscription-status',[
 Route::post('/cancel-subscription-plan',[
    'uses'=>'App\Http\Controllers\ApiController@cancelSubscriptionPlan',
    'as'=> 'cancel-subscription-plan'
+]);
+
+Route::post('/check-subscriber-status',[
+   'uses'=>'App\Http\Controllers\ApiController@checkSubscriberStatus',
+   'as'=> 'check-subscriber-status'
 ]);
 
 // CONTACT US FORM================================
