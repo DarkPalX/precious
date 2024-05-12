@@ -568,7 +568,7 @@ class UserCustomer extends Model
           COALESCE(usrs_sub.is_subscribe,0) as is_subscribe,
           COALESCE(usrs_sub.is_expired,0) as is_expired,
           COALESCE(usrs_sub.is_extended,0) as is_extended,
-          
+
           COALESCE(usrs_sub.is_cancelled,0) as is_cancelled,
           COALESCE(usrs_sub.cancel_reason,'') as cancel_reason
 
@@ -578,16 +578,6 @@ class UserCustomer extends Model
           ->where('usrs_sub.is_subscribe',"=",1)
           
           ->first();
-
-          if(isset($info)<=0){
-
-                //Dalete All Subscribed Read Books after Cancelled Subscription
-                DB::table('subscribed_books')
-                  ->where('user_id',$UserID)                  
-                  ->update([                                  
-                    'deleted_at' => $TODAY
-                ]);  
-          }
  
     return  $info;
  }
