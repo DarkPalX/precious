@@ -25,14 +25,25 @@ class RecaptchaRule implements Rule
      * @param  mixed  $value
      * @return bool
      */
-    public function passes($attribute, $value)
-    {
-        $secret = Setting::info()->google_recaptcha_secret;
-        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secret."&response=".$value);
-        $response = json_decode($response, true);
+    
+     public function passes($attribute, $value)
+     {
+         $response = Http::get("https://www.google.com/recaptcha/api/siteverify",[
+             'secret' => env('RECAPTCHA_SECRET_KEY'),
+             'response' => $value
+         ]);
+           
+         return $response->json()["success"];
+     }
+     
+    // public function passes($attribute, $value)
+    // {
+    //     $secret = Setting::info()->google_recaptcha_secret;
+    //     $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secret."&response=".$value);
+    //     $response = json_decode($response, true);
 
-        return isset($response['success']) && $response['success'] == true;
-    }
+    //     return isset($response['success']) && $response['success'] == true;
+    // }
 
     /**
      * Get the validation error message.
