@@ -66,7 +66,7 @@
    
    <!-- height spacer -->
   <div style="height: 10px;"></div>
-  
+
   <div id="viewer" class="spreads" style="font-size:30px;"></div>
     
   <!-- height spacer -->
@@ -91,13 +91,13 @@
               </div>
             </div>
 
-               <div class="row" style="background:#2e3c5f;padding-top: 5px;padding-bottom: 5px;">
+            <!--    <div class="row" style="background:#2e3c5f;padding-top: 5px;padding-bottom: 5px;">
                     <div class="container">
-                          <h2 class="mb-1 text-white" style="font-size: 15px;color: #fff !important;text-align: center;font-weight: bold;">
+                          <h2 class="mb-1 text-white" style="font-size: 15px;color: #fff !important;text-align: center;">
                             Set Theme
                           </h2>
                     </div>
-                </div>
+                </div> -->
           </div>
       </div>
 
@@ -122,17 +122,17 @@
                         </td>
                       </tr>  
                     
-                      <tr>
+                 <!--      <tr>
                         <td>
                           <div class="row" style="background:#2e3c5f;padding-top: 7px;padding-bottom: 7px;">
                               <div class="container">
-                                    <h2 class="mb-1 text-white" style="font-size: 15px;color: #fff !important;text-align: center;font-weight: bold;">
+                                    <h2 class="mb-1 text-white" style="font-size: 15px;color: #fff !important;text-align: center;">
                                       Set Font Size
                                     </h2>
                               </div>
                           </div>
                         </td>
-                      </tr> 
+                      </tr> --> 
 
 
                      <tr style="border-bottom:1px dashed gray;">
@@ -167,37 +167,37 @@
                         </td>
                       </tr> 
 
-
+<!-- 
                        <tr>
                         <td>
                           <div class="row" style="background:#2e3c5f;padding-top: 7px;padding-bottom: 7px;">
                               <div class="container">
-                                    <h2 class="mb-1 text-white" style="font-size: 15px;color: #fff !important;text-align: center;font-weight: bold;">
+                                    <h2 class="mb-1 text-white" style="font-size: 15px;color: #fff !important;text-align: center;">
                                       Set Font Style
                                     </h2>
                               </div>
                           </div>
                         </td>
-                      </tr> 
+                      </tr>  -->
 
 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="font_helvetica" style="vertical-align: middle;display: flex;cursor: pointer">
-                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-style.png" alt="font-helvetica" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold;font-family: Arial, Helvetica, sans-serif;">Helvetica Style</span>
+                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-style.png" alt="font-helvetica" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;font-family: Arial, Helvetica, sans-serif;">Helvetica Style</span>
                         </td>
                       </tr>
 
 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="font_times" style="vertical-align: middle;display: flex;cursor: pointer">
-                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-style.png" alt="font-arial" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold;font-family: Times New Roman, Times, serif;">Times Roman Style</span>
+                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-style.png" alt="font-arial" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;font-family: Times New Roman, Times, serif;">Times Roman Style</span>
                         </td>
                       </tr>
 
 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="font_lucida" style="vertical-align: middle;display: flex;cursor: pointer">
-                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-style.png" alt="font-arial" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold;font-family: Lucida Console, Courier New, monospace;">Courier New Style</span>
+                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-style.png" alt="font-arial" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;font-family: Lucida Console, Courier New, monospace;">Courier New Style</span>
                         </td>
                       </tr>  
 
@@ -475,7 +475,7 @@
     document.getElementById("CartPanel").style.right = "0px";
    }
    function closeSidePanelNav() {
-    document.getElementById("CartPanel").style.right = "-315px";
+    document.getElementById("CartPanel").style.right = "-300px";
    }
   </script>
 
