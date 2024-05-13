@@ -16,6 +16,7 @@ use Input;
 use Image;
 use DB;
 
+use App\Models\APIModels\Order;
 use App\Models\APIModels\Misc;
 use App\Models\APIModels\UserCustomer;
 
@@ -232,100 +233,118 @@ class Subscription extends Model
 
       }
      
-    //save to sales header
-    $OrderNo=$Misc->getNextOrderNumberFormat();      
-    $SalesHeaderID = DB::table('ecommerce_sales_headers')
-        ->insertGetId([                                            
-          'user_id' => $UserID,              
-          'order_number' => $OrderNo,                                            
-          'order_source' => $Platform,                                            
-          'customer_name' => $CustomerName, 
-          'customer_email' => $CustomerEmailAddress, 
-          'customer_contact_number' => $CustomerMobileNo, 
-          'customer_address' => $CompleteAddress, 
-          'customer_delivery_adress' => $CompleteDeliveryAddress, 
-          'customer_delivery_zip' => $ZipCode,                           
-          'gross_amount' => $GrossAmount, 
-          'net_amount' => $NetAmount, 
-          'discount_amount' => 0, 
-          'gross_amount' => $GrossAmount, 
-          'payment_method' => $PaymentMethod,
-          'payment_status' => $PaymentStatus, 
-          'ecredit_amount' => $UsedECredit, 
-          'delivery_type' => 'd2d', 
-          'delivery_status' => 'Delivered', 
-          'delivery_fee_amount' => 0, 
-          'delivery_fee_discount' => 0, 
-          'status' => 'Active', 
-          'created_at' => $TODAY             
-        ]);
+          //save to sales header
+          $OrderNo=$Misc->getNextOrderNumberFormat();      
+          $SalesHeaderID = DB::table('ecommerce_sales_headers')
+              ->insertGetId([                                            
+                'user_id' => $UserID,              
+                'order_number' => $OrderNo,                                            
+                'order_source' => $Platform,                                            
+                'customer_name' => $CustomerName, 
+                'customer_email' => $CustomerEmailAddress, 
+                'customer_contact_number' => $CustomerMobileNo, 
+                'customer_address' => $CompleteAddress, 
+                'customer_delivery_adress' => $CompleteDeliveryAddress, 
+                'customer_delivery_zip' => $ZipCode,                           
+                'gross_amount' => $GrossAmount, 
+                'net_amount' => $NetAmount, 
+                'discount_amount' => 0, 
+                'gross_amount' => $GrossAmount, 
+                'payment_method' => $PaymentMethod,
+                'payment_status' => $PaymentStatus, 
+                'ecredit_amount' => $UsedECredit, 
+                'delivery_type' => 'd2d', 
+                'delivery_status' => 'Delivered', 
+                'delivery_fee_amount' => 0, 
+                'delivery_fee_discount' => 0, 
+                'status' => 'Active', 
+                'created_at' => $TODAY             
+              ]);
 
 
         if($SalesHeaderID>0 && $User_Subscription_ID>0){
 
-      //PAYMENT
-      $ReceiptNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
-      $PaymentHeaderID = DB::table('ecommerce_sales_payments')
-         ->insertGetId([                                            
-          'sales_header_id' => $SalesHeaderID,              
-          'payment_type' => $PaymentMethod,                                            
-          'amount' => $NetAmount,                                            
-          'status' => $PaymentStatus, 
-          'payment_date' => $PaymentDate, 
-          'receipt_number' => $ReceiptNo,
-          'created_by' => $UserID,
-          'created_at' => $TODAY             
-        ]); 
+            //PAYMENT
+            $ReceiptNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
+            $PaymentHeaderID = DB::table('ecommerce_sales_payments')
+               ->insertGetId([                                            
+                'sales_header_id' => $SalesHeaderID,              
+                'payment_type' => $PaymentMethod,                                            
+                'amount' => $NetAmount,                                            
+                'status' => $PaymentStatus, 
+                'payment_date' => $PaymentDate, 
+                'receipt_number' => $ReceiptNo,
+                'created_by' => $UserID,
+                'created_at' => $TODAY             
+              ]); 
 
 
-        // SAVE TO SALES DETAIL
-        $SalesDetailID = DB::table('ecommerce_sales_details')
-            ->insertGetId([                                            
-              'sales_header_id' => $SalesHeaderID,              
-              'product_id' => 0,        
-              'subscription_plan_id' => $SubscriptionPlanID,              
-              'product_name' => $TitlePlan, 
-              'product_category' =>0,              
-              'price' => $SubTotal,              
-              'qty' => 1, 
-              'uom' => '', 
-              'tax_amount' =>0,              
-              'promo_id' =>0,  
-              'promo_description' =>'',  
-              'tax_amount' =>0,  
-              'discount_amount' => '0',                        
-              'gross_amount' => $GrossAmount,                                                        
-              'net_amount' => $NetAmount,
-              'created_by' => $UserID,                        
-              'created_at' => $TODAY             
-          ]); 
+              // SAVE TO SALES DETAIL
+              $SalesDetailID = DB::table('ecommerce_sales_details')
+                  ->insertGetId([                                            
+                    'sales_header_id' => $SalesHeaderID,              
+                    'product_id' => 0,        
+                    'subscription_plan_id' => $SubscriptionPlanID,              
+                    'product_name' => $TitlePlan, 
+                    'product_category' =>0,              
+                    'price' => $SubTotal,              
+                    'qty' => 1, 
+                    'uom' => '', 
+                    'tax_amount' =>0,              
+                    'promo_id' =>0,  
+                    'promo_description' =>'',  
+                    'tax_amount' =>0,  
+                    'discount_amount' => '0',                        
+                    'gross_amount' => $GrossAmount,                                                        
+                    'net_amount' => $NetAmount,
+                    'created_by' => $UserID,                        
+                    'created_at' => $TODAY             
+                ]); 
 
-       //EWALLET PAYMENT METHOD
-       if($PaymentMethod=='EWallet'){
-             if($UsedECredit>0){
+             //EWALLET PAYMENT METHOD
+             if($PaymentMethod=='EWallet'){
+                   if($UsedECredit>0){
 
-                //Save to EWallet Credit History
-                 $BalanceEWalletCredit=$CurrentEWalletCredit-$UsedECredit;
-                   $CreditBalanceID = DB::table('ecredits')
-                    ->insertGetId([                                            
-                      'user_id' => $UserID,              
-                      'used_credits' => $UsedECredit,                                              
-                      'balance' => $BalanceEWalletCredit,  
-                      'remarks' => 'Used '.$UsedECredit.' e-credit as payment for subscription with order no. '.$OrderNo,
-                      'created_at' => $TODAY             
-                  ]); 
-            
-               // Update Customer EWallet     
-                 DB::table('users')
-                  ->where('id',$UserID)
-                  ->update([                              
-                    'ecredits' => $BalanceEWalletCredit,                                                            
-                    'updated_at' => $TODAY
-                ]);  
-                         
-             }
-         }  
-     }
+                      //Save to EWallet Credit History
+                       $BalanceEWalletCredit=$CurrentEWalletCredit-$UsedECredit;
+                         $CreditBalanceID = DB::table('ecredits')
+                          ->insertGetId([                                            
+                            'user_id' => $UserID,              
+                            'used_credits' => $UsedECredit,                                              
+                            'balance' => $BalanceEWalletCredit,  
+                            'remarks' => 'Used '.$UsedECredit.' e-credit as payment for subscription with order no. '.$OrderNo,
+                            'created_at' => $TODAY             
+                        ]); 
+                  
+                     // Update Customer EWallet     
+                       DB::table('users')
+                        ->where('id',$UserID)
+                        ->update([                              
+                          'ecredits' => $BalanceEWalletCredit,                                                            
+                          'updated_at' => $TODAY
+                      ]);  
+                               
+                   }
+               }  
+           }
+
+         //SEND EMAIL NOTIF
+         if($SalesHeaderID>0){
+            $Order= new Order();
+            $OrderInfo= $Order->getOrderInfo($SalesHeaderID);        
+              if($OrderInfo->SalesHeaderID>0){
+                  $param['OrderID']=$OrderInfo->SalesHeaderID;
+                  $param['EmailAddress']=$OrderInfo->customer_email;
+                  $param["MobileNo"] = $OrderInfo->customer_contact_number;
+                  $param['OrderNo']=$OrderInfo->order_number;        
+                  $param['OrderInfo']=$OrderInfo;
+                  $param['OrderItem']=$Order->getOrderItemList($SalesHeaderID);
+                  
+                  $Email = new Email();
+                  $Email->SendOrderReceivedEmail($param);    
+              }
+
+           }
 
    }
        
