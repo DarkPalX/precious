@@ -162,7 +162,7 @@
 	</div><!-- #cookie end -->
 	
 
-	/* FOR CAPTCHA */
+	{{-- /* FOR CAPTCHA */ --}}
 
 	@include('theme.layouts.components.scripts')
 	
@@ -176,7 +176,7 @@
 		gtag('config', '{{ Setting::info()->google_analytics }}');
 	</script> --}}
 
-	/* FOR ANALYTICS */
+	{{-- /* FOR ANALYTICS */ --}}
 
 	<!-- Google tag (gtag.js) -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-HR35693H16"></script>
