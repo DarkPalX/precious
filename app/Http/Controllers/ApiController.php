@@ -1567,6 +1567,27 @@ public function getAllBookDetailsCatalogueList(Request $request){
     }
 }
 
+  public function sendCustomerOrderHistory(Request $request){
+
+  $Order = new Order();
+
+  $response = "Failed";
+  $responseMessage = "";
+
+  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+  $data['UserID'] = $request->post('UserID');
+
+  $data['Status'] = '';
+  $data['SearchText'] = '';
+
+  $data["PageNo"] = 0;
+  $data["Limit"] = 0;
+
+  $result=$Order->getOrderList($data);  
+
+  return response()->json($result); 
+  }
+
  public function getCustomerOrderDetails(Request $request){
 
   $Order = new Order();
