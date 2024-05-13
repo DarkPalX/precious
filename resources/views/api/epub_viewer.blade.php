@@ -234,44 +234,42 @@
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){  
 
-         rendition.themes.select("dark");          
-          rendition.themes.register("dark_mode_color", {
+        rendition.themes.select("dark");     
+        rendition.themes.register("dark_color", {
               "p": {                   
                 "color": "white !important",
               },
         });
-          rendition.themes.select("dark_mode_color");  
+       rendition.themes.select("dark_color");        
 
-        // // rendition.themes.default({ "p": { "color": "white !important"}})
+          // rendition.themes.default({ "p": { "color": "white !important"}})
 
       });
 
     var light_theme = document.getElementById("light-theme");    
     light_theme.addEventListener("click", function(e){    
 
-        rendition.themes.select("light");      
-          rendition.themes.register("light_mode_color", {
+        rendition.themes.select("light");              
+        rendition.themes.register("light_color", {
               "p": {                   
                 "color": "black !important",
               },
         });
-          rendition.themes.select("light_mode_color");      
-
-        // // rendition.themes.default({ "p": { "color": "black !important"}})
+       rendition.themes.select("light_color");              
+        //rendition.themes.default({ "p": { "color": "black !important"}})
       });
 
      var septia_theme = document.getElementById("septia-theme");    
      septia_theme.addEventListener("click", function(e){    
 
-        rendition.themes.select("septia");         
-        rendition.themes.register("septia_mode_color", {
+        rendition.themes.select("septia");               
+              rendition.themes.register("septia_color", {
               "p": {                   
                 "color": "#704214 !important",
               },
         });
-          rendition.themes.select("septia_mode_color");    
-
-        // rendition.themes.default({ "p": { "color": "#704214  !important"}})
+       rendition.themes.select("septia_color");  
+        //rendition.themes.default({ "p": { "color": "#704214  !important"}})
       });
       
      // End Theme=============
