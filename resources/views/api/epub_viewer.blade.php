@@ -54,23 +54,18 @@
   
 @if($epub_file_exist)
   
-  <!-- height spacer -->
-  <div style="height: 10px;background: #2e3c5f;"></div>
-
-  <div style="display:flex;position: fixed; top: 0px; width: 100%;background: #2e3c5f;height: 40px;z-index: 99999;">
+  
+  <div style="display:flex;top: 0px;right:0px;background: #2e3c5f;height: 40px;z-index: 99999;">
     <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>
-    <div style="padding-right: 20px;cursor: pointer;width: 2%; display: contents;padding-left: 4px; color: #fff;">        
+        <div style="padding-right: 20px;cursor: pointer;width: 2%; display: contents;padding-left: 4px; color: #fff;">        
         <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
     </div>
   </div>
    
-   <!-- height spacer -->
-  <div style="height: 10px;"></div>
-
   <div id="viewer" class="spreads" style="font-size:30px;"></div>
     
   <!-- height spacer -->
-  <div style="height: 10px;"></div>
+  <div style="height: 40px;"></div>
   
   <div style="height:44px;position: fixed;z-index: 999;bottom:0px;text-align:center;width:100%;background: #0c2136;">
         <a id="prev" href="#prev" class="arrow" style="font-size:23px;color:white;padding-right:20px;"><span style="font-size:15px;">Prev </span>‹</a>
@@ -237,17 +232,20 @@
    // Set Theme
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){      
-        rendition.themes.select("dark");      
+        rendition.themes.select("dark"); 
+        $("#viewer").css("background-color","black");      
       });
 
     var light_theme = document.getElementById("light-theme");    
     light_theme.addEventListener("click", function(e){    
         rendition.themes.select("light");      
+        $("#viewer").css("background-color","white"); 
       });
 
      var septia_theme = document.getElementById("septia-theme");    
      septia_theme.addEventListener("click", function(e){    
-        rendition.themes.select("septia");      
+        rendition.themes.select("septia");     
+         $("#viewer").css("background-color","#f4eacd"); 
       });
       
      // End Theme=============
