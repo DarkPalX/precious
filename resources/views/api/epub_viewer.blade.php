@@ -55,7 +55,7 @@
 @if($epub_file_exist)
   
   
-  <div style="display:flex;top: 0px;right:0px;background: #2e3c5f;height: 40px;z-index: 99999;">
+  <div style="display:flex;top: 0px;right:0px;background: lightgray;height: 40px;z-index: 99999;">
     <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>
         <div style="padding-right: 20px;cursor: pointer;width: 2%; display: contents;padding-left: 4px; color: #fff;">        
         <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
@@ -73,7 +73,7 @@
   </div>
 
   <div id="CartPanel" class="sidenav" style="right: -315px;width: 260px;">
-      <div id="SidePanelCartDetail" class="header-wrapper sticky-area" style="display: block; background: #2e3c5f !important;padding-top: 10px;">
+      <div id="SidePanelCartDetail" class="header-wrapper sticky-area" style="display: block; background: lightgray !important;padding-top: 10px;">
         <div class="container" style="padding-left: 5px;">
             <div class="topbar d-flex" style="border-bottom: 1.2px solid rgba(255,255,255,.5);">
               <div class="topbar-item-right d-flex ">
@@ -223,6 +223,7 @@
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: "100%",
+      spread: "always"
       flow: "scrolled-doc"
     });
    
