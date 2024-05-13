@@ -270,6 +270,10 @@ Route::post('/get-order-details',[
    'as'=> 'get-order-details'
 ]);
 
+Route::post('/send-order-history-list',[
+   'uses'=>'App\Http\Controllers\ApiController@sendCustomerOrderHistory',
+   'as'=> 'send-order-history-list'
+]);
 
 // REVIEW & COMMENT===============================
 Route::post('/get-review-list',[
