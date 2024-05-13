@@ -28,6 +28,7 @@
     padding-top:30px;    
    }
   .spreads{
+      padding-top:20px;
       padding-bottom:20px;
    }
 
