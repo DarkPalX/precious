@@ -167,26 +167,26 @@
 	@include('theme.layouts.components.scripts')
 	
 	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id={{ Setting::info()->google_analytics }}"></script>
+	{{-- <script async src="https://www.googletagmanager.com/gtag/js?id={{ Setting::info()->google_analytics }}"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
 
 		gtag('config', '{{ Setting::info()->google_analytics }}');
-	</script>
+	</script> --}}
 
 	/* FOR ANALYTICS */
 
-	{{-- <!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-D9LMZPFTGV"></script>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-HR35693H16"></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
 
-		gtag('config', 'G-D9LMZPFTGV');
-	</script> --}}
+		gtag('config', 'G-HR35693H16');
+	</script>
 
 </body>
 </html>
