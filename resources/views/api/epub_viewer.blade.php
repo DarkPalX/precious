@@ -60,7 +60,9 @@
         <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
     </div>
   </div>
-  
+   
+   <!-- height spacer -->
+  <div style="height: 10px;"></div>
   <div id="viewer" class="spreads" style="font-size:30px;"></div>
     
   
