@@ -162,7 +162,31 @@
 	</div><!-- #cookie end -->
 	
 
+	/* FOR CAPTCHA */
+
 	@include('theme.layouts.components.scripts')
+	
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id={{ Setting::info()->google_analytics }}"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', '{{ Setting::info()->google_analytics }}');
+	</script>
+
+	/* FOR ANALYTICS */
+
+	{{-- <!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-D9LMZPFTGV"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-D9LMZPFTGV');
+	</script> --}}
 
 </body>
 </html>

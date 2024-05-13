@@ -54,6 +54,13 @@
                             @endforeach
                         @endif
                     </div> --}}
+                    
+                    <div class="form-group">
+                        <div class="g-recaptcha recaptcha mt-2" name="g-recaptcha-response" id="g-recaptcha-response" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                        @if ($errors->has('g-recaptcha-response'))
+                            <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                        @endif
+                    </div>
 
                     <div class="row g-2">
                         <div class="col-md-6">
@@ -71,6 +78,8 @@
                     </div>
 
                 </form>
+                {{-- captcha script --}}
+                <script src="https://www.google.com/recaptcha/api.js" async defer></script>
             </div>
 
         </div>
