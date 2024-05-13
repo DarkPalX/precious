@@ -77,7 +77,7 @@
         <a id="next" href="#next" class="arrow"style="font-size:23px;color:white;padding-left:20px;">›<span style="font-size:15px;"> Next</span></a>
   </div>
 
-  <div id="CartPanel" class="sidenav" style="right: -315px;">
+  <div id="CartPanel" class="sidenav" style="right:-280px;">
       <div id="SidePanelCartDetail" class="header-wrapper sticky-area" style="display: block; background: #2e3c5f !important;padding-top: 10px;">
         <div class="container" style="padding-left: 5px;">
             <div class="topbar d-flex" style="border-bottom: 1.2px solid rgba(255,255,255,.5);">
@@ -475,7 +475,7 @@
     document.getElementById("CartPanel").style.right = "0px";
    }
    function closeSidePanelNav() {
-    document.getElementById("CartPanel").style.right = "-300px";
+    document.getElementById("CartPanel").style.right = "-280px";
    }
   </script>
 
