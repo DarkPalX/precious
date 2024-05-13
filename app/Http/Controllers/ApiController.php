@@ -1515,7 +1515,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $data['SearchText'] = '';
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 0;
+  $data["Limit"] = 20;
 
   $result=$Order->getOrderList($data);  
 
