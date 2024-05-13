@@ -108,7 +108,7 @@
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="light-theme" style="vertical-align: middle;display: flex;cursor: pointer">
-                            <img  src="https://www.api.ebooklat.phr.com.ph/public/api/img/light-mode.png" alt="light-mode" style="width: 40px;height: 40;"> <span style="padding-left:20px;position: relative;top: 10px;">Light/Default Theme</span>
+                            <img  src="https://www.api.ebooklat.phr.com.ph/public/api/img/light-mode.png" alt="light-mode" style="width: 40px;height: 40;"> <span style="padding-left:20px;position: relative;top: 10px;">Light Theme</span>
                         </td>
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
@@ -233,17 +233,37 @@
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){      
         rendition.themes.select("dark");         
-        rendition.themes.default({ "p": { "color": "white !important"}})
+          rendition.themes.register("dark_mode_color", {
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+          rendition.themes.select("dark_mode_color");  
+        // rendition.themes.default({ "p": { "color": "white !important"}})
       });
 
     var light_theme = document.getElementById("light-theme");    
     light_theme.addEventListener("click", function(e){    
-        rendition.themes.select("light");              
+        rendition.themes.select("light");
+          rendition.themes.register("light_mode_color", {
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+          rendition.themes.select("light_mode_color");               
+        // rendition.themes.default({ "p": { "color": "black !important"}})
       });
 
      var septia_theme = document.getElementById("septia-theme");    
      septia_theme.addEventListener("click", function(e){    
-        rendition.themes.select("septia");              
+        rendition.themes.select("septia"); 
+        rendition.themes.register("septia_mode_color", {
+              "p": {                   
+                "color": "#704214 !important",
+              },
+        });
+          rendition.themes.select("septia_mode_color");              
+        // rendition.themes.default({ "p": { "color": "#704214  !important"}})
       });
       
      // End Theme=============
