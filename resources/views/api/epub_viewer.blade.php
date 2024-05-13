@@ -77,7 +77,7 @@
         <a id="next" href="#next" class="arrow"style="font-size:23px;color:white;padding-left:20px;">›<span style="font-size:15px;"> Next</span></a>
   </div>
 
-  <div id="CartPanel" class="sidenav" style="right: -315px;width: 285px;">
+  <div id="CartPanel" class="sidenav" style="right: -315px;width: 260px;">
       <div id="SidePanelCartDetail" class="header-wrapper sticky-area" style="display: block; background: #2e3c5f !important;padding-top: 10px;">
         <div class="container" style="padding-left: 5px;">
             <div class="topbar d-flex" style="border-bottom: 1.2px solid rgba(255,255,255,.5);">
@@ -85,7 +85,7 @@
                   <div class="item">
                     <div style="display:flex;">
                     <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/close-button.png" onclick="closeSidePanelNav()" style="color:#fff;font-family: work sans,sans-serif;cursor: pointer;width: 30px;height: 30px;">  
-                    <span style="color:#fff;padding-left: 50px;">ePub Reader Settings</span>
+                    <span style="color:#fff;padding-left: 50px;">:: Settings ::</span>
                     </div>
                   </div>
               </div>
@@ -108,17 +108,17 @@
 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="dark-theme" style="vertical-align: middle;display: flex; background: black;color: white;cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/dark-mode.png" alt="dark-mode" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Dark Theme</span>
+                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/dark-mode.png" alt="dark-mode" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;">Dark Theme</span>
                         </td>
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="light-theme" style="vertical-align: middle;display: flex;background: white;color: black;cursor: pointer">
-                            <img  src="https://www.api.ebooklat.phr.com.ph/public/api/img/light-mode.png" alt="light-mode" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Light/Default Theme</span>
+                            <img  src="https://www.api.ebooklat.phr.com.ph/public/api/img/light-mode.png" alt="light-mode" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;">Light/Default Theme</span>
                         </td>
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="septia-theme" style="vertical-align: middle;display: flex;background: #f4eacd;color: #704214;cursor: pointer;">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/septia-mode.png" alt="septia-mode" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Sepia Theme</span>
+                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/septia-mode.png" alt="septia-mode" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;">Sepia Theme</span>
                         </td>
                       </tr>  
                     
@@ -137,33 +137,33 @@
 
                      <tr style="border-bottom:1px dashed gray;">
                         <td id="font_10" style="vertical-align: middle;display: flex; cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="extra-small-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Extra Small Font Size</span>
+                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="extra-small-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;">Extra Small Font Size</span>
                         </td>
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="font_13" style="vertical-align: middle;display: flex; cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="small-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Small Font Size</span>
+                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="small-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;">Small Font Size</span>
                         </td>
                       </tr> 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="font_16" style="vertical-align: middle;display: flex; cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="defualt-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Default Font Size</span>
+                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="defualt-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;">Default Font Size</span>
                         </td>
                       </tr> 
                        <tr style="border-bottom:1px dashed gray;">
                         <td id="font_18" style="vertical-align: middle;display: flex; cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="medium-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Medium Font Size</span>
+                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="medium-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;">Medium Font Size</span>
                         </td>
                       </tr>
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="font_20" style="vertical-align: middle;display: flex;cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="large-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Large Font Size</span>
+                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="large-font" style="width: 50px;"> <span style="padding-left:20px;position: relative;top: 10px;">Large Font Size</span>
                         </td>
                       </tr>
 
                       <tr style="border-bottom:1px dashed gray;">
                         <td id="font_25" style="vertical-align: middle;display: flex;cursor: pointer">
-                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="extra-large-font" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;font-weight: bold">Extra Large Font Size</span>
+                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="extra-large-font" style="width: 50px;">  <span style="padding-left:20px;position: relative;top: 10px;">Extra Large Font Size</span>
                         </td>
                       </tr> 
 
