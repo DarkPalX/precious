@@ -233,6 +233,7 @@
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){      
         rendition.themes.select("dark");         
+        rendition.themes.default({ "p": { "color": "white !important"}})
       });
 
     var light_theme = document.getElementById("light-theme");    
