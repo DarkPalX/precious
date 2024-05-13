@@ -223,7 +223,7 @@
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: "100%",
-      spread: "always"
+      flow: "scrolled-doc"
     });
    
     rendition.display(currentSectionIndex);
@@ -232,20 +232,17 @@
    // Set Theme
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){      
-        rendition.themes.select("dark"); 
-        $("#viewer").css("background-color","black");      
+        rendition.themes.select("dark");         
       });
 
     var light_theme = document.getElementById("light-theme");    
     light_theme.addEventListener("click", function(e){    
-        rendition.themes.select("light");      
-        $("#viewer").css("background-color","white"); 
+        rendition.themes.select("light");              
       });
 
      var septia_theme = document.getElementById("septia-theme");    
      septia_theme.addEventListener("click", function(e){    
-        rendition.themes.select("septia");     
-         $("#viewer").css("background-color","#f4eacd"); 
+        rendition.themes.select("septia");              
       });
       
      // End Theme=============
