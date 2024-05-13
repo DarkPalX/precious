@@ -24,15 +24,15 @@
     z-index:999;
     width: 98%;
    }
-   #viewer{
+
+   /*#viewer{
     padding-top:30px;    
    }
   .spreads{
       padding-top:20px;
       padding-bottom:20px;
-   }
+   }*/
 
-   
 .sidenav {
     height: 100%;
     width: 310px;
