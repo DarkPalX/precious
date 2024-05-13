@@ -27,10 +27,10 @@
    #viewer{
     padding-top:30px;    
    }
- /*  .spreads{
+  .spreads{
       padding-bottom:20px;
    }
-*/
+
    
 .sidenav {
     height: 100%;
@@ -56,7 +56,7 @@
   <div style="display:flex;position: fixed; width: 100%;background: #2e3c5f;height: 40px;z-index: 99999;">
     <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>
     <div style="padding-right: 20px;cursor: pointer;width: 2%; display: contents;padding-left: 4px; color: #fff;">        
-        <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/cog-settings.png" onclick="openSidePanelNav()" style="width: 40px;">                
+        <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
     </div>
   </div>
   
