@@ -213,6 +213,7 @@
 
 
   <script>
+    var option=0;
     var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
     var currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
@@ -231,38 +232,45 @@
 
    // Set Theme
     var dark_theme = document.getElementById("dark-theme");
-    dark_theme.addEventListener("click", function(e){      
-        rendition.themes.select("dark");         
+    dark_theme.addEventListener("click", function(e){  
+
+         rendition.themes.select("dark");          
           rendition.themes.register("dark_mode_color", {
               "p": {                   
                 "color": "white !important",
               },
         });
           rendition.themes.select("dark_mode_color");  
-        // rendition.themes.default({ "p": { "color": "white !important"}})
+
+        // // rendition.themes.default({ "p": { "color": "white !important"}})
+
       });
 
     var light_theme = document.getElementById("light-theme");    
     light_theme.addEventListener("click", function(e){    
-        rendition.themes.select("light");
+
+        rendition.themes.select("light");      
           rendition.themes.register("light_mode_color", {
               "p": {                   
-                "color": "white !important",
+                "color": "black !important",
               },
         });
-          rendition.themes.select("light_mode_color");               
-        // rendition.themes.default({ "p": { "color": "black !important"}})
+          rendition.themes.select("light_mode_color");      
+
+        // // rendition.themes.default({ "p": { "color": "black !important"}})
       });
 
      var septia_theme = document.getElementById("septia-theme");    
      septia_theme.addEventListener("click", function(e){    
-        rendition.themes.select("septia"); 
+
+        rendition.themes.select("septia");         
         rendition.themes.register("septia_mode_color", {
               "p": {                   
                 "color": "#704214 !important",
               },
         });
-          rendition.themes.select("septia_mode_color");              
+          rendition.themes.select("septia_mode_color");    
+
         // rendition.themes.default({ "p": { "color": "#704214  !important"}})
       });
       
@@ -370,16 +378,14 @@
     book.ready.then(() => {
 
       var next = document.getElementById("next");
-
-      next.addEventListener("click", function(e){
+      next.addEventListener("click", function(e){        
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
-        e.preventDefault();
+        e.preventDefault();      
       }, false);
 
       var prev = document.getElementById("prev");
       prev.addEventListener("click", function(e){
-        book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();
-        e.preventDefault();
+        book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();       
       }, false);
 
       var keyListener = function(e){
