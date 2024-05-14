@@ -64,7 +64,8 @@ Route::get('/phpinfo', function () {
     //
 
     // Sitemap
-        Route::get('/sitemap', [SitemapController::class, 'index'])->name('sitemap');
+        Route::get('/sitemap', [FrontController::class, 'sitemap'])->name('sitemap');
+        // Route::get('/sitemap', [SitemapController::class, 'index'])->name('sitemap');
     // 
 
 //
