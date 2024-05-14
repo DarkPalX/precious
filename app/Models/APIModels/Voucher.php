@@ -59,7 +59,7 @@ class Voucher extends Model
       ->where("coup.location","=",null)                     
       ->where("coup.deleted_at","=",null)
       ->where("coup.activation_type","!=",'manual')
-      ->where("coup.applicable_product_type","=",'ebook');
+      ->where("coup.applicable_product_type","!=",'physical');
       
     //   ->orWhereRaw("CONCAT('|',coup.scope_customer_id,'|') LIKE CONCAT('%|',". $SearchText.",'|%')");
 
