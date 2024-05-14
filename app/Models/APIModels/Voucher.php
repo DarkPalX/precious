@@ -102,6 +102,7 @@ class Voucher extends Model
           COALESCE(coup.description,'') as coupon_description,
           COALESCE(coup.terms_and_conditions,'') as terms_and_conditions,
           
+          COALESCE(coup.applicable_product_type,'') as applicable_product_type,
           COALESCE(coup.customer_scope,'') as customer_scope,
           COALESCE(coup.scope_customer_id,'') as scope_customer_id,
           
