@@ -1583,7 +1583,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
-  $data['OrderList']=$Order->getOrderList($data);  
+  $data['OrderItemList']=$Order->getOrderHistoryItemList($data['UserID']);   
 
   $Email = new Email();
   $Email->SendOrderHistoryEmail($data);    
@@ -2027,7 +2027,7 @@ public function getAvailableCouponList(Request $request){
 //VALIDATE COUPON CODE=====================================================================
 public function validateCouponCode(Request $request){
     
-     $Voucher = new Voucher();
+    $Voucher = new Voucher();
 
     $response = "Failed";
     $responseMessage = "";
@@ -2043,7 +2043,9 @@ public function validateCouponCode(Request $request){
       $getRequiredQty=0;
       $getMinPurchase=0;
 
-      $getApplicableType='';  
+      $getActivationType='';  
+      $getApplicableType='';
+
       $getScopeCustomerScope='';
       $getScopeCustomerID=0;
 
@@ -2058,12 +2060,14 @@ public function validateCouponCode(Request $request){
           $getRequiredQty=$voucher_info->purchase_qty;
           $getMinPurchase=$voucher_info->min_purchsae_amount;
 
+          $getActivationType=$voucher_info->activation_type;  
           $getApplicableType=$voucher_info->applicable_product_type;  
+          
           $getScopeCustomerScope=$voucher_info->customer_scope;  
-
           $getScopeCustomerID=$voucher_info->scope_customer_id;          
                     
-            if($getApplicableType!='manual'){              
+            if($getApplicableType=='manual' && $getActivationType!='physical'){    
+
                 if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
                           
                           $list = DB::table('coupons')
@@ -2113,7 +2117,7 @@ public function validateCouponCode(Request $request){
                       }
 
             }else{
-              
+
                $ResponseMessage ='Invalid coupon code';
                return response()->json([
                 'response' => 'Failed',     
@@ -2157,7 +2161,7 @@ public function validateCouponCode(Request $request){
     return response()->json($result);     
 
   }
-
+  
  //EWALLET CREDITS HISTORY===============================================================
   public function getEWalletCreditsHistory(Request $request){
 
