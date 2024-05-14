@@ -166,6 +166,25 @@ class Email extends Model
 	    }
   	}
   	
+  	  public function SendOrderHistoryEmail($param){
+              
+    	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
+
+	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
+	      Mail::send(
+	         'api/send-order-history-email',
+	        [                  
+                  'OrderList'=> $param['OrderList'],	                
+	        ],
+	        function($message) use ($param){
+	          $message->from($param["CompanyNoReplyEmail"]);
+	          $message->to($param['EmailAddress']);
+	          $message->subject('Purchased order history");
+	        }
+	      );
+	    }
+  	}
+  	
   	
 
 }
