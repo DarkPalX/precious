@@ -2066,7 +2066,7 @@ public function validateCouponCode(Request $request){
           $getScopeCustomerScope=$voucher_info->customer_scope;  
           $getScopeCustomerID=$voucher_info->scope_customer_id;          
                     
-            if($getApplicableType=='manual' && $getActivationType!='physical'){    
+          if($getApplicableType!='physical' && $getActivationType=='manual'){  
 
                 if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
                           
@@ -2161,7 +2161,7 @@ public function validateCouponCode(Request $request){
     return response()->json($result);     
 
   }
-  
+
  //EWALLET CREDITS HISTORY===============================================================
   public function getEWalletCreditsHistory(Request $request){
 
