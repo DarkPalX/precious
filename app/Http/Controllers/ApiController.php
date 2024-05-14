@@ -1583,9 +1583,16 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
-  $result=$Order->getOrderList($data);  
+  $data['OrderList']=$Order->getOrderList($data);  
 
-  return response()->json($result); 
+  $Email = new Email();
+  $Email->SendOrderHistoryEmail($data);    
+        
+    return response()->json([
+      'response' => 'Success',
+      'message' => "Successfully email all transction order history.",
+    ]);   
+
   }
 
  public function getCustomerOrderDetails(Request $request){
@@ -2036,8 +2043,11 @@ public function validateCouponCode(Request $request){
       $getRequiredQty=0;
       $getMinPurchase=0;
 
+      $getApplicableType='';  
       $getScopeCustomerScope='';
       $getScopeCustomerID=0;
+
+      $IsCustomerAllowToUse=false;
 
       $voucher_info=$Voucher->getVoucherInfoByCode($data['VoucherCode']);
 
@@ -2048,63 +2058,73 @@ public function validateCouponCode(Request $request){
           $getRequiredQty=$voucher_info->purchase_qty;
           $getMinPurchase=$voucher_info->min_purchsae_amount;
 
+          $getApplicableType=$voucher_info->applicable_product_type;  
           $getScopeCustomerScope=$voucher_info->customer_scope;  
-          $getScopeCustomerID=$voucher_info->scope_customer_id;
-          
-          $IsCustomerAllowToUse=false;
-          
 
-          if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
-              
-              $list = DB::table('coupons')
-                     ->where('coupon_code','=',$data['VoucherCode'])
-                     ->whereraw ("CONCAT('|',scope_customer_id,'|') LIKE CONCAT('%|',". $data['UserID'].",'|%')")
-                     ->get();
-                     
-                     if(count($list)>0){
-                         $IsCustomerAllowToUse=true;
-                     }else{
-                         $IsCustomerAllowToUse=false;
-                     }
-                         
-                         
-                     if($IsCustomerAllowToUse){
-                          return response()->json([
-                             'response' => 'Success',         
-                             'percent_discount' => $getVoucherPercentDiscount,         
-                             'amount_discount' => $getVoucherAmountDiscount,   
-                             'required_qty' => $getRequiredQty, 
-                             'min_purchase' => $getMinPurchase, 
-                             'message' => 'Voucher Discount is '.$getVoucherPercentDiscount. '%',
-                            ]); 
-                    }else{
-                          $ResponseMessage ='Sorry you are not qualify to use this coupon code.';
-                             return response()->json([
-                              'response' => 'Failed',     
-                              'percent_discount' => null,      
-                              'amount_discount' => null,  
-                              'required_qty' => null,  
-                              'min_purchase' => null, 
-                              'message' => $ResponseMessage,
-                              ]); 
-                    }
-
-            
-          }else{
-              
-             return response()->json([
-             'response' => 'Success',         
-             'percent_discount' => $getVoucherPercentDiscount,         
-             'amount_discount' => $getVoucherAmountDiscount,   
-             'required_qty' => $getRequiredQty, 
-             'min_purchase' => $getMinPurchase, 
-             'message' => 'Voucher Discount is '.$getVoucherPercentDiscount. '%',
+          $getScopeCustomerID=$voucher_info->scope_customer_id;          
+                    
+            if($getApplicableType!='manual'){              
+                if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
+                          
+                          $list = DB::table('coupons')
+                                 ->where('coupon_code','=',$data['VoucherCode'])
+                                 ->whereraw ("CONCAT('|',scope_customer_id,'|') LIKE CONCAT('%|',". $data['UserID'].",'|%')")
+                                 ->get();
+                                 
+                                 if(count($list)>0){
+                                     $IsCustomerAllowToUse=true;
+                                 }else{
+                                     $IsCustomerAllowToUse=false;
+                                 }
+                                     
+                                     
+                                 if($IsCustomerAllowToUse){
+                                      return response()->json([
+                                         'response' => 'Success',         
+                                         'percent_discount' => $getVoucherPercentDiscount,         
+                                         'amount_discount' => $getVoucherAmountDiscount,   
+                                         'required_qty' => $getRequiredQty, 
+                                         'min_purchase' => $getMinPurchase, 
+                                         'message' => 'Voucher Discount is '.$getVoucherPercentDiscount. '%',
+                                        ]); 
+                                }else{
+                                      $ResponseMessage ='Sorry you are not qualify to use this coupon code.';
+                                         return response()->json([
+                                          'response' => 'Failed',     
+                                          'percent_discount' => null,      
+                                          'amount_discount' => null,  
+                                          'required_qty' => null,  
+                                          'min_purchase' => null, 
+                                          'message' => $ResponseMessage,
+                                          ]); 
+                                }
+                                
+                      }else{            
+                           return response()->json([
+                           'response' => 'Success',         
+                           'percent_discount' => $getVoucherPercentDiscount,         
+                           'amount_discount' => $getVoucherAmountDiscount,   
+                           'required_qty' => $getRequiredQty, 
+                           'min_purchase' => $getMinPurchase, 
+                           'message' => 'Voucher Discount is '.$getVoucherPercentDiscount. '%',
+                           
+                          ]); 
              
-            ]); 
- 
-          }
-          
-                  
+                      }
+
+            }else{
+              
+               $ResponseMessage ='Invalid coupon code';
+               return response()->json([
+                'response' => 'Failed',     
+                'percent_discount' => null,      
+                'amount_discount' => null,  
+                'required_qty' => null,  
+                'min_purchase' => null, 
+                'message' => $ResponseMessage,
+                ]); 
+            }   
+                                                            
        
       }else{
 
