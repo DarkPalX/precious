@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 
 // CMS Controllers
-use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController};
+use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController};
 
 use App\Http\Controllers\Cms4Controllers\{
     ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, MobileAlbumController, PageController, MenuController, FileManagerController
@@ -62,6 +62,12 @@ Route::get('/phpinfo', function () {
         Route::get('/albums/preview', [FrontController::class, 'test'])->name('albums.preview');
         Route::get('/search-result', [FrontController::class, 'seach_result'])->name('search.result');
     //
+
+    // Sitemap
+        Route::get('/sitemap', [FrontController::class, 'sitemap'])->name('sitemap');
+        // Route::get('/sitemap', [SitemapController::class, 'index'])->name('sitemap');
+    // 
+
 //
 
 

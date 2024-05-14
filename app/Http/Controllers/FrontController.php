@@ -20,6 +20,7 @@ use App\Models\User;
 use App\Models\TemplateCategory;
 use App\Models\Template;
 use App\Models\EmailRecipient;
+use App\Models\ArticleCategory;
 use App\Models\Ecommerce\{BannerAd, BannerAdPage, Product};
 
 use Auth;
@@ -60,6 +61,26 @@ class FrontController extends Controller
 
         return view('theme.pages.privacy-policy', compact('page', 'footer','breadcrumb'));
 
+    }
+
+    public function sitemap()
+    {
+        // return $this->page('sitemap');
+
+        $page = $this->page('sitemap')->page;
+
+        $breadcrumb = $this->breadcrumb($page);
+
+        $customPages = Page::where('name', '<>', 'footer')->where('status', 'PUBLISHED')->where('parent_page_id', 0)->orderBy('id','asc')->get();
+        
+        $articleCategories = ArticleCategory::with('articles')->get();
+
+        return view('theme.pages.sitemap', compact(
+            'page', 
+            'breadcrumb', 
+            'articleCategories', 
+            'customPages'
+        ));
     }
 
     public function seach_result(Request $request)
