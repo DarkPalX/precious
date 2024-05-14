@@ -296,7 +296,7 @@ class Order extends Model
         
    
     //SEND EMAIL NOTIF
-   if($SalesHeaderID>0){
+     if($SalesHeaderID>0){
 
         $OrderInfo= $this->getOrderInfo($SalesHeaderID);        
           if($OrderInfo->SalesHeaderID>0){
@@ -418,6 +418,43 @@ class Order extends Model
     ");    
 
     $query->where("sls_dtls.sales_header_id",'=',$SalesHeaderID);    
+    $info = $query->get();
+                             
+    return $info;             
+           
+  }
+
+   function getOrderHistoryItemList($UserID){
+
+    $query = DB::table('ecommerce_sales_details as sls_dtls')           
+            ->leftjoin('ecommerce_sales_headers as sales_hdr', 'sales_hdr.id', '=', 'sls_dtls.sales_header_id') 
+
+       ->selectraw("
+                              
+          COALESCE(sls_dtls.product_name,'') as product_name,
+
+          COALESCE(sls_dtls.price,0) as price,                                                        
+          COALESCE(sls_dtls.discount_amount,0) as discount_price,          
+
+          COALESCE(sls_dtls.gross_amount,0) as gross_amount,          
+          COALESCE(sls_dtls.net_amount,0) as net_amount,
+
+          COALESCE(sales_hdr.created_at,'') as order_date,
+          DATE_FORMAT(sales_hdr.created_at,'%m/%d/%Y') as order_date_format,
+
+          COALESCE(sales_hdr.order_number,'') as order_number,
+          COALESCE(sales_hdr.order_source,'') as order_source,
+          COALESCE(sales_hdr.customer_name,'') as customer_name,
+          
+          COALESCE(sales_hdr.customer_email,'') as customer_email,
+          COALESCE(sales_hdr.customer_contact_number,'') as customer_contact_number,
+
+          COALESCE(sales_hdr.customer_address,'') as customer_address   
+
+          
+    ");    
+
+    $query->where("sales_hdr.user_id",'=',$UserID);    
     $info = $query->get();
                              
     return $info;             
