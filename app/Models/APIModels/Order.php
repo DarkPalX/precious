@@ -20,6 +20,7 @@ use DB;
 use App\Models\APIModels\Misc;
 use App\Models\APIModels\Email;
 use App\Models\APIModels\Cart;
+use App\Models\APIModels\Voucher;
 use App\Models\APIModels\UserCustomer;
 
 class Order extends Model
@@ -223,8 +224,28 @@ class Order extends Model
           'created_at' => $TODAY             
         ]); 
 
+      //SAVE COUPON TO COUPON SALES
+       if($VoucherCode!=''){
 
-     //DETAIL
+         $CouponID=0;
+         $info=$Voucher->getVoucherInfoByCode($VoucherCode);
+
+         if(isset($info)>0){
+            $CouponID=$info->coupon_ID;
+
+              ->insertGetId([                                            
+              'customer_id' => $UserID,              
+              'coupon_id' => $CouponID,
+              'coupon_code' => $VoucherCode,
+              'sales_header_id' => $SalesHeaderID,
+              'order_status' => $PaymentStatus,                                                                
+              'created_at' => $TODAY             
+            ]); 
+         }
+     }         
+   
+
+     //DETAIL PRODUCT
      $cart_info = $Cart->getCartInfoByUserID($UserID);
      if(count($cart_info)>0){
         foreach($cart_info as $item_list){
