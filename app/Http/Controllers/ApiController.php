@@ -2022,8 +2022,9 @@ public function getAvailableCouponList(Request $request){
     $chkListCoupon=$Voucher->getVoucherList($data);
 
     $arr_all_coupons = [];  
-
-        foreach($chkListCoupon as $list){
+    
+    $CouponID=0;
+     foreach($chkListCoupon as $list){
          
           $CouponID=$list->coupon_ID;
           
@@ -2035,7 +2036,10 @@ public function getAvailableCouponList(Request $request){
            
            $info=$Voucher->getVoucherInfoByIDwithNoUsage($CouponID,$no_use);
            
-          array_push($arr_all_coupons, $info);
+           if(isset($info)>0){
+                array_push($arr_all_coupons, $info);     
+           }
+           
      }
     
          
