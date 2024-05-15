@@ -31,11 +31,14 @@ class Voucher extends Model
     $PageNo=$data['PageNo'];
 
     $query = DB::table('coupons as coup')  
+    ->leftjoin('coupon_sales as coup_sale', 'coup_sale.coupon_id', '=', 'coup.id') 
        ->selectraw("
           coup.id as coupon_ID,
 
           COALESCE(coup.coupon_code,'') as coupon_code,
           COALESCE(coup.name,'') as coupon_name,
+          
+          COALESCE(coup.customer_limit,0) as customer_limit,
 
           COALESCE(coup.description,'') as coupon_description,
           COALESCE(coup.terms_and_conditions,'') as terms_and_conditions,
@@ -60,6 +63,8 @@ class Voucher extends Model
       ->where("coup.deleted_at","=",null)
       ->where("coup.activation_type","!=",'manual')
       ->where("coup.applicable_product_type","!=",'physical');
+
+    //   ->havingRaw('COUNT(coup_sale.coupon_id) >= customer_limit');
       
     //   ->orWhereRaw("CONCAT('|',coup.scope_customer_id,'|') LIKE CONCAT('%|',". $SearchText.",'|%')");
 
@@ -123,6 +128,48 @@ class Voucher extends Model
         ");    
       
       $query->whereRaw('coup.coupon_code =?',[$Vouchre_Code]);     
+      $query->where("coup.status","=",'ACTIVE'); 
+
+      $info = $query->first();
+
+     return $info;      
+
+  }
+  
+   public function getVoucherInfoByIDwithNoUsage($VoucherID,$NoUsage){
+
+     $query = DB::table('coupons as coup')  
+       ->selectraw("
+          coup.id as coupon_ID,
+
+          COALESCE(coup.coupon_code,'') as coupon_code,
+          COALESCE(coup.name,'') as coupon_name,
+
+          COALESCE(coup.description,'') as coupon_description,
+          COALESCE(coup.terms_and_conditions,'') as terms_and_conditions,
+          
+          COALESCE(coup.activation_type,'') as activation_type,
+          COALESCE(coup.applicable_product_type,'') as applicable_product_type,
+
+          COALESCE(coup.customer_scope,'') as customer_scope,
+          COALESCE(coup.scope_customer_id,'') as scope_customer_id,
+          
+          COALESCE(coup.percentage,0) as percentage,
+          COALESCE(coup.purchase_amount,0) as min_purchsae_amount,
+          COALESCE(coup.purchase_qty,0) as purchase_qty,
+          COALESCE(coup.amount,0) as discount_amount,
+
+          COALESCE(coup.scope_customer_id,'') as scope_customer_id,
+
+          DATE_FORMAT(coup.start_date,'%M %d,%Y') as start_date_format,
+          DATE_FORMAT(coup.end_date,'%M %d,%Y') as end_date_format,
+             
+          COALESCE(coup.status,'') as status          
+          
+        ");    
+      
+      $query->where('coup.id','=',$VoucherID);     
+      $query->where('coup.customer_limit','>=',$NoUsage); 
       $query->where("coup.status","=",'ACTIVE'); 
 
       $info = $query->first();
