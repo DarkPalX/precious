@@ -271,10 +271,10 @@ return [
 
 
 
-     //API USE
+     //API USE ONLY
      //Company Information
     'CompanyName' => 'PRECIOUS PAGES CORP',
-    'CompanyEmail'=>'info@preciouspages.com.ph',
+    'CompanyEmail'=>'no-reply@beta.ebooklat.phr.com.ph',
     'CompanySupportEmail'=>'',
     'CompanyNoReplyEmail'=>'no-reply@beta.ebooklat.phr.com.ph',
     'CompanyMobileNo' => '0922 868 4362',
