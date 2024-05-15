@@ -1586,8 +1586,8 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
   $data['OrderItemList']=$Order->getOrderHistoryItemList($data['UserID']);   
 
-  $Email = new Email();
-  $Email->SendOrderHistoryEmail($data);    
+  // $Email = new Email();
+  // $Email->SendOrderHistoryEmail($data);    
         
     return response()->json([
       'response' => 'Success',
