@@ -2023,27 +2023,27 @@ public function getAvailableCouponList(Request $request){
 
     $arr_all_coupons = [];  
 
-    foreach($chkListCoupon as $list){
+        foreach($chkListCoupon as $list){
          
-          $CouponID=$list->coupon_ID;          
-          $no_use=DB::table('coupon_sales')
+          $CouponID=$list->coupon_ID;
+          
+           $no_use=DB::table('coupon_sales')
                 ->where('order_status','=','PAID')
                 ->where('coupon_id','=',$CouponID)
                 ->count();
-                      
+           
+           
            $info=$Voucher->getVoucherInfoByIDwithNoUsage($CouponID,$no_use);
            
           array_push($arr_all_coupons, $info);
      }
     
-     
-    
-      return response()->json([
-            'coupons' => $arr_all_coupons, 
-        ]);
-    
+         
+      // return response()->json([
+      //       'coupons' => $arr_all_coupons, 
+      //   ]);
 
-    return response()->json($result); 
+    return response()->json($arr_all_coupons); 
     
 }
 
