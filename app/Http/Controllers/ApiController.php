@@ -1591,7 +1591,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
         
     return response()->json([
       'response' => 'Success',
-      'message' => "Successfully email all transction order history.",
+      'message' => "Successfully email all transactions purchased order history.",
     ]);   
 
   }
@@ -2230,7 +2230,7 @@ public function validateCouponCode(Request $request){
      }
 
        return response()->json($result); 
-       
+
    }
   
  //EWALLET CREDITS HISTORY===============================================================
