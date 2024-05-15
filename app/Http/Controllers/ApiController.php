@@ -2017,6 +2017,8 @@ public function getAvailableCouponList(Request $request){
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
     
     $data["SearchText"] = '';
+    $data['UserID']=$request->post('UserID');
+
     $data["Status"] = '';
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
@@ -2024,23 +2026,47 @@ public function getAvailableCouponList(Request $request){
     $chkListCoupon=$Voucher->getVoucherList($data);
       
     $arr_all_coupons = [];    
-    $CouponID=0;
+
+    $VoucherID=0;
+    $VoucherCode='';
+    $VoucherScope='';
 
      foreach($chkListCoupon as $list){
          
-          $CouponID=$list->coupon_ID;
-          
-           $no_use=DB::table('coupon_sales')
+          $VoucherID=$list->coupon_ID;
+          $VoucherCode=$list->coupon_code;
+          $VoucherScope=$list->customer_scope;
+
+          if($Scope=='all'){
+
+              $no_use=DB::table('coupon_sales')
                 ->where('order_status','=','PAID')
-                ->where('coupon_id','=',$CouponID)
+                ->where('coupon_id','=',$VoucherID)
                 ->count();
                       
-           $info=$Voucher->getVoucherInfoByIDwithNoUsage($CouponID,$no_use);
+               $info=$Voucher->getVoucherInfoByIDwithNoUsage($VoucherID,$no_use);
            
-           if(isset($info)>0){
-                array_push($arr_all_coupons, $info);     
-           }
+               if(isset($info)>0){
+                    array_push($arr_all_coupons, $info);     
+               }
+
+          }else{
+
+             $list = DB::table('coupons')
+                 ->where('coupon_code','=',$VoucherCode)
+                 ->whereraw ("CONCAT('|',scope_customer_id,'|') LIKE CONCAT('%|',". $data['UserID'].",'|%')")
+                 ->get();
+
+                if(count($list)>0){
+
+                     $info=$Voucher->getVoucherInfoByIDwithNoUsage($VoucherID,$no_use);
            
+                     if(isset($info)>0){
+                          array_push($arr_all_coupons, $info);     
+                     }
+                }
+          }
+                                       
      }
     
          
