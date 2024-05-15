@@ -2113,7 +2113,7 @@ public function validateCouponCode(Request $request){
       $voucher_info=$Voucher->getVoucherInfoByCode($data['VoucherCode']);
 
       if(isset($voucher_info)>0){
-          
+
           $getVoucherID =$voucher_info->coupon_ID;
           $getVoucherPercentDiscount=$voucher_info->percentage;
           $getVoucherAmountDiscount=$voucher_info->discount_amount;
@@ -2124,7 +2124,7 @@ public function validateCouponCode(Request $request){
           $getApplicableType=$voucher_info->applicable_product_type;  
           
           $getScopeCustomerScope=$voucher_info->customer_scope;  
-          $getScopeCustomerID=$voucher_info->scope_customer_id;     
+          $getScopeCustomerID=$voucher_info->scope_customer_id;  
 
           if($getVoucherID>0){
 
@@ -2135,19 +2135,20 @@ public function validateCouponCode(Request $request){
 
              $info=$Voucher->getVoucherInfoByIDwithNoUsage($getVoucherID,$getVoucherNoUsage);  
              
-             if($info==null || !isset($info)){
-                   $ResponseMessage ='Sorry coupon code is already in maximum use limit.';
-                     return response()->json([
-                      'response' => 'Failed',     
-                      'percent_discount' => null,      
-                      'amount_discount' => null,  
-                      'required_qty' => null,  
-                      'min_purchase' => null, 
-                      'message' => $ResponseMessage,
-                      ]);
-             }           
-          }     
-                    
+               if($info==null || !isset($info)){
+                 $ResponseMessage ='Sorry coupon code is already in maximum use limit.';
+                   return response()->json([
+                    'response' => 'Failed',     
+                    'percent_discount' => null,      
+                    'amount_discount' => null,  
+                    'required_qty' => null,  
+                    'min_purchase' => null, 
+                    'message' => $ResponseMessage,
+                    ]);
+               }           
+            } 
+
+
           if($getApplicableType!='physical'){  
 
                 if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
@@ -2197,50 +2198,38 @@ public function validateCouponCode(Request $request){
                           ]); 
              
                       }
+                                                        
+           }else{
 
-            // }else{
+                $ResponseMessage ='Invalid coupon code.';
+                 return response()->json([
+                   'response' => 'Failed',     
+                   'percent_discount' => null,      
+                   'amount_discount' => null,  
+                   'required_qty' => null,  
+                   'min_purchase' => null, 
+                   'message' => $ResponseMessage,
+                  ]); 
 
-            //    $ResponseMessage ='Invalid code for manual input coupon code';
-            //    return response()->json([
-            //     'response' => 'Failed',     
-            //     'percent_discount' => null,      
-            //     'amount_discount' => null,  
-            //     'required_qty' => null,  
-            //     'min_purchase' => null, 
-            //     'message' => $ResponseMessage,
-            //     ]); 
-            // }   
-                                                            
-       
+            }  
+
+
       }else{
 
-        $ResponseMessage ='Invalid coupon code.';
-         return response()->json([
-           'response' => 'Failed',     
-           'percent_discount' => null,      
-           'amount_discount' => null,  
-           'required_qty' => null,  
-           'min_purchase' => null, 
-           'message' => $ResponseMessage,
-          ]); 
+            $ResponseMessage ='Enter coupon code to validate';
+               return response()->json([
+                 'response' => 'Failed',     
+                 'percent_discount' => null,      
+                 'amount_discount' => null,  
+                 'required_qty' => null,  
+                 'min_purchase' => null, 
+                 'message' => $ResponseMessage,
+                ]); 
 
-        }          
-
-    }else{
-
-        $ResponseMessage ='Enter coupon code to validate';
-         return response()->json([
-           'response' => 'Failed',     
-           'percent_discount' => null,      
-           'amount_discount' => null,  
-           'required_qty' => null,  
-           'min_purchase' => null, 
-           'message' => $ResponseMessage,
-          ]); 
-    }
-
-    
-    return response()->json($result);     
+       }
+                            
+     }
+   }
 
   }
 
