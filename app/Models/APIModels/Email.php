@@ -179,7 +179,7 @@ class Email extends Model
 	        function($message) use ($param){
 	          $message->from($param["CompanyNoReplyEmail"]);
 	          $message->to($param['EmailAddress']);
-	          $message->subject('Purchased order history");
+	          $message->subject('Purchased order history');
 	        }
 	      );
 	    }
