@@ -2019,7 +2019,30 @@ public function getAvailableCouponList(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$Voucher->getVoucherList($data);  
+    $chkListCoupon=$Voucher->getVoucherList($data)
+
+    $arr_all_coupons = [];  
+
+    foreach($chkListCoupon as $list){
+         
+          $CouponID=$list->coupon_ID;          
+          $no_use=DB::table('coupon_sales')
+                ->where('order_status','=','PAID')
+                ->where('coupon_id','=',$CouponID)
+                ->count();
+                      
+           $info=$Voucher->getVoucherInfoByIDwithNoUsage($CouponID,$no_use);
+           
+          array_push($arr_all_coupons, $info);
+     }
+    
+     
+    
+      return response()->json([
+            'coupons' => $arr_all_coupons, 
+        ]);
+    
+
     return response()->json($result); 
     
 }
@@ -2069,20 +2092,20 @@ public function validateCouponCode(Request $request){
           if($getApplicableType!='physical' && $getActivationType=='manual'){  
 
                 if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
-                          
-                          $list = DB::table('coupons')
-                                 ->where('coupon_code','=',$data['VoucherCode'])
-                                 ->whereraw ("CONCAT('|',scope_customer_id,'|') LIKE CONCAT('%|',". $data['UserID'].",'|%')")
-                                 ->get();
-                                 
-                                 if(count($list)>0){
-                                     $IsCustomerAllowToUse=true;
-                                 }else{
-                                     $IsCustomerAllowToUse=false;
-                                 }
+                        
+                        $list = DB::table('coupons')
+                               ->where('coupon_code','=',$data['VoucherCode'])
+                               ->whereraw ("CONCAT('|',scope_customer_id,'|') LIKE CONCAT('%|',". $data['UserID'].",'|%')")
+                               ->get();
+                               
+                               if(count($list)>0){
+                                   $IsCustomerAllowToUse=true;
+                               }else{
+                                   $IsCustomerAllowToUse=false;
+                               }
                                      
                                      
-                                 if($IsCustomerAllowToUse){
+                                if($IsCustomerAllowToUse){
                                       return response()->json([
                                          'response' => 'Success',         
                                          'percent_discount' => $getVoucherPercentDiscount,         
