@@ -38,6 +38,7 @@ class Order extends Model
 
      $query = DB::table('ecommerce_sales_headers as sales_hdr')
      ->join('ecommerce_sales_payments as sales_pay', 'sales_pay.sales_header_id', '=', 'sales_hdr.id') 
+     
        ->selectraw("
           sales_hdr.id as sales_Header_ID,
 
@@ -231,16 +232,17 @@ class Order extends Model
          $info=$Voucher->getVoucherInfoByCode($VoucherCode);
 
          if(isset($info)>0){
-            $CouponID=$info->coupon_ID;
 
-              ->insertGetId([                                            
-              'customer_id' => $UserID,              
-              'coupon_id' => $CouponID,
-              'coupon_code' => $VoucherCode,
-              'sales_header_id' => $SalesHeaderID,
-              'order_status' => $PaymentStatus,                                                                
-              'created_at' => $TODAY             
-            ]); 
+            $CouponID=$info->coupon_ID;         
+             $CopuponSalesID = DB::table('coupon_sales')
+                  ->insertGetId([                                            
+                  'customer_id' => $UserID,              
+                  'coupon_id' => $CouponID,
+                  'coupon_code' => $VoucherCode,
+                  'sales_header_id' => $SalesHeaderID,
+                  'order_status' => $PaymentStatus,                                                                
+                  'created_at' => $TODAY             
+                ]); 
          }
      }         
    
@@ -270,7 +272,6 @@ class Order extends Model
               'created_by' => $UserID,                        
               'created_at' => $TODAY             
           ]); 
-
 
           // SAVE TO LIBRARIES
            $SalesDetailID = DB::table('customer_libraries')
