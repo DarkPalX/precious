@@ -187,9 +187,12 @@ class Book extends Model
 
     $query = DB::table('products as prds')
     ->leftjoin('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id') 
+    ->leftjoin('customer_libraries as cust_lib', 'cust_lib.product_id', '=', 'prds.id') 
     
        ->selectraw("
           prds.id as book_ID,
+
+          COALESCE(cust_lib.product_id,0) as customer_library_product_id,
 
           COALESCE(prds.name,'') as name,
           COALESCE(prds.author,'') as author,
