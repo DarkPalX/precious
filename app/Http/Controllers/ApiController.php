@@ -2121,7 +2121,7 @@ public function validateCouponCode(Request $request){
              }           
           }     
                     
-          else if($getApplicableType!='physical' && $getActivationType=='manual'){  
+          if($getApplicableType!='physical' && $getActivationType=='manual'){  
 
                 if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
                         
