@@ -90,7 +90,7 @@ class Voucher extends Model
            
   }
 
-  public function getVoucherInfoByCode($Vouchre_Code){
+  public function getVoucherInfoByCode($Voucher_Code){
 
      $query = DB::table('coupons as coup')  
        ->selectraw("
@@ -122,7 +122,7 @@ class Voucher extends Model
           
         ");    
       
-      $query->whereRaw('coup.coupon_code =?',[$Vouchre_Code]);     
+      $query->whereRaw('coup.coupon_code =?',[$Voucher_Code]);     
       $query->where("coup.status","=",'ACTIVE'); 
 
       $info = $query->first();
@@ -164,7 +164,7 @@ class Voucher extends Model
         ");    
       
       $query->where('coup.id','=',$VoucherID);     
-      $query->where('coup.customer_limit','>=',$NoUsage); 
+      $query->where('coup.customer_limit','>',$NoUsage); 
       $query->where("coup.status","=",'ACTIVE'); 
 
       $info = $query->first();
