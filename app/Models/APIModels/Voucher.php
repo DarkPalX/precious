@@ -31,7 +31,6 @@ class Voucher extends Model
     $PageNo=$data['PageNo'];
 
     $query = DB::table('coupons as coup')  
-    ->leftjoin('coupon_sales as coup_sale', 'coup_sale.coupon_id', '=', 'coup.id') 
        ->selectraw("
           coup.id as coupon_ID,
 
@@ -63,10 +62,6 @@ class Voucher extends Model
       ->where("coup.deleted_at","=",null)
       ->where("coup.activation_type","!=",'manual')
       ->where("coup.applicable_product_type","!=",'physical');
-
-    //   ->havingRaw('COUNT(coup_sale.coupon_id) >= customer_limit');
-      
-    //   ->orWhereRaw("CONCAT('|',coup.scope_customer_id,'|') LIKE CONCAT('%|',". $SearchText.",'|%')");
 
                                  
       if($SearchText != ''){
