@@ -186,9 +186,9 @@ class Book extends Model
     $PageNo=$data['PageNo'];
 
     $query = DB::table('products as prds')
+    ->join('customer_libraries as cust_lib', 'cust_lib.product_id', '=', 'prds.id') 
     ->leftjoin('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id') 
-    ->leftjoin('customer_libraries as cust_lib', 'cust_lib.product_id', '=', 'prds.id') 
-    
+        
        ->selectraw("
           prds.id as book_ID,
 
