@@ -186,12 +186,10 @@ class Book extends Model
     $PageNo=$data['PageNo'];
 
     $query = DB::table('products as prds')
-    ->leftjoin('customer_libraries as cust_lib', 'cust_lib.product_id', '=', 'prds.id') 
-        
+    ->leftjoin('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id') 
+    
        ->selectraw("
           prds.id as book_ID,
-
-          COALESCE(cust_lib.product_id,0) as customer_library_product_id,
 
           COALESCE(prds.name,'') as name,
           COALESCE(prds.author,'') as author,
@@ -383,8 +381,9 @@ class Book extends Model
                     "CONCAT_WS(' ',
                         COALESCE(prds.name,''),
                         COALESCE(prds.author,''),                        
-                        COALESCE(prds.subtitle,''),                        
-                        COALESCE(prds.book_type,'')
+                        COALESCE(prds.subtitle,''),
+                        COALESCE(prds.book_type,''),
+                        COALESCE(prod_cat.name,'')
                     ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
              }
         }
