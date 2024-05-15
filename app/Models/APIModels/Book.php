@@ -266,7 +266,7 @@ class Book extends Model
               )
         ,0) as promo_discount_price,
 
-          COALESCE((
+        COALESCE((
                SELECT 
                   cust_lib.product_id FROM 
                 customer_libraries as cust_lib                                    
