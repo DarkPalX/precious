@@ -2019,7 +2019,7 @@ public function getAvailableCouponList(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $chkListCoupon=$Voucher->getVoucherList($data)
+    $chkListCoupon=$Voucher->getVoucherList($data);
 
     $arr_all_coupons = [];  
 
