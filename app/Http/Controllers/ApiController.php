@@ -2231,8 +2231,7 @@ public function validateCouponCode(Request $request){
      }
    }
 
-  }
-
+  
  //EWALLET CREDITS HISTORY===============================================================
   public function getEWalletCreditsHistory(Request $request){
 
