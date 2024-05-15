@@ -2226,11 +2226,12 @@ public function validateCouponCode(Request $request){
                  'message' => $ResponseMessage,
                 ]); 
 
-       }
-                            
+       }                      
      }
-   }
 
+       return response()->json($result); 
+       
+   }
   
  //EWALLET CREDITS HISTORY===============================================================
   public function getEWalletCreditsHistory(Request $request){
