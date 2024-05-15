@@ -2173,7 +2173,7 @@ public function validateCouponCode(Request $request){
 
             }else{
 
-               $ResponseMessage ='Invalid coupon code';
+               $ResponseMessage ='Invalid manual input coupon code';
                return response()->json([
                 'response' => 'Failed',     
                 'percent_discount' => null,      
