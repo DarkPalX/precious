@@ -2037,7 +2037,7 @@ public function getAvailableCouponList(Request $request){
           $VoucherCode=$list->coupon_code;
           $VoucherScope=$list->customer_scope;
 
-          if($Scope=='all'){
+          if($VoucherScope=='all'){
 
               $no_use=DB::table('coupon_sales')
                 ->where('order_status','=','PAID')
