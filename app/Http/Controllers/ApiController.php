@@ -2005,6 +2005,8 @@ public function checkSubscriberStatus(Request $request){
 
 //COUPON CODE=====================================================================
 public function getAvailableCouponList(Request $request){
+
+   
     
     $Misc = new Misc();
     $Voucher = new Voucher();
@@ -2020,10 +2022,10 @@ public function getAvailableCouponList(Request $request){
     $data["Limit"] = 0;
 
     $chkListCoupon=$Voucher->getVoucherList($data);
-
-    $arr_all_coupons = [];  
-    
+      
+    $arr_all_coupons = [];    
     $CouponID=0;
+    
      foreach($chkListCoupon as $list){
          
           $CouponID=$list->coupon_ID;
@@ -2032,8 +2034,7 @@ public function getAvailableCouponList(Request $request){
                 ->where('order_status','=','PAID')
                 ->where('coupon_id','=',$CouponID)
                 ->count();
-           
-           
+                      
            $info=$Voucher->getVoucherInfoByIDwithNoUsage($CouponID,$no_use);
            
            if(isset($info)>0){
