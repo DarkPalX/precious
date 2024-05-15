@@ -2148,7 +2148,7 @@ public function validateCouponCode(Request $request){
              }           
           }     
                     
-          if($getApplicableType!='physical' && $getActivationType=='manual'){  
+          if($getApplicableType!='physical'){  
 
                 if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
                         
@@ -2170,7 +2170,7 @@ public function validateCouponCode(Request $request){
                                          'percent_discount' => $getVoucherPercentDiscount,         
                                          'amount_discount' => $getVoucherAmountDiscount,   
                                          'required_qty' => $getRequiredQty, 
-                                         'min_purchase' => $getMinPurchase, 
+                                         'min_purchase' => $getMinPurchase,
                                          'message' => 'Voucher Discount is '.$getVoucherPercentDiscount. '%',
                                         ]); 
                                 }else{
@@ -2198,18 +2198,18 @@ public function validateCouponCode(Request $request){
              
                       }
 
-            }else{
+            // }else{
 
-               $ResponseMessage ='Invalid code for manual input coupon code';
-               return response()->json([
-                'response' => 'Failed',     
-                'percent_discount' => null,      
-                'amount_discount' => null,  
-                'required_qty' => null,  
-                'min_purchase' => null, 
-                'message' => $ResponseMessage,
-                ]); 
-            }   
+            //    $ResponseMessage ='Invalid code for manual input coupon code';
+            //    return response()->json([
+            //     'response' => 'Failed',     
+            //     'percent_discount' => null,      
+            //     'amount_discount' => null,  
+            //     'required_qty' => null,  
+            //     'min_purchase' => null, 
+            //     'message' => $ResponseMessage,
+            //     ]); 
+            // }   
                                                             
        
       }else{
