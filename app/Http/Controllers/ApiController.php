@@ -1345,6 +1345,7 @@ public function getAllBookCategoryList(Request $request){
 
   $data['Status'] = "All";
   $data['SearchText'] = $request->post('SearchText');
+  $data['UserID'] = $request->post('UserID');
 
   $data['Filter_Sort'] = $request->post('Filter_Sort');
   $data['Filter_Genre'] = $request->post('Filter_Genre');
