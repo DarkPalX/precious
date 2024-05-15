@@ -2109,7 +2109,7 @@ public function validateCouponCode(Request $request){
              $info=$Voucher->getVoucherInfoByIDwithNoUsage($getVoucherID,$getVoucherNoUsage);  
              
              if($info==null || !isset($info)){
-                   $ResponseMessage ='Sorry coupon code is already in limit use.';
+                   $ResponseMessage ='Sorry coupon code is already in maximum use limit.';
                      return response()->json([
                       'response' => 'Failed',     
                       'percent_discount' => null,      
