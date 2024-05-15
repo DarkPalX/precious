@@ -2025,7 +2025,7 @@ public function getAvailableCouponList(Request $request){
       
     $arr_all_coupons = [];    
     $CouponID=0;
-    
+
      foreach($chkListCoupon as $list){
          
           $CouponID=$list->coupon_ID;
@@ -2065,9 +2065,13 @@ public function validateCouponCode(Request $request){
     $data['UserID']=$request->post('UserID');
 
     if($data['VoucherCode']!=''){       
+      
+      $getVoucherID=0;
+      $getVoucherNoUsage=0;
 
       $getVoucherPercentDiscount=0;
       $getVoucherAmountDiscount=0;
+
       $getRequiredQty=0;
       $getMinPurchase=0;
 
@@ -2082,7 +2086,8 @@ public function validateCouponCode(Request $request){
       $voucher_info=$Voucher->getVoucherInfoByCode($data['VoucherCode']);
 
       if(isset($voucher_info)>0){
-
+          
+          $getVoucherID =$voucher_info->coupon_ID;
           $getVoucherPercentDiscount=$voucher_info->percentage;
           $getVoucherAmountDiscount=$voucher_info->discount_amount;
           $getRequiredQty=$voucher_info->purchase_qty;
@@ -2092,9 +2097,31 @@ public function validateCouponCode(Request $request){
           $getApplicableType=$voucher_info->applicable_product_type;  
           
           $getScopeCustomerScope=$voucher_info->customer_scope;  
-          $getScopeCustomerID=$voucher_info->scope_customer_id;          
+          $getScopeCustomerID=$voucher_info->scope_customer_id;     
+
+          if($getVoucherID>0){
+
+             $getVoucherNoUsage=DB::table('coupon_sales')
+                          ->where('order_status','=','PAID')
+                          ->where('coupon_id','=',$getVoucherID)
+                          ->count();
+
+             $info=$Voucher->getVoucherInfoByIDwithNoUsage($getVoucherID,$getVoucherNoUsage);  
+             
+             if($info==null || !isset($info)){
+                   $ResponseMessage ='Sorry coupon code is already in limit use.';
+                     return response()->json([
+                      'response' => 'Failed',     
+                      'percent_discount' => null,      
+                      'amount_discount' => null,  
+                      'required_qty' => null,  
+                      'min_purchase' => null, 
+                      'message' => $ResponseMessage,
+                      ]);
+             }           
+          }     
                     
-          if($getApplicableType!='physical' && $getActivationType=='manual'){  
+          else if($getApplicableType!='physical' && $getActivationType=='manual'){  
 
                 if($getScopeCustomerScope!='' && $getScopeCustomerScope=='specific'){
                         
