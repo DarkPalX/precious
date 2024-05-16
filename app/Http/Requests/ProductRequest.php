@@ -28,7 +28,7 @@ class ProductRequest extends FormRequest
             'name' => 'required|max:150',
             'author' => 'nullable|max:150',
             'book_type' => 'nullable',
-            'file_url' => 'nullable|max:10000',
+            'file_url' => 'nullable|max:204800',
             'ebook_price' => 'nullable',
             'ebook_discount_price' => 'nullable',
             'category_id' => 'nullable',
