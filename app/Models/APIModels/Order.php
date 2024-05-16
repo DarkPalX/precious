@@ -114,6 +114,7 @@ class Order extends Model
     $Misc  = New Misc();
     $Cart = new Cart();
     $UserCustomer  = New UserCustomer();
+    $Voucher  = New Voucher();
 
     $TODAY = date("Y-m-d H:i:s");
     $PaymentDate = date("Y-m-d");
