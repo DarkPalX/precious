@@ -344,6 +344,13 @@ class Subscription extends Model
                   $Email->SendOrderReceivedEmail($param);    
               }
 
+            //Resume Books after subscribe again.
+            DB::table('subscribed_books')
+              ->where('user_id',$UserID)              
+              ->update([                                  
+                'deleted_at' => null
+            ]);
+
            }
 
    }
