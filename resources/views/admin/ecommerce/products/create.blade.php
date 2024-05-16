@@ -174,7 +174,7 @@
                         @enderror
                         <p class="tx-10">
                             Required file type: .epub <br>
-                            Maximum Size: 10mb 
+                            Maximum Size: 200MB 
                         </p>
                         <div id="epub_div" style="display:none;">
                             <div class="d-flex mb-3">
