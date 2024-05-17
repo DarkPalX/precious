@@ -25,6 +25,7 @@ use App\Models\APIModels\Misc;
 use App\Models\APIModels\Book;
 use App\Models\APIModels\City;
 use App\Models\APIModels\Cart;
+use App\Models\APIModels\Email;
 use App\Models\APIModels\Order;
 use App\Models\APIModels\Review;
 use App\Models\APIModels\EWallet;
