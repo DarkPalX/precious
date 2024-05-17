@@ -174,7 +174,8 @@ class Email extends Model
 	      Mail::send(
 	         'api/send-order-history-email',
 	        [                  
-                  'OrderList'=> $param['OrderList'],	                
+                  'OrderItemList'=> $param['OrderItemList'],	                
+                  'FullName'=> $param['FullName'],	                
 	        ],
 	        function($message) use ($param){
 	          $message->from($param["CompanyNoReplyEmail"]);
