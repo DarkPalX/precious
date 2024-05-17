@@ -1571,6 +1571,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
   public function sendCustomerOrderHistory(Request $request){
 
   $Order = new Order();
+  $UserCustomer = new UserCustomer();
 
   $response = "Failed";
   $responseMessage = "";
