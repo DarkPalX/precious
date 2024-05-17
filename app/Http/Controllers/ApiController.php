@@ -1577,17 +1577,25 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
   $data['Platform'] = config('app.PLATFORM_ANDROID'); 
   $data['UserID'] = $request->post('UserID');
-
-  $data['Status'] = '';
-  $data['SearchText'] = '';
-
-  $data["PageNo"] = 0;
-  $data["Limit"] = 0;
-
-  $data['OrderItemList']=$Order->getOrderHistoryItemList($data['UserID']);   
-
-  // $Email = new Email();
-  // $Email->SendOrderHistoryEmail($data);    
+                  
+  $data['Status']='';
+  $data['SearchText']='';
+  
+  $data['Limit']=0;
+  $data['PageNo']=0;
+  
+  $info=$UserCustomer->getCustomerInformation($data);
+    
+  if(isset($info)>0){
+       $data['FullName']=$info->fullname;
+       $data['EmailAddress']=$info->emailaddress;
+       
+       $data['OrderItemList']=$Order->getOrderHistoryItemList($data);  
+       
+      $Email = new Email();
+      $Email->SendOrderHistoryEmail($data);
+      
+  }
         
     return response()->json([
       'response' => 'Success',
