@@ -1503,25 +1503,41 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
 //ORDER TRANSACTION===============================================================
 
-  public function getCustomerOrderHistory(Request $request){
+  public function sendCustomerOrderHistory(Request $request){
 
   $Order = new Order();
+  $UserCustomer = new UserCustomer();
 
   $response = "Failed";
   $responseMessage = "";
 
   $data['Platform'] = config('app.PLATFORM_ANDROID'); 
   $data['UserID'] = $request->post('UserID');
+                  
+  $data['Status']='';
+  $data['SearchText']='';
+  
+  $data['Limit']=0;
+  $data['PageNo']=0;
+  
+  $info=$UserCustomer->getCustomerInformation($data);
+    
+  if(isset($info)>0){
+       $data['FullName']=$info->fullname;
+       $data['EmailAddress']=$info->emailaddress;
+       
+       $data['OrderItemList']=$Order->getOrderHistoryItemList($data);  
+       
+      $Email = new Email();
+      $Email->SendOrderHistoryEmail($data);
+      
+  }
+        
+    return response()->json([
+      'response' => 'Success',
+      'message' => "Successfully email all transactions purchased order history.",
+    ]);   
 
-  $data['Status'] = '';
-  $data['SearchText'] = '';
-
-  $data["PageNo"] = 0;
-  $data["Limit"] = 20;
-
-  $result=$Order->getOrderList($data);  
-
-  return response()->json($result); 
   }
 
   public function getCustomerOrderInformation(Request $request){
