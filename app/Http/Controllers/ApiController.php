@@ -1501,6 +1501,28 @@ public function getAllBookDetailsCatalogueList(Request $request){
   return response()->json($result); 
   }
 
+//ORDER TRANSACTION===============================================================
+
+  public function getCustomerOrderHistory(Request $request){
+
+  $Order = new Order();
+
+  $response = "Failed";
+  $responseMessage = "";
+
+  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+  $data['UserID'] = $request->post('UserID');
+
+  $data['Status'] = '';
+  $data['SearchText'] = '';
+
+  $data["PageNo"] = 0;
+  $data["Limit"] = 20;
+
+  $result=$Order->getOrderList($data);  
+
+  return response()->json($result); 
+  }
 
   public function getCustomerOrderInformation(Request $request){
 
@@ -1567,15 +1589,16 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $info=$UserCustomer->getCustomerInformation($data);
     
   if(isset($info)>0){
+
        $data['FullName']=$info->fullname;
        $data['EmailAddress']=$info->emailaddress;
-       
-       $data['OrderItemList']=$Order->getOrderHistoryItemList($data);  
-       
-      $Email = new Email();
-      $Email->SendOrderHistoryEmail($data);
-      
+           
   }
+
+  $data['OrderItemList']=$Order->getOrderHistoryItemList($data);  
+       
+  $Email = new Email();
+  $Email->SendOrderHistoryEmail($data);
         
     return response()->json([
       'response' => 'Success',
