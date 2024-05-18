@@ -33,7 +33,6 @@
 
 
 
-
     //CATEGORY
     if($articleCategories->count()) {
 
@@ -64,9 +63,26 @@
     } else {
         $articleCategoriesHTML = '';
     } 
+
     
-    $keywords   = ['{Pages}', '{Category}'];
-    $variables  = [$customPagesHTML, $articleCategoriesHTML];
+
+    //ARTICLES
+    $articles = \App\Models\Article::where('status', 'PUBLISHED')->get();
+
+    if($articles->count()) {
+
+        $articlesHTML = '';
+
+        foreach($articles as $article){
+            $articlesHTML .= '<li><a href="' . url('/news') . '/'. $article->slug. '" style="color:#2ba6cb;">'. $article->name. '</a></li>';
+        }
+
+    } else {
+        $articlesHTML = '';
+    } 
+    
+    $keywords   = ['{Pages}', '{Category}', '{Articles}'];
+    $variables  = [$customPagesHTML, $articleCategoriesHTML, $articlesHTML];
     $contents = str_replace($keywords,$variables,$contents);
 
 @endphp
