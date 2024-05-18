@@ -574,7 +574,7 @@ class UserCustomer extends Model
 
           ")
 
-          ->whereRaw('usrs_sub.user_id=?',[$UserID])                                                      
+          ->where('usrs_sub.user_id',"=",$UserID)                                                      
           ->where('usrs_sub.is_subscribe',"=",1)
           
           ->first();
@@ -582,6 +582,33 @@ class UserCustomer extends Model
     return  $info;
  }
   
+
+  //subscirber mailing list status
+  public function getCustomerCurrentSubscriberInfo($EmailAddress){
+   
+   $TODAY = date("Y-m-d H:i:s");
+   
+   $info = DB::table('subscribers as subscriber')              
+     
+       ->selectraw("          
+ 
+          COALESCE(subscriber.id ,'') as subscriber_id,
+          COALESCE(subscriber.email ,'') as subscriber,
+
+          COALESCE(subscriber.name,0) as plan_id,
+          COALESCE(subscriber.code,'') as no_days,
+
+          COALESCE(subscriber.is_active,'') as start_date
+
+          ")
+
+          ->where('email .user_id',"=",$EmailAddress)                                                                        
+          ->first();
+ 
+    return  $info;
+ }
+  
+
   //news letter subscription status
  public function getNewsLettrSubsciberStatus($EmailAddress){
 
