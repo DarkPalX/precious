@@ -2012,13 +2012,13 @@ public function checkSubscriberStatus(Request $request){
      if(isset($info)>0){          
           return response()->json([                  
            'response' => 'Success',
-           'data' => $info,                     
+           'subscriber' => 1,                     
            'message' => "You have successfully check customer subscriber plan."
          ]);   
      }else{
        return response()->json([
           'response' => 'Failed',
-          'data' => null,          
+          'subscriber' => null,                     
           'message' => "Something wrong while checking subscriber.",
        ]); 
      }
