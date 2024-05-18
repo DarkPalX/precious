@@ -595,14 +595,12 @@ class UserCustomer extends Model
           COALESCE(subscriber.id ,'') as subscriber_id,
           COALESCE(subscriber.email ,'') as subscriber,
 
-          COALESCE(subscriber.name,0) as plan_id,
-          COALESCE(subscriber.code,'') as no_days,
-
-          COALESCE(subscriber.is_active,'') as start_date
+          COALESCE(subscriber.code ,'') as code,
+          COALESCE(subscriber.is_active ,0) as is_active        
 
           ")
 
-          ->where('email .user_id',"=",$EmailAddress)                                                                        
+          ->where('subscriber.email',"=",$EmailAddress)                                                                        
           ->first();
  
     return  $info;
