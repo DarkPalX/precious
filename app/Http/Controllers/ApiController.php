@@ -1996,10 +1996,18 @@ public function checkSubscriberStatus(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
+    $getEmailAddress="";
+
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
-    $data['UserID'] = $request->post('UserID');     
+    $data['UserID'] = $request->post('UserID');  
+
+    $info=$UserCustomer->getCustomerInformation($data);
+    if(isset($info)>0){
+
+       $getEmailAddress= $info->emailaddress;     
+      }   
      
-     $info=$UserCustomer->getCustomerCurrentSubscriberInfo($data['UserID']);
+     $info=$UserCustomer->getCustomerCurrentSubscriberInfo($getEmailAddress);
 
      if(isset($info)>0){          
           return response()->json([                  
