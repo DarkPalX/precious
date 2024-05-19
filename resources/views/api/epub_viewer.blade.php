@@ -12,6 +12,7 @@
   <link rel="stylesheet" type="text/css" href="https://www.api.ebooklat.phr.com.ph/public/api/css/epub-main-style.css">
 
   <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
+  <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/localforage.min.js"></script>  
   <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
   
   <style>
@@ -217,9 +218,13 @@
     var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
     var currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
+    
+    var file_url = params && params.get("file_url") && decodeURIComponent(params.get("file_url"));
 
     // Load the opf
-    var book = ePub(url || "{{$epub_doc}}");
+     var book = ePub("{{$epub_doc}}", {
+      store: "epubjs-test"
+    });
     
     var rendition = book.renderTo("viewer", {
       width: "100%",
@@ -489,6 +494,7 @@
 
   </script>
 
+  
   <script>
     function openSidePanelNav() {
     document.getElementById("CartPanel").style.right = "0px";
