@@ -888,14 +888,14 @@ public function checkCustomerLibraryBookExist(Request $request){
        $responseMessage ='Book is already in library section';
        return response()->json([
          'response' => 'Success',         
-         'is_allow_download' => true,         
+         'is_allow_post_review' => true,         
          'message' => $responseMessage,
         ]);    
 
     }else{
          return response()->json([
          'response' => 'Failed',         
-         'is_allow_download' => false,         
+         'is_allow_post_review' => false,         
          'message' => "This book is not in listed in your library.",
         ]);  
     }
