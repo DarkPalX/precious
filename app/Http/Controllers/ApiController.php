@@ -888,14 +888,14 @@ public function checkCustomerLibraryBookExist(Request $request){
        $responseMessage ='Book is already in library section';
        return response()->json([
          'response' => 'Success',         
-         'is_allow_post' => true,         
+         'is_allow_download' => true,         
          'message' => $responseMessage,
         ]);    
 
     }else{
          return response()->json([
          'response' => 'Failed',         
-         'is_allow_post' => false,         
+         'is_allow_download' => false,         
          'message' => "This book is not in listed in your library.",
         ]);  
     }
@@ -1040,13 +1040,13 @@ public function saveDownloadedSubscribedBooks(Request $request){
     //     ]);    
     // }
 
-    if($Library->checkProductsIfExistInDownloadSubscribedBooks($data['ProductID'],$data['UserID'])){
-       $ResponseMessage ='This book is already in your downloaded list.';
-       return response()->json([
-         'response' => 'Failed',         
-         'message' => $ResponseMessage,
-        ]);    
-    }
+    // if($Library->checkProductsIfExistInDownloadSubscribedBooks($data['ProductID'],$data['UserID'])){
+    //    $ResponseMessage ='This book is already in your downloaded list.';
+    //    return response()->json([
+    //      'response' => 'Failed',         
+    //      'message' => $ResponseMessage,
+    //     ]);    
+    // }
               
     $retVal=$Library->saveDownloadSubscribedBooks($data);
      return response()->json([
