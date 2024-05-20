@@ -26,6 +26,11 @@
     width: 98%;
    }
 
+/*   #viewer{
+    padding-top:20px;
+    padding-bottom:40px;
+   }*/
+
 .sidenav {
     height: 100%;
     width: 310px;
@@ -210,12 +215,10 @@
     var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
     var currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
-
+    
     var file_url = params && params.get("file_url") && decodeURIComponent(params.get("file_url"));
 
     // Load the opf
-    // var book = ePub(url || "{{$epub_doc}}");
-
      var book = ePub("{{$epub_doc}}", {
       store: "epubjs-test"
     });
@@ -223,7 +226,7 @@
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: "100%",
-      flow: "scrolled-doc"
+      flow: "spreads"
     });
    
     rendition.display(currentSectionIndex);
@@ -488,8 +491,7 @@
 
   </script>
 
-  var file_url = params && params.get("file_url") && decodeURIComponent(params.get("file_url"));
-
+  
   <script>
     function openSidePanelNav() {
     document.getElementById("CartPanel").style.right = "0px";
