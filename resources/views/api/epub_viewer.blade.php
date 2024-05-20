@@ -218,7 +218,6 @@
     
     var file_url = params && params.get("file_url") && decodeURIComponent(params.get("file_url"));
 
-    // Load the opf
      var book = ePub("{{$epub_doc}}", {
       store: "epubjs-test"
     });
@@ -226,8 +225,14 @@
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: "100%",
-      flow: "spreads"
+      flow: "scrolled-doc"
     });
+    
+    // var rendition = book.renderTo("viewer", {
+    //   width: "100%",
+    //   height: "100%",
+    //   flow: "spreads"
+    // });
    
     rendition.display(currentSectionIndex);
    
