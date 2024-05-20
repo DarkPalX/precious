@@ -1991,6 +1991,7 @@ public function checkSubscriptionStatus(Request $request){
          ]);   
 
     }else{
+
       $has_subscription=false;
       $info=null;
 
@@ -1998,7 +1999,7 @@ public function checkSubscriptionStatus(Request $request){
           'response' => 'Failed',
           'data' => null,          
           'message' => "User has no subscription plan.",
-       ])
+       ]);
     }  
          
 }
