@@ -243,7 +243,7 @@ class ApiController extends Controller {
      
 
     if(!empty($data['EmailAddress']) && $Misc->isDataExist('users', 'id', $data['UserID'], "email", $data['EmailAddress'])){
-        $ResponseMessage = 'Email address is already registered. Login your account or use forgot password.';
+        $ResponseMessage = 'Email is already registered. Login your account or use forgot password.';
          return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
