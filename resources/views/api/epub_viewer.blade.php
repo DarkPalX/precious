@@ -230,8 +230,14 @@
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: "100%",
-      spread: "always"
+      flow: "scrolled-doc"
     });
+    
+    // var rendition = book.renderTo("viewer", {
+    //   width: "100%",
+    //   height: "100%",
+    //   spread: "always"
+    // });
 
     rendition.display(currentSectionIndex);
    
