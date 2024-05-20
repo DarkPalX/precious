@@ -1966,32 +1966,41 @@ public function checkSubscriptionStatus(Request $request){
     
     $Cart = new Cart();
     $UserCustomer = new UserCustomer();
-
     $Subscription = new Subscription();
     
     $response = "Failed";
     $responseMessage = "";
 
+    $has_subscription=false;
+    $SubscriptionPlanID=0;
+
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
-    $data['UserID'] = $request->post('UserID');     
+    $data['UserID'] = $request->post('UserID'); 
 
-     $Subscription->checkSubscriptionStatus($data);//check plan subscription
-     $info=$UserCustomer->getCustomerCurrentSubscriptionInfo($data['UserID']);
+    $SubscriptionPlanID=$Subscription->checkCustomerSubscriptionIfExist($data['UserID']);  
 
-     if(isset($info)>0){          
-          return response()->json([                  
+    if($SubscriptionPlanID>0){
+      $has_subscription=true;  
+      $Subscription->checkSubscriptionStatus($data);//check plan subscription
+      $info=$UserCustomer->getCustomerCurrentSubscriptionInfo($data['UserID']);
+
+       return response()->json([                  
            'response' => 'Success',
            'data' => $info,                     
-           'message' => "You have successfully check customer subscription plan."
+           'message' => "You have successfully check customer subscription plan.",
          ]);   
-     }else{
+
+    }else{
+      $has_subscription=false;
+      $info=null;
+
        return response()->json([
           'response' => 'Failed',
           'data' => null,          
-          'message' => "Something wrong while checking subscription plan.",
-       ]); 
-     }
-
+          'message' => "User has no subscription plan.",
+       ])
+    }  
+         
 }
 
 
