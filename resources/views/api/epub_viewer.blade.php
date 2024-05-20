@@ -26,13 +26,10 @@
     width: 98%;
    }
 
-   /*#viewer{
-    padding-top:30px;    
+   #viewer{
+    padding-top:20px;
+    padding-bottom:20px;
    }
-  .spreads{
-      padding-top:20px;
-      padding-bottom:20px;
-   }*/
 
 .sidenav {
     height: 100%;
