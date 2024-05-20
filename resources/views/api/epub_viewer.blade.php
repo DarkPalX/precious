@@ -223,9 +223,7 @@
       store: "epubjs-test"
     });
     
-    var rendition = book.renderTo("viewer", {
-      width: "100%",
-      height: 600,
+    var rendition = book.renderTo("viewer", {  
       flow: "scrolled-doc"
     });
    
