@@ -226,7 +226,7 @@
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: "100%",
-      flow: "scrolled-doc"
+      flow: "spreads"
     });
    
     rendition.display(currentSectionIndex);
