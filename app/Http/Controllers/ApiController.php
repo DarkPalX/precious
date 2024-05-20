@@ -1598,15 +1598,22 @@ public function getAllBookDetailsCatalogueList(Request $request){
              
         $Email = new Email();
         $Email->SendOrderHistoryEmail($data);
+
+         return response()->json([
+          'response' => 'Success',
+          'message' => "Successfully email all transactions purchased order history.",
+        ]);  
            
+  }else{
+
+     return response()->json([
+          'response' => 'Failed',
+          'message' => "Something wrong while sending email all transactions purchased order history.",
+        ]);  
+
   }
 
-        
-    return response()->json([
-      'response' => 'Success',
-      'message' => "Successfully email all transactions purchased order history.",
-    ]);   
-
+      
   }
 
  public function getCustomerOrderDetails(Request $request){
