@@ -478,9 +478,9 @@ class Order extends Model
     ");    
 
     $query->where("sales_hdr.user_id",'=',$UserID);    
-    $info = $query->get();
+    $list = $query->get();
                              
-    return $info;             
+    return $list;             
            
   }
 
