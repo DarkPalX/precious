@@ -1590,12 +1590,15 @@ public function getAllBookDetailsCatalogueList(Request $request){
     
   if(isset($info)>0){
 
+       $data['OrderItemList']=$Order->getOrderHistoryItemList($data['UserID']);  
+
        $data['FullName']=$info->fullname;
        $data['EmailAddress']=$info->emailaddress;
+                                    
+  }
 
+  if($data['UserID']>0 && count($data['OrderItemList'])>0){
 
-        $data['OrderItemList']=$Order->getOrderHistoryItemList($data['UserID']);  
-             
         $Email = new Email();
         $Email->SendOrderHistoryEmail($data);
 
@@ -1603,16 +1606,16 @@ public function getAllBookDetailsCatalogueList(Request $request){
           'response' => 'Success',
           'message' => "Successfully email all transactions purchased order history.",
         ]);  
-           
+
   }else{
 
      return response()->json([
           'response' => 'Failed',
-          'message' => "Something wrong while sending email all transactions purchased order history.",
+          'message' => "Something is wrong while sending email of all transactions purchased order  history.",
         ]);  
-
+         
   }
-
+  
       
   }
 
