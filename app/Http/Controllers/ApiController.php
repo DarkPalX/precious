@@ -874,6 +874,7 @@ public function checkCustomerLibraryBookExist(Request $request){
     $Library = new Library();
 
     $checkLibraryBook=false;
+    $checkLibrarySubscribeBook=false;
 
     $response = "Failed";
     $responseMessage = "";
@@ -883,9 +884,9 @@ public function checkCustomerLibraryBookExist(Request $request){
     $data['ProductID']=$request->post('ProductID');
 
    $checkLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID']);
-   $checkLibraryBook=$Library->checkProductsIfExistInSubscribeLibrary($data['ProductID'],$data['UserID']);
+   $checkLibrarySubscribeBook=$Library->checkProductsIfExistInSubscribeLibrary($data['ProductID'],$data['UserID']);
 
-   if($checkLibraryBook){
+   if($checkLibraryBook || $checkLibrarySubscribeBook){
        $responseMessage ='Book is already in library section';
        return response()->json([
          'response' => 'Success',         
