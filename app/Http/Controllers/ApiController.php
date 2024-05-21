@@ -883,6 +883,7 @@ public function checkCustomerLibraryBookExist(Request $request){
     $data['ProductID']=$request->post('ProductID');
 
    $checkLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID']);
+   $checkLibraryBook=$Library->checkProductsIfExistInSubscribeLibrary($data['ProductID'],$data['UserID']);
 
    if($checkLibraryBook){
        $responseMessage ='Book is already in library section';
