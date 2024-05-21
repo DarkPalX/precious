@@ -462,10 +462,11 @@ class UserCustomer extends Model
 
           // CALL EMAIL HERE FOR REGISTRATION W/ ACTIVATION
           if(!empty($EmailAddress)){      
+
              $param['FullName']=trim($FullName);
              $param['EmailAddress']=trim($EmailAddress);
              $param['VerificationCode']=$VerificationCode;
-             
+                                                
              $Email = new Email();
              $Email->SendCustomerRegistrationEmail($param);      
           }
