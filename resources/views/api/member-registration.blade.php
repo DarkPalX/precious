@@ -78,7 +78,7 @@
                Dear <b>{{ $FullName }}</b>,
               <br><br>
                   Welcome to  {{ config("app.CompanyName") }} and thank you for your interest for signing and becoming one of our customer. Please login your account now and complete the registration process.
-                  Enter this 4 digit verification code below:
+                  Use this 4 digit verification code below:
 
                    <br><br>
                   
