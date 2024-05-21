@@ -760,13 +760,13 @@ class ApiController extends Controller {
         ]);
     }
 
-    // if(!empty($data['EmailAddress']) && $Misc->isDataExist('customer', 'UserAccountID', $data['UserCustomerID'], "EmailAddress", $data['EmailAddress'])){
-    //     $ResponseMessage = 'Email address is already used.';
-    //      return response()->json([
-    //      'response' => 'Failed',
-    //      'message' => $ResponseMessage,
-    //     ]);
-    // }
+    if(!empty($data['EmailAddress']) && $Misc->isDataExist('customer', 'UserAccountID', $data['UserCustomerID'], "EmailAddress", $data['EmailAddress'])){
+        $ResponseMessage = 'Email address is already used.';
+         return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
 
     // if(!empty($data['MobileNo']) && $Misc->isDataExist('customer', 'UserAccountID', $data['UserCustomerID'], "MobileNo", $data['MobileNo'])){
     //     $ResponseMessage = 'Mobile number is already used.';
