@@ -760,21 +760,21 @@ class ApiController extends Controller {
         ]);
     }
 
-    if(!empty($data['EmailAddress']) && $Misc->isDataExist('customer', 'UserAccountID', $data['UserCustomerID'], "EmailAddress", $data['EmailAddress'])){
-        $ResponseMessage = 'Email address is already used.';
+    if(!empty($data['EmailAddress']) && $Misc->isDataExist('users', 'id', $data['UserID'], "email", $data['EmailAddress'])){
+        $ResponseMessage = 'Email is already registered. Login your account or use forgot password.';
          return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
         ]);
     }
 
-    // if(!empty($data['MobileNo']) && $Misc->isDataExist('customer', 'UserAccountID', $data['UserCustomerID'], "MobileNo", $data['MobileNo'])){
-    //     $ResponseMessage = 'Mobile number is already used.';
-    //      return response()->json([
-    //      'response' => 'Failed',
-    //      'message' => $ResponseMessage,
-    //     ]);
-    // }
+     if(!empty($data['MobileNo']) && $Misc->isDataExist('users', 'id', $data['UserID'], "mobile", $data['MobileNo'])){
+        $ResponseMessage = 'Mobile number is already registered.';
+         return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    } 
     
     $retVal=$UserCustomer->doUpdateCustomerProfile($data);
      return response()->json([
