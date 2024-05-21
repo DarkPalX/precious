@@ -219,8 +219,7 @@
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
     var currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
 
-    var file_url = params && params.get("file_url") && decodeURIComponent(params.get("file_url"));
-
+    
     // Load the opf
     var book = ePub(url || "{{$epub_doc}}");
       
@@ -496,8 +495,7 @@
 
   </script>
 
-  var file_url = params && params.get("file_url") && decodeURIComponent(params.get("file_url"));
-
+  
   <script>
     function openSidePanelNav() {
     document.getElementById("CartPanel").style.right = "0px";
