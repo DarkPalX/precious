@@ -307,13 +307,7 @@ class Library extends Model
   public function getSubscribedDownloadedBooksList($data){
     
     $UserID=$data['UserID'];
-    
-    $Status=$data['Status'];
-    $SearchText=$data['SearchText'];
-    
-    $Limit=$data['Limit'];
-    $PageNo=$data['PageNo'];
-    
+        
     $query = DB::table('subscribed_books as rbooks')
       ->join('products as prds', 'prds.id', '=', 'rbooks.product_id') 
     
@@ -403,30 +397,7 @@ class Library extends Model
     $query->where("rbooks.user_id",'=',$UserID);    
     $query->where("rbooks.is_downloaded",'=',1);        
     $query->where("rbooks.deleted_at",'=',null);   
-   
-                    
-    if($SearchText != ''){
-        $arSearchText = explode(" ",$SearchText);
-        if(count($arSearchText) > 0){
-            for($x=0; $x< count($arSearchText); $x++) {
-                $query->whereraw(
-                    "CONCAT_WS(' ',
-                        COALESCE(prds.name,''),
-                        COALESCE(prds.author,''),                        
-                        COALESCE(prds.subtitle,'')
-                    ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
-             }
-        }
-    }
-
-    if($Limit > 0){
-      $query->limit($Limit);
-      $query->offset(($PageNo-1) * $Limit);
-    }
-
-    $query->orderBy("prds.name","ASC");    
-    $list = $query->get();
-                             
+                                                   
      return $list;             
            
   }
@@ -473,12 +444,13 @@ class Library extends Model
 
     $TODAY = date("Y-m-d H:i:s");
     $PaymentDate = date("Y-m-d");
-    
+
     $UserID=$data['UserID'];    
     $ProductID=$data['ProductID'];    
     $IsSubscribe=$data['IsSubscribed'];    
     $IsDownloaded=$data['IsDownloaded'];
-    
+
+
     DB::table('subscribed_books')
       ->where('user_id',$UserID)                  
       ->where('product_id',$ProductID)
