@@ -904,6 +904,42 @@ public function checkCustomerLibraryBookExist(Request $request){
 
 }
 
+public function checkCustomerLibraryDownloadBookExist(Request $request){
+    
+    $Misc = new Misc();
+    $Library = new Library();
+
+    $checkLibraryBook=false;
+    $checkLibrarySubscribeDownloadBook=false;
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['UserID']=$request->post('UserID');
+    $data['ProductID']=$request->post('ProductID');
+
+   $checkLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID']);
+   $checkLibrarySubscribeDownloadBook=$Library->checkProductsIfExistInSubscribeDownloadLibrary($data['ProductID'],$data['UserID']);
+
+   if($checkLibraryBook || $checkLibrarySubscribeDownloadBook){
+       $responseMessage ='Book is already in library section';
+       return response()->json([
+         'response' => 'Success',         
+         'is_allow_download' => true,         
+         'message' => $responseMessage,
+        ]);    
+
+    }else{
+         return response()->json([
+         'response' => 'Failed',         
+         'is_allow_download' => false,         
+         'message' => "This book is not in listed in your library.",
+        ]);  
+    }
+
+}
+
 public function getSubscribedReadBooksList(Request $request){
     
     $Misc = new Misc();
