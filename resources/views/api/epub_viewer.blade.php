@@ -26,9 +26,12 @@
     width: 98%;
    }
 
-/*   #viewer{
-    padding-top:20px;
-    padding-bottom:40px;
+   /*#viewer{
+    padding-top:30px;    
+   }
+  .spreads{
+      padding-top:20px;
+      padding-bottom:20px;
    }*/
 
 .sidenav {
@@ -215,24 +218,17 @@
     var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
     var currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
-    
+
     var file_url = params && params.get("file_url") && decodeURIComponent(params.get("file_url"));
 
-     var book = ePub("{{$epub_doc}}", {
-      store: "epubjs-test"
-    });
-    
+    // Load the opf
+    var book = ePub(url || "{{$epub_doc}}");
+      
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: "100%",
       flow: "scrolled-doc"
     });
-    
-    // var rendition = book.renderTo("viewer", {
-    //   width: "100%",
-    //   height: "100%",
-    //   flow: "spreads"
-    // });
    
     rendition.display(currentSectionIndex);
    
@@ -241,7 +237,8 @@
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){  
 
-        rendition.themes.select("dark");     
+        rendition.themes.select("dark");  
+
        //  rendition.themes.register("dark_color", {
        //        "p": {                   
        //          "color": "white !important",
@@ -358,7 +355,9 @@
       });
 
       var font_times = document.getElementById("font_times");
+
       font_times.addEventListener("click", function(e){    
+
         rendition.themes.register("custom_font_times", {
               body: {                   
                 "font-family": "Times New Roman, Times, serif !important",
@@ -368,6 +367,7 @@
       });
     
       var font_lucida = document.getElementById("font_lucida");
+
       font_lucida.addEventListener("click", function(e){    
         rendition.themes.register("custom_font_lucida", {
               body: {                   
@@ -496,7 +496,8 @@
 
   </script>
 
-  
+  var file_url = params && params.get("file_url") && decodeURIComponent(params.get("file_url"));
+
   <script>
     function openSidePanelNav() {
     document.getElementById("CartPanel").style.right = "0px";
