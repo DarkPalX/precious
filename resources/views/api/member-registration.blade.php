@@ -77,7 +77,8 @@
             <td  style="padding-top:40px;padding-bottom:0px;padding-left:50px;padding-right:50px;font-family:sans-serif;font-size:12px;line-height:20px;color:#232323;text-align:left;font-weight:normal">
                Dear <b>{{ $FullName }}</b>,
               <br><br>
-                  Welcome to   {{ config("app.CompanyName") }} and thank you for your interest for signing and becoming one of our customer. Please login your account now and and complete the registration process, please enter this new 4 digit verification code below:
+                  Welcome to  {{ config("app.CompanyName") }} and thank you for your interest for signing and becoming one of our customer. Please login your account now and complete the registration process.
+                  Enter this 4 digit verification code below:
 
                    <br><br>
                   
