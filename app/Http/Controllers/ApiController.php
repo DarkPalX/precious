@@ -1044,6 +1044,7 @@ public function saveDownloadedSubscribedBooks(Request $request){
     $responseMessage = "";
 
     $IsFreeBook=0;
+    $IsPremium=0;
 
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
     $data['UserID']=$request->post('UserID');
@@ -1051,35 +1052,44 @@ public function saveDownloadedSubscribedBooks(Request $request){
     $data['IsSubscribed']=$request->post('IsSubscribed');
     $data['IsDownloaded']=$request->post('IsDownloaded');
 
-    // $info=$Book->getBookInfoByID($data['ProductID']);
+    $info=$Book->getBookInfoByID($data['ProductID']);
 
-    // if(isset($info)>0){
-    //     $IsFreeBook=$info->is_free;
-    // }
+    if(isset($info)>0){
+        $IsFreeBook=$info->is_free;
+        $IsPremium=$info->is_premium;
+    }
 
-    // if($IsFreeBook==1){
-    //     $ResponseMessage ='Sorry. Cannot download free books.';
-    //      return response()->json([
-    //        'response' => 'Failed',         
-    //        'message' => $ResponseMessage,
-    //       ]);    
-    // }
+    if($IsFreeBook==1){
+        $ResponseMessage ='Sorry. Cannot download free books.';
+         return response()->json([
+           'response' => 'Failed',         
+           'message' => $ResponseMessage,
+          ]);    
+    }
 
-    // if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
-    //    $ResponseMessage ='Sorry. Cannot download library books.';
-    //    return response()->json([
-    //      'response' => 'Failed',         
-    //      'message' => $ResponseMessage,
-    //     ]);    
-    // }
+     if($IsPremium==1){
+        $ResponseMessage ='Sorry. Cannot download premium books.';
+         return response()->json([
+           'response' => 'Failed',         
+           'message' => $ResponseMessage,
+          ]);    
+    }
 
-    // if($Library->checkProductsIfExistInDownloadSubscribedBooks($data['ProductID'],$data['UserID'])){
-    //    $ResponseMessage ='This book is already in your downloaded list.';
-    //    return response()->json([
-    //      'response' => 'Failed',         
-    //      'message' => $ResponseMessage,
-    //     ]);    
-    // }
+    if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
+       $ResponseMessage ='Sorry. Cannot download book is already in your library section.';
+       return response()->json([
+         'response' => 'Failed',         
+         'message' => $ResponseMessage,
+        ]);    
+    }
+
+    if($Library->checkProductsIfExistInDownloadSubscribedBooks($data['ProductID'],$data['UserID'])){
+       $ResponseMessage ='This book is already in your downloaded list.';
+       return response()->json([
+         'response' => 'Failed',         
+         'message' => $ResponseMessage,
+        ]);    
+    }
               
     $retVal=$Library->saveDownloadSubscribedBooks($data);
      return response()->json([
