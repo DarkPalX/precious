@@ -989,12 +989,7 @@ public function getSubscribedDownloadedBooksList(Request $request){
 
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
     $data['UserID']=$request->post('UserID');    
-
-    $data["SearchText"] = '';
-    $data["Status"] = '';
-    $data["PageNo"] = 0;
-    $data["Limit"] = 0;
-
+    
     $result=$Library->getSubscribedDownloadedBooksList($data);  
     return response()->json($result); 
     
