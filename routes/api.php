@@ -182,6 +182,12 @@ Route::post('/check-library-book',[
    'as'=> 'check-library-book'
 ]);
 
+Route::post('/check-book-allow-download',[
+   'uses'=>'App\Http\Controllers\ApiController@checkCustomerLibraryDownloadBookExist',
+   'as'=> 'check-book-allow-download'
+]);
+
+
 Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
    'as'=> 'add-to-favorites'
