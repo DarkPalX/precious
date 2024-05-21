@@ -323,6 +323,26 @@ class Library extends Model
     return $IsExist;
   }
 
+    public function checkProductsIfExistInSubscribeDownloadLibrary($ProductID,$CustomerID){
+      
+    $IsExist = false; 
+    
+    $list = DB::table('subscribed_books')          
+        ->whereRaw('user_id=?',[$CustomerID])    
+        ->whereRaw('product_id=?',[$ProductID])                                    
+        ->where('is_downloaded','=',1)
+        ->where('deleted_at','=',null)
+        ->get();
+
+    if(count($list)>0){
+        $IsExist=true;
+    }else{
+        $IsExist=false;
+    }
+    
+    return $IsExist;
+  }
+
 
   public function getSubscribedDownloadedBooksList($data){
     
