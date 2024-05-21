@@ -397,7 +397,10 @@ class Library extends Model
     $query->where("rbooks.user_id",'=',$UserID);    
     $query->where("rbooks.is_downloaded",'=',1);        
     $query->where("rbooks.deleted_at",'=',null);   
-                                                   
+   
+
+    $list = $query->get();
+                             
      return $list;             
            
   }
