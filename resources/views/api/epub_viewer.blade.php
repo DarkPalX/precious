@@ -222,6 +222,8 @@
     
     // Load the opf
     var book = ePub(url || "{{$epub_doc}}");
+
+      book.displayChapter(3);
       
     var rendition = book.renderTo("viewer", {
       width: "100%",
