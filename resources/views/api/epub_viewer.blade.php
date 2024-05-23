@@ -230,9 +230,9 @@
       flow: "scrolled-doc"
     });
    
-     rendition.displayChapter(3);
+     // rendition.displayChapter(3);
 
-    // rendition.display(currentSectionIndex);
+    rendition.display(currentSectionIndex);
    
 
    // Set Theme
