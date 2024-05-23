@@ -223,7 +223,6 @@
     // Load the opf
     var book = ePub(url || "{{$epub_doc}}");
 
-      book.displayChapter(3);
       
     var rendition = book.renderTo("viewer", {
       width: "100%",
@@ -231,7 +230,9 @@
       flow: "scrolled-doc"
     });
    
-    rendition.display(currentSectionIndex);
+     rendition.displayChapter(3);
+
+    // rendition.display(currentSectionIndex);
    
 
    // Set Theme
