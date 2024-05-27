@@ -508,6 +508,7 @@
           type: "post",
           url: "https://www.beta.ebooklat.phr.com.ph/api/update-book-marks",
           data: {
+            _token: '{{ csrf_token() }}',
             UserID:vProductID,
             ProductID:vUserID,
             PageNo:vIndex          
