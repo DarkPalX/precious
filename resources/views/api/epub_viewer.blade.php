@@ -373,12 +373,13 @@
     // End Set Font Style
 
     book.ready.then(() => {
+
       var next = document.getElementById("next");
       next.addEventListener("click", function(e){        
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
 
        var $select = document.getElementById("toc");
-       index=$select.selectedIndex; 
+       index=$select.selectedIndex+1; 
 
         var $ChapterNo = document.getElementById("BookMarkIndex");
         $ChapterNo.value=index;  
@@ -391,7 +392,7 @@
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();    
        
        var $select = document.getElementById("toc");
-       index=$select.selectedIndex; 
+       index=$select.selectedIndex+1; 
 
        var $ChapterNo = document.getElementById("BookMarkIndex");
         $ChapterNo.value=index;     
