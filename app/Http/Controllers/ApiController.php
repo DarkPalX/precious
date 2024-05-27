@@ -1019,9 +1019,7 @@ public function updateBookMarks(Request $request){
        $data['chapter_page_no']=$Library->getPageChapterBookMark($data['product_id'],$data['customer_id']);
        
        if(is_null($data['chapter_page_no'])){
-           $data['chapter_page_no']=0;
-       }else{
-        $data['chapter_page_no']=$data['chapter_page_no']+1;
+           $data['chapter_page_no']=0;       
        }
 
        if(isset($info)>0){
