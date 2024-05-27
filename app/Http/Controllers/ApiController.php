@@ -1047,7 +1047,7 @@ public function updateBookMarks(Request $request){
        return View::make('api/epub_viewer')->with($data);    
     } 
 
-   
+   return Redirect::back()->with('msg', 'The Message');
   
 }
 
