@@ -1008,7 +1008,7 @@ public function updateBookMarks(Request $request){
     $data['PageNo']=$request->input('PageNo');
           
     $retVal=$Library->updateBookMarks($data);
-;
+
     $data['customer_id']=$data['UserID'];
     $data['product_id']=$data['ProductID'];
 
@@ -1047,7 +1047,7 @@ public function updateBookMarks(Request $request){
        return View::make('api/epub_viewer')->with($data);    
     } 
 
-   return Redirect::back()->with('msg', 'The Message');
+   // return Redirect::back();
   
 }
 
