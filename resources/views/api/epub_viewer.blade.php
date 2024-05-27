@@ -380,8 +380,8 @@
        var $select = document.getElementById("toc");
        index=$select.selectedIndex+1; 
 
-        var $page = document.getElementById("BookMarkIndex");
-        page.value=index;
+        var $ChapterNo = document.getElementById("BookMarkIndex");
+        $ChapterNo.value=index;  
                     
         e.preventDefault();      
       }, false);
@@ -393,8 +393,8 @@
        var $select = document.getElementById("toc");
        index=$select.selectedIndex+1; 
 
-       var $page = document.getElementById("BookMarkIndex");
-        page.value=index;     
+       var $ChapterNo = document.getElementById("BookMarkIndex");
+        $ChapterNo.value=index;     
         
       }, false);
 
