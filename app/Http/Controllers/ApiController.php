@@ -1009,7 +1009,7 @@ public function updateBookMarks(Request $request){
     $retVal=$Library->updateBookMarks($data);
      return response()->json([
       'response' => 'Success',
-      'message' => "Sucessfully open & read book.",
+      'message' => "Sucessfully updated book marks",
     ]);  
     
 }
@@ -2471,7 +2471,7 @@ public function validateCouponCode(Request $request){
 
            $Epub_file=$info->file_url;                              
             
-            $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
+            $data['epub_doc']='https://www.api.ebooklat.phr.com.ph/public/'.$Epub_file;
 
              if(file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$Epub_file)){
                 $data['epub_file_exist']=true;
