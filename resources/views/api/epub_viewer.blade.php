@@ -186,12 +186,13 @@
                         </div>
 
 
-                        <div>                          
+                        <div>  
+                          <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Set Book Chapter</div>                        
                           <form id="submit" action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
                             <input type="hidden" value="{{$customer_id}}" name="UserID">
                             <input type="hidden" value="{{$product_id}}" name="ProductID">
                             <input id="BookMarkIndex" type="hidden" name="PageNo">
-                             <input type="submit" value=" Bookmark this Chapter">
+                             <input type="submit" value=" Set Bookmark " style="vertical-align: middle;border-radius: 32px;border: 1px solid rgba(0, 0, 0, 0.15);text-align: center;margin: 4px;padding: 4px 8px;">
                            </form>   
                         </div>  
 
