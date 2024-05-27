@@ -990,6 +990,12 @@ public function saveBookMarks(Request $request){
 }
 
 public function updateBookMarks(Request $request){
+
+      return response([
+            'message' => 'update BookMark is working...'
+     ], 200);
+    
+    return;
     
     $Misc = new Misc();
     $Book = new Book();
@@ -1007,6 +1013,7 @@ public function updateBookMarks(Request $request){
     $data['PageNo']=$request->post('PageNo');
           
     $retVal=$Library->updateBookMarks($data);
+
      return response()->json([
       'response' => $response,
       'message' => "Sucessfully update book marks.",
