@@ -923,7 +923,7 @@ public function checkBookHasBookMark(Request $request){
    $BookMarkChapter=$Library->getPageChapterBookMark($data['ProductID'],$data['UserID']);
   
    if($BookMarkChapter>0){
-       $responseMessage ='Book has book mark chapter';
+       $responseMessage ='This book has chapter book mark';
        return response()->json([
          'response' => 'Success',         
          'has_book_mark' => true,         
@@ -934,7 +934,7 @@ public function checkBookHasBookMark(Request $request){
          return response()->json([
          'response' => 'Failed',         
          'has_book_mark' => false,         
-         'message' => "This book is not in listed in your library.",
+         'message' => "This book has no book mark chapter",
         ]);  
     }
 
