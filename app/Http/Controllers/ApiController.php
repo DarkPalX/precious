@@ -122,6 +122,7 @@ class ApiController extends Controller {
               
              
          }else{
+
             return response()->json([
                     'data' => null,                    
                     'response' => 'Failed',
@@ -129,6 +130,7 @@ class ApiController extends Controller {
                  ]); 
          }
      }else{
+
           return response()->json([
                 'data' => null,                
                 'response' => 'Failed',                
@@ -962,7 +964,7 @@ public function getSubscribedReadBooksList(Request $request){
 }
 
 //LIBRARY SUBSCRIBED SECTION========================================
-public function saveReadSubscribedBooks(Request $request){
+public function saveBookMarks(Request $request){
     
     $Misc = new Misc();
     $Book = new Book();
@@ -973,46 +975,61 @@ public function saveReadSubscribedBooks(Request $request){
 
     $IsFreeBook=0;
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
-    $data['IsRead']=$request->post('IsRead');
-
-    $info=$Book->getBookInfoByID($data['ProductID']);
-
-    if(isset($info)>0){
-        $IsFreeBook=$info->is_free;
-    }
-
-    if($IsFreeBook==1){
-        $ResponseMessage ='This book is a free book.';
-         return response()->json([
-           'response' => 'Failed',         
-           'message' => $ResponseMessage,
-          ]);    
-    }
-
-    if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
-       $ResponseMessage ='Book is already in library section';
-       return response()->json([
-         'response' => 'Failed',         
-         'message' => $ResponseMessage,
-        ]);    
-    }
-
-    if($Library->checkProductsIfExistInSubscribedBooks($data['ProductID'],$data['UserID'])){
-       $ResponseMessage ='You already have this book in your subscribed book sections';
-       return response()->json([
-         'response' => 'Failed',         
-         'message' => $ResponseMessage,
-        ]);    
-    }
-              
-    $retVal=$Library->saveReadSubscribedBooks($data);
+    $data['PageNo']=$request->post('PageNo');
+          
+    $retVal=$Library->saveBookMarks($data);
      return response()->json([
       'response' => 'Success',
       'message' => "Sucessfully open & read book.",
     ]);  
+    
+}
+
+public function updateBookMarks(Request $request){
+    
+    $Misc = new Misc();
+    $Book = new Book();
+    $Library = new Library();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $IsFreeBook=0;
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+
+    $data['UserID']=$request->post('UserID');
+    $data['ProductID']=$request->post('ProductID');
+    $data['PageNo']=$request->post('PageNo');
+          
+    $retVal=$Library->updateBookMarks($data);
+     return response()->json([
+      'response' => 'Success',
+      'message' => "Sucessfully open & read book.",
+    ]);  
+    
+}
+
+// SET READ SUBCRIBE BOOKS====================================================
+public function saveReadSubscribedBooks(Request $request){
+    
+    $Misc = new Misc();
+    $Library = new Library();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['UserID']=$request->post('UserID');   
+    $data['ProductID']=$request->post('ProductID'); 
+    $data['IsRead']=$request->post('IsRead');
+    
+    $result=$Library->saveReadSubscribedBooks($data);  
+    return response()->json($result); 
     
 }
 
@@ -2432,14 +2449,26 @@ public function validateCouponCode(Request $request){
    public function showViewerEpub(Request $request){
      
    $Book= new Book();
+   $Library= new Library();
    
    $data['epub_file_exist']=false;
-   $data['doc_id'] =  $request->input('doc_id');
+   $data['chapter_page_no']=0;
+
+   $data['product_id'] =  $request->input('doc_id');
+   $data['customer_id'] =  $request->input('user_id');
    
-   if($data['doc_id']>0){
+   if($data['product_id']>0){
        $Epub_file='';
-       $info=$Book->getBookInfoByID($data['doc_id']);
+
+       $info=$Book->getBookInfoByID($data['product_id']);
+       $data['chapter_page_no']=$Library->getPageChapterBookMark($data['product_id'],$data['customer_id']);
+       
+       if(is_null($data['chapter_page_no'])){
+           $data['chapter_page_no']=0;
+       }
+
        if(isset($info)>0){
+
            $Epub_file=$info->file_url;                              
             
             $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
