@@ -208,10 +208,9 @@
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
     var currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
 
-    var $select = document.getElementById("toc");
-    index=$select.selectedIndex;
-
-    alert(index);
+    // var $select = document.getElementById("toc");
+    // index=$select.selectedIndex;
+    // alert(index);
 
     var currentSectionIndex ="{{$chapter_page_no}}";
     var vProductID ="{{$product_id}}";
@@ -375,7 +374,7 @@
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
 
        var $select = document.getElementById("toc");
-       index=$select.selectedIndex;      
+       index=$select.selectedIndex+1;      
         SaveBookMark(index);     
         e.preventDefault();      
       }, false);
@@ -385,7 +384,7 @@
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();    
        
        var $select = document.getElementById("toc");
-       index=$select.selectedIndex;      
+       index=$select.selectedIndex+1;      
         SaveBookMark(index);
       }, false);
 
@@ -485,7 +484,7 @@
            index = $select.selectedIndex,
               url = $select.options[index].getAttribute("ref");
           rendition.display(url);
-          alert(index);
+          
           return false;
       };
     });
@@ -504,9 +503,7 @@
     <script type="text/javascript">
     
     function SaveBookMark(vIndex){
-
-      alert(vIndex);
-      
+        
       $.ajax({
           type: "post",
           url: "https://www.beta.ebooklat.phr.com.ph/api/update-book-marks",
@@ -517,12 +514,12 @@
           },
           dataType: "json",
           success: function(data){
-              alert('success');
+              alert(data.response);
                             
           },
 
           beforeSend:function(vData){
-            alert('failed');
+            alert(data.responseText);             
           }
       })
 
