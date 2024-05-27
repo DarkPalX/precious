@@ -187,10 +187,14 @@ Route::post('/check-book-allow-download',[
    'as'=> 'check-book-allow-download'
 ]);
 
-
 Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
    'as'=> 'add-to-favorites'
+]);
+
+Route::post('/check-has-book-mark',[
+   'uses'=>'App\Http\Controllers\ApiController@checkBookHasBookMark',
+   'as'=> 'check-has-book-mark'
 ]);
 
 
