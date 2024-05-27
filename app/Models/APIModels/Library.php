@@ -448,21 +448,29 @@ class Library extends Model
   public function saveReadSubscribedBooks($data){
 
     $TODAY = date("Y-m-d H:i:s");
-    $PaymentDate = date("Y-m-d");
     
     $UserID=$data['UserID'];    
     $ProductID=$data['ProductID'];    
     $IsRead=$data['IsRead'];    
-    
-    $ReadBookID = DB::table('subscribed_books')
-        ->insertGetId([                                            
-          'user_id' => $UserID,              
-          'product_id' => $ProductID,                                            
-          'is_read' => $IsRead,                                                      
-          'is_downloaded' => 0,                                                      
-          'created_at' => $TODAY             
-        ]);
 
+    $info = DB::table('subscribed_books')          
+        ->whereRaw('user_id=?',[$UserID])    
+        ->whereRaw('product_id=?',[$ProductID])          
+        ->first();
+
+    if(isset($info)<=0){
+
+            $ReadBookID = DB::table('subscribed_books')
+            ->insertGetId([                                            
+              'user_id' => $UserID,              
+              'product_id' => $ProductID,                                            
+              'is_read' => $IsRead,                                                      
+              'is_downloaded' => 0,                                                      
+              'created_at' => $TODAY             
+            ]);
+    } 
+            
+        
   }
 
   public function checkProductsIfExistInSubscribedBooks($ProductID,$CustomerID){
@@ -522,5 +530,82 @@ class Library extends Model
     
     return $IsExist;
   }
+
+    public function saveBookMarks($data){
+
+    $TODAY = date("Y-m-d H:i:s");
+    
+    
+    $UserID=$data['UserID'];    
+    $ProductID=$data['ProductID'];    
+    $PageNo=$data['PageNo'];   
+
+    $info = DB::table('book_marks')          
+        ->whereRaw('customer_id=?',[$UserID])    
+        ->whereRaw('product_id=?',[$ProductID])          
+        ->first();
+
+    if(isset($info)>0){
+       
+       if($PageNo!=null){
+
+          DB::table('book_marks')
+            ->where('customer_id',$UserID)
+            ->where('product_id',$ProductID)
+            ->update([                                                       
+              'chapter_page_no' => $PageNo
+           ]);   
+
+       }
+        
+                    
+    }else{
+
+     $BookMarkID = DB::table('book_marks')
+        ->insertGetId([                                            
+          'customer_id' => $UserID,              
+          'product_id' => $ProductID,                                            
+          'chapter_page_no' => $PageNo,                                                                                                                  
+          'created_at' => $TODAY             
+        ]);
+
+    }
+    
+  }
+
+  public function updateBookMarks($data){
+
+    $TODAY = date("Y-m-d H:i:s");
+    
+    $UserID=$data['UserID'];    
+    $ProductID=$data['ProductID'];    
+    $PageNo=$data['PageNo'];   
+
+    if($PageNo>=0){
+
+          DB::table('book_marks')
+            ->where('customer_id',$UserID)
+            ->where('product_id',$ProductID)
+            ->update([                                                       
+              'chapter_page_no' => $PageNo
+           ]);   
+
+    }                    
+  }
+
+   public function getPageChapterBookMark($ProductID,$CustomerID){
+      
+    $ChapterPageNo = 0; 
+    
+    $ChapterPageNo = DB::table('book_marks')          
+        ->whereRaw('customer_id=?',[$CustomerID])    
+        ->whereRaw('product_id=?',[$ProductID])                                          
+        ->value('chapter_page_no');
+
+    return $ChapterPageNo;
+        
+
+    }
+
 
 }
