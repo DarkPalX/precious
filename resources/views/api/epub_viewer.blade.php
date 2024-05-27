@@ -511,7 +511,7 @@
       var vUserID ="{{$customer_id}}";
         
       $.ajax({
-          type: "post",
+          type: "get",
            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
           url: "https://www.beta.ebooklat.phr.com.ph/update-book-marks",
           data: {
