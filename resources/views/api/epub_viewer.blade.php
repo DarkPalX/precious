@@ -515,12 +515,12 @@
           },
           dataType: "json",
           success: function(data){
-              alert(data.response);
+              // alert(data.response);
                             
           },
 
           beforeSend:function(data){
-            alert(data.responseText);             
+            // alert(data.responseText);             
           }
       })
 
