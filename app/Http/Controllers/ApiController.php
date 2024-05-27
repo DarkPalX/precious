@@ -983,8 +983,8 @@ public function saveBookMarks(Request $request){
           
     $retVal=$Library->saveBookMarks($data);
      return response()->json([
-      'response' => 'Success',
-      'message' => "Sucessfully open & read book.",
+      'response' => $response
+      'message' => "Sucessfully save book marks.",
     ]);  
     
 }
@@ -1008,8 +1008,8 @@ public function updateBookMarks(Request $request){
           
     $retVal=$Library->updateBookMarks($data);
      return response()->json([
-      'response' => 'Success',
-      'message' => "Sucessfully updated book marks",
+      'response' => $response
+      'message' => "Sucessfully update book marks.",
     ]);  
     
 }
