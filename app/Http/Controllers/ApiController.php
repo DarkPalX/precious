@@ -906,6 +906,40 @@ public function checkCustomerLibraryBookExist(Request $request){
 
 }
 
+public function checkBookHasBookMark(Request $request){
+    
+    $Misc = new Misc();
+    $Library = new Library();
+
+    $BookMarkChapter=0;
+    
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['UserID']=$request->post('UserID');
+    $data['ProductID']=$request->post('ProductID');
+
+   $BookMarkChapter=$Library->getPageChapterBookMark($data['ProductID'],$data['UserID']);
+  
+   if($BookMarkChapter>0){
+       $responseMessage ='Book has book mark chapter';
+       return response()->json([
+         'response' => 'Success',         
+         'has_book_mark' => true,         
+         'message' => $responseMessage,
+        ]);    
+
+    }else{
+         return response()->json([
+         'response' => 'Failed',         
+         'has_book_mark' => false,         
+         'message' => "This book is not in listed in your library.",
+        ]);  
+    }
+
+}
+
 public function checkCustomerLibraryDownloadBookExist(Request $request){
     
     $Misc = new Misc();
