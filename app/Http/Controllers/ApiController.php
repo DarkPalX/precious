@@ -991,14 +991,6 @@ public function saveBookMarks(Request $request){
 
 public function updateBookMarks(Request $request){
 
-   // return response([
-   //          'response' => 'Success',
-   //          'message' => 'Update To Book Mark is working...'
-   //   ], 200);
-
-  dd("here");
-
-
     $Misc = new Misc();
     $Book = new Book();
     $Library = new Library();
@@ -1016,12 +1008,43 @@ public function updateBookMarks(Request $request){
           
     $retVal=$Library->updateBookMarks($data);
 
-     $response='Success';
-     return response()->json([      
-      'response' => $response,
-      'message' => "Sucessfully update book marks.",
-    ]);  
-    
+    if($data['ProductID']>0){
+       $Epub_file='';
+
+       $info=$Book->getBookInfoByID($data['ProductID']);
+       $data['chapter_page_no']=$Library->getPageChapterBookMark($data['ProductID'],$data['UserID']);
+       
+       if(is_null($data['chapter_page_no'])){
+           $data['chapter_page_no']=0;
+       }
+
+       if(isset($info)>0){
+
+           $Epub_file=$info->file_url;                              
+            
+            $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
+
+             if(file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$Epub_file)){
+                $data['epub_file_exist']=true;
+             }else{
+                $data['epub_file_exist']=false;
+             }
+                             
+          return View::make('api/epub_viewer')->with($data);    
+
+       }else{
+           $data['epub_doc']='';
+           return View::make('api/epub_viewer')->with($data);    
+       }
+      
+   }else{
+
+       $data['epub_doc']='';
+       return View::make('api/epub_viewer')->with($data);    
+    } 
+
+   
+  
 }
 
 // SET READ SUBCRIBE BOOKS====================================================
@@ -2481,7 +2504,7 @@ public function validateCouponCode(Request $request){
 
            $Epub_file=$info->file_url;                              
             
-            $data['epub_doc']='https://www.api.ebooklat.phr.com.ph/public/'.$Epub_file;
+            $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
 
              if(file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$Epub_file)){
                 $data['epub_file_exist']=true;
