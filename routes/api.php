@@ -243,6 +243,16 @@ Route::post('/save-read-books',[
    'as'=> 'save-read-books'
 ]);
 
+Route::post('/save-book-marks',[
+   'uses'=>'App\Http\Controllers\ApiController@saveBookMarks',
+   'as'=> 'save-book-book'
+]);
+
+Route::post('/update-book-marks',[
+   'uses'=>'App\Http\Controllers\ApiController@updateBookMarks',
+   'as'=> 'update-book-marks'
+]);
+
 //DOWNLOADED BOOKS
 Route::post('/get-subscribed-downloaded-books-list',[
    'uses'=>'App\Http\Controllers\ApiController@getSubscribedDownloadedBooksList',
