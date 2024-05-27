@@ -1020,6 +1020,8 @@ public function updateBookMarks(Request $request){
        
        if(is_null($data['chapter_page_no'])){
            $data['chapter_page_no']=0;
+       }else{
+        $data['chapter_page_no']=$data['chapter_page_no']+1;
        }
 
        if(isset($info)>0){
