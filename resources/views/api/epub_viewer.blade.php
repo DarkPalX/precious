@@ -508,38 +508,6 @@
    }
   </script>
   
-<!--     <script type="text/javascript">
-    
-    function SaveBookMark(vIndex){
 
-      var vProductID ="{{$product_id}}";
-      var vUserID ="{{$customer_id}}";
-
-
-        
-      // $.ajax({
-      //     type: "get",
-      //      headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-      //     url: "https://www.beta.ebooklat.phr.com.ph/public/api/test/",
-      //     data: {
-      //       _token: 'cKTSf3GAZa8GNzadts8HLip1Zcf5Hc3LHiBf1H6u',
-      //       UserID:vProductID,
-      //       ProductID:vUserID,
-      //       PageNo:vIndex          
-      //     },
-      //     dataType: "json",
-      //     success: function(data){
-      //         // alert(data.response);                          
-      //     },
-
-      //     beforeSend:function(data){
-      //       console.log(data.responseText);             
-      //     }
-      // })
-
-    }
-
-  </script>
- -->
   </body>
 </html>
