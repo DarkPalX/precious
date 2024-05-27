@@ -575,22 +575,43 @@ class Library extends Model
 
   public function updateBookMarks($data){
 
-    $TODAY = date("Y-m-d H:i:s");
+    $TODAY = date("Y-m-d H:i:s");    
     
     $UserID=$data['UserID'];    
     $ProductID=$data['ProductID'];    
     $PageNo=$data['PageNo'];   
 
-    if($PageNo>=0){
+    $info = DB::table('book_marks')          
+        ->whereRaw('customer_id=?',[$UserID])    
+        ->whereRaw('product_id=?',[$ProductID])          
+        ->first();
 
+    if(isset($info)>0){
+       
+       if($PageNo!=null){
+
+    
           DB::table('book_marks')
             ->where('customer_id',$UserID)
             ->where('product_id',$ProductID)
             ->update([                                                       
               'chapter_page_no' => $PageNo
            ]);   
+       }
+        
+                    
+    }else{
 
-    }                    
+     $BookMarkID = DB::table('book_marks')
+        ->insertGetId([                                            
+          'customer_id' => $UserID,              
+          'product_id' => $ProductID,                                            
+          'chapter_page_no' => $PageNo,                                                                                                                  
+          'created_at' => $TODAY             
+        ]);
+
+    }
+                   
   }
 
    public function getPageChapterBookMark($ProductID,$CustomerID){
