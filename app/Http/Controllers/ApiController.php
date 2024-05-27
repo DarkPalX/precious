@@ -1008,9 +1008,8 @@ public function updateBookMarks(Request $request){
           
     $retVal=$Library->updateBookMarks($data);
 
-     return response()->json([
-      $response='Success';
-
+     $response='Success';
+     return response()->json([      
       'response' => $response,
       'message' => "Sucessfully update book marks.",
     ]);  
