@@ -185,6 +185,7 @@
                             </div>
                         </div>
 
+
                         <div>
                           <p onclick="SaveBookMark(6);">BookMark This Chapter</p>
                         </div>  
@@ -217,9 +218,7 @@
     // alert(index);
 
     var currentSectionIndex ="{{$chapter_page_no}}";
-    var vProductID ="{{$product_id}}";
-    var vUserID ="{{$customer_id}}";
- 
+  
     // Load the opf
     var book = ePub(url || "{{$epub_doc}}");    
     var rendition = book.renderTo("viewer", {
@@ -379,7 +378,7 @@
 
        var $select = document.getElementById("toc");
        index=$select.selectedIndex+1;      
-          
+        
         e.preventDefault();      
       }, false);
 
@@ -508,11 +507,13 @@
     
     function SaveBookMark(vIndex){
 
-      alert(vIndex);
+      var vProductID ="{{$product_id}}";
+      var vUserID ="{{$customer_id}}";
         
       $.ajax({
           type: "post",
-          url: "https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks",
+           headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+          url: "https://www.beta.ebooklat.phr.com.ph/api/update-book-marks",
           data: {
             _token: 'cKTSf3GAZa8GNzadts8HLip1Zcf5Hc3LHiBf1H6u',
             UserID:vProductID,
