@@ -248,9 +248,9 @@ Route::post('/save-book-marks',[
    'as'=> 'save-book-marks'
 ]);
 
-Route::post('/api/update-book-marks',[
+Route::post('/update-book-marks',[
    'uses'=>'App\Http\Controllers\ApiController@updateBookMarks',
-   'as'=> '/api/update-book-marks'
+   'as'=> '/update-book-marks'
 ]);
 
 //DOWNLOADED BOOKS
