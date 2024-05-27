@@ -185,6 +185,10 @@
                             </div>
                         </div>
 
+                        <div>
+                          <p onclick="SaveBookMark(6);">BookMark This Chapter</p>
+                        </div>  
+
                 </tbody>
            </table>                        
           </div>
@@ -375,7 +379,7 @@
 
        var $select = document.getElementById("toc");
        index=$select.selectedIndex+1;      
-        SaveBookMark(index);     
+          
         e.preventDefault();      
       }, false);
 
@@ -385,7 +389,7 @@
        
        var $select = document.getElementById("toc");
        index=$select.selectedIndex+1;      
-        SaveBookMark(index);
+        
       }, false);
 
       var keyListener = function(e){
@@ -503,6 +507,8 @@
     <script type="text/javascript">
     
     function SaveBookMark(vIndex){
+
+      alert(vIndex);
         
       $.ajax({
           type: "post",
