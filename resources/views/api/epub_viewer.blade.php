@@ -212,6 +212,10 @@
     // index=$select.selectedIndex;
     // alert(index);
 
+        var $select = document.getElementById("toc");
+       index=$select.selectedIndex+1;      
+        SaveBookMark(index); 
+
     var currentSectionIndex ="{{$chapter_page_no}}";
     var vProductID ="{{$product_id}}";
     var vUserID ="{{$customer_id}}";
@@ -372,16 +376,20 @@
       var next = document.getElementById("next");
       next.addEventListener("click", function(e){        
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
-
-       var $select = document.getElementById("toc");
-       index=$select.selectedIndex+1;      
-        SaveBookMark(index);     
+      
         e.preventDefault();      
+
+        var $select = document.getElementById("toc");
+       index=$select.selectedIndex+1;      
+        SaveBookMark(index); 
+
       }, false);
 
       var prev = document.getElementById("prev");
       prev.addEventListener("click", function(e){
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();    
+       
+       e.preventDefault();  
        
        var $select = document.getElementById("toc");
        index=$select.selectedIndex+1;      
@@ -515,12 +523,12 @@
           },
           dataType: "json",
           success: function(data){
-              // alert(data.response);
+              alert(data.response);
                             
           },
 
           beforeSend:function(data){
-            console.log(data.responseText);             
+            alert(data.responseText);             
           }
       })
 
