@@ -378,7 +378,7 @@
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
 
        var $select = document.getElementById("toc");
-       index=$select.selectedIndex+1; 
+       index=$select.selectedIndex; 
 
         var $ChapterNo = document.getElementById("BookMarkIndex");
         $ChapterNo.value=index;  
@@ -391,7 +391,7 @@
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();    
        
        var $select = document.getElementById("toc");
-       index=$select.selectedIndex+1; 
+       index=$select.selectedIndex; 
 
        var $ChapterNo = document.getElementById("BookMarkIndex");
         $ChapterNo.value=index;     
@@ -496,7 +496,7 @@
           rendition.display(url);
 
            var $ChapterNo = document.getElementById("BookMarkIndex");
-           $ChapterNo.value=index+1;   
+           $ChapterNo.value=index;   
           
           return false;
       };
