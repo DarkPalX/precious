@@ -392,7 +392,7 @@
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();    
        
        var $select = document.getElementById("toc");
-       index=$select.selectedIndex+1; 
+       index=$select.selectedIndex-1; 
 
        var $ChapterNo = document.getElementById("BookMarkIndex");
         $ChapterNo.value=index;     
