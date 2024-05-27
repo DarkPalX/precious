@@ -192,7 +192,7 @@
                             <input type="hidden" value=82 name="UserID">
                             <input type="hidden" value=7 name="ProductID">
                             <input type="hidden" value=3 name="PageNo">
-                             <input type="submit" value="Submit">
+                             <input type="submit" value=" Bookmark this Chapter">
                            </form>   
                         </div>  
 
