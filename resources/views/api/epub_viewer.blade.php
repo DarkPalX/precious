@@ -187,7 +187,13 @@
 
 
                         <div>
-                          <p onclick="SaveBookMark(6);">BookMark This Chapter</p>
+                          <!-- <p onclick="SaveBookMark(6);">BookMark This Chapter</p> -->
+                          <form id="submit" action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
+                            <input type="hidden" value=82 name="UserID">
+                            <input type="hidden" value=7 name="ProductID">
+                            <input type="hidden" value=3 name="PageNo">
+                             <input type="submit" value="Submit">
+                           </form>   
                         </div>  
 
                 </tbody>
@@ -509,26 +515,28 @@
 
       var vProductID ="{{$product_id}}";
       var vUserID ="{{$customer_id}}";
-        
-      $.ajax({
-          type: "get",
-           headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-          url: "https://www.beta.ebooklat.phr.com.ph/public/api/test",
-          data: {
-            _token: 'cKTSf3GAZa8GNzadts8HLip1Zcf5Hc3LHiBf1H6u',
-            UserID:vProductID,
-            ProductID:vUserID,
-            PageNo:vIndex          
-          },
-          dataType: "json",
-          success: function(data){
-              // alert(data.response);                          
-          },
 
-          beforeSend:function(data){
-            console.log(data.responseText);             
-          }
-      })
+
+        
+      // $.ajax({
+      //     type: "get",
+      //      headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+      //     url: "https://www.beta.ebooklat.phr.com.ph/public/api/test/",
+      //     data: {
+      //       _token: 'cKTSf3GAZa8GNzadts8HLip1Zcf5Hc3LHiBf1H6u',
+      //       UserID:vProductID,
+      //       ProductID:vUserID,
+      //       PageNo:vIndex          
+      //     },
+      //     dataType: "json",
+      //     success: function(data){
+      //         // alert(data.response);                          
+      //     },
+
+      //     beforeSend:function(data){
+      //       console.log(data.responseText);             
+      //     }
+      // })
 
     }
 
