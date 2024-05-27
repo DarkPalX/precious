@@ -212,10 +212,6 @@
     // index=$select.selectedIndex;
     // alert(index);
 
-        var $select = document.getElementById("toc");
-       index=$select.selectedIndex+1;      
-        SaveBookMark(index); 
-
     var currentSectionIndex ="{{$chapter_page_no}}";
     var vProductID ="{{$product_id}}";
     var vUserID ="{{$customer_id}}";
@@ -376,20 +372,16 @@
       var next = document.getElementById("next");
       next.addEventListener("click", function(e){        
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
-      
-        e.preventDefault();      
 
-        var $select = document.getElementById("toc");
+       var $select = document.getElementById("toc");
        index=$select.selectedIndex+1;      
-        SaveBookMark(index); 
-
+        SaveBookMark(index);     
+        e.preventDefault();      
       }, false);
 
       var prev = document.getElementById("prev");
       prev.addEventListener("click", function(e){
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();    
-       
-       e.preventDefault();  
        
        var $select = document.getElementById("toc");
        index=$select.selectedIndex+1;      
@@ -514,7 +506,7 @@
         
       $.ajax({
           type: "post",
-          url: "https://www.beta.ebooklat.phr.com.ph/api/update-book-marks",
+          url: "https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks",
           data: {
             _token: '{{ csrf_token() }}',
             UserID:vProductID,
@@ -523,12 +515,11 @@
           },
           dataType: "json",
           success: function(data){
-              alert(data.response);
-                            
+              // alert(data.response);                          
           },
 
           beforeSend:function(data){
-            alert(data.responseText);             
+            console.log(data.responseText);             
           }
       })
 
