@@ -245,7 +245,7 @@ Route::post('/save-read-books',[
 
 Route::post('/save-book-marks',[
    'uses'=>'App\Http\Controllers\ApiController@saveBookMarks',
-   'as'=> 'save-book-book'
+   'as'=> 'save-book-marks'
 ]);
 
 Route::post('/update-book-marks',[
