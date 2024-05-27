@@ -513,7 +513,7 @@
       $.ajax({
           type: "get",
            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-          url: "https://www.beta.ebooklat.phr.com.ph/public/api/test/",
+          url: "https://www.beta.ebooklat.phr.com.ph/public/api/test",
           data: {
             _token: 'cKTSf3GAZa8GNzadts8HLip1Zcf5Hc3LHiBf1H6u',
             UserID:vProductID,
