@@ -917,12 +917,13 @@ public function checkBookHasBookMark(Request $request){
     $responseMessage = "";
 
     $data['Platform'] = config('app.PLATFORM_ANDROID');   
+
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
 
-   $BookMarkChapter=$Library->getPageChapterBookMark($data['ProductID'],$data['UserID']);
+    $BookMarkChapter=$Library->getPageChapterBookMark($data['ProductID'],$data['UserID']);
   
-   if($BookMarkChapter>0){
+   if($BookMarkChapter>=1){
        $responseMessage ='This book has chapter book mark';
        return response()->json([
          'response' => 'Success',         
