@@ -518,7 +518,7 @@
                             
           },
 
-          beforeSend:function(vData){
+          beforeSend:function(data){
             alert(data.responseText);             
           }
       })
