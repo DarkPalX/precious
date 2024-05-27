@@ -1002,13 +1002,15 @@ public function updateBookMarks(Request $request){
 
     $data['Platform'] = config('app.PLATFORM_ANDROID'); 
 
-    $data['UserID']=$request->post('UserID');
-    $data['ProductID']=$request->post('ProductID');
-    $data['PageNo']=$request->post('PageNo');
+    $data['UserID']=$request->input('UserID');
+    $data['ProductID']=$request->input('ProductID');
+    $data['PageNo']=$request->input('PageNo');
           
     $retVal=$Library->updateBookMarks($data);
 
      return response()->json([
+      $response='Success';
+
       'response' => $response,
       'message' => "Sucessfully update book marks.",
     ]);  
