@@ -12,22 +12,23 @@
   <link rel="stylesheet" type="text/css" href="https://www.api.ebooklat.phr.com.ph/public/api/css/epub-main-style.css">
 
   <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
-  <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/localforage.min.js"></script>  
   <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  
   <style>
-   #toc{    
+   #toc{
     width: 100%;
     background: #e6e6e6;
     padding: 5px;
     display: block;
-    font-size: 13px;    
+    font-size: 13px;
     z-index:999;
     width: 98%;
    }
 
    /*#viewer{
-    padding-top:30px;    
+    padding-top:30px;
    }
   .spreads{
       padding-top:20px;
@@ -46,9 +47,65 @@
     transition: 0.5s;
     box-shadow: 0 6px 12px rgba(0,0,0,0.175);
 }
-  </style>
 
-   
+.font-chip{
+
+   display: inline-block;
+    vertical-align: middle;
+    border-radius: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    text-align: center;
+    margin: 4px;
+    padding: 4px 8px;
+
+      display: inline-block;
+    vertical-align: middle;
+    border-radius: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    text-align: center;
+    margin: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.font-setting {
+    display: block;
+    padding: 8px 12px;
+    border-botto
+  }
+
+.theme-setting {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    text-align: center;
+    margin: 4px;
+    padding: 4px 8px;
+}
+
+.size-setting {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    text-align: center;
+    margin: 4px;
+    padding: 4px 8px;
+}
+
+  .setting-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+        padding: 5px;
+}
+
+.setting-content{
+   padding: 4px;
+}
+
+  </style>
 </head>
 <body>
   <!-- <div id="title"></div> -->
@@ -68,13 +125,14 @@
   <!-- height spacer -->
   <div style="height: 40px;"></div>
   
-  <div style="height:44px;position: fixed;z-index: 999;bottom:0px;text-align:center;width:100%;background: #0c2136;">
-        <a id="prev" href="#prev" class="arrow" style="font-size:23px;color:white;padding-right:20px;"><span style="font-size:15px;">Prev </span>‹</a>
-        <a id="next" href="#next" class="arrow"style="font-size:23px;color:white;padding-left:20px;">›<span style="font-size:15px;"> Next</span></a>
+ 
+  <div style="height:44px;position: fixed;z-index: 999;bottom:0px;text-align:center;width:100%;background: none;">
+  <a id="prev" href="#prev" class="arrow" style="font-size:23px;color:white !important;width: 25px;background:#21395f;float:left;margin-left: 10px;">‹</a>
+  <a id="next" href="#next" class="arrow"style="font-size:23px;color:white !important;width: 25px;background:#21395f;float:right;margin-right: 10px;">›</a>      
   </div>
 
   <div id="CartPanel" class="sidenav" style="right: -315px;width: 260px;">
-      <div id="SidePanelCartDetail" class="header-wrapper sticky-area" style="display: block; background: gray !important;padding-top: 10px;">
+      <div id="SidePanelCartDetail" class="header-wrapper sticky-area" style="display: block; background: #21395f !important;padding-top: 10px;">
         <div class="container" style="padding-left: 5px;">
             <div class="topbar d-flex" style="border-bottom: 1.2px solid rgba(255,255,255,.5);">
               <div class="topbar-item-right d-flex ">
@@ -87,116 +145,45 @@
               </div>
             </div>
 
-            <!--    <div class="row" style="background:#2e3c5f;padding-top: 5px;padding-bottom: 5px;">
-                    <div class="container">
-                          <h2 class="mb-1 text-white" style="font-size: 15px;color: #fff !important;text-align: center;">
-                            Set Theme
-                          </h2>
-                    </div>
-                </div> -->
           </div>
       </div>
 
-        <div class="row" style="margin-right: 0px;margin-left: 0px;"> 
+       <div class="row" style="margin-right: 0px;margin-left: 0px;"> 
             <div class="table-responsive-md" style="width: 100%;">                  
                 <table class="table table-style-01" style="width:100%;">
                   <tbody> 
 
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="dark-theme" style="vertical-align: middle;display: flex; cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/dark-mode.png" alt="dark-mode" style="width: 40px;height: 40;"> <span style="padding-left:20px;position: relative;top: 10px;">Dark Theme</span>
-                        </td>
-                      </tr> 
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="light-theme" style="vertical-align: middle;display: flex;cursor: pointer">
-                            <img  src="https://www.api.ebooklat.phr.com.ph/public/api/img/light-mode.png" alt="light-mode" style="width: 40px;height: 40;"> <span style="padding-left:20px;position: relative;top: 10px;">Light Theme</span>
-                        </td>
-                      </tr> 
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="septia-theme" style="vertical-align: middle;display: flex;cursor: pointer;">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/septia-mode.png" alt="septia-mode" style="width: 40px;height: 40;">  <span style="padding-left:20px;position: relative;top: 10px;">Sepia Theme</span>
-                        </td>
-                      </tr>  
-                    
-                 <!--      <tr>
-                        <td>
-                          <div class="row" style="background:#2e3c5f;padding-top: 7px;padding-bottom: 7px;">
-                              <div class="container">
-                                    <h2 class="mb-1 text-white" style="font-size: 15px;color: #fff !important;text-align: center;">
-                                      Set Font Size
-                                    </h2>
-                              </div>
-                          </div>
-                        </td>
-                      </tr> --> 
+                      <div class="setting">
+                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Themes</div>
+                            <div class="setting-content" data-chips="theme">
+                                <div class="theme-setting" id="dark-theme" style="background: #fff; color: #000;" data-default="true" data-value="#fff;#000">Light</div>
+                                <div class="theme-setting" id="light-theme" style="background: #000; color: #fff;" data-value="#000;#fff">Dark</div>                                
+                                <div class="theme-setting" id="septia-theme"  style="background: #f5deb3; color: #000;" data-value="#f5deb3;#000">Sepia</div>                                
+                            </div>
+                        </div> 
 
+                      <div class="setting">
+                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Font</div>
+                            <div class="setting-content" data-chips="font">
+                                <div class="font-chip" id="font_lucida" style="font-family: Lucida Console, Courier New, monospace;">Courier New</div>                                
+                                <div class="font-chip " id="font_times" style="font-family: Times New Roman, Times, serif;">Times Roman</div>                                
+                                <div class="font-chip" id="font_helvetica" style="font-family: Arial, Helvetica, sans-serif;" >Helvetica Style</div>
+                            </div>
+                        </div>
 
-                     <tr style="border-bottom:1px dashed gray;">
-                        <td id="font_10" style="vertical-align: middle;display: flex; cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="extra-small-font" style="width: 40px;height: 40;"> <span style="padding-left:20px;position: relative;top: 10px;">Extra Small Font Size</span>
-                        </td>
-                      </tr> 
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="font_13" style="vertical-align: middle;display: flex; cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="small-font" style="width: 40px;height: 40;"> <span style="padding-left:20px;position: relative;top: 10px;">Small Font Size</span>
-                        </td>
-                      </tr> 
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="font_16" style="vertical-align: middle;display: flex; cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="defualt-font" style="width: 40px;height: 40;"> <span style="padding-left:20px;position: relative;top: 10px;">Default Font Size</span>
-                        </td>
-                      </tr> 
-                       <tr style="border-bottom:1px dashed gray;">
-                        <td id="font_18" style="vertical-align: middle;display: flex; cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="medium-font" style="width: 40px;height: 40;"> <span style="padding-left:20px;position: relative;top: 10px;">Medium Font Size</span>
-                        </td>
-                      </tr>
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="font_20" style="vertical-align: middle;display: flex;cursor: pointer">
-                            <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="large-font" style="width: 40px;height: 40;"> <span style="padding-left:20px;position: relative;top: 10px;">Large Font Size</span>
-                        </td>
-                      </tr>
-
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="font_25" style="vertical-align: middle;display: flex;cursor: pointer">
-                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-size.png" alt="extra-large-font" style="width: 40px;height: 40;">  <span style="padding-left:20px;position: relative;top: 10px;">Extra Large Font Size</span>
-                        </td>
-                      </tr> 
-
-<!-- 
-                       <tr>
-                        <td>
-                          <div class="row" style="background:#2e3c5f;padding-top: 7px;padding-bottom: 7px;">
-                              <div class="container">
-                                    <h2 class="mb-1 text-white" style="font-size: 15px;color: #fff !important;text-align: center;">
-                                      Set Font Style
-                                    </h2>
-                              </div>
-                          </div>
-                        </td>
-                      </tr>  -->
-
-
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="font_helvetica" style="vertical-align: middle;display: flex;cursor: pointer">
-                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-style.png" alt="font-helvetica" style="width: 40px;height: 40;">  <span style="padding-left:20px;position: relative;top: 10px;font-family: Arial, Helvetica, sans-serif;">Helvetica Style</span>
-                        </td>
-                      </tr>
-
-
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="font_times" style="vertical-align: middle;display: flex;cursor: pointer">
-                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-style.png" alt="font-arial" style="width: 40px;height: 40;">  <span style="padding-left:20px;position: relative;top: 10px;font-family: Times New Roman, Times, serif;">Times Roman Style</span>
-                        </td>
-                      </tr>
-
-
-                      <tr style="border-bottom:1px dashed gray;">
-                        <td id="font_lucida" style="vertical-align: middle;display: flex;cursor: pointer">
-                           <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/font-style.png" alt="font-arial" style="width: 40px;height: 40;">  <span style="padding-left:20px;position: relative;top: 10px;font-family: Lucida Console, Courier New, monospace;">Courier New Style</span>
-                        </td>
-                      </tr>  
-
+                        <div class="setting">
+                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Font Size</div>
+                            <div class="setting-content" data-chips="font-size">
+                                <div id="font_10" class="size-setting" style="font-size: 8pt" data-value="8pt">8</div>
+                                <div id="font_13" class="size-setting" style="font-size: 9pt" data-value="9pt">9</div>
+                                <div id="font_16" class="size-setting" style="font-size: 10pt" data-value="10pt">10</div>
+                                <div id="font_18" class="size-setting" style="font-size: 11pt" data-default="true" data-value="11pt">11</div>
+                                <div id="font_20" class="size-setting" style="font-size: 12pt" data-value="12pt">12</div>
+                                <div id="font_25" class="size-setting" style="font-size: 14pt" data-value="14pt">14</div>
+                                <div id="font_26" class="size-setting" style="font-size: 16pt" data-value="16pt">16</div>
+                                <div id="font_28" class="size-setting" style="font-size: 18pt" data-value="18pt">18</div>
+                            </div>
+                        </div>
 
                 </tbody>
            </table>                        
@@ -214,33 +201,37 @@
 
 
   <script>
+  
     var option=0;
+      
     var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
     var currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
 
-    
-    // Load the opf
-    var book = ePub(url || "{{$epub_doc}}");
+    var $select = document.getElementById("toc");
+    index=$select.selectedIndex;
 
-      
+    alert(index);
+
+    var currentSectionIndex ="{{$chapter_page_no}}";
+    var vProductID ="{{$product_id}}";
+    var vUserID ="{{$customer_id}}";
+ 
+    // Load the opf
+    var book = ePub(url || "{{$epub_doc}}");    
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: "100%",
       flow: "scrolled-doc"
     });
    
-     // rendition.displayChapter(3);
-
     rendition.display(currentSectionIndex);
    
-
    // Set Theme
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){  
 
-        rendition.themes.select("dark");  
-
+        rendition.themes.select("dark");     
        //  rendition.themes.register("dark_color", {
        //        "p": {                   
        //          "color": "white !important",
@@ -357,9 +348,7 @@
       });
 
       var font_times = document.getElementById("font_times");
-
       font_times.addEventListener("click", function(e){    
-
         rendition.themes.register("custom_font_times", {
               body: {                   
                 "font-family": "Times New Roman, Times, serif !important",
@@ -369,7 +358,6 @@
       });
     
       var font_lucida = document.getElementById("font_lucida");
-
       font_lucida.addEventListener("click", function(e){    
         rendition.themes.register("custom_font_lucida", {
               body: {                   
@@ -382,16 +370,23 @@
     // End Set Font Style
 
     book.ready.then(() => {
-
       var next = document.getElementById("next");
       next.addEventListener("click", function(e){        
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
+
+       var $select = document.getElementById("toc");
+       index=$select.selectedIndex;      
+        SaveBookMark(index);     
         e.preventDefault();      
       }, false);
 
       var prev = document.getElementById("prev");
       prev.addEventListener("click", function(e){
-        book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();       
+        book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();    
+       
+       var $select = document.getElementById("toc");
+       index=$select.selectedIndex;      
+        SaveBookMark(index);
       }, false);
 
       var keyListener = function(e){
@@ -409,7 +404,6 @@
       };
 
       rendition.on("keyup", keyListener);
-
       document.addEventListener("keyup", keyListener, false);
 
     })
@@ -454,7 +448,7 @@
       } else {
         prev.style.visibility = "visible";
       }
-
+      
     });
 
     rendition.on("layout", function(layout) {
@@ -488,17 +482,16 @@
       $select.appendChild(docfrag);
 
       $select.onchange = function(){
-          var index = $select.selectedIndex,
+           index = $select.selectedIndex,
               url = $select.options[index].getAttribute("ref");
           rendition.display(url);
+          alert(index);
           return false;
       };
-
     });
 
   </script>
 
-  
   <script>
     function openSidePanelNav() {
     document.getElementById("CartPanel").style.right = "0px";
@@ -506,6 +499,35 @@
    function closeSidePanelNav() {
     document.getElementById("CartPanel").style.right = "-315px";
    }
+  </script>
+  
+    <script type="text/javascript">
+    
+    function SaveBookMark(vIndex){
+
+      alert(vIndex);
+      
+      $.ajax({
+          type: "post",
+          url: "https://www.beta.ebooklat.phr.com.ph/api/update-book-marks",
+          data: {
+            UserID:vProductID,
+            ProductID:vUserID,
+            PageNo:vIndex          
+          },
+          dataType: "json",
+          success: function(data){
+              alert('success');
+                            
+          },
+
+          beforeSend:function(vData){
+            alert('failed');
+          }
+      })
+
+    }
+
   </script>
 
   </body>
