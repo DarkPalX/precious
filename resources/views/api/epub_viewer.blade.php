@@ -187,7 +187,7 @@
 
 
                         <div>  
-                          <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Set Book Chapter</div>                        
+                          <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Book Chapter</div>                        
                           <form id="submit" action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
                             <input type="hidden" value="{{$customer_id}}" name="UserID">
                             <input type="hidden" value="{{$product_id}}" name="ProductID">
