@@ -994,7 +994,8 @@ public function updateBookMarks(Request $request){
     $Misc = new Misc();
     $Book = new Book();
     $Library = new Library();
-
+   
+   $data['chapter_page_no']=0;
     $response = "Failed";
     $responseMessage = "";
 
