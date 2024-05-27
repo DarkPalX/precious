@@ -1007,12 +1007,15 @@ public function updateBookMarks(Request $request){
     $data['PageNo']=$request->input('PageNo');
           
     $retVal=$Library->updateBookMarks($data);
+;
+    $data['customer_id']=$data['UserID'];
+    $data['product_id']=$data['ProductID'];
 
-    if($data['ProductID']>0){
+    if($data['product_id']>0){
        $Epub_file='';
 
-       $info=$Book->getBookInfoByID($data['ProductID']);
-       $data['chapter_page_no']=$Library->getPageChapterBookMark($data['ProductID'],$data['UserID']);
+       $info=$Book->getBookInfoByID($data['product_id']);
+       $data['chapter_page_no']=$Library->getPageChapterBookMark($data['product_id'],$data['customer_id']);
        
        if(is_null($data['chapter_page_no'])){
            $data['chapter_page_no']=0;
