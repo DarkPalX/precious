@@ -520,7 +520,7 @@
           },
 
           beforeSend:function(data){
-            // alert(data.responseText);             
+            console.log(data.responseText);             
           }
       })
 
