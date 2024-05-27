@@ -539,11 +539,3 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
 // Pages Frontend
 Route::get('/{any}', [FrontController::class, 'page'])->where('any', '.*');
-
-
-Route::get('/update-book-marks', function(){
-    return response([
-            'message' => 'Api is working...'
-     ], 200);
-
- });
