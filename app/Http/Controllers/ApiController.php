@@ -991,6 +991,12 @@ public function saveBookMarks(Request $request){
 
 public function updateBookMarks(Request $request){
 
+   return response([
+            'response' => 'Success',
+            'message' => 'Update To Book Mark is working...'
+     ], 200);
+
+
     $Misc = new Misc();
     $Book = new Book();
     $Library = new Library();
