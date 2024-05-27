@@ -540,7 +540,10 @@ Route::group(['prefix' => 'admin-panel'], function (){
 // Pages Frontend
 Route::get('/{any}', [FrontController::class, 'page'])->where('any', '.*');
 
-Route::post('/update-book-marks',[
-   'uses'=>'App\Http\Controllers\ApiController@updateBookMarks',
-   'as'=> 'update-book-marks'
-]);
+
+Route::get('/update-book-marks', function(){
+    return response([
+            'message' => 'Api is working...'
+     ], 200);
+
+ });
