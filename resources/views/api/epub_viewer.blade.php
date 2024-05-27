@@ -188,9 +188,9 @@
 
                         <div>                          
                           <form id="submit" action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
-                            <input type="hidden" value=82 name="UserID">
-                            <input type="hidden" value=7 name="ProductID">
-                            <input type="hidden" value=3 name="PageNo">
+                            <input type="hidden" value="{{$customer_id}}" name="UserID">
+                            <input type="hidden" value="{{$product_id}}" name="ProductID">
+                            <input id="BookMarkIndex" type="hidden" name="PageNo">
                              <input type="submit" value=" Bookmark this Chapter">
                            </form>   
                         </div>  
@@ -217,10 +217,6 @@
     var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
     var currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
-
-    // var $select = document.getElementById("toc");
-    // index=$select.selectedIndex;
-    // alert(index);
 
     var currentSectionIndex ="{{$chapter_page_no}}";
   
@@ -382,8 +378,11 @@
         book.package.metadata.direction === "rtl" ? rendition.prev() : rendition.next();
 
        var $select = document.getElementById("toc");
-       index=$select.selectedIndex+1;      
-        
+       index=$select.selectedIndex+1; 
+
+        var $page = document.getElementById("BookMarkIndex");
+        page.value=index;
+                    
         e.preventDefault();      
       }, false);
 
@@ -392,7 +391,10 @@
         book.package.metadata.direction === "rtl" ? rendition.next() : rendition.prev();    
        
        var $select = document.getElementById("toc");
-       index=$select.selectedIndex+1;      
+       index=$select.selectedIndex+1; 
+
+       var $page = document.getElementById("BookMarkIndex");
+        page.value=index;     
         
       }, false);
 
