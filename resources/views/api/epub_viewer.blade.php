@@ -186,8 +186,7 @@
                         </div>
 
 
-                        <div>
-                          <!-- <p onclick="SaveBookMark(6);">BookMark This Chapter</p> -->
+                        <div>                          
                           <form id="submit" action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
                             <input type="hidden" value=82 name="UserID">
                             <input type="hidden" value=7 name="ProductID">
@@ -509,7 +508,7 @@
    }
   </script>
   
-    <script type="text/javascript">
+<!--     <script type="text/javascript">
     
     function SaveBookMark(vIndex){
 
@@ -541,6 +540,6 @@
     }
 
   </script>
-
+ -->
   </body>
 </html>
