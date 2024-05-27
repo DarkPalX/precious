@@ -494,6 +494,9 @@
            index = $select.selectedIndex,
               url = $select.options[index].getAttribute("ref");
           rendition.display(url);
+
+           var $ChapterNo = document.getElementById("BookMarkIndex");
+           $ChapterNo.value=index;   
           
           return false;
       };
