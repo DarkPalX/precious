@@ -193,12 +193,14 @@
                             <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Font Size</div>
                             <div class="setting-content" data-chips="font-size">                                
                                 <div id="font_10" class="size-setting" style="font-size:10pt">10</div>
+                                <div id="font_11" class="size-setting" style="font-size:11pt">11</div>
                                 <div id="font_12" class="size-setting" style="font-size:12pt">12</div>
+                                <div id="font_13" class="size-setting" style="font-size:13pt">13</div>
                                 <div id="font_15" class="size-setting" style="font-size:15pt">15</div>
+                                <div id="font_16" class="size-setting" style="font-size:16pt">16</div>
                                 <div id="font_18" class="size-setting" style="font-size:18pt">18</div>
                                 <div id="font_20" class="size-setting" style="font-size:20pt">20</div>
-                                <div id="font_23" class="size-setting" style="font-size:23pt">23</div>
-                                <div id="font_25" class="size-setting" style="font-size:25pt">25</div>
+                                
                             </div>
                         </div>
                     
@@ -293,7 +295,17 @@
        rendition.themes.select("custom_font_10");               
       });
 
-           var font_12 = document.getElementById("font_12");
+       var font_11 = document.getElementById("font_11");
+      font_11.addEventListener("click", function(e){            
+        rendition.themes.register("custom_font_11", {
+              body: {                   
+                "font-size": "11px !important",
+              },
+        });
+       rendition.themes.select("custom_font_10");               
+      });
+
+      var font_12 = document.getElementById("font_12");
       font_12.addEventListener("click", function(e){            
         rendition.themes.register("custom_font_12", {
               body: {                   
@@ -303,6 +315,15 @@
        rendition.themes.select("custom_font_12");               
       });
 
+      var font_13 = document.getElementById("font_13");
+      font_12.addEventListener("click", function(e){            
+        rendition.themes.register("custom_font_13", {
+              body: {                   
+                "font-size": "13px !important",
+              },
+        });
+       rendition.themes.select("custom_font_13");               
+      });
 
       var font_15 = document.getElementById("font_15");
       font_15.addEventListener("click", function(e){            
@@ -314,6 +335,16 @@
        rendition.themes.select("custom_font_15");               
       });
 
+
+      var font_16 = document.getElementById("font_16");
+      font_16.addEventListener("click", function(e){            
+        rendition.themes.register("custom_font_15", {
+              body: {                   
+                "font-size": "16px !important",
+              },
+        });
+       rendition.themes.select("custom_font_16");               
+      });
 
       var font_18 = document.getElementById("font_18");
       font_18.addEventListener("click", function(e){            
@@ -334,30 +365,9 @@
         });
          rendition.themes.select("custom_font_20");               
       });
-
-      var font_23 = document.getElementById("font_23");
-      font_23.addEventListener("click", function(e){    
-        rendition.themes.register("custom_font_23", {
-              body: {                   
-                "font-size": "23px !important",
-              },
-        });
-         rendition.themes.select("custom_font_23");               
-      });
-
-      var font_25 = document.getElementById("font_25");
-      font_25.addEventListener("click", function(e){    
-        rendition.themes.register("custom_font_25", {
-              body: {                   
-                "font-size": "25px !important",
-              },
-        });
-         rendition.themes.select("custom_font_25");               
-      });
     
     // End Set Font Size======
   
-
     //Set Font Style==========
     var font_helvetica = document.getElementById("font_helvetica");
       font_helvetica.addEventListener("click", function(e){         
