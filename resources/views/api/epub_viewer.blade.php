@@ -25,6 +25,7 @@
     font-size: 13px;
     z-index:999;
     width: 98%;
+    height: 50px;
    }
 
    /*#viewer{
@@ -116,7 +117,7 @@
   <div style="display:flex;top: 0px;right:0px;background: lightgray;height: 40px;z-index: 99999;position: fixed;">
     <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>
         <div style="padding-right: 20px;cursor: pointer;width: 2%; display: contents;padding-left: 4px; color: #fff;">        
-        <img src="https://www.beta.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
+        <img src="https://www.beta.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;height: 50px;">                
     </div>
   </div>
    
