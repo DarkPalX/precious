@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Laravel\Socialite\SocialiteServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -267,14 +268,18 @@ return [
         // Laravel File-manager
         'Image' => Intervention\Image\Facades\Image::class,
 
+
+        // Other facades...
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+
     ],
 
 
 
-     //API USE ONLY
+     //API USE
      //Company Information
     'CompanyName' => 'PRECIOUS PAGES CORP',
-    'CompanyEmail'=>'no-reply@beta.ebooklat.phr.com.ph',
+    'CompanyEmail'=>'info@preciouspages.com.ph',
     'CompanySupportEmail'=>'',
     'CompanyNoReplyEmail'=>'no-reply@beta.ebooklat.phr.com.ph',
     'CompanyMobileNo' => '0922 868 4362',
