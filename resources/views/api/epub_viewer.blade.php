@@ -191,7 +191,7 @@
                         </div> 
 
                       <div class="setting">
-                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Font</div>
+                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Font Style</div>
                             <div class="setting-content" data-chips="font">
                                 <div class="font-chip" id="font_lucida" style="font-family: Lucida Console, Courier New, monospace;">Courier New</div>                                
                                 <div class="font-chip " id="font_times" style="font-family: Times New Roman, Times, serif;">Times Roman</div>                                
