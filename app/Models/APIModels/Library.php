@@ -173,7 +173,7 @@ class Library extends Model
     
     $query = DB::table('subscribed_books as rbooks')
       ->join('products as prds', 'prds.id', '=', 'rbooks.product_id') 
-      ->leftjoin('book_marks as bkmrk', 'bkmrk.product_id', '=', 'rbooks.product_id') 
+       ->leftjoin('book_marks as bkmrk', 'bkmrk.product_id', '=', 'lib.product_id') 
     
        ->selectraw("
           prds.id as book_ID,
@@ -596,13 +596,22 @@ class Library extends Model
        
        if($PageNo!=null){
 
-    
-          DB::table('book_marks')
-            ->where('customer_id',$UserID)
-            ->where('product_id',$ProductID)
-            ->update([                                                       
-              'chapter_page_no' => $PageNo
-           ]);   
+          DB::table('book_marks')->where('customer_id', $UserID)->where('product_id', $ProductID)->delete();  
+
+        $BookMarkID = DB::table('book_marks')
+            ->insertGetId([                                            
+              'customer_id' => $UserID,              
+              'product_id' => $ProductID,                                            
+              'chapter_page_no' => $PageNo,                                                                                                                  
+              'created_at' => $TODAY             
+            ]);
+            
+          // DB::table('book_marks')
+          //   ->where('customer_id',$UserID)
+          //   ->where('product_id',$ProductID)
+          //   ->update([                                                       
+          //     'chapter_page_no' => $PageNo
+          //  ]);   
        }
         
                     
