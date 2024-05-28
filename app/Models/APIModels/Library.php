@@ -598,7 +598,7 @@ class Library extends Model
 
           DB::table('book_marks')->where('customer_id', $UserID)->where('product_id', $ProductID)->delete();  
 
-        $BookMarkID = DB::table('book_marks')
+          $BookMarkID = DB::table('book_marks')
             ->insertGetId([                                            
               'customer_id' => $UserID,              
               'product_id' => $ProductID,                                            
