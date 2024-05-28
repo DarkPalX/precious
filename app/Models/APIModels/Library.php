@@ -173,6 +173,7 @@ class Library extends Model
     
     $query = DB::table('subscribed_books as rbooks')
       ->join('products as prds', 'prds.id', '=', 'rbooks.product_id') 
+       ->leftjoin('book_marks as bkmrk', 'bkmrk.product_id', '=', 'lib.product_id') 
     
        ->selectraw("
           prds.id as book_ID,
@@ -203,6 +204,8 @@ class Library extends Model
           COALESCE(prds.ebook_discount_price,0) as discount_price,      
           
           COALESCE(prds.reorder_point,0) as reorder_point,  
+
+          COALESCE(bkmrk.chapter_page_no,0) as chapter_page_no,  
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,  
 
