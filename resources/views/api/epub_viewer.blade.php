@@ -9,10 +9,10 @@
   <title>Precious Epub Viewer</title>
 
   
-  <link rel="stylesheet" type="text/css" href="https://www.api.ebooklat.phr.com.ph/public/api/css/epub-main-style.css">
+  <link rel="stylesheet" type="text/css" href="https://www.beta.ebooklat.phr.com.ph/public/api/css/epub-main-style.css">
 
-  <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
-  <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
+  <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
+  <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   
@@ -116,7 +116,7 @@
   <div style="display:flex;top: 0px;right:0px;background: lightgray;height: 40px;z-index: 99999;">
     <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>
         <div style="padding-right: 20px;cursor: pointer;width: 2%; display: contents;padding-left: 4px; color: #fff;">        
-        <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
+        <img src="https://www.beta.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
     </div>
   </div>
    
@@ -138,7 +138,7 @@
               <div class="topbar-item-right d-flex ">
                   <div class="item">
                     <div style="display:flex;">
-                    <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/close-button.png" onclick="closeSidePanelNav()" style="color:#fff;font-family: work sans,sans-serif;cursor: pointer;width: 30px;height: 30px;">  
+                    <img src="https://www.beta.ebooklat.phr.com.ph/public/api/img/close-button.png" onclick="closeSidePanelNav()" style="color:#fff;font-family: work sans,sans-serif;cursor: pointer;width: 30px;height: 30px;">  
                     <span style="color:#fff;padding-left: 50px;">:: Settings ::</span>
                     </div>
                   </div>
