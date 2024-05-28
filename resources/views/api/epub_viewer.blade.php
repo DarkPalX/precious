@@ -338,7 +338,7 @@
 
       var font_16 = document.getElementById("font_16");
       font_16.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_15", {
+        rendition.themes.register("custom_font_16", {
               body: {                   
                 "font-size": "16px !important",
               },
