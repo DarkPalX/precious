@@ -191,15 +191,14 @@
 
                         <div class="setting">
                             <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Font Size</div>
-                            <div class="setting-content" data-chips="font-size">
-                                <div id="font_10" class="size-setting" style="font-size: 8pt" data-value="8pt">8</div>
-                                <div id="font_13" class="size-setting" style="font-size: 9pt" data-value="9pt">9</div>
-                                <div id="font_16" class="size-setting" style="font-size: 10pt" data-value="10pt">10</div>
-                                <div id="font_18" class="size-setting" style="font-size: 11pt" data-default="true" data-value="11pt">11</div>
-                                <div id="font_20" class="size-setting" style="font-size: 12pt" data-value="12pt">12</div>
-                                <div id="font_25" class="size-setting" style="font-size: 14pt" data-value="14pt">14</div>
-                                <div id="font_26" class="size-setting" style="font-size: 16pt" data-value="16pt">16</div>
-                                <div id="font_28" class="size-setting" style="font-size: 18pt" data-value="18pt">18</div>
+                            <div class="setting-content" data-chips="font-size">                                
+                                <div id="font_10" class="size-setting" style="font-size:10pt">10</div>
+                                <div id="font_12" class="size-setting" style="font-size:12pt">12</div>
+                                <div id="font_15" class="size-setting" style="font-size:15pt">15</div>
+                                <div id="font_18" class="size-setting" style="font-size:18pt">18</div>
+                                <div id="font_20" class="size-setting" style="font-size:20pt">20</div>
+                                <div id="font_23" class="size-setting" style="font-size:23pt">23</div>
+                                <div id="font_25" class="size-setting" style="font-size:25pt">25</div>
                             </div>
                         </div>
                     
@@ -294,35 +293,36 @@
        rendition.themes.select("custom_font_10");               
       });
 
-      var font_13 = document.getElementById("font_13");
-      font_13.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_13", {
+           var font_12 = document.getElementById("font_12");
+      font_12.addEventListener("click", function(e){            
+        rendition.themes.register("custom_font_12", {
               body: {                   
-                "font-size": "13px !important",
+                "font-size": "12px !important",
               },
         });
-       rendition.themes.select("custom_font_13");               
+       rendition.themes.select("custom_font_12");               
       });
 
 
-      var font_15 = document.getElementById("font_16");
+      var font_15 = document.getElementById("font_15");
       font_15.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_16", {
+        rendition.themes.register("custom_font_15", {
               body: {                   
                 "font-size": "15px !important",
               },
         });
-       rendition.themes.select("custom_font_16");               
+       rendition.themes.select("custom_font_15");               
       });
 
+
       var font_18 = document.getElementById("font_18");
-      font_18.addEventListener("click", function(e){    
+      font_18.addEventListener("click", function(e){            
         rendition.themes.register("custom_font_18", {
               body: {                   
-                "font-size": "20px !important",
+                "font-size": "18px !important",
               },
         });
-         rendition.themes.select("custom_font_18");               
+       rendition.themes.select("custom_font_18");               
       });
 
       var font_20 = document.getElementById("font_20");
@@ -333,6 +333,16 @@
               },
         });
          rendition.themes.select("custom_font_20");               
+      });
+
+      var font_23 = document.getElementById("font_23");
+      font_23.addEventListener("click", function(e){    
+        rendition.themes.register("custom_font_23", {
+              body: {                   
+                "font-size": "23px !important",
+              },
+        });
+         rendition.themes.select("custom_font_23");               
       });
 
       var font_25 = document.getElementById("font_25");
