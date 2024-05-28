@@ -175,6 +175,25 @@ class WebController extends Controller
         }
     }
 
+    public function update_signin(Request $request)
+    {
+        $ecommerce = Setting::first();
+        $third_party_signins = '';
+        if( isset($request->third_party_signins) && is_array($request->third_party_signins) ) {
+            $third_party_signins = implode(',', $request->third_party_signins);
+        }
+
+        $ecommerce->third_party_signin = $third_party_signins;
+
+        $ecommerce->save();
+
+        if($ecommerce){
+            return back()->with('success','Successfully Updated Third Party Sign-in');
+        } else {
+            return back()->with('error','Failed to update Third Party Sign-in');
+        }
+    }
+
     public function update_media_accounts(Request $request)
     {
         $data   = $request->all();

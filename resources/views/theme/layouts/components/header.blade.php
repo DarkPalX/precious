@@ -66,10 +66,7 @@
 							</div>
 							<div class="card-body mx-auto py-5" style="max-width: 70%;">
 
-								<a href="#" class="button button-large w-100 si-colored si-facebook nott fw-normal ls0 center m-0 mb-2"><i class="icon-facebook-sign"></i> Log in with Facebook</a>
-								<a href="#" class="button button-large w-100 si-colored si-google nott fw-normal ls0 center m-0"><i class="icon-google"></i> Log in with Google</a>
-
-								<div class="divider divider-center"><span class="position-relative" style="top: -2px">OR</span></div>
+								@include('theme.layouts.components.third-party-signin')
 
 								<form id="login-form" name="login-form" class="mb-0 row" action="{{ route('customer-front.customer_login') }}" method="post">
 									@csrf
