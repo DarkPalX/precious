@@ -603,8 +603,8 @@
             let maxSize = 200;
             let validateFileTypes = [".epub"];
 
-            validateFiles(files, maxSize, readEPUB, validateFileTypes);
-            // validateFiles(files, readEPUB, validateFileTypes);
+            // validateFiles(files, maxSize, readEPUB, validateFileTypes);
+            validateFiles(files, readEPUB, validateFileTypes);
         });
 
         function removeEPUB() {
