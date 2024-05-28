@@ -34,7 +34,7 @@ class Library extends Model
     
     $query = DB::table('customer_libraries as lib')
       ->join('products as prds', 'prds.id', '=', 'lib.product_id') 
-      ->leftjoin('book_marks as bkmrk', 'bkmrk.product_id', '=', 'lib.product_id') 
+      ->join('book_marks as bkmrk', 'bkmrk.product_id', '=', 'lib.product_id') 
     
        ->selectraw("
           prds.id as book_ID,
