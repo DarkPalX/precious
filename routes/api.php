@@ -182,9 +182,19 @@ Route::post('/check-library-book',[
    'as'=> 'check-library-book'
 ]);
 
+Route::post('/check-book-allow-download',[
+   'uses'=>'App\Http\Controllers\ApiController@checkCustomerLibraryDownloadBookExist',
+   'as'=> 'check-book-allow-download'
+]);
+
 Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
    'as'=> 'add-to-favorites'
+]);
+
+Route::post('/check-has-book-mark',[
+   'uses'=>'App\Http\Controllers\ApiController@checkBookHasBookMark',
+   'as'=> 'check-has-book-mark'
 ]);
 
 
@@ -237,9 +247,19 @@ Route::post('/save-read-books',[
    'as'=> 'save-read-books'
 ]);
 
+Route::post('/save-book-marks',[
+   'uses'=>'App\Http\Controllers\ApiController@saveBookMarks',
+   'as'=> 'save-book-marks'
+]);
+
+Route::post('/update-book-marks',[
+   'uses'=>'App\Http\Controllers\ApiController@updateBookMarks',
+   'as'=> '/update-book-marks'
+]);
+
 //DOWNLOADED BOOKS
 Route::post('/get-subscribed-downloaded-books-list',[
-   'uses'=>'App\Http\Controllers\ApiController@getSubscribedReadBooksList',
+   'uses'=>'App\Http\Controllers\ApiController@getSubscribedDownloadedBooksList',
    'as'=> 'get-subscribed-downloaded-books-list'
 ]);
 

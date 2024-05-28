@@ -416,7 +416,8 @@ class Order extends Model
           COALESCE(sls_dtls.price,0) as price,
           COALESCE(sls_dtls.discount_amount,0) as discount_price,          
 
-          COALESCE(prod.author,0) as author,
+          COALESCE(prod.author,'') as author,
+          COALESCE(prod.is_premium,0) as is_premium,
 
           COALESCE((
                SELECT 
@@ -478,9 +479,9 @@ class Order extends Model
     ");    
 
     $query->where("sales_hdr.user_id",'=',$UserID);    
-    $info = $query->get();
+    $list = $query->get();
                              
-    return $info;             
+    return $list;             
            
   }
 

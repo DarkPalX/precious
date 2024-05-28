@@ -77,7 +77,14 @@
             <td  style="padding-top:40px;padding-bottom:0px;padding-left:50px;padding-right:50px;font-family:sans-serif;font-size:12px;line-height:20px;color:#232323;text-align:left;font-weight:normal">
                Dear <b>{{ $FullName }}</b>,
               <br><br>
-                  Welcome to PRECIOUS PAGES CORP and thank you for your interest for signing up. Please login your account now and update your profile information now.
+                  Welcome to  {{ config("app.CompanyName") }} and thank you for your interest for signing and becoming one of our customer. Please login your account now and complete the registration process.
+                  Use this 4 digit verification code below:
+
+                   <br><br>
+                  
+                  CODE: <b>{{ $VerificationCode }}</b> 
+
+                  <br><br>
 
             </td> 
             </tr> 

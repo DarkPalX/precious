@@ -462,10 +462,11 @@ class UserCustomer extends Model
 
           // CALL EMAIL HERE FOR REGISTRATION W/ ACTIVATION
           if(!empty($EmailAddress)){      
+
              $param['FullName']=trim($FullName);
              $param['EmailAddress']=trim($EmailAddress);
              $param['VerificationCode']=$VerificationCode;
-             
+                                                
              $Email = new Email();
              $Email->SendCustomerRegistrationEmail($param);      
           }
@@ -574,7 +575,7 @@ class UserCustomer extends Model
 
           ")
 
-          ->whereRaw('usrs_sub.user_id=?',[$UserID])                                                      
+          ->where('usrs_sub.user_id',"=",$UserID)                                                      
           ->where('usrs_sub.is_subscribe',"=",1)
           
           ->first();
@@ -582,6 +583,31 @@ class UserCustomer extends Model
     return  $info;
  }
   
+
+  //subscirber mailing list status
+  public function getCustomerCurrentSubscriberInfo($EmailAddress){
+   
+   $TODAY = date("Y-m-d H:i:s");
+   
+   $info = DB::table('subscribers as subscriber')              
+     
+       ->selectraw("          
+ 
+          COALESCE(subscriber.id ,'') as subscriber_id,
+          COALESCE(subscriber.email ,'') as subscriber,
+
+          COALESCE(subscriber.code ,'') as code,
+          COALESCE(subscriber.is_active ,0) as is_active        
+
+          ")
+
+          ->where('subscriber.email',"=",$EmailAddress)                                                                        
+          ->first();
+ 
+    return  $info;
+ }
+  
+
   //news letter subscription status
  public function getNewsLettrSubsciberStatus($EmailAddress){
 
@@ -690,7 +716,7 @@ class UserCustomer extends Model
                $MessageNotificationID = DB::table('message_notification')
                   ->insertGetId([                                            
                     'user_id' => $UserID,   
-                    'message_notification' => 'You have subscribe for a monthly news letter & you will recived a regular email notifications of news letter, promos & events.',                                                                          
+                    'message_notification' => 'You have subscribe for a monthly news letter & you will recieved a regular email notifications of news letter, promos & events.',                                                                          
                     'created_at' => $TODAY             
                 ]); 
 
@@ -718,7 +744,7 @@ class UserCustomer extends Model
                $MessageNotificationID = DB::table('message_notification')
                   ->insertGetId([                                            
                     'user_id' => $UserID,   
-                    'message_notification' => 'You have subscribe for a monthly news letter & you will recived a regular email notifications of news letter, promos & events.',                                                                          
+                    'message_notification' => 'You have subscribe for a monthly news letter & you will recieved a regular email notifications of news letter, promos & events.',                                                                          
                     'created_at' => $TODAY             
                 ]); 
 
