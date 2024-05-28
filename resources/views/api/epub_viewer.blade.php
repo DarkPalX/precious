@@ -163,7 +163,7 @@
                   <tbody> 
 
                        <div class="setting">
-                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Select Chapters</div>
+                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Select Chapter</div>
                             <div class="setting-content" data-chips="theme">
                                <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>                              
                             </div>
