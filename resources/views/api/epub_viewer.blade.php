@@ -114,8 +114,7 @@
 @if($epub_file_exist)
   
   
-  <div style="display:flex;top: 0px;right:0px;background: lightgray;height: 40px;z-index: 99999;position: fixed;">
-    <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>
+  <div style="display:flex;top: 0px;right:0px;background: lightgray;height: 40px;z-index: 99999;position: fixed;">    
         <div style="padding-right: 20px;cursor: pointer;width: 2%; display: contents;padding-left: 4px; color: #fff;">        
         <img src="https://www.beta.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;height: 50px;">                
     </div>
@@ -126,7 +125,6 @@
   <!-- height spacer -->
   <div style="height: 40px;"></div>
   
- 
   <div style="height:44px;position: fixed;z-index: 999;bottom:0px;text-align:center;width:100%;background: none;">
   <a id="prev" href="#prev" class="arrow" style="font-size:23px;color:white !important;width: 25px;background:#21395f;float:left;margin-left: 10px;">‹</a>
   <a id="next" href="#next" class="arrow"style="font-size:23px;color:white !important;width: 25px;background:#21395f;float:right;margin-right: 10px;">›</a>      
@@ -153,6 +151,13 @@
             <div class="table-responsive-md" style="width: 100%;">                  
                 <table class="table table-style-01" style="width:100%;">
                   <tbody> 
+
+                     <div class="setting">
+                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Chapters</div>
+                            <div class="setting-content" data-chips="theme">
+                               <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>                              
+                            </div>
+                        </div>
 
                       <div class="setting">
                             <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Themes</div>
@@ -185,7 +190,6 @@
                                 <div id="font_28" class="size-setting" style="font-size: 18pt" data-value="18pt">18</div>
                             </div>
                         </div>
-
 
                         <div>  
                           <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Set Bookmark</div>                        
