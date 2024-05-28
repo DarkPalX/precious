@@ -161,7 +161,8 @@
 
                       <div class="setting">
                           <!-- <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Set Bookmark</div>     -->
-                          <center style="padding-top:20px;padding-bottom:20px;">
+                          <center style="padding-top:20px;padding-bottom:10px;">
+                            <br>
                           <form action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
                             <input type="hidden" value="{{$customer_id}}" name="UserID">
                             <input type="hidden" value="{{$product_id}}" name="ProductID">
