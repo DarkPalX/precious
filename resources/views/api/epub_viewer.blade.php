@@ -184,8 +184,8 @@
                       <div class="setting">
                             <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Themes</div>
                             <div class="setting-content" data-chips="theme">
-                                <div class="theme-setting" id="dark-theme" style="background: #fff; color: #000;" data-default="true" data-value="#fff;#000">Light</div>
-                                <div class="theme-setting" id="light-theme" style="background: #000; color: #fff;" data-value="#000;#fff">Dark</div>                                
+                                <div class="theme-setting" id="light-theme" style="background: #fff; color: #000;" data-default="true" data-value="#fff;#000">Light</div>
+                                <div class="theme-setting" id="dark-theme" style="background: #000; color: #fff;" data-value="#000;#fff">Dark</div>                                
                                 <div class="theme-setting" id="septia-theme"  style="background: #f5deb3; color: #000;" data-value="#f5deb3;#000">Sepia</div>                                
                             </div>
                         </div> 
