@@ -95,6 +95,16 @@
     padding: 4px 8px;
 }
 
+.margin-setting {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    text-align: center;
+    margin: 4px;
+    padding: 4px 8px;
+}
+
   .setting-label {
     display: block;
     font-weight: 700;
@@ -199,12 +209,23 @@
                                 <div id="font_15" class="size-setting" style="font-size:15pt">15</div>
                                 <div id="font_16" class="size-setting" style="font-size:16pt">16</div>
                                 <div id="font_18" class="size-setting" style="font-size:18pt">18</div>
-                                <div id="font_20" class="size-setting" style="font-size:20pt">20</div>
-                                
+                                <div id="font_20" class="size-setting" style="font-size:20pt">20</div>                                
+                            </div>
+                        </div>
+
+                        <div class="setting">
+                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Margins</div>
+                            <div class="setting-content" data-chips="font-size">                                
+                                <div id="margin_0" class="margin-setting" style="font-size:10pt">0px</div>
+                                <div id="margin_2" class="margin-setting" style="font-size:10pt">2px</div>
+                                <div id="margin_4" class="margin-setting" style="font-size:10pt">4px</div>
+                                <div id="margin_6" class="margin-setting" style="font-size:10pt">6px</div>
+                                <div id="margin_8" class="margin-setting" style="font-size:10pt">8px</div>
+                                <div id="margin_10" class="margin-setting" style="font-size:10pt">10px</div>                                                              
+                                <div id="margin_12" class="margin-setting" style="font-size:10pt">12px</div>                                                              
                             </div>
                         </div>
                     
-
                 </tbody>
            </table>                        
           </div>
@@ -302,7 +323,7 @@
                 "font-size": "11px !important",
               },
         });
-       rendition.themes.select("custom_font_10");               
+       rendition.themes.select("custom_font_11");               
       });
 
       var font_12 = document.getElementById("font_12");
@@ -367,6 +388,82 @@
       });
     
     // End Set Font Size======
+
+    // Set Margin Size==========
+      var margin_0 = document.getElementById("margin_0");
+      margin_0.addEventListener("click", function(e){            
+        rendition.themes.register("custom_margin_0", {
+              body: {                   
+                "margin": "0px !important",
+              },
+        });
+       rendition.themes.select("custom_margin_0");               
+      });
+
+        var margin_2 = document.getElementById("margin_2");
+      margin_2.addEventListener("click", function(e){            
+        rendition.themes.register("custom_margin_2", {
+              body: {                   
+                "margin": "2px !important",
+              },
+        });
+       rendition.themes.select("margin_2");               
+      });
+        
+  
+      var margin_4 = document.getElementById("margin_4");
+      margin_4.addEventListener("click", function(e){            
+        rendition.themes.register("custom_margin_4", {
+              body: {                   
+                "margin": "4px !important",
+              },
+        });
+       rendition.themes.select("custom_margin_4");               
+      });
+        
+      var margin_6 = document.getElementById("margin_6");
+      margin_6.addEventListener("click", function(e){            
+        rendition.themes.register("custom_margin_6", {
+              body: {                   
+                "margin": "6px !important",
+              },
+        });
+       rendition.themes.select("custom_margin_4");               
+      });
+        
+      var margin_8 = document.getElementById("margin_8");
+      margin_8.addEventListener("click", function(e){            
+        rendition.themes.register("custom_margin_8", {
+              body: {                   
+                "margin": "8px !important",
+              },
+        });
+       rendition.themes.select("custom_margin_8");               
+      });
+
+      var margin_10 = document.getElementById("margin_10");
+      margin_10.addEventListener("click", function(e){            
+        rendition.themes.register("custom_margin_10", {
+              body: {                   
+                "margin": "10px !important",
+              },
+        });
+       rendition.themes.select("custom_margin_10");               
+      });
+
+      var margin_12 = document.getElementById("margin_12");
+      margin_12.addEventListener("click", function(e){            
+        rendition.themes.register("custom_margin_12", {
+              body: {                   
+                "margin": "12px !important",
+              },
+        });
+       rendition.themes.select("custom_margin_12");               
+      });
+
+
+
+   // End of Margin
   
     //Set Font Style==========
     var font_helvetica = document.getElementById("font_helvetica");
