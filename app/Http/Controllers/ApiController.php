@@ -236,7 +236,7 @@ class ApiController extends Controller {
     }
 
     if($data['Password']!=$data['RepeatPassword']){
-      $ResponseMessage ='Password & Confirm password does not matched.';
+      $ResponseMessage ='Password & Confirm password do not match.';
        return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
@@ -355,7 +355,7 @@ class ApiController extends Controller {
     }
 
     if($data['NewPassword']!=$data['ConfirmNewPassword']){
-      $ResponseMessage ='Password & Confirm password does not matched.';
+      $ResponseMessage ='Password & Confirm password do not match.';
        return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
