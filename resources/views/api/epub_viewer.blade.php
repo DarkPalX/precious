@@ -152,11 +152,23 @@
                 <table class="table table-style-01" style="width:100%;">
                   <tbody> 
 
-                     <div class="setting">
-                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Chapters</div>
+                       <div class="setting">
+                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Select Chapters</div>
                             <div class="setting-content" data-chips="theme">
                                <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>                              
                             </div>
+                        </div>
+
+                      <div class="setting">
+                          <!-- <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Set Bookmark</div>     -->
+                          <center style="padding-top:20px;padding-bottom:20px;">
+                          <form action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
+                            <input type="hidden" value="{{$customer_id}}" name="UserID">
+                            <input type="hidden" value="{{$product_id}}" name="ProductID">
+                            <input id="BookMarkIndex" type="hidden" name="PageNo">
+                             <input type="submit" value=" Bookmark This Chapter " style="vertical-align: middle;border-radius: 32px;border: 1px solid rgba(0, 0, 0, 0.15);text-align: center;margin: 4px;padding: 4px 8px;">
+                           </form>
+                           </center>          
                         </div>
 
                       <div class="setting">
@@ -190,16 +202,7 @@
                                 <div id="font_28" class="size-setting" style="font-size: 18pt" data-value="18pt">18</div>
                             </div>
                         </div>
-
-                        <div>  
-                          <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Set Bookmark</div>                        
-                          <form  action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
-                            <input type="hidden" value="{{$customer_id}}" name="UserID">
-                            <input type="hidden" value="{{$product_id}}" name="ProductID">
-                            <input id="BookMarkIndex" type="hidden" name="PageNo">
-                             <input type="submit" value=" Bookmark Chapter " style="vertical-align: middle;border-radius: 32px;border: 1px solid rgba(0, 0, 0, 0.15);text-align: center;margin: 4px;padding: 4px 8px;">
-                           </form>   
-                        </div>  
+                    
 
                 </tbody>
            </table>                        
