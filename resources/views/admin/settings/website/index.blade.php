@@ -43,6 +43,9 @@
                     <li class="nav-item">
                         <a class="nav-link" id="paynamics-tab" data-toggle="tab" href="#paynamics" role="tab" aria-controls="paynamics" aria-selected="false">Paynamics Accepted Payments</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="false">Third Party Sign-in</a>
+                    </li>
                 </ul>
                 <div class="tab-content rounded bd bd-gray-300 bd-t-0 pd-20" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -590,6 +593,48 @@
                             </form>
                         </div>
                     </div>
+
+                    <!-- Signin Tab -->
+                    <div class="tab-pane fade" id="signin" role="tabpanel" aria-labelledby="siginin-tab">
+                        <div class="col-lg-12 mg-t-15">
+                            <form action="{{ route('website-settings.update-signin') }}" method="post" class="parsley-style-1" data-parsley-validate novalidate>
+                                @csrf
+                                <div class="col-md-12">
+                                    <h4>Third Party Sign-in List</h4>
+                                    @php
+                                        $third_party_signins = explode(",",$web->third_party_signin);
+                                    @endphp
+                                    <table class="table table-striped table-md">
+                                        <thead>
+                                            <tr>
+                                                <th width="1%"></th>                                        
+                                                <th>Name</th>                                        
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><input type="checkbox" name="third_party_signins[]" value="google" 
+                                                    @if(in_array('google', $third_party_signins)) checked="checked" @endif></td>
+                                                <td>Google</td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="checkbox" name="third_party_signins[]" value="facebook" 
+                                                    @if(in_array('facebook', $third_party_signins)) checked="checked" @endif></td>
+                                                <td>Facebook</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="col-lg-12 mg-t-30">
+                                    <button class="btn btn-primary btn-sm btn-uppercase" type="submit">Save Settings</button>
+                                    <a href="{{ route('website-settings.edit') }}" class="btn btn-outline-secondary btn-sm btn-uppercase">Discard Changes</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    
                 </div>
             </div>
         </div>

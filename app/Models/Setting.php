@@ -15,6 +15,8 @@ class Setting extends Model
                             'data_privacy_popup_content', 'data_privacy_content', 'mobile_no', 'fax_no', 'tel_no', 'email', 
                             'company_about', 'company_address', 'google_map', 'social_media_accounts', 'copyright', 'user_id',
                             'pickup_is_allowed','delivery_note','review_is_allowed','promo_is_displayed','min_order','min_order_is_allowed','flatrate_is_allowed','delivery_collect_is_allowed', 'coupon_limit', 'coupon_discount_limit', 'contact_us_email_layout', 'cart_notification_duration', 'cart_product_duration', 
+                            'accepted_payments',
+                            'third_party_signin',
                             'modal_title',
                             'modal_content',
                             'modal_status'
@@ -44,7 +46,7 @@ class Setting extends Model
     static $oldModel;
     static $tableTitle = 'settings';
     static $name = 'name';
-    static $unrelatedFields = ['id', 'social_media_accounts', 'user_id', 'min_order', 'promo_is_displayed', 'review_is_allowed', 'pickup_is_allowed', 'delivery_note', 'min_order_is_allowed', 'flatrate_is_allowed', 'delivery_collect_is_allowed', 'accepted_payments', 'created_at', 'updated_at', 'deleted_at'];
+    static $unrelatedFields = ['id', 'social_media_accounts', 'user_id', 'min_order', 'promo_is_displayed', 'review_is_allowed', 'pickup_is_allowed', 'delivery_note', 'min_order_is_allowed', 'flatrate_is_allowed', 'delivery_collect_is_allowed', 'accepted_payments', 'third_party_signin', 'created_at', 'updated_at', 'deleted_at'];
     static $logName = [
         'api_key' => 'api key',
         'website_name' => 'website name',

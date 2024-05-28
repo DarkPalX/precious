@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\SocialiteController;
 
 // CMS Controllers
 use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController};
@@ -22,6 +23,7 @@ use App\Http\Controllers\Ecommerce\{
 };
 
 use App\Http\Controllers\MailingList\{SubscriberController, GroupController, CampaignController, SubscriberFrontController};
+
 
 
 //FOR STORAGE LINK
@@ -86,6 +88,9 @@ Route::get('/phpinfo', function () {
     Route::get('/reset-password/{token}', [CustomerFrontController::class, 'showResetForm'])->name('customer-front.reset_password');
     Route::post('/reset-password',        [CustomerFrontController::class, 'reset'])->name('customer-front.reset_password_post');
 
+    //Socialite Signup -Signin
+    Route::get('login/{provider}', [SocialiteController::class, 'redirectToProvider'])->name('login.provider');
+    Route::get('login/{provider}/callback', [SocialiteController::class, 'handleProviderCallback']);
 
 
     // Ecommerce Pages
@@ -218,6 +223,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
             Route::post('/website-settings/update_contacts', [WebController::class, 'update_contacts'])->name('website-settings.update-contacts');
             Route::post('/website-settings/update-ecommerce', [WebController::class, 'update_ecommerce'])->name('website-settings.update-ecommerce');
             Route::post('/website-settings/update-paynamics', [WebController::class, 'update_paynamics'])->name('website-settings.update-paynamics');
+            Route::post('/website-settings/update-signin', [WebController::class, 'update_signin'])->name('website-settings.update-signin');
             Route::post('/website-settings/update_media_accounts', [WebController::class, 'update_media_accounts'])->name('website-settings.update-media-accounts');
             Route::post('/website-settings/update_data_privacy', [WebController::class, 'update_data_privacy'])->name('website-settings.update-data-privacy');
             Route::post('/website-settings/remove_logo', [WebController::class, 'remove_logo'])->name('website-settings.remove-logo');
