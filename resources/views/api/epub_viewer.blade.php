@@ -116,7 +116,7 @@
   
   <div style="display:flex;top: 0px;right:0px;background: lightgray;height: 40px;z-index: 99999;position: fixed;">    
         <div style="padding-right: 20px;cursor: pointer;width: 2%; display: contents;padding-left: 4px; color: #fff;">        
-        <img src="https://www.beta.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;height: 50px;">                
+        <img src="https://www.beta.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
     </div>
   </div>
    
@@ -161,13 +161,12 @@
 
                       <div class="setting">
                           <!-- <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Set Bookmark</div>     -->
-                          <center style="padding-top:20px;padding-bottom:10px;">
-                            <br>
+                          <center style="padding-bottom:10px;">                            
                           <form action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
                             <input type="hidden" value="{{$customer_id}}" name="UserID">
                             <input type="hidden" value="{{$product_id}}" name="ProductID">
                             <input id="BookMarkIndex" type="hidden" name="PageNo">
-                             <input type="submit" value=" Bookmark This Chapter " style="vertical-align: middle;border-radius: 32px;border: 1px solid rgba(0, 0, 0, 0.15);text-align: center;margin: 4px;padding: 4px 8px;">
+                             <input type="submit" value=" Bookmark This Chapter " style="vertical-align: middle;border-radius: 32px;border: 1px solid rgba(0, 0, 0, 0.15);text-align: center;margin: 4px;padding: 4px 8px;margin-top: 15px;">
                            </form>
                            </center>          
                         </div>
