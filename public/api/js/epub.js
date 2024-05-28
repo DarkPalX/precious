@@ -10724,7 +10724,7 @@ var keys  = __webpack_require__(31)
   , value = __webpack_require__(35)
   , max   = Math.max;
 
-module.exports = function (dest, src /*, ¡Ksrcn*/) {
+module.exports = function (dest, src /*, Â¡Ksrcn*/) {
   var error, i, length = max(arguments.length, 2), assign;
   dest = Object(value(dest));
   assign = function (key) {
@@ -10831,7 +10831,7 @@ var process = function (src, obj) {
 };
 
 // eslint-disable-next-line no-unused-vars
-module.exports = function (opts1 /*, ¡Koptions*/) {
+module.exports = function (opts1 /*, Â¡Koptions*/) {
   var result = create(null);
   forEach.call(arguments, function (options) {
     if (!isValue(options)) return;
@@ -13789,19 +13789,19 @@ var Themes = function () {
       },
 
       "dark": {
-        "rules": {"body": { "background-color": "black", "color": "white"}},
+        "rules": {"body": { "background-color": "black !important", "color": "white !important"}, "p": { "color": "white !important"}},
         "url": "",
         "serialized": ""
       },
 
         "light": {
-        "rules": {"body": { "background-color": "white", "color": "black"}},
+        "rules": {"body": { "background-color": "white !important", "color": "black !important"}, "p": { "color": "black !important"}},
         "url": "",
         "serialized": ""
       },
 
        "septia": {
-        "rules": {"body": { "background-color": "#f4eacd", "color": "#704214"}},
+        "rules": {"body": { "background-color": "#f4eacd !important", "color": "#704214 !important"}, "p": { "color": "#704214 !important"}},
         "url": "",
         "serialized": ""
       }
@@ -16804,4 +16804,3 @@ module.exports = function(module) {
 /******/ ]);
 });
 //# sourceMappingURL=epub.js.map
-  

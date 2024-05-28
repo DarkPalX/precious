@@ -9,10 +9,10 @@
   <title>Precious Epub Viewer</title>
 
   
-  <link rel="stylesheet" type="text/css" href="https://www.api.ebooklat.phr.com.ph/public/api/css/epub-main-style.css">
+  <link rel="stylesheet" type="text/css" href="https://www.beta.ebooklat.phr.com.ph/public/api/css/epub-main-style.css">
 
-  <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
-  <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
+  <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
+  <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   
@@ -25,6 +25,7 @@
     font-size: 13px;
     z-index:999;
     width: 98%;
+    height: 50px;
    }
 
    /*#viewer{
@@ -113,10 +114,9 @@
 @if($epub_file_exist)
   
   
-  <div style="display:flex;top: 0px;right:0px;background: lightgray;height: 40px;z-index: 99999;">
-    <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>
+  <div style="display:flex;top: 0px;right:0px;background: lightgray;height: 40px;z-index: 99999;position: fixed;">    
         <div style="padding-right: 20px;cursor: pointer;width: 2%; display: contents;padding-left: 4px; color: #fff;">        
-        <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
+        <img src="https://www.beta.ebooklat.phr.com.ph/public/api/img/menu-icon.png" onclick="openSidePanelNav()" style="width: 40px;">                
     </div>
   </div>
    
@@ -125,7 +125,6 @@
   <!-- height spacer -->
   <div style="height: 40px;"></div>
   
- 
   <div style="height:44px;position: fixed;z-index: 999;bottom:0px;text-align:center;width:100%;background: none;">
   <a id="prev" href="#prev" class="arrow" style="font-size:23px;color:white !important;width: 25px;background:#21395f;float:left;margin-left: 10px;">‹</a>
   <a id="next" href="#next" class="arrow"style="font-size:23px;color:white !important;width: 25px;background:#21395f;float:right;margin-right: 10px;">›</a>      
@@ -138,7 +137,7 @@
               <div class="topbar-item-right d-flex ">
                   <div class="item">
                     <div style="display:flex;">
-                    <img src="https://www.api.ebooklat.phr.com.ph/public/api/img/close-button.png" onclick="closeSidePanelNav()" style="color:#fff;font-family: work sans,sans-serif;cursor: pointer;width: 30px;height: 30px;">  
+                    <img src="https://www.beta.ebooklat.phr.com.ph/public/api/img/close-button.png" onclick="closeSidePanelNav()" style="color:#fff;font-family: work sans,sans-serif;cursor: pointer;width: 30px;height: 30px;">  
                     <span style="color:#fff;padding-left: 50px;">:: Settings ::</span>
                     </div>
                   </div>
@@ -152,6 +151,25 @@
             <div class="table-responsive-md" style="width: 100%;">                  
                 <table class="table table-style-01" style="width:100%;">
                   <tbody> 
+
+                       <div class="setting">
+                            <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Select Chapters</div>
+                            <div class="setting-content" data-chips="theme">
+                               <select id="toc" style="font-size:15px;padding:5px !important;float:left;"></select>                              
+                            </div>
+                        </div>
+
+                      <div class="setting">
+                          <!-- <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Set Bookmark</div>     -->
+                          <center style="padding-bottom:10px;">                            
+                          <form action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
+                            <input type="hidden" value="{{$customer_id}}" name="UserID">
+                            <input type="hidden" value="{{$product_id}}" name="ProductID">
+                            <input id="BookMarkIndex" type="hidden" name="PageNo">
+                             <input type="submit" value=" Bookmark This Chapter " style="vertical-align: middle;border-radius: 32px;border: 1px solid rgba(0, 0, 0, 0.15);text-align: center;margin: 4px;padding: 4px 8px;margin-top: 15px;">
+                           </form>
+                           </center>          
+                        </div>
 
                       <div class="setting">
                             <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Themes</div>
@@ -184,17 +202,7 @@
                                 <div id="font_28" class="size-setting" style="font-size: 18pt" data-value="18pt">18</div>
                             </div>
                         </div>
-
-
-                        <div>  
-                          <div class="setting-label" style="border-bottom: 1px dashed gray;border-top: 1px dashed gray;">Set Bookmark</div>                        
-                          <form id="submit" action="https://www.beta.ebooklat.phr.com.ph/public/api/update-book-marks" method="post">
-                            <input type="hidden" value="{{$customer_id}}" name="UserID">
-                            <input type="hidden" value="{{$product_id}}" name="ProductID">
-                            <input id="BookMarkIndex" type="hidden" name="PageNo">
-                             <input type="submit" value=" Bookmark Chapter " style="vertical-align: middle;border-radius: 32px;border: 1px solid rgba(0, 0, 0, 0.15);text-align: center;margin: 4px;padding: 4px 8px;">
-                           </form>   
-                        </div>  
+                    
 
                 </tbody>
            </table>                        
