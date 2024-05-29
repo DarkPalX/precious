@@ -338,8 +338,24 @@ class ApiController extends Controller {
         ]);
     }
 
+    if(empty($data['NewPassword'])){
+      $ResponseMessage ='New password is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+       if(empty($data['ConfirmNewPassword'])){
+      $ResponseMessage ='Confirm new password is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
     if(!empty($data['NewPassword']) &&  strlen($data['NewPassword'])<6){
-      $ResponseMessage ='Password must be atleast 6 character or more.';
+      $ResponseMessage ='New password must be atleast 6 character or more.';
        return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
