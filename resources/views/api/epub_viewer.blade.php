@@ -13,7 +13,9 @@
 
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
-  
+  <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
+  <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/localforage.min"></script>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   
   <style>
@@ -115,8 +117,8 @@
 .setting-content{
    padding: 4px;
 }
-
   </style>
+
 </head>
 <body>
   <!-- <div id="title"></div> -->
@@ -229,7 +231,7 @@
                 </tbody>
            </table>                        
           </div>
-      </div>        
+      </div>           
   </div>
 
   @else
