@@ -265,7 +265,7 @@
       flow: "scrolled-doc"
     });
    
-    rendition.display(currentSectionIndex);
+    var rendition.display(currentSectionIndex);
 
         displayed.then(function(renderer){
       // Add all resources to the store
