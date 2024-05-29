@@ -363,7 +363,7 @@ class ApiController extends Controller {
     }
 
     if(!empty($data['ConfirmNewPassword']) &&  strlen($data['ConfirmNewPassword'])<6){
-      $ResponseMessage ='Confirm password must be atleast 6 character or more.';
+      $ResponseMessage ='Confirm new password must be atleast 6 character or more.';
        return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
@@ -371,14 +371,13 @@ class ApiController extends Controller {
     }
 
     if($data['NewPassword']!=$data['ConfirmNewPassword']){
-      $ResponseMessage ='Password & Confirm password do not match.';
+      $ResponseMessage ='New password & Confirm new password do not match.';
        return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
         ]);
     }
     
-
     //Checking of password
     $getEmailAddress=''; 
     $info=$UserCustomer->getCustomerInformation($data);
