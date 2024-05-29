@@ -266,12 +266,12 @@
    
     var displayed = rendition.display(currentSectionIndex);
 
-    displayed.then(function(renderer){
-      // Add all resources to the store      
-      book.storage.add(book.resources, true).then(() => {
-        console.log("stored");
-      })
-    });
+    // displayed.then(function(renderer){
+    //   // Add all resources to the store      
+    //   book.storage.add(book.resources, true).then(() => {
+    //     console.log("stored");
+    //   })
+    // });
    
    // Set Theme
     var dark_theme = document.getElementById("dark-theme");
