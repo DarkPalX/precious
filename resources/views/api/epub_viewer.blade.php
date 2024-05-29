@@ -255,7 +255,10 @@
     var currentSectionIndex ="{{$chapter_page_no}}";
   
     // Load the opf
-    var book = ePub(url || "{{$epub_doc}}");    
+    var book = ePub(url || "{{$epub_doc}}",{
+      store: "epubjs-test"
+    });  
+     
     var rendition = book.renderTo("viewer", {
       width: "100%",
       height: "100%",
@@ -263,6 +266,14 @@
     });
    
     rendition.display(currentSectionIndex);
+
+        displayed.then(function(renderer){
+      // Add all resources to the store
+      // Add `true` to force re-saving resources
+      book.storage.add(book.resources, true).then(() => {
+        console.log("stored");
+      })
+    });
    
    // Set Theme
     var dark_theme = document.getElementById("dark-theme");
