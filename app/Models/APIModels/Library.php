@@ -595,9 +595,12 @@ class Library extends Model
     if(isset($info)>0){
        
        if($PageNo!=null){
-
-          DB::table('book_marks')->where('customer_id', $UserID)->where('product_id', $ProductID)->delete();  
-
+       
+       //remove no customer reference
+        DB::table('book_marks')->where('customer_id',"=",0)->delete();  
+        // delete existing customer book
+        DB::table('book_marks')->where('customer_id', $UserID)->where('product_id', $ProductID)->delete();  
+        // save new book upon update
         $BookMarkID = DB::table('book_marks')
             ->insertGetId([                                            
               'customer_id' => $UserID,              
