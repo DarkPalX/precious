@@ -171,8 +171,8 @@ class Library extends Model
     $Limit=$data['Limit'];
     $PageNo=$data['PageNo'];
     
-    $query = DB::table('subscribed_books as rbooks')
-      ->join('products as prds', 'prds.id', '=', 'rbooks.product_id') 
+    $query = DB::table('products as prds')
+      ->join('subscribed_books as rbooks', 'rbooks.id', '=', 'rbooks.product_id') 
       ->join('book_marks as bkmrk', 'bkmrk.product_id', '=', 'prds.id') 
     
        ->selectraw("
