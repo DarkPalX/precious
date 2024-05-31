@@ -171,9 +171,8 @@ class Library extends Model
     $Limit=$data['Limit'];
     $PageNo=$data['PageNo'];
     
-    $query = DB::table('products as prds')
-      ->join('subscribed_books as rbooks', 'rbooks.product_id', '=', 'prds.id') 
-      ->join('book_marks as bkmrk', 'bkmrk.product_id', '=', 'prds.id') 
+    $query = DB::table('subscribed_books as rbooks')
+      ->join('products as prds', 'prds.id', '=', 'rbooks.product_id')        
     
        ->selectraw("
           prds.id as book_ID,
@@ -204,9 +203,7 @@ class Library extends Model
           COALESCE(prds.ebook_discount_price,0) as discount_price,      
           
           COALESCE(prds.reorder_point,0) as reorder_point,  
-
-          COALESCE(bkmrk.chapter_page_no,0) as chapter_page_no,  
-
+          
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,  
 
           COALESCE((
@@ -255,6 +252,18 @@ class Library extends Model
                   LIMIT 1                                
               )
         ,0) as promo_discount_price,
+
+
+        COALESCE((
+               SELECT 
+                   bkmrk.chapter_page_no FROM 
+                        book_marks as bkmrk                  
+                    INNER JOIN products as prods ON prods.id = bkmrk.product_id
+                         WHERE bkmrk.product_id = prds.id                            
+                  LIMIT 1                                
+              )
+        ,0) as chapter_page_no,
+
 
           COALESCE(prds.status,'') as status          
           
@@ -600,7 +609,7 @@ class Library extends Model
         DB::table('book_marks')->where('customer_id',"=",0)->delete();  
         // delete existing customer book
         DB::table('book_marks')->where('customer_id', $UserID)->where('product_id', $ProductID)->delete();  
-        // save new book upon update
+        // save new book
         $BookMarkID = DB::table('book_marks')
             ->insertGetId([                                            
               'customer_id' => $UserID,              
