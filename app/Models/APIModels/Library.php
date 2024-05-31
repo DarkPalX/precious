@@ -173,7 +173,7 @@ class Library extends Model
     
     $query = DB::table('subscribed_books as rbooks')
       ->join('products as prds', 'prds.id', '=', 'rbooks.product_id') 
-      ->leftjoin('book_marks as bkmrk', 'bkmrk.product_id', '=', 'prds.id') 
+      ->join('book_marks as bkmrk', 'bkmrk.product_id', '=', 'prds.id') 
     
        ->selectraw("
           prds.id as book_ID,
