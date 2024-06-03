@@ -918,7 +918,6 @@ public function checkCustomerLibraryBookExist(Request $request){
          'message' => "This book is not in listed in your library.",
         ]);  
     }
-
 }
 
 public function checkBookHasBookMark(Request $request){

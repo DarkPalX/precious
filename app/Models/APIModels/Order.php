@@ -261,7 +261,7 @@ class Order extends Model
               'product_name' => $item_list->name, 
               'product_category' => $item_list->category_id,              
               'price' => $item_list->price,              
-              'qty' => 1, 
+              'qty' => 0, 
               'uom' => $item_list->uom, 
               'tax_amount' =>0,              
               'promo_id' =>0,  
