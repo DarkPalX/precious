@@ -1819,7 +1819,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
     $retVal=$Contact->doSendInquiry($data);
      return response()->json([
       'response' => 'Success',
-      'message' => "Your inquiry has successfully send. Wait for admin to contact you.",
+      'message' => "Inquiry has successfully sent. And wait for our staff to contact you.",
     ]);                     
            
   }
