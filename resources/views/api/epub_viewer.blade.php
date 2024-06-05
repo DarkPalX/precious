@@ -14,7 +14,6 @@
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
-  <!-- <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/localforage.min"></script> -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.3.0/localforage.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -251,7 +250,7 @@
     var background="light";
     var font_size="18";
     var margin_size="0";
-    var font_style="Times New Roman";
+    var font_style="Times Roman";
       
     var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
@@ -280,7 +279,9 @@
    
 
     // Start Set Custome Theme==========================
-    
+   
+   // Start Set Custome Theme==========================
+
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){  
 
@@ -640,9 +641,961 @@
         });
         rendition.themes.select("septia_color");  
       }             
+
         
       });
       
+     // End Theme=============
+     
+
+     // Set Font Size==========
+      var font_10 = document.getElementById("font_10");
+      font_10.addEventListener("click", function(e){   
+
+      font_size="10";
+
+      if(background=='light'){
+
+          rendition.themes.register("custom_font_10", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-size": "10px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_10");          
+         
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_10", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-size": "10px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_10");          
+         
+
+      }
+
+       if(background=='septia'){
+
+          rendition.themes.register("custom_font_10", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-size": "10px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_10");                   
+      }
+          
+
+      });
+
+       var font_11 = document.getElementById("font_11");
+      font_11.addEventListener("click", function(e){ 
+
+      font_size="11";  
+
+      if(background=='light'){
+
+          rendition.themes.register("custom_font_11", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_11");          
+         
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_11", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_11");                   
+      }
+
+       if(background=='septia'){
+
+          rendition.themes.register("custom_font_11", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_11");                   
+      }
+
+      });
+
+      var font_12 = document.getElementById("font_12");
+      font_12.addEventListener("click", function(e){    
+
+      font_size="12";  
+
+        if(background=='light'){
+
+          rendition.themes.register("custom_font_12", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_12");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_12", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_12");                   
+
+      }
+
+       if(background=='septia'){
+
+          rendition.themes.register("custom_font_12", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_12");                   
+
+      }
+
+      });
+
+      var font_13 = document.getElementById("font_13");
+      font_13.addEventListener("click", function(e){    
+
+        font_size="13";  
+
+        if(background=='light'){
+
+          rendition.themes.register("custom_font_13", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_13");          
+         
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_13", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_13");                   
+      }
+
+       if(background=='septia'){
+
+          rendition.themes.register("custom_font_13", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_13");                   
+      }
+
+      });
+
+      var font_15 = document.getElementById("font_15");
+      font_15.addEventListener("click", function(e){   
+
+      font_size="15";           
+        
+        if(background=='light'){
+
+          rendition.themes.register("custom_font_15", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_15");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_15", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_15");                   
+      }
+
+       if(background=='septia'){
+
+          rendition.themes.register("custom_font_15", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_15");          
+         
+      }
+
+      });
+
+      var font_16 = document.getElementById("font_16");
+      font_16.addEventListener("click", function(e){   
+
+      font_size="16";                    
+            
+        if(background=='light'){
+
+          rendition.themes.register("custom_font_16", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_16");          
+         
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_16", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_16");                   
+
+      }
+
+       if(background=='septia'){
+
+          rendition.themes.register("custom_font_16", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_16");                   
+      }
+
+      });
+
+      var font_18 = document.getElementById("font_18");
+      font_18.addEventListener("click", function(e){  
+
+      font_size="18";                      
+
+      if(background=='light'){
+
+          rendition.themes.register("custom_font_18", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_18");          
+         
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_18", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_18");                   
+      }
+
+       if(background=='septia'){
+
+          rendition.themes.register("custom_font_18", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_18");          
+         
+       }
+             
+      });
+
+      var font_20 = document.getElementById("font_20");
+      font_20.addEventListener("click", function(e){ 
+
+      font_size="20";                    
+
+         if(background=='light'){
+
+          rendition.themes.register("custom_font_20", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_20");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_20", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_20");                   
+      }
+
+       if(background=='septia'){
+
+          rendition.themes.register("custom_font_20", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_20");                          
+       }           
+
+      });
+    
+    // End Set Font Size======
+
+    // Set Margin Size==========
+    var margin_0 = document.getElementById("margin_0");
+      margin_0.addEventListener("click", function(e){  
+
+
+      if(background=='light'){
+
+          rendition.themes.register("custom_margin_0", {
+              body: {     
+                "background-color": "white !important",                        
+                "margin": "0px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_0");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_margin_0", {
+              body: {     
+                "background-color": "black !important",                        
+                "margin": "0px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_0");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_margin_0", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "margin": "0px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_0");                          
+       }     
+            
+      });
+
+      var margin_2 = document.getElementById("margin_2");
+      margin_2.addEventListener("click", function(e){            
+        
+
+      if(background=='light'){
+
+          rendition.themes.register("custom_margin_2", {
+              body: {     
+                "background-color": "white !important",                        
+                "margin": "2px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_2");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_margin_2", {
+              body: {     
+                "background-color": "black !important",                        
+                "margin": "2px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_2");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_margin_2", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "margin": "2px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_2");                          
+       }
+
+      });
+        
+     var margin_4 = document.getElementById("margin_4");
+      margin_4.addEventListener("click", function(e){    
+
+      if(background=='light'){
+
+          rendition.themes.register("custom_margin_4", {
+              body: {     
+                "background-color": "white !important",                        
+                "margin": "4px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_4");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_margin_4", {
+              body: {     
+                "background-color": "black !important",                        
+                "margin": "4px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_4");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_margin_4", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "margin": "4px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_4");                          
+       }
+
+
+      });
+        
+      var margin_6 = document.getElementById("margin_6");
+      margin_6.addEventListener("click", function(e){   
+
+      if(background=='light'){
+
+          rendition.themes.register("custom_margin_6", {
+              body: {     
+                "background-color": "white !important",                        
+                "margin": "6px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_6");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_margin_6", {
+              body: {     
+                "background-color": "black !important",                        
+                "margin": "6px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_6");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_margin_6", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "margin": "6px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_6");                          
+       }          
+
+      });
+        
+      var margin_8 = document.getElementById("margin_8");
+      margin_8.addEventListener("click", function(e){            
+       
+      if(background=='light'){
+
+          rendition.themes.register("custom_margin_8", {
+              body: {     
+                "background-color": "white !important",                        
+                "margin": "8px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_8");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_margin_8", {
+              body: {     
+                "background-color": "black !important",                        
+                "margin": "8px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_8");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_margin_8", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "margin": "8px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_8");                          
+       }          
+
+      });
+
+      var margin_10 = document.getElementById("margin_10");
+      margin_10.addEventListener("click", function(e){    
+
+       if(background=='light'){
+
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                "background-color": "white !important",                        
+                "margin": "10px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_10");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                "background-color": "black !important",                        
+                "margin": "10px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_10");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "margin": "10px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_10");                          
+       } 
+
+      });
+
+      var margin_12 = document.getElementById("margin_12");
+      margin_12.addEventListener("click", function(e){            
+
+      if(background=='light'){
+
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                "background-color": "white !important",                        
+                "margin": "12px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_12");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                "background-color": "black !important",                        
+                "margin": "12px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_12");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "margin": "12px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_margin_12");                          
+       } 
+        
+      });
+
+   // End of Margin
+  
+    //Set Font Style==========
+    var font_helvetica = document.getElementById("font_helvetica");
+      font_helvetica.addEventListener("click", function(e){  
+       
+      font_style="Helvetica";
+
+      if(background=='light'){
+
+          rendition.themes.register("custom_font_helvetica", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-family": "Arial, Helvetica, sans-serif !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_helvetica");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_helvetica", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-family": "Arial, Helvetica, sans-serif !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_helvetica");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_font_helvetica", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-family": "Arial, Helvetica, sans-serif !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_helvetica");                          
+       } 
+                     
+      });
+
+      var font_times = document.getElementById("font_times");
+      font_times.addEventListener("click", function(e){  
+
+      font_style="Times Roman";
+
+       if(background=='light'){
+
+          rendition.themes.register("custom_font_times", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-family": "Times New Roman, Times, serif !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_times");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_times", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-family": "Times New Roman, Times, serif !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_times");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_font_times", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-family": "Times New Roman, Times, serif !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_times");                          
+       } 
+
+              
+      });
+    
+      var font_lucida = document.getElementById("font_lucida");
+      font_lucida.addEventListener("click", function(e){    
+
+     font_style="Lucida";
+
+     if(background=='light'){
+
+          rendition.themes.register("custom_font_lucida", {
+              body: {     
+                "background-color": "white !important",                        
+                "font-family": "Lucida Console, Courier New, monospace !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_lucida");                   
+      }
+
+      if(background=='dark'){
+
+          rendition.themes.register("custom_font_lucida", {
+              body: {     
+                "background-color": "black !important",                        
+                "font-family": "Lucida Console, Courier New, monospace !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_lucida");                   
+      }
+
+      if(background=='septia'){
+
+          rendition.themes.register("custom_font_lucida", {
+              body: {     
+                "background-color": "#f4eacd !important",
+                "font-family": "Lucida Console, Courier New, monospace !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+
+         rendition.themes.select("custom_font_lucida");                          
+       } 
+
+            
+      });
+    
+    
      // End Set Custome Theme==========================
 
 
