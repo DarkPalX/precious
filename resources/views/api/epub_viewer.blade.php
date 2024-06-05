@@ -247,6 +247,11 @@
   <script>
   
     var option=0;
+
+    var background="light";
+    var font_size="18";
+    var margin_size="0";
+    var font_style="Times New Roman";
       
     var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
     var url = params && params.get("url") && decodeURIComponent(params.get("url"));
