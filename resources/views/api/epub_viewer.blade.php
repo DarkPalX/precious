@@ -2167,30 +2167,221 @@
 
       if(background=='light'){
 
-          rendition.themes.register("custom_font_helvetica", {
-              body: {     
-                "background-color": "white !important",                        
-                "font-family": "Arial, Helvetica, sans-serif !important",
-              },
-              "p": {                   
-                "color": "black !important",
-              },
-          });
+          if(font_size=="10"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "white !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "10px !important",
+                },
+                "p": {                   
+                  "color": "black !important",
+                },
+            });    
+          }
+
+          if(font_size=="11"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "white !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "11px !important",
+                },
+                "p": {                   
+                  "color": "black !important",
+                },
+            });    
+          }
+
+          if(font_size=="12"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "white !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "12px !important",
+                },
+                "p": {                   
+                  "color": "black !important",
+                },
+            });    
+          }
+
+          if(font_size=="13"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "white !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "13px !important",
+                },
+                "p": {                   
+                  "color": "black !important",
+                },
+            });    
+          }
+
+
+          if(font_size=="15"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "white !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "15px !important",
+                },
+                "p": {                   
+                  "color": "black !important",
+                },
+            });    
+          }
+
+          if(font_size=="16"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "white !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "16px !important",
+                },
+                "p": {                   
+                  "color": "black !important",
+                },
+            });    
+          }
+
+
+          if(font_size=="18"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "white !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "18px !important",
+                },
+                "p": {                   
+                  "color": "black !important",
+                },
+            });    
+          }
+
+          if(font_size=="20"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "white !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "20px !important",
+                },
+                "p": {                   
+                  "color": "black !important",
+                },
+            });    
+          }
 
          rendition.themes.select("custom_font_helvetica");                   
       }
 
       if(background=='dark'){
 
-          rendition.themes.register("custom_font_helvetica", {
-              body: {     
-                "background-color": "black !important",                        
-                "font-family": "Arial, Helvetica, sans-serif !important",
-              },
-              "p": {                   
-                "color": "white !important",
-              },
-          });
+        if(font_size=="10"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "black !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "10px !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+            });    
+          }
+
+           if(font_size=="11"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "black !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "11px !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+            });    
+          }
+
+          if(font_size=="12"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "black !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "12px !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+            });    
+          }
+
+          if(font_size=="13"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "black !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "13px !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+            });    
+          }
+
+           if(font_size=="15"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "black !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "15px !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+            });    
+          }
+
+            if(font_size=="16"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "black !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "16px !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+            });    
+          }
+
+            if(font_size=="18"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "black !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "18px !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+            });    
+          }
+
+           if(font_size=="20"){
+                rendition.themes.register("custom_font_helvetica", {
+                body: {     
+                  "background-color": "black !important",                        
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                  "font-size": "20px !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+            });    
+          }
+
 
          rendition.themes.select("custom_font_helvetica");                   
       }
