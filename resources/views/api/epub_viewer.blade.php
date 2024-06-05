@@ -14,6 +14,7 @@
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
+  <!-- <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/localforage.min"></script> -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.3.0/localforage.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -279,9 +280,7 @@
    
 
     // Start Set Custome Theme==========================
-   
-   // Start Set Custome Theme==========================
-
+     
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){  
 
@@ -290,114 +289,353 @@
 
       if(font_size=="10"){
 
-        rendition.themes.register("dark_color", {
-               body: {                   
-                "background-color": "black !important",
-                "font-size": "10px !important",
-              },
-              "p": {                   
-                "color": "white !important",
-              },
-        });
+        if(font_style=='Times Roman'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "10px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "10px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "10px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("dark_color");  
       }
 
       if(font_size=="11"){
+         if(font_style=='Times Roman'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "11px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
 
-        rendition.themes.register("dark_color", {
-               body: {                   
-                "background-color": "black !important",
-                "font-size": "11px !important",
-              },
-              "p": {                   
-                "color": "white !important",
-              },
-        });
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "11px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "11px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("dark_color");  
       }
 
       if(font_size=="12"){
 
-        rendition.themes.register("dark_color", {
-               body: {                   
-                "background-color": "black !important",
-                "font-size": "12px !important",
-              },
-              "p": {                   
-                "color": "white !important",
-              },
-        });
+         if(font_style=='Times Roman'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "12px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "12px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "12px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("dark_color");  
       }
 
       if(font_size=="13"){
 
-        rendition.themes.register("dark_color", {
-               body: {                   
-                "background-color": "black !important",
-                "font-size": "13px !important",
-              },
-              "p": {                   
-                "color": "white !important",
-              },
-        });
+       if(font_style=='Times Roman'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "13px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "13px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "13px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("dark_color");  
       }
 
       if(font_size=="15"){
 
-        rendition.themes.register("dark_color", {
-               body: {                   
-                "background-color": "black !important",
-                "font-size": "15px !important",
-              },
-              "p": {                   
-                "color": "white !important",
-              },
-        });
+         if(font_style=='Times Roman'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "15px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "15px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "15px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("dark_color");  
       }
 
       if(font_size=="16"){
 
-        rendition.themes.register("dark_color", {
-               body: {                   
-                "background-color": "black !important",
-                "font-size": "16px !important",
-              },
-              "p": {                   
-                "color": "white !important",
-              },
-        });
+        if(font_style=='Times Roman'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "16px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "16px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "16px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("dark_color");  
       }
 
       if(font_size=="18"){
 
-        rendition.themes.register("dark_color", {
-               body: {                   
-                "background-color": "black !important",
-                "font-size": "18px !important",
-              },
-              "p": {                   
-                "color": "white !important",
-              },
-        });
+        if(font_style=='Times Roman'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "18px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "18px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "18px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("dark_color");  
       }
 
 
       if(font_size=="20"){
 
-        rendition.themes.register("dark_color", {
-               body: {                   
-                "background-color": "black !important",
-                "font-size": "20px !important",
-              },
-              "p": {                   
-                "color": "white !important",
-              },
-        });
+        if(font_style=='Times Roman'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "20px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "20px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("dark_color", {
+                 body: {                   
+                  "background-color": "black !important",
+                  "font-size": "20px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("dark_color");  
       }
               
@@ -411,113 +649,352 @@
       
      if(font_size=="10"){
 
-        rendition.themes.register("light_color", {
-               body: {                   
-                "background-color": "white !important",
-                "font-size": "10px !important",
-              },
-              "p": {                   
-                "color": "black !important",
-              },
-        });
+       if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "10px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "10px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "10px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("light_color");  
       }
 
       if(font_size=="11"){
 
-        rendition.themes.register("light_color", {
-               body: {                   
-                "background-color": "white !important",
-                "font-size": "11px !important",
-              },
-              "p": {                   
-                "color": "black !important",
-              },
-        });
+               if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "11px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "11px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "11px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("light_color");  
       }
 
       if(font_size=="12"){
 
-        rendition.themes.register("light_color", {
-               body: {                   
-                "background-color": "white !important",
-                "font-size": "12px !important",
-              },
-              "p": {                   
-                "color": "black !important",
-              },
-        });
+       if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "12px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "12px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "12px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("light_color");  
       }
 
       if(font_size=="13"){
 
-        rendition.themes.register("light_color", {
-               body: {                   
-                "background-color": "white !important",
-                "font-size": "13px !important",
-              },
-              "p": {                   
-                "color": "black !important",
-              },
-        });
+        if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "13px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "13px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "13px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("light_color");  
       }
 
       if(font_size=="15"){
 
-        rendition.themes.register("light_color", {
-               body: {                   
-                "background-color": "white !important",
-                "font-size": "15px !important",
-              },
-              "p": {                   
-                "color": "black !important",
-              },
-        });
+          if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "15px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "15px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "15px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("light_color");  
       }
 
       if(font_size=="16"){
 
-        rendition.themes.register("light_color", {
-               body: {                   
-                "background-color": "white !important",
-                "font-size": "16px !important",
-              },
-              "p": {                   
-                "color": "black !important",
-              },
-        });
+           if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "16px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "16px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "16px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("light_color");  
       }
 
       if(font_size=="18"){
+         if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "18px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
 
-        rendition.themes.register("light_color", {
-               body: {                   
-                "background-color": "white !important",
-                "font-size": "18px !important",
-              },
-              "p": {                   
-                "color": "black !important",
-              },
-        });
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "18px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "18px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("light_color");  
       }
 
       if(font_size=="20"){
 
-        rendition.themes.register("light_color", {
-               body: {                   
-                "background-color": "white !important",
-                "font-size": "20px !important",
-              },
-              "p": {                   
-                "color": "black !important",
-              },
-        });
+        if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "20px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "20px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "20px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("light_color");  
       }
 
@@ -532,116 +1009,355 @@
 
       if(font_size=="10"){
 
-        rendition.themes.register("septia_color", {
-               body: {                   
-                "background-color": "#f4eacd !important",
-                "font-size": "10px !important",
-              },
-              "p": {                   
-                "color": "#704214 !important",
-              },
-        });
+        if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "#f4eacd !important",
+                  "font-size": "10px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "#704214 !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "10px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "10px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("septia_color");  
       }
 
       if(font_size=="11"){
 
-        rendition.themes.register("septia_color", {
-               body: {                   
-                "background-color": "#f4eacd !important",
-                "font-size": "11px !important",
-              },
-              "p": {                   
-                "color": "#704214 !important",
-              },
-        });
+    
+        if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "#f4eacd !important",
+                  "font-size": "11px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "#704214 !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "11px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "11px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("septia_color");  
       }
 
       if(font_size=="12"){
 
-        rendition.themes.register("septia_color", {
-               body: {                   
-                "background-color": "#f4eacd !important",
-                "font-size": "12px !important",
-              },
-              "p": {                   
-                "color": "#704214 !important",
-              },
-        });
+       if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "#f4eacd !important",
+                  "font-size": "12px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "#704214 !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "12px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "12px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("septia_color");  
       }
 
       if(font_size=="13"){
+         if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "#f4eacd !important",
+                  "font-size": "13px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "#704214 !important",
+                },
+          });
+        }
 
-        rendition.themes.register("septia_color", {
-               body: {                   
-                "background-color": "#f4eacd !important",
-                "font-size": "13px !important",
-              },
-              "p": {                   
-                "color": "#704214 !important",
-              },
-        });
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "13px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "13px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("septia_color");  
       }
 
       if(font_size=="15"){
 
-        rendition.themes.register("septia_color", {
-               body: {                   
-                "background-color": "#f4eacd !important",
-                "font-size": "15px !important",
-              },
-              "p": {                   
-                "color": "#704214 !important",
-              },
-        });
+       if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "#f4eacd !important",
+                  "font-size": "15px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "#704214 !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "15px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "15px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("septia_color");  
       }
 
       if(font_size=="16"){
 
-        rendition.themes.register("septia_color", {
-               body: {                   
-                "background-color": "#f4eacd !important",
-                "font-size": "16px !important",
-              },
-              "p": {                   
-                "color": "#704214 !important",
-              },
-        });
+      if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "#f4eacd !important",
+                  "font-size": "16px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "#704214 !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "16px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "16px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("septia_color");  
       }
 
       if(font_size=="18"){
 
-        rendition.themes.register("septia_color", {
-               body: {                   
-                "background-color": "#f4eacd !important",
-                "font-size": "18px !important",
-              },
-              "p": {                   
-                "color": "#704214 !important",
-              },
-        });
+   if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "#f4eacd !important",
+                  "font-size": "20px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "#704214 !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "20px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "20px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("septia_color");  
       }
 
       if(font_size=="20"){
 
-        rendition.themes.register("septia_color", {
-               body: {                   
-                "background-color": "#f4eacd !important",
-                "font-size": "20px !important",
-              },
-              "p": {                   
-                "color": "#704214 !important",
-              },
-        });
+       if(font_style=='Times Roman'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "#f4eacd !important",
+                  "font-size": "20px !important",
+                  "font-family": "Times New Roman, Times, serif !important",
+                },
+                "p": {                   
+                  "color": "#704214 !important",
+                },
+          });
+        }
+
+       if(font_style=='Helvetica'){            
+          rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "20px !important",
+                  "font-family": "Arial, Helvetica, sans-serif !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
+        if(font_style=='Lucida'){            
+            rendition.themes.register("light_color", {
+                 body: {                   
+                  "background-color": "white !important",
+                  "font-size": "20px !important",
+                  "font-family": "Lucida Console, Courier New, monospace !important",
+                },
+                "p": {                   
+                  "color": "white !important",
+                },
+          });
+        }
+
         rendition.themes.select("septia_color");  
       }             
-
         
       });
       
@@ -1596,10 +2312,7 @@
       });
     
     
-     // End Set Custome Theme==========================
-
-
-
+     // End Set Custome Theme===============================================================
 
     book.ready.then(() => {
 
