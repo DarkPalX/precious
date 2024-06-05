@@ -278,242 +278,375 @@
     //   })
     // });
    
-   // Set Theme
+
+    // Start Set Custome Theme==========================
+    
     var dark_theme = document.getElementById("dark-theme");
     dark_theme.addEventListener("click", function(e){  
 
-        rendition.themes.select("dark");     
-       //  rendition.themes.register("dark_color", {
-       //        "p": {                   
-       //          "color": "white !important",
-       //        },
-       //  });
-       // rendition.themes.select("dark_color");        
-        // rendition.themes.default({ "p": { "color": "white !important"}})
+      background="dark";
+      //rendition.themes.select("dark");     
 
-      });
+      if(font_size=="10"){
+
+        rendition.themes.register("dark_color", {
+               body: {                   
+                "background-color": "black !important",
+                "font-size": "10px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+        rendition.themes.select("dark_color");  
+      }
+
+      if(font_size=="11"){
+
+        rendition.themes.register("dark_color", {
+               body: {                   
+                "background-color": "black !important",
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+        rendition.themes.select("dark_color");  
+      }
+
+      if(font_size=="12"){
+
+        rendition.themes.register("dark_color", {
+               body: {                   
+                "background-color": "black !important",
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+        rendition.themes.select("dark_color");  
+      }
+
+      if(font_size=="13"){
+
+        rendition.themes.register("dark_color", {
+               body: {                   
+                "background-color": "black !important",
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+        rendition.themes.select("dark_color");  
+      }
+
+      if(font_size=="15"){
+
+        rendition.themes.register("dark_color", {
+               body: {                   
+                "background-color": "black !important",
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+        rendition.themes.select("dark_color");  
+      }
+
+      if(font_size=="16"){
+
+        rendition.themes.register("dark_color", {
+               body: {                   
+                "background-color": "black !important",
+                "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+        rendition.themes.select("dark_color");  
+      }
+
+      if(font_size=="18"){
+
+        rendition.themes.register("dark_color", {
+               body: {                   
+                "background-color": "black !important",
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+        rendition.themes.select("dark_color");  
+      }
+
+
+      if(font_size=="20"){
+
+        rendition.themes.register("dark_color", {
+               body: {                   
+                "background-color": "black !important",
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+        });
+        rendition.themes.select("dark_color");  
+      }
+              
+    });
 
     var light_theme = document.getElementById("light-theme");    
     light_theme.addEventListener("click", function(e){    
 
-        rendition.themes.select("light");              
-       //  rendition.themes.register("light_color", {
-       //        "p": {                   
-       //          "color": "black !important",
-       //        },
-       //  });
-       // rendition.themes.select("light_color");              
-        //rendition.themes.default({ "p": { "color": "black !important"}})
+      background="light";
+      // rendition.themes.select("light");  
+      
+     if(font_size=="10"){
+
+        rendition.themes.register("light_color", {
+               body: {                   
+                "background-color": "white !important",
+                "font-size": "10px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+        });
+        rendition.themes.select("light_color");  
+      }
+
+      if(font_size=="11"){
+
+        rendition.themes.register("light_color", {
+               body: {                   
+                "background-color": "white !important",
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+        });
+        rendition.themes.select("light_color");  
+      }
+
+      if(font_size=="12"){
+
+        rendition.themes.register("light_color", {
+               body: {                   
+                "background-color": "white !important",
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+        });
+        rendition.themes.select("light_color");  
+      }
+
+      if(font_size=="13"){
+
+        rendition.themes.register("light_color", {
+               body: {                   
+                "background-color": "white !important",
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+        });
+        rendition.themes.select("light_color");  
+      }
+
+      if(font_size=="15"){
+
+        rendition.themes.register("light_color", {
+               body: {                   
+                "background-color": "white !important",
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+        });
+        rendition.themes.select("light_color");  
+      }
+
+      if(font_size=="16"){
+
+        rendition.themes.register("light_color", {
+               body: {                   
+                "background-color": "white !important",
+                "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+        });
+        rendition.themes.select("light_color");  
+      }
+
+      if(font_size=="18"){
+
+        rendition.themes.register("light_color", {
+               body: {                   
+                "background-color": "white !important",
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+        });
+        rendition.themes.select("light_color");  
+      }
+
+      if(font_size=="20"){
+
+        rendition.themes.register("light_color", {
+               body: {                   
+                "background-color": "white !important",
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+        });
+        rendition.themes.select("light_color");  
+      }
+
+     
       });
 
      var septia_theme = document.getElementById("septia-theme");    
      septia_theme.addEventListener("click", function(e){    
 
-        rendition.themes.select("septia");               
-       //  rendition.themes.register("septia_color", {
-       //        "p": {                   
-       //          "color": "#704214 !important",
-       //        },
-       //  });
-       // rendition.themes.select("septia_color");  
-        //rendition.themes.default({ "p": { "color": "#704214  !important"}})
-      });
-      
-     // End Theme=============
-     
+       background="septia";      
+        // rendition.themes.select("septia");  
 
-     // Set Font Size==========
-      var font_10 = document.getElementById("font_10");
-      font_10.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_10", {
-              body: {                   
+      if(font_size=="10"){
+
+        rendition.themes.register("septia_color", {
+               body: {                   
+                "background-color": "#f4eacd !important",
                 "font-size": "10px !important",
               },
+              "p": {                   
+                "color": "#704214 !important",
+              },
         });
-       rendition.themes.select("custom_font_10");               
-      });
+        rendition.themes.select("septia_color");  
+      }
 
-       var font_11 = document.getElementById("font_11");
-      font_11.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_11", {
-              body: {                   
+      if(font_size=="11"){
+
+        rendition.themes.register("septia_color", {
+               body: {                   
+                "background-color": "#f4eacd !important",
                 "font-size": "11px !important",
               },
+              "p": {                   
+                "color": "#704214 !important",
+              },
         });
-       rendition.themes.select("custom_font_11");               
-      });
+        rendition.themes.select("septia_color");  
+      }
 
-      var font_12 = document.getElementById("font_12");
-      font_12.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_12", {
-              body: {                   
+      if(font_size=="12"){
+
+        rendition.themes.register("septia_color", {
+               body: {                   
+                "background-color": "#f4eacd !important",
                 "font-size": "12px !important",
               },
+              "p": {                   
+                "color": "#704214 !important",
+              },
         });
-       rendition.themes.select("custom_font_12");               
-      });
+        rendition.themes.select("septia_color");  
+      }
 
-      var font_13 = document.getElementById("font_13");
-      font_12.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_13", {
-              body: {                   
+      if(font_size=="13"){
+
+        rendition.themes.register("septia_color", {
+               body: {                   
+                "background-color": "#f4eacd !important",
                 "font-size": "13px !important",
               },
+              "p": {                   
+                "color": "#704214 !important",
+              },
         });
-       rendition.themes.select("custom_font_13");               
-      });
+        rendition.themes.select("septia_color");  
+      }
 
-      var font_15 = document.getElementById("font_15");
-      font_15.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_15", {
-              body: {                   
+      if(font_size=="15"){
+
+        rendition.themes.register("septia_color", {
+               body: {                   
+                "background-color": "#f4eacd !important",
                 "font-size": "15px !important",
               },
+              "p": {                   
+                "color": "#704214 !important",
+              },
         });
-       rendition.themes.select("custom_font_15");               
-      });
+        rendition.themes.select("septia_color");  
+      }
 
+      if(font_size=="16"){
 
-      var font_16 = document.getElementById("font_16");
-      font_16.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_16", {
-              body: {                   
+        rendition.themes.register("septia_color", {
+               body: {                   
+                "background-color": "#f4eacd !important",
                 "font-size": "16px !important",
               },
+              "p": {                   
+                "color": "#704214 !important",
+              },
         });
-       rendition.themes.select("custom_font_16");               
-      });
+        rendition.themes.select("septia_color");  
+      }
 
-      var font_18 = document.getElementById("font_18");
-      font_18.addEventListener("click", function(e){            
-        rendition.themes.register("custom_font_18", {
-              body: {                   
+      if(font_size=="18"){
+
+        rendition.themes.register("septia_color", {
+               body: {                   
+                "background-color": "#f4eacd !important",
                 "font-size": "18px !important",
               },
+              "p": {                   
+                "color": "#704214 !important",
+              },
         });
-       rendition.themes.select("custom_font_18");               
-      });
+        rendition.themes.select("septia_color");  
+      }
 
-      var font_20 = document.getElementById("font_20");
-      font_20.addEventListener("click", function(e){    
-        rendition.themes.register("custom_font_20", {
-              body: {                   
+      if(font_size=="20"){
+
+        rendition.themes.register("septia_color", {
+               body: {                   
+                "background-color": "#f4eacd !important",
                 "font-size": "20px !important",
               },
-        });
-         rendition.themes.select("custom_font_20");               
-      });
-    
-    // End Set Font Size======
-
-    // Set Margin Size==========
-      var margin_0 = document.getElementById("margin_0");
-      margin_0.addEventListener("click", function(e){            
-        rendition.themes.register("custom_margin_0", {
-              body: {                   
-                "margin": "0px !important",
+              "p": {                   
+                "color": "#704214 !important",
               },
         });
-       rendition.themes.select("custom_margin_0");               
-      });
-
-        var margin_2 = document.getElementById("margin_2");
-      margin_2.addEventListener("click", function(e){            
-        rendition.themes.register("custom_margin_2", {
-              body: {                   
-                "margin": "2px !important",
-              },
-        });
-       rendition.themes.select("margin_2");               
-      });
+        rendition.themes.select("septia_color");  
+      }             
         
-  
-      var margin_4 = document.getElementById("margin_4");
-      margin_4.addEventListener("click", function(e){            
-        rendition.themes.register("custom_margin_4", {
-              body: {                   
-                "margin": "4px !important",
-              },
-        });
-       rendition.themes.select("custom_margin_4");               
       });
-        
-      var margin_6 = document.getElementById("margin_6");
-      margin_6.addEventListener("click", function(e){            
-        rendition.themes.register("custom_margin_6", {
-              body: {                   
-                "margin": "6px !important",
-              },
-        });
-       rendition.themes.select("custom_margin_4");               
-      });
-        
-      var margin_8 = document.getElementById("margin_8");
-      margin_8.addEventListener("click", function(e){            
-        rendition.themes.register("custom_margin_8", {
-              body: {                   
-                "margin": "8px !important",
-              },
-        });
-       rendition.themes.select("custom_margin_8");               
-      });
-
-      var margin_10 = document.getElementById("margin_10");
-      margin_10.addEventListener("click", function(e){            
-        rendition.themes.register("custom_margin_10", {
-              body: {                   
-                "margin": "10px !important",
-              },
-        });
-       rendition.themes.select("custom_margin_10");               
-      });
-
-      var margin_12 = document.getElementById("margin_12");
-      margin_12.addEventListener("click", function(e){            
-        rendition.themes.register("custom_margin_12", {
-              body: {                   
-                "margin": "12px !important",
-              },
-        });
-       rendition.themes.select("custom_margin_12");               
-      });
+      
+     // End Set Custome Theme==========================
 
 
 
-   // End of Margin
-  
-    //Set Font Style==========
-    var font_helvetica = document.getElementById("font_helvetica");
-      font_helvetica.addEventListener("click", function(e){         
-        rendition.themes.register("custom_font_helvetica", {
-              body: {                   
-                "font-family": "Arial, Helvetica, sans-serif !important",
-              },
-        });
-         rendition.themes.select("custom_font_helvetica");               
-      });
-
-      var font_times = document.getElementById("font_times");
-      font_times.addEventListener("click", function(e){    
-        rendition.themes.register("custom_font_times", {
-              body: {                   
-                "font-family": "Times New Roman, Times, serif !important",
-              },
-        });
-         rendition.themes.select("custom_font_times");               
-      });
-    
-      var font_lucida = document.getElementById("font_lucida");
-      font_lucida.addEventListener("click", function(e){    
-        rendition.themes.register("custom_font_lucida", {
-              body: {                   
-                "font-family": "Lucida Console, Courier New, monospace !important",
-              },
-        });
-         rendition.themes.select("custom_font_lucida");               
-      });
-    
-    // End Set Font Style
 
     book.ready.then(() => {
 
