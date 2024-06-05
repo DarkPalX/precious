@@ -1007,7 +1007,7 @@
 
    // septia theme===========================================================
 
-   
+
      var septia_theme = document.getElementById("septia-theme");    
      septia_theme.addEventListener("click", function(e){    
 
@@ -1017,7 +1017,7 @@
       if(font_size=="10"){
 
         if(font_style=='Times Roman'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
                   "background-color": "#f4eacd !important",
                   "font-size": "10px !important",
@@ -1030,27 +1030,27 @@
         }
 
        if(font_style=='Helvetica'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "10px !important",
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
 
         if(font_style=='Lucida'){            
-            rendition.themes.register("light_color", {
+            rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "10px !important",
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
@@ -1062,7 +1062,7 @@
 
     
         if(font_style=='Times Roman'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
                   "background-color": "#f4eacd !important",
                   "font-size": "11px !important",
@@ -1075,27 +1075,27 @@
         }
 
        if(font_style=='Helvetica'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "11px !important",
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
 
         if(font_style=='Lucida'){            
-            rendition.themes.register("light_color", {
+            rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "11px !important",
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
@@ -1106,7 +1106,7 @@
       if(font_size=="12"){
 
        if(font_style=='Times Roman'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
                   "background-color": "#f4eacd !important",
                   "font-size": "12px !important",
@@ -1119,27 +1119,27 @@
         }
 
        if(font_style=='Helvetica'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "12px !important",
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
 
         if(font_style=='Lucida'){            
-            rendition.themes.register("light_color", {
+            rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "12px !important",
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
@@ -1149,7 +1149,7 @@
 
       if(font_size=="13"){
          if(font_style=='Times Roman'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
                   "background-color": "#f4eacd !important",
                   "font-size": "13px !important",
@@ -1162,27 +1162,27 @@
         }
 
        if(font_style=='Helvetica'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "13px !important",
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
 
         if(font_style=='Lucida'){            
-            rendition.themes.register("light_color", {
+            rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "13px !important",
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
@@ -1193,7 +1193,7 @@
       if(font_size=="15"){
 
        if(font_style=='Times Roman'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
                   "background-color": "#f4eacd !important",
                   "font-size": "15px !important",
@@ -1206,27 +1206,27 @@
         }
 
        if(font_style=='Helvetica'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "15px !important",
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
 
         if(font_style=='Lucida'){            
-            rendition.themes.register("light_color", {
+            rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "15px !important",
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
@@ -1237,7 +1237,7 @@
       if(font_size=="16"){
 
       if(font_style=='Times Roman'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
                   "background-color": "#f4eacd !important",
                   "font-size": "16px !important",
@@ -1250,27 +1250,27 @@
         }
 
        if(font_style=='Helvetica'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "16px !important",
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
 
         if(font_style=='Lucida'){            
-            rendition.themes.register("light_color", {
+            rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "16px !important",
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
@@ -1281,7 +1281,7 @@
       if(font_size=="18"){
 
    if(font_style=='Times Roman'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
                   "background-color": "#f4eacd !important",
                   "font-size": "20px !important",
@@ -1294,27 +1294,27 @@
         }
 
        if(font_style=='Helvetica'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "20px !important",
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
 
         if(font_style=='Lucida'){            
-            rendition.themes.register("light_color", {
+            rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "20px !important",
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
@@ -1325,7 +1325,7 @@
       if(font_size=="20"){
 
        if(font_style=='Times Roman'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
                   "background-color": "#f4eacd !important",
                   "font-size": "20px !important",
@@ -1338,27 +1338,27 @@
         }
 
        if(font_style=='Helvetica'){            
-          rendition.themes.register("light_color", {
+          rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "20px !important",
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
 
         if(font_style=='Lucida'){            
-            rendition.themes.register("light_color", {
+            rendition.themes.register("septia_color", {
                  body: {                   
-                  "background-color": "white !important",
+                  "background-color": "#f4eacd !important",
                   "font-size": "20px !important",
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "#704214 !important",
                 },
           });
         }
