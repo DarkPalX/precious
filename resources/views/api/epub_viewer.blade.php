@@ -641,6 +641,9 @@
               
     });
 
+   // light theme =====================================================
+
+
     var light_theme = document.getElementById("light-theme");    
     light_theme.addEventListener("click", function(e){    
 
@@ -657,7 +660,7 @@
                   "font-family": "Times New Roman, Times, serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -670,7 +673,7 @@
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -683,7 +686,7 @@
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -701,7 +704,7 @@
                   "font-family": "Times New Roman, Times, serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -714,7 +717,7 @@
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -727,7 +730,7 @@
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -745,7 +748,7 @@
                   "font-family": "Times New Roman, Times, serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -758,7 +761,7 @@
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -771,7 +774,7 @@
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -789,7 +792,7 @@
                   "font-family": "Times New Roman, Times, serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -802,7 +805,7 @@
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -815,7 +818,7 @@
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -833,7 +836,7 @@
                   "font-family": "Times New Roman, Times, serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -846,7 +849,7 @@
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -859,7 +862,7 @@
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -877,7 +880,7 @@
                   "font-family": "Times New Roman, Times, serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -890,7 +893,7 @@
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -903,7 +906,7 @@
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -920,7 +923,7 @@
                   "font-family": "Times New Roman, Times, serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -933,7 +936,7 @@
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -946,7 +949,7 @@
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -964,7 +967,7 @@
                   "font-family": "Times New Roman, Times, serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -977,7 +980,7 @@
                   "font-family": "Arial, Helvetica, sans-serif !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -990,7 +993,7 @@
                   "font-family": "Lucida Console, Courier New, monospace !important",
                 },
                 "p": {                   
-                  "color": "white !important",
+                  "color": "black !important",
                 },
           });
         }
@@ -1001,6 +1004,10 @@
      
       });
 
+
+   // septia theme===========================================================
+
+   
      var septia_theme = document.getElementById("septia-theme");    
      septia_theme.addEventListener("click", function(e){    
 
