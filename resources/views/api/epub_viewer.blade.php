@@ -2124,7 +2124,7 @@
 
 
         if(font_size=="10"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "white !important",                        
                 "margin": "2px !important",
@@ -2137,7 +2137,7 @@
         }
 
         if(font_size=="11"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "white !important",                        
                 "margin": "2px !important",
@@ -2150,7 +2150,7 @@
         }
 
         if(font_size=="12"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "white !important",                        
                 "margin": "2px !important",
@@ -2163,7 +2163,7 @@
         }
 
         if(font_size=="13"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "white !important",                        
                 "margin": "2px !important",
@@ -2177,7 +2177,7 @@
 
 
         if(font_size=="15"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "white !important",                        
                 "margin": "2px !important",
@@ -2190,7 +2190,7 @@
         }
 
         if(font_size=="18"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "white !important",                        
                 "margin": "2px !important",
@@ -2203,7 +2203,7 @@
         }
 
         if(font_size=="20"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "white !important",                        
                 "margin": "2px !important",
@@ -2221,7 +2221,7 @@
       if(background=='dark'){
 
        if(font_size=="10"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "black !important",                        
                 "margin": "2px !important",
@@ -2234,7 +2234,7 @@
         }
 
         if(font_size=="11"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "black !important",                        
                 "margin": "2px !important",
@@ -2247,7 +2247,7 @@
         }
 
         if(font_size=="12"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "black !important",                        
                 "margin": "2px !important",
@@ -2261,7 +2261,7 @@
 
 
         if(font_size=="13"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "black !important",                        
                 "margin": "2px !important",
@@ -2274,7 +2274,7 @@
         }
 
         if(font_size=="13"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "black !important",                        
                 "margin": "2px !important",
@@ -2287,7 +2287,7 @@
         }
 
         if(font_size=="15"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "black !important",                        
                 "margin": "2px !important",
@@ -2300,7 +2300,7 @@
         }
 
        if(font_size=="18"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "black !important",                        
                 "margin": "2px !important",
@@ -2314,7 +2314,7 @@
 
 
        if(font_size=="20"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "black !important",                        
                 "margin": "2px !important",
@@ -2331,7 +2331,7 @@
       if(background=='septia'){
 
         if(font_size=="10"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "#f4eacd !important",                      
                 "margin": "2px !important",
@@ -2344,7 +2344,7 @@
         }
 
        if(font_size=="11"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "#f4eacd !important",                      
                 "margin": "2px !important",
@@ -2357,7 +2357,7 @@
         }
 
        if(font_size=="12"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "#f4eacd !important",                      
                 "margin": "2px !important",
@@ -2370,7 +2370,7 @@
         }
 
        if(font_size=="13"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "#f4eacd !important",                      
                 "margin": "2px !important",
@@ -2383,7 +2383,7 @@
         }
 
        if(font_size=="15"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "#f4eacd !important",                      
                 "margin": "2px !important",
@@ -2396,7 +2396,7 @@
         }
 
         if(font_size=="18"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "#f4eacd !important",                      
                 "margin": "2px !important",
@@ -2409,7 +2409,7 @@
         }
 
         if(font_size=="20"){
-          rendition.themes.register("custom_margin_0", {
+          rendition.themes.register("custom_margin_2", {
               body: {     
                 "background-color": "#f4eacd !important",                      
                 "margin": "2px !important",
