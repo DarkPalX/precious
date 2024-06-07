@@ -3230,7 +3230,7 @@
 
       if(background=='septia'){
 
-           if(font_size=="10"){
+        if(font_size=="10"){
           rendition.themes.register("custom_margin_8", {
               body: {     
                  "background-color": "#f4eacd !important",
@@ -3333,45 +3333,292 @@
 
        if(background=='light'){
 
+        if(font_size=="10"){
           rendition.themes.register("custom_margin_10", {
               body: {     
-                "background-color": "white !important",                        
+                 "background-color": "white !important",   
                 "margin": "10px !important",
+                "font-size": "10px !important",
               },
               "p": {                   
                 "color": "black !important",
               },
           });
+        }
+
+        if(font_size=="11"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "10px !important",
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+        if(font_size=="12"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "10px !important",
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+        if(font_size=="13"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "10px !important",
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+        if(font_size=="15"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "10px !important",
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+
+        if(font_size=="18"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "10px !important",
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+
+        if(font_size=="20"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "10px !important",
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
 
          rendition.themes.select("custom_margin_10");                   
       }
 
       if(background=='dark'){
 
+         if(font_size=="10"){
           rendition.themes.register("custom_margin_10", {
               body: {     
-                "background-color": "black !important",                        
-                "margin": "10px !important",
+                 "background-color": "black !important",                        
+                "margin": "8px !important",
+                "font-size": "10px !important",
               },
               "p": {                   
                 "color": "white !important",
               },
           });
+        }
+
+        if(font_size=="11"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "10px !important",
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
+
+        if(font_size=="12"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "10px !important",
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
+
+        if(font_size=="13"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "10px !important",
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
+
+       if(font_size=="15"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "10px !important",
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }       
+
+        if(font_size=="18"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "10px !important",
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
+
+        if(font_size=="20"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "10px !important",
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
 
          rendition.themes.select("custom_margin_10");                   
       }
 
       if(background=='septia'){
 
+        if(font_size=="10"){
           rendition.themes.register("custom_margin_10", {
               body: {     
-                "background-color": "#f4eacd !important",
+                 "background-color": "#f4eacd !important",
                 "margin": "10px !important",
+                "font-size": "10px !important",
               },
               "p": {                   
                 "color": "#704214 !important",
               },
           });
+        }
+
+
+        if(font_size=="11"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "10px !important",
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+
+        if(font_size=="12"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "10px !important",
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+        if(font_size=="13"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "10px !important",
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+        if(font_size=="15"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "10px !important",
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+        if(font_size=="18"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "10px !important",
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+        if(font_size=="20"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "10px !important",
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
 
          rendition.themes.select("custom_margin_10");                          
        } 
@@ -3383,30 +3630,194 @@
 
       if(background=='light'){
 
+          if(font_size=="10"){
           rendition.themes.register("custom_margin_12", {
               body: {     
-                "background-color": "white !important",                        
+                 "background-color": "white !important",   
                 "margin": "12px !important",
+                "font-size": "10px !important",
               },
               "p": {                   
                 "color": "black !important",
               },
           });
+        }
+
+        if(font_size=="11"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "12px !important",
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+        if(font_size=="12"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "12px !important",
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+        if(font_size=="13"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "12px !important",
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+        if(font_size=="15"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "12px !important",
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+
+        if(font_size=="18"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "12px !important",
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
+
+        if(font_size=="20"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "white !important",   
+                "margin": "12px !important",
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
 
          rendition.themes.select("custom_margin_12");                   
       }
 
       if(background=='dark'){
 
+         if(font_size=="10"){
           rendition.themes.register("custom_margin_12", {
               body: {     
-                "background-color": "black !important",                        
+                 "background-color": "black !important",                        
                 "margin": "12px !important",
+                "font-size": "10px !important",
               },
               "p": {                   
                 "color": "white !important",
               },
           });
+        }
+
+        if(font_size=="11"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "12px !important",
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
+
+        if(font_size=="12"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "12px !important",
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
+
+        if(font_size=="13"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "12px !important",
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
+
+       if(font_size=="15"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "12px !important",
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }       
+
+        if(font_size=="18"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "12px !important",
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
+
+        if(font_size=="20"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "black !important",                        
+               "margin": "12px !important",
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
 
          rendition.themes.select("custom_margin_12");                   
       }
@@ -3414,15 +3825,98 @@
       if(background=='septia'){
 
 
+           if(font_size=="10"){
           rendition.themes.register("custom_margin_12", {
               body: {     
-                "background-color": "#f4eacd !important",
+                 "background-color": "#f4eacd !important",
                 "margin": "12px !important",
+                "font-size": "10px !important",
               },
               "p": {                   
                 "color": "#704214 !important",
               },
           });
+        }
+
+
+        if(font_size=="11"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "12px !important",
+                "font-size": "11px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+
+        if(font_size=="12"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "12px !important",
+                "font-size": "12px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+        if(font_size=="13"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "12px !important",
+                "font-size": "13px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+        if(font_size=="15"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "12px !important",
+                "font-size": "15px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+        if(font_size=="18"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "12px !important",
+                "font-size": "18px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
+
+        if(font_size=="20"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                "margin": "12px !important",
+                "font-size": "20px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }
 
          rendition.themes.select("custom_margin_12");                          
        } 
