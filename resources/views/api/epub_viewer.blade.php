@@ -1877,6 +1877,19 @@
           });
         }
 
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_0", {
+              body: {     
+                 "background-color": "white !important",                        
+                 "margin": "2px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }
+
         if(font_size=="18"){
           rendition.themes.register("custom_margin_0", {
               body: {     
@@ -1989,6 +2002,19 @@
           });
         }
 
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_0", {
+              body: {     
+                 "background-color": "black !important",                        
+                 "margin": "2px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }
+
        if(font_size=="18"){
           rendition.themes.register("custom_margin_0", {
               body: {     
@@ -2085,6 +2111,19 @@
               },
           });
         }
+
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_0", {
+              body: {     
+                 "background-color": "#f4eacd !important",                      
+                 "margin": "2px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        } 
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_0", {
@@ -2189,6 +2228,19 @@
               },
           });
         }
+
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_2", {
+              body: {     
+                 "background-color": "white !important",                        
+                 "margin": "2px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_2", {
@@ -2300,6 +2352,19 @@
           });
         }
 
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_2", {
+              body: {     
+                 "background-color": "black !important",                        
+                 "margin": "2px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }  
+
        if(font_size=="18"){
           rendition.themes.register("custom_margin_2", {
               body: {     
@@ -2395,6 +2460,19 @@
               },
           });
         }
+
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_2", {
+              body: {     
+                 "background-color": "#f4eacd !important",                      
+                 "margin": "2px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_2", {
@@ -2495,6 +2573,19 @@
               },
           });
         }
+
+       if(font_size=="16"){
+          rendition.themes.register("custom_margin_4", {
+              body: {     
+                 "background-color": "white !important",                        
+                 "margin": "4px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_4", {
@@ -2606,6 +2697,19 @@
           });
         }
 
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_4", {
+              body: {     
+                 "background-color": "black !important",                        
+                 "margin": "4px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }  
+
        if(font_size=="18"){
           rendition.themes.register("custom_margin_4", {
               body: {     
@@ -2702,6 +2806,19 @@
           });
         }
 
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_4", {
+              body: {     
+                 "background-color": "#f4eacd !important",                      
+                 "margin": "4px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }  
+
         if(font_size=="18"){
           rendition.themes.register("custom_margin_4", {
               body: {     
@@ -2736,7 +2853,7 @@
       var margin_6 = document.getElementById("margin_6");
       margin_6.addEventListener("click", function(e){   
 
-      if(background=='light'){
+        if(background=='light'){
 
          if(font_size=="10"){
           rendition.themes.register("custom_margin_6", {
@@ -2803,6 +2920,18 @@
           });
         }
 
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_6", {
+              body: {     
+                 "background-color": "white !important",   
+                 "margin": "6px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_6", {
@@ -2816,7 +2945,6 @@
               },
           });
         }
-
 
         if(font_size=="20"){
           rendition.themes.register("custom_margin_6", {
@@ -2899,7 +3027,20 @@
                 "color": "white !important",
               },
           });
-        }       
+        } 
+
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_6", {
+              body: {     
+                 "background-color": "black !important",                        
+                 "margin": "6px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }        
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_6", {
@@ -2998,6 +3139,19 @@
               },
           });
         }
+
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_6", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                 "margin": "6px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_6", {
@@ -3100,6 +3254,18 @@
           });
         }
 
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_8", {
+              body: {     
+                 "background-color": "white !important",   
+                 "margin": "8px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_8", {
@@ -3198,7 +3364,20 @@
                 "color": "white !important",
               },
           });
-        }       
+        } 
+
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_8", {
+              body: {     
+                 "background-color": "black !important",                        
+                 "margin": "8px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }        
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_8", {
@@ -3297,6 +3476,19 @@
               },
           });
         }
+
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_8", {
+              body: {     
+                 "background-color": "#f4eacd !important", 
+                 "margin": "8px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_8", {
@@ -3399,6 +3591,18 @@
           });
         }
 
+      if(font_size=="16"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "white !important",   
+                 "margin": "10px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_10", {
@@ -3495,7 +3699,20 @@
                 "color": "white !important",
               },
           });
-        }       
+        }   
+
+       if(font_size=="16"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "black !important",                        
+                 "margin": "10px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }      
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_10", {
@@ -3595,6 +3812,19 @@
           });
         }
 
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_10", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                 "margin": "10px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }  
+
         if(font_size=="18"){
           rendition.themes.register("custom_margin_10", {
               body: {     
@@ -3627,7 +3857,7 @@
       });
 
       var margin_12 = document.getElementById("margin_12");
-      margin_12.addEventListener("click", function(e){            
+      margin_12.addEventListener("click", function(e){  
 
       if(background=='light'){
 
@@ -3696,6 +3926,18 @@
           });
         }
 
+       if(font_size=="16"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "white !important",   
+                 "margin": "12px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "black !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_12", {
@@ -3785,14 +4027,27 @@
           rendition.themes.register("custom_margin_12", {
               body: {     
                  "background-color": "black !important",                        
-               "margin": "12px !important",
+                 "margin": "12px !important",
                 "font-size": "15px !important",
               },
               "p": {                   
                 "color": "white !important",
               },
           });
-        }       
+        }   
+
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "black !important",                        
+                 "margin": "12px !important",
+                "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "white !important",
+              },
+          });
+        }      
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_12", {
@@ -3892,6 +4147,19 @@
               },
           });
         }
+
+        if(font_size=="16"){
+          rendition.themes.register("custom_margin_12", {
+              body: {     
+                 "background-color": "#f4eacd !important",
+                 "margin": "12px !important",
+                 "font-size": "16px !important",
+              },
+              "p": {                   
+                "color": "#704214 !important",
+              },
+          });
+        }  
 
         if(font_size=="18"){
           rendition.themes.register("custom_margin_12", {
