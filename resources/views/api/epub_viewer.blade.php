@@ -13,7 +13,6 @@
 
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
-  <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/epub.js"></script>
   <!-- <script src="https://www.api.ebooklat.phr.com.ph/public/api/js/localforage.min"></script> -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.3.0/localforage.js"></script>
