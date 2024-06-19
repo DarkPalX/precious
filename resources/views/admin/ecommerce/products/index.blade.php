@@ -74,7 +74,7 @@
                                         @endif 
                                         {{ $product->currency }} {{ number_format($product->discount_price > 0 ? $product->discount_price : $product->price,2) }}
                                     </td>
-                                    <td>{{ number_format($product->Inventory,2) }}</td>
+                                    <td>{{ number_format($product->Inventory < 0 ? 0 : $product->Inventory,2) }}</td>
                                     <td>{{ $product->status }}</td>
                                     <td>{{ Setting::date_for_listing($product->updated_at) }}</td>
                                     <td class="text-right">
