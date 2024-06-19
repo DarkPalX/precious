@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SocialiteController;
 
 // CMS Controllers
-use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController};
+use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController, FacebookDataDeletionController};
 
 use App\Http\Controllers\Cms4Controllers\{
     ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, MobileAlbumController, PageController, MenuController, FileManagerController
@@ -91,6 +91,8 @@ Route::get('/phpinfo', function () {
     //Socialite Signup -Signin
     Route::get('login/{provider}', [SocialiteController::class, 'redirectToProvider'])->name('login.provider');
     Route::get('login/{provider}/callback', [SocialiteController::class, 'handleProviderCallback']);
+
+    Route::post('facebook/data-deletion', [FacebookDataDeletionController::class, 'handle'])->name('facebook.data-deletion');
 
 
     // Ecommerce Pages
