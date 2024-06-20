@@ -22,7 +22,7 @@
                 <div class="product">
                     <div class="grid-inner">
                         <div class="product-image h-translate-y all-ts">
-                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                            <a href="' . route('product.details', $product->slug) . '"><img src="' . $imageUrl . '" onerror="this.onerror=null;this.src=\'' . asset('storage/products/no-image.jpg') . '\';" alt="' . $product->name . '"></a>
                             <div class="bg-overlay">
                                 <div class="bg-overlay-content align-items-end justify-content-start flex-column">
                                     <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
@@ -43,7 +43,7 @@
                 <div class="product">
                     <div class="grid-inner">
                         <div class="product-image h-translate-y all-ts">
-                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" onerror="this.onerror=null;this.src=\'' . asset('storage/products/no-image.jpg') . '\';" alt="'. $product->name .'"></a>
                             <div class="bg-overlay">
                                 <div class="bg-overlay-content align-items-end justify-content-start flex-column">
                                     <a data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="#modal-register" data-lightbox="inline" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
@@ -99,7 +99,7 @@
                 <div class="product">
                     <div class="grid-inner">
                         <div class="product-image h-translate-y all-ts">
-                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" onerror="this.onerror=null;this.src=\'' . asset('storage/products/no-image.jpg') . '\';" alt="'. $product->name .'"></a>
                             <div class="bg-overlay">
                                 <div class="bg-overlay-content align-items-end justify-content-start flex-column">
                                     <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
@@ -120,7 +120,7 @@
                 <div class="product">
                     <div class="grid-inner">
                         <div class="product-image h-translate-y all-ts">
-                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                            <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" onerror="this.onerror=null;this.src=\'' . asset('storage/products/no-image.jpg') . '\';" alt="'. $product->name .'"></a>
                             <div class="bg-overlay">
                                 <div class="bg-overlay-content align-items-end justify-content-start flex-column">
                                     <a data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="#modal-register" data-lightbox="inline" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
@@ -171,7 +171,7 @@
                     <div class="product">
                         <div class="grid-inner">
                             <div class="product-image h-translate-y all-ts">
-                                <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                                <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" onerror="this.onerror=null;this.src=\'' . asset('storage/products/no-image.jpg') . '\';" alt="'. $product->name .'"></a>
                                 <div class="bg-overlay">
                                     <div class="bg-overlay-content align-items-end justify-content-start flex-column">
                                     <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="add_to_cart('. htmlspecialchars(json_encode($product->id), ENT_QUOTES, 'UTF-8') . ',' . htmlspecialchars(json_encode($product->discount_price > 0 ? $product->discount_price : $product->price), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->inventory), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->name), ENT_QUOTES, 'UTF-8') .',' . htmlspecialchars(json_encode($product->photoPrimary), ENT_QUOTES, 'UTF-8') .');" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
@@ -191,7 +191,7 @@
                     <div class="product">
                         <div class="grid-inner">
                             <div class="product-image h-translate-y all-ts">
-                                <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" alt="'. $product->name .'"></a>
+                                <a href="'.route('product.details',$product->slug).'"><img src="'.$imageUrl.'" onerror="this.onerror=null;this.src=\'' . asset('storage/products/no-image.jpg') . '\';" alt="'. $product->name .'"></a>
                                 <div class="bg-overlay">
                                     <div class="bg-overlay-content align-items-end justify-content-start flex-column">
                                     <a data-bs-toggle="tooltip" data-bs-placement="left" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="#modal-register" data-lightbox="inline" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
