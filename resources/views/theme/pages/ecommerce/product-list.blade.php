@@ -86,7 +86,7 @@
 									<div class="sale-flash badge bg-success p-2">Ebook</div>
 								</div>
 								<div class="product-desc">
-									<div class="product-title"><h3><a href="{{ route('ebook.details',$product->slug) }}">{{$product->name}}</a></h3></div>
+									<div class="product-title"><h3 style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;"><a href="{{ route('ebook.details',$product->slug) }}">{{$product->name}}</a></h3></div>
 									{!! ($product->ebook_discount_price > 0 ? '<div class="product-price"><del>' . number_format($product->ebook_price, 2) . '</del> <ins>' . number_format($product->ebook_discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->ebook_price, 2) . '</ins></div>') !!}
 									<div class="product-rating">
 										@for($star = 1; $star <= 5; $star++)
@@ -102,13 +102,13 @@
 					<div class="product col-4 col-md-3 col-sm-6 sf-dress bottommargin-sm">
 						<div class="grid-inner">
 							<div class="product-image">
-								<a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="{{$product->name}}"></a>
+								<a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';" alt="{{$product->name}}"></a>
 								@if($product->inventory <= 0)
 									<div class="sale-flash badge bg-danger p-2">Out of Stock</div>
 								@endif
 							</div>
 							<div class="product-desc">
-								<div class="product-title"><h3><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></h3></div>
+								<div class="product-title"><h3 style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;"><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></h3></div>
 								{!! ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"><del class="text-danger">' . number_format($product->price, 2) . '</del> <ins>' . number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->price, 2) . '</ins></div>') !!}
 								<div class="product-rating text-warning">
 									@for($star = 1; $star <= 5; $star++)

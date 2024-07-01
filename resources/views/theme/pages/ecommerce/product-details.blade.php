@@ -55,13 +55,13 @@
                                 <div class="flexslider">
                                     <div class="slider-wrap" data-lightbox="gallery">
                                         @foreach($product->photos as $photo)
-                                        <div class="slide" data-thumb="{{ asset('storage/products/'.$photo->path) }}"><a href="{{ asset('storage/products/'.$photo->path) }}" title="{{$product->name}}" data-lightbox="gallery-item"><img src="{{ asset('storage/products/'.$photo->path) }}" alt="{{$product->name}}"></a></div>
+                                        <div class="slide" data-thumb="{{ asset('storage/products/'.$photo->path) }}"><a href="{{ asset('storage/products/'.$photo->path) }}" title="{{$product->name}}" data-lightbox="gallery-item"><img src="{{ asset('storage/products/'.$photo->path) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';"  alt="{{$product->name}}"></a></div>
                                         @endforeach
                                     </div>
                                 </div>
                             </div>
                         @else
-                            <a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="{{$product->name}}"></a>
+                            <a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';" alt="{{$product->name}}" alt="{{$product->name}}"></a>
                         @endif
 
                     </div><!-- Product Single - Gallery End -->
@@ -181,7 +181,7 @@
                                             <div class="grid-inner row g-0">
                                                 <div class="col-md-5 mb-md-0">
                                                     <div class="product-image">
-                                                        <img src="{{ asset('storage/products/'.$bundle->photoPrimary) }}" />
+                                                        <img src="{{ asset('storage/products/'.$bundle->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';" alt="{{$product->name}}" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-7 ps-md-4">
@@ -498,7 +498,7 @@
                 <div class="product col-md-3 col-sm-6 sf-dress bottommargin-sm">
                     <div class="grid-inner">
                         <div class="product-image">
-                            <a href="{{ route('product.details',$rel->slug) }}"><img src="{{ asset('storage/products/'.$rel->photoPrimary) }}" alt="{{$rel->name}}"></a>
+                            <a href="{{ route('product.details',$rel->slug) }}"><img src="{{ asset('storage/products/'.$rel->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';" alt="{{$product->name}}" alt="{{$rel->name}}"></a>
                         </div>
                         <div class="product-desc">
                             <div class="product-title"><h3><a href="{{ route('product.details',$rel->slug) }}">{{$rel->name}}</a></h3></div>
@@ -597,7 +597,7 @@
                         // $('#top-cart-items').append(
                         //     '<div class="top-cart-item">'+
                         //         '<div class="top-cart-item-image border-0">'+
-                        //             '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" alt="Cart Image 1" /></a>'+
+                        //             '<a href="#"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';"  alt="Cart Image 1" /></a>'+
                         //         '</div>'+
                         //         '<div class="top-cart-item-desc">'+
                         //             '<div class="top-cart-item-desc-title">'+

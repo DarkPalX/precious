@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SocialiteController;
 
 // CMS Controllers
-use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController};
+use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController, FacebookDataDeletionController, GoogleDataDeletionController};
 
 use App\Http\Controllers\Cms4Controllers\{
     ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, MobileAlbumController, PageController, MenuController, FileManagerController
@@ -92,6 +92,9 @@ Route::get('/phpinfo', function () {
     Route::get('login/{provider}', [SocialiteController::class, 'redirectToProvider'])->name('login.provider');
     Route::get('login/{provider}/callback', [SocialiteController::class, 'handleProviderCallback']);
 
+    Route::post('facebook/data-deletion', [FacebookDataDeletionController::class, 'handle'])->name('facebook.data-deletion');
+    Route::post('google/data-deletion', [GoogleDataDeletionController::class, 'handle'])->name('google.data-deletion');
+    
 
     // Ecommerce Pages
     
@@ -101,7 +104,6 @@ Route::get('/phpinfo', function () {
 
     // Route::get('/brand-products/{id}', [ProductFrontController::class, 'brand_products'])->name('brand.product-list');
     Route::get('/category-products/{id}', [ProductFrontController::class, 'category_products'])->name('category.product-list');
-    
     
     
     // Cart Management

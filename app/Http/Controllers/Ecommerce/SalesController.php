@@ -202,7 +202,7 @@ class SalesController extends Controller
         if(isset($_GET['del_status']) && $_GET['del_status']<>'')
             $sales = $sales->where('delivery_status','like',''.$_GET['del_status'].'');
         $sales = $sales->orderBy('id','desc');
-        $sales = $sales->paginate(1000000);
+        $sales = $sales->paginate(100);
 
         $filter = $listing->get_filter($this->searchFields);
         $searchType = 'simple_search';

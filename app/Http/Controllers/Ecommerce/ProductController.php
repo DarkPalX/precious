@@ -349,15 +349,23 @@ class ProductController extends Controller
     {
         $delete = ProductTag::where('product_id',$id)->forceDelete();
 
-        if($delete){
-            foreach(explode(',',$tags) as $tag){
-                ProductTag::create([
-                    'product_id' => $id,
-                    'tag' => $tag,
-                    'created_by' => Auth::id()
-                ]);
-            }
+        foreach(explode(',',$tags) as $tag){
+            ProductTag::create([
+                'product_id' => $id,
+                'tag' => $tag,
+                'created_by' => Auth::id()
+            ]);
         }
+
+        // if($delete){
+        //     foreach(explode(',',$tags) as $tag){
+        //         ProductTag::create([
+        //             'product_id' => $id,
+        //             'tag' => $tag,
+        //             'created_by' => Auth::id()
+        //         ]);
+        //     }
+        // }
 
     }
 

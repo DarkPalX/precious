@@ -136,6 +136,7 @@
                                         
                                     @endif
                                 </td>
+                                {{-- <td>{{ $sale->payment_status }}</td> --}}
                                 <td>{{ $sale->Paymentstatus }}</td>
                                 <td>
                                     <nav class="nav table-options">
@@ -232,7 +233,7 @@
                 </div>
             </div>
             <!-- End Pages -->
-            <div class="col-md-6" style="display:none;">
+            <div class="col-md-6" style="display:block;">
                 <div class="mg-t-5">
                     @if ($sales->firstItem() == null)
                         <p class="tx-gray-400 tx-12 d-inline">{{__('common.showing_zero_items')}}</p>
@@ -241,13 +242,14 @@
                     @endif
                 </div>
             </div>
-            <div class="col-md-6" style="display:none;">
+            <div class="col-md-6" style="display:block;">
                 <div class="text-md-right float-md-right mg-t-5">
                     <div>
                         {{ $sales->appends((array) $filter)->links() }}
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
 
