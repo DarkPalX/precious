@@ -44,6 +44,7 @@ class SocialiteController extends Controller
             'provider' => $provider,
             'provider_id' => $socialUser->id,
             'password' => Hash::make('password'),
+            'role_id' => 1,
             'is_active' => 1,
         ]);
     }
