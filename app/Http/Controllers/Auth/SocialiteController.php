@@ -39,6 +39,7 @@ class SocialiteController extends Controller
 
         return User::create([
             'name' => $socialUser->name,
+            'firstname' => $socialUser->firstname,
             'email' => $socialUser->email,
             'provider' => $provider,
             'provider_id' => $socialUser->id,
