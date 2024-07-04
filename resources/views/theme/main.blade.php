@@ -188,5 +188,48 @@
 		gtag('config', 'G-HR35693H16');
 	</script>
 
+
+
+	<!-- Messenger Chat Plugin Code -->
+
+	<div id="fb-root"></div>
+    <div id="fb-customer-chat" class="fb-customerchat"></div>
+
+    <script>
+      var chatbox = document.getElementById('fb-customer-chat');
+      chatbox.setAttribute("page_id", "{{ env('FACEBOOK_PAGE_ID') }}");
+      chatbox.setAttribute("attribution", "biz_inbox");
+    </script>
+
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          xfbml            : true,
+          version          : 'v20.0'
+        //   version          : '{{ env('FACEBOOK_API_VERSION') }}'
+        });
+
+		FB.CustomerChat.show();
+
+        FB.CustomerChat.update({
+          logged_in_greeting: 'Hello There!',
+          logged_out_greeting: 'Log in to Chat with Us',
+          ref: 'coupon_15'
+        });
+
+        FB.Event.subscribe('customerchat.load', function() {
+          console.log('Customer Chat Plugin has loaded');
+        });
+      };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
+
 </body>
 </html>
