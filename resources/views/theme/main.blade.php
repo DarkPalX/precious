@@ -205,8 +205,7 @@
       window.fbAsyncInit = function() {
         FB.init({
           xfbml            : true,
-          version          : 'v20.0'
-        //   version          : '{{ env('FACEBOOK_API_VERSION') }}'
+          version          : '{{ env('FACEBOOK_API_VERSION') }}'
         });
 
 		FB.CustomerChat.show();
