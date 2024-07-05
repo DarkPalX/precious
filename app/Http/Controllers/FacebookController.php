@@ -9,12 +9,12 @@ class FacebookController extends Controller
 {
     public function setupChatPlugin()
     {
-        $pageId = 'YOUR_PAGE_ID';
-        $welcomeText = 'YOUR_WELCOME_TEXT';
-        $themeColor = '553399';
-        $entryPointIcon = 'MESSENGER_ICON';
-        $entryPointLabel = 'CHAT';
-        $pageAccessToken = 'YOUR_PAGE_ACCESS_TOKEN';
+        $pageId = env('FACEBOOK_PAGE_ID');
+        $welcomeText = env('WELCOME_TEXT');
+        $themeColor = env('THEME_COLOR');
+        $entryPointIcon = env('MESSENGER_ICON');
+        $entryPointLabel = env('ENTRY_POINT_LABEL');
+        $pageAccessToken = env('PAGE_ACCESS_TOKEN');
 
         $response = Http::post("https://graph.facebook.com/v20.0/$pageId/chat_plugin", [
             'welcome_screen_greeting' => $welcomeText,
