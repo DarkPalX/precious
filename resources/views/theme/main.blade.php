@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 
+
+<!-- Fresh Chat Plugin Code -->
+
+<script
+	src='//fw-cdn.com/11794505/4403633.js'
+	chat='true'>
+</script>
+
 @include('theme.layouts.components.styles')
 
 <body class="stretched">
