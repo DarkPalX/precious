@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class SocialiteController extends Controller
 {
@@ -38,9 +39,13 @@ class SocialiteController extends Controller
 
         return User::create([
             'name' => $socialUser->name,
+            'firstname' => $socialUser->name,
             'email' => $socialUser->email,
             'provider' => $provider,
             'provider_id' => $socialUser->id,
+            'password' => Hash::make('password'),
+            'role_id' => 1,
+            'is_active' => 1,
         ]);
     }
 }
