@@ -136,9 +136,6 @@
    
   <div id="viewer" class="spreads" style="font-size:30px;"></div>
     
-  <!-- height spacer -->
-  <div style="height: 40px;"></div>
-  
    <div style="height:44px;position: fixed;z-index: 999;bottom:40%;text-align:center;width:100%;background: none;">
   <a id="prev" href="#prev" class="arrow" style="font-size: 80px;width: 80px; background: transparent; float: left;margin-left: -20px !important;color: lightgray !important;visibility: visible;height: 100px;line-height: 70px;">‹</a>
   <a id="next" href="#next" class="arrow" style="font-size: 80px;width: 80px; background: transparent; float: right;margin-right: -20px !important;;color: lightgray !important;visibility: visible;height: 100px;line-height: 70px;">›</a>      
