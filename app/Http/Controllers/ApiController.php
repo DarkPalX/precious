@@ -1377,7 +1377,8 @@ public function proceedToCheckOut(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    // $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    $data['Platform'] = $request->post('Platform');   
 
     $data['UserID'] = $request->post('UserID');    
     $data['ApplyECredit'] = $request->post('ApplyECredit');
