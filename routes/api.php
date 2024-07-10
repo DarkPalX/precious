@@ -197,7 +197,6 @@ Route::post('/check-has-book-mark',[
    'as'=> 'check-has-book-mark'
 ]);
 
-
 // FAVORITE ==========================================================================
 Route::post('/get-favorite-list',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerFavoriteList',
