@@ -267,8 +267,6 @@
     //   })
     // });
    
-
-
     // Start Set Custome Theme==============================
      
     var dark_theme = document.getElementById("dark-theme");
