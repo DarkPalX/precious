@@ -2502,38 +2502,37 @@ public function validateCouponCode(Request $request){
   
   $response = "Failed";
   $responseMessage = "";
+  
+  $files = $_FILES;
 
-  // $fieldName = 'image';
-  // $files = $_FILES;
+  $ProductID = "Image";
+  $ImageDestination = "public/images/payment";
 
-  // $ProductID = "Image";
-  // $ImageDestination = "public/images/";
+   for($i=0; $i<count($files['image_file']['name']); $i++){
 
-   // for($i=0; $i<count($files[$fieldName]['name']); $i++){
+      if($files[$fieldName]['type'][$i] != ''){
+        //300 x 300
+        $FileName = $ProductID."-".($i + 1).'-'.'300X300.jpg';
+        $_FILES['image_file']['name']= $FileName;
+        $_FILES['image_file']['type']= $files['image_file']['type'][$i];
+        $_FILES['image_file']['tmp_name']= $files['image_file']['tmp_name'][$i];
+        $_FILES['image_file']['error']= $files['image_file']['error'][$i];
+        $_FILES['image_file']['size']= $files['image_file']['size'][$i];
 
-   //    if($files[$fieldName]['type'][$i] != ''){
-   //      //300 x 300
-   //      $FileName = $ProductID."-".($i + 1).'-'.'300X300.jpg';
-   //      $_FILES['image']['name']= $FileName;
-   //      $_FILES['image']['type']= $files['image']['type'][$i];
-   //      $_FILES['image']['tmp_name']= $files['image']['tmp_name'][$i];
-   //      $_FILES['image']['error']= $files['image']['error'][$i];
-   //      $_FILES['image']['size']= $files['image']['size'][$i];
+        $picdata["ImageUpload"] = 'image_file';
+        $picdata["Path"] = $ImageDestination;
+        $picdata["AutoScale"] = true;
+        $picdata["PosX"] = 0;
+        $picdata["PosY"] = 0;
+        $picdata["Width"] = 0;
+        $picdata["Height"] = 0;
+        $picdata["MaxWidth"] = 300;
+        $picdata["MaxHeight"] = 300;
+        $picdata["FileName"] = $FileName;
 
-   //      $picdata["ImageUpload"] = $fieldName;
-   //      $picdata["Path"] = $ImageDestination;
-   //      $picdata["AutoScale"] = true;
-   //      $picdata["PosX"] = 0;
-   //      $picdata["PosY"] = 0;
-   //      $picdata["Width"] = 0;
-   //      $picdata["Height"] = 0;
-   //      $picdata["MaxWidth"] = 300;
-   //      $picdata["MaxHeight"] = 300;
-   //      $picdata["FileName"] = $FileName;
-
-   //      $Misc->ResizePhoto($picdata);        
-   //    }
-   //  }
+        $Misc->ResizePhoto($picdata);        
+      }
+    }
 
    // $ImageDestination = "public/images/payment/";
 
@@ -2544,14 +2543,15 @@ public function validateCouponCode(Request $request){
 
    // $image_name=$_FILES["image_file"]["name"];
    // $tmp_name=$_FILES["image_file"]["tmp_name"];
-
    // move_uploaded_file($tmp_name, $ImageDestination);
 
-   if ($request->hasFile('image_file')) {
-          $file = $request->file('image_file');
-          $path = $file->store('images', 'public');
-          return response()->json(['path' => $path], 200);
-      }
+
+   //WORKING API
+   // if ($request->hasFile('image_file')) {
+   //        $file = $request->file('image_file');
+   //        $path = $file->store('images', 'public');
+   //        return response()->json(['path' => $path], 200);
+   //    }
 
 
   }
