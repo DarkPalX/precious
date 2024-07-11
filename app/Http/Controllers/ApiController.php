@@ -2497,13 +2497,42 @@ public function validateCouponCode(Request $request){
   // Set Deleted Message===================================================
   public function uploadPaymentImage(Request $request){
 
+  $Misc = new Misc();
   $Messages = new Messages();
-
+  
   $response = "Failed";
   $responseMessage = "";
 
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
-  $data['MessageID'] = $request->post('MessageID');
+  $fieldName = 'image';
+  $files = $_FILES;
+
+  $ProductID = "Image";
+  $ImageDestination = "public/images/";
+
+   for($i=0; $i<count($files[$fieldName]['name']); $i++){
+
+      if($files[$fieldName]['type'][$i] != ''){
+        //300 x 300
+        $FileName = $ProductID."-".($i + 1).'-'.'300X300.jpg';
+        $_FILES[$fieldName]['name']= $FileName;
+        $_FILES[$fieldName]['type']= $files[$fieldName]['type'][$i];
+        $_FILES[$fieldName]['tmp_name']= $files[$fieldName]['tmp_name'][$i];
+        $_FILES[$fieldName]['error']= $files[$fieldName]['error'][$i];
+        $_FILES[$fieldName]['size']= $files[$fieldName]['size'][$i];
+        $picdata["ImageUpload"] = $fieldName;
+        $picdata["Path"] = $ImageDestination;
+        $picdata["AutoScale"] = true;
+        $picdata["PosX"] = 0;
+        $picdata["PosY"] = 0;
+        $picdata["Width"] = 0;
+        $picdata["Height"] = 0;
+        $picdata["MaxWidth"] = 300;
+        $picdata["MaxHeight"] = 300;
+        $picdata["FileName"] = $FileName;
+        $Misc->ResizePhoto($picdata);        
+      }
+    }
+
 
    return response()->json([                  
      'response' => $response,
