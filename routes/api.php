@@ -381,6 +381,14 @@ Route::post('/delete-message-notification',[
    'as'=> 'delete-message-notification'
 ]);
 
+// UPLOAD IMAGE PAYMENT
+
+Route::post('/upload-image-payment',[
+   'uses'=>'App\Http\Controllers\ApiController@uploadPaymentImage',
+   'as'=> 'upload-image-payment'
+]);
+
+
 // EPUB VIEWER
 Route::get('/show-viewer',[
    'uses'=>'App\Http\Controllers\ApiController@showViewerEpub',
