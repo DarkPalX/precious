@@ -2541,12 +2541,12 @@ public function validateCouponCode(Request $request){
    // }
 
 
-   $ImageDestination = "public/images/";
+   $ImageDestination = "public/images/payment/";
 
    $image_name=$_FILES["image_file"]["name"];
    $tmp_name=$_FILES["image_file"]["tmp_name"];
 
-   move_uploaded_file($tmp_name.'-ariz-sample', $ImageDestination);
+   move_uploaded_file($tmp_name, $ImageDestination);
 
    return response()->json([                  
      'response' => 'Success',
