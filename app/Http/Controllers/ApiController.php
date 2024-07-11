@@ -2535,10 +2535,18 @@ public function validateCouponCode(Request $request){
    //    }
    //  }
 
-   $image_files=$request->file('ximage');
-   foreach($image_files as $file){
-      $file->storeAs('public/images/',$file->getClientOriginalName());
-   }
+   // $image_files=$request->file('ximage');
+   // foreach($image_files as $file){
+   //    $file->storeAs('public/images/',$file->getClientOriginalName());
+   // }
+
+
+   $ImageDestination = "public/images/";
+   
+   $image_name=$_FILES["image_file"]["name"];
+   $tmp_name=$_FILES["image_file"]["tmp_name"];
+
+   move_uploaded_file($tmp_name, $ImageDestination);
 
    return response()->json([                  
      'response' => 'Success',
