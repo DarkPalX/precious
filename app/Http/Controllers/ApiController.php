@@ -2551,10 +2551,8 @@ public function validateCouponCode(Request $request){
 
             $file = $request->file('image_file');
             $path = $file->store('avatars');
-
-            $file->store(
-
             return response()->json(['path' => $path], 200);
+                            
         }
       else{        
         return response()->json(['error' => 'No file uploaded'], 400);   
