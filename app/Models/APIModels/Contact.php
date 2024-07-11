@@ -34,6 +34,7 @@ class Contact extends Model{
     $EmailAddress=$data['EmailAddress'];
     $MobileNo=$data['MobileNo'];
     $Message=$data['Message'];
+    $ImageFileName=$data['ImageFileName'];
     
     //===================================
     $param["FullName"] = $FullName;
@@ -41,6 +42,7 @@ class Contact extends Model{
     $param["EmailAddress"] = $EmailAddress;
     $param["MobileNo"] = $MobileNo;
     $param["Message"] = $Message;
+    $param["ImageFileName"] = $ImageFileName;
         
     $Email = new Email();
     $Email->SendContactUsEmail($param);
