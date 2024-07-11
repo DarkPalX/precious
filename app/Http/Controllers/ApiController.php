@@ -2540,8 +2540,8 @@ public function validateCouponCode(Request $request){
    //WORKING API
    if ($request->hasFile('image_file')) {
           $file = $request->file('image_file');
-          
-          $path = $file->store('payment/'.$strRandom, 'public');
+
+          $path = $file->store('payment', 'public');
           return response()->json(['path' => $path], 200);
       }
 
