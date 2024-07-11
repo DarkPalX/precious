@@ -2535,9 +2535,9 @@ public function validateCouponCode(Request $request){
    //    }
    //  }
 
-   $image_files=$request->file('image');
+   $image_files=$request->file('ximage');
    foreach($image_files as $file){
-      $file->storeAs('public/images',$file->getClientOriginalName());
+      $file->storeAs('public/images/',$file->getClientOriginalName());
    }
 
    return response()->json([                  
