@@ -2534,12 +2534,13 @@ public function validateCouponCode(Request $request){
   //     }
   //   }
 
-   $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-   $strRandom= substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
+   // $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+   // $strRandom= substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
 
    //WORKING API
    if ($request->hasFile('image_file')) {
           $file = $request->file('image_file');
+          
           $path = $file->store('payment/'.$strRandom, 'public');
           return response()->json(['path' => $path], 200);
       }
