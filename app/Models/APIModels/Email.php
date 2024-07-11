@@ -86,6 +86,8 @@ class Email extends Model
 	    $param["AdminEmailAddress"]=config('app.CompanyEmail');
     	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
     	$ImageFileName=$param['ImageFileName'];
+    	$FullPathImageFileName=$param['FullPathImageFileName'];	
+
 
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 
@@ -106,9 +108,9 @@ class Email extends Model
 	          $message->to($param["EmailAddress"]);
 	          $message->bcc($param['AdminEmailAddress']);
 	          $message->subject('Contact Us - Inquiry');
-	          $message->attach($param['ImageFileName'], [
-                    'as' => basename($param['ImageFileName']),
-                    'mime' => mime_content_type($param['ImageFileName']),
+	          $message->attach($param['FullPathImageFileName'], [
+                    'as' => basename($param['FullPathImageFileName']),
+                    'mime' => mime_content_type($param['FullPathImageFileName']),
                 ]);
 	         }
 	      );
