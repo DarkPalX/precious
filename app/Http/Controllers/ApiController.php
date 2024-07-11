@@ -2494,6 +2494,24 @@ public function validateCouponCode(Request $request){
   }
 
  
+  // Set Deleted Message===================================================
+  public function uploadPaymentImage(Request $request){
+
+  $Messages = new Messages();
+
+  $response = "Failed";
+  $responseMessage = "";
+
+  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+  $data['MessageID'] = $request->post('MessageID');
+
+   return response()->json([                  
+     'response' => $response,
+     'message' => "Successfully save image proof of payment.",
+   ]);    
+
+  }
+
   //EPUB VIEWER================================================================
    public function showViewerEpub(Request $request){
      
