@@ -2510,26 +2510,32 @@ public function validateCouponCode(Request $request){
    if ($request->hasFile('image_file')) {
 
         $file = $request->file('image_file'); 
-        $isImage = $file->getClientOriginalExtension();  
+        $isImage = $file->getClientOriginalExtension(); 
 
-        if (in_array($isImage , $chk_extensions){
 
-          $path = $file->storeAs('images',$ImageName,'public');    
-          return response()->json(['path' => $path], 200);
+        $path = $file->storeAs('images',$ImageName,'public');    
+        return response()->json(['path' => $path], 200); 
 
-          // return response()->json([                  
-          //      'response' => "Success",
-          //      'message' => "Image is successfully uploaded.",
-          //   ],200); 
+        // if (in_array($isImage,$chk_extensions){
 
-        }else{     
+        //   $path = $file->storeAs('images',$ImageName,'public');    
+        //   return response()->json(['path' => $path], 200);
 
-            // return response()->json([                  
-            //    'response' => "Failed",
-            //    'message' => "Sorry! Image file type is required.",
-            // ],500);                              
+        //   return response()->json([                  
+        //        'response' => "Success",
+        //        'message' => "Image is successfully uploaded.",
+        //     ],200); 
 
-        }               
+        // }else{     
+
+        //     return response()->json([                  
+        //        'response' => "Failed",
+        //        'message' => "Sorry! Image file type is required.",
+        //     ],500);                              
+
+        // }               
+
+        
     }
 
 
