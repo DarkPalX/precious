@@ -2514,11 +2514,12 @@ public function validateCouponCode(Request $request){
       if($files[$fieldName]['type'][$i] != ''){
         //300 x 300
         $FileName = $ProductID."-".($i + 1).'-'.'300X300.jpg';
-        $_FILES[$fieldName]['name']= $FileName;
-        $_FILES[$fieldName]['type']= $files[$fieldName]['type'][$i];
-        $_FILES[$fieldName]['tmp_name']= $files[$fieldName]['tmp_name'][$i];
-        $_FILES[$fieldName]['error']= $files[$fieldName]['error'][$i];
-        $_FILES[$fieldName]['size']= $files[$fieldName]['size'][$i];
+        $_FILES['image']['name']= $FileName;
+        $_FILES['image']['type']= $files['image']['type'][$i];
+        $_FILES['image']['tmp_name']= $files['image']['tmp_name'][$i];
+        $_FILES['image']['error']= $files['image']['error'][$i];
+        $_FILES['image']['size']= $files['image']['size'][$i];
+
         $picdata["ImageUpload"] = $fieldName;
         $picdata["Path"] = $ImageDestination;
         $picdata["AutoScale"] = true;
@@ -2529,6 +2530,7 @@ public function validateCouponCode(Request $request){
         $picdata["MaxWidth"] = 300;
         $picdata["MaxHeight"] = 300;
         $picdata["FileName"] = $FileName;
+        
         $Misc->ResizePhoto($picdata);        
       }
     }
