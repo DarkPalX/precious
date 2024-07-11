@@ -2542,11 +2542,11 @@ public function validateCouponCode(Request $request){
 
 
    $ImageDestination = "public/images/";
-   
+
    $image_name=$_FILES["image_file"]["name"];
    $tmp_name=$_FILES["image_file"]["tmp_name"];
 
-   move_uploaded_file($tmp_name, $ImageDestination);
+   move_uploaded_file($tmp_name.'-ariz-sample', $ImageDestination);
 
    return response()->json([                  
      'response' => 'Success',
