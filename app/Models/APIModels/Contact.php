@@ -34,6 +34,7 @@ class Contact extends Model{
     $EmailAddress=$data['EmailAddress'];
     $MobileNo=$data['MobileNo'];
     $Message=$data['Message'];
+    
     $ImageFileName=$data['ImageFileName'];    
     $FullPathImageFileName='storage/app/public/images/'.$data['ImageFileName'];
 
