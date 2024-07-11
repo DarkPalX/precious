@@ -1767,6 +1767,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
     $data['EmailAddress'] = $request->post('EmailAddress');      
     $data['MobileNo'] = $request->post('MobileNo');
     $data['Message'] = $request->post('Message');
+    $data['ImageFileName'] = $request->post('ImageFileName');  
     
     if(empty($data['Purpose'])){
       $ResponseMessage = 'Select inquiry type from the list.';
