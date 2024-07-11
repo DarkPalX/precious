@@ -2515,8 +2515,7 @@ public function validateCouponCode(Request $request){
         if (in_array($isImage , $chk_extensions){
 
           $path = $file->storeAs('images',$ImageName,'public');    
-          return response()->json(['path' => $path], 200);
-
+          
           return response()->json([                  
                'response' => "Success",
                'message' => "Image is successfully uploaded.",
