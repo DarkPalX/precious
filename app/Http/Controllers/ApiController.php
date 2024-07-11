@@ -2503,41 +2503,48 @@ public function validateCouponCode(Request $request){
   $response = "Failed";
   $responseMessage = "";
 
-  $fieldName = 'image';
-  $files = $_FILES;
+  // $fieldName = 'image';
+  // $files = $_FILES;
 
-  $ProductID = "Image";
-  $ImageDestination = "public/images/";
+  // $ProductID = "Image";
+  // $ImageDestination = "public/images/";
 
-   for($i=0; $i<count($files[$fieldName]['name']); $i++){
+   // for($i=0; $i<count($files[$fieldName]['name']); $i++){
 
-      if($files[$fieldName]['type'][$i] != ''){
-        //300 x 300
-        $FileName = $ProductID."-".($i + 1).'-'.'300X300.jpg';
-        $_FILES['image']['name']= $FileName;
-        $_FILES['image']['type']= $files['image']['type'][$i];
-        $_FILES['image']['tmp_name']= $files['image']['tmp_name'][$i];
-        $_FILES['image']['error']= $files['image']['error'][$i];
-        $_FILES['image']['size']= $files['image']['size'][$i];
+   //    if($files[$fieldName]['type'][$i] != ''){
+   //      //300 x 300
+   //      $FileName = $ProductID."-".($i + 1).'-'.'300X300.jpg';
+   //      $_FILES['image']['name']= $FileName;
+   //      $_FILES['image']['type']= $files['image']['type'][$i];
+   //      $_FILES['image']['tmp_name']= $files['image']['tmp_name'][$i];
+   //      $_FILES['image']['error']= $files['image']['error'][$i];
+   //      $_FILES['image']['size']= $files['image']['size'][$i];
 
-        $picdata["ImageUpload"] = $fieldName;
-        $picdata["Path"] = $ImageDestination;
-        $picdata["AutoScale"] = true;
-        $picdata["PosX"] = 0;
-        $picdata["PosY"] = 0;
-        $picdata["Width"] = 0;
-        $picdata["Height"] = 0;
-        $picdata["MaxWidth"] = 300;
-        $picdata["MaxHeight"] = 300;
-        $picdata["FileName"] = $FileName;
-        
-        $Misc->ResizePhoto($picdata);        
-      }
-    }
+   //      $picdata["ImageUpload"] = $fieldName;
+   //      $picdata["Path"] = $ImageDestination;
+   //      $picdata["AutoScale"] = true;
+   //      $picdata["PosX"] = 0;
+   //      $picdata["PosY"] = 0;
+   //      $picdata["Width"] = 0;
+   //      $picdata["Height"] = 0;
+   //      $picdata["MaxWidth"] = 300;
+   //      $picdata["MaxHeight"] = 300;
+   //      $picdata["FileName"] = $FileName;
 
+   //      $Misc->ResizePhoto($picdata);        
+   //    }
+   //  }
+
+
+   $image_files=$request->file('image');
+
+   foreach($image_files as $file){
+
+      $file->storeAs('public/images',$file->getClientOriginalName());
+   }
 
    return response()->json([                  
-     'response' => $response,
+     'response' => 'Success',
      'message' => "Successfully save image proof of payment.",
    ]);    
 
