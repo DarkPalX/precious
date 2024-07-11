@@ -85,6 +85,7 @@ class Email extends Model
 
 	    $param["AdminEmailAddress"]=config('app.CompanyEmail');
     	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
+    	
     	$ImageFileName=$param['ImageFileName'];
     	$FullPathImageFileName=$param['FullPathImageFileName'];	
 
