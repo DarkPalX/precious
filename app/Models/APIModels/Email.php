@@ -85,9 +85,38 @@ class Email extends Model
 
 	    $param["AdminEmailAddress"]=config('app.CompanyEmail');
     	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
+    	$ImageFileName=$param['ImageFileName'];
 
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
-	      Mail::send(
+
+       if($ImageFileName!=''){
+
+       	 Mail::send(
+	        'api/contact-us-email',
+	        [                  
+             'FullName'=> $param['FullName'],
+             'Subject'=> $param['Subject'],
+             'EmailAddress'=> $param['EmailAddress'],
+             'MobileNo'=> $param['MobileNo'],
+             'Message'=> $param['Message']
+	        ],
+	        function($message) use ($param){
+
+	          $message->from($param['CompanyNoReplyEmail']);
+	          $message->to($param["EmailAddress"]);
+	          $message->bcc($param['AdminEmailAddress']);
+	          $message->subject('Contact Us - Inquiry');
+	          $message->attach($param['ImageFileName'], [
+                    'as' => basename($param['ImageFileName']),
+                    'mime' => mime_content_type($param['ImageFileName']),
+                ]);
+	         }
+	      );
+
+
+       }else{
+
+       	  Mail::send(
 	        'api/contact-us-email',
 	        [                  
              'FullName'=> $param['FullName'],
@@ -102,7 +131,10 @@ class Email extends Model
 	          $message->bcc($param['AdminEmailAddress']);
 	          $message->subject('Contact Us - Inquiry');
 	        }
-	      );
+	      );	
+
+       }
+	  
 	    }
   	}
 
