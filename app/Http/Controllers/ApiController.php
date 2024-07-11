@@ -2503,7 +2503,7 @@ public function validateCouponCode(Request $request){
   $response = "Failed";
   $responseMessage = "";
 
-  $ImageName='image-'.date("Y-m-d H:i:s");
+  $ImageName='image-'.date("Y-m-d H:i:s").'jpg';
     
    if ($request->hasFile('image_file')) {
           $file = $request->file('image_file');        
