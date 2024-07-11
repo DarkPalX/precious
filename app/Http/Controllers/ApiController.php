@@ -2541,7 +2541,11 @@ public function validateCouponCode(Request $request){
    if ($request->hasFile('image_file')) {
           $file = $request->file('image_file');
 
-          $path = $file->store('images', 'public');
+          // $path = $file->store('images', 'public');
+          
+            $path = $file->storeAs('images','test-image','public');
+          
+
           return response()->json(['path' => $path], 200);
       }
 
