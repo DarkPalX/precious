@@ -2547,10 +2547,22 @@ public function validateCouponCode(Request $request){
 
    move_uploaded_file($tmp_name, $ImageDestination);
 
-   return response()->json([                  
-     'response' => 'Success',
-     'message' => "Successfully save image proof of payment.",
-   ]);    
+   // return response()->json([                  
+   //   'response' => 'Success',
+   //   'message' => "Successfully save image proof of payment.",
+   // ]); 
+
+    if ($request->hasFile('image_file')) {
+
+            $file = $request->file('image_file');
+            $path = $file->store('avatars');
+
+            $file->store(
+
+            return response()->json(['path' => $path], 200);
+        }
+
+        return response()->json(['error' => 'No file uploaded'], 400);   
 
   }
 
