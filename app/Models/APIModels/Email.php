@@ -97,30 +97,33 @@ class Email extends Model
 	    $param["AdminEmailAddress"]=config('app.CompanyEmail');
     	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
 
-    	// $ImageFileName=$param['ImageFileName'];
-    	// $FullPathImageFileName=$param['FullPathImageFileName'];	
-     
-      $i=0;
-    	$contactList= [];         
-      $info_list=$this->getAdminEmailList();
+    	$ImageFileName=$param['ImageFileName'];
+    	$FullPathImageFileName=$param['FullPathImageFileName'];	
 
-      $temp="";
-      $final="";
+    	$ccEmails = DB::table('email_recipients')->pluck('email')->toArray();
+    
+      // $i=0;
+    	// $contactList= [];         
+      // $info_list=$this->getAdminEmailList();
+
+      // $temp="";
+      // $final="";
            	      
-      if(count($info_list)>0){
-           foreach($info_list as $info){
-               // array_push($arr_admin_emails, $info->EmailAddress);     
-           	    $contactList[$i] = $info->EmailAddress;
-           	     $i++;
+      // if(count($info_list)>0){
+      //      foreach($info_list as $info){
+      //          // array_push($arr_admin_emails, $info->EmailAddress);     
+      //      	    $contactList[$i] = $info->EmailAddress;
+      //      	     $i++;
 
-           	      $temp= $temp. "'".$info->EmailAddress."',";
-           }
-      }  
+      //      	      $temp= $temp. "'".$info->EmailAddress."',";
+      //      }
+      // }  
 
-       $final="[".$temp."]";      
-       $param['AdminEmailAddress'] = $final;
-      // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc
-           
+      //  $final="[".$temp."]";      
+      //  $param['AdminEmailAddress'] = $final;
+      // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc           
+      $param['AdminEmailAddress'] = $ccEmails;    
+      
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 
        if($ImageFileName!=''){
