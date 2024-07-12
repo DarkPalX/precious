@@ -553,6 +553,7 @@ class Book extends Model
           COALESCE(prod_cat.status,'') as status
         ");
 
+       $query->where("prod_cat.deleted_at","=",null); 
        $query->where("prod_cat.status","=","PUBLISHED"); 
          
       $list = $query->get();
