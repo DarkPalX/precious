@@ -85,7 +85,7 @@ class Email extends Model
 
       $query = DB::table('email_recipients as admn_emails')    
        ->selectraw("
-          admn_emails.email         
+          admn_emails.email as EmailAddress        
         ");
          
       $list = $query->get();       
@@ -102,9 +102,11 @@ class Email extends Model
 
     	$arr_admin_emails = [];         
       $info_list=$this->getAdminEmailList();
-       
-    	if(count($info_list)>0){
-          array_push($arr_admin_emails, $info_list);     
+           	      
+      if(count($info_list)>0){
+           foreach($info_list as $info){
+               array_push($arr_admin_emails, $info->EmailAddress);     
+           }
       }  
       
       // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com'];
