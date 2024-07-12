@@ -100,30 +100,28 @@ class Email extends Model
     	$ImageFileName=$param['ImageFileName'];
     	$FullPathImageFileName=$param['FullPathImageFileName'];	
 
-    	$ccEmails = DB::table('email_recipients')->pluck('email')->toArray();
+    	// $ccEmails = DB::table('email_recipients')->pluck('email')->toArray();
     
-      // $i=0;
-    	// $contactList= [];         
-      // $info_list=$this->getAdminEmailList();
+      $i=0;
+    	$contactList= [];         
+      $info_list=$this->getAdminEmailList();
 
-      // $temp="";
-      // $final="";
+      $temp="";
+      $final="";
            	      
-      // if(count($info_list)>0){
-      //      foreach($info_list as $info){
-      //          // array_push($arr_admin_emails, $info->EmailAddress);     
-      //      	    $contactList[$i] = $info->EmailAddress;
-      //      	     $i++;
-
-      //      	      $temp= $temp. "'".$info->EmailAddress."',";
-      //      }
-      // }  
+      if(count($info_list)>0){
+           foreach($info_list as $info){
+               // array_push($arr_admin_emails, $info->EmailAddress);     
+           	     $contactList[$i] = $info->EmailAddress;           	    
+           	      $temp= $temp. "'".$info->EmailAddress."',";
+           }
+      }  
 
       //  $final="[".$temp."]";      
       //  $param['AdminEmailAddress'] = $final;
-      // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc           
-      $param['AdminEmailAddress'] = $ccEmails;    
-      
+      // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc      
+
+      $param['AdminEmailAddress'] = $contactList;    
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 
        if($ImageFileName!=''){
@@ -149,7 +147,6 @@ class Email extends Model
                 ]);
 	         }
 	      );
-
 
        }else{
 
