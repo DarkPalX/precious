@@ -103,17 +103,22 @@ class Email extends Model
       $i=0;
     	$contactList= [];         
       $info_list=$this->getAdminEmailList();
+
+      $temp="";
+      $final="";
            	      
       if(count($info_list)>0){
            foreach($info_list as $info){
                // array_push($arr_admin_emails, $info->EmailAddress);     
            	    $contactList[$i] = $info->EmailAddress;
            	     $i++;
+
+           	      $temp= $temp. "'".$info->EmailAddress."',";
            }
       }  
-      
 
-       $param['AdminEmailAddress'] = $contactList;
+       $final="[".$temp."]";      
+       $param['AdminEmailAddress'] = $final;
       // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc
            
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
