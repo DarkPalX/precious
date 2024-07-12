@@ -675,6 +675,7 @@ class Book extends Model
 
         ");
 
+       $query->where("prds.deleted_at","=",null);
        $query->whereRaw("prod_det_cat.product_catalog_header_id =?",[$HeaderID]); 
          
       $list = $query->get();
