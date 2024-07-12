@@ -103,14 +103,14 @@ class Email extends Model
     	$arr_admin_emails = [];         
       $info_list=$this->getAdminEmailList();
            	      
-      if(count($info_list)>0){
-           foreach($info_list as $info){
-               array_push($arr_admin_emails, $info->EmailAddress);     
-           }
-      }  
+      // if(count($info_list)>0){
+      //      foreach($info_list as $info){
+      //          array_push($arr_admin_emails, $info->EmailAddress);     
+      //      }
+      // }  
       
-       $param['AdminEmailAddress'] = $arr_admin_emails;
-      // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc
+      //  $param['AdminEmailAddress'] = $arr_admin_emails;
+      // // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc
            
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 
@@ -129,7 +129,19 @@ class Email extends Model
 
 	          $message->from($param['CompanyNoReplyEmail']);
 	          $message->to($param["EmailAddress"]);
-	          $message->bcc($param['AdminEmailAddress']);
+	          // $message->bcc($param['AdminEmailAddress']);
+
+	          $message->bcc(
+	         		@php($Cntr = 1)
+	         		@foreach($info_list as $info)
+		         		'{{ $info->EmailAddress }}'
+	         			@php($Cntr = $Cntr + 1)
+		         		@if($Cntr < count($List))
+		         			,
+		         		@endif
+	         		@endforeach
+	         	);
+
 	          $message->subject('Contact Us - Inquiry');
 	          $message->attach($param['FullPathImageFileName'], [
                     'as' => basename($param['FullPathImageFileName']),
@@ -153,7 +165,18 @@ class Email extends Model
 	        function($message) use ($param){
 	          $message->from($param['CompanyNoReplyEmail']);
 	          $message->to($param["EmailAddress"]);
-	          $message->bcc($param['AdminEmailAddress']);
+	          // $message->bcc($param['AdminEmailAddress']);
+	           $message->bcc(
+	         		@php($Cntr = 1)
+	         		@foreach($info_list as $info)
+		         		'{{ $info->EmailAddress }}'
+	         			@php($Cntr = $Cntr + 1)
+		         		@if($Cntr < count($List))
+		         			,
+		         		@endif
+	         		@endforeach
+	         	);
+
 	          $message->subject('Contact Us - Inquiry');
 	        }
 	      );	
