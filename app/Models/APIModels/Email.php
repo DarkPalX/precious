@@ -100,26 +100,20 @@ class Email extends Model
     	$ImageFileName=$param['ImageFileName'];
     	$FullPathImageFileName=$param['FullPathImageFileName'];	
 
-    	// $ccEmails = DB::table('email_recipients')->pluck('email')->toArray();
+    	//$ccEmails = DB::table('email_recipients')->pluck('email')->toArray();
     
       $i=0;
     	$contactList= [];         
       $info_list=$this->getAdminEmailList();
 
-      $temp="";
-      $final="";
-           	      
       if(count($info_list)>0){
-           foreach($info_list as $info){
-               // array_push($arr_admin_emails, $info->EmailAddress);     
-           	     $contactList[$i] = $info->EmailAddress;           	    
-           	      $temp= $temp. "'".$info->EmailAddress."',";
+           foreach($info_list as $info){                 
+           	   $contactList[$i] = $info->EmailAddress;           	    
+           	   $i++;
            }
       }  
-
-      //  $final="[".$temp."]";      
-      //  $param['AdminEmailAddress'] = $final;
-      // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc      
+   
+      // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc  
 
       $param['AdminEmailAddress'] = $contactList;    
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
@@ -139,7 +133,7 @@ class Email extends Model
 
 	          $message->from($param['CompanyNoReplyEmail']);
 	          $message->to($param["EmailAddress"]);
-	          $message->bcc($param['AdminEmailAddress']);
+	          $message->cc($param['AdminEmailAddress']);
 	          $message->subject('Contact Us - Inquiry');
 	          $message->attach($param['FullPathImageFileName'], [
                     'as' => basename($param['FullPathImageFileName']),
@@ -162,7 +156,7 @@ class Email extends Model
 	        function($message) use ($param){
 	          $message->from($param['CompanyNoReplyEmail']);
 	          $message->to($param["EmailAddress"]);
-	          $message->bcc($param['AdminEmailAddress']);
+	          $message->cc($param['AdminEmailAddress']);
 	          $message->subject('Contact Us - Inquiry');
 	        }
 	      );	
