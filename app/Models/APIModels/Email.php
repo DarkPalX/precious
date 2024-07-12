@@ -114,8 +114,8 @@ class Email extends Model
       }  
    
       // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc  
-
       $param['AdminEmailAddress'] = $contactList;    
+      
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
 
        if($ImageFileName!=''){
