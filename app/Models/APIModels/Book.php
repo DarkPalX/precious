@@ -554,7 +554,7 @@ class Book extends Model
         ");
 
        $query->where("prod_cat.deleted_at","=",null); 
-       $query->where("prod_cat.status","=","PUBLISHED"); 
+       
          
       $list = $query->get();
                              
