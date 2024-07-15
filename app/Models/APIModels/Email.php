@@ -200,7 +200,7 @@ class Email extends Model
 	        function($message) use ($param){
 	          $message->from($param['CompanyNoReplyEmail']);
 	          $message->to($param["EmailAddress"]);	          
-	          $message->subject('Un-Subscirbe To News Letter');
+	          $message->subject('UnSubscirbe To News Letter');
 	        }
 	      );
 	    }
