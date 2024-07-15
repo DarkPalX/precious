@@ -466,7 +466,7 @@
     var increase_margin = document.getElementById("increase-margin");
      increase_margin.addEventListener("click", function(e){  
 
-        margin_size++;
+        margin_size=margin_size+2;
                           
          if(theme=='light'){
                  background="white";
@@ -527,7 +527,7 @@
     var decrease_margin = document.getElementById("decrease-margin");
      decrease_margin.addEventListener("click", function(e){  
 
-        margin_size--;
+        margin_size=margin_size-2;
                           
          if(theme=='light'){
                  background="white";
