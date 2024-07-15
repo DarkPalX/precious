@@ -38,7 +38,7 @@
 
     <div style="padding:30px 60px;">
         <div style="text-align: center;padding: 20px 0;">
-             <img src="https://beta.ebooklat.phr.com.ph/storage/logos/ebooklat.jpeg">
+             <img src="https://beta.ebooklat.phr.com.ph/storage/logos/ebooklat-logo.png">
         </div>
 
         <p>You will be missed!</p>

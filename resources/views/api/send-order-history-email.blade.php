@@ -168,7 +168,7 @@
                         <td align="center" style="padding: 35px; background-color: #ffffff;" bgcolor="#ffffff">
                             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:1000px;">
                                 <tr>
-                                    <td align="center"> <img src="https://beta.ebooklat.phr.com.ph/storage/logos/ebooklat.jpeg" width="50" height="50" style="display: block; border: 0px;" /> </td>
+                                    <td align="center"> <img src="https://beta.ebooklat.phr.com.ph/storage/logos/ebooklat-logo.png" width="50" height="50" style="display: block; border: 0px;" /> </td>
                                 </tr>
                                 <tr>
                                     <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 5px;">
