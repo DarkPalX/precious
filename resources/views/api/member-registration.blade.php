@@ -26,7 +26,7 @@
                       <tr> 
                         <td height="140" valign="bottom" style="text-align:left;height:140px"> 
                           <div style="display:inline-block">                              
-                            <img src="https://beta.ebooklat.phr.com.ph/storage/logos/ebooklat-logo.png" style="height:80px;width:184px;position: relative;top: -50px;right: -63px;">                            
+                            <img src="https://beta.ebooklat.phr.com.ph/storage/logos/ebooklat-logo.png" style="height:140px;width:140px;position: relative;top: -50px;right: -63px;">                            
                           </div> 
                       </td> 
                       </tr> 
