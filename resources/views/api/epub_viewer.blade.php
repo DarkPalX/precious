@@ -231,7 +231,7 @@
 
     var theme="light";
     var background="white";
-    var font_size="18";
+    var font_size="14";
     var margin_size="0";
     var font_style="Times Roman";
       
