@@ -15,9 +15,9 @@
             <table role="presentation" width="100%" align="center" cellpadding="0" cellspacing="0" border="0"  style="margin:0px auto;width:100%!important;min-width:100%!important"> 
             <tbody> 
             <tr> 
-              <td dir="rtl" style="text-align:center;font-size:0;background:#2e3c5f"> 
+              <td dir="rtl" style="text-align:center;font-size:0;background:#1f395e"> 
               <div  bgcolor="#ffffff" style="max-width:200px;width:100%;display:inline-block;vertical-align:top" dir="ltr"> 
-              <table bgcolor="#2e3c5f" width="100%" bgcolor="#ffffff" valign="top" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse"> 
+              <table bgcolor="#1f395e" width="100%" bgcolor="#ffffff" valign="top" border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse"> 
                   <tbody> 
                     <tr> 
                     <td style="line-height:1px"> 
@@ -26,7 +26,7 @@
                       <tr> 
                         <td height="140" valign="bottom" style="text-align:left;height:140px"> 
                           <div style="display:inline-block">                              
-                            <img src="https://beta.ebooklat.phr.com.ph/storage/logos/1707185818_webfocus-logo.png" style="height:80px;width:184px;position: relative;top: -50px;right: -63px;">                            
+                            <img src="https://beta.ebooklat.phr.com.ph/storage/logos/ebooklat-logo.png" style="height:140px;width:140px;position: relative;top: -50px;right: -63px;">                            
                           </div> 
                       </td> 
                       </tr> 
@@ -46,7 +46,7 @@
                     <table role="presentation" width="450" height="140" align="center" cellpadding="0" cellspacing="0" border="0"  style="width:450px;height:140px"> 
                     <tbody> 
                     <tr> 
-                    <td  bgcolor="#2e3c5f" valign="middle" height="140" style="height:140px" > 
+                    <td  bgcolor="#1f395e" valign="middle" height="140" style="height:140px" > 
                     <table role="presentation" width="100%" align="center" cellpadding="0" cellspacing="0" border="0"  style="margin:0px auto;width:100%!important;min-width:100%!important"> 
                     <tbody> 
                     <tr> 
