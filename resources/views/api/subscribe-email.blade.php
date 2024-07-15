@@ -38,7 +38,7 @@
 
     <div style="padding:30px 60px;">
         <div style="text-align: center;padding: 20px 0;">
-             <img src="https://beta.ebooklat.phr.com.ph/storage/logos/1707185818_webfocus-logo.png" style="height:140px;width:184px;">
+             <img src="https://beta.ebooklat.phr.com.ph/storage/logos/ebooklat.jpeg">
         </div>
 
         <p>You are receiving this email because you are subscribed to {{ config("app.CompanyName") }}.</p>
