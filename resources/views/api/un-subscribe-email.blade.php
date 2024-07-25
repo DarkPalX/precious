@@ -54,7 +54,7 @@
             
                           <br>
                           <br>
-                             Email UnSubscribed 
+                             Email Unsubscribed 
                         </td> 
                     </tr> 
                     </tbody> 
