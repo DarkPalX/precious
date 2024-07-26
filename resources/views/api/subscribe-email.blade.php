@@ -82,7 +82,7 @@
                     <br />
                     <br />
 
-                    <p>If you wish to unsubscriber from our list, you may click <a href="#">Unsubscribe</a></p>                                                  
+                    <p>If you wish to unsubscribe from our list, you may click <a href="#">Unsubscribe</a></p>                                                  
                  
             </td> 
             </tr> 
