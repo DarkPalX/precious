@@ -18,72 +18,61 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
- 
-// Route::get('/test-email',[
-//   'uses'=>'App\Http\Controllers\ApiController@testEmailCall',
-//   'as'=> 'test-email'
-// ]);
-
-// check and test api status
-Route::get('/test', function(){
-    return response([
-            'message' => 'Api is working...'
-     ], 200);
-
- });
- 
-// CUSTOMER CONTROLLER===========================================
-
-//Customer Logout
+//CUSTOMER LOGOUT==================================================================
 Route::get('/logout',[
    'uses'=>'App\Http\Controllers\ApiController@doCheckLogin',
    'as'=> 'logout'
 ]);
 
-//Customer Login
+//CUSTOMER LOGIN==================================================================
 Route::post('/check-login',[
    'uses'=>'App\Http\Controllers\ApiController@doCheckLogin',
    'as'=> 'check-login'
 ]);
 
-//Register New Customer Account
+//REGISTER ACCOUNT=================================================================
 Route::post('/register-account',[
    'uses'=>'App\Http\Controllers\ApiController@doRegisterCustomer',
    'as'=> 'register-account'
 ]);
 
-//Customer Forgot Password
-Route::post('/forgot-password',[
-   'uses'=>'App\Http\Controllers\ApiController@doForgotPassword',
-   'as'=> 'forgot-password'
-]);
-
-//Customer Forgot Password
+//FORGOT PASSWORD==================================================================
 Route::post('/change-password',[
    'uses'=>'App\Http\Controllers\ApiController@doChangePassword',
    'as'=> 'change-password'
 ]);
 
-//Customer Verify Account
+//VERIFY ACCOUNT===================================================================
+Route::post('/forgot-password',[
+   'uses'=>'App\Http\Controllers\ApiController@doForgotPassword',
+   'as'=> 'forgot-password'
+]);
+
+//CHANGE PASSWORD==================================================================
+Route::post('/change-password',[
+   'uses'=>'App\Http\Controllers\ApiController@doChangePassword',
+   'as'=> 'change-password'
+]);
+
+//VERIFY ACCOUNT===================================================================
 Route::post('/verify-account',[
    'uses'=>'App\Http\Controllers\ApiController@doVerifyAccount',
    'as'=> 'verify-account'
 ]);
 
-//Resend Verification Code
+//RESEND VERIFICATION CODE==========================================================
 Route::post('/resend-code',[
    'uses'=>'App\Http\Controllers\ApiController@doResendVerificationCode',
    'as'=> 'resend-code'
 ]);
 
-//Customer City Address Locator
+//CUSTOMER ADDRESS==================================================================
 Route::post('/update-city-address',[
    'uses'=>'App\Http\Controllers\ApiController@updateCityAddressLocation',
    'as'=> 'update-city-address'
 ]);
 
-//Get Customer Information
+//GET CUSTOMER INFORMATION===========================================================
 Route::post('/get-customer-info',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerInformation',
    'as'=> 'get-customer-info'
@@ -94,14 +83,13 @@ Route::post('/get-customer-info-primary-address',[
    'as'=> 'get-customer-info-primary-address'
 ]);
 
-//Customer Update Profile
+//CUSTOMER PPROFILE==================================================================
 Route::post('/update-customer-info',[
    'uses'=>'App\Http\Controllers\ApiController@doUpdateCustomerProfile',
    'as'=> 'update-customer-info'
 ]);
 
-
-//Update Customer Address
+//CUSTOMER ADDRESS===================================================================
 Route::post('/update-customer-address',[
    'uses'=>'App\Http\Controllers\ApiController@doUpdateCustomerAddress',
    'as'=> 'update-customer-address'
@@ -112,7 +100,7 @@ Route::post('/upload-photo',[
    'as'=> 'upload-photo'
 ]);
 
-// BOOK LIST =========================================================================
+//BOOK LIST =========================================================================
 Route::post('/get-all-book-category-list',[
    'uses'=>'App\Http\Controllers\ApiController@getAllBookCategoryList',
    'as'=> 'get-all-book-category-list'
@@ -153,7 +141,7 @@ Route::post('/get-premium-list',[
    'as'=> 'get-premium-list'
 ]);
 
-//CATALOGUE================================
+//CATALOGUE=========================================================================
 Route::post('/get-all-header-catalogue-list',[
    'uses'=>'App\Http\Controllers\ApiController@getAllBookHeaderCatalogueList',
    'as'=> 'get-all-header-catalogue-list'
@@ -164,14 +152,13 @@ Route::post('/get-all-details-catalogue-list',[
    'as'=> 'get-all-details-catalogue-list'
 ]);
 
-
-// CITY LIST =========================================================================
+//CITY LIST =======================================================================
 Route::post('/get-city-list',[
    'uses'=>'App\Http\Controllers\ApiController@getCityList',
    'as'=> 'get-city-list'
 ]);
 
-// LIBRARY ==========================================================================
+//LIBRARY =========================================================================
 Route::post('/get-library-list',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerLibraryList',
    'as'=> 'get-library-list'
@@ -187,17 +174,29 @@ Route::post('/check-book-allow-download',[
    'as'=> 'check-book-allow-download'
 ]);
 
+//FAVORITES ========================================================================
 Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
    'as'=> 'add-to-favorites'
 ]);
 
+//BOOKMARKS ========================================================================
 Route::post('/check-has-book-mark',[
    'uses'=>'App\Http\Controllers\ApiController@checkBookHasBookMark',
    'as'=> 'check-has-book-mark'
 ]);
 
-// FAVORITE ==========================================================================
+Route::post('/save-book-marks',[
+   'uses'=>'App\Http\Controllers\ApiController@saveBookMarks',
+   'as'=> 'save-book-marks'
+]);
+
+Route::post('/update-book-marks',[
+   'uses'=>'App\Http\Controllers\ApiController@updateBookMarks',
+   'as'=> '/update-book-marks'
+]);
+
+//FAVORITE===========================================================================
 Route::post('/get-favorite-list',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerFavoriteList',
    'as'=> 'get-favorite-list'
@@ -208,7 +207,7 @@ Route::post('/add-to-favorites',[
    'as'=> 'add-to-favorites'
 ]);
 
-// CART ==============================================================================
+//CART===============================================================================
 Route::post('/get-cart-list',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerCartList',
    'as'=> 'get-cart-list'
@@ -224,7 +223,7 @@ Route::post('/remove-to-cart',[
    'as'=> 'remove-to-cart'
 ]);
 
-// LIBRARY ==================================
+//LIBRARY =============================================================================
 Route::post('/get-customer-library-list',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerLibraryList',
    'as'=> 'get-customer-library-list'
@@ -235,7 +234,7 @@ Route::post('/add-to-library',[
    'as'=> 'add-to-library'
 ]);
 
-//SUBSCRIBED OPEN READ BOOKS
+//SUBSCRIBED OPEN READ BOOKS==========================================================
 Route::post('/get-subscribed-read-books-list',[
    'uses'=>'App\Http\Controllers\ApiController@getSubscribedReadBooksList',
    'as'=> 'get-subscribed-read-books-list'
@@ -246,17 +245,7 @@ Route::post('/save-read-books',[
    'as'=> 'save-read-books'
 ]);
 
-Route::post('/save-book-marks',[
-   'uses'=>'App\Http\Controllers\ApiController@saveBookMarks',
-   'as'=> 'save-book-marks'
-]);
-
-Route::post('/update-book-marks',[
-   'uses'=>'App\Http\Controllers\ApiController@updateBookMarks',
-   'as'=> '/update-book-marks'
-]);
-
-//DOWNLOADED BOOKS
+//DOWNLOADED BOOKS====================================================================
 Route::post('/get-subscribed-downloaded-books-list',[
    'uses'=>'App\Http\Controllers\ApiController@getSubscribedDownloadedBooksList',
    'as'=> 'get-subscribed-downloaded-books-list'
@@ -267,13 +256,13 @@ Route::post('/save-download-books',[
    'as'=> 'save-download-books'
 ]);
 
-// CART TRANS CHECK OUT =================================
+//CART TRANS CHECK OUT ===============================================================
 Route::post('/proceed-to-checkout',[
    'uses'=>'App\Http\Controllers\ApiController@proceedToCheckOut',
    'as'=> 'proceed-to-checkout'
 ]);
 
-// ORDER TRANSACTION ================================
+//ORDER TRANSACTION ==================================================================
 Route::post('/get-order-history-list',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerOrderHistory',
    'as'=> 'get-order-history-list'
@@ -294,7 +283,7 @@ Route::post('/send-order-history-list',[
    'as'=> 'send-order-history-list'
 ]);
 
-// REVIEW & COMMENT===============================
+// REVIEW & COMMENT===================================================================
 Route::post('/get-review-list',[
    'uses'=>'App\Http\Controllers\ApiController@getBookReview',
    'as'=> 'get-review-list'
@@ -305,7 +294,7 @@ Route::post('/post-comment-review',[
    'as'=> 'post-comment-review'
 ]);
 
-//BANNER ADS===============================
+//BANNER ADS==========================================================================
 Route::post('/get-home-slider-banner',[
    'uses'=>'App\Http\Controllers\ApiController@getHomeSliderBanner',
    'as'=> 'get-home-slider-banner'
@@ -316,7 +305,7 @@ Route::post('/get-home-popup-banner',[
    'as'=> 'get-home-popup-banner'
 ]);
 
-//COUPON ===============================
+//COUPON =============================================================================
 Route::post('/get-available-coupon-list',[
    'uses'=>'App\Http\Controllers\ApiController@getAvailableCouponList',
    'as'=> 'get-available-coupon-list'
@@ -327,7 +316,7 @@ Route::post('/validate-coupon-code',[
    'as'=> 'validate-coupon-code'
 ]);
 
-//SUBSCRIPTION PLAN ===============================
+//SUBSCRIPTION PLAN ===================================================================
 Route::post('/get-subscription-plan-list',[
    'uses'=>'App\Http\Controllers\ApiController@getSubscriptionPlanList',
    'as'=> 'get-subscription-plan-list'
@@ -353,19 +342,19 @@ Route::post('/check-subscriber-status',[
    'as'=> 'check-subscriber-status'
 ]);
 
-// CONTACT US FORM================================
+//CONTACT US FORM========================================================================
 Route::post('/send-inquiry',[
    'uses'=>'App\Http\Controllers\ApiController@doSendInquiry',
    'as'=> 'send-inquiry'
 ]);
 
-// EWALLET CREDIT HISTORY================================
+//EWALLET CREDIT HISTORY=================================================================
 Route::post('/get-ewallet-history',[
    'uses'=>'App\Http\Controllers\ApiController@getEWalletCreditsHistory',
    'as'=> 'get-ewallet-history'
 ]);
 
-// MESSAGE NOTIFICATION ================================
+//MESSAGE NOTIFICATION ==================================================================
 Route::post('/get-message-notification',[
    'uses'=>'App\Http\Controllers\ApiController@getMessageNotificationList',
    'as'=> 'get-message-notification'
@@ -381,15 +370,24 @@ Route::post('/delete-message-notification',[
    'as'=> 'delete-message-notification'
 ]);
 
-// UPLOAD IMAGE PAYMENT
+//COMPANY INFO===========================================================================
+Route::post('/get-company-faq',[
+   'uses'=>'App\Http\Controllers\ApiController@getCompanyFAQ',
+   'as'=> 'get-company-faq'
+]);
 
+Route::post('/get-company-about-us',[
+   'uses'=>'App\Http\Controllers\ApiController@getCompanyAboutUs',
+   'as'=> 'get-company-about-us'
+]);
+
+//UPLOAD IMAGE PAYMENT====================================================================
 Route::post('/upload-image-payment',[
    'uses'=>'App\Http\Controllers\ApiController@uploadPaymentImage',
    'as'=> 'upload-image-payment'
 ]);
 
-
-// EPUB VIEWER
+//EPUB VIEWER=============================================================================
 Route::get('/show-viewer',[
    'uses'=>'App\Http\Controllers\ApiController@showViewerEpub',
    'as'=> 'show-viewer'
