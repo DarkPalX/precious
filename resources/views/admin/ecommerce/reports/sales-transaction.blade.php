@@ -116,22 +116,24 @@
         </thead>
         <tbody>
             @forelse($sales as $sale)
-                <tr>
-                    <td>{{SettingHelper::datetimeFormat2($sale->header->created_at)}}</td>
-                    <td>{{$sale->order_number}}</td>
-                    <td>{{str_pad(($sale->header->user->id), 8, '0', STR_PAD_LEFT)}}</td>
-                    <td>{{$sale->header->user->fullname}}</td>
-                    <td>{{$sale->header->customer_delivery_adress}}</td>
-                    <td>{{$sale->product->name}}</td>
-                    <td>{{$sale->product->category->name}}</td>
-                    <td class="text-right">{{$sale->qty}}</td>
-                    <td class="text-right">{{number_format($sale->price,2)}}</td>
-                    <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
-                    <td class="text-right">{{number_format($sale->discount_amount,2)}}</td>
-                    <td class="text-right">{{number_format(($sale->price*$sale->qty) - $sale->discount_amount,2)}}</td>
-                    <td>{{$sale->payment_method}}</td>
-                    <td>{{$sale->header->delivery_status}} @if($sale->cancellation_request == 1) | {{ $sale->cancellation_reason }} : {{ $sale->cancellation_remarks }} @else {{ optional($sale->header->deliveries->last())->remarks != '' ? ' | '. optional($sale->header->deliveries->last())->remarks : '' }} @endif</td>
-                </tr>
+                @if(isset($sale->header->user->id))
+                    <tr>
+                        <td>{{SettingHelper::datetimeFormat2($sale->header->created_at)}}</td>
+                        <td>{{$sale->order_number}}</td>
+                        <td>{{str_pad(($sale->header->user->id), 8, '0', STR_PAD_LEFT)}}</td>
+                        <td>{{$sale->header->user->fullname}}</td>
+                        <td>{{$sale->header->customer_delivery_adress}}</td>
+                        <td>{{$sale->product->name}}</td>
+                        <td>{{$sale->product->category->name}}</td>
+                        <td class="text-right">{{$sale->qty}}</td>
+                        <td class="text-right">{{number_format($sale->price,2)}}</td>
+                        <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
+                        <td class="text-right">{{number_format($sale->discount_amount,2)}}</td>
+                        <td class="text-right">{{number_format(($sale->price*$sale->qty) - $sale->discount_amount,2)}}</td>
+                        <td>{{$sale->payment_method}}</td>
+                        <td>{{$sale->header->delivery_status}} @if($sale->cancellation_request == 1) | {{ $sale->cancellation_reason }} : {{ $sale->cancellation_remarks }} @else {{ optional($sale->header->deliveries->last())->remarks != '' ? ' | '. optional($sale->header->deliveries->last())->remarks : '' }} @endif</td>
+                    </tr>
+                @endif
             @empty
                 <tr>
                     <td colspan="10">No sales transaction found.</td>
@@ -139,7 +141,29 @@
             @endforelse
         </tbody>
     </table>
+
+    <div class="row row-sm">
+
+        <div class="col-md-6">
+            <div class="mg-t-5">
+                @if ($sales->firstItem() == null)
+                    <p class="tx-gray-400 tx-12 d-inline">{{__('common.showing_zero_items')}}</p>
+                @else
+                    <p class="tx-gray-400 tx-12 d-inline">Showing {{ $sales->firstItem() }} to {{ $sales->lastItem() }} of {{ $sales->total() }} items</p>
+                @endif
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="text-md-right float-md-right mg-t-5">
+                <div>
+                    {{ $sales->links() }}
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
+
 @endsection
 
 @section('pagejs')
@@ -151,14 +175,12 @@
 @endsection
 
 @section('customjs')
-<script src="{{ asset('js/datatables/Buttons-1.6.1/js/buttons.colVis.min.js') }}"></script>
+{{-- <script src="{{ asset('js/datatables/Buttons-1.6.1/js/buttons.colVis.min.js') }}"></script>
 <script>
-
-
     $(document).ready(function() {
         $('#example').DataTable( {
-            dom: 'Bfrtip',
-            pageLength: 20,
+            dom: 'Bfrti',
+            pageLength: 1000,
             order: [[0,'desc']],
             buttons: [
             {
@@ -201,10 +223,17 @@
             columnDefs: [ {
 
                 visible: false
-            } ]
+            } ],
+            language: {
+                info: "", // Hides the "Show 1 to 100 entries" label
+                infoEmpty: "", // Hides the "Showing 0 to 0 of 0 entries" label
+                infoFiltered: "", // Hides the "(filtered from _MAX_ total entries)" label
+                lengthMenu: "Show _MENU_ entries" // Optionally customize or hide the entries dropdown label
+            }
         } );
     } );
-</script>
+</script> --}}
+
 @endsection
 
 

@@ -37,7 +37,7 @@ class ReportsController extends Controller
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
         }
         
-        $rs = $rs->groupBy('product_id')->get();
+        $rs = $rs->groupBy('product_id')->paginate(1000);
 
         return view('admin.ecommerce.reports.best-sellers',compact('rs', 'startDate', 'endDate'));
     }
@@ -78,7 +78,7 @@ class ReportsController extends Controller
             $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
         }
 
-        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
+        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->paginate(1000);
 
         return view('admin.ecommerce.reports.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'));
 
@@ -100,7 +100,7 @@ class ReportsController extends Controller
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
         }
         
-        $rs = $rs->groupBy('user_id')->get();
+        $rs = $rs->groupBy('user_id')->paginate(1000);
 
         return view('admin.ecommerce.reports.top-buyers',compact('rs', 'startDate', 'endDate'));
 
@@ -119,7 +119,7 @@ class ReportsController extends Controller
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
         }
         
-        $rs = $rs->groupBy('product_id')->get();
+        $rs = $rs->groupBy('product_id')->paginate(1000);
 
         return view('admin.ecommerce.reports.top-products',compact('rs', 'startDate', 'endDate'));
     }
@@ -337,7 +337,7 @@ class ReportsController extends Controller
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
         }
         
-        $rs = $rs->groupBy('product_id')->get();
+        $rs = $rs->groupBy('product_id')->paginate(1000);
 
         return view('admin.ecommerce.reports-mobile.best-sellers',compact('rs', 'startDate', 'endDate'));
 
@@ -378,7 +378,7 @@ class ReportsController extends Controller
             $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
         }
 
-        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->get();
+        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->paginate(1000);
 
         return view('admin.ecommerce.reports-mobile.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'));
 
@@ -400,7 +400,7 @@ class ReportsController extends Controller
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
         }
         
-        $rs = $rs->groupBy('user_id', 'customer_name')->get();
+        $rs = $rs->groupBy('user_id', 'customer_name')->paginate(1000);
 
         return view('admin.ecommerce.reports-mobile.top-buyers',compact('rs','startDate','endDate'));
     }
@@ -418,7 +418,7 @@ class ReportsController extends Controller
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
         }
         
-        $rs = $rs->groupBy('product_id')->get();
+        $rs = $rs->groupBy('product_id')->paginate(1000);
 
         return view('admin.ecommerce.reports-mobile.top-products',compact('rs','startDate','endDate'));
     }
