@@ -20,7 +20,13 @@ class SubscriberFrontController extends Controller
         $requestData['code'] = Subscriber::generate_unique_code();
 
         
-        $existing_subscriber = Subscriber::where('name', $requestData['name'])->where('email', $requestData['email'])->first();
+        // $existing_subscriber = Subscriber::where('name', $requestData['name'])->where('email', $requestData['email'])->first();
+        $existing_subscriber = Subscriber::where('email', $requestData['email'])->first();
+        // $existing_subscriber = Subscriber::where(function($query) use ($requestData) {
+        //     $query->where('name', $requestData['name'])
+        //           ->orWhere('email', $requestData['email']);
+        // })->first();
+        
         // dd($subscriber);
         
         if (empty($existing_subscriber)) {

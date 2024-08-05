@@ -53,6 +53,27 @@
         </tbody>
     </table>
     @endif
+    
+    <div class="row row-sm">
+
+        <div class="col-md-6">
+            <div class="mg-t-5">
+                @if ($rs->firstItem() == null)
+                    <p class="tx-gray-400 tx-12 d-inline">{{__('common.showing_zero_items')}}</p>
+                @else
+                    <p class="tx-gray-400 tx-12 d-inline">Showing {{ $rs->firstItem() }} to {{ $rs->lastItem() }} of {{ $rs->total() }} items</p>
+                @endif
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="text-md-right float-md-right mg-t-5">
+                <div>
+                    {{ $rs->links() }}
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 
@@ -62,7 +83,7 @@
 @endsection
 
 @section('customjs')
-<script src="{{ asset('js/datatables/Buttons-1.6.1/js/buttons.colVis.min.js') }}"></script>
+{{-- <script src="{{ asset('js/datatables/Buttons-1.6.1/js/buttons.colVis.min.js') }}"></script>
 <script>
 
 
@@ -109,7 +130,7 @@
             } ]
         } );
     } );
-</script>
+</script> --}}
 @endsection
 
 
