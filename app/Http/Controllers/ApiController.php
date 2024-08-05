@@ -28,6 +28,7 @@ use App\Models\APIModels\Cart;
 use App\Models\APIModels\Email;
 use App\Models\APIModels\Order;
 use App\Models\APIModels\Review;
+use App\Models\APIModels\Company;
 use App\Models\APIModels\EWallet;
 use App\Models\APIModels\Contact;
 use App\Models\APIModels\Library;
@@ -1926,8 +1927,7 @@ public function doPostCommentReview(Request $request){
 
 //BANNER ADS=====================================================================
 public function getHomeSliderBanner(Request $request){
-    
-    $Misc = new Misc();
+        
     $BannerAds = new BannerAds();
 
     $response = "Failed";
@@ -1947,8 +1947,7 @@ public function getHomeSliderBanner(Request $request){
 }
 
 public function getPopUpBanner(Request $request){
-    
-    $Misc = new Misc();
+        
     $BannerAds = new BannerAds();
 
     $response = "Failed";
@@ -2525,7 +2524,44 @@ public function validateCouponCode(Request $request){
 
   }
 
-//CITY LIST==================================================================
+//COMPANY INFO=====================================================================
+public function getCompanyFAQ(Request $request){
+    
+    $Company = new Company();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $result=$Company->getCompanyFAQ($data);  
+    
+      return response()->json([
+      'response' => 'Success',
+      'data' => $Info,
+      'message' => "Successfully get pop company faq.",
+    ]); 
+    
+}
+
+public function getCompanyAboutUs(Request $request){
+    
+    $Company = new Company();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $Info=$Company->getCompanyAboutUs($data);  
+
+    return response()->json([
+      'response' => 'Success',
+      'data' => $Info,
+      'message' => "Successfully get pop company about us.",
+    ]); 
+
+    // return response()->json($result); 
+    
+}
+
+ //CITY LIST==================================================================
  public function getCityList(Request $request){
 
   $City = new City();
