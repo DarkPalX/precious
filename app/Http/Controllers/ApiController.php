@@ -2517,7 +2517,7 @@ public function getCompanyAboutUs(Request $request){
     
     $data['Type']=$request->post('Type');
 
-    $Info=$Company->getCompanyAboutUs($data);
+    $data['Info']=$Company->getCompanyAboutUs($data);
 
      return View::make('api/about-us')->with($data);   
 
@@ -2539,7 +2539,7 @@ public function getCompanyFAQ(Request $request){
 
     $data['Type']=$request->post('Type');
 
-    $result=$Company->getCompanyFAQ($data);
+    $data['Info']=$Company->getCompanyFAQ($data);
 
      return View::make('api/epub_viewer')->with($data);   
     
