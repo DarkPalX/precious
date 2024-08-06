@@ -163,8 +163,7 @@ class Cart extends Model
     $TODAY = date("Y-m-d H:i:s");
     
     $CartID=0;
-    $Platform=$data['Platform'];
-
+    
     $UserID=$data['UserID'];
     $ProductID=$data['ProductID'];
     // $ProductQty=$data['ProductQty'];
