@@ -2517,15 +2517,16 @@ public function getCompanyAboutUs(Request $request){
     
     $data['Type']=$request->post('Type');
 
-    $Info=$Company->getCompanyAboutUs($data);  
+    $Info=$Company->getCompanyAboutUs($data);
 
-    return response()->json([
-      'response' => 'Success',
-      'data' => $Info,
-      'message' => "Successfully get pop company about us.",
-    ]); 
+     return View::make('api/about-us')->with($data);   
 
-    // return response()->json($result); 
+    // return response()->json([
+    //   'response' => 'Success',
+    //   'data' => $Info,
+    //   'message' => "Successfully get pop company about us.",
+    // ]); 
+
     
 }
 
@@ -2538,13 +2539,15 @@ public function getCompanyFAQ(Request $request){
 
     $data['Type']=$request->post('Type');
 
-    $result=$Company->getCompanyFAQ($data);  
+    $result=$Company->getCompanyFAQ($data);
+
+     return View::make('api/epub_viewer')->with($data);   
     
-      return response()->json([
-      'response' => 'Success',
-      'data' => $Info,
-      'message' => "Successfully get pop company faq.",
-    ]); 
+    // return response()->json([
+    //   'response' => 'Success',
+    //   'data' => $Info,
+    //   'message' => "Successfully get pop company faq.",
+    // ]); 
     
 }
 
