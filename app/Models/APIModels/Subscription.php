@@ -97,6 +97,8 @@ class Subscription extends Model
 
     $EndDateFormatted="";
 
+    $Platform=$data['Platform'];
+    
     $UserID=$data['UserID'];    
     $SubscriptionPlanID=$data['SubscriptionPlanID'];
 
