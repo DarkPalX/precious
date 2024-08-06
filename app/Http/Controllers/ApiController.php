@@ -2508,6 +2508,8 @@ public function validateCouponCode(Request $request){
 
 //COMPANY =====================================================================
 public function getCompanyAboutUs(Request $request){
+
+   dd("here");
     
     $Company = new Company();
 
