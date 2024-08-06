@@ -2524,24 +2524,7 @@ public function validateCouponCode(Request $request){
 
   }
 
-//COMPANY INFO=====================================================================
-public function getCompanyFAQ(Request $request){
-    
-    $Company = new Company();
-
-    $response = "Failed";
-    $responseMessage = "";
-
-    $result=$Company->getCompanyFAQ($data);  
-    
-      return response()->json([
-      'response' => 'Success',
-      'data' => $Info,
-      'message' => "Successfully get pop company faq.",
-    ]); 
-    
-}
-
+//COMPANY =====================================================================
 public function getCompanyAboutUs(Request $request){
     
     $Company = new Company();
@@ -2560,6 +2543,24 @@ public function getCompanyAboutUs(Request $request){
     // return response()->json($result); 
     
 }
+
+public function getCompanyFAQ(Request $request){
+    
+    $Company = new Company();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $result=$Company->getCompanyFAQ($data);  
+    
+      return response()->json([
+      'response' => 'Success',
+      'data' => $Info,
+      'message' => "Successfully get pop company faq.",
+    ]); 
+    
+}
+
 
  //CITY LIST==================================================================
  public function getCityList(Request $request){
