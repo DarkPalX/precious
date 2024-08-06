@@ -1377,6 +1377,7 @@ public function proceedToCheckOut(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
+
        
     $data['Platform'] = $request->post('Platform');   
 
@@ -1964,8 +1965,11 @@ public function proceedToSubscribe(Request $request){
     $Cart = new Cart();
     $Subscription = new Subscription();
     
+
     $response = "Failed";
     $responseMessage = "";
+
+    $data['Platform'] = $request->post('Platform'); 
 
     $data['UserID'] = $request->post('UserID');    
     $data['SubscriptionPlanID'] = $request->post('PlanID');
