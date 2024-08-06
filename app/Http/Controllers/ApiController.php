@@ -57,7 +57,7 @@ class ApiController extends Controller {
     $responseMessage = "";
     
     $data['UserID']=0;
-    $data['Platform'] = config('app.PLATFORM_ANDROID');
+ 
    
     $data['EmailAddress'] =  $request->post('EmailAddress');
     $data['Password'] =  $request->post('Password');
@@ -150,7 +150,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');    
+     
     
     $data['UserID']=0;
     $data['FirstName'] = $request->post('FirstName');
@@ -278,7 +278,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['EmailAddress'] = $request->post('EmailAddress');
 
     if(empty($data['EmailAddress'])){
@@ -322,7 +322,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
 
     $data['UserID'] = $request->post('UserID');
 
@@ -435,7 +435,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
 
     $data['UserID'] = $request->post('UserID');
     $data['VerficationCode'] = $request->post('VerficationCode');    
@@ -481,7 +481,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');  
+   
 
     $data['UserID'] = $request->post('UserID');
     $data['EmailAddress'] = $request->post('EmailAddress');
@@ -515,7 +515,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
 
     $data['UserID'] = $request->post('UserID');
     $data['CityName'] = $request->post('CityName');    
@@ -552,7 +552,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
 
     $data['EmailAddress'] = $request->post('EmailAddress');
     $data['CurrentPassword'] = $request->post('CurrentPassword');
@@ -618,7 +618,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID'] = $request->post('UserID');
                 
     $Info=$UserCustomer->getCustomerInformation($data);
@@ -648,7 +648,7 @@ class ApiController extends Controller {
  //    $response = "Failed";
  //    $responseMessage = "";
 
- //    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+ //    
  //    $data['CustomerID'] = $request->post('UserID');
                 
  //    $Info=$UserCustomer->getCustomerInformation($data);
@@ -684,7 +684,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');    
+     
     
     $data['UserID']=$request->post('UserID');
 
@@ -811,7 +811,7 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');    
+     
     
     $data['UserID']=$request->post('UserID');
     
@@ -872,7 +872,7 @@ public function getCustomerLibraryList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID']=$request->post('UserID');
 
     $data["SearchText"] = '';
@@ -897,7 +897,7 @@ public function checkCustomerLibraryBookExist(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
 
@@ -931,7 +931,7 @@ public function checkBookHasBookMark(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
 
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
@@ -967,7 +967,7 @@ public function checkCustomerLibraryDownloadBookExist(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
 
@@ -1000,7 +1000,7 @@ public function getSubscribedReadBooksList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID']=$request->post('UserID');    
 
     $data["SearchText"] = '';
@@ -1025,7 +1025,7 @@ public function saveBookMarks(Request $request){
 
     $IsFreeBook=0;
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+  
 
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
@@ -1051,7 +1051,7 @@ public function updateBookMarks(Request $request){
 
     $IsFreeBook=0;
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+  
 
     $data['UserID']=$request->input('UserID');
     $data['ProductID']=$request->input('ProductID');
@@ -1072,7 +1072,7 @@ public function saveReadSubscribedBooks(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID']=$request->post('UserID');   
     $data['ProductID']=$request->post('ProductID'); 
     $data['IsRead']=$request->post('IsRead');
@@ -1091,7 +1091,7 @@ public function getSubscribedDownloadedBooksList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID']=$request->post('UserID');    
     
     $result=$Library->getSubscribedDownloadedBooksList($data);  
@@ -1112,7 +1112,7 @@ public function saveDownloadedSubscribedBooks(Request $request){
     $IsFreeBook=0;
     $IsPremium=0;
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
     $data['IsSubscribed']=$request->post('IsSubscribed');
@@ -1174,7 +1174,7 @@ public function getCustomerFavoriteList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');       
+        
     $data['UserID']=$request->post('UserID');
 
     $data["SearchText"] = '';
@@ -1195,7 +1195,7 @@ public function addToFavorites(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
 
     $data['UserID'] = $request->post('UserID');
     $data['ProductID'] = $request->post('ProductID');
@@ -1242,7 +1242,7 @@ public function getCustomerCartList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     
     $data['UserID']=$request->post('UserID');
 
@@ -1266,7 +1266,7 @@ public function addToCart(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
 
     $data['UserID'] = $request->post('UserID');
     $data['ProductID'] = $request->post('ProductID');
@@ -1336,7 +1336,7 @@ public function removeToCart(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
 
     $data['UserID'] = $request->post('UserID');
     $data['ProductID'] = $request->post('ProductID');
@@ -1378,7 +1378,7 @@ public function proceedToCheckOut(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    // $data['Platform'] = config('app.PLATFORM_ANDROID');   
+       
     $data['Platform'] = $request->post('Platform');   
 
     $data['UserID'] = $request->post('UserID');    
@@ -1413,8 +1413,7 @@ public function getAllBookCategoryList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['Status'] = 'All';
   $data['SearchText'] = '';
 
@@ -1432,8 +1431,7 @@ public function getAllBookCategoryList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['Status'] = 'All';
   $data['SearchText'] = '';
 
@@ -1451,8 +1449,7 @@ public function getAllBookCategoryList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
 
   $data['Status'] = "All";
   $data['SearchText'] = $request->post('SearchText');
@@ -1476,8 +1473,7 @@ public function getAllBookCategoryList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['SearchText'] = '';
   $data['Status'] = 'Featured';
   
@@ -1496,8 +1492,7 @@ public function getAllBookCategoryList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['SearchText'] = '';
   $data['Status'] = 'Best Seller';
   
@@ -1516,8 +1511,7 @@ public function getAllBookCategoryList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['SearchText'] = '';
   $data['Status'] = 'New Release';
   
@@ -1536,8 +1530,7 @@ public function getAllBookCategoryList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['SearchText'] = '';
   $data['Status'] = 'Premium';
   
@@ -1556,8 +1549,7 @@ public function getAllBookCategoryList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['SearchText'] = '';
   $data['Status'] = 'Free';
   
@@ -1577,8 +1569,7 @@ public function getAllBookHeaderCatalogueList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['Status'] = 'All';
   $data['SearchText'] = '';
 
@@ -1596,8 +1587,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID');   
+   
   $data['HeaderID'] = $request->post('HeaderID');
 
   $data['Status'] = 'All';
@@ -1619,8 +1609,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['UserID'] = $request->post('UserID');
 
   $data['Status'] = '';
@@ -1640,8 +1629,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['OrderID'] = $request->post('OrderID');
 
   $data['Status'] = '';
@@ -1686,8 +1674,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['UserID'] = $request->post('UserID');
                   
   $data['Status']='';
@@ -1735,8 +1722,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['OrderID'] = $request->post('OrderID');
 
   $data['Status'] = '';
@@ -1760,7 +1746,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');    
+     
         
     $data['Purpose'] = $request->post('Purpose');
     $data['UserID'] = $request->post('UserID');
@@ -1880,7 +1866,7 @@ public function getBookReview(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['ProductID']=$request->post('ProductID');
 
     $data["SearchText"] = '';
@@ -1901,7 +1887,7 @@ public function doPostCommentReview(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');    
+     
         
     $data['UserID'] = $request->post('UserID');
     $data['ProductID'] = $request->post('ProductID');
@@ -1933,7 +1919,7 @@ public function getHomeSliderBanner(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['Type']=$request->post('Type');
 
     $data["SearchText"] = '';
@@ -1953,7 +1939,7 @@ public function getPopUpBanner(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['Type']=$request->post('Type');
 
     $data["SearchText"] = '';
@@ -1983,7 +1969,7 @@ public function proceedToSubscribe(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
 
     $data['UserID'] = $request->post('UserID');    
     $data['SubscriptionPlanID'] = $request->post('PlanID');
@@ -2016,7 +2002,7 @@ public function getSubscriptionPlanList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     
     $data["SearchText"] = '';
     $data["Status"] = '';
@@ -2037,7 +2023,7 @@ public function cancelSubscriptionPlan(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');    
+     
         
     $data['UserID'] = $request->post('UserID');
     $data['FullName'] = $request->post('FullName');
@@ -2101,7 +2087,7 @@ public function extendSubscriptionPlan(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID'] = $request->post('UserID'); 
 
     $data["SearchText"] = '';
@@ -2127,7 +2113,7 @@ public function checkSubscriptionStatus(Request $request){
     $has_subscription=false;
     $SubscriptionPlanID=0;
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID'] = $request->post('UserID'); 
 
     $SubscriptionPlanID=$Subscription->checkCustomerSubscriptionIfExist($data['UserID']);  
@@ -2171,7 +2157,7 @@ public function checkSubscriberStatus(Request $request){
 
     $getEmailAddress="";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['UserID'] = $request->post('UserID');  
 
     $info=$UserCustomer->getCustomerInformation($data);
@@ -2209,7 +2195,7 @@ public function getAvailableCouponList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     
     $data["SearchText"] = '';
     $data['UserID']=$request->post('UserID');
@@ -2281,7 +2267,7 @@ public function validateCouponCode(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Platform'] = config('app.PLATFORM_ANDROID');   
+    
     $data['VoucherCode']=$request->post('VoucherCode');
     $data['UserID']=$request->post('UserID');
 
@@ -2434,8 +2420,7 @@ public function validateCouponCode(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['UserID'] = $request->post('UserID');
 
   $data['Status'] = '';
@@ -2457,8 +2442,7 @@ public function validateCouponCode(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['UserID'] = $request->post('UserID');
 
   $data['Status'] = '';
@@ -2479,8 +2463,7 @@ public function validateCouponCode(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['MessageID'] = $request->post('MessageID');
 
   $data['Status'] = '';
@@ -2505,8 +2488,7 @@ public function validateCouponCode(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $data['MessageID'] = $request->post('MessageID');
 
   $data['Status'] = '';
@@ -2532,6 +2514,9 @@ public function getCompanyAboutUs(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
+    
+    $data['Type']=$request->post('Type');
+
     $Info=$Company->getCompanyAboutUs($data);  
 
     return response()->json([
@@ -2551,6 +2536,8 @@ public function getCompanyFAQ(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
+    $data['Type']=$request->post('Type');
+
     $result=$Company->getCompanyFAQ($data);  
     
       return response()->json([
@@ -2569,8 +2556,7 @@ public function getCompanyFAQ(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
-
-  $data['Platform'] = config('app.PLATFORM_ANDROID'); 
+ 
   $result=$City->getNewCityList();  
   return response()->json($result); 
   }
