@@ -2538,7 +2538,7 @@ public function getCompanyFAQ(Request $request){
     $data['Type']=$request->post('Type');
 
     $data['Info']=$Company->getCompanyFAQ($data);
-    return View::make('api/epub_viewer')->with($data);   
+    return View::make('api/faqs')->with($data);   
     
     // return response()->json([
     //   'response' => 'Success',
