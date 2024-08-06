@@ -2509,20 +2509,15 @@ public function validateCouponCode(Request $request){
 //COMPANY =====================================================================
 public function getCompanyAboutUs(Request $request){
 
-   dd("here");
-    
     $Company = new Company();
 
     $response = "Failed";
     $responseMessage = "";
 
-    
     $data['Type']=$request->post('Type');
 
     $data['Info']=$Company->getCompanyAboutUs($data);
-    dd($data['Info']);
-
-     //return View::make('api/about-us')->with($data);   
+     return View::make('api/about-us')->with($data);   
 
     // return response()->json([
     //   'response' => 'Success',
@@ -2543,8 +2538,7 @@ public function getCompanyFAQ(Request $request){
     $data['Type']=$request->post('Type');
 
     $data['Info']=$Company->getCompanyFAQ($data);
-
-     return View::make('api/epub_viewer')->with($data);   
+    return View::make('api/epub_viewer')->with($data);   
     
     // return response()->json([
     //   'response' => 'Success',
@@ -2553,7 +2547,6 @@ public function getCompanyFAQ(Request $request){
     // ]); 
     
 }
-
 
  //CITY LIST==================================================================
  public function getCityList(Request $request){
