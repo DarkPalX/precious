@@ -371,14 +371,14 @@ Route::post('/delete-message-notification',[
 ]);
 
 //COMPANY INFO===========================================================================
-Route::post('/get-company-faq',[
-   'uses'=>'App\Http\Controllers\ApiController@getCompanyFAQ',
-   'as'=> 'get-company-faq'
-]);
-
 Route::post('/get-company-about-us',[
    'uses'=>'App\Http\Controllers\ApiController@getCompanyAboutUs',
    'as'=> 'get-company-about-us'
+]);
+
+Route::post('/get-company-faq',[
+   'uses'=>'App\Http\Controllers\ApiController@getCompanyFAQ',
+   'as'=> 'get-company-faq'
 ]);
 
 //UPLOAD IMAGE PAYMENT====================================================================
