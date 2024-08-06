@@ -20,26 +20,6 @@ use App\Models\APIModels\Misc;
 
 class Company extends Model
 {
-  
-  public function getCompanyFAQ($data){
-
-     $query = DB::table('pages as pg')
-         
-       ->selectraw("
-          pg.id as Page_ID,
-          COALESCE(pg.contents,'') as content                        
-        ");    
-       
-       $query->where("pg.status","=",'PUBLISHED');  
-       $query->where("pg.label","=",'FAQs');           
-       $query->where("pg.deleted_at","=",null);  
-
-         
-      $list = $query->first();
-                             
-     return $list;    
-    
-  }
 
   public function getCompanyAboutUs(){
 
@@ -47,19 +27,37 @@ class Company extends Model
      
        ->selectraw("
           pg.id as Page_ID,
-          COALESCE(pg.contents,'') as content                        
+          COALESCE(pg.contents,'') as about_us                        
         ");
 
        $query->where("pg.status","=",'PUBLISHED');  
        $query->where("pg.label","=",'About Us');           
        $query->where("pg.deleted_at","=",null);    
       
-    $list = $query->first();
-                             
-     return $list;  
+    $list = $query->first();                          
+   return $list;  
 
     
   }
+
+  public function getCompanyFAQ($data){
+
+     $query = DB::table('pages as pg')
+         
+       ->selectraw("
+          pg.id as Page_ID,
+          COALESCE(pg.contents,'') as faq                        
+        ");    
+       
+       $query->where("pg.status","=",'PUBLISHED');  
+       $query->where("pg.label","=",'FAQs');           
+       $query->where("pg.deleted_at","=",null);  
+     
+    $list = $query->first();                           
+     return $list;    
+    
+  }
+
 
 
 }
