@@ -2518,8 +2518,9 @@ public function getCompanyAboutUs(Request $request){
     $data['Type']=$request->post('Type');
 
     $data['Info']=$Company->getCompanyAboutUs($data);
+    dd($data['Info']);
 
-     return View::make('api/about-us')->with($data);   
+     //return View::make('api/about-us')->with($data);   
 
     // return response()->json([
     //   'response' => 'Success',
