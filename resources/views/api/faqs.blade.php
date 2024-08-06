@@ -4,6 +4,6 @@
         @php($Content = $Info->faq)   
   @endif
 
-  <div style="font-family: 'Poppins', sans-serif !important;color: #555;line-height: 1.5;font-size: 25px;padding:10px;"> 
+  <div style="font-family: 'Poppins', sans-serif !important;color: #555;line-height: 1.5;font-size: 27px;padding:10px;"> 
            {!! $Content !!}   
   </div>
