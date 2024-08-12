@@ -19,7 +19,7 @@ class QrCodeController extends Controller
         \Log::info('Generating QR code for URL: ' . $file_url);
 
         // Generate the QR code as an SVG
-        $qrCode = QrCode::size(300)->generate(env('APP_URL') . '/storage/' . $file_url);
+        $qrCode = QrCode::size(300)->generate(env('APP_URL') . '/public/' . $file_url);
 
         // Pass the QR code to the view
         return view('admin.ecommerce.products.file-qr', compact('qrCode'));
