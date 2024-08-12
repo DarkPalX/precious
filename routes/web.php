@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SocialiteController;
 
 // CMS Controllers
-use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController, FacebookDataDeletionController, GoogleDataDeletionController, FacebookController};
+use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController, FacebookDataDeletionController, GoogleDataDeletionController, FacebookController, QrCodeController};
 
 use App\Http\Controllers\Cms4Controllers\{
     ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, MobileAlbumController, PageController, MenuController, FileManagerController
@@ -394,7 +394,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/product-download-template',[ProductController::class, 'download_template'])->name('product.download.template');
                 Route::post('/product-upload-template',[ProductController::class, 'upload_template'])->name('product.upload.template');
 
-
+                Route::get('/generate-qr-code/{file_url}',[QrCodeController::class, 'generate'])->name('generate.file.qr');
 
             //
 
