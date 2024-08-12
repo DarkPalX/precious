@@ -3,12 +3,9 @@
 @section('pagecss')
     <link href="{{ asset('lib/ion-rangeslider/css/ion.rangeSlider.min.css') }}" rel="stylesheet">
     <style>
-        .row-selected {
-            background-color: #92b7da !important;
-        }
-
         .qr-code-container {
             display: flex;
+            flex-direction: column; /* Ensure content is stacked vertically */
             justify-content: center;
             align-items: center;
             height: 100vh; /* Full height of the viewport */
@@ -17,13 +14,25 @@
         .qr-code {
             max-width: 100%; /* Ensure the QR code is responsive */
         }
+
+        .product-name {
+            margin-bottom: 20px; /* Space between name and QR code */
+            text-align: center; /* Center align the text */
+        }
     </style>
 @endsection
 
 @section('content')
-    <div class="container pd-x-0 qr-code-container">
+    <div class="qr-code-container">
+        <!-- Display the product name and description -->
+        <div class="product-name">
+            <h1>{{ $product->name }}</h1>
+        </div>
+        
         <!-- Display the QR code -->
-        {!! $qrCode !!}
+        <div class="qr-code">
+            {!! $qrCode !!}
+        </div>
     </div>
 @endsection
 
