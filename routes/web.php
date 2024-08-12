@@ -129,6 +129,9 @@ Route::get('/phpinfo', function () {
     Route::get('/search-products', [ProductFrontController::class, 'search_product'])->name('search-product');
     Route::get('/search-contents', [ProductFrontController::class, 'search_content'])->name('search-content');
 
+    Route::get('/generate-book-qr-code', [QrCodeController::class, 'generate_product_qr'])->name('generate.product.qr');
+    Route::get('/book/series', [QrCodeController::class, 'product_series'])->name('product.series');
+
 
 
     // ECOMMERCE CUSTOMER AUTH ROUTES
@@ -394,7 +397,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/product-download-template',[ProductController::class, 'download_template'])->name('product.download.template');
                 Route::post('/product-upload-template',[ProductController::class, 'upload_template'])->name('product.upload.template');
 
-                Route::get('/generate-file-qr-code', [QrCodeController::class, 'generate'])->name('generate.file.qr');
+                Route::get('/generate-file-qr-code', [QrCodeController::class, 'generate_file_qr'])->name('generate.file.qr');
 
             //
 
