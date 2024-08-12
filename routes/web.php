@@ -394,7 +394,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/product-download-template',[ProductController::class, 'download_template'])->name('product.download.template');
                 Route::post('/product-upload-template',[ProductController::class, 'upload_template'])->name('product.upload.template');
 
-                Route::get('/generate-qr-code/{file_url}',[QrCodeController::class, 'generate'])->name('generate.file.qr');
+                Route::get('/generate-file-qr-code', [QrCodeController::class, 'generate'])->name('generate.file.qr');
 
             //
 
