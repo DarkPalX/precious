@@ -1741,8 +1741,6 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
-
-     
         
     $data['Purpose'] = $request->post('Purpose');
     $data['UserID'] = $request->post('UserID');
