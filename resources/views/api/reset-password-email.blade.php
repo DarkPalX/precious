@@ -74,8 +74,10 @@
             <tbody>
             <tr> 
             <td  style="padding-top:40px;padding-bottom:0px;padding-left:50px;padding-right:50px;font-family:sans-serif;font-size:12px;line-height:20px;color:#232323;text-align:left;font-weight:normal">
-               Dear <b> Guest </b>,
+
+               Dear <b> Customer </b>,
               <br><br>
+
                   Due to the encryption method used by our system, we issued a new and temporary password for you. 
                   Please change your password after logging in to your account and delete this email immediately.<br><br>
 
