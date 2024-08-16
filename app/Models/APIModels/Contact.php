@@ -25,6 +25,7 @@ class Contact extends Model{
 
     $Misc  = New Misc();
     $TODAY = date("Y-m-d H:i:s");
+    
 
     $UserID=$data['UserID'];
     $Subject=$data['Purpose'];
