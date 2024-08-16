@@ -150,8 +150,6 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-     
-    
     $data['UserID']=0;
     $data['FirstName'] = $request->post('FirstName');
     $data['LastName'] = $request->post('LastName');
@@ -685,7 +683,6 @@ class ApiController extends Controller {
     $responseMessage = "";
 
      
-    
     $data['UserID']=$request->post('UserID');
 
     $data['FirstName'] = $request->post('FirstName'); 
@@ -1337,7 +1334,6 @@ public function removeToCart(Request $request){
     $responseMessage = "";
 
     
-
     $data['UserID'] = $request->post('UserID');
     $data['ProductID'] = $request->post('ProductID');
     
