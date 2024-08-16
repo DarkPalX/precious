@@ -162,9 +162,7 @@ class UserCustomer extends Model
   }
 
   public function doForgotPassword($data){
-    
-    $Platform = $data['Platform'];
-
+        
     $usersID=0;
     $EmailAddress = $data['EmailAddress'];
 
@@ -204,8 +202,7 @@ class UserCustomer extends Model
 
   public function doChangePassword($data){
     
-    $Platform = $data['Platform'];
-
+    
     $UserID=0;
     $EmailAddress = $data['EmailAddress'];
 
@@ -244,9 +241,8 @@ class UserCustomer extends Model
   }
 
   public function doUserChangePassword($data){
-    
-    $Platform = $data['Platform'];
-    
+        
+
     $UserID = $data['UserID'];
     $NewPassword = $data['NewPassword'];
       
@@ -410,8 +406,7 @@ class UserCustomer extends Model
     $TODAY = date("Y-m-d H:i:s");
 
     $UserID=$data['UserID'];
-    $Platform=$data['Platform'];
-
+    
     $FirstName=$data['FirstName'];
     $LastName=$data['LastName'];
     $FullName=$data['FullName'];
@@ -632,8 +627,7 @@ class UserCustomer extends Model
     $Misc  = New Misc();
     $TODAY = date("Y-m-d H:i:s");
 
-    $Platform=$data['Platform'];
-
+    
     $UserID=$data['UserID'];
     
     $FirstName=$data['FirstName'];
