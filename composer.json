@@ -16,6 +16,7 @@
         "laravel/socialite": "^5.14",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-sluggable": "^3.5",
         "tarkhov/guzzle-xml": "^1.0",
         "unisharp/laravel-filemanager": "~1.8",

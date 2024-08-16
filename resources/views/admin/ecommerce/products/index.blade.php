@@ -62,6 +62,10 @@
                                         </div>
                                     </th>
                                     <td>
+                                        @if(!empty($product->file_url))
+                                            <a href="{{ route('generate.file.qr', ['product_id' => urlencode($product->id)]) }}" target="_blank" title="Generate QR Code"><i class="fa fa-qrcode mr-2"></i></a>
+                                            {{-- <a href="{{ route('generate.file.qr', ['file_url' => urlencode($product->file_url)]) }}" target="_blank" title="Generate QR Code"><i class="fa fa-qrcode mr-2"></i></a> --}}
+                                        @endif
                                         <strong @if($product->trashed()) style="text-decoration:line-through;" @endif> {{ $product->name }}</strong><br>
                                         <span class="badge badge-success" {{ !$product->is_bundle  ? 'hidden' : '' }}>Bundle</span>
                                         <span class="badge badge-primary" {{ !$product->is_free  ? 'hidden' : '' }}>Free</span>

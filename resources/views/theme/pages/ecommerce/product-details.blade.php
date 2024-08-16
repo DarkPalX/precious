@@ -70,7 +70,13 @@
 
                 <div class="col-md-6 product-desc pt-0">
                     <div class="badge bg-success p-2" {{ $product->is_preorder ? '' : 'hidden' }}>Pre Order</div>
-                    <h3 class="mb-2">{{$product->name}}</h3>
+                    <h3 class="mb-2">
+                        @if(!empty($product->file_url))
+                            <a href="{{ route('generate.product.qr', ['product_id' => urlencode($product->id)]) }}" target="_blank" title="Generate QR Code"><i class="fa fa-qrcode mr-2"></i></a>
+                            {{-- <a href="{{ route('generate.file.qr', ['file_url' => urlencode($product->file_url)]) }}" target="_blank" title="Generate QR Code"><i class="fa fa-qrcode mr-2"></i></a> --}}
+                        @endif
+                        {{$product->name}}
+                    </h3>
                     <h4>by: {{ $product->author ?? 'Anonymous' }}</h4>
                     
                     <div class="article-meta">                                  

@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SocialiteController;
 
 // CMS Controllers
-use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController, FacebookDataDeletionController, GoogleDataDeletionController, FacebookController};
+use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController, FacebookDataDeletionController, GoogleDataDeletionController, FacebookController, QrCodeController};
 
 use App\Http\Controllers\Cms4Controllers\{
     ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, MobileAlbumController, PageController, MenuController, FileManagerController
@@ -128,6 +128,9 @@ Route::get('/phpinfo', function () {
     // Route::get('/ebook-details/{slug}', [ProductFrontController::class, 'ebook_details'])->name('ebook.details');
     Route::get('/search-products', [ProductFrontController::class, 'search_product'])->name('search-product');
     Route::get('/search-contents', [ProductFrontController::class, 'search_content'])->name('search-content');
+
+    Route::get('/generate-book-qr-code', [QrCodeController::class, 'generate_product_qr'])->name('generate.product.qr');
+    Route::get('/book/series', [QrCodeController::class, 'product_series'])->name('product.series');
 
 
 
@@ -394,7 +397,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/product-download-template',[ProductController::class, 'download_template'])->name('product.download.template');
                 Route::post('/product-upload-template',[ProductController::class, 'upload_template'])->name('product.upload.template');
 
-
+                Route::get('/generate-file-qr-code', [QrCodeController::class, 'generate_file_qr'])->name('generate.file.qr');
 
             //
 
