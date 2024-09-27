@@ -281,7 +281,7 @@ return [
     'CompanyName' => 'PRECIOUS PAGES CORP',
     'CompanyEmail'=>'info@preciouspages.com.ph',
     'CompanySupportEmail'=>'',
-    'CompanyNoReplyEmail'=>'no-reply@beta.ebooklat.phr.com.ph',
+    'CompanyNoReplyEmail'=>'no-reply@preciouspagesbookstore.com.ph',
     'CompanyMobileNo' => '0922 868 4362',
     'CompanyTelephoneNo' => '8518-7610',
     'CompanyAddress' => '16 JRich Building, Santo Domingo Avenue, corner Pasig City',
