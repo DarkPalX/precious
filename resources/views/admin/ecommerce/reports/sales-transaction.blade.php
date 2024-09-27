@@ -123,8 +123,8 @@
                         <td>{{str_pad(($sale->header->user->id), 8, '0', STR_PAD_LEFT)}}</td>
                         <td>{{$sale->header->user->fullname}}</td>
                         <td>{{$sale->header->customer_delivery_adress}}</td>
-                        <td>{{$sale->product->name}}</td>
-                        <td>{{$sale->product->category->name}}</td>
+                        <td>{{$sale->product_name}}</td>
+                        <td>{{$sale->product_category}}</td>
                         <td class="text-right">{{$sale->qty}}</td>
                         <td class="text-right">{{number_format($sale->price,2)}}</td>
                         <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
