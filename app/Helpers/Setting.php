@@ -42,6 +42,20 @@ class Setting {
         }
     }
 
+    public static function getTopBar()
+    {
+        $top_bar = DB::table('pages')->where('slug', 'top-bar')->where('name', 'Top Bar')->first();
+
+        return $top_bar;
+    }
+
+    public static function getAds()
+    {
+        $ads = DB::table('pages')->where('slug', 'ads')->where('name', 'Ads')->first();
+
+        return $ads;
+    }
+
     public static function getFooter()
     {
         $footer = DB::table('pages')->where('slug', 'footer')->where('name', 'footer')->first();

@@ -94,7 +94,7 @@
 		
 		<!-- Top Bar
 		============================================= -->
-		@include('theme.layouts.components.top-bar')
+		@include('theme.layouts.top-bar')
 		
 		<!-- Header
 		============================================= -->
@@ -134,32 +134,11 @@
 				@endif
 			@endif
 			{{-- END BANNER ADS --}}
+		
+			<!-- CONTENT ADS
+			============================================= -->
+			@include('theme.layouts.content-ads')
 
-			<div class="section my-0 pb-0" style="background:#f9f9f9 url('{{ asset('theme/images/misc/dots-1.png')}}') 100% 0 no-repeat;">
-                <div class="container">
-                    <div class="row align-items-center justify-content-between">
-
-                        <div class="col-lg-5 col-md-5 col-sm-6">
-                            <div class="heading-block border-bottom-0">
-                                <h2 class="fw-normal ls0 nott mb-0 font-primary" style="font-size: 44px; line-height: 1.3">Available for your smartphone.</h2>
-                            </div>
-                            <p>Progressively strategize just in time scenarios and compelling results. Intrinsicly parallel task extensive systems whereas distinctive catalysts for scenarios and compelling results change.</p>
-                            <div>
-                                <a href="#"><img src="{{ asset('theme/images/misc/appstore.png') }}" alt="Image" height="54" class="mt-3"></a>
-                                <a href="#"><img src="{{ asset('theme/images/misc/googleplay.png') }}" alt="Image"  class="ms-xl-3 ms-lg-1 mt-3 ms-0 " height="54"></a>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-7 col-sm-6 mt-5 mt-sm-0">
-                            <div class="d-none d-lg-flex">
-                                <img src="{{ asset('theme/images/misc/app.png') }}" class="fast" alt="Image" style="height: 600px" data-animate="fadeInUp">
-                            </div>
-                            <img src="{{ asset('theme/images/misc/iphone.png') }}" alt="Image" class="d-block d-lg-none px-5 px-sm-0 p-md-5">
-                        </div>
-
-                    </div>
-                </div>
-            </div>
 		</section><!-- #content end -->
 
 		<form id="logout-form" action="{{ route('account.logout') }}" method="get" style="display: none;">
