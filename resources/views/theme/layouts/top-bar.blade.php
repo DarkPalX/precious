@@ -1,5 +1,7 @@
 @php
     $contents = Setting::getTopBar()->contents;
+    $styles = Setting::getTopBar()->styles;
+
 
     // $socmed = \App\Models\MediaAccounts::all();
 
@@ -21,5 +23,9 @@
 
     // $topBarContents = str_replace($keywords,$variables,$contents);
 @endphp
+
+<style>
+    {!! $styles !!}
+</style>
 
 {!! $contents !!}
