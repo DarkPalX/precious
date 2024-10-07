@@ -548,7 +548,7 @@ class Subscription extends Model
            $MessageNotificationID = DB::table('message_notification')
               ->insertGetId([                                            
                 'user_id' => $UserID,                                                         
-                'message_notification' => 'Your '.$TitlePlan. " has successfully cancelled & will end today ".$CurrentDayFormatted. ".",
+                'message_notification' => 'Your subscription '.$TitlePlan. " has successfully cancelled & will end today ".$CurrentDayFormatted. ".",
                 'created_at' => $TODAY             
             ]);  
                 
