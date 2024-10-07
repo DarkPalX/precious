@@ -692,7 +692,7 @@ class UserCustomer extends Model
            $MessageNotificationID = DB::table('message_notification')
                 ->insertGetId([                                            
                   'user_id' => $UserID,                                                         
-                  'message_notification' => 'You have successfully updated your profile information.",
+                  'message_notification' => 'You have successfully updated your profile information.',
                   'created_at' => $TODAY             
               ]);  
            
