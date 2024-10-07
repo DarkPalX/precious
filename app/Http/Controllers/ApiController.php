@@ -319,12 +319,9 @@ class ApiController extends Controller {
 
     $response = "Failed";
     $responseMessage = "";
-
-    
-
+  
     $data['UserID'] = $request->post('UserID');
-
-    // $data['UserID'] = 51;
+    
     $data['OldPassword'] = $request->post('OldPassword');
     $data['NewPassword'] = $request->post('NewPassword');
     $data['ConfirmNewPassword'] = $request->post('ConfirmNewPassword');
@@ -2017,8 +2014,7 @@ public function cancelSubscriptionPlan(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-     
-        
+             
     $data['UserID'] = $request->post('UserID');
     $data['FullName'] = $request->post('FullName');
     $data['EmailAddress'] = $request->post('EmailAddress');      
