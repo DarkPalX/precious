@@ -242,7 +242,7 @@ class UserCustomer extends Model
 
   public function doUserChangePassword($data){
         
-
+    $TODAY = date("Y-m-d H:i:s");
     $UserID = $data['UserID'];
     $NewPassword = $data['NewPassword'];
       
@@ -250,11 +250,20 @@ class UserCustomer extends Model
      $NewPassword=bcrypt($NewPassword);
   
     if($UserID>0){
+
         DB::table('users')
           ->whereRaw('id = ?',[$UserID])
           ->update([
             'password' => $NewPassword
       ]);
+
+            //send cancel notif 
+           $MessageNotificationID = DB::table('message_notification')
+              ->insertGetId([                                            
+                'user_id' => $UserID,                                                         
+                'message_notification' => 'You have successfully changed your new password.',
+                'created_at' => $TODAY             
+            ]); 
                  
     } else{
       return 'Failed';
