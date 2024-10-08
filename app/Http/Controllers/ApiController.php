@@ -481,7 +481,7 @@ class ApiController extends Controller {
     $data['UserID'] = $request->post('UserID');
     $data['EmailAddress'] = $request->post('EmailAddress');
 
-    $response=$UserCustomer->doResendVerificationCode($data); 
+    $response=$UserCustomer->reSendVerificationCodeEmail($data); 
     
     if($response=='Success'){   
        
