@@ -133,10 +133,10 @@
 
             <br>
 
-             <div>
-             <a target="_blanlk" href="#">Privacy Policy </a> | 
-             <a target="_blanlk" href="#">Terms & Condition </a> | 
-              <a target="_blanlk" href="#">Unsubscribe </a> 
+           <div>
+             <a target="_blanlk" href="https://preciouspagesbookstore.com.ph/privacy-policy">Privacy Policy </a> | 
+             <a target="_blanlk" href="https://preciouspagesbookstore.com.ph/terms-of-use-agreement">Terms & Condition </a> | 
+              <a target="_blanlk" href="javascript:void(0);">Unsubscribe </a> 
             </div> 
 
             </td> 
