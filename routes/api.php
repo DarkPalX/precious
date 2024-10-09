@@ -104,7 +104,7 @@ Route::post('/upload-photo',[
 Route::post('/subscribe-news-letter',[
    'uses'=>'App\Http\Controllers\ApiController@SubscribedToNewsLetter',
    'as'=> 'subscribe-news-letter'
-])
+]);
 
 //BOOK LIST =========================================================================
 Route::post('/get-all-book-category-list',[
