@@ -119,9 +119,10 @@ class Subscription extends Model
     
     if($UserID>0){
 
-
        $customer_info=$UserCustomer->getCustomerInformation($data);          
+
        if(isset($customer_info)>0){
+
           $CustomerName=$customer_info->fullname;
           $CustomerEmailAddress=$customer_info->emailaddress;
           $CustomerMobileNo=$customer_info->mobile;
@@ -138,6 +139,7 @@ class Subscription extends Model
      $plan_info=$this->getSubscriptionPlanInfo($SubscriptionPlanID);
 
        if(isset($plan_info)>0){
+
           $TitlePlan=$plan_info->title;                   
           $PlanNoDays=$plan_info->no_days;  
           $EndDate = date('Y-m-d H:i:s', strtotime("+".$PlanNoDays." day"));          
@@ -145,12 +147,12 @@ class Subscription extends Model
        } 
      
 
-    //Check if existing from Subscription
+      //Check if existing from Subscription
       $checkCustomerSubscriptionPlanIDExist=0;
       $checkCustomerSubscriptionPlanIDExist=$this->checkCustomerSubscriptionIfExist($UserID);
 
       if($checkCustomerSubscriptionPlanIDExist<=0){
-          // save subscription
+          // SAVE NEW SUBSCRIPTION
          $User_Subscription_ID = DB::table('users_subscriptions')
             ->insertGetId([                                            
               'user_id' => $UserID,                                                                          
@@ -175,6 +177,8 @@ class Subscription extends Model
 
       }else{
            
+           // UPDATE AND EXTEND OLD SUBSCRIPTION
+
            $User_Subscription_ID=$checkCustomerSubscriptionPlanIDExist;
 
            $OldExpirationDate='';
@@ -187,10 +191,8 @@ class Subscription extends Model
            if(isset($info)>0){
                 $StartDate=$info->start_date;
                 $EndDate=$info->end_date;
-
-                // $OldExpirationDate=$info->end_date;
+                
                 $OldNoOfDays=$info->no_days;
-
                 $NewNoOfDays=$PlanNoDays+$OldNoOfDays;
 
                 $DatePlanNoDaysExtended=$PlanNoDays." days";
@@ -223,8 +225,8 @@ class Subscription extends Model
                 ]); 
 
 
-                //Send Notification Message
-               $MessageNotificationID = DB::table('message_notification')
+                //SEND EXTENDED NOTIF
+                $MessageNotificationID = DB::table('message_notification')
                     ->insertGetId([                                            
                       'user_id' => $UserID,                                                         
                       'message_notification' => 'You have successfully extended your current plan to a '.$PlanNoDays.' days subscription & will expired on '.$NewExpiryEndDateFormatted, 
@@ -233,33 +235,33 @@ class Subscription extends Model
 
       }
      
-          //save to sales header
-          $OrderNo=$Misc->getNextOrderNumberFormat();      
-          $SalesHeaderID = DB::table('ecommerce_sales_headers')
-              ->insertGetId([                                            
-                'user_id' => $UserID,              
-                'order_number' => $OrderNo,                                            
-                'order_source' => $Platform,                                            
-                'customer_name' => $CustomerName, 
-                'customer_email' => $CustomerEmailAddress, 
-                'customer_contact_number' => $CustomerMobileNo, 
-                'customer_address' => $CompleteAddress, 
-                'customer_delivery_adress' => $CompleteDeliveryAddress, 
-                'customer_delivery_zip' => $ZipCode,                           
-                'gross_amount' => $GrossAmount, 
-                'net_amount' => $NetAmount, 
-                'discount_amount' => 0, 
-                'gross_amount' => $GrossAmount, 
-                'payment_method' => $PaymentMethod,
-                'payment_status' => $PaymentStatus, 
-                'ecredit_amount' => $UsedECredit, 
-                'delivery_type' => 'd2d', 
-                'delivery_status' => 'Delivered', 
-                'delivery_fee_amount' => 0, 
-                'delivery_fee_discount' => 0, 
-                'status' => 'Active', 
-                'created_at' => $TODAY             
-              ]);
+      //save to sales header
+      $OrderNo=$Misc->getNextOrderNumberFormat();      
+      $SalesHeaderID = DB::table('ecommerce_sales_headers')
+          ->insertGetId([                                            
+            'user_id' => $UserID,              
+            'order_number' => $OrderNo,                                            
+            'order_source' => $Platform,                                            
+            'customer_name' => $CustomerName, 
+            'customer_email' => $CustomerEmailAddress, 
+            'customer_contact_number' => $CustomerMobileNo, 
+            'customer_address' => $CompleteAddress, 
+            'customer_delivery_adress' => $CompleteDeliveryAddress, 
+            'customer_delivery_zip' => $ZipCode,                           
+            'gross_amount' => $GrossAmount, 
+            'net_amount' => $NetAmount, 
+            'discount_amount' => 0, 
+            'gross_amount' => $GrossAmount, 
+            'payment_method' => $PaymentMethod,
+            'payment_status' => $PaymentStatus, 
+            'ecredit_amount' => $UsedECredit, 
+            'delivery_type' => 'd2d', 
+            'delivery_status' => 'Delivered', 
+            'delivery_fee_amount' => 0, 
+            'delivery_fee_discount' => 0, 
+            'status' => 'Active', 
+            'created_at' => $TODAY             
+          ]);
 
 
         if($SalesHeaderID>0){
@@ -328,9 +330,9 @@ class Subscription extends Model
                                
                    }
                }  
-           }
+          }
 
-         //SEND EMAIL NOTIF
+         //SEND EMAIL NOTIF===============================================================================================
          if($SalesHeaderID>0){
             $Order= new Order();
             $OrderInfo= $Order->getOrderInfo($SalesHeaderID);        
@@ -346,7 +348,7 @@ class Subscription extends Model
                   $Email->SendOrderReceivedEmail($param);    
               }
 
-            //Resume Books after subscribe again.
+            //RESUME & RETUEN SUBSBRIBED BOOKS===
             DB::table('subscribed_books')
               ->where('user_id',$UserID)              
               ->update([                                  
