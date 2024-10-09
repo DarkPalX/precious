@@ -589,22 +589,22 @@ class UserCustomer extends Model
   
 
   //subscirber mailing list status
-  public function getCustomerCurrentSubscriberInfo($EmailAddress){
+  public function getCustomerNewsLetterSubscriberInfo($EmailAddress){
    
    $TODAY = date("Y-m-d H:i:s");
    
-   $info = DB::table('subscribers as subscriber')              
+   $info = DB::table('subscribers as subs')              
      
        ->selectraw("          
  
-          COALESCE(subscriber.id ,'') as subscriber_id,
-          COALESCE(subscriber.email ,'') as email,
+          COALESCE(subs.id ,0) as subscriber_id,
+          COALESCE(subs.email ,'') as email,
 
-          COALESCE(subscriber.code ,'') as code,
-          COALESCE(subscriber.is_active ,0) as is_active        
+          COALESCE(subs.code ,'') as code,
+          COALESCE(subs.is_active ,0) as is_active        
           ")
 
-          ->where('subscriber.email',"=",$EmailAddress)                                                                        
+          ->where('subs.email',$EmailAddress)                                                                        
           ->first();
  
     return  $info;
