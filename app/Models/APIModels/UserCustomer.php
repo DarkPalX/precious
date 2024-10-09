@@ -636,7 +636,6 @@ class UserCustomer extends Model
     $Misc  = New Misc();
     $TODAY = date("Y-m-d H:i:s");
 
-    
     $UserID=$data['UserID'];
     
     $FirstName=$data['FirstName'];
@@ -652,8 +651,6 @@ class UserCustomer extends Model
     $CityName=$data['CityName'];
     $ZipCode=$data['ZipCode'];
 
-    $Is_Subscribe=$data['Is_Subscribe'];
- 
     if($UserID > 0){
 
         if($BirthDate=='Not Set 00:00:00'){
@@ -697,8 +694,20 @@ class UserCustomer extends Model
               ]);  
            
     }
+   
+    return 'Success';
 
-    if($Is_Subscribe){
+  }
+
+  public function SubscribedToNewsLetter($data){
+
+
+    $Misc  = New Misc();
+    $TODAY = date("Y-m-d H:i:s");
+
+    $Is_Subscribe=$data['IsSubscribe'];
+
+   if($Is_Subscribe){
 
         $IsExist = false; 
     
@@ -796,10 +805,6 @@ class UserCustomer extends Model
  
         }
     }
-
-    return 'Success';
-
-  }
 
   public function doUpdateCustomerAddress($data) {
 
