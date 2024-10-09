@@ -692,10 +692,7 @@ class ApiController extends Controller {
     $data['StreetAddress'] = $request->post('StreetAddress'); 
     $data['CityName'] = $request->post('CityName');      
     $data['ZipCode'] = $request->post('ZipCode'); 
-
-    $data['Is_Subscribe'] = $request->post('Is_Subscribe'); 
-    
-
+      
     if(empty($data['FirstName'])){
       $ResponseMessage = 'First name is required.';
        return response()->json([
@@ -792,6 +789,33 @@ class ApiController extends Controller {
       'message' => "You have successfully updated your profile.",
     ]);                     
            
+  }
+
+  //SUBSCRIBED TO NEWS LETTER
+  public function SubscribedToNewsLetter(Request $request){
+
+    $Misc = new Misc();
+    $UserCustomer = new UserCustomer();
+
+    $response = "Failed";
+    $responseMessage = "";
+    
+    $data['UserID']=$request->post('UserID');     
+    $data['IsSubscribe'] = $request->post('IsSubscribe'); 
+           
+    $retVal=$UserCustomer->SubscribedToNewsLetter($data);
+
+    if($data['IsSubscribe']){
+     return response()->json([
+      'response' => 'Success',
+      'message' => "You have successfully subcribed to news letter.",
+       ]);                      
+    }else{
+          return response()->json([
+      'response' => 'Success',
+      'message' => "You have successfully un-subcribed to news letter.",
+       ]);                                    
+    }
   }
 
 // UPDATE CUSTOMER ADDRESS======================================
