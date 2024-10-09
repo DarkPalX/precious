@@ -37,7 +37,7 @@ class Order extends Model
     $PageNo=$data['PageNo'];
 
      $query = DB::table('ecommerce_sales_headers as sales_hdr')
-     ->join('ecommerce_sales_payments as sales_pay', 'sales_pay.sales_header_id', '=', 'sales_hdr.id') 
+     ->leftjoin('ecommerce_sales_payments as sales_pay', 'sales_pay.sales_header_id', '=', 'sales_hdr.id') 
      
        ->selectraw("
           sales_hdr.id as sales_Header_ID,
