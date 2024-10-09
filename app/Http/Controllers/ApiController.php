@@ -799,6 +799,7 @@ class ApiController extends Controller {
     $responseMessage = "";
     
     $data['UserID']=$request->post('UserID');     
+    $data['EmailAddress']=$request->post('EmailAddress');     
     $data['IsSubscribe'] = $request->post('IsSubscribe'); 
            
     $retVal=$UserCustomer->SubscribedToNewsLetter($data);
