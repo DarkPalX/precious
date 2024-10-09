@@ -598,11 +598,10 @@ class UserCustomer extends Model
        ->selectraw("          
  
           COALESCE(subscriber.id ,'') as subscriber_id,
-          COALESCE(subscriber.email ,'') as subscriber,
+          COALESCE(subscriber.email ,'') as email,
 
           COALESCE(subscriber.code ,'') as code,
           COALESCE(subscriber.is_active ,0) as is_active        
-
           ")
 
           ->where('subscriber.email',"=",$EmailAddress)                                                                        
