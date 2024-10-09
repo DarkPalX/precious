@@ -430,8 +430,6 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    
-
     $data['UserID'] = $request->post('UserID');
     $data['VerificationCode'] = $request->post('VerificationCode');    
 
