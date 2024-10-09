@@ -811,11 +811,12 @@ class ApiController extends Controller {
       'message' => "You have successfully subcribed to news letter.",
        ]);                      
     }else{
-          return response()->json([
+      return response()->json([
       'response' => 'Success',
       'message' => "You have successfully un-subcribed to news letter.",
        ]);                                    
     }
+
   }
 
 // UPDATE CUSTOMER ADDRESS======================================
