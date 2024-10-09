@@ -433,9 +433,9 @@ class ApiController extends Controller {
     
 
     $data['UserID'] = $request->post('UserID');
-    $data['VerficationCode'] = $request->post('VerficationCode');    
+    $data['VerificationCode'] = $request->post('VerificationCode');    
 
-    if(empty($data['VerficationCode'])){
+    if(empty($data['VerificationCode'])){
       $ResponseMessage ='Enter your 4 digit verification code.';
        return response()->json([
          'response' => 'Failed',
@@ -443,7 +443,7 @@ class ApiController extends Controller {
         ]);
     }
 
-    if(!empty($data['VerficationCode']) &&  strlen($data['VerficationCode'])<4){
+    if(!empty($data['VerificationCode']) &&  strlen($data['VerificationCode'])<4){
       $ResponseMessage ='Enter your 4 digit verification code.';
        return response()->json([
          'response' => 'Failed',
@@ -1973,7 +1973,7 @@ public function getPopUpBanner(Request $request){
     
 }
 
-// PROCEED TO CHECK OUT==========================================================
+// PROCEED TO SUBSCRIBED==========================================================
 public function proceedToSubscribe(Request $request){
     
     $Cart = new Cart();
