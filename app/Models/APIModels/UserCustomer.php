@@ -705,13 +705,13 @@ class UserCustomer extends Model
     $Misc  = New Misc();
     $TODAY = date("Y-m-d H:i:s");
 
+    $UserID=$data['UserID'];
     $EmailAddress=$data['EmailAddress'];
     $Is_Subscribe=$data['IsSubscribe'];
 
     if($Is_Subscribe){
 
       $IsExist = false; 
-    
       $list = DB::table('subscribers')                            
             ->whereRaw('email=?',[$EmailAddress])                                          
             ->get();
@@ -729,7 +729,6 @@ class UserCustomer extends Model
         }else{
 
             $IsExist=false;
-
             $SubscriberUserID = DB::table('subscribers')
               ->insertGetId([                                    
                 'email' => $EmailAddress,
