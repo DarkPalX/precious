@@ -263,9 +263,8 @@ class Subscription extends Model
             'created_at' => $TODAY             
           ]);
 
-
-        if($SalesHeaderID>0){
-        // if($SalesHeaderID>0 && $User_Subscription_ID>0){
+        
+        if($SalesHeaderID>0 && $User_Subscription_ID>0){
 
             //PAYMENT
             $ReceiptNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
