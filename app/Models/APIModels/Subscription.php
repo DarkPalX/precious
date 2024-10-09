@@ -262,10 +262,12 @@ class Subscription extends Model
               ]);
 
 
-        if($SalesHeaderID>0 && $User_Subscription_ID>0){
+        if($SalesHeaderID>0){
+        // if($SalesHeaderID>0 && $User_Subscription_ID>0){
 
             //PAYMENT
             $ReceiptNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
+
             $PaymentHeaderID = DB::table('ecommerce_sales_payments')
                ->insertGetId([                                            
                 'sales_header_id' => $SalesHeaderID,              
