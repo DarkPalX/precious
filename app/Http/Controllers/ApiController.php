@@ -2166,8 +2166,7 @@ public function checkSubscriberStatus(Request $request){
     $response = "Success";
     $responseMessage = "";
 
-    $getEmailAddress="";
-    
+    $getEmailAddress="";    
     $data['UserID'] = $request->post('UserID');  
 
     $info=$UserCustomer->getCustomerInformation($data);
