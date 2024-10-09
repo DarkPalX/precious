@@ -707,7 +707,7 @@ class UserCustomer extends Model
 
     $Is_Subscribe=$data['IsSubscribe'];
 
-   if($Is_Subscribe){
+    if($Is_Subscribe){
 
         $IsExist = false; 
     
@@ -803,8 +803,10 @@ class UserCustomer extends Model
                     'created_at' => $TODAY             
                 ]); 
  
-        }
-    }
+          }
+      }
+
+  }
 
   public function doUpdateCustomerAddress($data) {
 
