@@ -2161,14 +2161,12 @@ public function checkSubscriberStatus(Request $request){
     
     $Cart = new Cart();
     $UserCustomer = new UserCustomer();
-
     $Subscription = new Subscription();
     
     $response = "Failed";
     $responseMessage = "";
 
     $getEmailAddress="";
-
     
     $data['UserID'] = $request->post('UserID');  
 
@@ -2179,7 +2177,6 @@ public function checkSubscriberStatus(Request $request){
       }   
      
      $info=$UserCustomer->getCustomerCurrentSubscriberInfo($getEmailAddress);
-
      if(isset($info)>0){          
           return response()->json([                  
            'response' => 'Success',
