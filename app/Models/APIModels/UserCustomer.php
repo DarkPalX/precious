@@ -314,15 +314,15 @@ class UserCustomer extends Model
     $TODAY = date("Y-m-d H:i:s");
           
     $usersID  = $data['UserID'];
-    $VerficationCode = $data['VerficationCode'];
+    $VerificationCode = $data['VerificationCode'];
         
     if($usersID>0){
 
-      $CurrentVerficationCode = DB::table('users')                    
+      $CurrentVerificationCode = DB::table('users')                    
           ->whereRaw('id =?',[$usersID])                
           ->value('verification_code');  
           
-          if($CurrentVerficationCode==$VerficationCode){
+          if($CurrentVerificationCode==$VerificationCode){
                 DB::table('users')
                  ->whereRaw('id= ?',[$usersID])
                   ->update([
