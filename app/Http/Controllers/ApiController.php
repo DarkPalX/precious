@@ -2163,7 +2163,7 @@ public function checkSubscriberStatus(Request $request){
     $UserCustomer = new UserCustomer();
     $Subscription = new Subscription();
     
-    $response = "Failed";
+    $response = "Success";
     $responseMessage = "";
 
     $getEmailAddress="";
@@ -2172,7 +2172,6 @@ public function checkSubscriberStatus(Request $request){
 
     $info=$UserCustomer->getCustomerInformation($data);
     if(isset($info)>0){
-
        $getEmailAddress= $info->emailaddress;     
       }   
      
@@ -2180,13 +2179,13 @@ public function checkSubscriberStatus(Request $request){
      if(isset($info)>0){          
           return response()->json([                  
            'response' => 'Success',
-           'subscriber' => 1,                     
+           'data' => $info,                   
            'message' => "You have successfully check customer subscriber plan."
          ]);   
      }else{
        return response()->json([
           'response' => 'Failed',
-          'subscriber' => null,                     
+          'data' => $info,                    
           'message' => "Something wrong while checking subscriber.",
        ]); 
      }
