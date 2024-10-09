@@ -1899,9 +1899,7 @@ public function doPostCommentReview(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
-
-     
-        
+             
     $data['UserID'] = $request->post('UserID');
     $data['ProductID'] = $request->post('ProductID');
 
