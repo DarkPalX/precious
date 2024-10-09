@@ -726,22 +726,6 @@ class UserCustomer extends Model
                     'deleted_at' => null
                 ]);   
 
-
-              //SEND SUBSRIBE EMAIL  HERE 1 TIME ONLY
-              $param['EmailAddress']=$EmailAddress;
-              $Email = new Email();
-              $Email->SendSubscribedEmail($param);
-
-
-              //send system notif 
-               $MessageNotificationID = DB::table('message_notification')
-                  ->insertGetId([                                            
-                    'user_id' => $UserID,   
-                    'message_notification' => 'You have subscribe for a monthly news letter & you will recieved a regular email notifications of news letter, promos & events.',                                                                          
-                    'created_at' => $TODAY             
-                ]); 
-
-
         }else{
 
             $IsExist=false;
@@ -753,23 +737,22 @@ class UserCustomer extends Model
                 'name' => trim(ucwords($FullName)),   
                 'is_active' => 1,                           
                 'created_at' => $TODAY             
-              ]);
-
-              //SEND SUBSRIBE EMAIL  HERE 1 TIME ONLY
-              $param['EmailAddress']=$EmailAddress;
-              $Email = new Email();
-              $Email->SendSubscribedEmail($param);
-
-
-              //send system notif 
-               $MessageNotificationID = DB::table('message_notification')
-                  ->insertGetId([                                            
-                    'user_id' => $UserID,   
-                    'message_notification' => 'You have subscribe for a monthly news letter & you will recieved a regular email notifications of news letter, promos & events.',                                                                          
-                    'created_at' => $TODAY             
-                ]); 
-
+              ]);        
         }
+
+    //SEND SUBSRIBE EMAIL  HERE 1 TIME ONLY
+      $param['EmailAddress']=$EmailAddress;
+      $Email = new Email();
+      $Email->SendSubscribedEmail($param);
+
+
+      //send system notif 
+       $MessageNotificationID = DB::table('message_notification')
+          ->insertGetId([                                            
+            'user_id' => $UserID,   
+            'message_notification' => 'You have subscribe for a monthly news letter & you will recieved a regular email notifications of news letter, promos & events.',                                                                          
+            'created_at' => $TODAY             
+        ]); 
 
     }else if(!$Is_Subscribe){
 
@@ -788,23 +771,22 @@ class UserCustomer extends Model
                     'is_active' => 0,
                     'updated_at' => $TODAY,
                     'deleted_at' => $TODAY
-                ]);   
-
-                // SEND UNSUBSCRIBE EMAIL HERE 1 TIME ONLY
-                $param['EmailAddress']=$EmailAddress;
-                $Email = new Email();
-                $Email->SendUnSubscribedEmail($param);    
-
-
-               //send system notif 
-               $MessageNotificationID = DB::table('message_notification')
-                  ->insertGetId([                                            
-                    'user_id' => $UserID,                                                         
-                    'message_notification' => 'You have successfully unsubscribe for monthly news letter. You will not able to received email notification of new letter, promos & events.',
-                    'created_at' => $TODAY             
-                ]); 
- 
+                ]);        
           }
+
+           // SEND UNSUBSCRIBE EMAIL HERE 1 TIME ONLY
+            $param['EmailAddress']=$EmailAddress;
+            $Email = new Email();
+            $Email->SendUnSubscribedEmail($param);    
+
+
+           //send system notif 
+           $MessageNotificationID = DB::table('message_notification')
+              ->insertGetId([                                            
+                'user_id' => $UserID,                                                         
+                'message_notification' => 'You have successfully unsubscribe for monthly news letter. You will not able to received email notification of new letter, promos & events.',
+                'created_at' => $TODAY             
+            ]);   
       }
 
   }
