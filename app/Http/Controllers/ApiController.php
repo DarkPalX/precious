@@ -1494,7 +1494,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -1513,7 +1513,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -1532,7 +1532,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -1551,7 +1551,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -1570,7 +1570,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -2175,6 +2175,7 @@ public function checkSubscriberStatus(Request $request){
       }   
      
      $info=$UserCustomer->getCustomerNewsLetterSubscriberInfo($getEmailAddress);
+
      if(isset($info)>0){          
           return response()->json([                  
            'response' => 'Success',
