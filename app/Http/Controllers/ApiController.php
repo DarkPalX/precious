@@ -2174,7 +2174,7 @@ public function checkSubscriberStatus(Request $request){
        $getEmailAddress= $info->emailaddress;     
       }   
      
-     $info=$UserCustomer->getCustomerCurrentSubscriberInfo($getEmailAddress);
+     $info=$UserCustomer->getCustomerNewsLetterSubscriberInfo($getEmailAddress);
      if(isset($info)>0){          
           return response()->json([                  
            'response' => 'Success',
