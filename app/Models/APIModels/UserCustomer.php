@@ -705,13 +705,14 @@ class UserCustomer extends Model
     $Misc  = New Misc();
     $TODAY = date("Y-m-d H:i:s");
 
+    $EmailAddress=$data['EmailAddress'];
     $Is_Subscribe=$data['IsSubscribe'];
 
     if($Is_Subscribe){
 
-        $IsExist = false; 
+      $IsExist = false; 
     
-        $list = DB::table('subscribers')                            
+      $list = DB::table('subscribers')                            
             ->whereRaw('email=?',[$EmailAddress])                                          
             ->get();
 
