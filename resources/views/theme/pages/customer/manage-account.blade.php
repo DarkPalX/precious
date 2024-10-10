@@ -135,6 +135,17 @@
 				<button type="submit" class="button button-border button-rounded ms-0 topmargin-sm button-smal">Save Changes</button>
 				<a href="{{ route('customer.manage-account') }}" class="button button-3d button-black m-0 add_button">Reset</a>
 			</form>
+
+			<form method="post" action="{{ route('customer.deactivate-social-login') }}">
+				@csrf
+				<div class="col-12">
+					<div class="fancy-title title-border-color title-left mt-4">
+						<h4>Social Login</h4>
+					</div>
+					<input name="user_id" value="{{ auth()->user()->id }}" hidden>
+					<button type="submit "class="button button-3d button-yellow m-0 add_button">Deactivate Social Login</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

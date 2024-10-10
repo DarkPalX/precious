@@ -51,6 +51,19 @@ class MyAccountController extends Controller
         return view('theme.pages.customer.manage-account', compact('member', 'user', 'page', 'additional_addresses'));
     }
 
+    public function deactivate_social_login(Request $request)
+    {
+        $page = new Page;
+        $page->name = 'Social Login Deactivated';
+
+        User::where('id', $request->user_id)
+        ->update([
+            'social_login' => 0
+        ]);
+
+        return view('theme.pages.customer.social-login-deactivation', compact('page'));
+    }
+
     public function library(Request $request)
     {
         $page = new Page;
