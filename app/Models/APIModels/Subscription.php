@@ -536,7 +536,7 @@ class Subscription extends Model
                 'is_expired' => 1,                                                          
                 'is_cancelled' => 1,                                                          
                 'cancel_reason' => $Reason, 
-                'remarks' => 'Cancelled a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
+                'remarks' => 'Cancel a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
                 'updated_at' => $TODAY
             ]); 
             
@@ -551,7 +551,7 @@ class Subscription extends Model
            $MessageNotificationID = DB::table('message_notification')
               ->insertGetId([                                            
                 'user_id' => $UserID,                                                         
-                'message_notification' => 'Your current and active subscription plan has successfully cancelled and it will end today, ".$CurrentDayFormatted. ".",                
+                'message_notification' => "Your current and active subscription plan has successfully cancelled & will end today ".$CurrentDayFormatted. ".",                
                 'created_at' => $TODAY             
             ]);  
                 
