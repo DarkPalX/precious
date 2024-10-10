@@ -630,6 +630,35 @@ class ApiController extends Controller {
     } 
   }
 
+ // GET CUSTOMER INFORMATION========================================================================
+ public function getCustomerInformationByEmail(Request $request){
+
+    $Misc = new Misc();
+    $UserCustomer = new UserCustomer();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    
+    $data['EmailAddress'] = $request->post('EmailAddress');
+                
+    $Info=$UserCustomer->getCustomerInformation($data);
+
+    if(isset($Info)>0){      
+        return response()->json([                  
+         'response' => 'Success',
+         'data' => $Info,
+         'message' => "Customer with ID ". $data['UserID']. " has profile data.",
+       ]);    
+
+    }else{
+        return response()->json([
+          'response' => 'Failed',
+          'data' => null,
+          'message' => "Customer does not exist.",
+       ]); 
+    } 
+  }
  //   // GET CUSTOMER INFORMATION WITH PRIMARY ADDRESS========================================================================
  // public function getCustomerInformationWithPrimaryAddress(Request $request){
 
