@@ -648,7 +648,7 @@ class ApiController extends Controller {
         return response()->json([                  
          'response' => 'Success',
          'data' => $Info,
-         'message' => "Customer with ID ". $data['UserID']. " has profile data.",
+         'message' => "Customer with ID ". $data['EmailAddress']. " has profile data.",
        ]);    
 
     }else{
