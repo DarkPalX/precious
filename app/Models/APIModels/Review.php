@@ -98,8 +98,6 @@ class Review extends Model
     $FullName="";
     $EmailAddress="";
 
-    $Platform=$data['Platform'];
-
     $UserID=$data['UserID'];
     $ProductID=$data['ProductID'];
 

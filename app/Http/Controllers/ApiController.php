@@ -319,12 +319,9 @@ class ApiController extends Controller {
 
     $response = "Failed";
     $responseMessage = "";
-
-    
-
+  
     $data['UserID'] = $request->post('UserID');
-
-    // $data['UserID'] = 51;
+    
     $data['OldPassword'] = $request->post('OldPassword');
     $data['NewPassword'] = $request->post('NewPassword');
     $data['ConfirmNewPassword'] = $request->post('ConfirmNewPassword');
@@ -433,12 +430,10 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    
-
     $data['UserID'] = $request->post('UserID');
-    $data['VerficationCode'] = $request->post('VerficationCode');    
+    $data['VerificationCode'] = $request->post('VerificationCode');    
 
-    if(empty($data['VerficationCode'])){
+    if(empty($data['VerificationCode'])){
       $ResponseMessage ='Enter your 4 digit verification code.';
        return response()->json([
          'response' => 'Failed',
@@ -446,7 +441,7 @@ class ApiController extends Controller {
         ]);
     }
 
-    if(!empty($data['VerficationCode']) &&  strlen($data['VerficationCode'])<4){
+    if(!empty($data['VerificationCode']) &&  strlen($data['VerificationCode'])<4){
       $ResponseMessage ='Enter your 4 digit verification code.';
        return response()->json([
          'response' => 'Failed',
@@ -478,8 +473,6 @@ class ApiController extends Controller {
     $VerficationCode='';
     $response = "Failed";
     $responseMessage = "";
-
-   
 
     $data['UserID'] = $request->post('UserID');
     $data['EmailAddress'] = $request->post('EmailAddress');
@@ -697,10 +690,7 @@ class ApiController extends Controller {
     $data['StreetAddress'] = $request->post('StreetAddress'); 
     $data['CityName'] = $request->post('CityName');      
     $data['ZipCode'] = $request->post('ZipCode'); 
-
-    $data['Is_Subscribe'] = $request->post('Is_Subscribe'); 
-    
-
+      
     if(empty($data['FirstName'])){
       $ResponseMessage = 'First name is required.';
        return response()->json([
@@ -797,6 +787,35 @@ class ApiController extends Controller {
       'message' => "You have successfully updated your profile.",
     ]);                     
            
+  }
+
+  //SUBSCRIBED TO NEWS LETTER
+  public function SubscribedToNewsLetter(Request $request){
+
+    $Misc = new Misc();
+    $UserCustomer = new UserCustomer();
+
+    $response = "Failed";
+    $responseMessage = "";
+    
+    $data['UserID']=$request->post('UserID');     
+    $data['EmailAddress']=$request->post('EmailAddress');     
+    $data['IsSubscribe'] = $request->post('IsSubscribe'); 
+           
+    $retVal=$UserCustomer->SubscribedToNewsLetter($data);
+
+    if($data['IsSubscribe']){
+     return response()->json([
+      'response' => 'Success',
+      'message' => "You have successfully subcribed to news letter.",
+       ]);                      
+    }else{
+      return response()->json([
+      'response' => 'Success',
+      'message' => "You have successfully un-subcribed to news letter.",
+       ]);                                    
+    }
+
   }
 
 // UPDATE CUSTOMER ADDRESS======================================
@@ -1475,7 +1494,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -1494,7 +1513,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -1513,7 +1532,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -1532,7 +1551,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -1551,7 +1570,7 @@ public function getAllBookCategoryList(Request $request){
   
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 15;
+  $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
 
@@ -1880,9 +1899,7 @@ public function doPostCommentReview(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
-
-     
-        
+             
     $data['UserID'] = $request->post('UserID');
     $data['ProductID'] = $request->post('ProductID');
 
@@ -1953,7 +1970,7 @@ public function getPopUpBanner(Request $request){
     
 }
 
-// PROCEED TO CHECK OUT==========================================================
+// PROCEED TO SUBSCRIBED==========================================================
 public function proceedToSubscribe(Request $request){
     
     $Cart = new Cart();
@@ -2017,8 +2034,7 @@ public function cancelSubscriptionPlan(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-     
-        
+             
     $data['UserID'] = $request->post('UserID');
     $data['FullName'] = $request->post('FullName');
     $data['EmailAddress'] = $request->post('EmailAddress');      
@@ -2143,35 +2159,31 @@ public function checkSubscriberStatus(Request $request){
     
     $Cart = new Cart();
     $UserCustomer = new UserCustomer();
-
     $Subscription = new Subscription();
     
-    $response = "Failed";
+    $response = "Success";
     $responseMessage = "";
 
-    $getEmailAddress="";
-
-    
+    $getEmailAddress="";    
     $data['UserID'] = $request->post('UserID');  
 
     $info=$UserCustomer->getCustomerInformation($data);
     if(isset($info)>0){
-
        $getEmailAddress= $info->emailaddress;     
       }   
      
-     $info=$UserCustomer->getCustomerCurrentSubscriberInfo($getEmailAddress);
+     $info=$UserCustomer->getCustomerNewsLetterSubscriberInfo($getEmailAddress);
 
      if(isset($info)>0){          
           return response()->json([                  
            'response' => 'Success',
-           'subscriber' => 1,                     
+           'data' => $info,                   
            'message' => "You have successfully check customer subscriber plan."
          ]);   
      }else{
        return response()->json([
           'response' => 'Failed',
-          'subscriber' => null,                     
+          'data' => $info,                    
           'message' => "Something wrong while checking subscriber.",
        ]); 
      }

@@ -26,7 +26,7 @@
                       <tr> 
                         <td height="140" valign="bottom" style="text-align:left;height:140px"> 
                           <div style="display:inline-block">                              
-                            <img src="https://beta.ebooklat.phr.com.ph/storage/logos/ebooklat-logo-horizontal.png" style="width: 106%;">                      
+                            <img src="https://preciouspagesbookstore.com.ph/storage/logos/ebooklat-logo-horizontal.png" style="width: 106%;">                      
                           </div> 
                       </td> 
                       </tr> 
@@ -136,10 +136,10 @@
 
             <br>
 
-             <div>
-             <a target="_blanlk" href="#">Privacy Policy </a> | 
-             <a target="_blanlk" href="#">Terms & Condition </a> | 
-              <a target="_blanlk" href="#">Unsubscribe </a> 
+            <div>
+             <a target="_blanlk" href="https://preciouspagesbookstore.com.ph/privacy-policy">Privacy Policy </a> | 
+             <a target="_blanlk" href="https://preciouspagesbookstore.com.ph/terms-of-use-agreement">Terms & Condition </a> | 
+              <a target="_blanlk" href="javascript:void(0);">Unsubscribe </a> 
             </div> 
 
             </td> 

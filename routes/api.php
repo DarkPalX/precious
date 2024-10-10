@@ -100,6 +100,12 @@ Route::post('/upload-photo',[
    'as'=> 'upload-photo'
 ]);
 
+//CUSTOMER SUBSCRIBED TO NEWS LETTER==================================================================
+Route::post('/subscribe-news-letter',[
+   'uses'=>'App\Http\Controllers\ApiController@SubscribedToNewsLetter',
+   'as'=> 'subscribe-news-letter'
+]);
+
 //BOOK LIST =========================================================================
 Route::post('/get-all-book-category-list',[
    'uses'=>'App\Http\Controllers\ApiController@getAllBookCategoryList',
