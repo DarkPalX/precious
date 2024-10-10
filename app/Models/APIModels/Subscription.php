@@ -536,7 +536,7 @@ class Subscription extends Model
                 'is_expired' => 1,                                                          
                 'is_cancelled' => 1,                                                          
                 'cancel_reason' => $Reason, 
-                'remarks' => 'Cancel a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
+                'remarks' => 'Cancelled a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
                 'updated_at' => $TODAY
             ]); 
             
