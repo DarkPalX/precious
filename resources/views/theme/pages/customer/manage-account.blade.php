@@ -143,7 +143,7 @@
 						<h4>Social Login</h4>
 					</div>
 					<input name="user_id" value="{{ auth()->user()->id }}" hidden>
-					<button type="submit "class="button button-3d button-yellow m-0 add_button">Deactivate Social Login</button>
+					<button type="submit "class="button button-3d button-yellow m-0 add_button">Deactivate My Account</button>
 				</div>
 			</form>
 		</div>
