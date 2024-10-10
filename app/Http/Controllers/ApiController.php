@@ -642,7 +642,7 @@ class ApiController extends Controller {
     
     $data['EmailAddress'] = $request->post('EmailAddress');
                 
-    $Info=$UserCustomer->getCustomerInformation($data);
+    $Info=$UserCustomer->getCustomerInformationByEmail($data);
 
     if(isset($Info)>0){      
         return response()->json([                  
