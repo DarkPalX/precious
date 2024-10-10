@@ -158,6 +158,9 @@ Route::get('/phpinfo', function () {
             Route::get('/account/change-password', [MyAccountController::class, 'change_password'])->name('my-account.change-password');
             Route::post('/account/change-password', [MyAccountController::class, 'update_password'])->name('my-account.update-password');
             Route::get('/account-logout', [CustomerFrontController::class, 'logout'])->name('account.logout');
+            
+            //DEACTIVATE SOCIAL LOGIN 
+            Route::post('/deactivate-social-login', [MyAccountController::class, 'deactivate_social_login'])->name('customer.deactivate-social-login');
 
             Route::get('/my-orders', [MyAccountController::class, 'orders'])->name('profile.sales');
             Route::get('/account/pay/{id}', [MyAccountController::class, 'pay_again'])->name('my-account.pay-again');
