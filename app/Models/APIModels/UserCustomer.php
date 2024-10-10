@@ -548,6 +548,73 @@ class UserCustomer extends Model
 
   }
 
+  public function getCustomerInformationByEmail($data){
+        
+    $EmailAddress = $data['EmailAddress'];   
+
+    $info = DB::table('users as usrs')              
+    
+       ->selectraw("
+          usrs.id as user_ID,
+
+          COALESCE(usrs.firstname,'') as firstname,
+          COALESCE(usrs.lastname,'') as lastname,
+          COALESCE(usrs.name,'') as fullname,
+          COALESCE(usrs.avatar,'') as avatar,
+
+          COALESCE(usrs.email,'') as emailaddress,
+          COALESCE(usrs.email_verified_at,'') as email_verified_at,
+          COALESCE(usrs.password,'') as password,
+          COALESCE(usrs.mobile,'') as mobile,
+          COALESCE(usrs.phone,'') as phone,
+
+          COALESCE(usrs.birth_date,'') as birth_date,
+          DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+          DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
+
+          COALESCE(usrs.address_street,'') as address_street,
+          COALESCE(usrs.address_city,'') as address_city,
+          COALESCE(usrs.address_municipality,'') as address_municipality,
+          COALESCE(usrs.address_province,'') as address_province,
+          COALESCE(usrs.address_zip,'') as address_zip,
+
+          COALESCE(usrs.ecredits,0) as ecredits,
+          COALESCE(usrs.verification_code,'') as verification_code,
+          COALESCE(usrs.remember_token,'') as remember_token,
+          
+          COALESCE((
+               SELECT 
+                   COUNT(cart.qty) FROM 
+                      ecommerce_shopping_cart as cart                                    
+                  WHERE cart.user_id = usrs.id                           
+                  AND cart.qty=0 
+                  LIMIT 1
+                                              
+              )
+        ,0) as item_cart,
+
+        COALESCE((
+               SELECT 
+                   COUNT(mssg_notif.id ) FROM 
+                      message_notification as mssg_notif                                    
+                  WHERE mssg_notif.user_id = usrs.id                           
+                  AND mssg_notif.is_read=0 
+                  LIMIT 1
+                                              
+              )
+         ,0) as item_message,
+
+
+          COALESCE(usrs.is_active,0) as is_active         
+          
+        ")        
+        ->whereRaw('usrs.email =?',[$EmailAddress])                                      
+        ->first();
+
+    return $info;
+
+  }
+
   //subscription plan status
   public function getCustomerCurrentSubscriptionInfo($UserID){
    
