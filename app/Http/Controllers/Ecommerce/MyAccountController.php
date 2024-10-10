@@ -58,8 +58,11 @@ class MyAccountController extends Controller
 
         User::where('id', $request->user_id)
         ->update([
-            'social_login' => 0
+            'social_login' => 0,
+            'is_active' => 0
         ]);
+
+        Auth::logout();
 
         return view('theme.pages.customer.social-login-deactivation', compact('page'));
     }
