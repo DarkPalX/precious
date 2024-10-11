@@ -2416,7 +2416,7 @@ public function validateCouponCode(Request $request){
                                                         
            }else{
 
-                $ResponseMessage ='Invalid coupon code.';
+                $ResponseMessage ='Coupon is invalid. Please try other coupon.';
                  return response()->json([
                    'response' => 'Failed',     
                    'percent_discount' => null,      
