@@ -829,11 +829,11 @@ class ApiController extends Controller {
     
     $data['UserID']=$request->post('UserID');     
     $data['EmailAddress']=$request->post('EmailAddress');     
-    $data['IsSubscribe'] = $request->post('IsSubscribe'); 
+    $data['Is_Subscribe'] = $request->post('Is_Subscribe'); 
            
     $retVal=$UserCustomer->SubscribedToNewsLetter($data);
 
-    if($data['IsSubscribe']){
+    if($data['Is_Subscribe']){
      return response()->json([
       'response' => 'Success',
       'message' => "You have successfully subcribed to news letter.",
