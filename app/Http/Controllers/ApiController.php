@@ -824,12 +824,18 @@ class ApiController extends Controller {
     $Misc = new Misc();
     $UserCustomer = new UserCustomer();
 
-    $response = "Failed";
     $responseMessage = "";
-    
+    $response = "Failed";  
+    $data['FullName']="";
+
     $data['UserID']=$request->post('UserID');     
     $data['EmailAddress']=$request->post('EmailAddress');     
     $data['Is_Subscribe'] = $request->post('Is_Subscribe'); 
+
+    $info=$UserCustomer->getCustomerInformation($data);
+    if(isset($info)>0){
+        $data['FullName']=$info->fullname;
+    }
            
     $retVal=$UserCustomer->SubscribedToNewsLetter($data);
 
