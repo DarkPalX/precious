@@ -1986,6 +1986,7 @@ public function getPopUpBanner(Request $request){
 
     
     $data['Type']=$request->post('Type');
+    $data['BannerID']=$request->post('BannerID');
 
     $data["SearchText"] = '';
     $data["Status"] = '';
