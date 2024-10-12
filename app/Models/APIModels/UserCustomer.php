@@ -773,7 +773,7 @@ class UserCustomer extends Model
 
     $UserID=$data['UserID'];
     $EmailAddress=$data['EmailAddress'];
-    $Is_Subscribe=$data['IsSubscribe'];
+    $Is_Subscribe=$data['Is_Subscribe'];
 
     if($Is_Subscribe){
 
