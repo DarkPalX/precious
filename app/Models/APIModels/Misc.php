@@ -252,7 +252,7 @@ class Misc extends Model
         return $Value;
     }
 
-   public function generateRandomString($length) {
+   public function GenerateRandomString($length) {
 
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
@@ -263,7 +263,7 @@ class Misc extends Model
     }
 
     return $randomString;
-    
+
     }
 
     public function IsValidEmail($Email){
