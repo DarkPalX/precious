@@ -798,7 +798,7 @@ class UserCustomer extends Model
             $SubscriberUserID = DB::table('subscribers')
               ->insertGetId([                                    
                 'email' => $EmailAddress,
-                'code' => '90Ty34uKK0thCgyrzleCYyH9xAGCFX6AXTCoJzrakAWHxJk478Uy9bvQkJAyg3JQv3rZaVuTiKxVXDWMzFsczhzp0jnSoBtNryOdyzRMWFjeBYxnawr',
+                'code' => $Misc->GenerateRandomString(128),
                 'name' => trim(ucwords($FullName)),   
                 'is_active' => 1,                           
                 'created_at' => $TODAY             
@@ -819,7 +819,7 @@ class UserCustomer extends Model
             'created_at' => $TODAY             
         ]); 
 
-    }else if(!$Is_Subscribe){
+    }else{
 
         $IsExist = false; 
         $list = DB::table('subscribers')                          
