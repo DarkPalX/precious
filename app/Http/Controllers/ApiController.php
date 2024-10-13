@@ -2538,7 +2538,7 @@ public function validateCouponCode(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
-  $result=$Messages->deleteReadMessageNotification($data);  
+  $response=$Messages->deleteReadMessageNotification($data);  
 
    return response()->json([                  
      'response' => $response,
