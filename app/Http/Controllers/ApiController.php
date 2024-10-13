@@ -1690,7 +1690,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $sales_header=$Order->getOrderInfo($data['OrderID']);  
   if(isset($sales_header)>0){
 
-     $response='Success';     
+      $response='Success';     
       if($response=='Success'){        
         return response()->json([                  
          'response' => $response,
@@ -1780,7 +1780,8 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
-  $sales_details=$Order->getOrderItemList($data['OrderID']);  
+  $sales_details=$Order->getOrderItemList($data['OrderID']); 
+   
   if(isset($sales_details)>0){     
     return response()->json($sales_details); 
   }
