@@ -2513,7 +2513,7 @@ public function validateCouponCode(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
-  $result=$Messages->openSetReadMessageNotification($data);  
+  $response=$Messages->openSetReadMessageNotification($data);  
 
    return response()->json([                  
      'response' => $response,
