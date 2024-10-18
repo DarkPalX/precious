@@ -1972,15 +1972,9 @@ public function getHomeSliderBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $list = DB::table('mobile_banners as mob_ban');
-            $list ->join('mobile_albums as  mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id'); 
-            $list ->where("mob_alb.status","=",1); 
-            $list ->where("mob_ban.album_id","=",1);
-            $list ->where("mob_alb.type","=",'main_banner');
-            $list ->where("mob_alb.banner_type","=",'image') 
-            $list ->where("mob_ban.deleted_at","=",null); 
-  
-    $data["RecordBanner"]=count($list);    
+    $list=$BannerAds->getPopUpBannerList(); 
+    $data["BannerRecord"] =count($list);
+
     $result=$BannerAds->getHomeSliderBanner($data);  
     return response()->json($result); 
     
