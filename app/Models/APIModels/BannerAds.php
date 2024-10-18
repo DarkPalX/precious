@@ -83,7 +83,7 @@ class BannerAds extends Model
        $query->where("mob_ban.deleted_at","=",null); 
        
        if($BannerID>0){
-          $query->whereNotIn("mob_alb.status","=",1);  
+          $query->where("mob_ban.id","=",1);  
        }
 
        $query->whereRaw('RAND()');   
@@ -123,7 +123,7 @@ class BannerAds extends Model
        $query->where("mob_ban.deleted_at","=",null); 
        
        if($BannerID>0){
-          $query->where("mob_ban.id","!=",$BannerID);  
+          $query->where("mob_alb.status","=",1);  
        }
 
        $query->whereRaw('RAND()');   
