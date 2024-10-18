@@ -57,11 +57,7 @@ class BannerAds extends Model
 
   public function getRandomPopUpBanner($data){
 
-    $BannerRecord=0;
     $BannerID=$data['BannerID'];
-
-
-    //$BannerRecord=$this->getPopUpBannerList();
 
      $query = DB::table('mobile_banners as mob_ban')
      ->join('mobile_albums as  mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id') 
@@ -87,21 +83,22 @@ class BannerAds extends Model
        $query->where("mob_ban.deleted_at","=",null); 
        
        if($BannerID>0){
-          $query->whereNotIn("mob_ban.id","=",$BannerID);  
+          $query->whereNotIn("mob_alb.status","=",1);  
        }
 
        $query->whereRaw('RAND()');   
       
-    $info = $query->first();
+    $list = $query->first();
                              
-     return $info;  
+     return $list;  
 
     
   }
 
-    public function getPopUpBannerList(){
+    public function getRandomPopUpBanner($data){
 
-   
+    $BannerID=$data['BannerID'];
+
      $query = DB::table('mobile_banners as mob_ban')
      ->join('mobile_albums as  mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id') 
     
@@ -124,8 +121,14 @@ class BannerAds extends Model
        $query->where("mob_alb.type","=",'main_banner');    
        $query->where("mob_alb.banner_type","=",'image'); 
        $query->where("mob_ban.deleted_at","=",null); 
-                  
-      $list = $query->get();
+       
+       if($BannerID>0){
+          $query->where("mob_ban.id","!=",$BannerID);  
+       }
+
+       $query->whereRaw('RAND()');   
+      
+    $list = $query->first();
                              
      return $list;  
 
