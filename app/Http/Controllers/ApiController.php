@@ -1974,11 +1974,11 @@ public function getHomeSliderBanner(Request $request){
 
     $data["RecordBanner"] = DB::table('mobile_banners as mob_ban')
                  ->join('mobile_albums as  mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id') 
-                  ->where("mob_alb.status","=",1);   
-                  ->where("mob_ban.album_id","=",1); 
-                  ->where("mob_alb.type","=",'main_banner');    
-                  ->where("mob_alb.banner_type","=",'image'); 
-                  ->where("mob_ban.deleted_at","=",null); 
+                  ->where("mob_alb.status","=",1) 
+                  ->where("mob_ban.album_id","=",1);
+                  ->where("mob_alb.type","=",'main_banner');
+                  ->where("mob_alb.banner_type","=",'image') 
+                  ->where("mob_ban.deleted_at","=",null);
   
     $result=$BannerAds->getHomeSliderBanner($data);  
     return response()->json($result); 
