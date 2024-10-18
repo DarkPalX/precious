@@ -1760,9 +1760,8 @@ public function getAllBookDetailsCatalogueList(Request $request){
           'message' => "Something is wrong while sending email of all transactions purchased order  history.",
         ]);  
          
-  }
-  
-      
+    }
+    
   }
 
  public function getCustomerOrderDetails(Request $request){
@@ -1781,7 +1780,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $data["Limit"] = 0;
 
   $sales_details=$Order->getOrderItemList($data['OrderID']); 
-   
+
   if(isset($sales_details)>0){     
     return response()->json($sales_details); 
   }
@@ -1973,6 +1972,14 @@ public function getHomeSliderBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
+    $data["RecordBanner"] = DB::table('mobile_banners as mob_ban')
+                 ->join('mobile_albums as  mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id') 
+                  ->where("mob_alb.status","=",1);   
+                  ->where("mob_ban.album_id","=",1); 
+                  ->where("mob_alb.type","=",'main_banner');    
+                  ->where("mob_alb.banner_type","=",'image'); 
+                  ->where("mob_ban.deleted_at","=",null); 
+  
     $result=$BannerAds->getHomeSliderBanner($data);  
     return response()->json($result); 
     
