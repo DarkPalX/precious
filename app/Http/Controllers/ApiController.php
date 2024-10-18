@@ -1984,7 +1984,6 @@ public function getPopUpBanner(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    
     $data['Type']=$request->post('Type');
     $data['BannerID']=$request->post('BannerID');
 
@@ -1994,14 +1993,15 @@ public function getPopUpBanner(Request $request){
     $data["Limit"] = 0;
 
     $Info=$BannerAds->getRandomPopUpBanner($data);  
+    return response()->json($result); 
 
-    return response()->json([
-      'response' => 'Success',
-      'data' => $Info,
-      'message' => "Successfully get pop up banner.",
-    ]); 
+    // return response()->json([
+    //   'response' => 'Success',
+    //   'data' => $Info,
+    //   'message' => "Successfully get pop up banner.",
+    // ]); 
 
-    // return response()->json($result); 
+    
     
 }
 
