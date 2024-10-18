@@ -1972,9 +1972,6 @@ public function getHomeSliderBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $list=$BannerAds->getPopUpBannerList(); 
-    $data["BannerRecord"] =count($list);
-
     $result=$BannerAds->getHomeSliderBanner($data);  
     return response()->json($result); 
     
