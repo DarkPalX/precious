@@ -61,7 +61,7 @@ class BannerAds extends Model
     $BannerID=$data['BannerID'];
 
 
-    // $BannerRecord=count($this->getPopUpBannerList());
+    $BannerRecord=$this->getPopUpBannerList();
 
      $query = DB::table('mobile_banners as mob_ban')
      ->join('mobile_albums as  mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id') 
@@ -86,7 +86,7 @@ class BannerAds extends Model
        $query->where("mob_alb.banner_type","=",'image'); 
        $query->where("mob_ban.deleted_at","=",null); 
        
-       if($BannerID>0 && $BannerRecord>0){
+       if($BannerID>0 && count($BannerRecord)>0){
           $query->whereNotIn("mob_ban.id","=",$BannerID);  
        }
 
