@@ -122,11 +122,11 @@ class BannerAds extends Model
        $query->where("mob_alb.banner_type","=",'image'); 
        $query->where("mob_ban.deleted_at","=",null); 
        
-       if($BannerID>0){
-          $query->where("mob_alb.status","=",1);  
-       }
+       // if($BannerID>0){
+       //    $query->where("mob_alb.status","=",1);  
+       // }
 
-       $query->whereRaw('RAND()');   
+       // $query->whereRaw('RAND()');   
       
     $list = $query->first();
                              
