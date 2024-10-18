@@ -1992,7 +1992,7 @@ public function getPopUpBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $Info=$BannerAds->getRandomPopUpBanner($data);  
+    $result=$BannerAds->getRandomPopUpBanner($data);  
     return response()->json($result); 
 
     // return response()->json([
