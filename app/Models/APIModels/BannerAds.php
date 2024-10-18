@@ -88,7 +88,7 @@ class BannerAds extends Model
 
        // $query->whereRaw('RAND()');   
       
-    $list = $query->list();
+    $list = $query->get();
                              
      return $list;  
 
