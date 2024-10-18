@@ -2001,8 +2001,6 @@ public function getPopUpBanner(Request $request){
       'message' => "Successfully get pop up banner.",
     ]); 
 
-    
-    
 }
 
 // PROCEED TO SUBSCRIBED==========================================================
