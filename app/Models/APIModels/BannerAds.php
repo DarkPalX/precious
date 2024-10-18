@@ -59,8 +59,9 @@ class BannerAds extends Model
 
     $BannerRecord=0;
     $BannerID=$data['BannerID'];
-    
-    $BannerRecord=count($this->getPopUpBannerList());
+
+
+    // $BannerRecord=count($this->getPopUpBannerList());
 
      $query = DB::table('mobile_banners as mob_ban')
      ->join('mobile_albums as  mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id') 
