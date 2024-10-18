@@ -86,7 +86,7 @@ class BannerAds extends Model
        $query->where("mob_alb.banner_type","=",'image'); 
        $query->where("mob_ban.deleted_at","=",null); 
        
-       if($BannerID>0 && count($BannerRecord)>0){
+       if($BannerID>0 && count($BannerRecord)>1){
           $query->whereNotIn("mob_ban.id","=",$BannerID);  
        }
 
