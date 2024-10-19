@@ -816,7 +816,7 @@ class UserCustomer extends Model
        $MessageNotificationID = DB::table('message_notification')
           ->insertGetId([                                            
             'user_id' => $UserID,   
-            'message_notification' => 'You have subscribe for a monthly news letter & you will recieved a regular email notifications of news letter events, book discount & special offer of book promos.',                                                                          
+            'message_notification' => 'Thank you for subscribing to our monthly newsletter! You will now receive regular updates on exciting events, exclusive book discounts, and special promotions just for our subscribers. Always stay tuned for the latest news and offers that will keep you updated. ',                                                                          
             'created_at' => $TODAY             
         ]); 
 
