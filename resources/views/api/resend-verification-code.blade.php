@@ -86,8 +86,8 @@
                   CODE: <b>{{ $VerificationCode }}</b> 
                   
                   <br><br>
-                  If you did not request this verification code, please disregard this email.
-                  If you have any questions or encounter any issues, feel free to contact our support team at [Support Email]. We're here to help! 
+                  If you did not request this verification code, please disregard this email.    <br><br>              
+                  Should you have any questions or encounter any issues, feel free to reach out to our customer service team —we're here to help!
 
             </td> 
             </tr> 
@@ -103,7 +103,7 @@
                  Thank you,
                  <br><br>
                  {{ config("app.CompanyName") }} <br>
-                  Admin & Staff
+                  Admin & Team Staff 
 
             </td> 
             </tr> 
