@@ -816,7 +816,7 @@ class UserCustomer extends Model
        $MessageNotificationID = DB::table('message_notification')
           ->insertGetId([                                            
             'user_id' => $UserID,   
-            'message_notification' => 'Thank you for subscribing to our monthly newsletter! You will now receive regular updates on exciting events, exclusive book discounts, and special promotions just for our subscribers. Always stay tuned for the latest news and offers that will keep you updated. ',                                                                          
+            'message_notification' => 'Thank you for subscribing to our monthly newsletter! You will now receive regular updates on exciting events, exclusive book discounts, and special promotions just for our subscribers. Always stay tuned for the latest news and offers that will keep you updated.',                                                                          
             'created_at' => $TODAY             
         ]); 
 
@@ -850,7 +850,7 @@ class UserCustomer extends Model
            $MessageNotificationID = DB::table('message_notification')
               ->insertGetId([                                            
                 'user_id' => $UserID,                                                         
-                'message_notification' => 'You have successfully unsubscribe for monthly news letter. You will not able to received any email notifications of news letter events, book discount & special offer of book promos.',
+                'message_notification' => 'You have successfully unsubscribe to our monthly newsletter!  You will no longer receive updates on newsletter events, book discounts, or special promotions. We appreciate your time with subscribing with us, and if you ever wish to receive newsletter again, just simply subscribed back.',
                 'created_at' => $TODAY             
             ]);   
       }
