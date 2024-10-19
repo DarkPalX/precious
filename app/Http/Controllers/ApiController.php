@@ -638,8 +638,10 @@ class ApiController extends Controller {
 
     $response = "Failed";
     $responseMessage = "";
-
     
+    $data['SocialMedia'] = $request->post('SocialMedia');    
+    $data['FirstName'] = $request->post('FirstName');
+    $data['LastName'] = $request->post('LastName');
     $data['EmailAddress'] = $request->post('EmailAddress');
                 
     $Info=$UserCustomer->getCustomerInformationByEmail($data);
@@ -652,13 +654,23 @@ class ApiController extends Controller {
        ]);    
 
     }else{
-        return response()->json([
-          'response' => 'Failed',
-          'data' => null,
-          'message' => "Customer does not exist.",
-       ]); 
+
+      // SAVE NEW RECORD USING SOCIAL IF EMAIL DOES NOT EXIST     
+      $retVal=$UserCustomer->doRegisterSocial($data);
+      if($retVal=='Success'){
+
+         $Info=$UserCustomer->getCustomerInformationByEmail($data);
+         return response()->json([                  
+           'response' => 'Success',
+           'data' => $Info,
+           'message' => "Customer with ID ". $data['EmailAddress']. " has profile data.",
+          ]);    
+
+      }
+      
     } 
   }
+
  //   // GET CUSTOMER INFORMATION WITH PRIMARY ADDRESS========================================================================
  // public function getCustomerInformationWithPrimaryAddress(Request $request){
 
