@@ -1964,7 +1964,6 @@ public function getHomeSliderBanner(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    
     $data['Type']=$request->post('Type');
 
     $data["SearchText"] = '';
@@ -1984,14 +1983,14 @@ public function getPopUpBanner(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['Type']=$request->post('Type');    
+    $data['Type']=$request->post('Type');
 
     $data["SearchText"] = '';
     $data["Status"] = '';
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$BannerAds->getRandomPopUpBannerList($data);  
+    $result=$BannerAds->getPopUpBannerList($data);  
     return response()->json($result); 
     
 }
