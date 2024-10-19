@@ -56,10 +56,8 @@ class BannerAds extends Model
   }
 
   public function getPopUpBannerList($data){
-
-    $BannerID=$data['BannerID'];
-
-     $query = DB::table('mobile_banners as mob_ban')
+   
+   $query = DB::table('mobile_banners as mob_ban')
      ->join('mobile_albums as  mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id') 
     
        ->selectraw("
