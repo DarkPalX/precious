@@ -948,7 +948,6 @@ public function checkCustomerLibraryBookExist(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
 
