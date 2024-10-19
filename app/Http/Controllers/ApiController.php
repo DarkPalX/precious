@@ -1990,7 +1990,7 @@ public function getPopUpBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$BannerAds->getHomeSliderBannerList($data);  
+    $result=$BannerAds->getPopUpBannerList($data);  
     return response()->json($result); 
     
 }
