@@ -1470,8 +1470,8 @@ public function getAllBookCategoryList(Request $request){
   $data["Limit"] = 0;
 
   $result=$Books->getAllBookCatergoryList($data);  
-
   return response()->json($result); 
+  
   }
 
  public function getAllBookList(Request $request){
@@ -1990,7 +1990,7 @@ public function getPopUpBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$BannerAds->getPopUpBannerList($data);  
+    $result=$BannerAds->getHomeSliderBannerList($data);  
     return response()->json($result); 
     
 }
