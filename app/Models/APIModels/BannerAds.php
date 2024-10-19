@@ -21,7 +21,7 @@ use App\Models\APIModels\Misc;
 class BannerAds extends Model
 {
   
-  public function getHomeSliderBanner($data){
+  public function getHomeSliderBannerList($data){
 
      $query = DB::table('mobile_banners as mob_ban')
      ->join('mobile_albums as  mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id') 
@@ -55,7 +55,7 @@ class BannerAds extends Model
     
   }
 
-  public function getRandomPopUpBanner($data){
+  public function getPopUpBannerList($data){
 
     $BannerID=$data['BannerID'];
 
@@ -76,22 +76,14 @@ class BannerAds extends Model
           COALESCE(mob_ban.order,0) as order_sequence
         ");    
        
-       $query->where("mob_alb.status","=",1);  
-       $query->where("mob_ban.album_id","=",1); 
+       $query->where("mob_alb.status","=",1);         
        $query->where("mob_alb.type","=",'main_banner');    
        $query->where("mob_alb.banner_type","=",'image'); 
+       $query->where("mob_ban.album_id","=",1); 
        $query->where("mob_ban.deleted_at","=",null); 
-       
-       // if($BannerID>0){
-       //    $query->where("mob_ban.id","=",1);  
-       // }
-
-       // $query->whereRaw('RAND()');   
-      
-    $list = $query->get();
-                             
-     return $list;  
-
+             
+     $list = $query->get();                           
+     return $list;     
     
   }
 
