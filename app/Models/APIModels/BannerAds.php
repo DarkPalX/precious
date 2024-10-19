@@ -71,8 +71,28 @@ class BannerAds extends Model
           
           COALESCE(mob_ban.button_text,'') as button_text,
           COALESCE(mob_ban.url,'') as url_link,          
+
           COALESCE(mob_ban.order,0) as order_sequence
+                        
         ");    
+       
+       $query->where("mob_alb.status","=",1);  
+       $query->where("mob_alb.type","=",'sub_banner');    
+       $query->where("mob_alb.banner_type","=",'image');   
+       $query->where("mob_ban.deleted_at","=",null);  
+
+     
+    $query->orderBy("mob_ban.order","ASC");     
+    $list = $query->get();
+       
+       $query->where("mob_alb.status","=",1);  
+       $query->where("mob_alb.type","=",'sub_banner');    
+       $query->where("mob_alb.banner_type","=",'image');   
+       $query->where("mob_ban.deleted_at","=",null);  
+
+     
+    $query->orderBy("mob_ban.order","ASC");     
+    $list = $query->get();
        
        $query->where("mob_alb.status","=",1);         
        $query->where("mob_alb.type","=",'main_banner');    
