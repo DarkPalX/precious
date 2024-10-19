@@ -95,10 +95,10 @@
             <tr> 
             <td  style="padding-top:10px;padding-bottom:40px;padding-left:50px;padding-right:50px;font-family:sans-serif;font-size:12px;line-height:20px;color:#232323;text-align:left;font-weight:normal">
              
+                Thank you,
                  <br><br>
-                 Thank you,
-                 <br><br>
-                 {{ config("app.CompanyName") }}
+                 {{ config("app.CompanyName") }} <br>
+                  Admin & Team Staff 
 
             </td> 
             </tr> 
