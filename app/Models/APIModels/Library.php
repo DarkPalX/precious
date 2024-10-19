@@ -325,8 +325,7 @@ class Library extends Model
         $IsExist=true;
     }else{
         $IsExist=false;
-    }
-    
+    }    
     return $IsExist;
   }
 
