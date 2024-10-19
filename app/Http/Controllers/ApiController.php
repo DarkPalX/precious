@@ -1972,7 +1972,7 @@ public function getHomeSliderBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$BannerAds->getHomeSliderBanner($data);  
+    $result=$BannerAds->getHomeSliderBannerList($data);  
     return response()->json($result); 
     
 }
@@ -1991,7 +1991,7 @@ public function getPopUpBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$BannerAds->getRandomPopUpBanner($data);  
+    $result=$BannerAds->getRandomPopUpBannerList($data);  
     return response()->json($result); 
     
 }
