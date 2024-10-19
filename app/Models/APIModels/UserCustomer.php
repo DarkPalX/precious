@@ -261,7 +261,7 @@ class UserCustomer extends Model
            $MessageNotificationID = DB::table('message_notification')
               ->insertGetId([                                            
                 'user_id' => $UserID,                                                         
-                'message_notification' => 'You have successfully changed your new password.',
+                'message_notification' => 'You have successfully updated your password. If you did not initiate this change or have any concerns, please contact our support team immediately. Always keep your account secure!',
                 'created_at' => $TODAY             
             ]); 
                  
