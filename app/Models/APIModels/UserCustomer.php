@@ -499,7 +499,7 @@ class UserCustomer extends Model
               'name' => trim(ucwords($FullName)),              
               'email' => trim($data['EmailAddress']),                                                   
               'verification_code' => $VerificationCode,
-              'provider' => $SocialMedia
+              'provider' => $SocialMedia,
               'role_id' => 6,              
               'is_active' => 1,              
               'created_at' => $TODAY             
