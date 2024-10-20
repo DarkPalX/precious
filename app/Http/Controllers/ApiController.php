@@ -647,18 +647,23 @@ class ApiController extends Controller {
     $data['FullName'] = $request->post('FullName');    
     $data['EmailAddress'] = $request->post('EmailAddress');
 
-    if($data['FullName']!=""){
-      $Names = explode(" ", $data['FullName']);
+    // if($data['FullName']!=""){
+    //   $Names = explode(" ", $data['FullName']);
 
-      $data['FirstName'] = $Names[0];
-      $data['LastName'] = $Names[1];
-      $data['MiddleName'] = $Names[2];
-    }  
-
-
+    //   $data['FirstName'] = $Names[0];
+    //   $data['LastName'] = $Names[1];
+    //   $data['MiddleName'] = $Names[2];
+    // }  
+    
+     $result=$this->SeparateTheNames($data['FullName']);
+     if($result!=""){
+        $data['FirstName']=$result['FirstName'];
+        $data['LastName']=$result['LastName'];
+     }
+     
       return response()->json([
          'response' => 'Failed',
-         'message' => "Customer first name is ". $data['FirstName'],
+         'message' => "Customer first name is ". $data['FirstName']. 'and last name is '.$data['LastName'],
         ]);
 
      if(empty($data['FullName'])){
@@ -700,6 +705,31 @@ class ApiController extends Controller {
     } 
 
   }
+
+  public function SeparateTheNames($fullName) {
+    
+    $fullName = trim($fullName);
+    
+    // Find the position of the last space
+    $spacePosition = strrpos($fullName, ' ');
+    
+    // If no space is found, return the whole name as first name
+    if ($spacePosition === false) {
+        return [
+            'FirstName' => $fullName,
+            'LastName' => ''
+        ];
+    }
+    
+    // Extract first name and family name
+    $firstName = trim(substr($fullName, 0, $spacePosition));
+    $familyName = trim(substr($fullName, $spacePosition + 1));
+    
+    return [
+        'FirstName' => $firstName,
+        'LastName' => $familyName
+    ];
+}
 
  //   // GET CUSTOMER INFORMATION WITH PRIMARY ADDRESS========================================================================
  // public function getCustomerInformationWithPrimaryAddress(Request $request){
