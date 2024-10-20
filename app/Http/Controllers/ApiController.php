@@ -643,23 +643,22 @@ class ApiController extends Controller {
     $data['FullName'] = $request->post('FullName');    
     $data['EmailAddress'] = $request->post('EmailAddress');
 
-    //  if(empty($data['FullName'])){
-    //   $ResponseMessage ='FullName address is required.';
-    //    return response()->json([
-    //      'response' => 'Failed',
-    //      'message' => $ResponseMessage,
-    //     ]);
-    // }
+     if(empty($data['FullName'])){
+      $ResponseMessage ='FullName address is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => "Customer Name via Facebook is". $data['FullName'],
+        ]);
+    }
 
-    //  if(empty($data['EmailAddress'])){
-    //   $ResponseMessage ='EmailAddress address is required.';
-    //    return response()->json([
-    //      'response' => 'Failed',
-    //      'message' => $ResponseMessage,
-    //     ]);
-    // }
-
-                
+     if(empty($data['EmailAddress'])){
+      $ResponseMessage ='EmailAddress address is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => "Customer Email via Facebook is". $data['EmailAddress'],
+        ]);
+    }
+              
     $Info=$UserCustomer->getCustomerInformationByEmail($data);
     if(isset($Info)>0){      
         return response()->json([                  
@@ -681,7 +680,7 @@ class ApiController extends Controller {
           ]);    
       }      
     } 
-    
+
   }
 
  //   // GET CUSTOMER INFORMATION WITH PRIMARY ADDRESS========================================================================
