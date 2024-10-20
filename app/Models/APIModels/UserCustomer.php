@@ -493,49 +493,38 @@ class UserCustomer extends Model
     $EmailAddress=$data['EmailAddress'];
     $SocialMedia=$data['SocialMedia'];
 
-    // if($FullName!=""){
+    if($FullName!=""){
 
-    // $Names = explode(" ", $FullName);
-    //   $FirstName = $Names[0];
-    //   $LastName = $Names[1];
-    //   $MiddleName = $Names[2];
-    // }    
+    $Names = explode(" ", $FullName);
+      $FirstName = $Names[0];
+      $LastName = $Names[1];
+      $MiddleName = $Names[2];
+    }    
       
-    //$VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
+    $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
     $UserID = DB::table('users')
             ->insertGetId([                                    
-              'firstname' => 'Ariz',
-              'lastname' => 'Gayorgor',
-              'name' => 'Ariz Gayorgor',              
-              'email' => 'zira0814@gmail.com',   
+              'firstname' => $FirstName,
+              'lastname' => $LastName,
+              'name' => $FullName,              
+              'email' => $EmailAddress,   
               'email_verified_at' => $TODAY,    
               'password' => bcrypt('123456'),                                                   
-              'verification_code' => '0190',
-              'provider' => 'facebook',
+              'verification_code' => $VerificationCode,
+              'provider' => $SocialMedia,
               'role_id' => 6,              
               'is_active' => 1,              
               'created_at' => $TODAY             
             ]);
 
-          //    //Send Notification Message
-          //      $MessageNotificationID = DB::table('message_notification')
-          //           ->insertGetId([                                            
-          //             'user_id' => $UserID,                                                         
-          //             'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
-          //             'created_at' => $TODAY             
-          //         ]);    
-
-          // // CALL EMAIL HERE FOR REGISTRATION W/ ACTIVATION
-          // if(!empty($EmailAddress)){      
-
-          //    $param['FullName']=trim($FullName);
-          //    $param['EmailAddress']=trim($EmailAddress);
-          //    $param['VerificationCode']=$VerificationCode;
-                                                
-          //    $Email = new Email();
-          //    $Email->SendCustomerRegistrationEmail($param);      
-          // }
-    
+             //Send Notification Message
+               $MessageNotificationID = DB::table('message_notification')
+                    ->insertGetId([                                            
+                      'user_id' => $UserID,                                                         
+                      'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
+                      'created_at' => $TODAY             
+             ]);    
+       
     return 'Success';
 
   }
