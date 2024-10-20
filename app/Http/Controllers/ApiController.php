@@ -639,13 +639,17 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
     
+    $data['FirstName']="";
+    $data['LastName']="";    
+    $data['MiddleName']="";
+
     $data['SocialMedia'] = $request->post('SocialMedia');    
     $data['FullName'] = $request->post('FullName');    
     $data['EmailAddress'] = $request->post('EmailAddress');
 
       return response()->json([
          'response' => 'Failed',
-         'message' => "Customer Email Address via Facebook is ". $data['EmailAddress'],
+         'message' => "Customer social media is ". $data['SocialMedia'],
         ]);
 
      if(empty($data['FullName'])){
@@ -674,7 +678,15 @@ class ApiController extends Controller {
 
     }else{
 
-      // SAVE NEW RECORD USING SOCIAL IF EMAIL DOES NOT EXIST     
+    // SAVE NEW RECORD USING SOCIAL IF EMAIL DOES NOT EXIST     
+    if($data['FullName']!=""){
+      $Names = explode(" ", $data['FullName']);
+
+      $data['FirstName'] = $Names[0];
+      $data['LastName'] = $Names[1];
+      $$data['MiddleName'] = $Names[2];
+    }  
+
       $retVal=$UserCustomer->doRegisterSocial($data);
       if($retVal=='Success'){
          $Info=$UserCustomer->getCustomerInformationByEmail($data);
