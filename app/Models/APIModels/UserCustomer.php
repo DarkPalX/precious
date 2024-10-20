@@ -490,6 +490,7 @@ class UserCustomer extends Model
     $MiddleName="";
         
     $FullName=$data['FullName'];    
+    $EmailAddress=$data['EmailAddress'];
     $SocialMedia=$data['SocialMedia'];
 
     if($FullName!=""){
