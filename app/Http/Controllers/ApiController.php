@@ -642,6 +642,23 @@ class ApiController extends Controller {
     $data['SocialMedia'] = $request->post('SocialMedia');    
     $data['FullName'] = $request->post('FullName');    
     $data['EmailAddress'] = $request->post('EmailAddress');
+
+     if(empty($data['FullName'])){
+      $ResponseMessage ='FullName address is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+     if(empty($data['EmailAddress'])){
+      $ResponseMessage ='EmailAddress address is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
                 
     $Info=$UserCustomer->getCustomerInformationByEmail($data);
 
@@ -657,7 +674,6 @@ class ApiController extends Controller {
       // SAVE NEW RECORD USING SOCIAL IF EMAIL DOES NOT EXIST     
       $retVal=$UserCustomer->doRegisterSocial($data);
       if($retVal=='Success'){
-
          $Info=$UserCustomer->getCustomerInformationByEmail($data);
          return response()->json([                  
            'response' => 'Success',
