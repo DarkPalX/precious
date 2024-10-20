@@ -647,9 +647,18 @@ class ApiController extends Controller {
     $data['FullName'] = $request->post('FullName');    
     $data['EmailAddress'] = $request->post('EmailAddress');
 
+    if($data['FullName']!=""){
+      $Names = explode(" ", $data['FullName']);
+
+      $data['FirstName'] = $Names[0];
+      $data['LastName'] = $Names[1];
+      $$data['MiddleName'] = $Names[2];
+    }  
+
+
       return response()->json([
          'response' => 'Failed',
-         'message' => "Customer social media is ". $data['SocialMedia'],
+         'message' => "Customer info are ". $data['FirstName'].' '.$data['LastName'].' full name is  '.$data['FullName']. ' and email is '.$data['EmailAddress'],
         ]);
 
      if(empty($data['FullName'])){
@@ -679,14 +688,6 @@ class ApiController extends Controller {
     }else{
 
     // SAVE NEW RECORD USING SOCIAL IF EMAIL DOES NOT EXIST     
-    if($data['FullName']!=""){
-      $Names = explode(" ", $data['FullName']);
-
-      $data['FirstName'] = $Names[0];
-      $data['LastName'] = $Names[1];
-      $$data['MiddleName'] = $Names[2];
-    }  
-
       $retVal=$UserCustomer->doRegisterSocial($data);
       if($retVal=='Success'){
          $Info=$UserCustomer->getCustomerInformationByEmail($data);
