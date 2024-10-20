@@ -493,19 +493,19 @@ class UserCustomer extends Model
     $EmailAddress=$data['EmailAddress'];
     $SocialMedia=$data['SocialMedia'];
 
-    if($FullName!=""){
+    // if($FullName!=""){
 
-    $Names = explode(" ", $FullName);
-      $FirstName = $Names[0];
-      $LastName = $Names[1];
-      $MiddleName = $Names[2];
-    }    
+    // $Names = explode(" ", $FullName);
+    //   $FirstName = $Names[0];
+    //   $LastName = $Names[1];
+    //   $MiddleName = $Names[2];
+    // }    
       
     $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
     $UserID = DB::table('users')
             ->insertGetId([                                    
-              'firstname' => trim(ucwords($FirstName)),
-              'lastname' => trim(ucwords($LastName)),
+              'firstname' => trim(ucwords($FullName)),
+              'lastname' => trim(ucwords($FullName)),
               'name' => trim(ucwords($FullName)),              
               'email' => trim($data['EmailAddress']),                                                   
               'verification_code' => $VerificationCode,
@@ -515,24 +515,24 @@ class UserCustomer extends Model
               'created_at' => $TODAY             
             ]);
 
-             //Send Notification Message
-               $MessageNotificationID = DB::table('message_notification')
-                    ->insertGetId([                                            
-                      'user_id' => $UserID,                                                         
-                      'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
-                      'created_at' => $TODAY             
-                  ]);    
+          //    //Send Notification Message
+          //      $MessageNotificationID = DB::table('message_notification')
+          //           ->insertGetId([                                            
+          //             'user_id' => $UserID,                                                         
+          //             'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
+          //             'created_at' => $TODAY             
+          //         ]);    
 
-          // CALL EMAIL HERE FOR REGISTRATION W/ ACTIVATION
-          if(!empty($EmailAddress)){      
+          // // CALL EMAIL HERE FOR REGISTRATION W/ ACTIVATION
+          // if(!empty($EmailAddress)){      
 
-             $param['FullName']=trim($FullName);
-             $param['EmailAddress']=trim($EmailAddress);
-             $param['VerificationCode']=$VerificationCode;
+          //    $param['FullName']=trim($FullName);
+          //    $param['EmailAddress']=trim($EmailAddress);
+          //    $param['VerificationCode']=$VerificationCode;
                                                 
-             $Email = new Email();
-             $Email->SendCustomerRegistrationEmail($param);      
-          }
+          //    $Email = new Email();
+          //    $Email->SendCustomerRegistrationEmail($param);      
+          // }
     
     return 'Success';
 
