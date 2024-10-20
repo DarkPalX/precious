@@ -486,10 +486,8 @@ class UserCustomer extends Model
     $TODAY = date("Y-m-d H:i:s");
           
     $FirstName=$data['FirstName'];    
-    $LastName=$data['LastName'];    
-    $MiddleName=$data['MiddleName'];    
-
-    $FirstName=$data['FirstName']; 
+    $LastName=$data['LastName'];        
+    $FullName=$data['FullName']; 
 
     $EmailAddress=$data['EmailAddress'];
     $SocialMedia=$data['SocialMedia'];
