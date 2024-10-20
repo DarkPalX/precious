@@ -484,22 +484,16 @@ class UserCustomer extends Model
 
     $Misc  = New Misc();
     $TODAY = date("Y-m-d H:i:s");
-      
-    $FirstName="";
-    $LastName="";
-    $MiddleName="";
-        
-    $FullName=$data['FullName'];    
+          
+    $FirstName=$data['FirstName'];    
+    $LastName=$data['LastName'];    
+    $MiddleName=$data['MiddleName'];    
+
+    $FirstName=$data['FirstName']; 
+
     $EmailAddress=$data['EmailAddress'];
     $SocialMedia=$data['SocialMedia'];
-
-    if($FullName!=""){
-
-    $Names = explode(" ", $FullName);
-      $FirstName = $Names[0];
-      $LastName = $Names[1];
-      $MiddleName = $Names[2];
-    }    
+    
       
     $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
     $UserID = DB::table('users')
@@ -517,13 +511,13 @@ class UserCustomer extends Model
               'created_at' => $TODAY             
             ]);
 
-             //Send Notification Message
-               $MessageNotificationID = DB::table('message_notification')
-                    ->insertGetId([                                            
-                      'user_id' => $UserID,                                                         
-                      'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
-                      'created_at' => $TODAY             
-             ]);    
+             // //Send Notification Message
+             //   $MessageNotificationID = DB::table('message_notification')
+             //        ->insertGetId([                                            
+             //          'user_id' => $UserID,                                                         
+             //          'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
+             //          'created_at' => $TODAY             
+             // ]);    
        
     return 'Success';
 
