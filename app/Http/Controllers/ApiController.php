@@ -640,8 +640,7 @@ class ApiController extends Controller {
     $responseMessage = "";
     
     $data['SocialMedia'] = $request->post('SocialMedia');    
-    $data['FirstName'] = $request->post('FirstName');
-    $data['LastName'] = $request->post('LastName');
+    $data['FullName'] = $request->post('FullName');    
     $data['EmailAddress'] = $request->post('EmailAddress');
                 
     $Info=$UserCustomer->getCustomerInformationByEmail($data);
