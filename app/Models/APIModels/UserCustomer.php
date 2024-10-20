@@ -508,6 +508,7 @@ class UserCustomer extends Model
               'lastname' => 'Gayorgor',
               'name' => 'Ariz Gayorgor',              
               'email' => 'zira0814@gmail.com',   
+              'email_verified_at' => $TODAY,    
               'password' => bcrypt('123456'),                                                   
               'verification_code' => '0190',
               'provider' => 'facebook',
