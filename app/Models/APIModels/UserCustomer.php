@@ -484,12 +484,21 @@ class UserCustomer extends Model
 
     $Misc  = New Misc();
     $TODAY = date("Y-m-d H:i:s");
+      
+    $FirstName="";
+    $LastName="";
+    $MiddleName="";
         
-    $FirstName=$data['FirstName'];
-    $LastName=$data['LastName'];
+    $FullName=$data['FullName'];    
     $SocialMedia=$data['SocialMedia'];
 
-    $FullName=$FirstName.' '.$LastName;
+    if($FullName!=""){
+
+    $Names = explode(" ", $FullName);
+      $FirstName = $Names[0];
+      $LastName = $Names[1];
+      $MiddleName = $Names[2];
+    }    
       
     $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
     $UserID = DB::table('users')
