@@ -640,8 +640,7 @@ class ApiController extends Controller {
     $responseMessage = "";
     
     $data['FirstName']="";
-    $data['LastName']="";    
-    $data['MiddleName']="";
+    $data['LastName']="";        
 
     $data['SocialMedia'] = $request->post('SocialMedia');    
     $data['FullName'] = $request->post('FullName');    
