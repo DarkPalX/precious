@@ -491,8 +491,7 @@ class UserCustomer extends Model
 
     $EmailAddress=$data['EmailAddress'];
     $SocialMedia=$data['SocialMedia'];
-    
-      
+        
     $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
     $UserID = DB::table('users')
             ->insertGetId([                                    
@@ -509,13 +508,13 @@ class UserCustomer extends Model
               'created_at' => $TODAY             
             ]);
 
-             // //Send Notification Message
-             //   $MessageNotificationID = DB::table('message_notification')
-             //        ->insertGetId([                                            
-             //          'user_id' => $UserID,                                                         
-             //          'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
-             //          'created_at' => $TODAY             
-             // ]);    
+             //Send Notification Message
+               $MessageNotificationID = DB::table('message_notification')
+                    ->insertGetId([                                            
+                      'user_id' => $UserID,                                                         
+                      'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
+                      'created_at' => $TODAY             
+             ]);    
        
     return 'Success';
 
