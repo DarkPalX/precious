@@ -652,7 +652,7 @@ class ApiController extends Controller {
 
       $data['FirstName'] = $Names[0];
       $data['LastName'] = $Names[1];
-      $$data['MiddleName'] = $Names[2];
+      $data['MiddleName'] = $Names[2];
     }  
 
 
