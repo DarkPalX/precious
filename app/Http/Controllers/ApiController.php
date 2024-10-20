@@ -645,7 +645,7 @@ class ApiController extends Controller {
 
       return response()->json([
          'response' => 'Failed',
-         'message' => "Customer Name via Facebook is". $data['FullName'],
+         'message' => "Customer Email Address via Facebook is ". $data['EmailAddress'],
         ]);
 
      if(empty($data['FullName'])){
