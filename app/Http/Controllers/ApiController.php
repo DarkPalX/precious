@@ -643,6 +643,11 @@ class ApiController extends Controller {
     $data['FullName'] = $request->post('FullName');    
     $data['EmailAddress'] = $request->post('EmailAddress');
 
+      return response()->json([
+         'response' => 'Failed',
+         'message' => "Customer Name via Facebook is". $data['FullName'],
+        ]);
+
      if(empty($data['FullName'])){
       $ResponseMessage ='FullName address is required.';
        return response()->json([
