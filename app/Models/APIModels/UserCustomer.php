@@ -501,15 +501,15 @@ class UserCustomer extends Model
     //   $MiddleName = $Names[2];
     // }    
       
-    $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
+    //$VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
     $UserID = DB::table('users')
             ->insertGetId([                                    
-              'firstname' => trim(ucwords($FullName)),
-              'lastname' => trim(ucwords($FullName)),
-              'name' => trim(ucwords($FullName)),              
-              'email' => trim($data['EmailAddress']),                                                   
-              'verification_code' => $VerificationCode,
-              'provider' => $SocialMedia,
+              'firstname' => 'Ariz',
+              'lastname' => 'Gayorgor',
+              'name' => 'Ariz Gayorgor',              
+              'email' => 'zira0814@gmail.com',                                                   
+              'verification_code' => '56790',
+              'provider' => 'facebook',
               'role_id' => 6,              
               'is_active' => 1,              
               'created_at' => $TODAY             
