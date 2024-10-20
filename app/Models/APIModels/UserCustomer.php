@@ -509,7 +509,7 @@ class UserCustomer extends Model
               'name' => 'Ariz Gayorgor',              
               'email' => 'zira0814@gmail.com',   
               'password' => bcrypt('123456'),                                                   
-              'verification_code' => '56790',
+              'verification_code' => '0190',
               'provider' => 'facebook',
               'role_id' => 6,              
               'is_active' => 1,              
