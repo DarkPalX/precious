@@ -661,7 +661,6 @@ class ApiController extends Controller {
 
                 
     $Info=$UserCustomer->getCustomerInformationByEmail($data);
-
     if(isset($Info)>0){      
         return response()->json([                  
          'response' => 'Success',
@@ -680,10 +679,9 @@ class ApiController extends Controller {
            'data' => $Info,
            'message' => "Customer with ID ". $data['EmailAddress']. " has profile data.",
           ]);    
-
-      }
-      
+      }      
     } 
+    
   }
 
  //   // GET CUSTOMER INFORMATION WITH PRIMARY ADDRESS========================================================================
