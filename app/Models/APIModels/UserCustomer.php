@@ -168,7 +168,7 @@ class UserCustomer extends Model
 
     //GENERATE RANDOM PASSWORD
      $Misc = new Misc();
-     $GeneratedTempPassword=$Misc->GenerateRandomNo(4,'users','verification_code');  
+     $GeneratedTempPassword=$Misc->GenerateRandomNo(6,'users','verification_code');  
 
      //SET BYCRYPT PASSWORD
      $NewPassword=bcrypt($GeneratedTempPassword);
