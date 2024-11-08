@@ -409,22 +409,22 @@ class Book extends Model
    
     //Sorting Option
     if($Filter_Sort!=''){
-      if($Filter_Sort=='Featured Tiles'){
+      if($Filter_Sort=='Featured Books'){
         $query->orderBy("prds.is_featured","DESC");   
        }
-       if($Filter_Sort=='Low-High'){
+       if($Filter_Sort=='Price: Low-High'){
         $query->orderBy("prds.ebook_price","ASC");   
        }
-        if($Filter_Sort=='High-Low'){
+        if($Filter_Sort=='Price: High-Low'){
         $query->orderBy("prds.ebook_price","DESC");   
        }
        if($Filter_Sort=='Publication Date'){
         $query->orderBy("prds.publication_date","ASC");   
        }
-        if($Filter_Sort=='A-Z'){
+        if($Filter_Sort=='A-Z Sort'){
         $query->orderBy("prds.name","ASC");   
        }
-        if($Filter_Sort=='Z-A'){
+        if($Filter_Sort=='Z-A Sort'){
         $query->orderBy("prds.name","DESC");   
        }
      }

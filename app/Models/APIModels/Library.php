@@ -276,9 +276,14 @@ class Library extends Model
           
         ");    
 
-    $query->where("rbooks.user_id",'=',$UserID);    
-    $query->where("rbooks.is_read",'=',1);        
+            
+    $query->where("prds.is_free",'=',0);        
+    $query->where("prds.is_premium",'=',0);        
+    
+    $query->where("rbooks.user_id",'=',$UserID);        
     $query->where("rbooks.deleted_at",'=',null);   
+
+    $query->where("rbooks.is_read",'=',1);
   
                                   
       if($SearchText != ''){
@@ -320,8 +325,7 @@ class Library extends Model
         $IsExist=true;
     }else{
         $IsExist=false;
-    }
-    
+    }    
     return $IsExist;
   }
 
@@ -364,7 +368,6 @@ class Library extends Model
     
     return $IsExist;
   }
-
 
   public function getSubscribedDownloadedBooksList($data){
     

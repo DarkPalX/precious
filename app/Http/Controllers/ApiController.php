@@ -630,6 +630,77 @@ class ApiController extends Controller {
     } 
   }
 
+ // GET CUSTOMER INFORMATION========================================================================
+ public function getCustomerInformationByEmail(Request $request){
+
+    $Misc = new Misc();
+    $UserCustomer = new UserCustomer();
+
+    $response = "Failed";
+    $responseMessage = "";
+    
+    $data['FirstName']="";
+    $data['LastName']="";        
+
+    $data['SocialMedia'] = $request->post('SocialMedia');    
+    $data['FullName'] = $request->post('FullName');    
+    $data['EmailAddress'] = $request->post('EmailAddress');
+
+     $result=$this->SeparateTheNames($data['FullName']);
+     if($result!=""){
+        $data['FirstName']=$result['FirstName'];
+        $data['LastName']=$result['LastName'];
+     }       
+              
+    $Info=$UserCustomer->getCustomerInformationByEmail($data);
+    if(isset($Info)>0){      
+        return response()->json([                  
+         'response' => 'Success',
+         'data' => $Info,
+         'message' => "Customer with ID ". $data['EmailAddress']. " has profile data.",
+       ]);    
+
+    }else{
+
+    // SAVE NEW RECORD USING SOCIAL IF EMAIL DOES NOT EXIST     
+      $retVal=$UserCustomer->doRegisterSocial($data);
+      if($retVal=='Success'){
+         $Info=$UserCustomer->getCustomerInformationByEmail($data);
+         return response()->json([                  
+           'response' => 'Success',
+           'data' => $Info,
+           'message' => "Customer with ID ". $data['EmailAddress']. " has profile data.",
+          ]);    
+      }      
+    } 
+
+  }
+
+  public function SeparateTheNames($fullName) {
+    
+    $fullName = trim($fullName);
+    
+    // Find the position of the last space
+    $spacePosition = strrpos($fullName, ' ');
+    
+    // If no space is found, return the whole name as first name
+    if ($spacePosition === false) {
+        return [
+            'FirstName' => $fullName,
+            'LastName' => ''
+        ];
+    }
+    
+    // Extract first name and family name
+    $firstName = trim(substr($fullName, 0, $spacePosition));
+    $familyName = trim(substr($fullName, $spacePosition + 1));
+    
+    return [
+        'FirstName' => $firstName,
+        'LastName' => $familyName
+    ];
+}
+
  //   // GET CUSTOMER INFORMATION WITH PRIMARY ADDRESS========================================================================
  // public function getCustomerInformationWithPrimaryAddress(Request $request){
 
@@ -766,7 +837,7 @@ class ApiController extends Controller {
     }
 
     if(!empty($data['EmailAddress']) && $Misc->isDataExist('users', 'id', $data['UserID'], "email", $data['EmailAddress'])){
-        $ResponseMessage = 'Email is already registered.';
+        $ResponseMessage = 'Email is already used and registered by other.';
          return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
@@ -795,16 +866,22 @@ class ApiController extends Controller {
     $Misc = new Misc();
     $UserCustomer = new UserCustomer();
 
-    $response = "Failed";
     $responseMessage = "";
-    
+    $response = "Failed";  
+    $data['FullName']="";
+
     $data['UserID']=$request->post('UserID');     
     $data['EmailAddress']=$request->post('EmailAddress');     
-    $data['IsSubscribe'] = $request->post('IsSubscribe'); 
+    $data['Is_Subscribe'] = $request->post('Is_Subscribe'); 
+
+    $info=$UserCustomer->getCustomerInformation($data);
+    if(isset($info)>0){
+        $data['FullName']=$info->fullname;
+    }
            
     $retVal=$UserCustomer->SubscribedToNewsLetter($data);
 
-    if($data['IsSubscribe']){
+    if($data['Is_Subscribe']){
      return response()->json([
       'response' => 'Success',
       'message' => "You have successfully subcribed to news letter.",
@@ -913,7 +990,6 @@ public function checkCustomerLibraryBookExist(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
 
@@ -1087,7 +1163,6 @@ public function saveReadSubscribedBooks(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
-
     
     $data['UserID']=$request->post('UserID');   
     $data['ProductID']=$request->post('ProductID'); 
@@ -1436,8 +1511,8 @@ public function getAllBookCategoryList(Request $request){
   $data["Limit"] = 0;
 
   $result=$Books->getAllBookCatergoryList($data);  
-
   return response()->json($result); 
+  
   }
 
  public function getAllBookList(Request $request){
@@ -1451,7 +1526,7 @@ public function getAllBookCategoryList(Request $request){
   $data['SearchText'] = '';
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 0;
+  $data["Limit"] = $request->post('Limit');
 
   $result=$Books->getBookList($data);  
 
@@ -1656,7 +1731,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $sales_header=$Order->getOrderInfo($data['OrderID']);  
   if(isset($sales_header)>0){
 
-     $response='Success';     
+      $response='Success';     
       if($response=='Success'){        
         return response()->json([                  
          'response' => $response,
@@ -1726,9 +1801,8 @@ public function getAllBookDetailsCatalogueList(Request $request){
           'message' => "Something is wrong while sending email of all transactions purchased order  history.",
         ]);  
          
-  }
-  
-      
+    }
+    
   }
 
  public function getCustomerOrderDetails(Request $request){
@@ -1746,7 +1820,8 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
-  $sales_details=$Order->getOrderItemList($data['OrderID']);  
+  $sales_details=$Order->getOrderItemList($data['OrderID']); 
+
   if(isset($sales_details)>0){     
     return response()->json($sales_details); 
   }
@@ -1930,7 +2005,6 @@ public function getHomeSliderBanner(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    
     $data['Type']=$request->post('Type');
 
     $data["SearchText"] = '';
@@ -1938,7 +2012,7 @@ public function getHomeSliderBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$BannerAds->getHomeSliderBanner($data);  
+    $result=$BannerAds->getHomeSliderBannerList($data);  
     return response()->json($result); 
     
 }
@@ -1950,7 +2024,6 @@ public function getPopUpBanner(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    
     $data['Type']=$request->post('Type');
 
     $data["SearchText"] = '';
@@ -1958,15 +2031,8 @@ public function getPopUpBanner(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $Info=$BannerAds->getRandomPopUpBanner($data);  
-
-    return response()->json([
-      'response' => 'Success',
-      'data' => $Info,
-      'message' => "Successfully get pop up banner.",
-    ]); 
-
-    // return response()->json($result); 
+    $result=$BannerAds->getPopUpBannerList($data);  
+    return response()->json($result); 
     
 }
 
@@ -2387,7 +2453,7 @@ public function validateCouponCode(Request $request){
                                                         
            }else{
 
-                $ResponseMessage ='Invalid coupon code.';
+                $ResponseMessage ='Coupon is invalid. Please try other coupon.';
                  return response()->json([
                    'response' => 'Failed',     
                    'percent_discount' => null,      
@@ -2402,7 +2468,7 @@ public function validateCouponCode(Request $request){
 
       }else{
 
-            $ResponseMessage ='Enter coupon code to validate';
+            $ResponseMessage ='Coupon is invalid. Please try other coupon.';
                return response()->json([
                  'response' => 'Failed',     
                  'percent_discount' => null,      
@@ -2478,7 +2544,7 @@ public function validateCouponCode(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
-  $result=$Messages->openSetReadMessageNotification($data);  
+  $response=$Messages->openSetReadMessageNotification($data);  
 
    return response()->json([                  
      'response' => $response,
@@ -2503,7 +2569,7 @@ public function validateCouponCode(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
-  $result=$Messages->deleteReadMessageNotification($data);  
+  $response=$Messages->deleteReadMessageNotification($data);  
 
    return response()->json([                  
      'response' => $response,

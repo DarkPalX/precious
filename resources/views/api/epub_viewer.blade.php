@@ -8,7 +8,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Precious Epub Viewer</title>
 
-  
   <link rel="stylesheet" type="text/css" href="https://www.beta.ebooklat.phr.com.ph/public/api/css/epub-main-style.css">
 
   <script src="https://www.beta.ebooklat.phr.com.ph/public/api/js/jszip.min.js"></script>

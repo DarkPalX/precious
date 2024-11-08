@@ -168,7 +168,7 @@ class UserCustomer extends Model
 
     //GENERATE RANDOM PASSWORD
      $Misc = new Misc();
-     $GeneratedTempPassword=$Misc->GenerateRandomNo(4,'users','verification_code');  
+     $GeneratedTempPassword=$Misc->GenerateRandomNo(6,'users','verification_code');  
 
      //SET BYCRYPT PASSWORD
      $NewPassword=bcrypt($GeneratedTempPassword);
@@ -261,7 +261,7 @@ class UserCustomer extends Model
            $MessageNotificationID = DB::table('message_notification')
               ->insertGetId([                                            
                 'user_id' => $UserID,                                                         
-                'message_notification' => 'You have successfully changed your new password.',
+                'message_notification' => 'You have successfully updated your password. If you did not initiate this change or have any concerns, please contact our support team immediately. Always keep your account secured!',
                 'created_at' => $TODAY             
             ]); 
                  
@@ -454,13 +454,12 @@ class UserCustomer extends Model
               'is_active' => 1,              
               'created_at' => $TODAY             
             ]);
-
-          // SAVE SYSTEM 
+          
              //Send Notification Message
                $MessageNotificationID = DB::table('message_notification')
                     ->insertGetId([                                            
                       'user_id' => $UserID,                                                         
-                      'message_notification' => 'Welcome to Precious Pages Corp. & thank you for your for signing-up. Enjoy & explore our wide variety of books from best seller to premium books or any books that you have been looking for.',
+                      'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
                       'created_at' => $TODAY             
                   ]);    
 
@@ -477,6 +476,46 @@ class UserCustomer extends Model
 
        }
 
+    return 'Success';
+
+  }
+
+   public function doRegisterSocial($data) {
+
+    $Misc  = New Misc();
+    $TODAY = date("Y-m-d H:i:s");
+          
+    $FirstName=$data['FirstName'];    
+    $LastName=$data['LastName'];        
+    $FullName=$data['FullName']; 
+
+    $EmailAddress=$data['EmailAddress'];
+    $SocialMedia=$data['SocialMedia'];
+        
+    $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
+    $UserID = DB::table('users')
+            ->insertGetId([                                    
+              'firstname' => $FirstName,
+              'lastname' => $LastName,
+              'name' => $FullName,              
+              'email' => $EmailAddress,   
+              'email_verified_at' => $TODAY,    
+              'password' => bcrypt('123456'),                                                   
+              'verification_code' => $VerificationCode,
+              'provider' => $SocialMedia,
+              'role_id' => 6,              
+              'is_active' => 1,              
+              'created_at' => $TODAY             
+            ]);
+
+             //Send Notification Message
+               $MessageNotificationID = DB::table('message_notification')
+                    ->insertGetId([                                            
+                      'user_id' => $UserID,                                                         
+                      'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
+                      'created_at' => $TODAY             
+             ]);    
+       
     return 'Success';
 
   }
@@ -542,6 +581,73 @@ class UserCustomer extends Model
           
         ")        
         ->whereRaw('usrs.id =?',[$UserID])                                      
+        ->first();
+
+    return $info;
+
+  }
+
+  public function getCustomerInformationByEmail($data){
+        
+    $EmailAddress = $data['EmailAddress'];   
+
+    $info = DB::table('users as usrs')              
+    
+       ->selectraw("
+          usrs.id as user_ID,
+
+          COALESCE(usrs.firstname,'') as firstname,
+          COALESCE(usrs.lastname,'') as lastname,
+          COALESCE(usrs.name,'') as fullname,
+          COALESCE(usrs.avatar,'') as avatar,
+
+          COALESCE(usrs.email,'') as emailaddress,
+          COALESCE(usrs.email_verified_at,'') as email_verified_at,
+          COALESCE(usrs.password,'') as password,
+          COALESCE(usrs.mobile,'') as mobile,
+          COALESCE(usrs.phone,'') as phone,
+
+          COALESCE(usrs.birth_date,'') as birth_date,
+          DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+          DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
+
+          COALESCE(usrs.address_street,'') as address_street,
+          COALESCE(usrs.address_city,'') as address_city,
+          COALESCE(usrs.address_municipality,'') as address_municipality,
+          COALESCE(usrs.address_province,'') as address_province,
+          COALESCE(usrs.address_zip,'') as address_zip,
+
+          COALESCE(usrs.ecredits,0) as ecredits,
+          COALESCE(usrs.verification_code,'') as verification_code,
+          COALESCE(usrs.remember_token,'') as remember_token,
+          
+          COALESCE((
+               SELECT 
+                   COUNT(cart.qty) FROM 
+                      ecommerce_shopping_cart as cart                                    
+                  WHERE cart.user_id = usrs.id                           
+                  AND cart.qty=0 
+                  LIMIT 1
+                                              
+              )
+        ,0) as item_cart,
+
+        COALESCE((
+               SELECT 
+                   COUNT(mssg_notif.id ) FROM 
+                      message_notification as mssg_notif                                    
+                  WHERE mssg_notif.user_id = usrs.id                           
+                  AND mssg_notif.is_read=0 
+                  LIMIT 1
+                                              
+              )
+         ,0) as item_message,
+
+
+          COALESCE(usrs.is_active,0) as is_active         
+          
+        ")        
+        ->whereRaw('usrs.email =?',[$EmailAddress])                                      
         ->first();
 
     return $info;
@@ -688,7 +794,7 @@ class UserCustomer extends Model
            $MessageNotificationID = DB::table('message_notification')
                 ->insertGetId([                                            
                   'user_id' => $UserID,                                                         
-                  'message_notification' => 'You have successfully updated your profile information.',
+                  'message_notification' => 'Your profile information has been successfully updated! We appreciate you for keeping & taking your time to ensure your detail information always updated.',
                   'created_at' => $TODAY             
               ]);  
            
@@ -706,7 +812,8 @@ class UserCustomer extends Model
 
     $UserID=$data['UserID'];
     $EmailAddress=$data['EmailAddress'];
-    $Is_Subscribe=$data['IsSubscribe'];
+    $FullName=$data['FullName'];
+    $Is_Subscribe=$data['Is_Subscribe'];
 
     if($Is_Subscribe){
 
@@ -731,7 +838,7 @@ class UserCustomer extends Model
             $SubscriberUserID = DB::table('subscribers')
               ->insertGetId([                                    
                 'email' => $EmailAddress,
-                'code' => '90Ty34uKK0thCgyrzleCYyH9xAGCFX6AXTCoJzrakAWHxJk478Uy9bvQkJAyg3JQv3rZaVuTiKxVXDWMzFsczhzp0jnSoBtNryOdyzRMWFjeBYxnawr',
+                'code' => $Misc->GenerateRandomString(128),
                 'name' => trim(ucwords($FullName)),   
                 'is_active' => 1,                           
                 'created_at' => $TODAY             
@@ -748,11 +855,11 @@ class UserCustomer extends Model
        $MessageNotificationID = DB::table('message_notification')
           ->insertGetId([                                            
             'user_id' => $UserID,   
-            'message_notification' => 'You have subscribe for a monthly news letter & you will recieved a regular email notifications of news letter, promos & events.',                                                                          
+            'message_notification' => 'Thank you for subscribing to our monthly newsletter! You will now receive regular updates on exciting events, exclusive book discounts, and special promotions just for our subscribers. Always stay tuned for the latest news and offers that will keep you updated.',                                                                          
             'created_at' => $TODAY             
         ]); 
 
-    }else if(!$Is_Subscribe){
+    }else{
 
         $IsExist = false; 
         $list = DB::table('subscribers')                          
@@ -782,7 +889,7 @@ class UserCustomer extends Model
            $MessageNotificationID = DB::table('message_notification')
               ->insertGetId([                                            
                 'user_id' => $UserID,                                                         
-                'message_notification' => 'You have successfully unsubscribe for monthly news letter. You will not able to received email notification of new letter, promos & events.',
+                'message_notification' => 'You have successfully unsubscribe to our monthly newsletter!  You will no longer receive updates on newsletter events, book discounts, or special promotions. We appreciate your time subscribing with us, and if you ever wish to receive newsletter again, just simply subscribed back.',
                 'created_at' => $TODAY             
             ]);   
       }

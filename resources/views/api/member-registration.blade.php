@@ -75,16 +75,16 @@
             <tbody>
             <tr> 
             <td  style="padding-top:40px;padding-bottom:0px;padding-left:50px;padding-right:50px;font-family:sans-serif;font-size:12px;line-height:20px;color:#232323;text-align:left;font-weight:normal">
-               Dear <b>{{ $FullName }}</b>,
-              <br><br>
-                  Welcome to  {{ config("app.CompanyName") }} and thank you for your interest for signing and becoming one of our customer. Please login your account now and complete the registration process.
-                  Use this 4 digit verification code below:
 
-                   <br><br>
+               Dear <b>{{ $FullName }}</b>, <br><br>
                   
-                  CODE: <b>{{ $VerificationCode }}</b> 
+                  Welcome to  {{ config("app.CompanyName") }}! We’re thrilled to have you join our community of book lovers. Thank you for your interest in becoming a valued customer. <br><br>
 
-                  <br><br>
+                  Please log in to your account now to complete the registration process. Use the following 4-digit verification code: [ <b>{{ $VerificationCode }}</b> ] <br><br>                                    
+                                    
+                  Here at  {{ config("app.CompanyName") }}, we offer a vast selection of books across all genres, from bestsellers to hidden gems. Whether you're looking for your next great read or a gift for a fellow book enthusiast, we have something for everyone.<br><br>
+
+                  If you have any questions or need assistance, our customer service team is here to help. Happy reading!
 
             </td> 
             </tr> 
@@ -96,10 +96,10 @@
             <tr> 
             <td  style="padding-top:10px;padding-bottom:40px;padding-left:50px;padding-right:50px;font-family:sans-serif;font-size:12px;line-height:20px;color:#232323;text-align:left;font-weight:normal">
              
-                 <br><br>
                  Thank you,
                  <br><br>
-                 {{ config("app.CompanyName") }}
+                 {{ config("app.CompanyName") }} <br>
+                  Admin & Team Staff 
 
             </td> 
             </tr> 

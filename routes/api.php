@@ -78,6 +78,11 @@ Route::post('/get-customer-info',[
    'as'=> 'get-customer-info'
 ]);
 
+Route::post('/get-customer-info-by-email',[
+   'uses'=>'App\Http\Controllers\ApiController@getCustomerInformationByEmail',
+   'as'=> 'get-customer-info-by-email'
+]);
+
 Route::post('/get-customer-info-primary-address',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerInformationWithPrimaryAddress',
    'as'=> 'get-customer-info-primary-address'
