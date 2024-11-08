@@ -331,5 +331,9 @@
             <a href="{{ route('report.top-products.mobile') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Rated Products</span></a>
         </li>
         
+        <li class="nav-item @if (\Route::current()->getName() == 'report.subscribers.mobile')) active show @endif">
+            <a href="{{ route('report.subscribers.mobile') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Subscribers</span></a>
+        </li>
+        
     @endif
 </ul>

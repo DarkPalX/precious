@@ -548,6 +548,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/report/sales-transaction/mobile', [ReportsController::class, 'sales_list_mobile'])->name('report.sales-transaction.mobile');
                 Route::get('/report/top-buyers/mobile', [ReportsController::class, 'top_buyers_mobile'])->name('report.top-buyers.mobile');
                 Route::get('/report/top-products/mobile', [ReportsController::class, 'top_products_mobile'])->name('report.top-products.mobile');
+                Route::get('/report/subscribers/mobile', [ReportsController::class, 'subscribers_mobile'])->name('report.subscribers.mobile');
             //
         ###### Ecommerce Routes ######
     });

@@ -20,7 +20,7 @@ class UsersSubscription extends Model
 
     public static function getSubscriptions($id){
 
-        $subs = UsersSubscription::where('user_id', $id)->where('is_subscribe', 1)->where('end_date', '>', Carbon::now())->get();
+        $subs = UsersSubscription::where('user_id', $id)->where('is_subscribe', 1)->orWhere('is_extended', 1)->where('end_date', '>', Carbon::now())->get();
 
         return $subs;
     }
