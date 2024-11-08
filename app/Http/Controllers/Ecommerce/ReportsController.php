@@ -428,7 +428,16 @@ class ReportsController extends Controller
     public function subscribers_mobile(Request $request)
     {
 
-        $subscribers = UsersSubscription::select('user_id')->where('is_subscribe', 1)->orWhere('is_extended', 1)->where('end_date', '>', Carbon::now())->distinct()->get();
+        // $subscribers = UsersSubscription::select('user_id')->where('is_subscribe', 1)->orWhere('is_extended', 1)->where('end_date', '>', Carbon::now())->distinct()->get();
+        $subscribers = UsersSubscription::select('user_id')
+            ->where(function ($query) {
+                $query->where('is_subscribe', 1)
+                    ->orWhere('is_extended', 1);
+            })
+            ->where('end_date', '>', Carbon::now())
+            ->distinct()
+            ->get();
+
         
         $rs = User::whereIn('id', $subscribers)->where('role_id', '6')->get();  
 
