@@ -8,7 +8,7 @@
     <h4 class="mg-b-0 tx-spacing--1">Subscribers List</h4>
     @if($rs <>'')
     <br><br>
-    <table id="example" class="display nowrap" style="width:100%;font: normal 13px/150% Arial, sans-serif, Helvetica;">
+    <table id="subscribers" class="display nowrap" style="width:100%;font: normal 13px/150% Arial, sans-serif, Helvetica;">
         <thead>
             <tr>
                 <th align="left">Name</th>
@@ -54,7 +54,7 @@
 
 
     $(document).ready(function() {
-        $('#example').DataTable( {
+        $('#subscribers').DataTable( {
             dom: 'Bfrtip',
             pageLength: 20,
             order: [[0,'desc']],
@@ -95,6 +95,7 @@
                 visible: false
             } ]
         } );
+        
     } );
 </script>
 @endsection
