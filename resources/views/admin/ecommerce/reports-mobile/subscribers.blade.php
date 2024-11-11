@@ -15,25 +15,43 @@
                 <th align="left">Email</th>
                 <th align="left">Contact #</th>
                 <th align="left">Subscription</th>
+                <th align="left">Status</th>
+                <th align="left">Subscription Date</th>
+                <th align="left">Remarks</th>
             </tr>
         </thead>
         <tbody>
             @forelse($rs as $r)
                 @php 
-                    $user_subs = \App\Models\UsersSubscription::getSubscriptions($r->id);
+                    $user_subs = \App\Models\UsersSubscription::getSubscriptions($r->user_id);
+                    $user = \App\Models\User::getUser($r->user_id); 
                 @endphp
                 
-                <tr>
-                    <td>{{$r->fullname}}</td>
-                    <td>{{$r->email}}</td>
-                    <td>{{$r->mobile}}</td>
-                    <td>
-                        @foreach($user_subs as $user_sub)
-                            {{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}<br>
-                            <span class="text-secondary">expires on {{ Setting::date_for_listing($user_sub->end_date) }}</span><br>
-                        @endforeach
-                    </td>
-                </tr>
+                @if($user)
+                    <tr>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->mobile }}</td>
+                        <td>
+                            {{ \App\Models\Subscription::getPlan($r->plan_id)[0]->title }}
+                        </td>
+                        <td>
+                            @if($r->is_expired == 1)
+                                Expired
+                            @else
+                                @if(($r->is_subscribe == 1 || $r->is_extended == 1) && \Carbon\Carbon::parse($r->end_date) > \Carbon\Carbon::now())
+                                    Active
+                                @elseif($r->is_cancelled == 1)
+                                    Cancelled
+                                @else
+                                    Expired
+                                @endif
+                            @endif
+                        </td>
+                        <td>{{$r->start_date}} - {{$r->end_date}}</td>
+                        <td>{{$r->remarks}}</td>
+                    </tr>
+                @endif
             @empty
                 <tr>
                     <td colspan="6">No subscribers found.</td>

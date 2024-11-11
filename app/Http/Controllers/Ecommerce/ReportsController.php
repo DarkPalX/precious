@@ -428,18 +428,18 @@ class ReportsController extends Controller
     public function subscribers_mobile(Request $request)
     {
 
-        // $subscribers = UsersSubscription::select('user_id')->where('is_subscribe', 1)->orWhere('is_extended', 1)->where('end_date', '>', Carbon::now())->distinct()->get();
-        $subscribers = UsersSubscription::select('user_id')
-            ->where(function ($query) {
-                $query->where('is_subscribe', 1)
-                    ->orWhere('is_extended', 1);
-            })
-            ->where('end_date', '>', Carbon::now())
-            ->distinct()
-            ->get();
+        $rs = UsersSubscription::all();
+        // $userIds = $subscribers->pluck('user_id');
 
         
-        $rs = User::whereIn('id', $subscribers)->where('role_id', '6')->get();  
+        // $rs = User::whereIn('id', $userIds)->where('role_id', '6')->get();
+        
+        // $rs = UsersSubscription::leftJoin('users', 'users.id', '=', 'users_subscriptions.user_id')
+        // ->select('users_subscriptions.*', 'users_subscriptions.user_id', 'users.*') // Adjust fields as needed
+        // ->get();
+
+
+        // dd($rs);
 
         return view('admin.ecommerce.reports-mobile.subscribers',compact('rs'));
 

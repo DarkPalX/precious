@@ -17,6 +17,11 @@ class UsersSubscription extends Model
     {
         return $this->belongsTo(Subscription::class);
     }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id'); // Change 'user_id' if the column is different
+    }
 
     public static function getSubscriptions($id){
 
