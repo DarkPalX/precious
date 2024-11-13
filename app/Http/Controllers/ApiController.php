@@ -1168,6 +1168,10 @@ public function saveReadSubscribedBooks(Request $request){
     $IsFreeBook=0;
     $IsPremium=0;
 
+    $data['UserID']=$request->post('UserID');   
+    $data['ProductID']=$request->post('ProductID'); 
+    $data['IsRead']=$request->post('IsRead');
+
     $info=$Book->getBookInfoByID($data['ProductID']);
 
     if(isset($info)>0){
@@ -1191,11 +1195,7 @@ public function saveReadSubscribedBooks(Request $request){
           ]);    
     }
 
-    //SAVE ALL NON FREE AND PREMIUM BOOKS
-    $data['UserID']=$request->post('UserID');   
-    $data['ProductID']=$request->post('ProductID'); 
-    $data['IsRead']=$request->post('IsRead');
-    
+    //SAVE ALL NON FREE AND PREMIUM BOOKS   
     $result=$Library->saveReadSubscribedBooks($data);  
     return response()->json($result); 
     
