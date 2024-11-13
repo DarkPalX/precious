@@ -1155,15 +1155,43 @@ public function updateBookMarks(Request $request){
   
 }
 
-// SET READ SUBCRIBE BOOKS====================================================
+  // SET READ SUBCRIBE BOOKS PREMIUM AND FREE NOT INCLUDED====================================================
 public function saveReadSubscribedBooks(Request $request){
     
     $Misc = new Misc();
+    $Book = new Book();
     $Library = new Library();
 
     $response = "Failed";
     $responseMessage = "";
-    
+
+    $IsFreeBook=0;
+    $IsPremium=0;
+
+    $info=$Book->getBookInfoByID($data['ProductID']);
+
+    if(isset($info)>0){
+        $IsFreeBook=$info->is_free;
+        $IsPremium=$info->is_premium;
+    }
+
+    if($IsFreeBook==1){
+        $ResponseMessage ='Sorry. Cannot download free books.';
+         return response()->json([
+           'response' => 'Failed',         
+           'message' => $ResponseMessage,
+          ]);    
+    }
+
+    if($IsPremium==1){
+        $ResponseMessage ='Sorry. Cannot download premium books.';
+         return response()->json([
+           'response' => 'Failed',         
+           'message' => $ResponseMessage,
+          ]);    
+    }
+
+    //SAVE ALL NON FREE AND PREMIUM BOOKS
     $data['UserID']=$request->post('UserID');   
     $data['ProductID']=$request->post('ProductID'); 
     $data['IsRead']=$request->post('IsRead');
@@ -1203,7 +1231,6 @@ public function saveDownloadedSubscribedBooks(Request $request){
     $IsFreeBook=0;
     $IsPremium=0;
 
-    
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
     $data['IsSubscribed']=$request->post('IsSubscribed');
