@@ -14,9 +14,11 @@ use App\Models\Ecommerce\{
 };
 
 use App\Models\User;
+use App\Models\UsersSubscription;
 
 use Auth;
 use DB;
+use \Carbon\Carbon;
 
 
 class ReportsController extends Controller
@@ -421,6 +423,26 @@ class ReportsController extends Controller
         $rs = $rs->groupBy('product_id')->paginate(1000);
 
         return view('admin.ecommerce.reports-mobile.top-products',compact('rs','startDate','endDate'));
+    }
+
+    public function subscribers_mobile(Request $request)
+    {
+
+        $rs = UsersSubscription::all();
+        // $userIds = $subscribers->pluck('user_id');
+
+        
+        // $rs = User::whereIn('id', $userIds)->where('role_id', '6')->get();
+        
+        // $rs = UsersSubscription::leftJoin('users', 'users.id', '=', 'users_subscriptions.user_id')
+        // ->select('users_subscriptions.*', 'users_subscriptions.user_id', 'users.*') // Adjust fields as needed
+        // ->get();
+
+
+        // dd($rs);
+
+        return view('admin.ecommerce.reports-mobile.subscribers',compact('rs'));
+
     }
 
 

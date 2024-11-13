@@ -44,6 +44,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    public static function getUser($id)
+    {
+        return self::find($id); // This fetches the user by ID, equivalent to `where('id', $id)->first()`
+    }
+
     public function getFullNameAttribute()
     {
         return "$this->firstname $this->lastname";
@@ -341,6 +346,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function assign_role()
     {
         return $this->belongsTo(Role::class,'role_id', 'id');
+    }
+
+    public function users_subscription()
+    {
+        return $this->hasMany(UsersSubscription::class);
     }
 
 
