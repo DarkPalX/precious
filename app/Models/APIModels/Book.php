@@ -586,6 +586,7 @@ class Book extends Model
  public function getDetailsCatalogueList($data){
 
       $HeaderID=$data['HeaderID'];
+      $UserID=$data['UserID'];
 
       $query = DB::table('product_catalog_details as prod_det_cat')  
       ->join('product_catalog_headers as prod_hdrs_cat', 'prod_hdrs_cat.id', '=', 'prod_det_cat.product_catalog_header_id')   
