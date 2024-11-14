@@ -433,7 +433,7 @@ class Order extends Model
             COALESCE((
               SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
-                WHERE rev.product_id = sls_dtls.id     
+                WHERE rev.product_id = sls_dtls.product_id     
                 AND rev.status = 1 
              LIMIT 1                                
               )
