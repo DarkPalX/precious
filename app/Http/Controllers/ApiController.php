@@ -1706,6 +1706,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $responseMessage = "";
    
   $data['HeaderID'] = $request->post('HeaderID');
+  $data['UserID'] = $request->post('UserID');
 
   $data['Status'] = 'All';
   $data['SearchText'] = '';
