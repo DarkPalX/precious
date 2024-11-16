@@ -25,15 +25,27 @@ class UsersSubscription extends Model
 
     public static function getSubscriptions($id){
 
-        // $subs = UsersSubscription::where('user_id', $id)->where('is_subscribe', 1)->orWhere('is_extended', 1)->where('end_date', '>', Carbon::now())->get();
         $subs = UsersSubscription::where('user_id', $id)
             ->where(function ($query) {
                 $query->where('is_subscribe', 1)
                     ->orWhere('is_extended', 1);
             })
+            ->where('is_cancelled', '<>', 1)
             ->where('end_date', '>', Carbon::now())
+            ->orderBy('start_date', 'desc') // Order by start date in descending order
             ->distinct()
-            ->get();
+            ->first(); // Get only the latest record
+
+            
+        // $subs = UsersSubscription::where('user_id', $id)
+        //     ->where(function ($query) {
+        //         $query->where('is_subscribe', 1)
+        //             ->orWhere('is_extended', 1);
+        //     })
+        //     ->where('is_cancelled', '<>', 1)
+        //     ->where('end_date', '>', Carbon::now())
+        //     ->distinct()
+        //     ->get();
 
         return $subs;
     }

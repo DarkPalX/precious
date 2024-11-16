@@ -108,7 +108,7 @@
                             <tbody>
                                 @forelse($users as $user)
                                     @php 
-                                        $user_subs = \App\Models\UsersSubscription::getSubscriptions($user->id);
+                                        $user_sub = \App\Models\UsersSubscription::getSubscriptions($user->id);
                                         $files = explode('|',$user->business_proof);
                                     @endphp
                                     <tr>
@@ -119,12 +119,18 @@
                                         <td>{{ $user->address }}</td>
                                         <td>{{ $user->ecredits }}</td>
                                         <td>
-                                            @forelse($user_subs as $user_sub)
+                                            @if($user_sub)
+                                                {{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}<br>
+                                                <span class="text-secondary">expires on {{ $user_sub->end_date }}</span><br>
+                                            @else
+                                                {{ 'Not Subscribed' }}
+                                            @endif
+                                            {{-- @forelse($user_subs as $user_sub)
                                                 {{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}<br>
                                                 <span class="text-secondary">expires on {{ $user_sub->end_date }}</span><br>
                                             @empty
                                                 {{ 'Not Subscribed' }}
-                                            @endforelse
+                                            @endforelse --}}
                                         </td>
                                         <td>
                                             @if($user->is_active == 1)
