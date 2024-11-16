@@ -268,12 +268,12 @@ class Book extends Model
               )
         ,0) as promo_discount_price,
 
-          COALESCE((
+         COALESCE((
                SELECT 
                   cust_lib.product_id FROM 
                 customer_libraries as cust_lib                                    
                       WHERE cust_lib.product_id = prds.id 
-                      AND   cust_lib.user_id=".$UserID."                      
+                      AND cust_lib.user_id=".$UserID."                      
                   LIMIT 1                                
               )
         ,0) as product_library_exist,
@@ -586,6 +586,7 @@ class Book extends Model
  public function getDetailsCatalogueList($data){
 
       $HeaderID=$data['HeaderID'];
+      $UserID=$data['UserID'];
 
       $query = DB::table('product_catalog_details as prod_det_cat')  
       ->join('product_catalog_headers as prod_hdrs_cat', 'prod_hdrs_cat.id', '=', 'prod_det_cat.product_catalog_header_id')   
@@ -670,6 +671,17 @@ class Book extends Model
                   LIMIT 1                                
               )
         ,0) as promo_discount_price,
+
+         COALESCE((
+               SELECT 
+                  cust_lib.product_id FROM 
+                customer_libraries as cust_lib                                    
+                      WHERE cust_lib.product_id = prds.id 
+                      AND cust_lib.user_id=".$UserID."                      
+                  LIMIT 1                                
+              )
+        ,0) as product_library_exist,
+
 
           COALESCE(prds.status,'') as status        
 
