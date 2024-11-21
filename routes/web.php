@@ -402,6 +402,10 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
                 Route::get('/generate-file-qr-code', [QrCodeController::class, 'generate_file_qr'])->name('generate.file.qr');
 
+                Route::get('/ebook-customer-assignment/{id}', [ProductController::class, 'ebook_customer_assignment'])->name('product.ebook-customer-assignment');
+                Route::put('/ebook-customer-assignment-update/{id}', [ProductController::class, 'ebook_customer_assignment_update'])->name('product.ebook-customer-assignment-update');
+
+
             //
 
             // Brands

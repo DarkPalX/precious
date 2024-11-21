@@ -114,6 +114,11 @@
                                                         @else
                                                             <a class="dropdown-item" href="{{route('product.single-change-status',[$product->id,'PUBLISHED'])}}"> Publish</a>
                                                         @endif
+
+                                                        @if(strtolower($product->book_type) == 'ebook' || strtolower($product->book_type) == 'e-book')
+                                                            <a class="dropdown-item" href="{{ route('product.ebook-customer-assignment',$product->id) }}"> Assign Customers</a>
+                                                        @endif
+
                                                     </div>
                                                 @endif
                                             </nav>
