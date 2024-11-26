@@ -16,7 +16,7 @@ use App\Models\Ecommerce\{
 };
 
 use App\Models\{
-    Permission, Page, Brand, BrandProductCategory, User
+    Permission, Page, Brand, BrandProductCategory, User, CustomerLibrary
 };
 
 use Response;
@@ -756,7 +756,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         $customers = User::where('role_id', 6)->get();
-        $ebook_customers = EbookCustomer::where('product_id', $id)->get();
+        $ebook_customers = CustomerLibrary::where('product_id', $id)->where('is_admin_selected', 1)->get();
 
         return view('admin.ecommerce.products.ebook-customer-assignment',compact('product', 'customers', 'ebook_customers'));
     }
@@ -764,18 +764,45 @@ class ProductController extends Controller
     public function ebook_customer_assignment_update($id, Request $request)
     {
         // Remove existing ebook customers for the product
-        EbookCustomer::where('product_id', $id)->delete();
+        CustomerLibrary::where('product_id', $id)->where('is_admin_selected', 1)->delete();
 
         // Add new ebook customers
         foreach ($request->customers as $customerId) {
-            EbookCustomer::create([
+            CustomerLibrary::create([
                 'product_id' => $id,
                 'user_id' => $customerId,
+                'is_admin_selected' => 1
             ]);
         }
 
         return redirect()->back()->with('success', 'Ebook customer assignment updated successfully.');
     }
+
+    // public function ebook_customer_assignment($id)
+    // {
+    //     $product = Product::findOrFail($id);
+
+    //     $customers = User::where('role_id', 6)->get();
+    //     $ebook_customers = EbookCustomer::where('product_id', $id)->get();
+
+    //     return view('admin.ecommerce.products.ebook-customer-assignment',compact('product', 'customers', 'ebook_customers'));
+    // }
+
+    // public function ebook_customer_assignment_update($id, Request $request)
+    // {
+    //     // Remove existing ebook customers for the product
+    //     EbookCustomer::where('product_id', $id)->delete();
+
+    //     // Add new ebook customers
+    //     foreach ($request->customers as $customerId) {
+    //         EbookCustomer::create([
+    //             'product_id' => $id,
+    //             'user_id' => $customerId,
+    //         ]);
+    //     }
+
+    //     return redirect()->back()->with('success', 'Ebook customer assignment updated successfully.');
+    // }
 
 
 }
