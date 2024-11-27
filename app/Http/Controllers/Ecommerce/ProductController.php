@@ -768,11 +768,16 @@ class ProductController extends Controller
 
         // Add new ebook customers
         foreach ($request->customers as $customerId) {
-            CustomerLibrary::create([
-                'product_id' => $id,
-                'user_id' => $customerId,
-                'is_admin_selected' => 1
-            ]);
+            
+            $already_purchased = CustomerLibrary::where('product_id', $id)->where('user_id', $customerId)->where('is_admin_selected', 0)->exists();
+
+            if(!$already_purchased){
+                CustomerLibrary::create([
+                    'product_id' => $id,
+                    'user_id' => $customerId,
+                    'is_admin_selected' => 1
+                ]);
+            }
         }
 
         return redirect()->back()->with('success', 'Ebook customer assignment updated successfully.');
