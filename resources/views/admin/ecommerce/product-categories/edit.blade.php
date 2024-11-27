@@ -94,6 +94,26 @@
                         </div>
                     </div>
 
+                    <div class="form-group banner-image">
+                        <label class="d-block">Banner Image</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input @error('banner_url') is-invalid @enderror"  id="banner_url" name="banner_url" @if (!empty($category->banner_url)) title="{{$category->get_image_file_name()}}" @endif>
+                            <label class="custom-file-label" for="customFile" id="img_name">@if (empty($category->banner_url)) Choose file @else {{$category->get_image_file_name()}} @endif</label>
+                        </div>
+                        <p class="tx-10">
+                            Required image dimension: {{ env('SUB_BANNER_WIDTH') }}px by {{ env('SUB_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
+                        </p>
+                        @error('banner_url')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+    
+                        <div id="image_div" @if($category->banner_url == null) style="display: none;" @endif>
+                            <img src="{{ env('APP_URL') . '/' . old('banner_url', $category->banner_url) }}" height="{{ env('IMAGE_DISPLAY_HEIGHT') }}" width="{{ env('IMAGE_DISPLAY_WIDTH') }}" id="img_temp" alt="">  <br /><br />
+                            <input type="text" id="current_banner_file" name="current_banner_file" value="{{ $category->banner_url }}" hidden/>
+                            <a href="javascript:void(0)" class="btn btn-sm btn-danger" onclick="remove_image();">Remove Image</a>
+                        </div>
+                    </div>
+
                     {{-- <div class="form-group">
                         <label class="d-block">Description *</label>
                         <textarea rows="3" class="form-control @error('description') is-invalid @enderror" name="description">{{ old('description',$category->description) }}</textarea>
@@ -218,6 +238,50 @@
             $('#current_mobile_file').val('');
             $('#mobile_img_temp').attr('src', '');
             $('#mobile_image_div').hide();
+        }
+    </script>
+    <script>
+        function readURL(file) {
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#img_name').html(file.name);
+                $('#banner_url').attr('title', file.name);
+                $('#img_temp').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+            $('#image_div').show();
+        }
+
+        $("#banner_url").change(function(evt) {
+
+            $('#img_name').html('Choose file');
+            $('#img_temp').attr('src', '');
+            $('#image_div').hide();
+
+            let files = evt.target.files;
+            let maxSize = 1;
+            let validateFileTypes = ["image/jpeg", "image/png"];
+            let requiredWidth = "{{ env('SUB_BANNER_WIDTH') }}";
+            let requiredHeight =  "{{ env('SUB_BANNER_HEIGHT') }}";
+
+            validate_files(files, readURL, maxSize, validateFileTypes, requiredWidth, requiredHeight, remove_banner_value_when_error);
+        });
+
+        function remove_banner_value_when_error()
+        {
+            $('#banner_url').val('');
+            $('#banner_url').removeAttr('title');
+        }
+
+        function remove_image() {
+            $('#img_name').html('Choose file');
+            $('#banner_url').removeAttr('title');
+            $('#banner_url').val('');
+            $('#current_banner_file').val('');
+            $('#img_temp').attr('src', '');
+            $('#image_div').hide();
         }
     </script>
 @endsection

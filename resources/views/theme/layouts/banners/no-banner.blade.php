@@ -23,7 +23,16 @@
 					</div>
 					<div id="banner" class="slick-slider">
 						<div class="hero-slide dark">
-							<img src="{{ asset('theme/images/banners/sub1.jpg') }}" />
+							@php
+								$currentSlug = Str::afterLast(url()->current(), '/');
+								$category_banner_url = \App\Models\Ecommerce\ProductCategory::where('slug', $currentSlug)->first()->banner_url;
+							@endphp
+
+							@if($category_banner_url)
+								<img src="{{ env('APP_URL') . '/' . $category_banner_url }}" />
+							@else
+								<img src="{{ asset('theme/images/banners/sub1.jpg') }}" />
+							@endif
 						</div>
 					</div>
 				</div>
