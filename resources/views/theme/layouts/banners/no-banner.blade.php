@@ -25,11 +25,11 @@
 						<div class="hero-slide dark">
 							@php
 								$currentSlug = Str::afterLast(url()->current(), '/');
-								$category_banner_url = \App\Models\Ecommerce\ProductCategory::where('slug', $currentSlug)->first()->banner_url;
+								$category = \App\Models\Ecommerce\ProductCategory::where('slug', $currentSlug)->first();
 							@endphp
 
-							@if($category_banner_url)
-								<img src="{{ env('APP_URL') . '/' . $category_banner_url }}" />
+							@if($category != null)
+								<img src="{{ env('APP_URL') . '/' . $category->banner_url }}" />
 							@else
 								<img src="{{ asset('theme/images/banners/sub1.jpg') }}" />
 							@endif
