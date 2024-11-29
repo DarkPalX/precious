@@ -25,7 +25,8 @@ class ProductFrontController extends Controller
 
     public function product_list(Request $request, $category = null)
     {
-        $page = new Page();
+        // $page = new Page();
+        $page = Page::where('slug', 'books')->where('status', 'PUBLISHED')->where('parent_page_id', 0)->first();
         $pageLimit = 12;
 
         $products = Product::where('status','PUBLISHED')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book']);
