@@ -311,7 +311,7 @@ class ApiController extends Controller {
     } 
   }
 
-    //CUSTOMER CHANGE PASSWORD=================================  
+  //CUSTOMER CHANGE PASSWORD=================================  
   public function doChangePassword(Request $request){
 
     $Misc = new Misc();
@@ -412,6 +412,79 @@ class ApiController extends Controller {
              ]); 
      }
 
+   }else{
+      return response()->json([
+          'data' => null,
+          'response' => 'Failed',
+          'message' => "Invalid old password.",
+      ]);    
+   }
+ }
+
+ //CUSTOMER DE-ACTIVATE ACCOUNT=================================  
+  public function doDeactivateMyAccount(Request $request){
+
+    $Misc = new Misc();
+    $UserCustomer = new UserCustomer();
+
+    $response = "Failed";
+    $responseMessage = "";
+  
+    $data['UserID'] = $request->post('UserID');
+    
+    $data['Password'] = $request->post('Password');
+    $data['ConfirmNewPassword'] = $request->post('ConfirmNewPassword');
+
+
+    if(empty($data['NewPassword'])){
+      $ResponseMessage ='Password is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+       if(empty($data['ConfirmNewPassword'])){
+      $ResponseMessage ='Confirm new password is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+    if(!empty($data['Password']) &&  strlen($data['Password'])<6){
+      $ResponseMessage ='New password must be atleast 6 character or more.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+    if(!empty($data['ConfirmNewPassword']) &&  strlen($data['ConfirmNewPassword'])<6){
+      $ResponseMessage ='Confirm new password must be atleast 6 character or more.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+    if($data['Password']!=$data['ConfirmNewPassword']){
+      $ResponseMessage ='Password & Confirm new password do not match.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+    
+    //Deactivation Process
+    $info=$UserCustomer->getCustomerInformation($data);
+    if(isset($info)>0){
+        
+         return response()->json([                  
+         'response' => $response,
+         'message' => "You have successfully deactivated your account. To activate, please contact & email our admin & staff.",
+       ]);   
+   
    }else{
       return response()->json([
           'data' => null,
