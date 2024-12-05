@@ -60,6 +60,12 @@ Route::post('/verify-account',[
    'as'=> 'verify-account'
 ]);
 
+//DEACTIVATE ACCOUNT==================================================================
+Route::post('/deactivate-my-account',[
+   'uses'=>'App\Http\Controllers\ApiController@doDeactivateMyAccount',
+   'as'=> 'deactivate-my-account'
+]);
+
 //RESEND VERIFICATION CODE==========================================================
 Route::post('/resend-code',[
    'uses'=>'App\Http\Controllers\ApiController@doResendVerificationCode',
