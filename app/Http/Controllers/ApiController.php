@@ -436,7 +436,7 @@ class ApiController extends Controller {
     $data['ConfirmNewPassword'] = $request->post('ConfirmNewPassword');
 
 
-    if(empty($data['NewPassword'])){
+    if(empty($data['Password'])){
       $ResponseMessage ='Password is required.';
        return response()->json([
          'response' => 'Failed',
