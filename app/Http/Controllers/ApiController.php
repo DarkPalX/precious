@@ -488,7 +488,7 @@ class ApiController extends Controller {
          $getPassword= $info->password;
          
          //check bycrypt
-         if (Hash::check($data['OldPassword'], $getPassword)){
+         if (Hash::check($data['Password'], $getPassword)){
 
             //$response=$UserCustomer->doUserChangePassword($data);            
             if($response=='Success'){      
