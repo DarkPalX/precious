@@ -117,7 +117,7 @@ class ApiController extends Controller {
                     return response()->json([
                       'data' => null,                      
                       'response' => 'Failed',
-                      'message' => "Your account is deactivated & in-active. To activate, just email our admin & staff. ",                      
+                      'message' => "Your account is deactivated & in-active. If you wish to reactivate your account, please contact our admin and staff via email.",                      
                    ]); 
                 }
               
