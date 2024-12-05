@@ -380,7 +380,6 @@ class ApiController extends Controller {
     if(isset($info)>0){
 
       $getEmailAddress= $info->emailaddress;     
-
        $getPassword='';                
        $info=$UserCustomer->getUserLoginPassword($getEmailAddress);
 
@@ -477,13 +476,41 @@ class ApiController extends Controller {
     }
     
     //Deactivation Process
+     $getEmailAddress=''; 
     $info=$UserCustomer->getCustomerInformation($data);
     if(isset($info)>0){
         
-         return response()->json([                  
-         'response' => $response,
-         'message' => "You have successfully deactivated your account. To activate, please contact & email our admin & staff.",
-       ]);   
+      $getEmailAddress= $info->emailaddress;     
+       $getPassword='';                
+       $info=$UserCustomer->getUserLoginPassword($getEmailAddress);
+
+      if(isset($info)>0){                               
+         $getPassword= $info->password;
+         
+         //check bycrypt
+         if (Hash::check($data['OldPassword'], $getPassword)){
+
+            //$response=$UserCustomer->doUserChangePassword($data);            
+            if($response=='Success'){      
+                return response()->json([                  
+                'response' => $response,
+                'message' => "You have successfully deactivated your account. To activate back, please contact & email our admin & staff.",
+                 ]);    
+              }                
+            }else{
+                  return response()->json([
+                    'data' => null,
+                    'response' => 'Failed',
+                    'message' => "Invalid old password.",
+                 ]); 
+         }
+     }else{
+          return response()->json([
+                'data' => null,
+                'response' => 'Failed',
+                'message' => "Invalid old password.",
+             ]); 
+     } 
    
    }else{
       return response()->json([
