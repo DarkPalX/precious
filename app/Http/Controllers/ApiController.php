@@ -2706,7 +2706,7 @@ public function validateCouponCode(Request $request){
 
   }
 
-//COMPANY =====================================================================
+//COMPANY ABOUT=====================================================================
 public function getCompanyAboutUs(Request $request){
 
     $Company = new Company();
@@ -2728,7 +2728,50 @@ public function getCompanyAboutUs(Request $request){
     
 }
 
+//FAQ COMPANY=======================================================================
 public function getCompanyFAQ(Request $request){
+    
+    $Company = new Company();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Type']=$request->post('Type');
+
+    $data['Info']=$Company->getCompanyFAQ($data);
+    return View::make('api/faqs')->with($data);   
+    
+    // return response()->json([
+    //   'response' => 'Success',
+    //   'data' => $Info,
+    //   'message' => "Successfully get pop company faq.",
+    // ]); 
+    
+}
+
+//TERMS CONDITION COMPANY=======================================================================
+public function getCompanyTermsCondition(Request $request){
+    
+    $Company = new Company();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Type']=$request->post('Type');
+
+    $data['Info']=$Company->getCompanyFAQ($data);
+    return View::make('api/faqs')->with($data);   
+    
+    // return response()->json([
+    //   'response' => 'Success',
+    //   'data' => $Info,
+    //   'message' => "Successfully get pop company faq.",
+    // ]); 
+    
+}
+
+//PRIVACY POLICY COMPANY=======================================================================
+public function getCompanyPrivacyPolicy(Request $request){
     
     $Company = new Company();
 
