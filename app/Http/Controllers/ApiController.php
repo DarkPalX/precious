@@ -486,15 +486,15 @@ class ApiController extends Controller {
 
       if(isset($info)>0){                               
          $getPassword= $info->password;
-         
+
          //check bycrypt
          if (Hash::check($data['Password'], $getPassword)){
 
-            //$response=$UserCustomer->doUserChangePassword($data);            
+            $response=$UserCustomer->doDeactivateMyAccount($data);            
             if($response=='Success'){      
                 return response()->json([                  
                 'response' => $response,
-                'message' => "You have successfully deactivated your account. To activate back, please contact & email our admin & staff.",
+                'message' => "You have successfully deactivated your account. If you wish to reactivate your account, please contact our admin and staff via email.",
                  ]);    
               }                
             }else{
