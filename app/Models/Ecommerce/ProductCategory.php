@@ -18,7 +18,7 @@ class ProductCategory extends Model
     protected $table = 'product_categories';
     protected $timestamp = true;
 
-    protected $fillable = [ 'parent_id', 'name', 'slug', 'description', 'mobile_file_url', 'status', 'menu_order_no', 'created_by',];
+    protected $fillable = [ 'parent_id', 'name', 'slug', 'description', 'mobile_file_url', 'banner_url', 'status', 'menu_order_no', 'created_by',];
 
     /**
      * Get the options for generating the slug.
@@ -124,6 +124,7 @@ class ProductCategory extends Model
         'name' => 'name',
         'description' => 'description',
         'mobile_file_url' => 'mobile_file_url',
+        'banner_url' => 'banner_url',
         'status' => 'status',
         'menu_order_no' => 'sequence number'
     ];

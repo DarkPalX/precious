@@ -84,11 +84,13 @@ class ProductCategoryController extends Controller
         Validator::make($request->all(), [
             'category_id' => 'nullable',
             'mobile_file_url' => 'nullable',
+            'banner_url' => 'nullable',
             'name' => 'required',
         ])->validate();
 
         $requestData = $request->all();
         $requestData['mobile_file_url'] = $request->hasFile('mobile_file_url') ? FileHelper::move_to_product_file_folder($request->file('mobile_file_url'), 'storage/product_category')['url'] : null;
+        $requestData['banner_url'] = $request->hasFile('banner_url') ? FileHelper::move_to_product_file_folder($request->file('banner_url'), 'storage/product_category/banners')['url'] : null;
         $requestData['status'] = isset($request->visibility) ? 'PUBLISHED' : 'PRIVATE';
         $requestData['created_by'] = Auth::id();
 
@@ -135,6 +137,7 @@ class ProductCategoryController extends Controller
         Validator::make($request->all(), [
             'category_id' => 'nullable',
             'mobile_file_url' => 'nullable',
+            'banner_url' => 'nullable',
             'name' => 'required',
         ])->validate();
 
@@ -164,6 +167,22 @@ class ProductCategoryController extends Controller
                 $updateData['mobile_file_url'] = null;
             }
         }
+        
+        //FOR BANNER FILE UPDATE VALUE
+        $updateData['banner_url'] = null;
+
+        $current_banner_file = explode('/', $request->current_banner_file)[1] ?? '';
+        if($request->hasFile('banner_url')){
+            $updateData['banner_url'] = FileHelper::move_to_product_file_folder($request->file('banner_url'), 'storage/product_category')['url'];
+        }
+        else{
+            if($current_banner_file){
+                $updateData['banner_url'] = $productCategory->banner_url;
+            }
+            else{
+                $updateData['banner_url'] = null;
+            }
+        }
 
         $productCategory->update([
             'name' => $request->name,
@@ -171,6 +190,7 @@ class ProductCategoryController extends Controller
             'slug' => $slug,
             'status' => (isset($request->visibility) ? 'PUBLISHED' : 'PRIVATE'),
             'mobile_file_url' => $updateData['mobile_file_url'],
+            'banner_url' => $updateData['banner_url'],
             'description' => $request->description,
             'created_by' => auth()->user()->id
         ]);

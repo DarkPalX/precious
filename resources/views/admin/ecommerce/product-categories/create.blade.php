@@ -53,7 +53,7 @@
                     <div class="form-group">
                         <label class="d-block">Upload Image</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('mobile_file_url') is-invalid @enderror" name="mobile_file_url" id="mobile_file_url" accept="image/jpeg, image/png, image/gif, video/mp4" required>
+                            <input type="file" class="custom-file-input @error('mobile_file_url') is-invalid @enderror" name="mobile_file_url" id="mobile_file_url" accept="image/jpeg, image/png, image/gif, video/mp4">
                             <label class="custom-file-label" for="mobile_file_url" id="mobile_ad_preview">Choose file</label>
                         </div>
                         <p class="tx-10">
@@ -73,6 +73,25 @@
                             </video>
 
                             <a href="javascript:void(0)" class="btn btn-xs btn-danger" onclick="remove_mobile_image();">Remove Image</a>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group banner-image">
+                        <label class="d-block">Banner Image</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input @error('banner_url') is-invalid @enderror" name="banner_url" id="banner_url" accept="image/*">
+                            <label class="custom-file-label" for="banner_url" id="img_name">Choose file</label>
+                        </div>
+                        @error('banner_url')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                        <p class="tx-10">
+                            Required image dimension: {{ env('SUB_BANNER_WIDTH') }}px by {{ env('SUB_BANNER_HEIGHT') }}px <br /> Maximum file size: 1MB <br /> Required file type: .jpeg .png
+                        </p>
+
+                        <div id="image_div" style="display:none;">
+                            <img src="" height="{{ env('IMAGE_DISPLAY_HEIGHT') }}" width="{{ env('IMAGE_DISPLAY_WIDTH') }}" id="img_temp" alt="">  <br /><br />
+                            <a href="javascript:void(0)" class="btn btn-xs btn-danger" onclick="remove_image();">Remove Image</a>
                         </div>
                     </div>
 
@@ -165,6 +184,49 @@
             $('#mobile_file_url').val('');
             $('#mobile_img_temp').attr('src', '');
             $('#mobile_image_div').hide();
+        }
+    </script>
+    <script>
+        function readURL(file) {
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#img_name').html(file.name);
+                $('#banner_url').attr('title', file.name);
+                $('#img_temp').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+            $('#image_div').show();
+        }
+
+        $("#banner_url").change(function(evt) {
+
+            $('#img_name').html('Choose file');
+            $('#img_temp').attr('src', '');
+            $('#image_div').hide();
+
+            let files = evt.target.files;
+            let maxSize = 1;
+            let validateFileTypes = ["image/jpeg", "image/png"];
+            let requiredWidth = "{{ env('SUB_BANNER_WIDTH') }}";
+            let requiredHeight =  "{{ env('SUB_BANNER_HEIGHT') }}";
+
+            validate_files(files, readURL, maxSize, validateFileTypes, requiredWidth, requiredHeight, remove_banner_value_when_error);
+        });
+
+        function remove_banner_value_when_error()
+        {
+            $('#banner_url').val('');
+            $('#banner_url').removeAttr('title');
+        }
+
+        function remove_image() {
+            $('#img_name').html('Choose file');
+            $('#banner_url').removeAttr('title');
+            $('#banner_url').val('');
+            $('#img_temp').attr('src', '');
+            $('#image_div').hide();
         }
     </script>
 @endsection
