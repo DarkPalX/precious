@@ -501,14 +501,14 @@ class ApiController extends Controller {
                   return response()->json([
                     'data' => null,
                     'response' => 'Failed',
-                    'message' => "Invalid old password.",
+                    'message' => "Invalid password.",
                  ]); 
          }
      }else{
           return response()->json([
                 'data' => null,
                 'response' => 'Failed',
-                'message' => "Invalid old password.",
+                'message' => "Invalid password.",
              ]); 
      } 
    
