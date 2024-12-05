@@ -404,6 +404,16 @@ Route::get('/get-company-faq',[
    'as'=> 'get-company-faq'
 ]);
 
+Route::get('/get-company-privacy-policy',[
+   'uses'=>'App\Http\Controllers\ApiController@getCompanyPrivacyPolicy',
+   'as'=> 'get-company-privacy-policy'
+]);
+
+Route::get('/get-company-terms-condition',[
+   'uses'=>'App\Http\Controllers\ApiController@getCompanyTermsCondition',
+   'as'=> 'get-company-terms-condition'
+]);
+
 //EPUB VIEWER=============================================================================
 Route::get('/show-viewer',[
    'uses'=>'App\Http\Controllers\ApiController@showViewerEpub',
