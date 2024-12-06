@@ -109,7 +109,7 @@ class ApiController extends Controller {
                     return response()->json([
                       'data' => $info,                      
                       'response' => 'Success',
-                      'message' => "Naa tama ang password..",
+                      'message' => "Password is okay",
                      ]);  
 
                 }else{
@@ -452,7 +452,7 @@ class ApiController extends Controller {
     }
 
     if(!empty($data['Password']) &&  strlen($data['Password'])<6){
-      $ResponseMessage ='New password must be atleast 6 character or more.';
+      $ResponseMessage ='Password must be atleast 6 character or more.';
        return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
@@ -460,7 +460,7 @@ class ApiController extends Controller {
     }
 
     if(!empty($data['ConfirmNewPassword']) &&  strlen($data['ConfirmNewPassword'])<6){
-      $ResponseMessage ='Confirm new password must be atleast 6 character or more.';
+      $ResponseMessage ='Confirm password must be atleast 6 character or more.';
        return response()->json([
          'response' => 'Failed',
          'message' => $ResponseMessage,
