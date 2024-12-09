@@ -2781,6 +2781,7 @@ public function getCompanyPrivacyPolicy(Request $request){
     $data['Type']=$request->post('Type');
 
     $data['Info']=$Company->getCompanyPrivacyPolicy($data);
+    dd($data['Info']);
     return View::make('api/privacy-policy')->with($data);   
     
     // return response()->json([
