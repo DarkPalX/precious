@@ -58,6 +58,41 @@ class Company extends Model
     
   }
 
+  public function getCompanyPrivacyPolicy($data){
 
+     $query = DB::table('pages as pg')
+         
+       ->selectraw("
+          pg.id as Page_ID,
+          COALESCE(pg.contents,'') as privacy_policy                        
+        ");    
+       
+       $query->where("pg.status","=",'PUBLISHED');  
+       $query->where("pg.label","=",'Privacy Policy');           
+       $query->where("pg.deleted_at","=",null);  
+     
+    $list = $query->first();                           
+     return $list;    
+    
+  }
+
+
+  public function getCompanyTermsCondition($data){
+
+     $query = DB::table('pages as pg')
+         
+       ->selectraw("
+          pg.id as Page_ID,
+          COALESCE(pg.contents,'') as terms_condition                        
+        ");    
+       
+       $query->where("pg.status","=",'PUBLISHED');  
+       $query->where("pg.label","=",'Terms of Use Agreement');           
+       $query->where("pg.deleted_at","=",null);  
+     
+    $list = $query->first();                           
+     return $list;    
+    
+  }
 
 }
