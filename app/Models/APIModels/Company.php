@@ -68,7 +68,7 @@ class Company extends Model
         ");    
        
        $query->where("pg.status","=",'PUBLISHED');  
-       $query->where("pg.id","=",'Privacy Policy');           
+       $query->where("pg.label","=",'Privacy Policy');           
        $query->where("pg.deleted_at","=",null);  
      
     $list = $query->first();                           
