@@ -2759,8 +2759,8 @@ public function getCompanyTermsCondition(Request $request){
 
     $data['Type']=$request->post('Type');
 
-    $data['Info']=$Company->getCompanyFAQ($data);
-    return View::make('api/faqs')->with($data);   
+    $data['Info']=$Company->getCompanyTermsCondition($data);
+    return View::make('api/terms-condition')->with($data);   
     
     // return response()->json([
     //   'response' => 'Success',
@@ -2780,8 +2780,8 @@ public function getCompanyPrivacyPolicy(Request $request){
 
     $data['Type']=$request->post('Type');
 
-    $data['Info']=$Company->getCompanyFAQ($data);
-    return View::make('api/faqs')->with($data);   
+    $data['Info']=$Company->getCompanyPrivacyPolicy($data);
+    return View::make('api/privacy-policy')->with($data);   
     
     // return response()->json([
     //   'response' => 'Success',
