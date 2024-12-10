@@ -70,7 +70,7 @@
                             </div>
 
                             @php 
-                                $user_subs = \App\Models\UsersSubscription::getSubscriptions($user->id);
+                                $user_subs = \App\Models\UsersSubscription::getSubscriptionsList($user->id);
                                 $files = explode('|',$user->business_proof);
                             @endphp
 
