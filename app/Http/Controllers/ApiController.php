@@ -109,7 +109,7 @@ class ApiController extends Controller {
                     return response()->json([
                       'data' => $info,                      
                       'response' => 'Success',
-                      'message' => "Naa tama ang password..",
+                      'message' => "Password is okay",
                      ]);  
 
                 }else{
@@ -117,7 +117,7 @@ class ApiController extends Controller {
                     return response()->json([
                       'data' => null,                      
                       'response' => 'Failed',
-                      'message' => "Your account is in-acative. To activate, just email our admin & staff. ",                      
+                      'message' => "Your account is deactivated & in-active. If you wish to reactivate your account, please contact our admin and staff via email.",                      
                    ]); 
                 }
               
@@ -311,7 +311,7 @@ class ApiController extends Controller {
     } 
   }
 
-    //CUSTOMER CHANGE PASSWORD=================================  
+  //CUSTOMER CHANGE PASSWORD=================================  
   public function doChangePassword(Request $request){
 
     $Misc = new Misc();
@@ -380,7 +380,6 @@ class ApiController extends Controller {
     if(isset($info)>0){
 
       $getEmailAddress= $info->emailaddress;     
-
        $getPassword='';                
        $info=$UserCustomer->getUserLoginPassword($getEmailAddress);
 
@@ -412,6 +411,107 @@ class ApiController extends Controller {
              ]); 
      }
 
+   }else{
+      return response()->json([
+          'data' => null,
+          'response' => 'Failed',
+          'message' => "Invalid old password.",
+      ]);    
+   }
+ }
+
+ //CUSTOMER DE-ACTIVATE ACCOUNT=================================  
+  public function doDeactivateMyAccount(Request $request){
+
+    $Misc = new Misc();
+    $UserCustomer = new UserCustomer();
+
+    $response = "Failed";
+    $responseMessage = "";
+  
+    $data['UserID'] = $request->post('UserID');
+    
+    $data['Password'] = $request->post('Password');
+    $data['ConfirmNewPassword'] = $request->post('ConfirmNewPassword');
+
+
+    if(empty($data['Password'])){
+      $ResponseMessage ='Password is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+       if(empty($data['ConfirmNewPassword'])){
+      $ResponseMessage ='Confirm new password is required.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+    if(!empty($data['Password']) &&  strlen($data['Password'])<6){
+      $ResponseMessage ='Password must be atleast 6 character or more.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+    if(!empty($data['ConfirmNewPassword']) &&  strlen($data['ConfirmNewPassword'])<6){
+      $ResponseMessage ='Confirm password must be atleast 6 character or more.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+
+    if($data['Password']!=$data['ConfirmNewPassword']){
+      $ResponseMessage ='Password & Confirm new password do not match.';
+       return response()->json([
+         'response' => 'Failed',
+         'message' => $ResponseMessage,
+        ]);
+    }
+    
+    //Deactivation Process
+     $getEmailAddress=''; 
+    $info=$UserCustomer->getCustomerInformation($data);
+    if(isset($info)>0){
+        
+      $getEmailAddress= $info->emailaddress;     
+       $getPassword='';                
+       $info=$UserCustomer->getUserLoginPassword($getEmailAddress);
+
+      if(isset($info)>0){                               
+         $getPassword= $info->password;
+
+         //check bycrypt
+         if (Hash::check($data['Password'], $getPassword)){
+
+            $response=$UserCustomer->doDeactivateMyAccount($data);            
+            if($response=='Success'){      
+                return response()->json([                  
+                'response' => $response,
+                'message' => "You have successfully deactivated your account. If you wish to reactivate your account, please contact our admin and staff via email.",
+                 ]);    
+              }                
+            }else{
+                  return response()->json([
+                    'data' => null,
+                    'response' => 'Failed',
+                    'message' => "Invalid password.",
+                 ]); 
+         }
+     }else{
+          return response()->json([
+                'data' => null,
+                'response' => 'Failed',
+                'message' => "Invalid password.",
+             ]); 
+     } 
+   
    }else{
       return response()->json([
           'data' => null,
@@ -2606,7 +2706,7 @@ public function validateCouponCode(Request $request){
 
   }
 
-//COMPANY =====================================================================
+//COMPANY ABOUT=====================================================================
 public function getCompanyAboutUs(Request $request){
 
     $Company = new Company();
@@ -2628,6 +2728,7 @@ public function getCompanyAboutUs(Request $request){
     
 }
 
+//FAQ COMPANY=======================================================================
 public function getCompanyFAQ(Request $request){
     
     $Company = new Company();
@@ -2639,6 +2740,48 @@ public function getCompanyFAQ(Request $request){
 
     $data['Info']=$Company->getCompanyFAQ($data);
     return View::make('api/faqs')->with($data);   
+    
+    // return response()->json([
+    //   'response' => 'Success',
+    //   'data' => $Info,
+    //   'message' => "Successfully get pop company faq.",
+    // ]); 
+    
+}
+
+//TERMS CONDITION COMPANY=======================================================================
+public function getCompanyTermsCondition(Request $request){
+    
+    $Company = new Company();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Type']=$request->post('Type');
+
+    $data['Info']=$Company->getCompanyTermsCondition($data);
+    return View::make('api/terms-condition')->with($data);   
+    
+    // return response()->json([
+    //   'response' => 'Success',
+    //   'data' => $Info,
+    //   'message' => "Successfully get pop company faq.",
+    // ]); 
+    
+}
+
+//PRIVACY POLICY COMPANY=======================================================================
+public function getCompanyPrivacyPolicy(Request $request){
+    
+    $Company = new Company();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Type']=$request->post('Type');
+
+    $data['Info']=$Company->getCompanyPrivacyPolicy($data);    
+    return View::make('api/privacy-policy')->with($data);   
     
     // return response()->json([
     //   'response' => 'Success',

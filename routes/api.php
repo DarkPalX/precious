@@ -60,6 +60,12 @@ Route::post('/verify-account',[
    'as'=> 'verify-account'
 ]);
 
+//DEACTIVATE ACCOUNT==================================================================
+Route::post('/deactivate-my-account',[
+   'uses'=>'App\Http\Controllers\ApiController@doDeactivateMyAccount',
+   'as'=> 'deactivate-my-account'
+]);
+
 //RESEND VERIFICATION CODE==========================================================
 Route::post('/resend-code',[
    'uses'=>'App\Http\Controllers\ApiController@doResendVerificationCode',
@@ -396,6 +402,16 @@ Route::get('/get-company-about-us',[
 Route::get('/get-company-faq',[
    'uses'=>'App\Http\Controllers\ApiController@getCompanyFAQ',
    'as'=> 'get-company-faq'
+]);
+
+Route::get('/get-company-privacy-policy',[
+   'uses'=>'App\Http\Controllers\ApiController@getCompanyPrivacyPolicy',
+   'as'=> 'get-company-privacy-policy'
+]);
+
+Route::get('/get-company-terms-condition',[
+   'uses'=>'App\Http\Controllers\ApiController@getCompanyTermsCondition',
+   'as'=> 'get-company-terms-condition'
 ]);
 
 //EPUB VIEWER=============================================================================

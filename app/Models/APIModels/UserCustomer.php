@@ -273,6 +273,36 @@ class UserCustomer extends Model
 
   }
 
+  public function doDeactivateMyAccount($data){
+        
+    $TODAY = date("Y-m-d H:i:s");
+    $UserID = $data['UserID'];
+    
+    if($UserID>0){
+
+        DB::table('users')
+          ->whereRaw('id = ?',[$UserID])
+          ->update([
+            'is_active' => 0,
+            'deleted_at' =>$TODAY 
+
+      ]);
+
+            //send cancel notif 
+           $MessageNotificationID = DB::table('message_notification')
+              ->insertGetId([                                            
+                'user_id' => $UserID,                                                         
+                'message_notification' => 'You have successfully deactivated your account. If you wish to reactivate your account, please contact our admin and staff via email.',
+                'created_at' => $TODAY             
+            ]); 
+                 
+    } else{
+      return 'Failed';
+    } 
+
+    return 'Success';
+
+  }
   public function updateUsersPassword($data){
     
     $chkEmailID=0;
