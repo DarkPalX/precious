@@ -284,7 +284,7 @@ class Book extends Model
         ");    
 
       $query->where("prds.file_url","!=",null); 
-      $query->where("prds.status","==",'PUBLISHED');    
+      $query->where("prds.status","=",'PUBLISHED');    
       $query->where("prds.deleted_at","=",null); 
         
 
