@@ -22,6 +22,23 @@ class UsersSubscription extends Model
     {
         return $this->belongsTo(User::class, 'user_id'); // Change 'user_id' if the column is different
     }
+    
+
+    public static function getSubscriptionsList($id){
+
+        $subs = UsersSubscription::where('user_id', $id)
+            ->where(function ($query) {
+                $query->where('is_subscribe', 1)
+                    ->orWhere('is_extended', 1);
+            })
+            ->where('is_cancelled', '<>', 1)
+            ->where('end_date', '>', Carbon::now())
+            ->orderBy('start_date', 'desc') // Order by start date in descending order
+            ->distinct()
+            ->get();
+
+        return $subs;
+    }
 
     public static function getSubscriptions($id){
 
