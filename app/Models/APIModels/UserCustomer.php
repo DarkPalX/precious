@@ -289,10 +289,10 @@ class UserCustomer extends Model
       ]);
 
             //send cancel notif 
-           $MessageNotificationID = DB::table('message_notification')
+            $MessageNotificationID = DB::table('message_notification')
               ->insertGetId([                                            
                 'user_id' => $UserID,                                                         
-                'message_notification' => 'You have successfully deactivated your account. If you wish to reactivate your account, please contact our admin and staff via email.',
+                'message_notification' => 'You have successfully deleted your account. If you wish to access back to the app, you will have to create new one.',
                 'created_at' => $TODAY             
             ]); 
                  
