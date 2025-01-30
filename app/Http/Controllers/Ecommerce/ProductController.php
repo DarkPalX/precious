@@ -659,7 +659,7 @@ class ProductController extends Controller
         );
 
         $products = Product::all();
-        $columns = array('SKU', 'Name', 'Author', 'Book Type', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point');
+        $columns = array('SKU', 'Name', 'Author', 'Book Type', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point', 'Stock');
 
         foreach($attributes as $attr){
             array_push($columns, $attr->name);
@@ -693,7 +693,7 @@ class ProductController extends Controller
                 // number of fields in the csv
                 $col_count = count($data);
 
-                $excel_columns = array('SKU', 'Name', 'Author', 'Book Type', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point');
+                $excel_columns = array('SKU', 'Name', 'Author', 'Book Type', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point', 'Stock');
 
                 $attributes = FormAttribute::orderBy('name', 'asc')->get();
                 foreach($attributes as $attr){
@@ -728,6 +728,19 @@ class ProductController extends Controller
                         'reorder_point' => $data[11] ?: 0,
                         'status' => 'PRIVATE',
                         'created_by' => Auth::id()
+                    ]);
+
+                    $header= InventoryReceiverHeader::create([
+                        'user_id' => Auth::id(),
+                        'posted_at' => now(),
+                        'posted_by' => Auth::id(),
+                        'status' => 'POSTED'
+                    ]);
+            
+                    InventoryReceiverDetail::create([
+                        'product_id' => $product->id,
+                        'inventory' => $data[12] ?: 0,
+                        'header_id' => $header->id
                     ]);
 
 
