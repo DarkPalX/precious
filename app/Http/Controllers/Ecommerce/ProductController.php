@@ -683,10 +683,10 @@ class ProductController extends Controller
             set_time_limit(0);
 
             $row = 0;
-            $header = InventoryReceiverHeader::create([
-                'user_id' => Auth::id(),
-                'status' => 'SAVED'
-            ]);
+            // $header = InventoryReceiverHeader::create([
+            //     'user_id' => Auth::id(),
+            //     'status' => 'SAVED'
+            // ]);
 
             while(($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
                 $row++;
@@ -730,18 +730,22 @@ class ProductController extends Controller
                         'created_by' => Auth::id()
                     ]);
 
-                    $header= InventoryReceiverHeader::create([
-                        'user_id' => Auth::id(),
-                        'posted_at' => now(),
-                        'posted_by' => Auth::id(),
-                        'status' => 'POSTED'
-                    ]);
-            
-                    InventoryReceiverDetail::create([
-                        'product_id' => $product->id,
-                        'inventory' => $data[12] ?: 0,
-                        'header_id' => $header->id
-                    ]);
+                    if (is_numeric($data[12]) && $data[12] > 0) {
+
+                        $header= InventoryReceiverHeader::create([
+                            'user_id' => Auth::id(),
+                            'posted_at' => now(),
+                            'posted_by' => Auth::id(),
+                            'status' => 'POSTED'
+                        ]);
+                
+                        InventoryReceiverDetail::create([
+                            'product_id' => $product->id,
+                            'inventory' => $data[12] ?: 0,
+                            'header_id' => $header->id
+                        ]);
+                        
+                    }
 
 
                     for ($x = 8; $x <= $col_count; $x++) {
