@@ -191,6 +191,12 @@ Route::post('/check-book-allow-download',[
    'as'=> 'check-book-allow-download'
 ]);
 
+// PAYMENT OPTION===================================================================
+Route::post('get-payment-option-list',[
+    'uses'=>'App\Http\Controllers\ApiController@getPaymentOptionList',
+    'as'=> 'get-payment-option-list'
+]);
+
 //FAVORITES ========================================================================
 Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',

@@ -38,6 +38,7 @@ use App\Models\APIModels\BannerAds;
 use App\Models\APIModels\Favorites;
 use App\Models\APIModels\Subscription;
 use App\Models\APIModels\UserCustomer;
+use App\Models\APIModels\PaymentOption;
 
 class ApiController extends Controller {
 
@@ -1778,6 +1779,21 @@ public function getAllBookCategoryList(Request $request){
   $result=$Books->getBookList($data);  
 
   return response()->json($result); 
+  }
+
+// MOBILE PAYMENT OPTION===============================================================
+
+   public function getPaymentOptionList(Request $request){
+
+    $PaymentOption = new PaymentOption();
+    $data["Status"] = $request["Status"];
+
+    $RetVal['Response'] = "Success";
+    $RetVal['ResponseMessage'] = "";
+    $RetVal["PaymentOptionList"] = $PaymentOption->getPaymentOptionList($data);
+
+    return response()->json($RetVal);
+
   }
 
 //CATALOGUE BOOK LIST==================================================================
