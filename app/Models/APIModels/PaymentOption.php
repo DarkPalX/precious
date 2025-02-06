@@ -41,7 +41,7 @@ class PaymentOption extends Model
 			$query->where("mop.Status",$Status);
 		}
 
-		$query->orderBy("mop.ModeOfPaymentID","ASC");
+		$query->orderBy("mop.PaymentOptionID","ASC");
 
 		$list = $query->get();
 
