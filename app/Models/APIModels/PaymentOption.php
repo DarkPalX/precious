@@ -17,16 +17,14 @@ use Input;
 use Image;
 use DB;
 
-use App\Models\Misc;
+use App\Models\APIModels\Misc;
 
 class PaymentOption extends Model
 {
 
-
 	public function getPaymentOptionList($param){
 
 		$Status = $param['Status'];
-
 
 		$query = DB::table('mobile_payment_option as mop')
 			->selectraw("
