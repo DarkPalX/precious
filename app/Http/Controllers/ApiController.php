@@ -1805,6 +1805,7 @@ public function getAllBookCategoryList(Request $request){
     $RetVal['Response'] = "Success";
     $RetVal['ResponseMessage'] = "";
 
+    $RetVal['ServerPayPalSandBoxEnvironmentMode'] = config("app.PayPalSandBoxEnvironmentMode");
     $RetVal['ServerPayPalClientID'] = config("app.PayPalClientID");
     $RetVal['ServerPayPalSecretKey'] = config("app.PayPalSecretKey");
     $RetVal['ServerreturnURL'] = config("app.returnURL");
