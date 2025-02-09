@@ -1808,8 +1808,8 @@ public function getAllBookCategoryList(Request $request){
     $RetVal['ServerPayPalSandBoxEnvironmentMode'] = config("app.PayPalSandBoxEnvironmentMode");
     $RetVal['ServerPayPalClientID'] = config("app.PayPalClientID");
     $RetVal['ServerPayPalSecretKey'] = config("app.PayPalSecretKey");
-    $RetVal['ServerreturnURL'] = config("app.returnURL");
-    $RetVal['ServercancelURL'] = config("app.cancelURL");
+    $RetVal['ServerPaypalReturnURL'] = config("app.PaypalReturnURL");
+    $RetVal['ServerPaypalCancel'] = config("app.PaypalCancel");
     $RetVal['ServerPayPalCurrency'] = config("app.PayPalCurrency");
     $RetVal['ServerPayPalCountryCode'] = config("app.PayPalCountryCode");
 
