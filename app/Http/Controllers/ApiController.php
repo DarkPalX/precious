@@ -1809,7 +1809,7 @@ public function getAllBookCategoryList(Request $request){
     $RetVal['ServerPayPalClientID'] = config("app.PayPalClientID");
     $RetVal['ServerPayPalSecretKey'] = config("app.PayPalSecretKey");
     $RetVal['ServerPaypalReturnURL'] = config("app.PaypalReturnURL");
-    $RetVal['ServerPaypalCancel'] = config("app.PaypalCancel");
+    $RetVal['ServerPaypalCancelURL'] = config("app.PaypalCancel");
     $RetVal['ServerPayPalCurrency'] = config("app.PayPalCurrency");
     $RetVal['ServerPayPalCountryCode'] = config("app.PayPalCountryCode");
 
