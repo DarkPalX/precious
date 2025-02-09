@@ -1608,7 +1608,12 @@ public function proceedToCheckOut(Request $request){
 
     $data['VoucherCode'] = $request->post('VoucherCode');
     $data['VoucherDiscountAmount'] = $request->post('VoucherAmount');
-     
+
+    $data['PayPalParamResponse']='';
+     if(isset($request['PayPalParamResponse'])){
+        $data['PayPalParamResponse']=$request->post('PayPalParamResponse');;
+     }
+
     $response=$Order->proceedToCheckOut($data);
     if($response=='Success'){      
         return response()->json([                  
@@ -1624,6 +1629,7 @@ public function proceedToCheckOut(Request $request){
     } 
 
 }
+
 
 //BOOK LIST==================================================================
 public function getAllBookCategoryList(Request $request){

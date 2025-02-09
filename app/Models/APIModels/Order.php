@@ -145,11 +145,13 @@ class Order extends Model
     $VoucherCode=$data['VoucherCode'];    
     $VoucherDiscountAmount=$data['VoucherDiscountAmount'];    
 
-    if($PaymentMethod=='Debit Card/Credit Card' ||  $PaymentMethod=='EWallet'){
+    if($PaymentMethod=='Debit Card/Credit Card' ||  $PaymentMethod=='EWallet' || $PaymentMethod=='PayPal'){
        $PaymentStatus='PAID';
     }else{
         $PaymentStatus='UNPAID';
     }
+
+    $PayPalParamResponse=$data['PayPalParamResponse'];  
 
     if($UserID>0){
 
@@ -288,7 +290,8 @@ class Order extends Model
        DB::table('ecommerce_shopping_cart')
           ->where('user_id', $UserID)->delete();  
 
-       //EWALLET PAYMENT METHOD
+
+       // EWALLET PAYMENT METHOD
        if($PaymentMethod=='EWallet'){
              if($UsedECredit>0){
 
@@ -313,7 +316,20 @@ class Order extends Model
                 ]);    
 
              }
-         }            
+ 
+        // PAYPAL PAYMENT METHOD
+        }else if($PaymentMethod=='PayPal'){
+
+             $PayPalTransID = DB::table('paypal_payment')
+                ->insertGetId([                                            
+                  'user_id' => $UserID,                                                   
+                  'paypal_param_response' =>$PayPalParamResponse,
+                  'sales_header_id' => $SalesHeaderID,    
+                   'Status' => 'Success',                   
+                  'payment_date_time' => $TODAY             
+              ]); 
+
+         }        
       } 
   }
         

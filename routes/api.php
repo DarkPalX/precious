@@ -203,6 +203,12 @@ Route::post('get-paypal-setting',[
     'as'=> 'get-paypal-setting'
 ]);
 
+// PAYPAL  SETTSINGS===================================================================
+Route::post('save-paypal-order-payment',[
+    'uses'=>'App\Http\Controllers\ApiController@getPayPalSettings',
+    'as'=> 'save-paypal-order-payment'
+]);
+
 //FAVORITES ========================================================================
 Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
@@ -235,6 +241,7 @@ Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
    'as'=> 'add-to-favorites'
 ]);
+
 
 //CART===============================================================================
 Route::post('/get-cart-list',[
