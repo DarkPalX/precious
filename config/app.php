@@ -275,7 +275,6 @@ return [
     ],
 
 
-
      //API USE
      //Company Information
     'CompanyName' => 'PRECIOUS PAGES CORP',
@@ -290,6 +289,15 @@ return [
     //Site is On Debug Mode
     'DebugMode' => '0',
     'EmailDebugMode' => '0',
+
+    //PayPal Setting
+    'PayPalClientID'=>'AeBIXT1-kv9wfiws93iQQLuKMRYKv3ENXhnfixHpeV1xhiCbUvmoGpA4c7JmZqs1E7_WR3lHS_AfxRzH',
+    'PayPalSecretKey' =>'ENUU_-qN_S9kU3-K8jv8bI16NDQNAWtBFTrevAcHa9wyb0GBDfFuVayafXuzUoeLXES-wnePXnm-gLi3',
+    'returnURL'=>'https://preciouspagesbookstore.com.ph/return',
+    'cancelURL'=>'https://preciouspagesbookstore.com.ph/cancel',
+    'PayPalCurrency'=>'PHP',
+    'PayPalCountryCode'=>'PH',
+
 
     //PLATFORM
     'PLATFORM_ANDROID' => 'Android',

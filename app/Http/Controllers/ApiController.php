@@ -1796,6 +1796,26 @@ public function getAllBookCategoryList(Request $request){
 
   }
 
+// PAYPAL MOBILE PAYMENT SETTING===============================================================
+
+   public function getPayPalSettings(Request $request){
+
+    $data["Settings"] = $request["Settings"];
+    
+    $RetVal['Response'] = "Success";
+    $RetVal['ResponseMessage'] = "";
+
+    $RetVal['ServerPayPalClientID'] = config("app.PayPalClientID");
+    $RetVal['ServerPayPalSecretKey'] = config("app.PayPalSecretKey");
+    $RetVal['ServerreturnURL'] = config("app.returnURL");
+    $RetVal['ServercancelURL'] = config("app.cancelURL");
+    $RetVal['ServerPayPalCurrency'] = config("app.PayPalCurrency");
+    $RetVal['ServerPayPalCountryCode'] = config("app.PayPalCountryCode");
+
+    return response()->json($RetVal);
+
+  }
+
 //CATALOGUE BOOK LIST==================================================================
 public function getAllBookHeaderCatalogueList(Request $request){
 

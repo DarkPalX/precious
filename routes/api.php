@@ -197,6 +197,12 @@ Route::post('get-payment-option-list',[
     'as'=> 'get-payment-option-list'
 ]);
 
+// PAYPAL  SETTSINGS===================================================================
+Route::post('get-paypal-setting',[
+    'uses'=>'App\Http\Controllers\ApiController@getPayPalSettings',
+    'as'=> 'get-paypal-setting'
+]);
+
 //FAVORITES ========================================================================
 Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
