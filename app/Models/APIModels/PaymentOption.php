@@ -32,6 +32,7 @@ class PaymentOption extends Model
 
 				COALESCE(mop.Code,'') as Code,
 				COALESCE(mop.ModeOfPayment,'') as ModeOfPayment,
+				COALESCE(mop.ImageIcon,'') as ImageIcon,
 				COALESCE(mop.Status,'') as Status
 			");
 
@@ -55,6 +56,7 @@ class PaymentOption extends Model
 
 				COALESCE(mop.Code,'') as Code,
 				COALESCE(mop.ModeOfPayment,'') as ModeOfPayment,
+				COALESCE(mop.ImageIcon,'') as ImageIcon,
 				COALESCE(mop.Status,'') as Status
 			")
 			->where("mop.PaymentOptionID",$ModeOfPaymentID)
