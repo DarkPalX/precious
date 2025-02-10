@@ -111,11 +111,13 @@ class Subscription extends Model
     $GrossAmount=$SubTotal;
     $NetAmount=$SubTotal;
 
-    if($PaymentMethod=='Debit Card/Credit Card' ||  $PaymentMethod=='EWallet'){
+     if($PaymentMethod=='Debit Card/Credit Card' ||  $PaymentMethod=='EWallet' || $PaymentMethod=='PayPal'){
        $PaymentStatus='PAID';
     }else{
         $PaymentStatus='UNPAID';
     }
+
+     $PayPalParamResponse=$data['PayPalParamResponse'];  
     
     if($UserID>0){
 
@@ -178,7 +180,6 @@ class Subscription extends Model
       }else{
            
            // UPDATE AND EXTEND OLD SUBSCRIPTION
-
            $User_Subscription_ID=$checkCustomerSubscriptionPlanIDExist;
 
            $OldExpirationDate='';
@@ -235,7 +236,7 @@ class Subscription extends Model
 
       }
      
-      //save to sales header
+      //SAVE SALES HEADER
       $OrderNo=$Misc->getNextOrderNumberFormat();      
       $SalesHeaderID = DB::table('ecommerce_sales_headers')
           ->insertGetId([                                            
@@ -266,7 +267,7 @@ class Subscription extends Model
         
         if($SalesHeaderID>0 && $User_Subscription_ID>0){
 
-            //PAYMENT
+            //SAVE TO SALES PAYMENT
             $ReceiptNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
 
             $PaymentHeaderID = DB::table('ecommerce_sales_payments')
@@ -304,11 +305,11 @@ class Subscription extends Model
                     'created_at' => $TODAY             
                 ]); 
 
-             //EWALLET PAYMENT METHOD
-             if($PaymentMethod=='EWallet'){
+              // EWALLET PAYMENT METHOD
+              if($PaymentMethod=='EWallet'){
                    if($UsedECredit>0){
 
-                      //Save to EWallet Credit History
+                      //UPDATE CURRENT BALANCE EWALLET
                        $BalanceEWalletCredit=$CurrentEWalletCredit-$UsedECredit;
                          $CreditBalanceID = DB::table('ecredits')
                           ->insertGetId([                                            
@@ -319,7 +320,7 @@ class Subscription extends Model
                             'created_at' => $TODAY             
                         ]); 
                   
-                     // Update Customer EWallet     
+                  
                        DB::table('users')
                         ->where('id',$UserID)
                         ->update([                              
@@ -328,7 +329,20 @@ class Subscription extends Model
                       ]);  
                                
                    }
-               }  
+
+                 // PAYPAL PAYMENT METHOD
+               }else if($PaymentMethod=='PayPal'){
+
+                     $PayPalTransID = DB::table('paypal_payment')
+                        ->insertGetId([                                            
+                          'user_id' => $UserID,                                                   
+                          'paypal_param_response' =>$PayPalParamResponse,
+                          'sales_header_id' => $SalesHeaderID,    
+                           'Status' => 'Success',                   
+                          'payment_date_time' => $TODAY             
+                      ]); 
+
+                 }  
           }
 
          //SEND EMAIL NOTIF===============================================================================================

@@ -2225,6 +2225,11 @@ public function proceedToSubscribe(Request $request){
     $data['ApplyECredit'] = $request->post('ApplyECredit');
     $data['PaymentMethod'] = $request->post('PaymentMethod');
     $data['SubTotal'] = $request->post('SubTotal');
+
+     $data['PayPalParamResponse']='';
+     if(isset($request['PayPalParamResponse'])){
+        $data['PayPalParamResponse']=$request->post('PayPalParamResponse');;
+     }
      
     $response=$Subscription->proceedToSubscribe($data);
     if($response=='Success'){      

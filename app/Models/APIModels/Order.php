@@ -182,9 +182,9 @@ class Order extends Model
         $NetAmount=$GrossAmount - $VoucherDiscountAmount;
       }
      
-     //HEADER
-    //$OrderNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
+
      
+    //SAVE SALES HEADER
     $OrderNo=$Misc->getNextOrderNumberFormat();      
     $SalesHeaderID = DB::table('ecommerce_sales_headers')
         ->insertGetId([                                            
@@ -214,7 +214,7 @@ class Order extends Model
         
    if($SalesHeaderID>0){
 
-      //PAYMENT
+      //SAVE TO SALES PAYMENT
       $ReceiptNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
       $PaymentHeaderID = DB::table('ecommerce_sales_payments')
          ->insertGetId([                                            
@@ -250,7 +250,7 @@ class Order extends Model
      }         
    
 
-     //DETAIL PRODUCT
+     // SAVE TO SALES DETAIL
      $cart_info = $Cart->getCartInfoByUserID($UserID);
      if(count($cart_info)>0){
         foreach($cart_info as $item_list){
@@ -276,7 +276,7 @@ class Order extends Model
               'created_at' => $TODAY             
           ]); 
 
-          // SAVE TO LIBRARIES
+          // SAVE TO CUSATOMER LIBRARY BOOKS
            $SalesDetailID = DB::table('customer_libraries')
             ->insertGetId([                                            
               'user_id' => $UserID,              
@@ -318,7 +318,7 @@ class Order extends Model
              }
  
         // PAYPAL PAYMENT METHOD
-        }else if($PaymentMethod=='PayPal'){
+       }else if($PaymentMethod=='PayPal'){
 
              $PayPalTransID = DB::table('paypal_payment')
                 ->insertGetId([                                            
