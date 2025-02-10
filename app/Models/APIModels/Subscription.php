@@ -321,13 +321,13 @@ class Subscription extends Model
                         ]); 
                   
                   
-                       DB::table('users')
-                        ->where('id',$UserID)
-                        ->update([                              
-                          'ecredits' => $BalanceEWalletCredit,                                                            
-                          'updated_at' => $TODAY
-                      ]);  
-                               
+                         DB::table('users')
+                          ->where('id',$UserID)
+                          ->update([                              
+                            'ecredits' => $BalanceEWalletCredit,                                                            
+                            'updated_at' => $TODAY
+                        ]);  
+                                 
                    }
 
                  // PAYPAL PAYMENT METHOD
@@ -338,7 +338,7 @@ class Subscription extends Model
                           'user_id' => $UserID,                                                   
                           'paypal_param_response' =>$PayPalParamResponse,
                           'sales_header_id' => $SalesHeaderID,    
-                           'Status' => 'Success',                   
+                           'Status' => 'Success,                   
                           'payment_date_time' => $TODAY             
                       ]); 
 
