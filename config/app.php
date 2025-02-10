@@ -311,7 +311,7 @@ return [
 
     //SHOW/HIDE SETTING
     'ShowGoogleLogin'=>'N',
-    'ShowContactUsImageAttach'=>'Y',
+    'ShowContactUsImageAttach'=>'N',
     'ShowSubscriptionModule'=>'Y',
 
     //PLATFORM
