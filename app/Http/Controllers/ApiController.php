@@ -1611,7 +1611,7 @@ public function proceedToCheckOut(Request $request){
 
     $data['PayPalParamResponse']='';
      if(isset($request['PayPalParamResponse'])){
-        $data['PayPalParamResponse']=$request->post('PayPalParamResponse');;
+        $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
      }
 
     $response=$Order->proceedToCheckOut($data);
@@ -2228,7 +2228,7 @@ public function proceedToSubscribe(Request $request){
 
      $data['PayPalParamResponse']='';
      if(isset($request['PayPalParamResponse'])){
-        $data['PayPalParamResponse']=$request->post('PayPalParamResponse');;
+        $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
      }
      
     $response=$Subscription->proceedToSubscribe($data);
