@@ -338,7 +338,7 @@ class Subscription extends Model
                           'user_id' => $UserID,                                                   
                           'paypal_param_response' =>$PayPalParamResponse,
                           'sales_header_id' => $SalesHeaderID,    
-                           'Status' => 'Success,                   
+                           'Status' => 'Success',                   
                           'payment_date_time' => $TODAY             
                       ]); 
 
