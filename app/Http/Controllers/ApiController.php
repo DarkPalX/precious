@@ -1823,6 +1823,23 @@ public function getAllBookCategoryList(Request $request){
 
   }
 
+  // SHOW HIDE MOBILE SETTING===============================================================
+
+   public function getShowHideSettings(Request $request){
+
+    $data["Settings"] = $request["Settings"];
+    
+    $RetVal['Response'] = "Success";
+    $RetVal['ResponseMessage'] = "";
+
+    $RetVal['ShowGoogleLogin'] = config("app.ShowGoogleLogin");
+    $RetVal['ShowContactUsImageAttach'] = config("app.ShowContactUsImageAttach");
+    $RetVal['ShowSubscriptionModule'] = config("app.ShowSubscriptionModule");
+
+    return response()->json($RetVal);
+
+  }
+
 //CATALOGUE BOOK LIST==================================================================
 public function getAllBookHeaderCatalogueList(Request $request){
 

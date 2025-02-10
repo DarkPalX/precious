@@ -275,8 +275,9 @@ return [
     ],
 
 
-     //API USE
-     //Company Information
+     //API ======================================================
+
+     //COMPANY INFO
     'CompanyName' => 'PRECIOUS PAGES CORP',
     'CompanyEmail'=>'info@preciouspages.com.ph',
     'CompanySupportEmail'=>'',
@@ -299,6 +300,10 @@ return [
     'PayPalCurrency'=>'PHP',
     'PayPalCountryCode'=>'PH',
 
+    //SHOW/HIDE SETTING
+    'ShowGoogleLogin'=>'Y',
+    'ShowContactUsImageAttach'=>'Y',
+    'ShowSubscriptionModule'=>'Y',
 
     //PLATFORM
     'PLATFORM_ANDROID' => 'Android',

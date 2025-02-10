@@ -197,17 +197,24 @@ Route::post('get-payment-option-list',[
     'as'=> 'get-payment-option-list'
 ]);
 
-// PAYPAL  SETTSINGS===================================================================
+// PAYPAL  SETTINGS===================================================================
 Route::post('get-paypal-setting',[
     'uses'=>'App\Http\Controllers\ApiController@getPayPalSettings',
     'as'=> 'get-paypal-setting'
 ]);
 
-// PAYPAL  SETTSINGS===================================================================
-Route::post('save-paypal-order-payment',[
-    'uses'=>'App\Http\Controllers\ApiController@getPayPalSettings',
-    'as'=> 'save-paypal-order-payment'
+// SHOW/HIDE SETTINGS===================================================================
+Route::post('get-showhide-setting',[
+    'uses'=>'App\Http\Controllers\ApiController@getShowHideSettings',
+    'as'=> 'get-showhide-setting'
 ]);
+
+
+// // PAYPAL ===================================================================
+// Route::post('save-paypal-order-payment',[
+//     'uses'=>'App\Http\Controllers\ApiController@getPayPalSettings',
+//     'as'=> 'save-paypal-order-payment'
+// ]);
 
 //FAVORITES ========================================================================
 Route::post('/add-to-favorites',[
