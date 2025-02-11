@@ -293,8 +293,8 @@ return [
 
     //PayPal Setting SandBox Environment
     'PayPalSandBoxEnvironmentMode'=>true,
-    'PayPalClientID'=>'AeBIXT1-kv9wfiws93iQQLuKMRYKv3ENXhnfixHpeV1xhiCbUvmoGpA4c7JmZqs1E7_WR3lHS_AfxRzH',
-    'PayPalSecretKey' =>'ENUU_-qN_S9kU3-K8jv8bI16NDQNAWtBFTrevAcHa9wyb0GBDfFuVayafXuzUoeLXES-wnePXnm-gLi3',
+    'PayPalClientID'=>'AT-Lbr6vr2OHL-ToewkGaiIZNTA6ClwDw39zOguUokq8YyQPT0oYoooHcnvCTYUUERObav4ubqs15_qn',
+    'PayPalSecretKey' =>'EF-I8V16BUGeZpoRVfvklcmSB2Ge1fPZSpr-m8CY884dhxb0tChaaEzZA3rA3rR1WezaywTIhRR12rZ9',
     'PaypalReturnURL'=>'https://preciouspagesbookstore.com.ph/return',
     'PaypalCancelURL'=>'https://preciouspagesbookstore.com.ph/cancel',
     'PayPalCurrency'=>'PHP',
