@@ -310,7 +310,7 @@ return [
     // 'PayPalCountryCode'=>'PH',
 
     //SHOW/HIDE SETTING
-    'ShowGoogleLogin'=>'N',
+    'ShowGoogleLogin'=>'Y',
     'ShowContactUsImageAttach'=>'Y',
     'ShowSubscriptionModule'=>'Y',
 
