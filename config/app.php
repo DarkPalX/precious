@@ -314,7 +314,7 @@ return [
     //SHOW/HIDE SETTING
     'ShowGoogleLogin'=>'N',
     'ShowContactUsImageAttach'=>'N',
-    'ShowSubscriptionModule'=>'N',
+    'ShowSubscriptionModule'=>'Y',
 
     //PLATFORM
     'PLATFORM_ANDROID' => 'Android',
