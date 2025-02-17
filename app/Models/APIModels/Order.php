@@ -145,11 +145,13 @@ class Order extends Model
     $VoucherCode=$data['VoucherCode'];    
     $VoucherDiscountAmount=$data['VoucherDiscountAmount'];    
 
-    if($PaymentMethod=='Debit Card/Credit Card' ||  $PaymentMethod=='EWallet'){
+    if($PaymentMethod=='Debit Card/Credit Card' ||  $PaymentMethod=='EWallet' || $PaymentMethod=='PayPal'){
        $PaymentStatus='PAID';
     }else{
         $PaymentStatus='UNPAID';
     }
+
+    $PayPalParamResponse=$data['PayPalParamResponse'];  
 
     if($UserID>0){
 
@@ -180,9 +182,9 @@ class Order extends Model
         $NetAmount=$GrossAmount - $VoucherDiscountAmount;
       }
      
-     //HEADER
-    //$OrderNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
+
      
+    //SAVE SALES HEADER
     $OrderNo=$Misc->getNextOrderNumberFormat();      
     $SalesHeaderID = DB::table('ecommerce_sales_headers')
         ->insertGetId([                                            
@@ -212,7 +214,7 @@ class Order extends Model
         
    if($SalesHeaderID>0){
 
-      //PAYMENT
+      //SAVE TO SALES PAYMENT
       $ReceiptNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
       $PaymentHeaderID = DB::table('ecommerce_sales_payments')
          ->insertGetId([                                            
@@ -248,7 +250,7 @@ class Order extends Model
      }         
    
 
-     //DETAIL PRODUCT
+     // SAVE TO SALES DETAIL
      $cart_info = $Cart->getCartInfoByUserID($UserID);
      if(count($cart_info)>0){
         foreach($cart_info as $item_list){
@@ -274,7 +276,7 @@ class Order extends Model
               'created_at' => $TODAY             
           ]); 
 
-          // SAVE TO LIBRARIES
+          // SAVE TO CUSATOMER LIBRARY BOOKS
            $SalesDetailID = DB::table('customer_libraries')
             ->insertGetId([                                            
               'user_id' => $UserID,              
@@ -288,7 +290,8 @@ class Order extends Model
        DB::table('ecommerce_shopping_cart')
           ->where('user_id', $UserID)->delete();  
 
-       //EWALLET PAYMENT METHOD
+
+       // EWALLET PAYMENT METHOD
        if($PaymentMethod=='EWallet'){
              if($UsedECredit>0){
 
@@ -313,7 +316,20 @@ class Order extends Model
                 ]);    
 
              }
-         }            
+ 
+        // PAYPAL PAYMENT METHOD
+       }else if($PaymentMethod=='PayPal'){
+
+             $PayPalTransID = DB::table('paypal_payment')
+                ->insertGetId([                                            
+                  'user_id' => $UserID,                                                   
+                  'paypal_param_response' =>$PayPalParamResponse,
+                  'sales_header_id' => $SalesHeaderID,    
+                   'Status' => 'Success',                   
+                  'payment_date_time' => $TODAY             
+              ]); 
+
+         }        
       } 
   }
         

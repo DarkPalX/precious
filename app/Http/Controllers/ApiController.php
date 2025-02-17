@@ -38,6 +38,7 @@ use App\Models\APIModels\BannerAds;
 use App\Models\APIModels\Favorites;
 use App\Models\APIModels\Subscription;
 use App\Models\APIModels\UserCustomer;
+use App\Models\APIModels\PaymentOption;
 
 class ApiController extends Controller {
 
@@ -1607,7 +1608,12 @@ public function proceedToCheckOut(Request $request){
 
     $data['VoucherCode'] = $request->post('VoucherCode');
     $data['VoucherDiscountAmount'] = $request->post('VoucherAmount');
-     
+
+    $data['PayPalParamResponse']='';
+     if(isset($request['PayPalParamResponse'])){
+        $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
+     }
+
     $response=$Order->proceedToCheckOut($data);
     if($response=='Success'){      
         return response()->json([                  
@@ -1623,6 +1629,7 @@ public function proceedToCheckOut(Request $request){
     } 
 
 }
+
 
 //BOOK LIST==================================================================
 public function getAllBookCategoryList(Request $request){
@@ -1778,6 +1785,59 @@ public function getAllBookCategoryList(Request $request){
   $result=$Books->getBookList($data);  
 
   return response()->json($result); 
+  }
+
+// MOBILE PAYMENT OPTION===============================================================
+
+   public function getPaymentOptionList(Request $request){
+
+    $PaymentOption = new PaymentOption();
+    $data["Status"] = $request["Status"];
+
+    $RetVal['Response'] = "Success";
+    $RetVal['ResponseMessage'] = "";
+    $RetVal["PaymentOptionList"] = $PaymentOption->getPaymentOptionList($data);
+
+    return response()->json($RetVal);
+
+  }
+
+// PAYPAL MOBILE PAYMENT SETTING===============================================================
+
+   public function getPayPalSettings(Request $request){
+
+    $data["Settings"] = $request["Settings"];
+    
+    $RetVal['Response'] = "Success";
+    $RetVal['ResponseMessage'] = "";
+
+    $RetVal['ServerPayPalSandBoxEnvironmentMode'] = config("app.PayPalSandBoxEnvironmentMode");
+    $RetVal['ServerPayPalClientID'] = config("app.PayPalClientID");
+    $RetVal['ServerPayPalSecretKey'] = config("app.PayPalSecretKey");
+    $RetVal['ServerPaypalReturnURL'] = config("app.PaypalReturnURL");
+    $RetVal['ServerPaypalCancelURL'] = config("app.PaypalCancelURL");
+    $RetVal['ServerPayPalCurrency'] = config("app.PayPalCurrency");
+    $RetVal['ServerPayPalCountryCode'] = config("app.PayPalCountryCode");
+
+    return response()->json($RetVal);
+
+  }
+
+  // SHOW HIDE MOBILE SETTING===============================================================
+
+   public function getShowHideSettings(Request $request){
+
+    $data["Settings"] = $request["Settings"];
+    
+    $RetVal['Response'] = "Success";
+    $RetVal['ResponseMessage'] = "";
+
+    $RetVal['ShowGoogleLogin'] = config("app.ShowGoogleLogin");
+    $RetVal['ShowContactUsImageAttach'] = config("app.ShowContactUsImageAttach");
+    $RetVal['ShowSubscriptionModule'] = config("app.ShowSubscriptionModule");
+
+    return response()->json($RetVal);
+
   }
 
 //CATALOGUE BOOK LIST==================================================================
@@ -2182,6 +2242,11 @@ public function proceedToSubscribe(Request $request){
     $data['ApplyECredit'] = $request->post('ApplyECredit');
     $data['PaymentMethod'] = $request->post('PaymentMethod');
     $data['SubTotal'] = $request->post('SubTotal');
+
+     $data['PayPalParamResponse']='';
+     if(isset($request['PayPalParamResponse'])){
+        $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
+     }
      
     $response=$Subscription->proceedToSubscribe($data);
     if($response=='Success'){      

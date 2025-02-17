@@ -191,6 +191,31 @@ Route::post('/check-book-allow-download',[
    'as'=> 'check-book-allow-download'
 ]);
 
+// PAYMENT OPTION===================================================================
+Route::post('get-payment-option-list',[
+    'uses'=>'App\Http\Controllers\ApiController@getPaymentOptionList',
+    'as'=> 'get-payment-option-list'
+]);
+
+// PAYPAL  SETTINGS===================================================================
+Route::post('get-paypal-setting',[
+    'uses'=>'App\Http\Controllers\ApiController@getPayPalSettings',
+    'as'=> 'get-paypal-setting'
+]);
+
+// SHOW/HIDE SETTINGS===================================================================
+Route::post('get-showhide-setting',[
+    'uses'=>'App\Http\Controllers\ApiController@getShowHideSettings',
+    'as'=> 'get-showhide-setting'
+]);
+
+
+// // PAYPAL ===================================================================
+// Route::post('save-paypal-order-payment',[
+//     'uses'=>'App\Http\Controllers\ApiController@getPayPalSettings',
+//     'as'=> 'save-paypal-order-payment'
+// ]);
+
 //FAVORITES ========================================================================
 Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
@@ -223,6 +248,7 @@ Route::post('/add-to-favorites',[
    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
    'as'=> 'add-to-favorites'
 ]);
+
 
 //CART===============================================================================
 Route::post('/get-cart-list',[
