@@ -62,7 +62,10 @@ class Coupon extends Model
         $coupon_sales = CouponSale::all();
 
         foreach($coupon_sales as $coupon_sale){
-            $payment_status = SalesHeader::where('id', $coupon_sale->sales_header_id)->first()->payment_status;
+            // $payment_status = SalesHeader::where('id', $coupon_sale->sales_header_id)->first()->payment_status;
+
+            $salesHeader = SalesHeader::where('id', $coupon_sale->sales_header_id)->first();
+            $payment_status = $salesHeader ? $salesHeader->payment_status : null;
 
             CouponSale::where('id', $coupon_sale->id)
             ->update([
