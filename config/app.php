@@ -312,8 +312,8 @@ return [
     'PayPalCountryCode'=>'PH',
 
     //SHOW/HIDE SETTING
-    'ShowGoogleLogin'=>'Y',
-    'ShowContactUsImageAttach'=>'Y',
+    'ShowGoogleLogin'=>'N',
+    'ShowContactUsImageAttach'=>'N',
     'ShowSubscriptionModule'=>'N',
 
     //PLATFORM
