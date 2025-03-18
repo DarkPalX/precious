@@ -312,9 +312,9 @@ return [
     'PayPalCountryCode'=>'PH',
 
     //SHOW/HIDE SETTING
-    'ShowGoogleLogin'=>'Y',
-    'ShowContactUsImageAttach'=>'Y',
-    'ShowSubscriptionModule'=>'Y',
+    'ShowGoogleLogin'=>'N',
+    'ShowContactUsImageAttach'=>'N',
+    'ShowSubscriptionModule'=>'N',
 
     //PLATFORM
     'PLATFORM_ANDROID' => 'Android',
