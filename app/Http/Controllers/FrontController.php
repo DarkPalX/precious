@@ -207,7 +207,14 @@ class FrontController extends Controller
         \Mail::to($client['email'])->send(new InquiryMail(Setting::info(), $client));
 
         foreach ($email_recipients as $email_recipient) {
-            \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
+            
+            if (filter_var($email_recipient->email, FILTER_VALIDATE_EMAIL)) {
+                \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
+            } else {
+                \Log::error('Invalid email: ' . $email_recipient->email);
+            }
+            
+            // \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
         }
 
         session()->flash('success', 'Email sent!');
