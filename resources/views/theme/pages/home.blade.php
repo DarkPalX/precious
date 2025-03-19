@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <div class="product-desc py-0">
-                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a class="text-white" href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
                             ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating text-warning">';
             }
@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <div class="product-desc py-0">
-                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a class="text-white" href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
                             ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating text-warning">';
             }
