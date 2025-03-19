@@ -112,7 +112,7 @@ class ProductFrontController extends Controller
         $products = Product::select('products.*')
             ->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
             ->where('products.status', 'PUBLISHED')
-            ->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])
+            // ->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])
             ->distinct(); 
 
         // Handling search input

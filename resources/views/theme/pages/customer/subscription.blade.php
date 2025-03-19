@@ -26,7 +26,9 @@
                         <div class="col-12 col-lg">
                             <h3>You are currently subscribed to a plan!</h3>
                             <span>
-                                <i>{{ $subscription_detail->title }}</i><br>
+                                {{-- <i>{{ $subscription_detail->title }}</i><br> --}}
+                                <i>{{ $current_subscription->no_days }} Day(s) Subscription</i><br>
+                                <small style="font-size:10px;">expires on {{ $current_subscription->end_date }}</small><br><br>
                                 <small class="text-white">
                                     You can still subscribe to another plan to extend your subscription days or 
                                     <a class="text-warning" href="javasacript:void(0)" data-bs-toggle="modal" data-bs-target="#unsubscribe_modal">unsubscribe</a> 

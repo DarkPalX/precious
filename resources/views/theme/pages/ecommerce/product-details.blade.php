@@ -64,6 +64,11 @@
                             <a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';" alt="{{$product->name}}" alt="{{$product->name}}"></a>
                         @endif
 
+                        
+                        @if(strtolower($product->book_type) != "ebook" || strtolower($product->book_type) != "e-book")
+                            <div class="sale-flash badge bg-info p-2">E-book</div>
+                        @endif
+
                     </div><!-- Product Single - Gallery End -->
 
                 </div>
@@ -505,6 +510,10 @@
                     <div class="grid-inner">
                         <div class="product-image">
                             <a href="{{ route('product.details',$rel->slug) }}"><img src="{{ asset('storage/products/'.$rel->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';" alt="{{$product->name}}" alt="{{$rel->name}}"></a>
+                            
+                            @if(strtolower($rel->book_type) != "ebook" || strtolower($rel->book_type) != "e-book")
+                                <div class="sale-flash badge bg-info p-2">E-book</div>
+                            @endif
                         </div>
                         <div class="product-desc">
                             <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;"><a href="{{ route('product.details',$rel->slug) }}">{{$rel->name}}</a></span></div>

@@ -97,7 +97,7 @@
                                 <tr>
                                     <th scope="col" width="15%">Name</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Status</th>
+                                    {{-- <th scope="col">Status</th> --}}
                                     <th scope="col">Subscription</th>
                                     <th scope="col">Last Date Modified</th>
                                     <th scope="col" width="10%">Options</th>
@@ -114,19 +114,20 @@
                                             <strong @if($user->is_active == 0) style="text-decoration:line-through;" @endif> {{$user->fullname}}</strong><br>{{ $user->mobile }}
                                         </th>
                                         <td>{{ $user->email }}</td>
-                                        <td>
+                                        {{-- <td>
                                             @if($user->is_active == 1)
                                                 <span class="badge badge-success">Active</span>
                                             @else
                                                 <span class="badge badge-danger">Inactive</span>
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <td>
                                             @if($user_sub)
-                                                {{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}<br>
+                                                <span class="badge badge-success">{{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}</span>
+                                                <br>
                                                 <span class="text-secondary">expires on {{ $user_sub->end_date }}</span><br>
                                             @else
-                                                {{ 'Not Subscribed' }}
+                                                <span class="badge badge-danger">{{ 'Not Subscribed' }}</span>
                                             @endif
                                             {{-- @forelse($user_subs as $user_sub)
                                                 {{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}<br>
