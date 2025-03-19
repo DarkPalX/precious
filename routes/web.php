@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\PayPalController;
+
 
 // CMS Controllers
 use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController, FacebookDataDeletionController, GoogleDataDeletionController, FacebookController, QrCodeController};
@@ -98,6 +100,12 @@ Route::get('/phpinfo', function () {
     //Chat Plugin
     Route::post('/setup-chat-plugin', [FacebookController::class, 'setupChatPlugin']);
 
+    // Paypal Plugin
+    Route::get('paypal', [PayPalController::class, 'createPayment'])->name('paypal.create');
+    Route::get('paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
+    Route::get('paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
+
+        
     // Ecommerce Pages
     
     Route::get('/brands', [ProductFrontController::class, 'brands'])->name('product.brands');
@@ -158,6 +166,12 @@ Route::get('/phpinfo', function () {
             Route::get('/account/change-password', [MyAccountController::class, 'change_password'])->name('my-account.change-password');
             Route::post('/account/change-password', [MyAccountController::class, 'update_password'])->name('my-account.update-password');
             Route::get('/account-logout', [CustomerFrontController::class, 'logout'])->name('account.logout');
+
+            Route::get('/subscription', [MyAccountController::class, 'subscription'])->name('customer.subscription');
+            Route::post('/subscription-selected', [MyAccountController::class, 'subscription_selected'])->name('customer.subscription-selected');
+            Route::post('/subscription-checkout', [MyAccountController::class, 'subscription_checkout'])->name('customer.subscription-checkout');
+            Route::post('/subscription-cancel', [MyAccountController::class, 'subscription_cancel'])->name('customer.subscription-cancel');
+
             
             //DEACTIVATE SOCIAL LOGIN 
             Route::post('/deactivate-social-login', [MyAccountController::class, 'deactivate_social_login'])->name('customer.deactivate-social-login');
@@ -264,7 +278,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
             Route::resource('/access', AccessController::class);
             Route::post('/roles_and_permissions/update', [AccessController::class, 'update_roles_and_permissions'])->name('role-permission.update');
 
-            if (env('APP_DEBUG') == "true") {
+            // if (env('APP_DEBUG') == "true") {
                 // Permission Routes
                 Route::resource('/permission', PermissionController::class)->except(['destroy']);
                 Route::get('/permission-search/', [PermissionController::class, 'search'])->name('permission.search');
@@ -272,7 +286,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/permission/restore/{id}', [PermissionController::class, 'restore'])->name('permission.restore');
                 Route::post('permission/delete', [PermissionController::class, 'delete'])->name('permission.delete');
 
-            }
+            // }
         //
 
 
@@ -360,6 +374,8 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::post('/customer/deactivate', [CustomerController::class, 'deactivate'])->name('customer.deactivate');
                 Route::post('/customer/activate', [CustomerController::class, 'activate'])->name('customer.activate');
                 Route::post('/customer/update', [CustomerController::class, 'update'])->name('customer.update');
+                Route::get('/customer/subscriptions', [CustomerController::class, 'customers_subscriptions'])->name('subscriptions.customers');
+                Route::get('/customer/subscriptions/{id}', [CustomerController::class, 'subscriptions'])->name('customer.subscriptions');
             //
 
             // Product Categories
@@ -405,6 +421,8 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/ebook-customer-assignment/{id}', [ProductController::class, 'ebook_customer_assignment'])->name('product.ebook-customer-assignment');
                 Route::put('/ebook-customer-assignment-update/{id}', [ProductController::class, 'ebook_customer_assignment_update'])->name('product.ebook-customer-assignment-update');
 
+                Route::get('/ebook/subscriptions', [ProductController::class, 'ebook_subscriptions'])->name('subscriptions.ebooks');
+                Route::get('/ebook/subscriptions-list/{id}', [ProductController::class, 'ebook_subscriptions_list'])->name('subscriptions.ebooks-subscription-list');
 
             //
 

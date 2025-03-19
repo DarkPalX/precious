@@ -29,7 +29,8 @@ class ProductFrontController extends Controller
         $page = Page::where('slug', 'books')->where('status', 'PUBLISHED')->where('parent_page_id', 0)->first();
         $pageLimit = 12;
 
-        $products = Product::where('status','PUBLISHED')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book']);
+        $products = Product::where('status','PUBLISHED');
+        // $products = Product::where('status','PUBLISHED')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book']);
 
         if($category){
             $productCategory  = ProductCategory::where('slug', $category)->first();

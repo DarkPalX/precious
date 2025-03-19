@@ -507,7 +507,7 @@
                             <a href="{{ route('product.details',$rel->slug) }}"><img src="{{ asset('storage/products/'.$rel->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';" alt="{{$product->name}}" alt="{{$rel->name}}"></a>
                         </div>
                         <div class="product-desc">
-                            <div class="product-title"><h3><a href="{{ route('product.details',$rel->slug) }}">{{$rel->name}}</a></h3></div>
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;"><a href="{{ route('product.details',$rel->slug) }}">{{$rel->name}}</a></span></div>
                             {{-- <div class="product-price"><ins>₱{{number_format($rel->price,2)}}</ins></div> --}}
 							{!! ($rel->discount_price > 0 ? '<div class="product-price"><del class="text-danger">' . number_format($rel->price, 2) . '</del> <ins>' . number_format($rel->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($rel->price, 2) . '</ins></div>') !!}
                             <div class="product-rating text-warning">

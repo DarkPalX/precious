@@ -9,6 +9,9 @@ use DB;
 class Subscription extends Model
 {
     use HasFactory;
+    
+    protected $table = "subscriptions";
+    protected $fillable = ['title', 'price', 'no_days', 'short_description', 'long_description', 'status'];
 
     public function users_subscriptions()
     {

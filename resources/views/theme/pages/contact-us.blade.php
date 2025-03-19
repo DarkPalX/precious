@@ -26,24 +26,44 @@
             @endif
             <p><strong>Note:</strong> Please do not leave required fields (*) empty.</p>
             <div class="form-style fs-sm">
-                <form id="contactUsForm" action="{{ route('contact-us') }}" method="POST">
+                <form id="contactUsForm" action="{{ route('contact-us') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="fullName" class="fs-6 fw-semibold text-initial nols">Full Name <span class="text-danger">*</span></label>
-                        <input type="text" id="fullName" class="form-control form-input" name="name" placeholder="First and Last Name" />
+                        <input type="text" id="fullName" class="form-control form-input" name="name" placeholder="First and Last Name" required/>
                     </div>
 
                     <div class="form-group">
                         <label for="emailAddress" class="fs-6 fw-semibold text-initial nols">E-mail Address <span class="text-danger">*</span></label>
-                        <input type="email" id="emailAddress" class="form-control form-input" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="hello@email.com" />
+                        <input type="email" id="emailAddress" class="form-control form-input" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="hello@email.com" required/>
                     </div>
                     <div class="form-group">
-                        <label for="contactNumber" class="fs-6 fw-semibold text-initial nols">Contact Number <span class="text-danger">*</span></label>
+                        <label for="contactNumber" class="fs-6 fw-semibold text-initial nols">Contact Number</label>
                         <input type="number" id="contactNumber" class="form-control form-input" name="contact" placeholder="Landline or Mobile" />
                     </div>
                     <div class="form-group">
+                        <label for="mail_attachments" class="fs-6 fw-semibold text-initial nols">Attachments</label>
+                        <div class="col-lg-12">
+                            <input id="mail_attachments" name="mail_attachments[]" type="file" multiple class="file-loading" data-show-preview="false" 
+                                accept=".png, .jpg" 
+                                onchange="
+                                        if(this.files.length > 3) { 
+                                            alert('You can upload a maximum of 3 files'); this.value = ''; 
+                                        } 
+                                        else { 
+                                            Array.from(this.files).forEach(f => { 
+                                                if (f.size > 3145728) { 
+                                                    alert('File size must be less than 3MB'); this.value = ''; } 
+                                                }
+                                            )
+                                        }"
+                            >  
+
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="message" class="fs-6 fw-semibold text-initial nols">Message <span class="text-danger">*</span></label>
-                        <textarea name="message" id="message" class="form-control form-input textarea" rows="5"></textarea>
+                        <textarea name="message" id="message" class="form-control form-input textarea" rows="5" required></textarea>
                     </div>
                     
                     {{-- <div class="form-group">
@@ -64,7 +84,8 @@
 
                     <div class="row g-2">
                         <div class="col-md-6">
-                            <a class="button button-circle border-bottom ms-0 text-initial nols fw-normal button-large d-block text-center" href="javascript:void(0)" onclick="document.getElementById('contactUsForm').submit()">Submit</a>
+                            {{-- <a class="button button-circle border-bottom ms-0 text-initial nols fw-normal button-large d-block text-center" href="javascript:void(0)" onclick="document.getElementById('contactUsForm').submit()">Submit</a> --}}
+                            <a class="button button-circle border-bottom ms-0 text-initial nols fw-normal button-large d-block text-center" href="javascript:void(0)" onclick="validateAndSubmit(event)">Submit</a>
                         </div>
                         <div class="col-md-6">
                             <a href="javascript:void(0)" class="button button-circle button-dark border-bottom ms-0 text-initial nols fw-normal button-large d-block text-center" onclick="resetForm();">Reset</a>
@@ -115,5 +136,37 @@
     function resetForm() {
         document.getElementById("contactUsForm").reset();
     }
+</script>
+<script>
+    function validateAndSubmit(event) {
+        event.preventDefault(); // Prevent default anchor behavior
+    
+        let form = document.getElementById('contactUsForm');
+        
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            form.reportValidity(); // Show validation messages
+        }
+    }
+    </script>
+
+<script >
+    jQuery(document).ready(function() {
+        
+        jQuery("#mail_attachments").fileinput({
+            showUpload: false,
+            layoutTemplates: {
+                main1: "{preview}\n" +
+                "<div class=\'input-group {class}\'>\n" +
+                "       {browse}\n" +
+                "       {upload}\n" +
+                "       {remove}\n" +
+                "   {caption}\n" +
+                "</div>"
+            }
+        });
+        
+    });
 </script>
 @endsection

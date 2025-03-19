@@ -98,4 +98,36 @@ class CustomerController extends Controller
         
         return back()->with('success', 'Customer Account successfully updated');
     }
+
+    public function customers_subscriptions($param = null)
+    {   
+        $listing = ListingHelper::required_condition('role_id', '=', 6);
+        $users = $listing->simple_search(User::class, $this->searchFields);
+
+        // Simple search init data
+        $filter = $listing->get_filter($this->searchFields);
+
+        $searchType = 'simple_search';
+
+        return view('admin.ecommerce.ebook-subscribers.customers-subscriptions',compact('users','filter', 'searchType'));
+    }
+
+    public function subscriptions($id)
+    {   
+        $listing = ListingHelper::required_condition('role_id', '=', 6);
+        $users = $listing->simple_search(User::class, $this->searchFields);
+
+        // Simple search init data
+        $filter = $listing->get_filter($this->searchFields);
+
+        $searchType = 'simple_search';
+
+        $user = User::withTrashed()->find($id);
+
+        $user_subscriptions = UsersSubscription::getAllSubscriptions($id);
+
+        // dd($user_subscriptions);
+        return view('admin.ecommerce.customers.subscriptions',compact('user','users','user_subscriptions'));
+    }
+
 }

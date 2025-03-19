@@ -8,6 +8,7 @@ use Facades\App\Helpers\ListingHelper;
 
 use App\Http\Requests\ContactUsRequest;
 use App\Helpers\Setting;
+use Facades\App\Helpers\FileHelper;
 
 use Illuminate\Support\Facades\Mail;
 use App\Mail\InquiryAdminMail;
@@ -188,11 +189,20 @@ class FrontController extends Controller
         return view('theme.page', compact('footer', 'page', 'parentPage', 'breadcrumb', 'currentPageItems', 'parentPageName', 'banner_ads'));
     }
 
-    
     public function contact_us(Request $request)
     {
-        $email_recipients  = EmailRecipient::all();
-        $client = $request->all();
+        $client = $request->all(); // Get all request data
+        $client['mail_attachments'] = [];
+
+        if ($request->hasFile('mail_attachments')) {
+            foreach ($request->file('mail_attachments') as $file) {
+                if ($file) {
+                    $client['mail_attachments'][] = env('APP_URL') . '/' . FileHelper::move_to_attachments_file_folder($file, 'attachments/email')['url'];
+                }
+            }
+        }
+
+        $email_recipients = EmailRecipient::all();
 
         \Mail::to($client['email'])->send(new InquiryMail(Setting::info(), $client));
 
@@ -204,6 +214,39 @@ class FrontController extends Controller
 
         return redirect()->back();
     }
+
+    
+    // public function contact_us(Request $request)
+    // {
+
+    //     if ($request->hasFile('mail_attachments')) {
+    //         $attachment_urls = []; // Initialize an array
+        
+    //         foreach ($request->file('mail_attachments') as $file) {
+    //             if ($file) {
+    //                 $attachment_urls[] = env('APP_URL') .'/'. FileHelper::move_to_attachments_file_folder($file, 'attachments/email')['url'];
+    //             }
+    //         }
+        
+    //         // dd($attachment_urls); // Debug: Check stored URLs
+    //     }
+        
+        
+    //     $email_recipients  = EmailRecipient::all();
+    //     $client = $request->all();
+
+    //     // dd($client);
+
+    //     \Mail::to($client['email'])->send(new InquiryMail(Setting::info(), $client, $attachment_urls));
+
+    //     foreach ($email_recipients as $email_recipient) {
+    //         \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient, $attachment_urls));
+    //     }
+
+    //     session()->flash('success', 'Email sent!');
+
+    //     return redirect()->back();
+    // }
 
     // public function contact_us(ContactUsRequest $request)
     // {

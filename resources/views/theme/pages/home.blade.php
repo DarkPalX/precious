@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <div class="product-desc py-0">
-                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
                             ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating text-warning">';
             }
@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <div class="product-desc py-0">
-                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
                             ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="me-1">'. number_format($product->price,2) .'</del> <ins class="text-light">'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins class="text-light">'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating text-warning">';
             }
@@ -110,7 +110,7 @@
                             </div>
                         </div>
                         <div class="product-desc py-0">
-                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
                             ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="text-danger">'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating text-warning">';
                 }
@@ -131,7 +131,7 @@
                             </div>
                         </div>
                         <div class="product-desc py-0">
-                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
                             ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="text-danger">'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating text-warning">';
 
@@ -182,7 +182,7 @@
                                 </div>
                             </div>
                         <div class="product-desc py-0">
-                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
                             ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="text-danger">'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating text-warning">';
                 }
@@ -202,7 +202,7 @@
                                 </div>
                             </div>
                         <div class="product-desc py-0">
-                            <div class="product-title"><h3><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></h3></div>'.
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;" ><a href="'.route('product.details',$product->slug).'">'. $product->name .'</a></span></div>'.
                             ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"> <del class="text-danger">'. number_format($product->price,2) .'</del> <ins>'. number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price,2) .'</ins> </div>' : '<div class="product-price"><ins>'. number_format($product->price,2) .'</ins></div>') . '
                             <div class="product-rating text-warning">';
                 }
@@ -245,7 +245,7 @@
                             <a href="'. $article->get_url() .'" data-lightbox="image"><img class="image_fade" src="'. $imageUrl .'" alt="Standard Post with Image"></a>
                         </div>
                         <div class="entry-title" style="max-height: 70px; overflow: hidden;">
-                            <h3 style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-overflow: ellipsis;">
+                            <h3 style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; text-overflow: ellipsis;">
                                 <a href="'. $article->get_url() .'" style="text-decoration: none;">'. $article->name .'</a>
                             </h3>
                         </div>
@@ -253,7 +253,7 @@
                             <li><i class="icon-calendar3"></i> '. $article->date_posted() .'</li>
                         </ul>
                         <div class="entry-content" style="max-height: 140px; overflow: hidden;">
-                            <p style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; text-overflow: ellipsis;">'. $article->teaser .'</p>
+                            <p style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; text-overflow: ellipsis;">'. $article->teaser .'</p>
                         </div>
                     </div>
                 </div>';

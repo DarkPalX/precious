@@ -16,7 +16,7 @@ use App\Models\Ecommerce\{
 };
 
 use App\Models\{
-    Permission, Page, Brand, BrandProductCategory, User, CustomerLibrary
+    Permission, Page, Brand, BrandProductCategory, User, CustomerLibrary, UsersSubscription
 };
 
 use Response;
@@ -825,6 +825,44 @@ class ProductController extends Controller
 
     //     return redirect()->back()->with('success', 'Ebook customer assignment updated successfully.');
     // }
+    
+    public function ebook_subscriptions()
+    {
+        $listing = ListingHelper::required_condition('status', '!=', 'UNEDITABLE')->required_condition('book_type', '=', 'e-book');
+        $products = $listing->simple_search(Product::class, $this->searchFields);
 
+        // Simple search init data
+        $filter = ListingHelper::get_filter($this->searchFields);
+        $searchType = 'simple_search';
+
+        $advanceSearchData = $listing->get_search_data($this->advanceSearchFields);
+        $uniqueProductByCategory = $listing->get_unique_item_by_column(Product::class, 'category_id');
+
+        // $uniqueProductByBrand = $listing->get_unique_item_by_column(Product::class, 'brand_id');
+        $brands = Brand::orderBy('name', 'asc')->get();
+
+        $uniqueProductByUser = $listing->get_unique_item_by_column(Product::class, 'created_by');
+
+        return view('admin.ecommerce.ebook-subscribers.ebook-subscriptions',compact('products', 'filter', 'searchType','uniqueProductByCategory','brands','uniqueProductByUser','advanceSearchData'));
+
+    }
+
+    public function ebook_subscriptions_list($id)
+    {   
+        $listing = ListingHelper::required_condition('role_id', '=', 6);
+        $users = $listing->simple_search(User::class, $this->searchFields);
+
+        // Simple search init data
+        $filter = $listing->get_filter($this->searchFields);
+
+        $searchType = 'simple_search';
+
+        $product = Product::withTrashed()->find($id);
+
+        $ebook_subscribers = UsersSubscription::getSubscribers($id);
+
+        // dd($user_subscriptions);
+        return view('admin.ecommerce.ebook-subscribers.ebook-subscriptions-list',compact('product','users','ebook_subscribers'));
+    }
 
 }

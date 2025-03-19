@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('theme/css/cookiealert.css') }}" type="text/css"  />
     <link rel="stylesheet" href="{{ asset('theme/css/fonts.css') }}" type="text/css"  />
     <link rel="stylesheet" href="{{ asset('theme/css/cafe.css') }}" type="text/css"  />
+    <link rel="stylesheet" href="{{ asset('theme/css/components/bs-filestyle.css') }}" type="text/css"  />
     
     <link rel="stylesheet" href="{{ asset('theme/css/custom.css') }}" type="text/css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

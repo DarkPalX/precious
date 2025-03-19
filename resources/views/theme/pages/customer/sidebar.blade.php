@@ -8,6 +8,7 @@
             <ul class="mb-0 pb-0">
                 <li class="active"><a href="{{ route('customer.dashboard') }}"><div><i class="icon-note"></i> Dashboard</div></a></li>
                 <li><a href="{{ route('customer.manage-account') }}"><div><i class="icon-user"></i> Profile</div></a></li>
+                <li><a href="{{ route('customer.subscription') }}"><div><i class="icon-ticket"></i> Subscription</div></a></li>
                 {{-- <li><a href="{{ route('customer.library') }}"><div><i class="icon-book"></i> My Library</div></a></li> --}}
                 <li><a href="{{ route('customer.wishlist') }}"><div><i class="icon-star"></i> My Wishlist</div></a></li>
                 {{-- <li><a href="{{ route('customer.favorites') }}"><div><i class="icon-heart"></i> My Favorites</div></a></li> --}}
