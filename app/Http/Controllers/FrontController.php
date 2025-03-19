@@ -202,20 +202,33 @@ class FrontController extends Controller
             }
         }
 
-        $email_recipients = EmailRecipient::all();
-
         \Mail::to($client['email'])->send(new InquiryMail(Setting::info(), $client));
 
+        $email_recipients = EmailRecipient::all();
+
         foreach ($email_recipients as $email_recipient) {
-            
             if (filter_var($email_recipient->email, FILTER_VALIDATE_EMAIL)) {
-                \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
+                // ✅ Send individually with queue
+                Mail::to($email_recipient->email)
+                    ->queue(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
+
+                // ✅ Add a small delay to prevent SMTP throttling
+                usleep(500000);  // 0.5-second delay
             } else {
-                \Log::error('Invalid email: ' . $email_recipient->email);
+                Log::error('Invalid email: ' . $email_recipient->email);
             }
-            
-            // \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
         }
+
+        // $email_recipients = EmailRecipient::all();
+        // foreach ($email_recipients as $email_recipient) {
+
+        //     if (filter_var($email_recipient->email, FILTER_VALIDATE_EMAIL)) {
+        //         \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
+        //     } else {
+        //         \Log::error('Invalid email: ' . $email_recipient->email);
+        //     }
+            
+        // }
 
         session()->flash('success', 'Email sent!');
 
