@@ -206,9 +206,9 @@ class FrontController extends Controller
 
         \Mail::to($client['email'])->send(new InquiryMail(Setting::info(), $client));
 
-        // foreach ($email_recipients as $email_recipient) {
-        //     \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
-        // }
+        foreach ($email_recipients as $email_recipient) {
+            \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
+        }
 
         session()->flash('success', 'Email sent!');
 
