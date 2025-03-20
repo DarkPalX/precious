@@ -106,19 +106,33 @@
 								@if( $product->inventory <= 0 && (strtolower($product->book_type) != "ebook" && strtolower($product->book_type) != "e-book") )
 									<div class="sale-flash badge bg-danger p-2">Out of Stock</div>
 								@endif
-								@if(strtolower($product->book_type) != "ebook" || strtolower($product->book_type) != "e-book")
+								@if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book")
 									<div class="sale-flash badge bg-info p-2">E-book</div>
 								@endif
 							</div>
-							<div class="product-desc">
-								<div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;"><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></span></div>
-								{!! ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"><del class="text-danger">' . number_format($product->price, 2) . '</del> <ins>' . number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->price, 2) . '</ins></div>') !!}
-								<div class="product-rating text-warning">
-									@for($star = 1; $star <= 5; $star++)
-										<i class="icon-star{{ $star <= $product->rating ? '3' : '-empty' }}"></i>
-									@endfor
+
+							@if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book")
+								<div class="product-desc">
+									<div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;"><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></span></div>
+									{!! ($product->ebook_discount_price > 0 || $product->ebookdiscountedprice != $product->ebook_price ? '<div class="product-price"><del class="text-danger">' . number_format($product->ebook_price, 2) . '</del> <ins>' . number_format($product->ebookdiscountedprice != $product->ebook_price ? $product->ebookdiscountedprice : $product->ebook_discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->ebook_price, 2) . '</ins></div>') !!}
+									<div class="product-rating text-warning">
+										@for($star = 1; $star <= 5; $star++)
+											<i class="icon-star{{ $star <= $product->rating ? '3' : '-empty' }}"></i>
+										@endfor
+									</div>
 								</div>
-							</div>
+							@else
+								<div class="product-desc">
+									<div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;"><a href="{{ route('product.details',$product->slug) }}">{{$product->name}}</a></span></div>
+									{!! ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<div class="product-price"><del class="text-danger">' . number_format($product->price, 2) . '</del> <ins>' . number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($product->price, 2) . '</ins></div>') !!}
+									<div class="product-rating text-warning">
+										@for($star = 1; $star <= 5; $star++)
+											<i class="icon-star{{ $star <= $product->rating ? '3' : '-empty' }}"></i>
+										@endfor
+									</div>
+								</div>
+							@endif
+
 						</div>
 					</div>
 				@empty

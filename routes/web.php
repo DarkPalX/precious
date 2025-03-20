@@ -132,6 +132,7 @@ Route::get('/phpinfo', function () {
 
     //Products/Books
     Route::get('books/{category?}', [ProductFrontController::class, 'product_list'])->name('product.front.list');
+    Route::get('ebooks/{category?}', [ProductFrontController::class, 'product_ebook_list'])->name('product.front.ebook-list');
     Route::get('/book-details/{slug}', [ProductFrontController::class, 'product_details'])->name('product.details');
     // Route::get('/ebook-details/{slug}', [ProductFrontController::class, 'ebook_details'])->name('ebook.details');
     Route::get('/search-products', [ProductFrontController::class, 'search_product'])->name('search-product');

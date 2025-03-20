@@ -330,6 +330,40 @@ class Product extends Model
         return $price;
     }
 
+    public function getEbookDiscountedPriceAttribute()
+    {
+        $promoProducts = PromoProducts::where('product_id', $this->id);
+
+        $arr_promos = [];
+        if($promoProducts->count() > 0){
+            $products = $promoProducts->get();
+
+            foreach($products as $product){
+                array_push($arr_promos, $product->promo_id);
+            }
+        }
+
+        $promos = Promo::whereIn('id', $arr_promos)->whereNull('deleted_at')->where('status', 'ACTIVE')
+        ->where(function($query) {
+            $query->where('applicable_product_type', 'ebook')
+                  ->orWhere('applicable_product_type', 'e-book');
+        });
+
+        if($promos->count() > 0){
+
+            $discount = $promos->max('discount');
+
+            $percentage = ($discount/100);
+            $discountedAmount = ($this->ebook_price * $percentage);
+
+            $price = ($this->ebook_price - $discountedAmount);
+        } else {
+            $price = $this->ebook_price;
+        }
+
+        return $price;
+    }
+
     public static function onsale_checker($id)
     {
         $checkproduct = DB::table('promos')->join('promo_products','promos.id','=','promo_products.promo_id')->where('promos.status','ACTIVE')->where('promos.is_expire',0)->where('promo_products.product_id',$id)->count();

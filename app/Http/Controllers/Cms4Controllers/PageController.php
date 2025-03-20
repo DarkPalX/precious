@@ -186,7 +186,7 @@ class PageController extends Controller
     {
         $updateData = $request->validated();
         $updateData['album_id'] = empty($updateData['album_id']) ? 0 : $updateData['album_id'];
-        $updateData['status'] = $request->has('visibility') ? 'PUBLISHED' : 'PRIVATE';
+        $updateData['status'] = $request->has('visibility') ? 'PUBLISHED' : 'PUBLISHED';
         $updateData['user_id'] = auth()->id();
 
         if ($request->banner_type == 'banner_slider' || $request->has('delete_image')) {

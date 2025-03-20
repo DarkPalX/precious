@@ -297,6 +297,7 @@ class CartController extends Controller
     public function buy_now(Request $request)
     {
         $requestData = $request->all();
+
         $requestData['user_id'] = Auth::id();
 
         Cart::create($requestData);
@@ -467,16 +468,25 @@ class CartController extends Controller
         $page->name = 'Checkout';
 
         $customer  = User::find(Auth::id());
-        $orders    = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();      
+        $orders    = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();    
         $cart      = CouponCartDiscount::where('customer_id',Auth::id())->first();
 
         $coupons = CouponCart::where('customer_id', Auth::id())->get();
 
         $use_ecredit = session('use_ecredit');
 
+        $has_ebook = false;
+
+        foreach($orders as $order){
+            if (in_array(strtolower($order->product->book_type), ['e-book', 'ebook'])) {
+                $has_ebook = true;
+                break;
+            }
+        }
+
         // $lbc_provinces = LBCHelper::provinces();
 
-        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'use_ecredit'));
+        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'use_ecredit', 'has_ebook'));
         // return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'lbc_provinces'));
     }
 

@@ -244,7 +244,7 @@
 											<h3 class="nott ls0 mb-0">E-Wallet</h3>
 										</div>
 										<div class="px-3">
-											<p class="">Balance: {{ number_format(auth()->user()->ecredits, '2') }}</p>
+											<p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 										</div>
 									</div>
 								</label>

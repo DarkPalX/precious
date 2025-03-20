@@ -44,9 +44,9 @@
 
 								<div class="d-flex mt-2">
 									<div class="quantity">
-										<input type="button" value="-" class="minus" onclick="minus_qty('{{$cart->id}}');">
-										<input type="text" name="quantity[]" class="qty" value="{{$cart->qty}}" id="quantity{{$cart->id}}"/>
-										<input type="button" value="+" class="plus" onclick="plus_qty('{{$cart->id}}');">
+										<input type="button" value="-" class="minus" onclick="minus_qty('{{$cart->id}}');" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) disabled @endif />
+										<input type="text" name="quantity[]" class="qty" value="{{$cart->qty}}" id="quantity{{$cart->id}}" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) readonly @endif />
+										<input type="button" value="+" class="plus" onclick="plus_qty('{{$cart->id}}');" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) disabled @endif />
 
 										<input type="hidden" id="orderID{{$cart->id}}" value="{{$cart->product_id}}">
 										<input type="hidden" id="prevqty{{$cart->id}}" value="{{ $cart->qty }}">
