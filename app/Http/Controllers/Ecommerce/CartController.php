@@ -19,7 +19,7 @@ use App\Models\Ecommerce\{
 };
 
 use App\Models\{
-    Page, User, PaynamicsLog
+    Page, User, PaynamicsLog, CustomerLibrary
 };
 
 
@@ -701,6 +701,12 @@ class CartController extends Controller
                 'uom' => $product->uom,               
                 'created_by' => Auth::id()
             ]);  
+
+            CustomerLibrary::create([
+                'user_id' => Auth::user()->id,              
+                'product_id' => $product->id
+            ]);
+
         }
     }
 

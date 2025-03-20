@@ -92,6 +92,8 @@ class ProductFrontController extends Controller
             $products = $products->orderBy('name','asc')->paginate($pageLimit);
         }
 
+        $page_type="physical";
+
         return view($this->folder.'.product-list',compact(
             'products',
             'page',
@@ -99,6 +101,7 @@ class ProductFrontController extends Controller
             'maxPrice',
             'minPrice',
             'productMaxPrice',
+            'page_type'
         ));
     }
 
@@ -171,6 +174,8 @@ class ProductFrontController extends Controller
             $products = $products->orderBy('name','asc')->paginate($pageLimit);
         }
 
+        $page_type="ebook";
+
         return view($this->folder.'.product-list',compact(
             'products',
             'page',
@@ -178,6 +183,7 @@ class ProductFrontController extends Controller
             'maxPrice',
             'minPrice',
             'productMaxPrice',
+            'page_type'
         ));
     }
 
@@ -293,10 +299,18 @@ class ProductFrontController extends Controller
 
         $page = new Page();
         $page->name = $product->name;
+        
+        $page_type = $product->book_type;
 
-        $relatedProducts = Product::where('category_id',$product->category_id)->where('id','<>',$product->id)->where('status','PUBLISHED')->skip(0)->take(4)->get();
+        if(in_array(strtolower($page_type), ['ebook', 'e-book'])){
+            $relatedProducts = Product::where('category_id',$product->category_id)->where('id','<>',$product->id)->where('status','PUBLISHED')->whereRaw('LOWER(book_type) IN (?, ?)', ['ebook', 'e-book'])->skip(0)->take(4)->get();
+        }
+        else{
+            $relatedProducts = Product::where('category_id',$product->category_id)->where('id','<>',$product->id)->where('status','PUBLISHED')->skip(0)->take(4)->get();
+        }
 
-        return view($this->folder.'.product-details',compact('product','page', 'relatedProducts', 'categories', 'product_reviews'));
+
+        return view($this->folder.'.product-details',compact('product','page', 'relatedProducts', 'categories', 'product_reviews', 'page_type'));
     }
 
 
