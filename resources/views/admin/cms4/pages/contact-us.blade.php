@@ -380,6 +380,7 @@
                     <div class="form-group">
                         <label class="d-block">Email Recipients *</label>
                         <input type="text" class="form-control @error('emails') is-invalid @enderror" data-role="tagsinput" name="emails" id="tags" value="{{ $emails }}">
+                        <label class="text-danger">Make sure that all the emails are working to avoid errors.</label>
                         @error('emails')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
