@@ -197,7 +197,7 @@ class ProductFrontController extends Controller
         $products = Product::select('products.*')
             ->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
             ->where('products.status', 'PUBLISHED')
-            // ->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])
+            ->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])
             ->distinct(); 
 
         // Handling search input
@@ -235,7 +235,62 @@ class ProductFrontController extends Controller
         // Apply pagination
         $products = $products->paginate($pageLimit);
 
-        return view($this->folder . '.product-list', compact('products', 'page', 'searchtxt'));
+        $page_type="physical";
+
+        return view($this->folder . '.product-list', compact('products', 'page', 'searchtxt', 'page_type'));
+    }
+
+    public function search_product_ebook(Request $request)
+    {
+        $page = new Page();
+        $page->name = 'Search Product';
+        $pageLimit = 20;
+
+        // Base query with DISTINCT to remove duplicates
+        $products = Product::select('products.*')
+            ->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
+            ->where('products.status', 'PUBLISHED')
+            ->whereRaw('LOWER(book_type) IN (?, ?)', ['ebook', 'e-book'])
+            ->distinct(); 
+
+        // Handling search input
+        $searchtxt = trim($request->get('keyword', ''));
+        if (!empty($searchtxt)) {
+            $keyword = Str::lower($searchtxt);
+
+            $products->where(function ($query) use ($keyword) {
+                $query->whereRaw('LOWER(products.name) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(products.author) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(products.description) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(product_additional_infos.value) LIKE ?', ["%{$keyword}%"]);
+            });
+        }
+
+        // Handling sorting input
+        $sortBy = $request->get('sort_by', 'name_asc');
+        $sortOptions = [
+            'name_asc'  => ['name', 'asc'],
+            'name_desc' => ['name', 'desc'],
+            'price_asc' => ['price', 'asc'],
+            'price_desc'=> ['price', 'desc'],
+            'date_asc'  => ['created_at', 'asc'],
+            'date_desc' => ['created_at', 'desc'],
+        ];
+
+        if (isset($sortOptions[$sortBy])) {
+            [$sortField, $sortDirection] = $sortOptions[$sortBy];
+            $products->orderBy($sortField, $sortDirection);
+        } else {
+            // Default sorting
+            $products->orderBy('name', 'asc');
+        }
+
+        // Apply pagination
+        $products = $products->paginate($pageLimit);
+
+        $page_type="physical";
+
+        return view($this->folder . '.product-list', compact('products', 'page', 'searchtxt', 'page_type'));
     }
 
 

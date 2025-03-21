@@ -19,7 +19,8 @@
                     <div class="border-0 mb-5">
                         <h3 class="mb-3">Search</h3>
                         <div class="search">
-                            <form class="mb-0" action="{{ route('search-product') }}" method="get">
+                            <form class="mb-0" action="{{ route(in_array(strtolower($product->book_type), ['ebook', 'e-book']) ? 'search-product-ebook' : 'search-product') }}" method="get">
+                            {{-- <form class="mb-0" action="{{ route('search-product') }}" method="get"> --}}
                                 <div class="searchbar">
                                     <input type="text" name="keyword" class="form-control form-input form-search" placeholder="Search Product" aria-label="Search Product" aria-describedby="button-addon1" />
                                     <button class="form-submit-search" type="submit" name="submit">
