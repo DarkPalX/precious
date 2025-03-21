@@ -221,42 +221,19 @@ class FrontController extends Controller
 
         $email_recipients = EmailRecipient::all();
         foreach ($email_recipients as $email_recipient) {
-            \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
-        }
-        
-        // foreach ($email_recipients as $email_recipient) {
 
-        //     if (filter_var($email_recipient->email, FILTER_VALIDATE_EMAIL)) {
-        //         \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
-        //     } else {
-        //         \Log::error('Invalid email: ' . $email_recipient->email);
-        //     }
+            if (filter_var($email_recipient->email, FILTER_VALIDATE_EMAIL)) {
+                \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
+            } else {
+                \Log::error('Invalid email: ' . $email_recipient->email);
+            }
             
-        // }
+        }
 
         session()->flash('success', 'Email sent!');
 
         return redirect()->back();
     }
-
-    
-
-    
-    // public function contact_us(Request $request)
-    // {
-    //     $email_recipients  = EmailRecipient::all();
-    //     $client = $request->all();
-
-    //     \Mail::to($client['email'])->send(new InquiryMail(Setting::info(), $client));
-
-    //     foreach ($email_recipients as $email_recipient) {
-    //         \Mail::to($email_recipient->email)->send(new InquiryAdminMail(Setting::info(), $client, $email_recipient));
-    //     }
-
-    //     session()->flash('success', 'Email sent!');
-
-    //     return redirect()->back();
-    // }
 
     
     // public function contact_us(Request $request)
