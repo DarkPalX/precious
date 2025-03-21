@@ -164,37 +164,47 @@
                     </td>
 
                     
-                    <!-- Product Single - Short Description End -->
-                    @if($product->inventory > 0 || (strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book"))
+                    @if(App\Models\CustomerLibrary::already_purchased($product->id))
 
-                        @if(App\Models\Ecommerce\Cart::is_product_on_cart($product->id) && in_array(strtolower($product->book_type), ['ebook', 'e-book']))
-                            <div class="d-flex justify-content-evenly align-content-stretch mb-1">
-                                <a href="{{ route('cart.front.show') }}" class="btn btn-info text-white vw-100">Proceed To Checkout</a>
-                            </div>
+                        <!-- Product Single - Short Description End -->
+                        @if($product->inventory > 0 || (strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book"))
+
+                            @if(App\Models\Ecommerce\Cart::is_product_on_cart($product->id) && in_array(strtolower($product->book_type), ['ebook', 'e-book']))
+                                <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                                    <a href="{{ route('cart.front.show') }}" class="btn btn-info text-white vw-100">Proceed To Checkout</a>
+                                </div>
+                            @else
+                                <div id="checkout_button_div" class="d-flex justify-content-evenly align-content-stretch mb-1" style="display: none !important;">
+                                    <a href="{{ route('cart.front.show') }}" class="btn btn-info text-white vw-100">Proceed To Checkout</a>
+                                </div>
+
+                                <div id="buynow_and_add_to_cart_button_div" class="d-flex justify-content-evenly align-content-stretch mb-1">
+                                    @if(Auth::check())
+                                        <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
+                                        <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$product->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
+                                    @else
+                                        <a class="btn bg-color text-white vw-100" href="#modal-register" data-lightbox="inline">Add To Bag <i class="icon-shopping-bag"></i></a>
+                                    @endif
+                                </div>
+                            @endif
+
                         @else
-                            <div id="checkout_button_div" class="d-flex justify-content-evenly align-content-stretch mb-1" style="display: none !important;">
-                                <a href="{{ route('cart.front.show') }}" class="btn btn-info text-white vw-100">Proceed To Checkout</a>
-                            </div>
+                            @if(Auth::check())
 
-                            <div id="buynow_and_add_to_cart_button_div" class="d-flex justify-content-evenly align-content-stretch mb-1">
-                                @if(Auth::check())
-                                    <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
-                                    <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$product->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
-                                @else
-                                    <a class="btn bg-color text-white vw-100" href="#modal-register" data-lightbox="inline">Add To Bag <i class="icon-shopping-bag"></i></a>
-                                @endif
-                            </div>
+                                @php($is_wishlist = \App\Models\Ecommerce\CustomerWishlist::isWishlist($product->id))
+
+                                <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                                    <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a>
+                                </div>
+                            @endif
                         @endif
 
                     @else
-                        @if(Auth::check())
+                        
+                        <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                            <a href="javascript:void(0);" class="btn btn-dark text-white vw-100">You already purchased this ebook</a>
+                        </div>
 
-                            @php($is_wishlist = \App\Models\Ecommerce\CustomerWishlist::isWishlist($product->id))
-
-                            <div class="d-flex justify-content-evenly align-content-stretch mb-1">
-                                <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a>
-                            </div>
-                        @endif
                     @endif
 
                     @if(\App\Models\Ecommerce\Product::has_bundle($product->id))
