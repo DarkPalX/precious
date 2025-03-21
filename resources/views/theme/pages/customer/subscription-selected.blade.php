@@ -88,12 +88,12 @@
                                                 <select id="mode_payment" name="mode_payment" class="form-control text-primary text-end bg-transparent border-0 p-0" required>
                                                     <option value="" disabled selected>Select Method</option>
                                                     <option value="EWallet" @if(auth()->user()->ecredits < $subscription->price) disabled @endif>E-Wallet</option>
-                                                    {{-- <option value="PayPal">Paypal</option> --}}
+                                                    <option value="PayPal">Paypal</option>
                                                 </select>
                                             </td>
                                         </tr>
 
-                                        {{-- <tr><a href="{{ route('paypal.create') }}" class="btn btn-primary">Pay with PayPal</a></tr> --}}
+                                        <tr><a href="{{ route('paypal.create') }}" class="btn btn-primary">Pay with PayPal</a></tr>
                                         
                                         <tr id="ewalletrow" class="cart_item">
                                             <td class="cart-product-name">

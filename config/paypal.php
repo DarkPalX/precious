@@ -25,8 +25,10 @@
     'validate_ssl'   => true,
 
     // Add the return and cancel URLs here
-    'return_url'     => env('PAYPAL_RETURN_URL'),
-    'cancel_url'     => env('PAYPAL_CANCEL_URL'),
+    'return_url'     => 'https://preciouspagesbookstore.com.ph/return',
+    'cancel_url'     => 'https://preciouspagesbookstore.com.ph/cancel',
+    // 'return_url'     => env('PAYPAL_RETURN_URL'),
+    // 'cancel_url'     => env('PAYPAL_CANCEL_URL'),
 ];
 
 
