@@ -24,7 +24,12 @@ class CustomerLibrary extends Model
 
         if (in_array(strtolower($product->book_type), ['e-book', 'ebook'])) {
             $r = CustomerLibrary::where('user_id', Auth::user()->id)->where('product_id', $product_id)->first();
-            return false;
+            if($r){
+                return false;
+            }
+            else{
+                return true;
+            }
         }
         else{
             return true;
