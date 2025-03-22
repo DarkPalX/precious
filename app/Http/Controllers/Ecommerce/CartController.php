@@ -577,7 +577,13 @@ class CartController extends Controller
 
         $this->update_coupon_status($request, $salesHeader->id);
 
-        //FOR ECREDIT SALES PAYMENT
+        Cart::where('user_id', Auth::id())->delete();
+        Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
+
+        //to check update coupon availability
+        Coupon::checkCouponAvailability();
+
+        //FOR SALES PAYMENT
         if($request->payment_method == 'ecredit'){
             $salesHeader->update(['payment_status' => 'PAID']);
             SalesPayment::create([
@@ -590,12 +596,13 @@ class CartController extends Controller
                 'created_by' => Auth::id()
             ]);
         }
-
-        Cart::where('user_id', Auth::id())->delete();
-        Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
-
-        //to check update coupon availability
-        Coupon::checkCouponAvailability();
+        if($request->payment_method == 'paypal'){
+            return redirect()->route('paypal.create', [
+                'user_id' => Auth::id(),
+                'sales_header_id' => $salesHeader->id,
+                'amount_paid' => $salesHeader->gross_amount
+            ]);
+        }
 
         return redirect(route('cart.success'));
     }

@@ -518,39 +518,6 @@ class MyAccountController extends Controller
             ]); 
 
 
-            // PAYMENT METHOD
-            if($mode_payment == 'EWallet'){
-                if($amount_paid > 0){
-
-                   //UPDATE CURRENT BALANCE EWALLET
-                    $ecredit = Ecredit::create([                                          
-                        'user_id' => $user_id,              
-                        'used_credits' => $amount_paid,                                              
-                        'balance' => Auth::user()->ecredits - $amount_paid,  
-                        'remarks' => 'Used '. $amount_paid .' e-credit as payment for subscription with order no. '. $order_no
-                    ]); 
-            
-                    User::where('id',$user_id)
-                    ->update([                              
-                        'ecredits' => Auth::user()->ecredits - $amount_paid                                                         
-                    ]);  
-                            
-                }
-            }
-            else if($mode_payment=='PayPal'){
-
-                $PayPalTransID = DB::table('paypal_payment')
-                    ->insertGetId([                                            
-                    'user_id' => $UserID,                                                   
-                    'paypal_param_response' =>$PayPalParamResponse,
-                    'sales_header_id' => $SalesHeaderID,    
-                    'Status' => 'Success',                   
-                    'payment_date_time' => $TODAY             
-                ]); 
-
-            }  
-
-
             // SEND EMAIL NOTIFICATION
             $Order= new Order();
             $OrderInfo= $Order->getOrderInfo($sales_header->id);        
@@ -572,8 +539,38 @@ class MyAccountController extends Controller
               ->update([                                  
                 'deleted_at' => null
             ]);
-        }
+            
 
+            // PAYMENT METHOD
+            if($mode_payment == 'EWallet'){
+                if($amount_paid > 0){
+
+                   //UPDATE CURRENT BALANCE EWALLET
+                    $ecredit = Ecredit::create([                                          
+                        'user_id' => $user_id,              
+                        'used_credits' => $amount_paid,                                              
+                        'balance' => Auth::user()->ecredits - $amount_paid,  
+                        'remarks' => 'Used '. $amount_paid .' e-credit as payment for subscription with order no. '. $order_no
+                    ]); 
+            
+                    User::where('id',$user_id)
+                    ->update([                              
+                        'ecredits' => Auth::user()->ecredits - $amount_paid                                                         
+                    ]);  
+                            
+                }
+            }
+            else if($mode_payment=='PayPal'){
+
+                // Redirect to PayPal with payment details
+                return redirect()->route('paypal.create', [
+                    'user_id' => $user_id,
+                    'sales_header_id' => $sales_header->id,
+                    'amount_paid' => $amount_paid
+                ]);
+
+            }  
+        }
 
         return redirect()->route('product.front.list')->with('success', 'You have successfully subscribed a plan');
     }

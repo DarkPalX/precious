@@ -192,6 +192,9 @@
 					<h2>Payment Method</h2>
 					
 					<div class="row justify-content-center">
+
+						{{-- FOR COD --}}
+
 						<div class="col-sm-4 col-md-4">
 							<label for="payment-option-card2" class="w-100">
 								<div class="pricing-box text-center shadow-none border">
@@ -205,6 +208,8 @@
 								</div>
 							</label>
 						</div>
+
+						{{-- FOR DEBIT/CREDIT --}}
 
 						{{-- <div class="col-sm-4 col-md-4">
 							<label for="payment-option-card" class="w-100">
@@ -250,6 +255,23 @@
 								</label>
 							</div>
 						@endif
+
+						{{-- FOR PAYPAL --}}
+						
+						<div class="col-sm-4 col-md-4">
+							<label for="payment-option-card4" class="w-100">
+								<div class="pricing-box text-center shadow-none border">
+									<input type="radio" name="payment_method" value="paypal" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card4">
+									<div class="pricing-price">
+										<h3 class="nott ls0 mb-0">Paypal</h3>
+									</div>
+									<div class="px-3">
+										<p class="">Pay with PayPal</p>
+									</div>
+								</div>
+							</label>
+						</div>
+
 					</div>
 					
 					
