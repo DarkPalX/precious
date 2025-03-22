@@ -4,11 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SocialiteController;
-use App\Http\Controllers\PayPalController;
-
 
 // CMS Controllers
-use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController, FacebookDataDeletionController, GoogleDataDeletionController, FacebookController, QrCodeController};
+use App\Http\Controllers\{FileDownloadCategoryController, FileDownloadController, MemberController, PageModalController, SitemapController, FacebookDataDeletionController, GoogleDataDeletionController, FacebookController, QrCodeController, PayPalController};
 
 use App\Http\Controllers\Cms4Controllers\{
     ArticleCategoryController, ArticleFrontController, ArticleController, AlbumController, MobileAlbumController, PageController, MenuController, FileManagerController
@@ -101,7 +99,7 @@ Route::get('/phpinfo', function () {
     Route::post('/setup-chat-plugin', [FacebookController::class, 'setupChatPlugin']);
 
     // Paypal Plugin
-    Route::get('paypal', [PayPalController::class, 'createPayment'])->name('paypal.create');
+    Route::get('paypal/create', [PayPalController::class, 'createPayment'])->name('paypal.create');
     Route::get('paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
     Route::get('paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
 

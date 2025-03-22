@@ -93,7 +93,7 @@
                                             </td>
                                         </tr>
 
-                                        {{-- <tr><a href="{{ route('paypal.create') }}" class="btn btn-primary">Pay with PayPal</a></tr> --}}
+                                        <tr><a href="{{ route('paypal.create') }}" class="btn btn-primary">Pay with PayPal</a></tr>
                                         
                                         <tr id="ewalletrow" class="cart_item">
                                             <td class="cart-product-name">
