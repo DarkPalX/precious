@@ -8,13 +8,18 @@ use Exception;
 
 class PayPalController extends Controller
 {
-    
+
     // Create PayPal payment
     public function createPayment()
     {
         try {
             $provider = new PayPalClient;
-            $provider->setApiCredentials(config('paypal'));
+            
+            // Forcefully retrieve the access token
+            $provider->getAccessToken();
+            
+            // Dump token to confirm it's being generated
+            \Log::info('Access Token:', $provider->getAccessToken());
 
             $paypal = $provider->createOrder([
                 "intent" => "CAPTURE",
@@ -22,7 +27,7 @@ class PayPalController extends Controller
                     [
                         "amount" => [
                             "currency_code" => config('paypal.currency', 'PHP'),
-                            "value" => "100.00"  // Replace with dynamic value
+                            "value" => "100.00"
                         ]
                     ]
                 ],
@@ -31,9 +36,6 @@ class PayPalController extends Controller
                     "return_url" => config('paypal.return_url'),
                 ]
             ]);
-
-            // Log PayPal response for debugging
-            \Log::info('PayPal Response:', $paypal);
 
             if (isset($paypal['id']) && $paypal['id'] != null) {
                 foreach ($paypal['links'] as $link) {
@@ -49,6 +51,47 @@ class PayPalController extends Controller
             return redirect()->route('paypal.cancel')->with('error', $e->getMessage());
         }
     }
+    
+    // public function createPayment()
+    // {
+    //     try {
+    //         $provider = new PayPalClient;
+    //         dd($provider);
+    //         $provider->setApiCredentials(config('paypal'));
+
+    //         $paypal = $provider->createOrder([
+    //             "intent" => "CAPTURE",
+    //             "purchase_units" => [
+    //                 [
+    //                     "amount" => [
+    //                         "currency_code" => config('paypal.currency', 'PHP'),
+    //                         "value" => "100.00"  // Replace with dynamic value
+    //                     ]
+    //                 ]
+    //             ],
+    //             "application_context" => [
+    //                 "cancel_url" => config('paypal.cancel_url'),
+    //                 "return_url" => config('paypal.return_url'),
+    //             ]
+    //         ]);
+
+    //         // Log PayPal response for debugging
+    //         \Log::info('PayPal Response:', $paypal);
+
+    //         if (isset($paypal['id']) && $paypal['id'] != null) {
+    //             foreach ($paypal['links'] as $link) {
+    //                 if ($link['rel'] === 'approve') {
+    //                     return redirect()->away($link['href']);
+    //                 }
+    //             }
+    //         }
+
+    //         return redirect()->route('paypal.cancel')->with('error', 'Something went wrong.');
+    //     } catch (Exception $e) {
+    //         \Log::error('Error in createPayment: ' . $e->getMessage());
+    //         return redirect()->route('paypal.cancel')->with('error', $e->getMessage());
+    //     }
+    // }
 
     // Handle PayPal success
     public function success(Request $request)
