@@ -1832,9 +1832,13 @@ public function getAllBookCategoryList(Request $request){
     $RetVal['Response'] = "Success";
     $RetVal['ResponseMessage'] = "";
 
-    $RetVal['ShowGoogleLogin'] = config("app.ShowGoogleLogin");
-    $RetVal['ShowContactUsImageAttach'] = config("app.ShowContactUsImageAttach");
-    $RetVal['ShowSubscriptionModule'] = config("app.ShowSubscriptionModule");
+    // $RetVal['ShowGoogleLogin'] = config("app.ShowGoogleLogin");
+    // $RetVal['ShowContactUsImageAttach'] = config("app.ShowContactUsImageAttach");
+    // $RetVal['ShowSubscriptionModule'] = config("app.ShowSubscriptionModule");
+
+    $RetVal['ShowGoogleLogin'] = 'N';
+    $RetVal['ShowContactUsImageAttach'] = 'Y';
+    $RetVal['ShowSubscriptionModule'] = 'Y';
 
     return response()->json($RetVal);
 
