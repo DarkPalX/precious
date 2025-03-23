@@ -317,7 +317,7 @@ return [
     'ShowContactUsImageAttach'=>'Y',
 
     //PLATFORM
-    'PLATFORM_ANDROID' => 'Android'd
+    'PLATFORM_ANDROID' => 'Android',
     'PLATFORM_IOS' => 'iOS',
 
 
