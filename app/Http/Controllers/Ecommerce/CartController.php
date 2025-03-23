@@ -19,7 +19,7 @@ use App\Models\Ecommerce\{
 };
 
 use App\Models\{
-    Page, User, PaynamicsLog
+    Page, User, PaynamicsLog, CustomerLibrary
 };
 
 
@@ -297,6 +297,7 @@ class CartController extends Controller
     public function buy_now(Request $request)
     {
         $requestData = $request->all();
+
         $requestData['user_id'] = Auth::id();
 
         Cart::create($requestData);
@@ -467,16 +468,25 @@ class CartController extends Controller
         $page->name = 'Checkout';
 
         $customer  = User::find(Auth::id());
-        $orders    = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();      
+        $orders    = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();    
         $cart      = CouponCartDiscount::where('customer_id',Auth::id())->first();
 
         $coupons = CouponCart::where('customer_id', Auth::id())->get();
 
         $use_ecredit = session('use_ecredit');
 
+        $has_ebook = false;
+
+        foreach($orders as $order){
+            if (in_array(strtolower($order->product->book_type), ['e-book', 'ebook'])) {
+                $has_ebook = true;
+                break;
+            }
+        }
+
         // $lbc_provinces = LBCHelper::provinces();
 
-        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'use_ecredit'));
+        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'use_ecredit', 'has_ebook'));
         // return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'lbc_provinces'));
     }
 
@@ -567,7 +577,13 @@ class CartController extends Controller
 
         $this->update_coupon_status($request, $salesHeader->id);
 
-        //FOR ECREDIT SALES PAYMENT
+        Cart::where('user_id', Auth::id())->delete();
+        Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
+
+        //to check update coupon availability
+        Coupon::checkCouponAvailability();
+
+        //FOR SALES PAYMENT
         if($request->payment_method == 'ecredit'){
             $salesHeader->update(['payment_status' => 'PAID']);
             SalesPayment::create([
@@ -580,12 +596,13 @@ class CartController extends Controller
                 'created_by' => Auth::id()
             ]);
         }
-
-        Cart::where('user_id', Auth::id())->delete();
-        Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
-
-        //to check update coupon availability
-        Coupon::checkCouponAvailability();
+        if($request->payment_method == 'paypal'){
+            return redirect()->route('paypal.create', [
+                'user_id' => Auth::id(),
+                'sales_header_id' => $salesHeader->id,
+                'amount_paid' => $salesHeader->gross_amount
+            ]);
+        }
 
         return redirect(route('cart.success'));
     }
@@ -691,6 +708,12 @@ class CartController extends Controller
                 'uom' => $product->uom,               
                 'created_by' => Auth::id()
             ]);  
+
+            CustomerLibrary::create([
+                'user_id' => Auth::user()->id,              
+                'product_id' => $product->id
+            ]);
+
         }
     }
 

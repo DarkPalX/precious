@@ -16,8 +16,10 @@
         "laravel/socialite": "^5.14",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
+        "paypal/rest-api-sdk-php": "^1.6",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-sluggable": "^3.5",
+        "srmklive/paypal": "^3.0",
         "tarkhov/guzzle-xml": "^1.0",
         "unisharp/laravel-filemanager": "~1.8",
         "webwizo/laravel-shortcodes": "1.0.*"

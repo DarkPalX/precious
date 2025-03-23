@@ -97,8 +97,8 @@
                             <th>Payment Date</th>
                             <th>Customer</th>
                             <th>Total Amount</th>
-                            <th>Order Status</th>
                             <th>Payment Status</th> 
+                            <th>Order Status</th>
                             <th class="exclude_export">Action</th>
                         </tr>
                         </thead>
@@ -126,18 +126,39 @@
                                         {{-- {{ number_format($sale->net_amount - $sale->discount_amount + $sale->ecredit_amount,2) }} --}}
                                     @endif
                                 </td>
+                                {{-- <td>{{ $sale->payment_status }}</td> --}}
+                                <td>{{ $sale->Paymentstatus }}</td>
                                 {{-- <td><a href="{{route('admin.report.delivery_report',$sale->id)}}" target="_blank">{{$sale->delivery_status}}</a></td> --}}
                                 <td>
                                     @if($sale->cancellation_request == 1)
                                         <a href="{{route('admin.report.delivery_report',$sale->id)}}" target="_blank">CANCELLED <span class="text-danger">| {{$sale->cancellation_reason}}</span></a>
                                     @else
+
+                                        @php
+                                            $all_ebooks = true;  // Assume all are ebooks initially
+                                            $items = App\Models\Ecommerce\SalesDetail::where('sales_header_id', $sale->id)->get();
+
+                                            foreach ($items as $item) {
+                                                $product = App\Models\Ecommerce\Product::find($item->product_id);
+
+                                                if ($product && !in_array(strtolower($product->book_type), ['ebook', 'e-book'])) {
+                                                    $all_ebooks = false;
+                                                    break;  // No need to continue checking
+                                                }
+                                            }
+
+                                            $deliveryStatus = $sale->delivery_status;
+
+                                            if ($all_ebooks) {
+                                                $deliveryStatus = "Delivered";
+                                            }
+                                        @endphp
+
                                         {{-- <a href="{{ route('admin.report.delivery_report', $sale->id) }}" target="_blank">{{ $sale->delivery_status }} | <span class="text-dark">{{ optional($sale->deliveries->last())->remarks }}</span></a> --}}
-                                        <a href="{{ route('admin.report.delivery_report', $sale->id) }}" target="_blank">{{ $sale->delivery_status }} @if(optional($sale->deliveries->last())->remarks) <span class="text-dark"> |  {{ optional($sale->deliveries->last())->remarks }}</span> @endif</a>
+                                        <a href="{{ route('admin.report.delivery_report', $sale->id) }}" target="_blank">{{ $deliveryStatus }} @if(optional($sale->deliveries->last())->remarks) <span class="text-dark"> |  {{ optional($sale->deliveries->last())->remarks }}</span> @endif</a>
                                         
                                     @endif
                                 </td>
-                                {{-- <td>{{ $sale->payment_status }}</td> --}}
-                                <td>{{ $sale->Paymentstatus }}</td>
                                 <td>
                                     <nav class="nav table-options">
                                         @if($sale->trashed())

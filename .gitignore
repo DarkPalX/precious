@@ -15,6 +15,7 @@ public/file-manager
 public/images
 public/vendor
 public/product_files
+public/attachments
 
 # Laravel 5 & Lumen specific with changed public path
 public_html/storage

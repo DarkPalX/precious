@@ -11,10 +11,10 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1 mg-b-5">
                         <li class="breadcrumb-item" aria-current="page">Ecommerce</li>
-                        <li class="breadcrumb-item active" aria-current="page">Customers</li>
+                        <li class="breadcrumb-item active" aria-current="page">Customers' Subscriptions</li>
                     </ol>
                 </nav>
-                <h4 class="mg-b-0 tx-spacing--1">Manage Customers</h4>
+                <h4 class="mg-b-0 tx-spacing--1">Customers' Subscriptions</h4>
             </div>
         </div>
 
@@ -97,10 +97,8 @@
                                 <tr>
                                     <th scope="col" width="15%">Name</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">E-Credits</th>
+                                    {{-- <th scope="col">Status</th> --}}
                                     <th scope="col">Subscription</th>
-                                    <th scope="col">Status</th>
                                     <th scope="col">Last Date Modified</th>
                                     <th scope="col" width="10%">Options</th>
                                 </tr>
@@ -116,14 +114,20 @@
                                             <strong @if($user->is_active == 0) style="text-decoration:line-through;" @endif> {{$user->fullname}}</strong><br>{{ $user->mobile }}
                                         </th>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ $user->address }}</td>
-                                        <td>{{ $user->ecredits }}</td>
+                                        {{-- <td>
+                                            @if($user->is_active == 1)
+                                                <span class="badge badge-success">Active</span>
+                                            @else
+                                                <span class="badge badge-danger">Inactive</span>
+                                            @endif
+                                        </td> --}}
                                         <td>
                                             @if($user_sub)
-                                                {{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}<br>
+                                                <span class="badge badge-success">{{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}</span>
+                                                <br>
                                                 <span class="text-secondary">expires on {{ $user_sub->end_date }}</span><br>
                                             @else
-                                                {{ 'Not Subscribed' }}
+                                                <span class="badge badge-danger">{{ 'Not Subscribed' }}</span>
                                             @endif
                                             {{-- @forelse($user_subs as $user_sub)
                                                 {{ \App\Models\Subscription::getPlan($user_sub->plan_id)[0]->title }}<br>
@@ -132,27 +136,10 @@
                                                 {{ 'Not Subscribed' }}
                                             @endforelse --}}
                                         </td>
-                                        <td>
-                                            @if($user->is_active == 1)
-                                                <span class="badge badge-success">Active</span>
-                                            @else
-                                                <span class="badge badge-danger">Inactive</span>
-                                            @endif
-                                        </td>
                                         <td>{{ Setting::date_for_listing($user->updated_at) }}</td>
                                         <td>
                                             <nav class="nav table-options justify-content-begin">
                                                 <a class="nav-link" href="{{ route('customer.subscriptions', ['id' => $user->id]) }}" title="View Customer Subscriptions"><i data-feather="eye"></i></a>
-                                                <a class="nav-link" href="{{ route('customers.show',$user->id) }}" title="Edit Customer Details"><i data-feather="edit"></i></a>
-                                                @if($user->is_active == 1)
-                                                    @if (auth()->user()->has_access_to_route('customer.deactivate'))
-                                                        <a class="nav-link deactivate_user" data-user_id="{{ $user->id }}" href="#" title="Deactivate Customer" data-toggle="modal" data-target="#modalUserDeactivate"><i data-feather="user-x"></i></a>
-                                                    @endif
-                                                @else
-                                                    @if (auth()->user()->has_access_to_route('customer.activate'))
-                                                        <a class="nav-link activate_user" data-user_id="{{ $user->id }}" href="#" title="Activate User" data-toggle="modal" data-target="#modalUserActivate"><i data-feather="user-check"></i></a>
-                                                    @endif
-                                                @endif
                                             </nav>
                                         </td>
                                     </tr>
@@ -200,7 +187,7 @@
     <script src="{{ asset('scripts/user/scripts.js') }}"></script>
 
     <script>
-        let listingUrl = "{{ route('customers.index') }}";
+        let listingUrl = "{{ route('subscriptions.customers') }}";
         let advanceListingUrl = "";
         let searchType = "{{ $searchType }}";
     </script>

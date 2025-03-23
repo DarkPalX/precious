@@ -18,7 +18,7 @@
         <div class="col-lg-9">
             <h2>E-Credit</h2>
             
-            <p>Fusce ac justo lobortis, consectetur metus vel, varius erat. Cras a ornare nisl. Quisque congue dictum nisl, ac condimentum tortor mattis sed. Quisque erat ligula, fringilla sed mollis at, aliquet at diam. Donec bibendum leo vel vulputate viverra. </p>
+            <p>Your ecredit balance can be used for transactions</p>
             
             <p>Your current balance</p>
             <h3>₱ {{ auth()->user()->ecredits }}</h3>

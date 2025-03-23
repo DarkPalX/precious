@@ -55,6 +55,29 @@ class SalesHeader extends Model
        
     }
 
+    public function updateOrderStatus(){
+        if($this->delivery_status != 'Delivered'){
+
+            $all_ebooks = true;
+            $items = SalesDetail::where('sales_header_id', (int) $this->id)->get();
+
+            foreach ($items as $item) {
+                $product = Product::find($item->product_id);
+
+                if ($product && !in_array(strtolower($product->book_type), ['ebook', 'e-book'])) {
+                    $all_ebooks = false;
+                    break;
+                }
+            }
+
+            if ($all_ebooks) {
+                SalesHeader::whereId((int) $this->id)->update(['delivery_status' => 'Delivered']);
+                DeliveryStatus::where('order_id', (int) $this->id)->update(['status' => 'Delivered']);
+            }
+
+        }
+    }
+
     public function items(){
     	return $this->hasMany(SalesDetail::class,'sales_header_id');
     }

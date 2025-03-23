@@ -207,6 +207,10 @@ class SalesController extends Controller
         $filter = $listing->get_filter($this->searchFields);
         $searchType = 'simple_search';
 
+        foreach($sales as $sale){
+            $sale->updateOrderStatus();
+        }
+
         return view('admin.ecommerce.sales.index',compact('sales','filter','searchType', 'deliveryStatus', 'startDate', 'endDate', 'customer'));
 
     }
@@ -262,6 +266,8 @@ class SalesController extends Controller
         if($totalNet <= $totalPayment)
         $status = 'PAID';
         else $status = 'UNPAID';
+
+        $sales->updateOrderStatus();
 
         return view('admin.ecommerce.sales.view',compact('sales','salesPayments','salesDetails','status'));
     }

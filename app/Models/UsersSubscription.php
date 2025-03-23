@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use \Carbon\Carbon;
+use DB;
 
 class UsersSubscription extends Model
 {
@@ -65,6 +66,43 @@ class UsersSubscription extends Model
         //     ->get();
 
         return $subs;
+    }
+
+    public static function getAllSubscriptions($id){
+
+        $subs = UsersSubscription::where('user_id', $id)
+            ->join('subscriptions', 'subscriptions.id', 'users_subscriptions.plan_id')
+            ->orderBy('start_date', 'desc')
+            ->get();
+
+        return $subs;
+    }
+
+    public static function getSubscriberCount($id){
+
+        $subs = DB::table('subscribed_books')
+            ->where('product_id', '=', $id)
+            ->count();
+
+        return $subs;
+    }
+
+    public static function getSubscribers($id){
+
+        $subs = DB::table('subscribed_books')
+            ->where('product_id', '=', $id)
+            ->get();
+
+        return $subs;
+    }
+
+    public static function getSubscriberInfo($id){
+
+        $r = User::where('id', '=', $id)->withTrashed()->first();
+
+        // return $r->name ?? 'Unknown';
+        // return $r->name ?? null;
+        return $r;
     }
     
 }

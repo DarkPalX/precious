@@ -45,6 +45,26 @@
 
     <div class="row row-sm mg-b-10">
 
+        @php
+            $all_ebooks = true;  // Assume all are ebooks initially
+            $items = App\Models\Ecommerce\SalesDetail::where('sales_header_id', $sales->id)->get();
+
+            foreach ($items as $item) {
+                $product = App\Models\Ecommerce\Product::find($item->product_id);
+
+                if ($product && !in_array(strtolower($product->book_type), ['ebook', 'e-book'])) {
+                    $all_ebooks = false;
+                    break;  // No need to continue checking
+                }
+            }
+
+            $deliveryStatus = $sales->delivery_status;
+
+            if ($all_ebooks) {
+                $deliveryStatus = "Delivered";
+            }
+        @endphp
+
         <div class="col-sm-6 col-lg-8 mg-t-10">
             <label class="tx-sans tx-uppercase tx-10 tx-medium tx-spacing-1 tx-color-03">Customer Details</label>
             <p class="mg-b-3 tx-semibold">{{$sales->customer_name}}</p>
@@ -56,7 +76,7 @@
             <p class="mg-b-3">Order Date: {{ date('F d, Y', strtotime($sales->created_at))}}</p>
             <p class="mg-b-3">Delivery Type: {{ strtoupper($sales->delivery_type) }}</p>
             <p class="mg-b-3">Order Status: <span class="tx-success tx-semibold">{{$status}}</span></p>
-            <p class="mg-b-3">Delivery Status: <span class="tx-success tx-semibold tx-uppercase">{{$sales->delivery_status}}</span></p>
+            <p class="mg-b-3">Delivery Status: <span class="tx-success tx-semibold tx-uppercase">{{$deliveryStatus}}</span></p>
             @if($sales->cancellation_request === 1)
                 <p class="mg-b-3">Cancellation Reason: <span class="tx-success tx-semibold">{{$sales->cancellation_reason}}</span></p>
                 <p class="mg-b-3">Cancellation Remark: <span class="tx-success tx-semibold">{{$sales->cancellation_remarks}}</span></p>
@@ -79,6 +99,7 @@
             <thead style="background-color:#000000;">
                 <tr>
                     <th class="text-white wd-30p">Item</th>
+                    <th class="text-white tx-center">Status</th>
                     <th class="text-white tx-center">Quantity</th>
                     <th class="text-white tx-center">Original Price</th>
                     <th class="text-white tx-center">Discounted Price</th>
@@ -98,9 +119,24 @@
                 @endphp
                 <tr class="pd-20">
                     <td class="tx-nowrap">{{$details->product_name}}</td>
+                    
+
+                    @if(in_array(strtolower($details->product->book_type), ['ebook', 'e-book']))
+                        <td class="tx-nowrap">Delivered</td>
+                    @else
+                        <td class="tx-nowrap">{{$sales->delivery_status}}</td>
+                    @endif
+
                     <td class="tx-right">{{number_format($details->qty, 0)}}</td>
-                    <td class="tx-right">{{number_format($details->product->price ?? $details->price, 2)}}</td>
-                    <td class="tx-right">{{number_format($details->product->discount_price ?? 0, 2)}}</td>
+
+                    @if(in_array(strtolower($details->product->book_type), ['ebook', 'e-book']))
+                        <td class="tx-right">{{number_format($details->product->ebook_price ?? $details->price, 2)}}</td>
+                        <td class="tx-right">{{number_format($details->product->ebook_discount_price ?? 0, 2)}}</td>
+                    @else
+                        <td class="tx-right">{{number_format($details->product->price ?? $details->price, 2)}}</td>
+                        <td class="tx-right">{{number_format($details->product->discount_price ?? 0, 2)}}</td>
+                    @endif
+                    
                     <td class="tx-right">{{number_format($details->discount_amount, 2)}}</td>
                     <td class="tx-right">{{number_format($product_subtotal, 2)}}</td>
                 </tr>
@@ -116,17 +152,17 @@
                 @endphp
 
                 <tr>
-                    <td  class="tx-right" colspan="5"><strong>Subtotal:</strong></td>
+                    <td  class="tx-right" colspan="6"><strong>Subtotal:</strong></td>
                     <td class="tx-right"><strong>{{number_format($subtotal, 2)}}</strong></td>
                 </tr>
 
                 @if($sales->discount_amount > 0)
                 <tr>
-                    <td  class="tx-right" colspan="5"><strong>Coupon Discount:</strong></td>
+                    <td  class="tx-right" colspan="6"><strong>Coupon Discount:</strong></td>
                     <td class="tx-right"><strong>{{number_format($sales->discount_amount, 2)}}</strong></td>
                 </tr>
                 <tr>
-                    <td  class="tx-right border-0" colspan="5">
+                    <td  class="tx-right border-0" colspan="6">
                         <strong>Coupons:</strong>
                     </td>
                     <td  class="tx-right border-0">
@@ -139,27 +175,27 @@
 
                 {{-- @if($sales->delivery_fee_amount > 0) --}}
                 <tr>
-                    <td  class="tx-right" colspan="5"><strong>Delivery Fee:</strong></td>
+                    <td  class="tx-right" colspan="6"><strong>Delivery Fee:</strong></td>
                     <td class="tx-right"><strong>{{number_format($sales->delivery_fee_amount, 2)}}</strong></td>
                 </tr>
                 {{-- @endif --}}
 
                 @if($delivery_discount > 0)
                 <tr>
-                    <td  class="tx-right" colspan="5"><strong>Delivery Discount:</strong></td>
+                    <td  class="tx-right" colspan="6"><strong>Delivery Discount:</strong></td>
                     <td class="tx-right"><strong>{{number_format($delivery_discount, 2)}}</strong></td>
                 </tr>
                 @endif
 
                 <tr>
-                    <td  class="tx-right" colspan="5"><strong>Grand Total:</strong></td>
+                    <td  class="tx-right" colspan="6"><strong>Grand Total:</strong></td>
                     <td class="tx-right"><strong>{{ number_format(($sales->product_id != 0 ? $sales->net_amount + $sales->ecredit_amount : $sales->net_amount), 2) }}</strong></td>
                     {{-- <td class="tx-right"><strong>{{ number_format($sales->net_amount, 2) }}</strong></td> --}}
                 </tr>
 
                 @if($sales->ecredit_amount > 0)
                 <tr>
-                    <td  class="tx-right" colspan="5"><strong>E-Wallet Payment:</strong></td>
+                    <td  class="tx-right" colspan="6"><strong>E-Wallet Payment:</strong></td>
                     <td class="tx-right"><strong>{{number_format($sales->ecredit_amount, 2)}}</strong></td>
                 </tr>
                 @endif

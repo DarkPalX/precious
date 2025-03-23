@@ -19,7 +19,8 @@
                     <div class="border-0 mb-5">
                         <h3 class="mb-3">Search</h3>
                         <div class="search">
-                            <form class="mb-0" action="{{ route('search-product') }}" method="get">
+                            <form class="mb-0" action="{{ route(in_array(strtolower($product->book_type), ['ebook', 'e-book']) ? 'search-product-ebook' : 'search-product') }}" method="get">
+                            {{-- <form class="mb-0" action="{{ route('search-product') }}" method="get"> --}}
                                 <div class="searchbar">
                                     <input type="text" name="keyword" class="form-control form-input form-search" placeholder="Search Product" aria-label="Search Product" aria-describedby="button-addon1" />
                                     <button class="form-submit-search" type="submit" name="submit">
@@ -50,6 +51,7 @@
                     <!-- Product Single - Gallery
                     ============================================= -->
                     <div class="product-image">
+
                         @if(count($product->photos))
                             <div class="fslider" data-pagi="false" data-arrows="false" data-thumbs="true">
                                 <div class="flexslider">
@@ -62,6 +64,11 @@
                             </div>
                         @else
                             <a href="{{ route('product.details',$product->slug) }}"><img src="{{ asset('storage/products/'.$product->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';" alt="{{$product->name}}" alt="{{$product->name}}"></a>
+                        @endif
+
+                        
+                        @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book")
+                            <div class="sale-flash badge bg-info p-2">E-book</div>
                         @endif
 
                     </div><!-- Product Single - Gallery End -->
@@ -102,8 +109,13 @@
                         @endfor
                     </div>
                     
-                    {!! ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) . '</ins> <del class="text-danger">₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
-                    <input type="hidden" id="product_price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
+                    @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book")
+                        {!! ($product->ebook_discount_price > 0 || $product->ebookdiscountedprice != $product->ebook_price ? '<ins class="h1 text-decoration-none">₱' . number_format($product->ebookdiscountedprice != $product->ebook_price ? $product->ebookdiscountedprice : $product->ebook_discount_price, 2) . '</ins> <del class="text-danger">₱' . number_format($product->ebook_price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->ebook_price, 2) . '</ins>') !!}
+                        <input type="hidden" id="product_price" value="{{$product->ebook_discount_price > 0 ? $product->ebook_discount_price : $product->ebook_price}}">
+                    @else
+                        {!! ($product->discount_price > 0 || $product->discountedprice != $product->price ? '<ins class="h1 text-decoration-none">₱' . number_format($product->discountedprice != $product->price ? $product->discountedprice : $product->discount_price, 2) . '</ins> <del class="text-danger">₱' . number_format($product->price, 2) . '</del>' : '<ins class="h1 text-decoration-none">₱' . number_format($product->price, 2) . '</ins>') !!}
+                        <input type="hidden" id="product_price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
+                    @endif
                     
                     <!-- Product Single - Short Description
                     ============================================= -->
@@ -122,18 +134,18 @@
                           <td>Texture:</td>
                           <td>{{$product->texture}}</td>
                         </tr>
-                        <tr>
-                          <td>Stocks Left:</td>
-                          <td><input id="remaining_stock" class="form-control border-0 bg-transparent" readonly value="{{$product->inventory}}" /></td>
+                        <tr @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book") hidden @endif>
+                            <td>Stocks Left:</td>
+                            <td><input id="remaining_stock" class="form-control border-0 bg-transparent" readonly value="{{$product->inventory}}" /></td>
                         </tr>
                         <tr>
                           <td>Quantity:</td>
                           <td>
                             <form class=" mb-0 d-flex justify-content-between align-items-center" method="post" enctype='multipart/form-data'>
                                 <div class="quantity clearfix">
-                                    <input type="button" value="-" class="minus" onclick="minus_qty();">
+                                    <input type="button" value="-" class="minus" onclick="minus_qty();" @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book") disabled @endif>
                                     <input type="number" step="1" min="1" name="quantity" id="quantity" value="1" title="Qty" class="qty" readonly/>
-                                    <input type="button" value="+" class="plus" onclick="plus_qty();">
+                                    <input type="button" value="+" class="plus" onclick="plus_qty();" @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book") disabled @endif>
                                 </div>
                             </form>
                           </td>
@@ -148,29 +160,52 @@
                             {{-- <input type="hidden" id="orderID" value="{{$product->id}}"> --}}
                             {{-- <input type="hidden" id="prevqty" value="{{ $product->qty }}"> --}}
                             <input type="hidden" id="maxorder" value="{{ $product->inventory }}">
+                            <input type="hidden" id="book_type" value="{{ $product->book_type }}">
                         </div>
                     </td>
 
                     
-                    <!-- Product Single - Short Description End -->
-                    @if($product->inventory > 0)
-                    <div class="d-flex justify-content-evenly align-content-stretch mb-1">
-                        @if(Auth::check())
-                            <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
-                            <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$product->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
+                    @if(App\Models\CustomerLibrary::already_purchased($product->id))
+
+                        <!-- Product Single - Short Description End -->
+                        @if($product->inventory > 0 || (strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book"))
+
+                            @if(App\Models\Ecommerce\Cart::is_product_on_cart($product->id) && in_array(strtolower($product->book_type), ['ebook', 'e-book']))
+                                <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                                    <a href="{{ route('cart.front.show') }}" class="btn btn-info text-white vw-100">Proceed To Checkout</a>
+                                </div>
+                            @else
+                                <div id="checkout_button_div" class="d-flex justify-content-evenly align-content-stretch mb-1" style="display: none !important;">
+                                    <a href="{{ route('cart.front.show') }}" class="btn btn-info text-white vw-100">Proceed To Checkout</a>
+                                </div>
+
+                                <div id="buynow_and_add_to_cart_button_div" class="d-flex justify-content-evenly align-content-stretch mb-1">
+                                    @if(Auth::check())
+                                        <a href="javascript:;" class="btn btn-info text-white vw-100 me-1" onclick="buynow();">Buy Now</a>
+                                        <a href="javascript:;" class="btn bg-color text-white vw-100" onclick="add_to_cart('{{$product->id}}');">Add To Bag <i class="icon-shopping-bag"></i></a>
+                                    @else
+                                        <a class="btn bg-color text-white vw-100" href="#modal-register" data-lightbox="inline">Add To Bag <i class="icon-shopping-bag"></i></a>
+                                    @endif
+                                </div>
+                            @endif
+
                         @else
-                            <a class="btn bg-color text-white vw-100" href="#modal-register" data-lightbox="inline">Add To Bag <i class="icon-shopping-bag"></i></a>
+                            @if(Auth::check())
+
+                                @php($is_wishlist = \App\Models\Ecommerce\CustomerWishlist::isWishlist($product->id))
+
+                                <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                                    <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a>
+                                </div>
+                            @endif
                         @endif
-                    </div>
+
                     @else
-                        @if(Auth::check())
+                        
+                        <div class="d-flex justify-content-evenly align-content-stretch mb-1">
+                            <a href="javascript:void(0);" class="btn btn-dark text-white vw-100">You already purchased this ebook</a>
+                        </div>
 
-                            @php($is_wishlist = \App\Models\Ecommerce\CustomerWishlist::isWishlist($product->id))
-
-                            <div class="d-flex justify-content-evenly align-content-stretch mb-1">
-                                <a href="{{ route('add-to-wishlist', [$product->id]) }}" class="btn {{ $is_wishlist ? 'btn-info' : 'btn-secondary' }} text-white vw-100">{{ $is_wishlist ? 'Remove from Wishlist' : 'Add To Wishlist' }} <i class="icon-star"></i></a>
-                            </div>
-                        @endif
                     @endif
 
                     @if(\App\Models\Ecommerce\Product::has_bundle($product->id))
@@ -505,11 +540,20 @@
                     <div class="grid-inner">
                         <div class="product-image">
                             <a href="{{ route('product.details',$rel->slug) }}"><img src="{{ asset('storage/products/'.$rel->photoPrimary) }}" onerror="this.onerror=null;this.src='{{ asset('storage/products/no-image.jpg') }}';" alt="{{$product->name}}" alt="{{$rel->name}}"></a>
+                            
+                            @if(strtolower($rel->book_type) == "ebook" || strtolower($rel->book_type) == "e-book")
+                                <div class="sale-flash badge bg-info p-2">E-book</div>
+                            @endif
                         </div>
                         <div class="product-desc">
-                            <div class="product-title"><h3><a href="{{ route('product.details',$rel->slug) }}">{{$rel->name}}</a></h3></div>
+                            <div class="product-title"><span style="display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;"><a href="{{ route('product.details',$rel->slug) }}">{{$rel->name}}</a></span></div>
                             {{-- <div class="product-price"><ins>₱{{number_format($rel->price,2)}}</ins></div> --}}
-							{!! ($rel->discount_price > 0 ? '<div class="product-price"><del class="text-danger">' . number_format($rel->price, 2) . '</del> <ins>' . number_format($rel->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($rel->price, 2) . '</ins></div>') !!}
+                            
+                            @if(strtolower($rel->book_type) == "ebook" || strtolower($rel->book_type) == "e-book")
+							    {!! ($rel->ebook_discount_price > 0 ? '<div class="product-price"><del class="text-danger">' . number_format($rel->ebook_price, 2) . '</del> <ins>' . number_format($rel->ebook_discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($rel->ebook_price, 2) . '</ins></div>') !!}
+                            @else
+							    {!! ($rel->discount_price > 0 ? '<div class="product-price"><del class="text-danger">' . number_format($rel->price, 2) . '</del> <ins>' . number_format($rel->discount_price, 2) . '</ins></div>' : '<div class="product-price"><ins>' . number_format($rel->price, 2) . '</ins></div>') !!}
+                            @endif
                             <div class="product-rating text-warning">
                                 @for($star = 1; $star <= 5; $star++)
                                     <i class="icon-star{{ $star <= App\Models\Ecommerce\ProductReview::getProductRating($rel->id) ? '3' : '-empty' }}"></i>
@@ -528,8 +572,13 @@
     <form id="buy-now-form" method="post" action="{{route('cart.buy-now')}}">
         @csrf
         <input type="text" name="product_id" value="{{ $product->id}}">
-        <input type="text" name="price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
         <input type="text" name="qty" id="buy_now_qty">
+
+        @if(strtolower($rel->book_type) == "ebook" || strtolower($rel->book_type) == "e-book")
+            <input type="text" name="price" value="{{$product->ebook_discount_price > 0 ? $product->ebook_discount_price : $product->ebook_price}}">
+        @else
+            <input type="text" name="price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">
+        @endif
     </form>
 </div>
 
@@ -542,9 +591,12 @@
     function buynow(){
         var qty   = parseFloat($('#quantity').val());
         var remaining_stock = parseFloat($('#remaining_stock').val());
+        var book_type = $('#book_type').val();
+
+        // alert(book_type.toLowerCase() === "e-book");
+
         
-        
-        if(qty <= remaining_stock){
+        if(qty <= remaining_stock || (book_type.toLowerCase() === "e-book" || book_type.toLowerCase() === "ebook")){
             $('#buy_now_qty').val(qty);
             $('#buy-now-form').submit();
         }
@@ -574,8 +626,9 @@
         var qty   = parseFloat($('#quantity').val());
         var price = parseFloat($('#product_price').val());
         var remaining_stock = parseFloat($('#remaining_stock').val());
+        var book_type = $('#book_type').val();
 
-        if(qty <= remaining_stock){
+        if(qty <= remaining_stock || (book_type.toLowerCase() === "e-book" || book_type.toLowerCase() === "ebook")){
 
             $.ajax({
                 data: {
@@ -675,6 +728,11 @@
 
             $('#quantity').val(1);
             $('#remaining_stock').val(remaining_stock - qty);
+            
+            if(book_type.toLowerCase() === "e-book" || book_type.toLowerCase() === "ebook"){
+                $('#buynow_and_add_to_cart_button_div').removeClass('d-flex').hide();
+                $('#checkout_button_div').show();
+            }
         }
         else{
             swal({

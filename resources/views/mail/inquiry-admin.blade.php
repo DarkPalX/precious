@@ -56,26 +56,44 @@
 
         <table style="width:100%; padding: 20px;background: #f0f0f0;font-size: 14px;">
             <tbody>
-            <tr>
-                <td width="30%"><strong>Subject</strong></td>
-                <td>{{ $clientInfo['subject'] }}</td>
-            </tr>
-            <tr>
-                <td width="30%"><strong>Name</strong></td>
-                <td>{{ $clientInfo['name'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Email</strong></td>
-                <td>{{ $clientInfo['email'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Contact Number</strong></td>
-                <td>{{ $clientInfo['contact'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Message</strong></td>
-                <td>{{ $clientInfo['message'] }}</td>
-            </tr>
+                <tr>
+                    <td width="30%"><strong>Subject</strong></td>
+                    <td>{{ $clientInfo['subject'] }}</td>
+                </tr>
+                <tr>
+                    <td width="30%"><strong>Name</strong></td>
+                    <td>{{ $clientInfo['name'] }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Email</strong></td>
+                    <td>{{ $clientInfo['email'] }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Contact Number</strong></td>
+                    <td>{{ $clientInfo['contact'] }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Message</strong></td>
+                    <td>{{ $clientInfo['message'] }}</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td><strong>Attached files</strong></td>
+                </tr>
+                <tr>
+                    <td>
+                        @forelse($clientInfo['mail_attachments'] as $attachment)
+                        @php
+                            $fileParts = explode('/', $attachment);
+                            $fileName = end($fileParts);
+                        @endphp
+                            <a href="{{ $attachment }}">{{ $fileName }}</a><br>
+                        @empty
+                            <span class="text-secondary">No attachments</span>
+                        @endforelse
+                    </td>
+                </tr>
             </tbody>
         </table>
 

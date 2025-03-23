@@ -6,7 +6,7 @@
 <div class="side-menu">
 	<ul class="mb-0 pb-0">
 		@foreach($parentCategories as $parentCategory)
-			<li><a href="{{ route('product.front.list', $parentCategory->slug) }}"><div>{{$parentCategory->name}}</div></a>
+			<li><a href="{{ route(in_array(strtolower($page_type), ['ebook', 'e-book']) ? 'product.front.ebook-list' : 'product.front.list', $parentCategory->slug) }}"><div>{{$parentCategory->name}}</div></a>
 				@if(count($parentCategory->child_categories))
                 	@include('theme.layouts.components.product-categories-item',['subcategories' => $parentCategory->child_categories])
                 @endif

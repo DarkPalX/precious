@@ -2,6 +2,7 @@
 ============================================= -->
 <script src="{{ asset('theme/js/jquery.js') }}"></script>
 <script src="{{ asset('theme/js/plugins.min.js') }}"></script>
+<script src="{{ asset('theme/js/bs-filestyle.js') }}"></script>
 
 <script>
     $(document).ready(function() {

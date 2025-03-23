@@ -29,6 +29,7 @@ class ProductFrontController extends Controller
         $page = Page::where('slug', 'books')->where('status', 'PUBLISHED')->where('parent_page_id', 0)->first();
         $pageLimit = 12;
 
+        // $products = Product::where('status','PUBLISHED');
         $products = Product::where('status','PUBLISHED')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book']);
 
         if($category){
@@ -37,7 +38,7 @@ class ProductFrontController extends Controller
 
             $page->name = $productCategory->name;
         } else {
-            $page->name = "Books";
+            $page->name = "Physical Books";
         }
 
 
@@ -91,6 +92,8 @@ class ProductFrontController extends Controller
             $products = $products->orderBy('name','asc')->paginate($pageLimit);
         }
 
+        $page_type="physical";
+
         return view($this->folder.'.product-list',compact(
             'products',
             'page',
@@ -98,6 +101,89 @@ class ProductFrontController extends Controller
             'maxPrice',
             'minPrice',
             'productMaxPrice',
+            'page_type'
+        ));
+    }
+
+    public function product_ebook_list(Request $request, $category = null)
+    {
+        // $page = new Page();
+        $page = Page::where('slug', 'books')->where('status', 'PUBLISHED')->where('parent_page_id', 0)->first();
+        $pageLimit = 12;
+
+        // $products = Product::where('status','PUBLISHED');
+        $products = Product::where('status','PUBLISHED')->whereRaw('LOWER(book_type) IN (?, ?)', ['ebook', 'e-book']);
+
+        if($category){
+            $productCategory  = ProductCategory::where('slug', $category)->first();
+            $products->where('category_id', $productCategory->id);
+
+            $page->name = $productCategory->name;
+        } else {
+            $page->name = "E-Books";
+        }
+
+
+        $maxPrice = $products->max('price');
+        $minPrice = 1;
+
+        if($request->has('search')){
+
+            if(!empty($request->rating)){
+                $rating = $request->rating;
+                $products->whereIn('id',function($query) use($rating){
+                    $query->select('product_id')->from('ecommerce_product_review')
+                    ->where('rating',$rating)
+                    ->where('is_approved',1);
+                });
+            }
+
+            if(!empty($request->sort)){            
+                if($request->sort == 'Price low to high'){
+                    $products = $products->orderBy('price','asc');
+                }
+                elseif($request->sort == 'Price high to low'){
+                    $products = $products->orderBy('price','desc');
+                }
+            }
+
+            if(!empty($request->limit)){ 
+                if($request->limit=='All')
+                    $pageLimit = 100000000;      
+                else
+                    $pageLimit = $request->limit;
+            }
+
+            if(!empty($request->price)){
+                $price = explode(';',$request->price);
+                $products = $products->whereBetween('price',[$price[0],$price[1]]);
+
+                $productMaxPrice = $maxPrice;
+                $maxPrice = $price[1];
+                $minPrice = $price[0];
+
+            }
+
+            $total_product = $products->count();
+            $products = $products->orderBy('updated_at','desc')->paginate($pageLimit);
+        }
+        else{
+            $productMaxPrice = $maxPrice;
+            $minPrice = $minPrice;
+            $total_product = $products->count();
+            $products = $products->orderBy('name','asc')->paginate($pageLimit);
+        }
+
+        $page_type="ebook";
+
+        return view($this->folder.'.product-list',compact(
+            'products',
+            'page',
+            'total_product',
+            'maxPrice',
+            'minPrice',
+            'productMaxPrice',
+            'page_type'
         ));
     }
 
@@ -149,7 +235,62 @@ class ProductFrontController extends Controller
         // Apply pagination
         $products = $products->paginate($pageLimit);
 
-        return view($this->folder . '.product-list', compact('products', 'page', 'searchtxt'));
+        $page_type="physical";
+
+        return view($this->folder . '.product-list', compact('products', 'page', 'searchtxt', 'page_type'));
+    }
+
+    public function search_product_ebook(Request $request)
+    {
+        $page = new Page();
+        $page->name = 'Search Product';
+        $pageLimit = 20;
+
+        // Base query with DISTINCT to remove duplicates
+        $products = Product::select('products.*')
+            ->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
+            ->where('products.status', 'PUBLISHED')
+            ->whereRaw('LOWER(book_type) IN (?, ?)', ['ebook', 'e-book'])
+            ->distinct(); 
+
+        // Handling search input
+        $searchtxt = trim($request->get('keyword', ''));
+        if (!empty($searchtxt)) {
+            $keyword = Str::lower($searchtxt);
+
+            $products->where(function ($query) use ($keyword) {
+                $query->whereRaw('LOWER(products.name) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(products.author) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(products.description) LIKE ?', ["%{$keyword}%"])
+                    ->orWhereRaw('LOWER(product_additional_infos.value) LIKE ?', ["%{$keyword}%"]);
+            });
+        }
+
+        // Handling sorting input
+        $sortBy = $request->get('sort_by', 'name_asc');
+        $sortOptions = [
+            'name_asc'  => ['name', 'asc'],
+            'name_desc' => ['name', 'desc'],
+            'price_asc' => ['price', 'asc'],
+            'price_desc'=> ['price', 'desc'],
+            'date_asc'  => ['created_at', 'asc'],
+            'date_desc' => ['created_at', 'desc'],
+        ];
+
+        if (isset($sortOptions[$sortBy])) {
+            [$sortField, $sortDirection] = $sortOptions[$sortBy];
+            $products->orderBy($sortField, $sortDirection);
+        } else {
+            // Default sorting
+            $products->orderBy('name', 'asc');
+        }
+
+        // Apply pagination
+        $products = $products->paginate($pageLimit);
+
+        $page_type="physical";
+
+        return view($this->folder . '.product-list', compact('products', 'page', 'searchtxt', 'page_type'));
     }
 
 
@@ -213,10 +354,18 @@ class ProductFrontController extends Controller
 
         $page = new Page();
         $page->name = $product->name;
+        
+        $page_type = $product->book_type;
 
-        $relatedProducts = Product::where('category_id',$product->category_id)->where('id','<>',$product->id)->where('status','PUBLISHED')->skip(0)->take(4)->get();
+        if(in_array(strtolower($page_type), ['ebook', 'e-book'])){
+            $relatedProducts = Product::where('category_id',$product->category_id)->where('id','<>',$product->id)->where('status','PUBLISHED')->whereRaw('LOWER(book_type) IN (?, ?)', ['ebook', 'e-book'])->skip(0)->take(4)->get();
+        }
+        else{
+            $relatedProducts = Product::where('category_id',$product->category_id)->where('id','<>',$product->id)->where('status','PUBLISHED')->skip(0)->take(4)->get();
+        }
 
-        return view($this->folder.'.product-details',compact('product','page', 'relatedProducts', 'categories', 'product_reviews'));
+
+        return view($this->folder.'.product-details',compact('product','page', 'relatedProducts', 'categories', 'product_reviews', 'page_type'));
     }
 
 
