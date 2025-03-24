@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Exception;
 use DB;
 
+use App\Http\Controllers\Ecommerce\{
+    MyAccountController, CartController
+};
+
 class PayPalController extends Controller
 {
 
@@ -20,15 +24,15 @@ class PayPalController extends Controller
             $provider->getAccessToken();
 
             // Capture dynamic data from the request
-            $user_id = $request->id;
+            $transaction = $request->transaction;
+            $user_id = $request->user_id;
             $amount_paid = $request->amount_paid;
-            $sales_header_id = $request->sales_header_id;
 
-             // Store the params in session to access them in the success route
+            // Store the params in session to access them in the success route
             session([
+                'transaction' => $transaction,
                 'user_id' => $user_id,
                 'amount_paid' => $amount_paid,
-                'sales_header_id' => $sales_header_id,
             ]);
 
             $paypal = $provider->createOrder([
@@ -77,21 +81,32 @@ class PayPalController extends Controller
             if (isset($response['status']) && $response['status'] == 'COMPLETED') {
 
                 // Retrieve session variables
+                $transaction = session('transaction');
                 $user_id = session('user_id');
                 $amount_paid = session('amount_paid');
-                $sales_header_id = session('sales_header_id');
 
                 // Store PayPal response in the database
                 DB::table('paypal_payment')->insert([
                     'user_id' => $user_id,
                     'paypal_param_response' => json_encode($response),  // Store full response
-                    'sales_header_id' => $sales_header_id,
                     'Status' => 'Success',
                     'payment_date_time' => now(),
                 ]);
 
+                // Retrieve the session data
+                $paypalRequest = session('paypal_request', []);
+                $paypalRequestObj = new Request($paypalRequest);
+
+                // ✅ Call the static subscription process
+                if($transaction == "subscription"){
+                    MyAccountController::subscription_process($paypalRequestObj);
+                }
+                if($transaction == "sales"){
+                    CartController::save_sales_process($paypalRequestObj);
+                }
+
                 // Clear session variables
-                session()->forget(['user_id', 'amount_paid', 'sales_header_id']);
+                session()->forget(['transaction', 'user_id', 'amount_paid']);
 
                 return redirect()->route('home')->with('success', 'Payment successful!');
             }

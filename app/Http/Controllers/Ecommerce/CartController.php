@@ -525,15 +525,38 @@ class CartController extends Controller
         }
         return $next_number;
     }
+    
+    public function save_sales(Request $request)
+    {
 
-    public function save_sales(Request $request) 
+        $user_id = Auth::user()->id;
+        $mode_payment = $request->payment_method;
+        $amount_paid =  $request->total_amount;
+
+
+        if ($mode_payment == 'paypal') {
+            // Store the entire request data in the session
+            session(['paypal_request' => $request->all()]);
+
+            // Redirect to PayPal
+            return redirect()->route('paypal.create', [
+                'transaction' => 'sales',
+                'user_id' => $user_id,
+                'amount_paid' => $amount_paid
+            ]);
+        }
+
+        return $this->save_sales_process($request);
+    }
+
+    public static function save_sales_process(Request $request) 
     {
         $coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
 
         $totalPrice = number_format($request->total_amount,2,'.','');
         // $totalPrice  = number_format($request->payment_method == 'ecredit' ? 0 : ($request->total_amount < 0 ? 0 : $request->total_amount), 2,'.','');
         $realTotalPrice  = number_format($totalPrice + $request->shippingRate - $request->shippingFeeDiscount, 2,'.','');
-        $orderNumber = $this->next_order_number(); 
+        $orderNumber = (new self())->next_order_number(); 
 
         $customerAddress = $request->customer_delivery_barangay.', '.$request->customer_delivery_city.', '.$request->customer_delivery_province.', '.$request->customer_delivery_zip;
 
@@ -573,9 +596,9 @@ class CartController extends Controller
         $salesHeader = SalesHeader::create($requestData);
         session::put('shid', $salesHeader->id);
 
-        $this->store_items($salesHeader->id);
+        (new self())->store_items($salesHeader->id);
 
-        $this->update_coupon_status($request, $salesHeader->id);
+        (new self())->update_coupon_status($request, $salesHeader->id);
 
         Cart::where('user_id', Auth::id())->delete();
         Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
@@ -596,16 +619,90 @@ class CartController extends Controller
                 'created_by' => Auth::id()
             ]);
         }
-        if($request->payment_method == 'paypal'){
-            return redirect()->route('paypal.create', [
-                'user_id' => Auth::id(),
-                'sales_header_id' => $salesHeader->id,
-                'amount_paid' => $salesHeader->gross_amount
-            ]);
-        }
 
         return redirect(route('cart.success'));
     }
+
+    // public function save_sales(Request $request) 
+    // {
+    //     $coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
+
+    //     $totalPrice = number_format($request->total_amount,2,'.','');
+    //     // $totalPrice  = number_format($request->payment_method == 'ecredit' ? 0 : ($request->total_amount < 0 ? 0 : $request->total_amount), 2,'.','');
+    //     $realTotalPrice  = number_format($totalPrice + $request->shippingRate - $request->shippingFeeDiscount, 2,'.','');
+    //     $orderNumber = $this->next_order_number(); 
+
+    //     $customerAddress = $request->customer_delivery_barangay.', '.$request->customer_delivery_city.', '.$request->customer_delivery_province.', '.$request->customer_delivery_zip;
+
+    //     $use_ecredit = $request->payment_method == 'ecredit' ? 1 : 0;
+        
+    //     session(['use_ecredit' => $use_ecredit]);
+
+    //     //FOR THE ECREDIT
+        
+    //     $current_ecredit = number_format($request->ecredit_amount,2,'.','');
+    //     $new_ecredit = ($current_ecredit - $totalPrice) > 0 ? $current_ecredit - $totalPrice : 0;
+
+    //     User::where('id', Auth::user()->id)
+    //     ->update([
+    //         'ecredits' => $new_ecredit
+    //     ]);
+
+    //     //
+        
+    //     $ecredit_amount = ($current_ecredit - $totalPrice) < 0 ? $current_ecredit - $totalPrice : $totalPrice;
+
+    //     $requestData = $request->all();
+    //     $requestData['user_id'] = Auth::id();
+    //     $requestData['order_number'] = $orderNumber;
+    //     $requestData['customer_name'] = $request->customer_fname.' '.$request->customer_lname;
+    //     $requestData['customer_delivery_adress'] = $customerAddress;
+    //     $requestData['customer_address'] = $customerAddress;
+    //     $requestData['delivery_type'] = $request->shippingOption;
+    //     $requestData['delivery_fee_amount'] = $request->shippingRate;
+    //     $requestData['delivery_fee_discount'] = $request->shippingFeeDiscount;
+    //     $requestData['delivery_status'] = $request->payment_method == 'cod' || 'ecredit' ? 'Pending' : 'Pending';
+    //     $requestData['gross_amount'] = number_format($totalPrice,2,'.','');
+    //     $requestData['net_amount'] = number_format($totalPrice,2,'.','');
+    //     $requestData['discount_amount'] = $coupon_total_discount;
+    //     $requestData['ecredit_amount'] = $ecredit_amount;
+    //     $requestData['payment_method'] = $request->payment_method;
+    //     $salesHeader = SalesHeader::create($requestData);
+    //     session::put('shid', $salesHeader->id);
+
+    //     $this->store_items($salesHeader->id);
+
+    //     $this->update_coupon_status($request, $salesHeader->id);
+
+    //     Cart::where('user_id', Auth::id())->delete();
+    //     Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
+
+    //     //to check update coupon availability
+    //     Coupon::checkCouponAvailability();
+
+    //     //FOR SALES PAYMENT
+    //     if($request->payment_method == 'ecredit'){
+    //         $salesHeader->update(['payment_status' => 'PAID']);
+    //         SalesPayment::create([
+    //             'sales_header_id' => $salesHeader->id,
+    //             'payment_type' => 'EWallet',
+    //             'amount' => $salesHeader->gross_amount,
+    //             'status' => 'PAID',
+    //             'payment_date' => today(),
+    //             'receipt_number' => Str::random(10),
+    //             'created_by' => Auth::id()
+    //         ]);
+    //     }
+    //     if($request->payment_method == 'paypal'){
+    //         return redirect()->route('paypal.create', [
+    //             'user_id' => Auth::id(),
+    //             'sales_header_id' => $salesHeader->id,
+    //             'amount_paid' => $salesHeader->gross_amount
+    //         ]);
+    //     }
+
+    //     return redirect(route('cart.success'));
+    // }
 
     // public function save_sales(Request $request) 
     // {

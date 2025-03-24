@@ -391,7 +391,28 @@ class MyAccountController extends Controller
     
     public function subscription_checkout(Request $request)
     {
+        $user_id = Auth::user()->id;
+        $mode_payment = $request->mode_payment;
+        $amount_paid = $request->amount_paid;
 
+        if ($mode_payment == 'PayPal') {
+            // Store the entire request data in the session
+            session(['paypal_request' => $request->all()]);
+
+            // Redirect to PayPal
+            return redirect()->route('paypal.create', [
+                'transaction' => 'subscription',
+                'user_id' => $user_id,
+                'amount_paid' => $amount_paid
+            ]);
+        }
+
+        return $this->subscription_process($request);
+    }
+
+
+    public static function subscription_process(Request $request)
+    {
         $Misc  = New Misc();
         
         $user_id = Auth::user()->id;
@@ -560,20 +581,200 @@ class MyAccountController extends Controller
                             
                 }
             }
-            else if($mode_payment=='PayPal'){
 
-                // Redirect to PayPal with payment details
-                return redirect()->route('paypal.create', [
-                    'user_id' => $user_id,
-                    'sales_header_id' => $sales_header->id,
-                    'amount_paid' => $amount_paid
-                ]);
-
-            }  
+            return redirect()->route('home')->with('success', 'You have successfully subscribed a plan');
         }
-
-        return redirect()->route('product.front.list')->with('success', 'You have successfully subscribed a plan');
+        else{
+            return redirect()->back()->with('error', 'Failed to process the subscription.');
+        }
+        
     }
+    
+    // public function subscription_checkout(Request $request)
+    // {
+
+    //     $Misc  = New Misc();
+        
+    //     $user_id = Auth::user()->id;
+    //     $plan_id = $request->plan_id;
+    //     $title = $request->title;
+    //     $no_days = $request->no_days;
+    //     $mode_payment = $request->mode_payment;
+    //     $amount_paid = $request->amount_paid;
+    //     $start_date = date("Y-m-d H:i:s");
+    //     $end_date = date('Y-m-d H:i:s', strtotime("+".$no_days." day"));
+
+    //     $customer_name = Auth::user()->firstname . ' ' . Auth::user()->lastname;
+    //     $customer_email = Auth::user()->email;
+    //     $customer_contact_number = Auth::user()->mobile;
+    //     $customer_address = Auth::user()->address_street . ', ' . Auth::user()->address_city . ', ' . Auth::user()->address_municipality . ', ' . Auth::user()->address_province . ' ' . Auth::user()->address_zip;
+    //     $customer_delivery_zip = Auth::user()->address_zip;
+
+    //     $message = '';
+
+    //     $currently_subscribed = UsersSubscription::where('user_id', $user_id)->where('is_subscribe', 1)->first();
+
+    //     // dd($currently_subscribed);
+
+    //     if(!$currently_subscribed){
+    //         $user_subscription = UsersSubscription::create([
+    //             'user_id' => $user_id,                                                                          
+    //             'plan_id' => $plan_id, 
+    //             'no_days' => $no_days, 
+    //             'mode_payment' => $mode_payment, 
+    //             'amount_paid' => $amount_paid,           
+    //             'start_date' => $start_date, 
+    //             'end_date' => $end_date,
+    //             'is_subscribe' => 1, 
+    //             'remarks' => 'Set a '.$no_days.' days subscription plan with plan ID:'.$plan_id     
+    //         ]);
+
+    //         $message = 'You have successfully subscribed to a '.$title. " plan & it will expire on ".$end_date. " .";
+    //     }
+    //     else{
+
+    //         $new_date_extended=date_create($currently_subscribed->end_date);
+    //         date_add($new_date_extended,date_interval_create_from_date_string($no_days." days"));            
+    //         $new_end_date=date("Y-m-d H:i:s", strtotime(date_format($new_date_extended,"Y-m-d H:i:s")));
+
+    //         UsersSubscription::where('id', $currently_subscribed->id)
+    //         ->update([
+    //             'plan_id' => $plan_id, 
+    //             'no_days' => $currently_subscribed->no_days + $no_days, 
+    //             'mode_payment' => $mode_payment, 
+    //             'amount_paid' => $amount_paid,           
+    //             'end_date' => $new_end_date,
+    //             'is_extended' => 1, 
+    //             'remarks' => 'Extended a '.$no_days.' days subscription plan with plan ID:'.$plan_id
+    //         ]);
+
+    //         $message = 'You have successfully extended your current plan to a '.$no_days. " days subscription & will expire on ".$end_date. " .";
+            
+    //     }
+
+    //     //Send Notification Message
+    //     $messaage_notification = DB::table('message_notification')
+    //     ->insertGetId([                                            
+    //         'user_id' => $user_id,                                                         
+    //         'message_notification' => $message,
+    //         'created_at' => $start_date             
+    //     ]);  
+
+    //     // SALES HEADER
+    //     $order_no = $Misc->getNextOrderNumberFormat();      
+    //     $sales_header = SalesHeader::create([                                            
+    //       'user_id' => $user_id,              
+    //       'order_number' => $order_no,                                            
+    //       'customer_name' => $customer_name, 
+    //       'customer_email' => $customer_email, 
+    //       'customer_contact_number' => $customer_contact_number, 
+    //       'customer_address' => $customer_address, 
+    //       'customer_delivery_adress' => $customer_address, 
+    //       'customer_delivery_zip' => $customer_delivery_zip,                           
+    //       'gross_amount' => $amount_paid, 
+    //       'net_amount' => $amount_paid, 
+    //       'discount_amount' => 0, 
+    //       'payment_method' => $mode_payment,
+    //       'payment_status' => 'PAID', 
+    //       'ecredit_amount' => $amount_paid, 
+    //       'delivery_type' => 'd2d', 
+    //       'delivery_status' => 'Delivered', 
+    //       'delivery_fee_amount' => 0, 
+    //       'delivery_fee_discount' => 0, 
+    //       'status' => 'Active', 
+    //     ]);
+
+
+    //     if($sales_header){
+    //         //SAVE TO SALES PAYMENT
+    //         $receipt_number = $Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
+
+    //         $sales_payment = SalesPayment::create([                                             
+    //             'sales_header_id' => $sales_header->id,              
+    //             'payment_type' => $mode_payment,                                            
+    //             'amount' => $amount_paid,                                            
+    //             'status' => 'PAID', 
+    //             'payment_date' => $start_date, 
+    //             'receipt_number' => $receipt_number,
+    //             'created_by' => $user_id,         
+    //         ]); 
+
+    //         $sales_detail = SalesDetail::create([                 
+    //             'sales_header_id' => $sales_header->id,              
+    //             'product_id' => 0,        
+    //             'subscription_plan_id' => $plan_id,              
+    //             'product_name' => $title, 
+    //             'product_category' =>0,              
+    //             'price' => $amount_paid,              
+    //             'qty' => 1, 
+    //             'uom' => '', 
+    //             'tax_amount' => 0,              
+    //             'promo_id' => 0,  
+    //             'promo_description' => '',  
+    //             'tax_amount' => 0,  
+    //             'discount_amount' => 0,                        
+    //             'gross_amount' => $amount_paid,                                                        
+    //             'net_amount' => $amount_paid,
+    //             'created_by' => $user_id,                        
+    //         ]); 
+
+
+    //         // SEND EMAIL NOTIFICATION
+    //         $Order= new Order();
+    //         $OrderInfo= $Order->getOrderInfo($sales_header->id);        
+    //         if($OrderInfo->SalesHeaderID>0){
+    //             $param['OrderID']=$OrderInfo->SalesHeaderID;
+    //             $param['EmailAddress']=$OrderInfo->customer_email;
+    //             $param["MobileNo"] = $OrderInfo->customer_contact_number;
+    //             $param['OrderNo']=$OrderInfo->order_number;        
+    //             $param['OrderInfo']=$OrderInfo;
+    //             $param['OrderItem']=$Order->getOrderItemList($sales_header->id);
+                
+    //             $Email = new Email();
+    //             $Email->SendOrderReceivedEmail($param);    
+    //         }
+
+    //         // RESUME & RETUEN SUBSBRIBED BOOKS===
+    //         DB::table('subscribed_books')
+    //           ->where('user_id',$user_id)              
+    //           ->update([                                  
+    //             'deleted_at' => null
+    //         ]);
+            
+
+    //         // PAYMENT METHOD
+    //         if($mode_payment == 'EWallet'){
+    //             if($amount_paid > 0){
+
+    //                //UPDATE CURRENT BALANCE EWALLET
+    //                 $ecredit = Ecredit::create([                                          
+    //                     'user_id' => $user_id,              
+    //                     'used_credits' => $amount_paid,                                              
+    //                     'balance' => Auth::user()->ecredits - $amount_paid,  
+    //                     'remarks' => 'Used '. $amount_paid .' e-credit as payment for subscription with order no. '. $order_no
+    //                 ]); 
+            
+    //                 User::where('id',$user_id)
+    //                 ->update([                              
+    //                     'ecredits' => Auth::user()->ecredits - $amount_paid                                                         
+    //                 ]);  
+                            
+    //             }
+    //         }
+    //         else if($mode_payment=='PayPal'){
+
+    //             // Redirect to PayPal with payment details
+    //             return redirect()->route('paypal.create', [
+    //                 'user_id' => $user_id,
+    //                 'sales_header_id' => $sales_header->id,
+    //                 'amount_paid' => $amount_paid
+    //             ]);
+
+    //         }  
+    //     }
+
+    //     return redirect()->route('product.front.list')->with('success', 'You have successfully subscribed a plan');
+    // }
     
     public function subscription_cancel(Request $request)
     {
