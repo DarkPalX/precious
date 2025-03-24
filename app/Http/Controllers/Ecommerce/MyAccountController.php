@@ -581,6 +581,16 @@ class MyAccountController extends Controller
                             
                 }
             }
+            
+            if($mode_payment == 'PayPal'){
+                // Update
+                DB::table('paypal_payment')->where('id', session('paypal_payment_id'))
+                ->update([
+                    'sales_header_id' => $sales_header->id,
+                ]);
+
+                session()->forget(['paypal_payment_id']);
+            }
 
             return redirect()->route('home')->with('success', 'You have successfully subscribed a plan');
         }

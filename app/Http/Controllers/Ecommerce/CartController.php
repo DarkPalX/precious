@@ -619,6 +619,16 @@ class CartController extends Controller
                 'created_by' => Auth::id()
             ]);
         }
+            
+        if($request->payment_method == 'paypal'){
+            // Update
+            DB::table('paypal_payment')->where('id', session('paypal_payment_id'))
+            ->update([
+                'sales_header_id' => $salesHeader->id,
+            ]);
+
+            session()->forget(['paypal_payment_id']);
+        }
 
         return redirect(route('cart.success'));
     }

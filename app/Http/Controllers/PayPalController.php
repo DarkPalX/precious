@@ -73,6 +73,9 @@ class PayPalController extends Controller
             $provider = new PayPalClient;
             $provider->setApiCredentials(config('paypal'));
 
+            // Retrieve the access token
+            $provider->getAccessToken();
+            
             $token = $request->query('token');
 
             // Capture the payment
@@ -84,15 +87,26 @@ class PayPalController extends Controller
                 $transaction = session('transaction');
                 $user_id = session('user_id');
                 $amount_paid = session('amount_paid');
+                
+                try {
+                    // Store PayPal response in the database
+                    $paypal_payment_id = DB::table('paypal_payment')->insertGetId([
+                        'user_id' => $user_id,
+                        'paypal_param_response' => json_encode($response),  // Store full response
+                        'Status' => 'Success',
+                        'sales_header_id' => 0,
+                        'payment_date_time' => now(),
+                    ]);
 
-                // Store PayPal response in the database
-                DB::table('paypal_payment')->insert([
-                    'user_id' => $user_id,
-                    'paypal_param_response' => json_encode($response),  // Store full response
-                    'Status' => 'Success',
-                    'payment_date_time' => now(),
-                ]);
-
+                    session([
+                        'paypal_payment_id' => $paypal_payment_id
+                    ]);
+                }
+                catch (Exception $e) {
+                    \Log::error('Error in success: ' . $e->getMessage());
+                    return redirect()->route('paypal.cancel')->with('error', $e->getMessage());
+                }
+                
                 // Retrieve the session data
                 $paypalRequest = session('paypal_request', []);
                 $paypalRequestObj = new Request($paypalRequest);
@@ -122,6 +136,6 @@ class PayPalController extends Controller
     // Handle PayPal cancellation
     public function cancel()
     {
-        return redirect()->route('home')->with('error', 'You have cancelled the payment.');
+        return redirect()->route('home')->with('error', 'Something went wrong.');
     }
 }
