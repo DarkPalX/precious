@@ -301,6 +301,10 @@ class MyAccountController extends Controller
     public function orders(){
 
         $sales = SalesHeader::where('user_id',Auth::id())->orderBy('id','desc')->paginate(10);
+        foreach($sales as $sale){
+            $sale->updateOrderStatus();
+        }
+        $sales = SalesHeader::where('user_id',Auth::id())->orderBy('id','desc')->paginate(10);
 
         $page = new Page();
         $page->name = 'Sales Transaction';
