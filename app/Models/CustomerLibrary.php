@@ -22,7 +22,7 @@ class CustomerLibrary extends Model
 
         $product = Product::where('id', $product_id)->first();
 
-        if (in_array(strtolower($product->book_type), ['e-book', 'ebook'])) {
+        if (in_array(strtolower($product->book_type), ['e-book', 'ebook']) && Auth::user()) {
             $r = CustomerLibrary::where('user_id', Auth::user()->id)->where('product_id', $product_id)->first();
             if($r){
                 return false;

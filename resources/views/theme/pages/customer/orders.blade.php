@@ -32,12 +32,31 @@
                     @forelse($sales as $sale)
                         @php
                             $balance = \App\Models\Ecommerce\SalesHeader::balance($sale->id);
+
+                            
+                            $all_ebooks = true;  // Assume all are ebooks initially
+                            $items = App\Models\Ecommerce\SalesDetail::where('sales_header_id', $sale->id)->get();
+
+                            foreach ($items as $item) {
+                                $product = App\Models\Ecommerce\Product::find($item->product_id);
+
+                                if ($product && !in_array(strtolower($product->book_type), ['ebook', 'e-book'])) {
+                                    $all_ebooks = false;
+                                    break;  // No need to continue checking
+                                }
+                            }
+
+                            $deliveryStatus = $sale->delivery_status;
+
+                            if ($all_ebooks) {
+                                $deliveryStatus = "Delivered";
+                            }
                         @endphp
                         <tr>
                             <td>{{$sale->order_number}}</td>
                             <td>{{$sale->created_at}}</td>
                             <td>{{number_format($sale->net_amount,2)}}</td>
-                            <td>{{$sale->delivery_status}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif</td> 
+                            <td>{{$deliveryStatus}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif</td> 
                             <td>
                                 <ul class="nav nav-pills">
                                     <li class="nav-item dropdown">
