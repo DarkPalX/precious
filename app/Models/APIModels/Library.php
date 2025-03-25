@@ -128,7 +128,8 @@ class Library extends Model
           
         ");    
 
-    $query->where("lib.user_id",'=',$UserID);    
+    $query->where("lib.user_id",'=',$UserID);  
+    $query->where("prds.file_url","!=",null);      
    
       // if($Status!='' && $Status!='All'){
 
