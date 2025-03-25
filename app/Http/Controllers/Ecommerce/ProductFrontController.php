@@ -288,7 +288,7 @@ class ProductFrontController extends Controller
         // Apply pagination
         $products = $products->paginate($pageLimit);
 
-        $page_type="physical";
+        $page_type="ebook";
 
         return view($this->folder . '.product-list', compact('products', 'page', 'searchtxt', 'page_type'));
     }

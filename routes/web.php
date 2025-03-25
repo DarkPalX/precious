@@ -134,7 +134,7 @@ Route::get('/phpinfo', function () {
     Route::get('/book-details/{slug}', [ProductFrontController::class, 'product_details'])->name('product.details');
     // Route::get('/ebook-details/{slug}', [ProductFrontController::class, 'ebook_details'])->name('ebook.details');
     Route::get('/search-products', [ProductFrontController::class, 'search_product'])->name('search-product');
-    Route::get('/search-products/ebook', [ProductFrontController::class, 'search_product_ebook'])->name('search-product-ebook');
+    Route::get('/search-products/ebooks', [ProductFrontController::class, 'search_product_ebook'])->name('search-product-ebook');
     Route::get('/search-contents', [ProductFrontController::class, 'search_content'])->name('search-content');
 
     Route::get('/generate-book-qr-code', [QrCodeController::class, 'generate_product_qr'])->name('generate.product.qr');

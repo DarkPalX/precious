@@ -195,20 +195,38 @@
 
 						{{-- FOR COD --}}
 
-						<div class="col-sm-4 col-md-4">
-							<label for="payment-option-card2" class="w-100">
-								<div class="pricing-box text-center shadow-none border">
-									<input type="radio" name="payment_method" value="cod" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card1" checked>
-									<div class="pricing-price">
-										<h3 class="nott ls0 mb-0">Cash on Delivery</h3>
+						@if(method_exists(\App\Models\Ecommerce\Cart::class, 'has_ebooks_in_cart') && !\App\Models\Ecommerce\Cart::has_ebooks_in_cart())
+							<div class="col-sm-4 col-md-4">
+								<label for="payment-option-card2" class="w-100">
+									<div class="pricing-box text-center shadow-none border">
+										<input type="radio" name="payment_method" value="cod" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card1" checked>
+										<div class="pricing-price">
+											<h3 class="nott ls0 mb-0">Cash on Delivery</h3>
+										</div>
+										<div class="px-3">
+											<p class="">Pay when parcel arrives.</p>
+										</div>
 									</div>
-									<div class="px-3">
-										<p class="">Pay when parcel arrives.</p>
-									</div>
-								</div>
-							</label>
-						</div>
+								</label>
+							</div>
+						@endif
 
+
+						{{-- @if(method_exists(\App\Models\Ecommerce\Cart::class, 'has_ebooks_in_cart') && !(\App\Models\Ecommerce\Cart::has_ebooks_in_cart()))
+							<div class="col-sm-4 col-md-4">
+								<label for="payment-option-card2" class="w-100">
+									<div class="pricing-box text-center shadow-none border">
+										<input type="radio" name="payment_method" value="cod" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card1" checked>
+										<div class="pricing-price">
+											<h3 class="nott ls0 mb-0">Cash on Delivery</h3>
+										</div>
+										<div class="px-3">
+											<p class="">Pay when parcel arrives.</p>
+										</div>
+									</div>
+								</label>
+							</div>
+						@endif --}}
 						{{-- FOR DEBIT/CREDIT --}}
 
 						{{-- <div class="col-sm-4 col-md-4">

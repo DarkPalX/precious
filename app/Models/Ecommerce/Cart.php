@@ -6,6 +6,8 @@ use App\Models\Ecommerce\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
+use Auth;
+
 class Cart extends Model
 {
 
@@ -95,5 +97,40 @@ class Cart extends Model
 
         return $cart;
     }
+
+    public static function all_ebooks_in_cart()
+    {
+        return Cart::where('user_id', Auth::id())
+            ->where('qty', '>', 0)
+            ->get()
+            ->every(function ($item) {
+                $product = Product::find($item->product_id);
+                return $product && in_array(strtolower($product->book_type), ['ebook', 'e-book']);
+            });
+    }
+
+    public static function has_ebooks_in_cart()
+    {
+        return Cart::where('user_id', Auth::id())
+            ->where('qty', '>', 0)
+            ->get()
+            ->contains(function ($item) {
+                $product = Product::find($item->product_id);
+                return $product && in_array(strtolower($product->book_type), ['ebook', 'e-book']);
+            });
+    }
+
+
+    // public static function has_ebooks_in_cart()
+    // {
+    //     return !Cart::where('user_id', Auth::id())
+    //         ->where('qty', '>', 0)
+    //         ->get()
+    //         ->contains(function ($item) {
+    //             $product = Product::find($item->product_id);
+    //             return $product && in_array(strtolower($product->book_type), ['ebook', 'e-book']);
+    //         });
+    // }
+
 
 }

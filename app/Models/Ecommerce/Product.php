@@ -207,6 +207,13 @@ class Product extends Model
         return $ebook !== null;
     }
 
+    public static function is_ebook($id){
+        
+        $ebook = Product::where('id', $id)->whereStatus('PUBLISHED')->whereRaw('LOWER(book_type) IN (?, ?)', ['ebook', 'e-book'])->whereNotNull('file_url')->exists();
+
+        return $ebook;
+    }
+
     public static function related_products($id){
 
         $products = Product::whereStatus('PUBLISHED')->where('id','<>',$id)->take(3)->get();

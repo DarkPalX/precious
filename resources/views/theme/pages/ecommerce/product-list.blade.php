@@ -15,7 +15,7 @@
 					<div class="border-0 mb-5">
 						<h3 class="mb-3">Search</h3>
 						<div class="search">
-							<form class="mb-0" action="{{ route( Str::contains(url()->current(), 'ebooks') ? 'search-product-ebook' : 'search-product') }}" method="get">
+							<form class="mb-0" action="{{ route( Str::contains(url()->current(), 'ebook') ? 'search-product-ebook' : 'search-product') }}" method="get">
 							{{-- <form action="{{ route('search-product') }}" method="GET"> --}}
                                 <div class="searchbar">
                                     <input type="text" name="keyword" id="keyword" class="form-control form-input form-search" placeholder="Search a book" aria-label="Search a book" aria-describedby="button-addon1" value="@if(request()->has('keyword')) {{ request('keyword') }} @endif"/>
@@ -35,7 +35,7 @@
 			</div>
 		</div>
 		<div class="col-lg-9">
-			<form id="sortForm" action="{{ route('search-product') }}" method="GET">
+			<form id="sortForm" action="{{ route( Str::contains(url()->current(), 'ebook') ? 'search-product-ebook' : 'search-product') }}" method="GET">
 				<div class="form-group d-flex">
 					<label for="sort_by" class="col-form-label me-2">Sort by</label>
 					<div class="">

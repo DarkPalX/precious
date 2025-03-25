@@ -560,23 +560,26 @@ class CartController extends Controller
 
         $customerAddress = $request->customer_delivery_barangay.', '.$request->customer_delivery_city.', '.$request->customer_delivery_province.', '.$request->customer_delivery_zip;
 
-        $use_ecredit = $request->payment_method == 'ecredit' ? 1 : 0;
-        
-        session(['use_ecredit' => $use_ecredit]);
+        $ecredit_amount = 0;
 
-        //FOR THE ECREDIT
-        
-        $current_ecredit = number_format($request->ecredit_amount,2,'.','');
-        $new_ecredit = ($current_ecredit - $totalPrice) > 0 ? $current_ecredit - $totalPrice : 0;
+        if($request->payment_method == 'ecredit'){
+            $use_ecredit = $request->payment_method == 'ecredit' ? 1 : 0;
+            
+            session(['use_ecredit' => $use_ecredit]);
 
-        User::where('id', Auth::user()->id)
-        ->update([
-            'ecredits' => $new_ecredit
-        ]);
+            //FOR THE ECREDIT
+            
+            $current_ecredit = number_format($request->ecredit_amount,2,'.','');
+            $new_ecredit = ($current_ecredit - $totalPrice) > 0 ? $current_ecredit - $totalPrice : 0;
 
-        //
-        
-        $ecredit_amount = ($current_ecredit - $totalPrice) < 0 ? $current_ecredit - $totalPrice : $totalPrice;
+            User::where('id', Auth::user()->id)
+            ->update([
+                'ecredits' => $new_ecredit
+            ]);
+
+            //
+            $ecredit_amount = ($current_ecredit - $totalPrice) < 0 ? $current_ecredit - $totalPrice : $totalPrice;
+        }
 
         $requestData = $request->all();
         $requestData['user_id'] = Auth::id();
@@ -591,7 +594,7 @@ class CartController extends Controller
         $requestData['gross_amount'] = number_format($totalPrice,2,'.','');
         $requestData['net_amount'] = number_format($totalPrice,2,'.','');
         $requestData['discount_amount'] = $coupon_total_discount;
-        $requestData['ecredit_amount'] = $ecredit_amount;
+        $requestData['ecredit_amount'] = $ecredit_amount ?? 0;
         $requestData['payment_method'] = $request->payment_method;
         $salesHeader = SalesHeader::create($requestData);
         session::put('shid', $salesHeader->id);
@@ -816,10 +819,12 @@ class CartController extends Controller
                 'created_by' => Auth::id()
             ]);  
 
-            CustomerLibrary::create([
-                'user_id' => Auth::user()->id,              
-                'product_id' => $product->id
-            ]);
+            if(Product::is_ebook($product->id)){
+                CustomerLibrary::create([
+                    'user_id' => Auth::user()->id,              
+                    'product_id' => $product->id
+                ]);
+            }
 
         }
     }

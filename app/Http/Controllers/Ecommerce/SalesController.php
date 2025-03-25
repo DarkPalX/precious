@@ -264,8 +264,9 @@ class SalesController extends Controller
         $totalPayment = SalesPayment::where('sales_header_id',$id)->sum('amount');
         $totalNet = SalesHeader::where('id',$id)->sum('net_amount');
         if($totalNet <= $totalPayment)
-        $status = 'PAID';
-        else $status = 'UNPAID';
+            $status = 'PAID';
+        else 
+            $status = 'UNPAID';
 
         $sales->updateOrderStatus();
 

@@ -574,7 +574,7 @@
         <input type="text" name="product_id" value="{{ $product->id}}">
         <input type="text" name="qty" id="buy_now_qty">
 
-        @if(strtolower($rel->book_type) == "ebook" || strtolower($rel->book_type) == "e-book")
+        @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book")
             <input type="text" name="price" value="{{$product->ebook_discount_price > 0 ? $product->ebook_discount_price : $product->ebook_price}}">
         @else
             <input type="text" name="price" value="{{$product->discount_price > 0 ? $product->discount_price : $product->price}}">

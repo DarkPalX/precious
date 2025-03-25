@@ -121,7 +121,7 @@
                     <td class="tx-nowrap">{{$details->product_name}}</td>
                     
 
-                    @if(in_array(strtolower($details->product->book_type), ['ebook', 'e-book']))
+                    @if($details->product && in_array(strtolower($details->product->book_type ?? ''), ['ebook', 'e-book']))
                         <td class="tx-nowrap">Delivered</td>
                     @else
                         <td class="tx-nowrap">{{$sales->delivery_status}}</td>
@@ -129,7 +129,7 @@
 
                     <td class="tx-right">{{number_format($details->qty, 0)}}</td>
 
-                    @if(in_array(strtolower($details->product->book_type), ['ebook', 'e-book']))
+                    @if($details->product && in_array(strtolower($details->product->book_type), ['ebook', 'e-book']))
                         <td class="tx-right">{{number_format($details->product->ebook_price ?? $details->price, 2)}}</td>
                         <td class="tx-right">{{number_format($details->product->ebook_discount_price ?? 0, 2)}}</td>
                     @else

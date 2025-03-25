@@ -71,7 +71,13 @@
                                                 @endif
 
                                                 <a class="dropdown-item" href="#" onclick="view_deliveries('{{$sale->id}}');">View Deliveries</a>
-                                                <a class="dropdown-item" href="#" onclick="cancel_unpaid_order('{{$sale->id}}')" @if($sale->delivery_status != "Pending" && $sale->delivery_status != "Pending" && $sale->delivery_status != "Delivered") hidden @endif>Cancel Order</a>
+                                                <a class="dropdown-item" href="#" 
+                                                    onclick="cancel_unpaid_order('{{$sale->id}}')" 
+                                                    @if(in_array($deliveryStatus, ['Pending', 'Processing Stock', 'Delivered']) && $sale->payment_status === 'PAID') hidden @endif>
+                                                    Cancel Order
+                                                </a>
+
+                                                {{-- <a class="dropdown-item" href="#" onclick="cancel_unpaid_order('{{$sale->id}}')" @if($sale->delivery_status != "Pending" && $sale->delivery_status != "Pending" && $sale->delivery_status != "Delivered") hidden @endif>Cancel Order</a> --}}
                                             @endif
                                         </ul>
                                     </li>

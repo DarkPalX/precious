@@ -42,9 +42,8 @@ class SalesHeader extends Model
         $paid = SalesPayment::where('sales_header_id',$this->id)->whereStatus('PAID')->sum('amount');
         $is_already_paid = SalesHeader::where('id', $this->id)->value('payment_status');
 
-  
-        if($paid >= $this->net_amount || $is_already_paid == 'PAID'){
-            $tag_as_paid = SalesHeader::whereId((int) $this->id)->update(['payment_status' => 'PAID']);
+        if($this->net_amount && $paid >= $this->net_amount || $is_already_paid == 'PAID'){
+        $tag_as_paid = SalesHeader::whereId((int) $this->id)->update(['payment_status' => 'PAID']);
             if($this->delivery_status == 'Pending'){
                 $update_delivery_status = SalesHeader::whereId((int) $this->id)->update(['delivery_status' => 'Processing Stock']);
             }
