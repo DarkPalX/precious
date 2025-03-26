@@ -348,6 +348,11 @@ Route::post('/get-home-popup-banner',[
    'as'=> 'get-home-popup-banner'
 ]);
 
+Route::post('/get-home-popup-banner-all',[
+   'uses'=>'App\Http\Controllers\ApiController@getPopUpBannerAll',
+   'as'=> 'get-home-popup-banner-all'
+]);
+
 //COUPON =============================================================================
 Route::post('/get-available-coupon-list',[
    'uses'=>'App\Http\Controllers\ApiController@getAvailableCouponList',
