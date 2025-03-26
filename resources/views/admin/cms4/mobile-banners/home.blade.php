@@ -110,6 +110,13 @@
                             <label class="custom-control-label" id="banner_type_label" for="banner_type">@if(is_video_type($mobile_album, $errors)) Video @else Image @endif</label>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="d-block">Visibility</label>
+                        <div class="custom-control custom-switch @error('status') is-invalid @enderror">
+                            <input type="checkbox" class="custom-control-input" name="status" {{ (old("status") == "ON" || $mobile_album->status == 1 ? "checked":"") }} id="customSwitch1">
+                            <label class="custom-control-label" id="label_visibility" for="customSwitch1">{{ucfirst(strtolower($mobile_album->status ? 'PUBLISHED' : 'PRIVATE'))}}</label>
+                        </div>
+                    </div>
                     <div class="form-group mg-b-0" id="imageDiv" @if(is_video_type($mobile_album, $errors)) style="display: none;" @endif>
                         <input type="file" name="banner" class="d-none" id="upload_image" accept="image/*" multiple>
                         <button type="button" class="btn btn-light btn-xs btn-uppercase upload @error('banners') is-invalid @enderror" type="submit"><i data-feather="upload"></i> Upload images*</button>
@@ -523,6 +530,15 @@
                 validate_files(files, upload_video, maxSize, validateFileTypes);
             });
 
+        });
+        
+        $("#customSwitch1").change(function() {
+            if(this.checked) {
+                $('#label_visibility').html('Published');
+            }
+            else{
+                $('#label_visibility').html('Private');
+            }
         });
     </script>
 @endsection
