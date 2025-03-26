@@ -221,7 +221,7 @@ class Subscription extends Model
                     'is_expired' => 0, 
                     'is_cancelled' => 0, 
                     'cancel_reason' => null, 
-                       'remarks' => 'Extended a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
+                    'remarks' => 'Extended a '.$PlanNoDays.' days subscription plan with plan ID:'.$SubscriptionPlanID, 
                     'created_at' => $TODAY  
                 ]); 
 
@@ -361,12 +361,12 @@ class Subscription extends Model
                   $Email->SendOrderReceivedEmail($param);    
               }
 
-            //RESUME & RETUEN SUBSBRIBED BOOKS===
-            DB::table('subscribed_books')
-              ->where('user_id',$UserID)              
-              ->update([                                  
-                'deleted_at' => null
-            ]);
+              //RESUME & RETURN SUBSBRIBED BOOKS
+              DB::table('subscribed_books')
+                ->where('user_id',$UserID)              
+                ->update([                                  
+                  'deleted_at' => null
+              ]);
 
            }
 
@@ -406,7 +406,7 @@ class Subscription extends Model
           $EndDateFormatted=date_format(date_create($EndDate),'M. j, Y ');
 
           $ExpiryDateOneDayBefore=date($EndDate, strtotime('+1 day')); 
-          $ExpiryDateTowDaysBefore=date($EndDate, strtotime('-2 day')); 
+          $ExpiryDateTwoDaysBefore=date($EndDate, strtotime('-2 day')); 
           $ExpiryDateThreeDaysBefore=date($EndDate, strtotime('-3 day')); 
           
          if($IsSubcscribe=1){ 
@@ -418,7 +418,7 @@ class Subscription extends Model
             
             $date2=date_create($EndDate);
             date_sub($date2,date_interval_create_from_date_string("2 days"));            
-            $ExpiryDateTowDaysBefore=date("Y-m-d", strtotime(date_format($date2,"Y-m-d")));
+            $ExpiryDateTwoDaysBefore=date("Y-m-d", strtotime(date_format($date2,"Y-m-d")));
             
             $date3=date_create($EndDate);
             date_sub($date3,date_interval_create_from_date_string("3 days"));            
@@ -436,7 +436,7 @@ class Subscription extends Model
             }            
 
             //check current date if same as 3 days before the expiration date
-            if($ExpiryDateTowDaysBefore==$CurrentDay){               
+            if($ExpiryDateTwoDaysBefore==$CurrentDay){               
               //send message expiration date 1 day before the expiration date  
                 $MessageNotificationID = DB::table('message_notification')
                     ->insertGetId([                                            
@@ -519,7 +519,7 @@ class Subscription extends Model
     $TODAY = date("Y-m-d H:i:s");
     $CurrentDay = date("Y-m-d"); 
      
-     $TitlePlan="";
+    $TitlePlan="";
     $PlanNoDays=0;
     $SubscriptionPlanID=0;
     $CurrentDayFormatted=date_format(date_create($CurrentDay),'M. j, Y ');
