@@ -106,7 +106,8 @@ class BannerAds extends Model
           
           COALESCE(mob_ban.button_text,'') as button_text,
           COALESCE(mob_ban.url,'') as url_link,          
-
+          
+          COALESCE(mob_alb.banner_type,'') as banner_type,
           COALESCE(mob_ban.order,0) as order_sequence
                         
         ");    
