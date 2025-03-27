@@ -101,6 +101,7 @@
                             <tr>
                                 <th scope="col" width="35%">Ad Title</th>
                                 <th scope="col" width="35%">Url</th>
+                                <th scope="col">Platform</th>
                                 <th scope="col">Click Counts</th>
                                 <th scope="col">Expiration Date</th>
                                 <th scope="col" class="text-center">Options</th>
@@ -115,6 +116,7 @@
                                         @if($ad->expiration_date <= now()) <span class="badge badge-sm badge-danger ml-2">Expired</span> @endif
                                     </td>
                                     <td><span class="text-nowrap"><a href="{{ $ad->url }}" target="blank_">{{ $ad->url }}</a></span></td>
+                                    <td><span class="text-nowrap">{{ $ad->is_mobile ? 'Mobile' : 'Desktop' }}</span></td>
                                     <td><span class="text-nowrap">{{ $ad->click_counts }}</span></td>
                                     <td><span class="text-nowrap">{{ Carbon\Carbon::parse($ad->expiration_date)->format('F d, Y') }}</span></td>
                                     <td>

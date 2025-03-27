@@ -26,6 +26,12 @@ class BannerAdController extends Controller
 
         // Query for pages that are not in the $usedPageIds array and have status PUBLISHED
         $usedPageIds = BannerAdPage::pluck('page_id');
+        
+        $usedPageIds = BannerAdPage::join('banner_ads', 'banner_ad_pages.banner_ad_id', '=', 'banner_ads.id')
+        ->whereNull('banner_ads.deleted_at')
+        ->pluck('banner_ad_pages.page_id')
+        ->toArray();
+
         $pages = Page::whereNotIn('id', $usedPageIds)->where('status', 'PUBLISHED')->get();
         $mobile_pages = [
             'Home',
@@ -90,7 +96,12 @@ class BannerAdController extends Controller
     public function edit($id){
         
         // Get the page IDs used in any ad
-        $usedPageIds = BannerAdPage::where('banner_ad_id', '!=', $id)->pluck('page_id')->toArray();
+        $usedPageIds = BannerAdPage::join('banner_ads', 'banner_ad_pages.banner_ad_id', '=', 'banner_ads.id')
+        ->where('banner_ad_pages.banner_ad_id', '!=', $id)
+        ->whereNull('banner_ads.deleted_at')
+        ->pluck('banner_ad_pages.page_id')
+        ->toArray();
+
         $pages = Page::whereNotIn('id', $usedPageIds)->where('status', 'PUBLISHED')->get();
         $mobile_pages = [
             'Home',
