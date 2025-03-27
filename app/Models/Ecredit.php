@@ -10,5 +10,5 @@ class Ecredit extends Model
     use HasFactory;
 
     protected $table = 'ecredits';
-    protected $fillable = ['user_id', 'used_credits', 'added_credits', 'balance'];
+    protected $fillable = ['user_id', 'used_credits', 'added_credits', 'balance', 'remarks'];
 }

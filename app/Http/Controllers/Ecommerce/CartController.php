@@ -19,7 +19,7 @@ use App\Models\Ecommerce\{
 };
 
 use App\Models\{
-    Page, User, PaynamicsLog, CustomerLibrary
+    Page, User, PaynamicsLog, CustomerLibrary, Ecredit
 };
 
 
@@ -561,6 +561,7 @@ class CartController extends Controller
         $customerAddress = $request->customer_delivery_barangay.', '.$request->customer_delivery_city.', '.$request->customer_delivery_province.', '.$request->customer_delivery_zip;
 
         $ecredit_amount = 0;
+        $new_ecredit = 0;
 
         if($request->payment_method == 'ecredit'){
             $use_ecredit = $request->payment_method == 'ecredit' ? 1 : 0;
@@ -621,6 +622,15 @@ class CartController extends Controller
                 'receipt_number' => Str::random(10),
                 'created_by' => Auth::id()
             ]);
+
+            //UPDATE CURRENT BALANCE EWALLET
+            $ecredit = Ecredit::create([                                          
+                'user_id' => Auth::id(),           
+                'used_credits' => $totalPrice,                                              
+                'balance' => $new_ecredit,  
+                'remarks' => 'Used '. $totalPrice .' e-credit as payment for sales with transaction no. '. $salesHeader->id
+            ]); 
+            
         }
             
         if($request->payment_method == 'paypal'){
