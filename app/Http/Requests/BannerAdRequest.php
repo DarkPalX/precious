@@ -30,6 +30,7 @@ class BannerAdRequest extends FormRequest
             'url' => 'nullable',
             'pages' => 'required',
             'expiration_date' => 'required',
+            'is_mobile' => 'nullable',
             'status' => 'nullable',
         ];
     }

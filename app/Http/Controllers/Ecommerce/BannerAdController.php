@@ -27,15 +27,26 @@ class BannerAdController extends Controller
         // Query for pages that are not in the $usedPageIds array and have status PUBLISHED
         $usedPageIds = BannerAdPage::pluck('page_id');
         $pages = Page::whereNotIn('id', $usedPageIds)->where('status', 'PUBLISHED')->get();
-        // $pages = Page::where('status', 'PUBLISHED')->get();
-
-        return view('admin.ecommerce.ads.create', compact('pages'));
+        $mobile_pages = [
+            'Home',
+            'Dashboard',
+            'Profile',
+            'Library',
+            'Subscription',
+            'Transactions',
+            'Ecredits',
+            'MyBag',
+            'ContactUs',
+            'FAQ',
+            'Settings'
+        ];
+        return view('admin.ecommerce.ads.create', compact('pages', 'mobile_pages'));
     }
 
     public function store(BannerAdRequest $request){
 
         $newData = $request->validated();
-        
+
         $newData['file_url'] = $request->hasFile('file_url') ? FileHelper::move_to_product_file_folder($request->file('file_url'), 'storage/ads/files')['url'] : "";
         $newData['mobile_file_url'] = $request->hasFile('mobile_file_url') ? FileHelper::move_to_product_file_folder($request->file('mobile_file_url'), 'storage/ads/mobile_files')['url'] : "";
         $newData['status'] = $request->status ? 1 : 0;
@@ -63,12 +74,24 @@ class BannerAdController extends Controller
         // Get the page IDs used in any ad
         $usedPageIds = BannerAdPage::where('banner_ad_id', '!=', $id)->pluck('page_id')->toArray();
         $pages = Page::whereNotIn('id', $usedPageIds)->where('status', 'PUBLISHED')->get();
-        // $pages = Page::where('status', 'PUBLISHED')->get();
+        $mobile_pages = [
+            'Home',
+            'Dashboard',
+            'Profile',
+            'Library',
+            'Subscription',
+            'Transactions',
+            'Ecredits',
+            'MyBag',
+            'ContactUs',
+            'FAQ',
+            'Settings'
+        ];
 
         $ad = BannerAd::findOrFail($id);
         $ad_pages = BannerAdPage::where('banner_ad_id', $id)->get();
 
-        return view('admin.ecommerce.ads.edit', compact('pages', 'ad', 'ad_pages'));
+        return view('admin.ecommerce.ads.edit', compact('pages', 'mobile_pages', 'ad', 'ad_pages'));
     }
     
     public function update(BannerAdRequest $request, $id)

@@ -10,7 +10,7 @@ class BannerAd extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'file_url', 'mobile_file_url', 'url', 'status', 'click_counts', 'expiration_date'];
+    protected $fillable = ['name', 'file_url', 'mobile_file_url', 'url', 'is_mobile', 'status', 'click_counts', 'expiration_date'];
     
     public function get_image_file_name()
     {

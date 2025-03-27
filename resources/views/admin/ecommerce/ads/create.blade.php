@@ -34,6 +34,31 @@
             <div class="row row-sm">
                 @csrf
                 <div class="col-lg-6">
+                    
+                    <div class="form-group">
+                        <label class="d-block">Platform</label>
+                        <div class="form-group @error('is_mobile') is-invalid @enderror">
+                        
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input is_mobile" name="is_mobile" id="desktop" value="0" checked required>
+                                <label class="form-check-label" for="desktop">Desktop</label>
+                            </div>
+                        
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input is_mobile" name="is_mobile" id="mobile" value="1" required>
+                                <label class="form-check-label" for="mobile">Mobile</label>
+                            </div>
+                        
+                            @error('is_mobile')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        
+                        @error('pages')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    
                     <div class="form-group">
                         <label class="d-block">Name *</label>
                         <input name="name" id="name" value="{{ old('name') }}" required type="text" class="form-control @error('name') is-invalid @enderror">
@@ -42,10 +67,10 @@
                         @enderror
                     </div>
                     
-                    <div class="form-group">
+                    <div class="form-group desktop-container">
                         <label class="d-block">Desktop Ad Image/Video</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('file_url') is-invalid @enderror" name="file_url" id="file_url" accept="image/jpeg, image/png, image/gif, video/mp4" required>
+                            <input type="file" class="custom-file-input @error('file_url') is-invalid @enderror" name="file_url" id="file_url" accept="image/jpeg, image/png, image/gif, video/mp4">
                             <label class="custom-file-label" for="file_url" id="ad_preview">Choose file</label>
                         </div>
                         <p class="tx-10">
@@ -68,10 +93,10 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mobile-container">
                         <label class="d-block">Mobile Ad Image/Video</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('mobile_file_url') is-invalid @enderror" name="mobile_file_url" id="mobile_file_url" accept="image/jpeg, image/png, image/gif, video/mp4" required>
+                            <input type="file" class="custom-file-input @error('mobile_file_url') is-invalid @enderror" name="mobile_file_url" id="mobile_file_url" accept="image/jpeg, image/png, image/gif, video/mp4">
                             <label class="custom-file-label" for="mobile_file_url" id="mobile_ad_preview">Choose file</label>
                         </div>
                         <p class="tx-10">
@@ -101,12 +126,24 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div class="form-group">
+                    <div class="form-group desktop-container">
                         <label class="d-block">Pages *</label>
-                        <select class="form-control select2 @error('pages') is-invalid @enderror" multiple="multiple" name="pages[]" id="pages" required>
+                        <select class="form-control select2 @error('pages') is-invalid @enderror" multiple="multiple" name="pages[]" id="pages">
                             <option label="Choose multiple pages"></option>
                             @foreach($pages as $page)
                                 <option value="{{ $page['id'] }}">{{ $page['name'] }}</option>
+                            @endforeach
+                        </select>
+                        @error('pages')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group mobile-container">
+                        <label class="d-block">Pages *</label>
+                        <select class="form-control select2 @error('pages') is-invalid @enderror" multiple="multiple" name="pages[]" id="mobile_pages">
+                            <option label="Choose multiple pages"></option>
+                            @foreach($mobile_pages as $mobile_page)
+                                <option value="{{ $mobile_page }}">{{ $mobile_page }}</option>
                             @endforeach
                         </select>
                         @error('pages')
@@ -281,5 +318,24 @@
             $('#mobile_img_temp').attr('src', '');
             $('#mobile_image_div').hide();
         }
+
+        $(document).ready(function() {
+            // Trigger the change event after DOM is fully loaded
+            setTimeout(function() {
+                $(".is_mobile:checked").trigger('change');
+            }, 100);
+
+            $(".is_mobile").change(function(evt) {
+                var platform = $(".is_mobile:checked").val();
+
+                if (platform === "0") {
+                    $(".mobile-container").hide();
+                    $(".desktop-container").show();
+                } else {
+                    $(".mobile-container").show();
+                    $(".desktop-container").hide();
+                }
+            });
+        });
     </script>
 @endsection
