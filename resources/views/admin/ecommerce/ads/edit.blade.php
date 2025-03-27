@@ -71,18 +71,35 @@
                     {{-- DESKTOP AD --}}
                     <div class="form-group desktop-container">
                         <label class="d-block">Desktop Ad Image/Video</label>
+                        
                         <div class="custom-file">
+                            <input type="file" 
+                                class="custom-file-input @error('file_url') is-invalid @enderror" 
+                                name="file_url[]" 
+                                accept="image/jpeg, image/png, image/gif, video/mp4" 
+                                multiple 
+                                onchange="displayFileNames(this, 'desktop')">
+
+                            <label class="custom-file-label" id="desktop_ad_preview">
+                                Choose file(s)
+                            </label>
+
+                            <input type="hidden" id="current_desktop_file" name="current_file" 
+                                value='{{ json_encode($ad->file_url ? explode(",", $ad->file_url) : []) }}'>
+                        </div>
+                        
+                        {{-- <div class="custom-file">
                             <input type="file" class="custom-file-input @error('file_url') is-invalid @enderror" name="file_url" id="file_url" accept="image/jpeg, image/png, image/gif, video/mp4" title="{{ $ad->get_image_file_name() }}">
                             <label class="custom-file-label" for="file_url" id="ad_preview">@if (empty($ad->file_url)) Choose file @else {{$ad->get_image_file_name()}} @endif</label>
                             <input type="text" id="current_file" name="current_file" value="{{ $ad->file_url }}" hidden/>
-                        </div>
+                        </div> --}}
                         <p class="tx-10">
                             Required image dimension: {{ env('AD_BANNER_WIDTH') }}px by {{ env('AD_BANNER_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png .mp4 .gif
                         </p>
                         @error('file_url')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                        <div id="image_div" @if(empty($ad->file_url)) style="display:none;" @endif>
+                        <div id="image_div" style="display:none;" @if(empty($ad->file_url)) style="display:none;" @endif>
 
                             {{-- for image --}}
                             <img src="{{ asset($ad->file_url) }}" id="img_temp" alt="" height="{{ env('AD_BANNER_HEIGHT') }}" width="{{ env('AD_BANNER_WIDTH') }}" style="display: {{ Str::contains($ad->file_url, 'mp4') ? 'none' : '' }}">  <br /><br />
@@ -99,18 +116,35 @@
                     {{-- MOBILE AD --}}
                     <div class="form-group mobile-container">
                         <label class="d-block">Mobile Ad Image/Video</label>
+                        
                         <div class="custom-file">
+                            <input type="file" 
+                                class="custom-file-input @error('mobile_file_url') is-invalid @enderror" 
+                                name="mobile_file_url[]" 
+                                accept="image/jpeg, image/png, image/gif, video/mp4" 
+                                multiple 
+                                onchange="displayFileNames(this, 'mobile')">
+
+                            <label class="custom-file-label" id="mobile_ad_preview">
+                                Choose file(s)
+                            </label>
+
+                            <input type="hidden" id="current_mobile_file" name="current_mobile_file" 
+                                value='{{ json_encode($ad->mobile_file_url ? explode(",", $ad->mobile_file_url) : []) }}'>
+                        </div>
+
+                        {{-- <div class="custom-file">
                             <input type="file" class="custom-file-input @error('mobile_file_url') is-invalid @enderror" name="mobile_file_url" id="mobile_file_url" accept="image/jpeg, image/png, image/gif, video/mp4" title="{{ $ad->get_image_file_name() }}">
                             <label class="custom-file-label" for="mobile_file_url" id="mobile_ad_preview">@if (empty($ad->mobile_file_url)) Choose file @else {{$ad->get_mobile_image_file_name()}} @endif</label>
                             <input type="text" id="current_mobile_file" name="current_mobile_file" value="{{ $ad->mobile_file_url }}" hidden/>
-                        </div>
+                        </div> --}}
                         <p class="tx-10">
                             Required image dimension: {{ env('MOBILE_AD_BANNER_WIDTH') }}px by {{ env('MOBILE_AD_BANNER_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png .mp4 .gif
                         </p>
                         @error('mobile_file_url')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                        <div id="mobile_image_div" @if(empty($ad->mobile_file_url)) style="display:none;" @endif>
+                        <div id="mobile_image_div" style="display:none;" @if(empty($ad->mobile_file_url)) style="display:none;" @endif>
                             
                             {{-- for image --}}
                             <img src="{{ asset($ad->mobile_file_url) }}" id="mobile_img_temp" alt="" height="{{ env('MOBILE_AD_BANNER_HEIGHT') }}" width="{{ env('MOBILE_AD_BANNER_WIDTH') }}" style="display: {{ Str::contains($ad->mobile_file_url, 'mp4') ? 'none' : '' }}">  <br /><br />
@@ -362,5 +396,86 @@
                 }
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            displayExistingFiles('desktop');
+            displayExistingFiles('mobile');
+        });
+
+        function displayExistingFiles(context) {
+            const label = document.getElementById(`${context}_ad_preview`);
+            const currentFileInput = document.getElementById(`current_${context}_file`).value;
+
+            try {
+                const currentFiles = JSON.parse(currentFileInput);
+
+                if (currentFiles.length > 0) {
+                    label.textContent = `${currentFiles.length} file(s) selected`;
+                }
+            } catch (error) {
+                console.error(`Error parsing ${context} files:`, error);
+            }
+        }
+
+        function displayFileNames(input, context) {
+            const label = input.nextElementSibling;
+            const selectedFiles = input.files;
+
+            if (selectedFiles.length === 0) {
+                label.textContent = 'Choose file(s)';
+            } else if (selectedFiles.length === 1) {
+                label.textContent = selectedFiles[0].name;
+            } else {
+                label.textContent = `${selectedFiles.length} file(s) selected`;
+            }
+        }
+
+
+
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     displayExistingFiles();
+        // });
+
+        // function displayExistingFiles() {
+        //     const label = document.getElementById('ad_preview');
+        //     const currentFileInput = document.getElementById('current_file').value;
+
+        //     try {
+        //         const currentFiles = JSON.parse(currentFileInput);
+                
+        //         if (currentFiles.length > 0) {
+        //             label.textContent = `${currentFiles.length} file(s) selected`;
+        //         }
+        //     } catch (error) {
+        //         console.error("Error parsing existing files:", error);
+        //     }
+        // }
+
+        // function displayFileNames(input) {
+        //     const label = input.nextElementSibling;
+        //     const selectedFiles = input.files;
+
+        //     if (selectedFiles.length === 0) {
+        //         label.textContent = 'Choose file(s)';
+        //     } else if (selectedFiles.length === 1) {
+        //         label.textContent = selectedFiles[0].name;
+        //     } else {
+        //         label.textContent = `${selectedFiles.length} file(s) selected`;
+        //     }
+        // }
+
+        
+        // function displayFileNames(input) {
+        //     const label = input.nextElementSibling;
+            
+        //     if (input.files.length === 0) {
+        //         label.textContent = 'Choose file(s)';
+        //     } else if (input.files.length === 1) {
+        //         label.textContent = input.files[0].name;
+        //     } else {
+        //         label.textContent = `${input.files.length} files selected`;
+        //     }
+        // }
+
     </script>
 @endsection

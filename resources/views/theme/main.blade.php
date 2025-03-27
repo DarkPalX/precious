@@ -112,17 +112,61 @@
 			@yield('content')
 			
 			{{-- BANNER ADS --}}
-			@if(isset($banner_ads))
+			@if(isset($banner_ads) && !$banner_ads->isEmpty())
+				@foreach($banner_ads as $banner_ad)
+					@php
+						$files = json_decode($banner_ad->file_url, true) ?? [];
+					@endphp
+
+					<div class="section my-0" style="background-color:white;">
+						<div class="container">
+							<a href="{{ route('ads.click.count', $banner_ad->id) }}" target="_blank">
+								<div id="carousel-{{ $banner_ad->id }}" class="carousel slide" data-bs-ride="carousel">
+									<div class="carousel-inner">
+										@foreach($files as $index => $file)
+											<div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+												@if(Str::endsWith($file, ['.jpg', '.jpeg', '.png', '.gif']))
+													{{-- Display image --}}
+													<img src="{{ asset($file) }}" class="d-block w-100" alt="Ad Image" style="object-fit: cover; max-height: 400px;">
+												@elseif(Str::endsWith($file, ['.mp4']))
+													{{-- Display video --}}
+													<video autoplay muted loop class="d-block w-100" style="object-fit: cover; max-height: 400px;">
+														<source src="{{ asset($file) }}" type="video/mp4">
+														Your browser does not support the video tag.
+													</video>
+												@endif
+											</div>
+										@endforeach
+									</div>
+
+									@if(count($files) > 1)
+										{{-- Navigation Controls --}}
+										<button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ $banner_ad->id }}" data-bs-slide="prev">
+											<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+											<span class="visually-hidden">Previous</span>
+										</button>
+										<button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ $banner_ad->id }}" data-bs-slide="next">
+											<span class="carousel-control-next-icon" aria-hidden="true"></span>
+											<span class="visually-hidden">Next</span>
+										</button>
+									@endif
+								</div>
+							</a>
+						</div>
+					</div>
+				@endforeach
+			@endif
+			{{-- @if(isset($banner_ads))
 				@if(!$banner_ads->isEmpty())
 					@foreach($banner_ads as $banner_ad)
 						<div class="section my-0" style="background-color:white;">
 							<div class="container">
 								<a href="{{ route('ads.click.count', $banner_ad->id) }}" target="blank">
 									<div class="text-center">
-										{{-- for image --}}
+										<!-- for image -->
 										<img src="{{ asset($banner_ad->file_url) }}" id="img_temp" alt="" style="display: {{ Str::contains($banner_ad->file_url, 'mp4') ? 'none' : '' }}">  <br /><br />
                         
-										{{-- for video --}}
+										<!-- for video -->
 										<video autoplay="" muted="" loop="" id="vid_temp" style="object-fit:none; display: {{ Str::contains($banner_ad->file_url, 'mp4') ? '' : 'none' }}">
 											<source src="{{ asset($banner_ad->file_url) }}" type="video/mp4">
 										</video>
@@ -132,7 +176,7 @@
 						</div>		
 					@endforeach	
 				@endif
-			@endif
+			@endif --}}
 			{{-- END BANNER ADS --}}
 		
 			<!-- CONTENT ADS

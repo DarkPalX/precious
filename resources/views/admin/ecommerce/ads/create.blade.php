@@ -70,9 +70,15 @@
                     <div class="form-group desktop-container">
                         <label class="d-block">Desktop Ad Image/Video</label>
                         <div class="custom-file">
+                            <input type="file" class="custom-file-input @error('file_url') is-invalid @enderror" 
+                                   name="file_url[]" accept="image/jpeg, image/png, image/gif, video/mp4" 
+                                   multiple onchange="displayFileNames(this)">
+                            <label class="custom-file-label">Choose file(s)</label>
+                        </div>
+                        {{-- <div class="custom-file">
                             <input type="file" class="custom-file-input @error('file_url') is-invalid @enderror" name="file_url" id="file_url" accept="image/jpeg, image/png, image/gif, video/mp4">
                             <label class="custom-file-label" for="file_url" id="ad_preview">Choose file</label>
-                        </div>
+                        </div> --}}
                         <p class="tx-10">
                             Required image dimension: {{ env('AD_BANNER_WIDTH') }}px by {{ env('AD_BANNER_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png .mp4 .gif
                         </p>
@@ -96,9 +102,15 @@
                     <div class="form-group mobile-container">
                         <label class="d-block">Mobile Ad Image/Video</label>
                         <div class="custom-file">
+                            <input type="file" class="custom-file-input @error('mobile_file_url') is-invalid @enderror" 
+                                   name="mobile_file_url[]" accept="image/jpeg, image/png, image/gif, video/mp4" 
+                                   multiple onchange="displayFileNames(this)">
+                            <label class="custom-file-label">Choose file(s)</label>
+                        </div>
+                        {{-- <div class="custom-file">
                             <input type="file" class="custom-file-input @error('mobile_file_url') is-invalid @enderror" name="mobile_file_url" id="mobile_file_url" accept="image/jpeg, image/png, image/gif, video/mp4">
                             <label class="custom-file-label" for="mobile_file_url" id="mobile_ad_preview">Choose file</label>
-                        </div>
+                        </div> --}}
                         <p class="tx-10">
                             Required image dimension: {{ env('MOBILE_AD_BANNER_WIDTH') }}px by {{ env('MOBILE_AD_BANNER_HEIGHT') }}px <br /> Maximum file size: 5MB <br /> Required file type: .jpeg .png .mp4 .gif
                         </p>
@@ -337,5 +349,17 @@
                 }
             });
         });
+        
+        function displayFileNames(input) {
+            const label = input.nextElementSibling;
+            
+            if (input.files.length === 0) {
+                label.textContent = 'Choose file(s)';
+            } else if (input.files.length === 1) {
+                label.textContent = input.files[0].name;
+            } else {
+                label.textContent = `${input.files.length} files selected`;
+            }
+        }
     </script>
 @endsection
