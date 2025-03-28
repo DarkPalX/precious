@@ -338,19 +338,29 @@ Route::post('/post-comment-review',[
 ]);
 
 //BANNER ADS==========================================================================
+
+//SLIDER IMAGE ONLY
 Route::post('/get-home-slider-banner',[
    'uses'=>'App\Http\Controllers\ApiController@getHomeSliderBanner',
    'as'=> 'get-home-slider-banner'
 ]);
 
+//POP UP MODAL IMAGE ONLY
 Route::post('/get-home-popup-banner',[
    'uses'=>'App\Http\Controllers\ApiController@getPopUpBanner',
    'as'=> 'get-home-popup-banner'
 ]);
 
+//POP UP MODAL IMAGE & VIDEO
 Route::post('/get-home-popup-banner-all',[
    'uses'=>'App\Http\Controllers\ApiController@getPopUpBannerAll',
    'as'=> 'get-home-popup-banner-all'
+]);
+
+//BODY SECTION
+Route::post('/get-banner-ads-all',[
+   'uses'=>'App\Http\Controllers\ApiController@getBannerAds',
+   'as'=> 'get-banner-ads-all'
 ]);
 
 //COUPON =============================================================================
