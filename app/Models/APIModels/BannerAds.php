@@ -140,7 +140,8 @@ class BannerAds extends Model
                         
         ");    
               
-       // $query->where("ban_ads_pg.page_id",'=',$Page);             
+       // $query->where("ban_ads_pg.page_id",'=',$Page);   
+       $query->where("ban_ads.is_mobile","=",1);              
        $query->where("ban_ads.status","=",1);           
        $query->where("ban_ads.deleted_at","=",null); 
                    
