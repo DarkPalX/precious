@@ -2260,14 +2260,14 @@ public function getBannerAds(Request $request){
     $responseMessage = "";
 
     $data['Type']=$request->post('Type');
-    $data['Page']=$request->post('Page');
+    // $data['Page']=$request->post('Page');
 
     $data["SearchText"] = '';
     $data["Status"] = '';
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $result=$BannerAds->getPopUpBannerListAll($data);  
+    $result=$BannerAds->getBannerAds($data);  
     return response()->json($result); 
     
 }
