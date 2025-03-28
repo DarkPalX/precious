@@ -132,11 +132,11 @@ class BannerAds extends Model
     
        ->selectraw("
            ban_ads.id as banner_Ads_ID,
-           COALESCE(mob_ban.mobile_file_url,'') as mobile_file_url,
-           COALESCE(mob_ban.url,'') as url,
+           COALESCE(ban_ads.mobile_file_url,'') as mobile_file_url,
+           COALESCE(ban_ads.url,'') as url,
            COALESCE(ban_ads_pg.page_id,'') as page,
 
-          COALESCE(mob_ban.click_counts,0) as click_counts
+          COALESCE(ban_ads.click_counts,0) as click_counts
                         
         ");    
               
