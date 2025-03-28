@@ -142,7 +142,7 @@ class BannerAds extends Model
               
        // $query->where("ban_ads_pg.page_id",'=',$Page);             
        $query->where("ban_ads.status","=",1);           
-       $query->where("ban_ads_pg.deleted_at","=",null); 
+       $query->where("ban_ads.deleted_at","=",null); 
                    
      $list = $query->get();                           
      return $list;     
