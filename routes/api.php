@@ -358,9 +358,9 @@ Route::post('/get-home-popup-banner-all',[
 ]);
 
 //BODY SECTION
-Route::post('/get-banner-ads-all',[
+Route::post('/get-banner-ads-list',[
    'uses'=>'App\Http\Controllers\ApiController@getBannerAds',
-   'as'=> 'get-banner-ads-all'
+   'as'=> 'get-banner-ads-all-list'
 ]);
 
 //COUPON =============================================================================
