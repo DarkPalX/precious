@@ -2190,7 +2190,7 @@ public function doPostCommentReview(Request $request){
            
   }
 
-//BANNER ADS=====================================================================
+//SLIDER BANNER ADS=====================================================================
 public function getHomeSliderBanner(Request $request){
         
     $BannerAds = new BannerAds();
@@ -2210,7 +2210,7 @@ public function getHomeSliderBanner(Request $request){
     
 }
 
-//IMAGE ONLY  // REMOVE THIS ONCE ALL APPS IS APPROVED
+// POP UP MODAL BANNER ADS IMAGE ONLY  // REMOVE THIS ONCE ALL APPS IS APPROVED
 public function getPopUpBanner(Request $request){
         
     $BannerAds = new BannerAds();
@@ -2230,7 +2230,7 @@ public function getPopUpBanner(Request $request){
     
 }
 
-//IMAGE & VIDEO LATEST FUNCTION
+// POP UP MODAL BANNER ADS IMAGE & VIDEO LATEST FUNCTION
 public function getPopUpBannerAll(Request $request){
         
     $BannerAds = new BannerAds();
@@ -2250,6 +2250,27 @@ public function getPopUpBannerAll(Request $request){
     
 }
 
+
+//BODY SECTION BANNER ADS IMAGE & VIDEO LATEST FUNCTION
+public function getBannerAds(Request $request){
+        
+    $BannerAds = new BannerAds();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['Type']=$request->post('Type');
+    $data['Page']=$request->post('Page');
+
+    $data["SearchText"] = '';
+    $data["Status"] = '';
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+
+    $result=$BannerAds->getPopUpBannerListAll($data);  
+    return response()->json($result); 
+    
+}
 
 // PROCEED TO SUBSCRIBED==========================================================
 public function proceedToSubscribe(Request $request){
