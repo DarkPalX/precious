@@ -127,9 +127,6 @@ class BannerAds extends Model
   //PAGE BODY SECTION ADS
   public function getBannerAds($data){
 
-
-   $Page=$data['Page'];
-   
    $query = DB::table('banner_ads as ban_ads')
      ->join('banner_ad_pages as  ban_ads_pg', 'ban_ads_pg.banner_ad_id', '=', 'ban_ads.id') 
     
@@ -137,12 +134,13 @@ class BannerAds extends Model
            ban_ads.id as banner_Ads_ID,
            COALESCE(mob_ban.mobile_file_url,'') as mobile_file_url,
            COALESCE(mob_ban.url,'') as url,
+           COALESCE(ban_ads_pg.page_id,'') as page,
 
           COALESCE(mob_ban.click_counts,0) as click_counts
                         
         ");    
               
-       $query->where("ban_ads_pg.page_id",'=',$Page);             
+       // $query->where("ban_ads_pg.page_id",'=',$Page);             
        $query->where("ban_ads.status","=",1);           
        $query->where("ban_ads_pg.deleted_at","=",null); 
                    
