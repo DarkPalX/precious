@@ -144,7 +144,7 @@ class BannerAds extends Model
        $query->where("ban_ads.is_mobile","=",1);              
        $query->where("ban_ads.status","=",1);           
        $query->where("ban_ads.deleted_at","=",null); 
-       $query->->whereRaw('ban_ads_pg.page_id NOT REGEXP "^[0-9]+$"');  // Make sure page id is not in numeric ID but name of the page
+       $query->whereRaw('ban_ads_pg.page_id NOT REGEXP "^[0-9]+$"');  // Make sure page id is not in numeric ID but name of the page
                    
      $list = $query->get();                           
      return $list;     
