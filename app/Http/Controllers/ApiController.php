@@ -2255,22 +2255,27 @@ public function getBannerAds(Request $request){
     $data['Type']=$request->post('Type');
     $data['Page']=$request->post('Page');
 
-     $data['Page']='Home';
+     $data['Page']='Home'
 
     $data["SearchText"] = '';
     $data["Status"] = '';
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
     
-    $result['url_banner']="";
-    $result['mobile_banner']="";
+    $result_url="";
+    $result_banner_ads="";
     $info=$BannerAds->getBannerAds($data);
     if(isset($info)>0){
-      $result['url_banner']=$info->url;
-      $result['mobile_banner']=$info->mobile_file_url;
+      $result_url=$info->url;
+      $result_banner_ads=$info->mobile_file_url;
     }
 
-    return response()->json($result); 
+    return response()->json([
+          'url' => $result_url,
+          'mobile_banner' => $result_banner_ads,         
+     ]);
+
+    // return response()->json($result); 
     
 }
 
