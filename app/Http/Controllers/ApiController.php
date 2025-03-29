@@ -2260,7 +2260,8 @@ public function getBannerAds(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
     
-    $result="";
+    $result['url_banner']="";
+    $result['mobile_banner']="";
     $info=$BannerAds->getBannerAds($data);
     if(isset($info)>0){
       $result['url_banner']=$info->url;
