@@ -2271,13 +2271,23 @@ public function getBannerAds(Request $request){
       $banner_ads_id=$info->banner_Ads_ID;
       $result_url=$info->url;
       $result_banner_ads=$info->mobile_file_url;
-    }
 
-    return response()->json([
+      return response()->json([
           'banner_id' => $banner_ads_id,
           'url' => $result_url,
           'mobile_banner' => $result_banner_ads,         
      ]);
+
+    }else{
+
+      return response()->json([
+          'banner_id' => $banner_ads_id,
+          'url' => null,
+          'mobile_banner' => null,         
+       ]);
+    }
+
+
     
 }
 
