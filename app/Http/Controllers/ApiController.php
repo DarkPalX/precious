@@ -2266,8 +2266,13 @@ public function getBannerAds(Request $request){
     $data["Status"] = '';
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
+    
+    $result="";
+    $info=$BannerAds->getBannerAds($data);
+    if(isset($info)>0){
+      $result=$info->mobile_file_url;
+    }
 
-    $result=$BannerAds->getBannerAds($data);  
     return response()->json($result); 
     
 }
