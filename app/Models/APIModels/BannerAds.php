@@ -127,7 +127,7 @@ class BannerAds extends Model
   //PAGE BODY SECTION ADS
   public function getBannerAds($data){
 
-    $Page=$data['Page'];
+   $Page=$data['Page'];
 
    $query = DB::table('banner_ads as ban_ads')
      ->join('banner_ad_pages as  ban_ads_pg', 'ban_ads_pg.banner_ad_id', '=', 'ban_ads.id') 
