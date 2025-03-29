@@ -2270,11 +2270,7 @@ public function getBannerAds(Request $request){
     $result="";
     $info=$BannerAds->getBannerAds($data);
     if(isset($info)>0){
-      $mobile_file=$info->mobile_file_url;
-
-      $filePaths = str_replace('"', '', $mobile_file);
-
-      $result = explode(',', $filePaths);
+      $result=$info->mobile_file_url;
     }
 
     return response()->json($result); 
