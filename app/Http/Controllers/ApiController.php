@@ -2260,7 +2260,7 @@ public function getBannerAds(Request $request){
     $responseMessage = "";
 
     $data['Type']=$request->post('Type');
-    // $data['Page']=$request->post('Page');
+    $data['Page']=$request->post('Page');
 
     $data["SearchText"] = '';
     $data["Status"] = '';
