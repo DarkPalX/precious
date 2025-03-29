@@ -2262,20 +2262,22 @@ public function getBannerAds(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
     
+    $banner_ads_id=0;
     $result_url="";
     $result_banner_ads="";
+
     $info=$BannerAds->getBannerAds($data);
     if(isset($info)>0){
+      $banner_ads_id=$info->banner_Ads_ID;
       $result_url=$info->url;
       $result_banner_ads=$info->mobile_file_url;
     }
 
     return response()->json([
+          'banner_id' => $banner_ads_id,
           'url' => $result_url,
           'mobile_banner' => $result_banner_ads,         
      ]);
-
-    // return response()->json($result); 
     
 }
 
