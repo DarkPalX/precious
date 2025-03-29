@@ -2255,8 +2255,6 @@ public function getBannerAds(Request $request){
     $data['Type']=$request->post('Type');
     $data['Page']=$request->post('Page');
 
-     $data['Page']="Dashboard";
-
     $data["SearchText"] = '';
     $data["Status"] = '';
     $data["PageNo"] = 0;
