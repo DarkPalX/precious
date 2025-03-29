@@ -1006,8 +1006,6 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-     
-    
     $data['UserID']=$request->post('UserID');
     
     $data['StreetAddress'] = $request->post('StreetAddress'); 
@@ -1067,7 +1065,6 @@ public function getCustomerLibraryList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    
     $data['UserID']=$request->post('UserID');
 
     $data["SearchText"] = '';
@@ -1244,8 +1241,6 @@ public function updateBookMarks(Request $request){
     $responseMessage = "";
 
     $IsFreeBook=0;
-
-  
 
     $data['UserID']=$request->input('UserID');
     $data['ProductID']=$request->input('ProductID');
@@ -1485,8 +1480,6 @@ public function addToCart(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
-
-    
 
     $data['UserID'] = $request->post('UserID');
     $data['ProductID'] = $request->post('ProductID');
@@ -2270,7 +2263,8 @@ public function getBannerAds(Request $request){
     $result="";
     $info=$BannerAds->getBannerAds($data);
     if(isset($info)>0){
-      $result=$info->mobile_file_url;
+      $result['url_banner']=$info->url;
+      $result['mobile_banner']=$info->mobile_file_url;
     }
 
     return response()->json($result); 
