@@ -33,7 +33,8 @@ class BannerAdController extends Controller
         ->toArray();
 
         $pages = Page::whereNotIn('id', $usedPageIds)->where('status', 'PUBLISHED')->get();
-        $mobile_pages = [
+
+        $mobile_pages_array = [
             'Home',
             'Dashboard',
             'Profile',
@@ -44,6 +45,9 @@ class BannerAdController extends Controller
             'Products',
             'Settings'
         ];
+        
+        $mobile_pages = array_diff($mobile_pages_array, $usedPageIds);
+        
         return view('admin.ecommerce.ads.create', compact('pages', 'mobile_pages'));
     }
 
@@ -101,7 +105,8 @@ class BannerAdController extends Controller
         ->toArray();
 
         $pages = Page::whereNotIn('id', $usedPageIds)->where('status', 'PUBLISHED')->get();
-        $mobile_pages = [
+
+        $mobile_pages_array = [
             'Home',
             'Dashboard',
             'Profile',
@@ -112,6 +117,8 @@ class BannerAdController extends Controller
             'Products',
             'Settings'
         ];
+        
+        $mobile_pages = array_diff($mobile_pages_array, $usedPageIds);
 
         $ad = BannerAd::findOrFail($id);
         $ad_pages = BannerAdPage::where('banner_ad_id', $id)->get();
@@ -134,14 +141,11 @@ class BannerAdController extends Controller
             foreach ($request->file('file_url') as $file) {
                 $fileUrls[] = FileHelper::move_to_product_file_folder($file, 'storage/ads/files')['url'];
             }
+
+            $updateData['file_url'] = json_encode($fileUrls);
         }
         else{
-            if($current_file){
-                $updateData['file_url'] = $ad->file_url;
-            }
-            else{
-                $updateData['file_url'] = "";
-            }
+            $updateData['file_url'] = $current_file ? $ad->file_url : '';
         }
 
         //FOR MOBILE FILE UPDATE VALUE
@@ -150,18 +154,13 @@ class BannerAdController extends Controller
             foreach ($request->file('mobile_file_url') as $file) {
                 $mobileFileUrls[] = FileHelper::move_to_product_file_folder($file, 'storage/ads/mobile_files')['url'];
             }
+
+            $updateData['mobile_file_url'] = json_encode($mobileFileUrls);
         }
         else{
-            if($current_mobile_file){
-                $updateData['mobile_file_url'] = $ad->mobile_file_url;
-            }
-            else{
-                $updateData['mobile_file_url'] = "";
-            }
+            $updateData['mobile_file_url'] = $current_mobile_file ? $ad->mobile_file_url : '';
         }
 
-        $updateData['file_url'] = json_encode($fileUrls) ?? "";
-        $updateData['mobile_file_url'] = json_encode($mobileFileUrls) ?? "";
         $updateData['status'] = $request->status ? 1 : 0;
         
 
