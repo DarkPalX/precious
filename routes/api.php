@@ -220,10 +220,6 @@ Route::post('/save-book-marks',[
    'as'=> 'save-book-marks'
 ]);
 
-// Route::post('/update-book-marks',[
-//    'uses'=>'App\Http\Controllers\ApiController@updateBookMarks',
-//    'as'=> '/update-book-marks'
-// ]);
 
 //FAVORITE===========================================================================
 Route::post('/get-favorite-list',[
