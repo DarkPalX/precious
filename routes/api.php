@@ -209,19 +209,6 @@ Route::post('get-showhide-setting',[
     'as'=> 'get-showhide-setting'
 ]);
 
-
-// // PAYPAL ===================================================================
-// Route::post('save-paypal-order-payment',[
-//     'uses'=>'App\Http\Controllers\ApiController@getPayPalSettings',
-//     'as'=> 'save-paypal-order-payment'
-// ]);
-
-//FAVORITES ========================================================================
-Route::post('/add-to-favorites',[
-   'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
-   'as'=> 'add-to-favorites'
-]);
-
 //BOOKMARKS ========================================================================
 Route::post('/check-has-book-mark',[
    'uses'=>'App\Http\Controllers\ApiController@checkBookHasBookMark',
@@ -233,10 +220,10 @@ Route::post('/save-book-marks',[
    'as'=> 'save-book-marks'
 ]);
 
-Route::post('/update-book-marks',[
-   'uses'=>'App\Http\Controllers\ApiController@updateBookMarks',
-   'as'=> '/update-book-marks'
-]);
+// Route::post('/update-book-marks',[
+//    'uses'=>'App\Http\Controllers\ApiController@updateBookMarks',
+//    'as'=> '/update-book-marks'
+// ]);
 
 //FAVORITE===========================================================================
 Route::post('/get-favorite-list',[
