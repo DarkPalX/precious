@@ -2298,14 +2298,11 @@ public function updateBannerClickCounts(Request $request){
 
     $info=$BannerAds->getBannerAdsInfo($data['BannerAdsID']);
     
-    $banner_ads_id=0;
     $banner_click_counts=0;
     if(isset($info)>0){
       
-      $banner_ads_id=$info->banner_Ads_ID;
       $banner_click_counts=$info->click_counts +1;
-
-      $response=$BannerAds->updateBannerClickCounts($banner_click_counts,$banner_ads_id);
+      $response=$BannerAds->updateBannerClickCounts($banner_click_counts,$data['BannerAdsID']);
 
       return response()->json([
            'response' => 'Success',
