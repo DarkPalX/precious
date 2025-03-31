@@ -720,17 +720,14 @@ class Book extends Model
         ->first();
 
     if(isset($info)>0){
-       
-       if($PageNo!=null){
 
-          DB::table('book_marks')
-            ->where('customer_id',$UserID)
-            ->where('product_id',$ProductID)
-            ->update([                                                       
-              'chapter_no' => $PageNo,
-              'created_at' => $TODAY     
-           ]);   
-       }
+      DB::table('book_marks')
+        ->where('customer_id',$UserID)
+        ->where('product_id',$ProductID)
+        ->update([                                                       
+          'chapter_no' => $PageNo,
+          'created_at' => $TODAY     
+       ]);   
            
     }else{
 
