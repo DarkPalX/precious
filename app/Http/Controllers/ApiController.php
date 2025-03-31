@@ -2309,6 +2309,11 @@ public function updateBannerClickCounts(Request $request){
            'message' => 'Successfully updated click counts',
        ]);
 
+    }else{
+       return response()->json([
+           'response' => 'Failed',
+           'message' => 'No Banner Ads information found.',
+       ]);
     }
 
     
