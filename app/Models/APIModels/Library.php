@@ -116,13 +116,13 @@ class Library extends Model
 
         COALESCE((
                SELECT 
-                   bkmrk.chapter_page_no FROM 
+                   bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
-                    INNER JOIN products as prods ON prods.id = bkmrk.product_id
+                    LEFTs JOIN products as prods ON prods.id = bkmrk.product_id
                          WHERE bkmrk.product_id = prds.id                            
                   LIMIT 1                                
               )
-        ,0) as chapter_page_no,
+        ,0) as chapter_no,
 
           COALESCE(prds.status,'') as status          
           

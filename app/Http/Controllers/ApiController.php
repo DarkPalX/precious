@@ -713,7 +713,6 @@ class ApiController extends Controller {
 
     
     $data['UserID'] = $request->post('UserID');
-                
     $Info=$UserCustomer->getCustomerInformation($data);
 
     if(isset($Info)>0){      
