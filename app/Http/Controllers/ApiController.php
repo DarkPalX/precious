@@ -1121,8 +1121,6 @@ public function checkBookHasBookMark(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    
-
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
 
@@ -1217,7 +1215,7 @@ public function saveBookMarks(Request $request){
     $data['PageNo']=$request->post('ChapterNo');
           
     $retVal=$Book->saveBookMarks($data);
-    
+
      return response()->json([
       'response' => $response,
       'message' => "Sucessfully save book marks.",
@@ -1225,29 +1223,7 @@ public function saveBookMarks(Request $request){
     
 }
 
-public function updateBookMarks(Request $request){
-
-    $Misc = new Misc();
-    $Book = new Book();
-    $Library = new Library();
-   
-   $data['chapter_page_no']=0;
-    $response = "Failed";
-    $responseMessage = "";
-
-    $IsFreeBook=0;
-
-    $data['UserID']=$request->input('UserID');
-    $data['ProductID']=$request->input('ProductID');
-    $data['PageNo']=$request->input('PageNo');
-          
-    $retVal=$Library->updateBookMarks($data);
-
-    return Redirect::back();
-  
-}
-
-  // SET READ SUBCRIBE BOOKS PREMIUM AND FREE NOT INCLUDED====================================================
+// SET READ SUBCRIBE BOOKS PREMIUM AND FREE NOT INCLUDED====================================================
 public function saveReadSubscribedBooks(Request $request){
     
     $Misc = new Misc();
