@@ -106,13 +106,12 @@ class BannerAdController extends Controller
             'Home',
             'Dashboard',
             'Profile',
-            'Library',
             'Subscription',
             'Transactions',
             'Ecredits',
-            'MyBag',
             'ContactUs',
-            'FAQ',
+            'Messages',
+            'Products',
             'Settings'
         ];
 
