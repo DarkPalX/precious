@@ -2294,7 +2294,8 @@ public function updateBannerClickCounts(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['BannerAdsID']=$request->post('BannerAdsID');
+    // $data['BannerAdsID']=$request->post('BannerAdsID');
+     $data['BannerAdsID']=5;
 
     $info=$BannerAds->getBannerAdsInfo($data['BannerAdsID']);
     
