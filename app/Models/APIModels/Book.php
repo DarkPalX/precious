@@ -730,10 +730,8 @@ class Book extends Model
               'chapter_no' => $PageNo,
               'created_at' => $TODAY     
            ]);   
-
        }
-        
-                    
+           
     }else{
 
      $BookMarkID = DB::table('book_marks')
@@ -745,7 +743,6 @@ class Book extends Model
         ]);
 
     }
-    
   }
 
 }
