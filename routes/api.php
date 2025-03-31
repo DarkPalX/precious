@@ -357,10 +357,15 @@ Route::post('/get-home-popup-banner-all',[
    'as'=> 'get-home-popup-banner-all'
 ]);
 
-//BODY SECTION
+//BANNER ADS IN BODY SECTION
 Route::post('/get-banner-ads-list',[
    'uses'=>'App\Http\Controllers\ApiController@getBannerAds',
-   'as'=> 'get-banner-ads-all-list'
+   'as'=> 'get-banner-ads-list'
+]);
+
+Route::post('/update-banner-click-count',[
+   'uses'=>'App\Http\Controllers\ApiController@getBannerAds',
+   'as'=> 'update-banner-click-count'
 ]);
 
 //COUPON =============================================================================

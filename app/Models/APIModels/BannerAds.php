@@ -153,5 +153,39 @@ class BannerAds extends Model
     
   }
 
+   public function getBannerAdsInfo($BannerAdsID){
+
+   $query = DB::table('banner_ads as ban_ads')
+     ->join('banner_ad_pages as  ban_ads_pg', 'ban_ads_pg.banner_ad_id', '=', 'ban_ads.id') 
+    
+       ->selectraw("
+           ban_ads.id as banner_Ads_ID,
+           COALESCE(ban_ads.mobile_file_url,'') as mobile_file_url,
+           COALESCE(ban_ads.url,'') as url,
+           COALESCE(ban_ads_pg.page_id,'') as page,
+
+          COALESCE(ban_ads.click_counts,0) as click_counts
+                        
+        ");    
+              
+       $query->where("ban_ads.id",'=',$BannerAdsID);   
+      
+     $list = $query->first();                           
+     return $list;     
+    
+  }
+
+  public function updateBannerClickCounts($click_counts, $BannerAdsID){
+
+       DB::table('banner_ads')
+          ->whereRaw('id = ?',[$BannerAdsID])
+           ->update([
+              'click_counts' => $click_counts
+          ]);
+
+        return "Success";
+
+  }
+
 
 }
