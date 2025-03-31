@@ -122,7 +122,7 @@ class Library extends Model
                          WHERE bkmrk.product_id = prds.id                            
                   LIMIT 1                                
               )
-        ,0) as chapter_no,
+        ,'') as chapter_no,
 
           COALESCE(prds.status,'') as status          
           

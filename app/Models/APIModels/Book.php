@@ -118,7 +118,7 @@ class Book extends Model
                          WHERE bkmrk.product_id = prds.id                            
                   LIMIT 1                                
               )
-          ,0) as chapter_no,
+          ,'') as chapter_no,
 
           COALESCE(prds.status,'') as status          
           
@@ -284,7 +284,7 @@ class Book extends Model
                          WHERE bkmrk.product_id = prds.id                            
                   LIMIT 1                                
               )
-          ,0) as chapter_no,
+          ,'') as chapter_no,
 
          COALESCE((
                SELECT 
@@ -699,7 +699,7 @@ class Book extends Model
                          WHERE bkmrk.product_id = prds.id                            
                   LIMIT 1                                
               )
-          ,0) as chapter_no,
+          ,'') as chapter_no,
 
          COALESCE((
                SELECT 
