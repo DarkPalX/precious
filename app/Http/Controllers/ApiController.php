@@ -1214,7 +1214,7 @@ public function saveBookMarks(Request $request){
 
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
-    $data['PageNo']=$request->post('PageNo');
+    $data['PageNo']=$request->post('ChapterNo');
           
     $retVal=$Book->saveBookMarks($data);
      return response()->json([
