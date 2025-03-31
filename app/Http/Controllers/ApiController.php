@@ -1208,20 +1208,15 @@ public function saveBookMarks(Request $request){
     
     $Misc = new Misc();
     $Book = new Book();
-    $Library = new Library();
 
     $response = "Failed";
     $responseMessage = "";
-
-    $IsFreeBook=0;
-
-  
 
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
     $data['PageNo']=$request->post('PageNo');
           
-    $retVal=$Library->saveBookMarks($data);
+    $retVal=$Book->saveBookMarks($data);
      return response()->json([
       'response' => $response,
       'message' => "Sucessfully save book marks.",
