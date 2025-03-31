@@ -1217,6 +1217,7 @@ public function saveBookMarks(Request $request){
     $data['PageNo']=$request->post('ChapterNo');
           
     $retVal=$Book->saveBookMarks($data);
+    
      return response()->json([
       'response' => $response,
       'message' => "Sucessfully save book marks.",
