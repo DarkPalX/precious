@@ -97,7 +97,6 @@ class Book extends Model
               )
         ,0) as promo_discount_percent,
 
-
         COALESCE((
                SELECT 
                    (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
@@ -276,6 +275,16 @@ class Book extends Model
                   LIMIT 1                                
               )
         ,0) as promo_discount_price,
+
+        COALESCE((
+               SELECT 
+                   bkmrk.chapter_no FROM 
+                        book_marks as bkmrk                  
+                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
+                         WHERE bkmrk.product_id = prds.id                            
+                  LIMIT 1                                
+              )
+          ,0) as chapter_no,
 
          COALESCE((
                SELECT 
@@ -684,6 +693,16 @@ class Book extends Model
 
          COALESCE((
                SELECT 
+                   bkmrk.chapter_no FROM 
+                        book_marks as bkmrk                  
+                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
+                         WHERE bkmrk.product_id = prds.id                            
+                  LIMIT 1                                
+              )
+          ,0) as chapter_no,
+
+         COALESCE((
+               SELECT 
                   cust_lib.product_id FROM 
                 customer_libraries as cust_lib                                    
                       WHERE cust_lib.product_id = prds.id 
@@ -741,5 +760,20 @@ class Book extends Model
 
     }
   }
+
+  public function getPageChapterBookMark($ProductID,$CustomerID){
+      
+    $ChapterPageNo = 0; 
+    
+    $ChapterPageNo = DB::table('book_marks')          
+        ->whereRaw('customer_id=?',[$CustomerID])    
+        ->whereRaw('product_id=?',[$ProductID])                                          
+        ->value('chapter_no');
+
+    return $ChapterPageNo;
+        
+
+    }
+
 
 }
