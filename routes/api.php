@@ -364,7 +364,7 @@ Route::post('/get-banner-ads-list',[
 ]);
 
 Route::post('/update-banner-click-count',[
-   'uses'=>'App\Http\Controllers\ApiController@getBannerAds',
+   'uses'=>'App\Http\Controllers\ApiController@updateBannerClickCounts',
    'as'=> 'update-banner-click-count'
 ]);
 

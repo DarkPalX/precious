@@ -2287,7 +2287,7 @@ public function getBannerAds(Request $request){
  
 }
 
-public function updaeClickCounts(Request $request){
+public function updateBannerClickCounts(Request $request){
         
     $BannerAds = new BannerAds();
 
