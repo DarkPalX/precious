@@ -40,7 +40,6 @@ class BannerAdController extends Controller
             'Subscription',
             'Transactions',
             'Ecredits',
-            'ContactUs',
             'Messages',
             'Products',
             'Settings'
@@ -109,7 +108,6 @@ class BannerAdController extends Controller
             'Subscription',
             'Transactions',
             'Ecredits',
-            'ContactUs',
             'Messages',
             'Products',
             'Settings'
