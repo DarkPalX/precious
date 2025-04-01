@@ -73,8 +73,7 @@ class Library extends Model
                       product_photos as prod_img                  
                   LEFT JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = lib.product_id
-                      AND prod_img.is_primary = 1    
-                  LIMIT 1                                
+                      AND prod_img.is_primary = 1 LIMIT 1                                
               )
         ,'') as image_path,
 
@@ -82,8 +81,7 @@ class Library extends Model
                SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
                 WHERE rev.product_id = prds.id     
-                AND rev.status = 1 
-             LIMIT 1                                
+                AND rev.status = 1 LIMIT 1                                
               )
         ,0) as rating,
 
@@ -95,8 +93,7 @@ class Library extends Model
                        WHERE promo_prods.product_id = lib.product_id 
                        AND promo.applicable_product_type !='physical'                   
                        AND promo.status = 'ACTIVE'
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_percent,
 
@@ -109,8 +106,7 @@ class Library extends Model
                        WHERE promo_prods.product_id = lib.product_id 
                        AND promo.applicable_product_type !='physical'                   
                        AND promo.status = 'ACTIVE'
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_price,
 
@@ -120,8 +116,7 @@ class Library extends Model
                         book_marks as bkmrk                  
                     LEFT JOIN customer_libraries as lib ON lib.product_id = bkmrk.product_id
                         WHERE bkmrk.product_id = lib.product_id    
-                        AND bkmrk.customer_id = ".$UserID."         
-                  LIMIT 1                                
+                        AND bkmrk.customer_id = ".$UserID." LIMIT 1                                
               )
         ,'') as chapter_no,
 
@@ -210,8 +205,7 @@ class Library extends Model
                       product_photos as prod_img                  
                   LEFT JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = rbooks.product_id
-                      AND prod_img.is_primary = 1    
-                  LIMIT 1                                
+                      AND prod_img.is_primary = 1 LIMIT 1                                
               )
         ,'') as image_path,
 
@@ -219,8 +213,7 @@ class Library extends Model
                SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
                 WHERE rev.product_id = prds.id     
-                AND rev.status = 1 
-             LIMIT 1                                
+                AND rev.status = 1 LIMIT 1                                
               )
         ,0) as rating,
 
@@ -232,11 +225,9 @@ class Library extends Model
                        WHERE promo_prods.product_id = rbooks.product_id  
                        AND promo.applicable_product_type !='physical'
                        AND promo.status = 'ACTIVE'                      
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_percent,
-
 
         COALESCE((
                SELECT 
@@ -246,8 +237,7 @@ class Library extends Model
                        WHERE promo_prods.product_id = rbooks.product_id     
                        AND promo.applicable_product_type !='physical'                   
                        AND promo.status = 'ACTIVE'
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_price,
 
@@ -258,13 +248,11 @@ class Library extends Model
                         book_marks as bkmrk                  
                     INNER JOIN subscribed_books as rbooks ON rbooks.product_id = bkmrk.product_id
                          WHERE bkmrk.product_id = rbooks.product_id 
-                         AND bkmrk.customer_id = ".$UserID."                             
-                  LIMIT 1                                
+                         AND bkmrk.customer_id = ".$UserID." LIMIT 1                                
               )
         ,0) as chapter_page_no,
 
-
-          COALESCE(prds.status,'') as status          
+        COALESCE(prds.status,'') as status          
           
         ");    
 
@@ -406,8 +394,7 @@ class Library extends Model
                       product_photos as prod_img                  
                   LEFT JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = rbooks.product_id
-                      AND prod_img.is_primary = 1    
-                  LIMIT 1                                
+                      AND prod_img.is_primary = 1 LIMIT 1                                
               )
         ,'') as image_path,
 
@@ -415,8 +402,7 @@ class Library extends Model
                SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
                 WHERE rev.product_id = prds.id     
-                AND rev.status = 1 
-             LIMIT 1                                
+                AND rev.status = 1 LIMIT 1                                
               )
         ,0) as rating,
 
@@ -428,11 +414,9 @@ class Library extends Model
                        WHERE promo_prods.product_id = rbooks.product_id  
                        AND promo.applicable_product_type !='physical'
                        AND promo.status = 'ACTIVE'                      
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_percent,
-
 
         COALESCE((
                SELECT 
@@ -442,8 +426,7 @@ class Library extends Model
                        WHERE promo_prods.product_id = rbooks.product_id     
                        AND promo.applicable_product_type !='physical'                   
                        AND promo.status = 'ACTIVE'
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_price,
 

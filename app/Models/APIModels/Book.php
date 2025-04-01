@@ -107,8 +107,7 @@ class Book extends Model
                        WHERE promo_prods.product_id = prds.id 
                        AND promo.applicable_product_type !='physical'                                              
                        AND promo.status = 'ACTIVE'
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_price,
 
@@ -118,8 +117,7 @@ class Book extends Model
                         book_marks as bkmrk                  
                     LEFT JOIN products as prods ON prods.id = bkmrk.product_id
                          WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id=".$UserID."                             
-                  LIMIT 1                                
+                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
               )
           ,'') as chapter_no,
 
@@ -239,8 +237,7 @@ class Book extends Model
                       product_photos as prod_img                  
                   LEFT JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = prds.id     
-                      AND prod_img.is_primary = 1    
-                  LIMIT 1                                
+                      AND prod_img.is_primary = 1 LIMIT 1                                
               )
         ,'') as image_path,
 
@@ -248,8 +245,7 @@ class Book extends Model
                SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
                 WHERE rev.product_id = prds.id     
-                AND rev.status = 1 
-             LIMIT 1                                
+                AND rev.status = 1 LIMIT 1                                
               )
         ,0) as rating,
 
@@ -261,8 +257,7 @@ class Book extends Model
                        WHERE promo_prods.product_id = prds.id  
                        AND promo.applicable_product_type !='physical'
                        AND promo.status = 'ACTIVE'                     
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_percent,
 
@@ -274,8 +269,7 @@ class Book extends Model
                        WHERE promo_prods.product_id = prds.id  
                        AND promo.applicable_product_type !='physical'
                        AND promo.status = 'ACTIVE'                     
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_price,
 
@@ -285,8 +279,7 @@ class Book extends Model
                         book_marks as bkmrk                  
                     LEFT JOIN products as prods ON prods.id = bkmrk.product_id
                          WHERE bkmrk.product_id = prds.id   
-                         AND bkmrk.customer_id=".$UserID."                          
-                  LIMIT 1                                
+                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
               )
           ,'') as chapter_no,
 
@@ -295,8 +288,7 @@ class Book extends Model
                   cust_lib.product_id FROM 
                 customer_libraries as cust_lib                                    
                       WHERE cust_lib.product_id = prds.id 
-                      AND cust_lib.user_id=".$UserID."                      
-                  LIMIT 1                                
+                      AND cust_lib.user_id=".$UserID." LIMIT 1                                
               )
         ,0) as product_library_exist,
 
@@ -506,8 +498,7 @@ class Book extends Model
                       product_photos as prod_img                  
                   LEFT JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = prds.id     
-                      AND prod_img.is_primary = 1    
-                  LIMIT 1                                
+                      AND prod_img.is_primary = 1 LIMIT 1                                
               )
         ,'') as image_path,
 
@@ -515,8 +506,7 @@ class Book extends Model
              SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
                 WHERE rev.product_id = prds.id     
-                AND rev.status = 1 
-             LIMIT 1                                
+                AND rev.status = 1 LIMIT 1                                
               )
         ,0) as rating,
 
@@ -528,8 +518,7 @@ class Book extends Model
                        WHERE promo_prods.product_id = prds.id  
                        AND promo.applicable_product_type !='physical'
                        AND promo.status = 'ACTIVE'                     
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_percent,
 
@@ -541,8 +530,7 @@ class Book extends Model
                        WHERE promo_prods.product_id = prds.id  
                        AND promo.applicable_product_type !='physical'
                        AND promo.status = 'ACTIVE'                    
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_price,
 
@@ -655,8 +643,7 @@ class Book extends Model
                       product_photos as prod_img                  
                   LEFT JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = prod_det_cat.product_id   
-                      AND prod_img.is_primary = 1    
-                  LIMIT 1                                
+                      AND prod_img.is_primary = 1 LIMIT 1                                
               )
         ,'') as image_path,
 
@@ -664,8 +651,7 @@ class Book extends Model
              SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
                 WHERE rev.product_id = prod_det_cat.product_id   
-                AND rev.status = 1 
-             LIMIT 1                                
+                AND rev.status = 1 LIMIT 1                                
               )
         ,0) as rating,
 
@@ -677,8 +663,7 @@ class Book extends Model
                        WHERE promo_prods.product_id = prod_det_cat.product_id  
                        AND promo.applicable_product_type !='physical'
                        AND promo.status = 'ACTIVE'                     
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_percent,
 
@@ -690,8 +675,7 @@ class Book extends Model
                        WHERE promo_prods.product_id = prod_det_cat.product_id  
                        AND promo.applicable_product_type !='physical'
                        AND promo.status = 'ACTIVE'                     
-                       AND promo_prods.deleted_at IS NULL                     
-                  LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_price,
 
@@ -701,8 +685,7 @@ class Book extends Model
                         book_marks as bkmrk                  
                     LEFT JOIN products as prods ON prods.id = bkmrk.product_id
                          WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id=".$UserID."                          
-                  LIMIT 1                                
+                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
               )
           ,'') as chapter_no,
 
@@ -711,8 +694,7 @@ class Book extends Model
                   cust_lib.product_id FROM 
                 customer_libraries as cust_lib                                    
                       WHERE cust_lib.product_id = prds.id 
-                      AND cust_lib.user_id=".$UserID."                      
-                  LIMIT 1                                
+                      AND cust_lib.user_id=".$UserID." LIMIT 1                                
               )
         ,0) as product_library_exist,
 
