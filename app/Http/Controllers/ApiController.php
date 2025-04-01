@@ -1210,11 +1210,35 @@ public function saveBookMarks(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
+    $ChapterPageNo="";
+
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
     $data['PageNo']=$request->post('ChapterNo');
           
-    $retVal=$Book->saveBookMarks($data);
+    $ChapterPageNo=$Book->saveBookMarks($data);
+
+     return response()->json([
+      'response' => "Success",
+      'chapter' => $ChapterPageNo,
+      'message' => "Sucessfully get book marks.",
+    ]);  
+    
+}
+
+//LIBRARY SUBSCRIBED SECTION========================================
+public function saveBookMarks(Request $request){
+    
+    $Misc = new Misc();
+    $Book = new Book();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['UserID']=$request->post('UserID');
+    $data['ProductID']=$request->post('ProductID');
+          
+    $retVal=$Book->getPageChapterBookMark($data);
 
      return response()->json([
       'response' => $response,
@@ -1222,7 +1246,6 @@ public function saveBookMarks(Request $request){
     ]);  
     
 }
-
 // SET READ SUBCRIBE BOOKS PREMIUM AND FREE NOT INCLUDED====================================================
 public function saveReadSubscribedBooks(Request $request){
     
