@@ -1201,16 +1201,16 @@ public function getBookMarks(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $ChapterPageNo="";
+    $ChapterResult="";
 
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
           
-    $ChapterPageNo=$Book->getPageChapterBookMark($data);
+    $ChapterResult=$Book->getPageChapterBookMark($data);
 
      return response()->json([
       'response' => $response,
-      'chapter' => $ChapterPageNo,
+      'chapter' => $ChapterResult,
       'message' => "Sucessfully save book marks.",
     ]);  
     
