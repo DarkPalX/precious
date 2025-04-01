@@ -1646,7 +1646,11 @@ public function getAllBookCategoryList(Request $request){
  
   $data['Status'] = 'All';
   $data['SearchText'] = '';
-  $data['UserID'] = $request->post('UserID');
+
+  $data['UserID']=0;
+   if(isset($data['UserID'])){
+       $data['UserID'] = $request->post('UserID');
+   }
 
   $data["PageNo"] = 0;
   $data["Limit"] = $request->post('Limit');
@@ -1665,7 +1669,11 @@ public function getAllBookCategoryList(Request $request){
  
   $data['Status'] = "All";
   $data['SearchText'] = $request->post('SearchText');
-  $data['UserID'] = $request->post('UserID');
+
+  $data['UserID']=0;
+   if(isset($data['UserID'])){
+       $data['UserID'] = $request->post('UserID');
+   }
 
   $data['Filter_Sort'] = $request->post('Filter_Sort');
   $data['Filter_Genre'] = $request->post('Filter_Genre');
@@ -1764,6 +1772,11 @@ public function getAllBookCategoryList(Request $request){
  
   $data['SearchText'] = '';
   $data['Status'] = 'Free';
+
+   $data['UserID']=0;
+   if(isset($data['UserID'])){
+       $data['UserID'] = $request->post('UserID');
+   }
   
 
   $data["PageNo"] = 0;
@@ -1857,8 +1870,12 @@ public function getAllBookDetailsCatalogueList(Request $request){
   $responseMessage = "";
    
   $data['HeaderID'] = $request->post('HeaderID');
-  $data['UserID'] = $request->post('UserID');
 
+   $data['UserID']=0;
+   if(isset($data['UserID'])){
+       $data['UserID'] = $request->post('UserID');
+   }
+  
   $data['Status'] = 'All';
   $data['SearchText'] = '';
 
