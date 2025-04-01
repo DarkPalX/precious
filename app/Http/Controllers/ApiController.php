@@ -1224,7 +1224,7 @@ public function saveBookMarks(Request $request){
 }
 
 //LIBRARY SUBSCRIBED SECTION========================================
-public function saveBookMarks(Request $request){
+public function getBookMarks(Request $request){
     
     $Misc = new Misc();
     $Book = new Book();
