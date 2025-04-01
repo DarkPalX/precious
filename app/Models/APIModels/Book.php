@@ -761,9 +761,12 @@ class Book extends Model
     }
   }
 
-  public function getPageChapterBookMark($ProductID,$UserID){
+  public function getPageChapterBookMark($data){
       
     $ChapterPageNo = ""; 
+
+    $UserID=$data['UserID';
+    $ProductID=$data['ProductID'];
     
     $ChapterPageNo = DB::table('book_marks')          
         ->whereRaw('customer_id=?',[$UserID])    

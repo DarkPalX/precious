@@ -1210,18 +1210,15 @@ public function saveBookMarks(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $ChapterPageNo="";
-
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
     $data['PageNo']=$request->post('ChapterNo');
           
-    $ChapterPageNo=$Book->saveBookMarks($data);
+    $response=$Book->saveBookMarks($data);
 
      return response()->json([
-      'response' => "Success",
-      'chapter' => $ChapterPageNo,
-      'message' => "Sucessfully get book marks.",
+      'response' => $response
+      'message' => "Sucessfully saved book marks.",
     ]);  
     
 }
@@ -1235,13 +1232,16 @@ public function saveBookMarks(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
+    $ChapterPageNo="";
+
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
           
-    $retVal=$Book->getPageChapterBookMark($data);
+    $ChapterPageNo=$Book->getPageChapterBookMark($data);
 
      return response()->json([
       'response' => $response,
+      'chapter' => $ChapterPageNo,
       'message' => "Sucessfully save book marks.",
     ]);  
     
