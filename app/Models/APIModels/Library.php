@@ -126,8 +126,7 @@ class Library extends Model
 
     $query->where("lib.user_id",'=',$UserID);  
     $query->where("prds.file_url","!=",null);      
-   
-                          
+                  
       if($SearchText != ''){
         $arSearchText = explode(" ",$SearchText);
         if(count($arSearchText) > 0){

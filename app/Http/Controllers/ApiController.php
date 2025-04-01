@@ -1673,7 +1673,6 @@ public function getAllBookCategoryList(Request $request){
        $data['UserID'] = $request->post('UserID');
    }
   
-
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
