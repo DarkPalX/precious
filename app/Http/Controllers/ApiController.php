@@ -2956,53 +2956,53 @@ public function getCompanyPrivacyPolicy(Request $request){
   return response()->json($result); 
   }
 
-  //EPUB VIEWER================================================================
-   public function showViewerEpub(Request $request){
+ //  //EPUB VIEWER================================================================
+ //   public function showViewerEpub(Request $request){
      
-   $Book= new Book();
-   $Library= new Library();
+ //   $Book= new Book();
+ //   $Library= new Library();
    
-   $data['epub_file_exist']=false;
-   $data['chapter_page_no']=0;
+ //   $data['epub_file_exist']=false;
+ //   $data['chapter_page_no']=0;
 
-   $data['product_id'] =  $request->input('doc_id');
-   $data['customer_id'] =  $request->input('user_id');
+ //   $data['product_id'] =  $request->input('doc_id');
+ //   $data['customer_id'] =  $request->input('user_id');
    
-   if($data['product_id']>0){
-       $Epub_file='';
+ //   if($data['product_id']>0){
+ //       $Epub_file='';
 
-       $info=$Book->getBookInfoByID($data['product_id']);
-       $data['chapter_page_no']=$Library->getPageChapterBookMark($data['product_id'],$data['customer_id']);
+ //       $info=$Book->getBookInfoByID($data['product_id']);
+ //       $data['chapter_page_no']=$Library->getPageChapterBookMark($data);
        
-       if(is_null($data['chapter_page_no'])){
-           $data['chapter_page_no']=0;
-       }
+ //       if(is_null($data['chapter_page_no'])){
+ //           $data['chapter_page_no']=0;
+ //       }
 
-       if(isset($info)>0){
+ //       if(isset($info)>0){
 
-           $Epub_file=$info->file_url;                              
+ //           $Epub_file=$info->file_url;                              
             
-            $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
+ //            $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
 
-             if(file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$Epub_file)){
-                $data['epub_file_exist']=true;
-             }else{
-                $data['epub_file_exist']=false;
-             }
+ //             if(file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$Epub_file)){
+ //                $data['epub_file_exist']=true;
+ //             }else{
+ //                $data['epub_file_exist']=false;
+ //             }
                              
-          return View::make('api/epub_viewer')->with($data);    
+ //          return View::make('api/epub_viewer')->with($data);    
 
-       }else{
-           $data['epub_doc']='';
-           return View::make('api/epub_viewer')->with($data);    
-       }
+ //       }else{
+ //           $data['epub_doc']='';
+ //           return View::make('api/epub_viewer')->with($data);    
+ //       }
       
-   }else{
+ //   }else{
 
-       $data['epub_doc']='';
-       return View::make('api/epub_viewer')->with($data);    
-    }  
- }
+ //       $data['epub_doc']='';
+ //       return View::make('api/epub_viewer')->with($data);    
+ //    }  
+ // }
 
 
 }

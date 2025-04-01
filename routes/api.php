@@ -210,10 +210,10 @@ Route::post('get-showhide-setting',[
 ]);
 
 //BOOKMARKS ========================================================================
-Route::post('/check-has-book-mark',[
-   'uses'=>'App\Http\Controllers\ApiController@checkBookHasBookMark',
-   'as'=> 'check-has-book-mark'
-]);
+// Route::post('/check-has-book-mark',[
+//    'uses'=>'App\Http\Controllers\ApiController@checkBookHasBookMark',
+//    'as'=> 'check-has-book-mark'
+// ]);
 
 Route::post('/save-book-marks',[
    'uses'=>'App\Http\Controllers\ApiController@saveBookMarks',
@@ -221,7 +221,7 @@ Route::post('/save-book-marks',[
 ]);
 
 Route::post('/get-book-marks',[
-   'uses'=>'App\Http\Controllers\ApiController@saveBookMarks',
+   'uses'=>'App\Http\Controllers\ApiController@getBookMarks',
    'as'=> 'get-book-marks'
 ]);
 
