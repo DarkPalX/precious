@@ -23,6 +23,8 @@ class Book extends Model
   
   public function getBookList($data){
 
+     $UserID=$data['UserID'];
+
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
     
@@ -281,7 +283,8 @@ class Book extends Model
                    bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
                     LEFT JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id                            
+                         WHERE bkmrk.product_id = prds.id   
+                         AND bkmrk.customer_id=".$UserID."                          
                   LIMIT 1                                
               )
           ,'') as chapter_no,
@@ -696,7 +699,8 @@ class Book extends Model
                    bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
                     LEFT JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id                            
+                         WHERE bkmrk.product_id = prds.id    
+                         AND  bkmrk.customer_id = ".$UserID."                               
                   LIMIT 1                                
               )
           ,'') as chapter_no,

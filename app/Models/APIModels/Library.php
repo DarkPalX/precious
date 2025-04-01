@@ -119,7 +119,8 @@ class Library extends Model
                    bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
                     LEFT JOIN customer_libraries as lib ON lib.product_id = bkmrk.product_id
-                         WHERE bkmrk.product_id = lib.product_id                            
+                         WHERE bkmrk.product_id = lib.product_id    
+                        AND  bkmrk.customer_id = ".$UserID."         
                   LIMIT 1                                
               )
         ,'') as chapter_no,
@@ -131,18 +132,7 @@ class Library extends Model
     $query->where("lib.user_id",'=',$UserID);  
     $query->where("prds.file_url","!=",null);      
    
-      // if($Status!='' && $Status!='All'){
-
-      //   if($Status=='Epub'){
-      //     $query->where("prds.file_url","!=",null);    
-      //   }
-
-      //   if($Status=='Physical'){
-      //     $query->where("prds.file_url","==",null);    
-      //   } 
-
-      // }    
-                                  
+                          
       if($SearchText != ''){
         $arSearchText = explode(" ",$SearchText);
         if(count($arSearchText) > 0){

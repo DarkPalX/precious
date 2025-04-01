@@ -1646,6 +1646,7 @@ public function getAllBookCategoryList(Request $request){
  
   $data['Status'] = 'All';
   $data['SearchText'] = '';
+  $data['UserID'] = $request->post('UserID');
 
   $data["PageNo"] = 0;
   $data["Limit"] = $request->post('Limit');
@@ -1662,7 +1663,6 @@ public function getAllBookCategoryList(Request $request){
   $response = "Failed";
   $responseMessage = "";
  
-
   $data['Status'] = "All";
   $data['SearchText'] = $request->post('SearchText');
   $data['UserID'] = $request->post('UserID');
@@ -1679,81 +1679,81 @@ public function getAllBookCategoryList(Request $request){
   return response()->json($result); 
   }
 
-  public function getFeaturedBookList(Request $request){
+  // public function getFeaturedBookList(Request $request){
 
-  $Books = new Book();
+  // $Books = new Book();
 
-  $response = "Failed";
-  $responseMessage = "";
+  // $response = "Failed";
+  // $responseMessage = "";
  
-  $data['SearchText'] = '';
-  $data['Status'] = 'Featured';
+  // $data['SearchText'] = '';
+  // $data['Status'] = 'Featured';
   
 
-  $data["PageNo"] = 0;
-  $data["Limit"] = 0;
+  // $data["PageNo"] = 0;
+  // $data["Limit"] = 0;
 
-  $result=$Books->getBookList($data);  
+  // $result=$Books->getBookList($data);  
 
-  return response()->json($result); 
-  }
+  // return response()->json($result); 
+  // }
 
-  public function getBestSellerBookList(Request $request){
+  // public function getBestSellerBookList(Request $request){
 
-  $Books = new Book();
+  // $Books = new Book();
 
-  $response = "Failed";
-  $responseMessage = "";
+  // $response = "Failed";
+  // $responseMessage = "";
  
-  $data['SearchText'] = '';
-  $data['Status'] = 'Best Seller';
+  // $data['SearchText'] = '';
+  // $data['Status'] = 'Best Seller';
   
 
-  $data["PageNo"] = 0;
-  $data["Limit"] = 0;
+  // $data["PageNo"] = 0;
+  // $data["Limit"] = 0;
 
-  $result=$Books->getBookList($data);  
+  // $result=$Books->getBookList($data);  
 
-  return response()->json($result); 
-  }
+  // return response()->json($result); 
+  // }
 
-  public function getNewReleaseBookList(Request $request){
+  // public function getNewReleaseBookList(Request $request){
 
-  $Books = new Book();
+  // $Books = new Book();
 
-  $response = "Failed";
-  $responseMessage = "";
+  // $response = "Failed";
+  // $responseMessage = "";
  
-  $data['SearchText'] = '';
-  $data['Status'] = 'New Release';
+  // $data['SearchText'] = '';
+  // $data['Status'] = 'New Release';
   
 
-  $data["PageNo"] = 0;
-  $data["Limit"] = 0;
+  // $data["PageNo"] = 0;
+  // $data["Limit"] = 0;
 
-  $result=$Books->getBookList($data);  
+  // $result=$Books->getBookList($data);  
 
-  return response()->json($result); 
-  }
+  // return response()->json($result); 
+  // }
 
-    public function getPremiumBookList(Request $request){
+  //   public function getPremiumBookList(Request $request){
 
-  $Books = new Book();
+  // $Books = new Book();
 
-  $response = "Failed";
-  $responseMessage = "";
+  // $response = "Failed";
+  // $responseMessage = "";
  
-  $data['SearchText'] = '';
-  $data['Status'] = 'Premium';
+  // $data['SearchText'] = '';
+  // $data['Status'] = 'Premium';
   
 
-  $data["PageNo"] = 0;
-  $data["Limit"] = 0;
+  // $data["PageNo"] = 0;
+  // $data["Limit"] = 0;
 
-  $result=$Books->getBookList($data);  
+  // $result=$Books->getBookList($data);  
 
-  return response()->json($result); 
-  }
+  // return response()->json($result); 
+  // }
 
   public function getFreeBookList(Request $request){
 
@@ -1775,7 +1775,6 @@ public function getAllBookCategoryList(Request $request){
   }
 
 // MOBILE PAYMENT OPTION===============================================================
-
    public function getPaymentOptionList(Request $request){
 
     $PaymentOption = new PaymentOption();
