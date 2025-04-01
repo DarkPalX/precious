@@ -119,7 +119,7 @@ class Library extends Model
                    bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
                     LEFTs JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = lib.id                            
+                         WHERE bkmrk.product_id = lib.product_id                            
                   LIMIT 1                                
               )
         ,'') as chapter_no,
