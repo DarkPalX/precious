@@ -119,8 +119,8 @@ class Library extends Model
                    bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
                     LEFT JOIN customer_libraries as lib ON lib.product_id = bkmrk.product_id
-                         WHERE bkmrk.product_id = lib.product_id    
-                        AND  bkmrk.customer_id = ".$UserID."         
+                        WHERE bkmrk.product_id = lib.product_id    
+                        AND bkmrk.customer_id = ".$UserID."         
                   LIMIT 1                                
               )
         ,'') as chapter_no,
@@ -256,8 +256,9 @@ class Library extends Model
                SELECT 
                    bkmrk.chapter_page_no FROM 
                         book_marks as bkmrk                  
-                    INNER JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id                            
+                    INNER JOIN subscribed_books as rbooks ON rbooks.product_id = bkmrk.product_id
+                         WHERE bkmrk.product_id = rbooks.product_id 
+                         AND bkmrk.customer_id = ".$UserID."                             
                   LIMIT 1                                
               )
         ,0) as chapter_page_no,
