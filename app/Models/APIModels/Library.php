@@ -110,15 +110,15 @@ class Library extends Model
               )
         ,0) as promo_discount_price,
 
-        COALESCE((
+       COALESCE((
                SELECT 
                    bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
-                    LEFT JOIN customer_libraries as lib ON lib.product_id = bkmrk.product_id
-                        WHERE bkmrk.product_id = lib.product_id    
-                        AND bkmrk.customer_id = ".$UserID." LIMIT 1                                
+                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
+                         WHERE bkmrk.product_id = prds.id    
+                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
               )
-        ,'') as chapter_no,
+          ,'') as chapter_no,
 
           COALESCE(prds.status,'') as status          
           
