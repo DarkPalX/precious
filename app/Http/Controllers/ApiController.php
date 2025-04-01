@@ -1665,7 +1665,6 @@ public function getAllBookCategoryList(Request $request){
   $response = "Failed";
   $responseMessage = "";
  
-  $data['SearchText'] = '';
   $data['Status'] = 'Free';
 
    $data['UserID']=0;
