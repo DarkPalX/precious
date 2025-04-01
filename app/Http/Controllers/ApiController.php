@@ -1033,7 +1033,7 @@ public function getCustomerLibraryList(Request $request){
        $data['UserID'] = $request->post('UserID');
    }
     
-     $data['UserID']=52261;
+    $data['UserID']=52261;
     $data["SearchText"] = '';
     $data["Status"] = '';
     $data["PageNo"] = 0;
@@ -1667,6 +1667,7 @@ public function getAllBookCategoryList(Request $request){
   $responseMessage = "";
  
   $data['Status'] = 'Free';
+  $data['SearchText']="";
 
    $data['UserID']=0;
    if(isset($data['UserID'])){
