@@ -769,7 +769,7 @@ class Book extends Model
       
     $ChapterPageNo = ""; 
 
-    $UserID=$data['UserID';
+    $UserID=$data['UserID'];
     $ProductID=$data['ProductID'];
     
     $ChapterPageNo = DB::table('book_marks')          
