@@ -46,14 +46,11 @@ class ApiController extends Controller {
 
     $IsUpdated = false;
 
-    // $request['APP_TYPE']='Android';
-    // $request['APP_VERSION']='1.0.0';
+    if($request->post('APP_TYPE')){
+        if($request->post('APP_TYPE') == config("app.PLATFORM_ANDROID")){
 
-    if($request['APP_TYPE']){
-        if($request['APP_TYPE'] == config("app.PLATFORM_ANDROID")){
-
-          if($request['APP_VERSION']){
-            if($request['APP_VERSION'] == '1.0.0' || $request['APP_VERSION'] == '1.0.0'){
+          if($request->post('APP_VERSION')){
+            if($request->post('APP_VERSION') == '1.0.1' || $request->post('APP_VERSION') == '1.0.1'){
                  $IsUpdated = true;
             }
           }
@@ -61,7 +58,6 @@ class ApiController extends Controller {
             $IsUpdated = true;
         }
     }
-
 
    if($IsUpdated){
       return response()->json([
@@ -1604,7 +1600,7 @@ public function proceedToCheckOut(Request $request){
     $data['VoucherDiscountAmount'] = $request->post('VoucherAmount');
 
     $data['PayPalParamResponse']='';
-     if(isset($request['PayPalParamResponse'])){
+     if(isset($request->post('PayPalParamResponse')){
         $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
      }
 
