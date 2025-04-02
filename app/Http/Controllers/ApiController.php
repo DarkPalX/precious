@@ -42,7 +42,7 @@ use App\Models\APIModels\PaymentOption;
 
 class ApiController extends Controller {
 
-  public function CheckAppUpdate($request){
+  public function CheckAppUpdate(Request $request){
 
     $IsUpdated = false;
 
@@ -66,12 +66,10 @@ class ApiController extends Controller {
         'message' => '',
       ]);
     }else{
-
       return response()->json([
         'response' => 'Failed',
         'message' => config('app.AndroidUpdateMsg'),
       ]);
-
     }
 
   }
