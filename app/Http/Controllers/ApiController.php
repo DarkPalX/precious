@@ -66,11 +66,13 @@ class ApiController extends Controller {
    if($IsUpdated){
       return response()->json([
         'response' => 'Success',
+         'status' => $IsUpdated,
         'message' => 'Andoid version is in latest version.',
       ]);
     }else{
       return response()->json([
         'response' => 'Failed',
+        'status' => $IsUpdated,
         'message' => 'We have released a new update of Precious App. Please download Version 1.0.0 update on Google Play Store.',
       ]);
     }
