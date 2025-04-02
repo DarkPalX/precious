@@ -1563,8 +1563,7 @@ public function proceedToCheckOut(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
-
-       
+    
     $data['Platform'] = $request->post('Platform');   
 
     $data['UserID'] = $request->post('UserID');    
@@ -1577,7 +1576,8 @@ public function proceedToCheckOut(Request $request){
     $data['VoucherDiscountAmount'] = $request->post('VoucherAmount');
 
     $data['PayPalParamResponse']='';
-     if(isset($request->post('PayPalParamResponse'))){
+
+     if(isset($request['PayPalParamResponse'])){
         $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
      }
 
