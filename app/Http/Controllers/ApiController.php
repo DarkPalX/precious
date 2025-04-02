@@ -642,8 +642,6 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-    
-
     $data['UserID'] = $request->post('UserID');
     $data['CityName'] = $request->post('CityName');    
 
@@ -678,8 +676,6 @@ class ApiController extends Controller {
 
     $response = "Failed";
     $responseMessage = "";
-
-    
 
     $data['EmailAddress'] = $request->post('EmailAddress');
     $data['CurrentPassword'] = $request->post('CurrentPassword');
@@ -845,7 +841,6 @@ class ApiController extends Controller {
     $response = "Failed";
     $responseMessage = "";
 
-     
     $data['UserID']=$request->post('UserID');
 
     $data['FirstName'] = $request->post('FirstName'); 
@@ -1077,7 +1072,6 @@ public function getCustomerLibraryList(Request $request){
     
 }
 
-  //LIBRARY=====================================================================
 public function checkCustomerLibraryBookExist(Request $request){
     
     $Misc = new Misc();
@@ -1294,23 +1288,6 @@ public function saveReadSubscribedBooks(Request $request){
     return response()->json($result); 
     
 }
-
-// DOWNLOADED BOOKS====================================================
-// public function getSubscribedDownloadedBooksList(Request $request){
-    
-//     $Misc = new Misc();
-//     $Library = new Library();
-
-//     $response = "Failed";
-//     $responseMessage = "";
-
-    
-//     $data['UserID']=$request->post('UserID');    
-    
-//     $result=$Library->getSubscribedDownloadedBooksList($data);  
-//     return response()->json($result); 
-    
-// }
 
 //DOWNLOADED SECTION======================================================
 public function saveDownloadedSubscribedBooks(Request $request){
@@ -1719,7 +1696,7 @@ public function getAllBookCategoryList(Request $request){
    public function getPaymentOptionList(Request $request){
 
     $PaymentOption = new PaymentOption();
-    $data["Status"] = $request["Status"];
+    $data["Status"] = $request->post("Status");
 
     $RetVal['Response'] = "Success";
     $RetVal['ResponseMessage'] = "";
@@ -1733,7 +1710,7 @@ public function getAllBookCategoryList(Request $request){
 
    public function getPayPalSettings(Request $request){
 
-    $data["Settings"] = $request["Settings"];
+    $data["Settings"] = $request->post("Settings");
     
     $RetVal['Response'] = "Success";
     $RetVal['ResponseMessage'] = "";
@@ -1754,7 +1731,7 @@ public function getAllBookCategoryList(Request $request){
 
    public function getShowHideSettings(Request $request){
 
-    $data["Settings"] = $request["Settings"];
+    $data["Settings"] = $request->post("Settings");
     
     $RetVal['Response'] = "Success";
     $RetVal['ResponseMessage'] = "";
@@ -2276,7 +2253,7 @@ public function proceedToSubscribe(Request $request){
     $data['SubTotal'] = $request->post('SubTotal');
 
      $data['PayPalParamResponse']='';
-     if(isset($request['PayPalParamResponse'])){
+     if(isset($request->post('PayPalParamResponse')){
         $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
      }
      
@@ -2323,8 +2300,7 @@ public function cancelSubscriptionPlan(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
-
-             
+     
     $data['UserID'] = $request->post('UserID');
     $data['FullName'] = $request->post('FullName');
     $data['EmailAddress'] = $request->post('EmailAddress');      
@@ -2482,8 +2458,6 @@ public function checkSubscriberStatus(Request $request){
 
 //COUPON CODE=====================================================================
 public function getAvailableCouponList(Request $request){
-
-   
     
     $Misc = new Misc();
     $Voucher = new Voucher();
@@ -2491,8 +2465,6 @@ public function getAvailableCouponList(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    
-    
     $data["SearchText"] = '';
     $data['UserID']=$request->post('UserID');
 
@@ -2814,14 +2786,6 @@ public function getCompanyAboutUs(Request $request){
 
     $data['Info']=$Company->getCompanyAboutUs($data);
      return View::make('api/about-us')->with($data);   
-
-    // return response()->json([
-    //   'response' => 'Success',
-    //   'data' => $Info,
-    //   'message' => "Successfully get pop company about us.",
-    // ]); 
-
-    
 }
 
 //FAQ COMPANY=======================================================================
@@ -2836,12 +2800,6 @@ public function getCompanyFAQ(Request $request){
 
     $data['Info']=$Company->getCompanyFAQ($data);
     return View::make('api/faqs')->with($data);   
-    
-    // return response()->json([
-    //   'response' => 'Success',
-    //   'data' => $Info,
-    //   'message' => "Successfully get pop company faq.",
-    // ]); 
     
 }
 
@@ -2858,12 +2816,6 @@ public function getCompanyTermsCondition(Request $request){
     $data['Info']=$Company->getCompanyTermsCondition($data);
     return View::make('api/terms-condition')->with($data);   
     
-    // return response()->json([
-    //   'response' => 'Success',
-    //   'data' => $Info,
-    //   'message' => "Successfully get pop company faq.",
-    // ]); 
-    
 }
 
 //PRIVACY POLICY COMPANY=======================================================================
@@ -2879,12 +2831,6 @@ public function getCompanyPrivacyPolicy(Request $request){
     $data['Info']=$Company->getCompanyPrivacyPolicy($data);    
     return View::make('api/privacy-policy')->with($data);   
     
-    // return response()->json([
-    //   'response' => 'Success',
-    //   'data' => $Info,
-    //   'message' => "Successfully get pop company faq.",
-    // ]); 
-    
 }
 
  //CITY LIST==================================================================
@@ -2898,170 +2844,6 @@ public function getCompanyPrivacyPolicy(Request $request){
   $result=$City->getNewCityList();  
   return response()->json($result); 
   }
-
- //  //EPUB VIEWER================================================================
- //   public function showViewerEpub(Request $request){
-     
- //   $Book= new Book();
- //   $Library= new Library();
-   
- //   $data['epub_file_exist']=false;
- //   $data['chapter_page_no']=0;
-
- //   $data['product_id'] =  $request->input('doc_id');
- //   $data['customer_id'] =  $request->input('user_id');
-   
- //   if($data['product_id']>0){
- //       $Epub_file='';
-
- //       $info=$Book->getBookInfoByID($data['product_id']);
- //       $data['chapter_page_no']=$Library->getPageChapterBookMark($data);
-       
- //       if(is_null($data['chapter_page_no'])){
- //           $data['chapter_page_no']=0;
- //       }
-
- //       if(isset($info)>0){
-
- //           $Epub_file=$info->file_url;                              
-            
- //            $data['epub_doc']='https://www.beta.ebooklat.phr.com.ph/public/'.$Epub_file;
-
- //             if(file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$Epub_file)){
- //                $data['epub_file_exist']=true;
- //             }else{
- //                $data['epub_file_exist']=false;
- //             }
-                             
- //          return View::make('api/epub_viewer')->with($data);    
-
- //       }else{
- //           $data['epub_doc']='';
- //           return View::make('api/epub_viewer')->with($data);    
- //       }
-      
- //   }else{
-
- //       $data['epub_doc']='';
- //       return View::make('api/epub_viewer')->with($data);    
- //    }  
- // }
-
-
-
-
- //   // GET CUSTOMER INFORMATION WITH PRIMARY ADDRESS========================================================================
- // public function getCustomerInformationWithPrimaryAddress(Request $request){
-
- //    $Misc = new Misc();
- //    $UserCustomer = new UserCustomer();
-
- //    $response = "Failed";
- //    $responseMessage = "";
-
- //    
- //    $data['CustomerID'] = $request->post('UserID');
-                
- //    $Info=$UserCustomer->getCustomerInformation($data);
-
- //    if(isset($Info)>0){     
-
- //        $Subcriber_Status=0;
- //        $Subcriber_Status=$UserCustomer->getNewsLettrSubsciberStatus($Info->emailaddress);
-
- //        return response()->json([                  
- //         'response' => 'Success',
- //         'data' => $Info,
- //         'subscriber_status' => $Subcriber_Status,
- //         'message' => "Customer with ID ". $data['CustomerID']. " has profile data.",
- //       ]);    
-
- //    }else{
- //        return response()->json([
- //          'response' => 'Failed',
- //          'data' => null,
- //          'subscriber_status' => null,
- //          'message' => "Customer does not exist.",
- //       ]); 
- //    } 
- //  }
-
-  // public function getFeaturedBookList(Request $request){
-
-  // $Books = new Book();
-
-  // $response = "Failed";
-  // $responseMessage = "";
- 
-  // $data['SearchText'] = '';
-  // $data['Status'] = 'Featured';
-  
-
-  // $data["PageNo"] = 0;
-  // $data["Limit"] = 0;
-
-  // $result=$Books->getBookList($data);  
-
-  // return response()->json($result); 
-  // }
-
-  // public function getBestSellerBookList(Request $request){
-
-  // $Books = new Book();
-
-  // $response = "Failed";
-  // $responseMessage = "";
- 
-  // $data['SearchText'] = '';
-  // $data['Status'] = 'Best Seller';
-  
-
-  // $data["PageNo"] = 0;
-  // $data["Limit"] = 0;
-
-  // $result=$Books->getBookList($data);  
-
-  // return response()->json($result); 
-  // }
-
-  // public function getNewReleaseBookList(Request $request){
-
-  // $Books = new Book();
-
-  // $response = "Failed";
-  // $responseMessage = "";
- 
-  // $data['SearchText'] = '';
-  // $data['Status'] = 'New Release';
-  
-
-  // $data["PageNo"] = 0;
-  // $data["Limit"] = 0;
-
-  // $result=$Books->getBookList($data);  
-
-  // return response()->json($result); 
-  // }
-
-  //   public function getPremiumBookList(Request $request){
-
-  // $Books = new Book();
-
-  // $response = "Failed";
-  // $responseMessage = "";
- 
-  // $data['SearchText'] = '';
-  // $data['Status'] = 'Premium';
-  
-
-  // $data["PageNo"] = 0;
-  // $data["Limit"] = 0;
-
-  // $result=$Books->getBookList($data);  
-
-  // return response()->json($result); 
-  // }
-
 
 
 }
