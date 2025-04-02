@@ -2253,7 +2253,7 @@ public function proceedToSubscribe(Request $request){
     $data['SubTotal'] = $request->post('SubTotal');
 
      $data['PayPalParamResponse']='';
-     if(isset($request->post('PayPalParamResponse')){
+     if(isset($request->post('PayPalParamResponse'))){
         $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
      }
      
