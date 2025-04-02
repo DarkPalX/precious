@@ -320,5 +320,15 @@ return [
     'PLATFORM_ANDROID' => 'Android',
     'PLATFORM_IOS' => 'iOS',
 
+    //Android Latest Version
+    'AndroidLatestVersion' => '1.0.0',
+    'AndroidBetaVersion' => '1.0.0',
+    'AndroidUpdateMsg' => 'We have released a new update of Precious App. Please download Version 1.0.0 update on Google Play Store.',
+
+    //iOS Latest Version
+    'iOSLatestVersion' => '1.00',
+    'iOSLatestVersionNew' => '1.00',
+    'iOSUpdateMsg' => 'We have released a new update of Palengke Boy App. Please download update  version 1.0.0 on Apple App Store.',
+
 
 ];

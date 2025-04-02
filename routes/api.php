@@ -447,10 +447,18 @@ Route::get('/get-company-terms-condition',[
    'as'=> 'get-company-terms-condition'
 ]);
 
-//EPUB VIEWER=============================================================================
-Route::get('/show-viewer',[
-   'uses'=>'App\Http\Controllers\ApiController@showViewerEpub',
-   'as'=> 'show-viewer'
+//APP CHECKING APP VERSION INFO
+//========================================================================
+Route::post('/check-app-version-info',[
+   'uses'=>'App\Http\Controllers\ApiController@CheckAppUpdate',
+   'as'=> 'check-app-version-info'
 ]);
+
+
+// //EPUB VIEWER=============================================================================
+// Route::get('/show-viewer',[
+//    'uses'=>'App\Http\Controllers\ApiController@showViewerEpub',
+//    'as'=> 'show-viewer'
+// ]);
 
 

@@ -42,6 +42,41 @@ use App\Models\APIModels\PaymentOption;
 
 class ApiController extends Controller {
 
+  public function CheckAppUpdate($request){
+
+    $IsUpdated = false;
+
+    if($request['APP_TYPE']){
+        if($request['APP_TYPE'] == config('app.PLATFORM_ANDROID')){
+
+          if($request['APP_VERSION']){
+            if($request['APP_VERSION'] == config('app.AndroidLatestVersion') || $request['APP_VERSION'] == config('app.AndroidBetaVersion')){
+                 $IsUpdated = true;
+            }
+          }
+        }else{
+            $IsUpdated = true;
+        }
+    }
+
+
+    if($IsUpdated){
+      return response()->json([
+        'response' => 'Success',
+        'message' => '',
+      ]);
+    }else{
+
+      return response()->json([
+        'response' => 'Failed',
+        'message' => config('app.AndroidUpdateMsg'),
+      ]);
+
+    }
+
+  }
+  
+
 // CUSTOMER=======================================
   public function doLogout(){
      return response()->json($RetVal);
