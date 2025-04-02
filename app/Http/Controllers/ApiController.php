@@ -71,7 +71,7 @@ class ApiController extends Controller {
     }else{
       return response()->json([
         'response' => 'Failed',
-        'message' => config('app.AndroidUpdateMsg'),
+        'message' => 'We have released a new update of Precious App. Please download Version 1.0.0 update on Google Play Store.',
       ]);
     }
 
