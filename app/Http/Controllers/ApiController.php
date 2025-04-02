@@ -1563,7 +1563,7 @@ public function proceedToCheckOut(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
-    
+
     $data['Platform'] = $request->post('Platform');   
 
     $data['UserID'] = $request->post('UserID');    
@@ -2240,7 +2240,6 @@ public function proceedToSubscribe(Request $request){
     $Cart = new Cart();
     $Subscription = new Subscription();
     
-
     $response = "Failed";
     $responseMessage = "";
 
@@ -2253,7 +2252,7 @@ public function proceedToSubscribe(Request $request){
     $data['SubTotal'] = $request->post('SubTotal');
 
      $data['PayPalParamResponse']='';
-     if(isset($request->post('PayPalParamResponse'))){
+     if(isset($request['PayPalParamResponse'])){
         $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
      }
      
