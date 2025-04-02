@@ -60,7 +60,7 @@ class ApiController extends Controller {
     }
 
 
-    if($IsUpdated){
+   if($IsUpdated){
       return response()->json([
         'response' => 'Success',
         'message' => 'Andoid version is in latest version.',
