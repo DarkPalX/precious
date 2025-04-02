@@ -46,8 +46,8 @@ class ApiController extends Controller {
 
     $IsUpdated = false;
 
-    $request['APP_TYPE']='Android';
-    $request['APP_VERSION']='1.0.0';
+    // $request['APP_TYPE']='Android';
+    // $request['APP_VERSION']='1.0.0';
 
     if($request['APP_TYPE']){
         if($request['APP_TYPE'] == 'Android'){
