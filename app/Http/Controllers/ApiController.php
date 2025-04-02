@@ -1577,7 +1577,7 @@ public function proceedToCheckOut(Request $request){
     $data['VoucherDiscountAmount'] = $request->post('VoucherAmount');
 
     $data['PayPalParamResponse']='';
-     if(isset($request->post('PayPalParamResponse'))){
+     if(isset($request->post('ProductID'))){
         $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
      }
 
