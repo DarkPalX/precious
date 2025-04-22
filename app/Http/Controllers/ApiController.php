@@ -1209,7 +1209,7 @@ public function saveBookMarks(Request $request){
 
     $data['UserID']=$request->post('UserID');
     $data['ProductID']=$request->post('ProductID');
-    $data['PageNo']=$request->post('ChapterNo');
+    $data['PageNo']=$request->post('Chapter');
           
     $response=$Book->saveBookMarks($data);
 
