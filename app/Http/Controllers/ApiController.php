@@ -1741,8 +1741,8 @@ public function getAllBookCategoryList(Request $request){
     // $RetVal['ShowSubscriptionModule'] = config("app.ShowSubscriptionModule");
 
     $RetVal['ShowGoogleLogin'] = 'N';
-    $RetVal['ShowContactUsImageAttach'] = 'Y';
-    $RetVal['ShowSubscriptionModule'] = 'Y';
+    $RetVal['ShowContactUsImageAttach'] = 'N';
+    $RetVal['ShowSubscriptionModule'] = 'N';
 
     return response()->json($RetVal);
 
