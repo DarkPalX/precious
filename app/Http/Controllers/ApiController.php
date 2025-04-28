@@ -47,6 +47,8 @@ class ApiController extends Controller {
     $IsUpdated = false;
 
     if($request->post('APP_TYPE')){
+        
+        //ANDROID CHECKING
         if($request->post('APP_TYPE') == config("app.PLATFORM_ANDROID")){
            //CURRENT VERSION IS  1.0.1 NEXT UPLOAD INCREMENT TO 1
           if($request->post('APP_VERSION')){
@@ -57,6 +59,21 @@ class ApiController extends Controller {
         }else{
             $IsUpdated = true;
         }
+
+
+         //IOS CHECKING
+        if($request->post('APP_TYPE') == config("app.PLATFORM_IOS")){
+           //CURRENT VERSION IS  1.00 NEXT UPLOAD INCREMENT TO 1
+          if($request->post('APP_VERSION')){
+            if($request->post('APP_VERSION') == '1.0.1' || $request->post('APP_BETA_VERSION') == '1.0.1'){
+                 $IsUpdated = true;
+            }
+          }
+        }else{
+            $IsUpdated = true;
+        }
+
+
     }
 
    if($IsUpdated){
