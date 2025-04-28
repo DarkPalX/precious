@@ -100,9 +100,29 @@ class ApiController extends Controller {
     }
 
 
-
   }
   
+
+ // SHOW HIDE MOBILE SETTING===============================================================
+
+   public function getShowHideSettings(Request $request){
+
+    $data["Settings"] = $request->post("Settings");
+    
+    $RetVal['Response'] = "Success";
+    $RetVal['ResponseMessage'] = "";
+
+    // $RetVal['ShowGoogleLogin'] = config("app.ShowGoogleLogin");
+    // $RetVal['ShowContactUsImageAttach'] = config("app.ShowContactUsImageAttach");
+    // $RetVal['ShowSubscriptionModule'] = config("app.ShowSubscriptionModule");
+
+    $RetVal['ShowGoogleLogin'] = 'Y';
+    $RetVal['ShowContactUsImageAttach'] = 'Y';
+    $RetVal['ShowSubscriptionModule'] = 'Y';
+
+    return response()->json($RetVal);
+
+  }
 
 // CUSTOMER=======================================
   public function doLogout(){
@@ -1755,26 +1775,6 @@ public function getAllBookCategoryList(Request $request){
 
   }
 
-  // SHOW HIDE MOBILE SETTING===============================================================
-
-   public function getShowHideSettings(Request $request){
-
-    $data["Settings"] = $request->post("Settings");
-    
-    $RetVal['Response'] = "Success";
-    $RetVal['ResponseMessage'] = "";
-
-    // $RetVal['ShowGoogleLogin'] = config("app.ShowGoogleLogin");
-    // $RetVal['ShowContactUsImageAttach'] = config("app.ShowContactUsImageAttach");
-    // $RetVal['ShowSubscriptionModule'] = config("app.ShowSubscriptionModule");
-
-    $RetVal['ShowGoogleLogin'] = 'N';
-    $RetVal['ShowContactUsImageAttach'] = 'N';
-    $RetVal['ShowSubscriptionModule'] = 'N';
-
-    return response()->json($RetVal);
-
-  }
 
 //CATALOGUE BOOK LIST==================================================================
 public function getAllBookHeaderCatalogueList(Request $request){
