@@ -836,7 +836,6 @@ class UserCustomer extends Model
 
   public function SubscribedToNewsLetter($data){
 
-
     $Misc  = New Misc();
     $TODAY = date("Y-m-d H:i:s");
 
