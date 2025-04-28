@@ -56,8 +56,20 @@ class ApiController extends Controller {
                  $IsUpdated = true;
             }
           }
-        }else{
-            $IsUpdated = true;
+
+            if($IsUpdated){
+              return response()->json([
+                'response' => 'Success',
+                 'status' => $IsUpdated,
+                'message' => 'Android version is in latest version.',
+              ]);
+            }else{
+              return response()->json([
+                'response' => 'Failed',
+                'status' => $IsUpdated,
+                'message' => 'We have released a new update of Precious App. Please download Version 1.0.0 update on Google Play Store.',
+              ]);
+            }
         }
 
 
@@ -69,26 +81,25 @@ class ApiController extends Controller {
                  $IsUpdated = true;
             }
           }
-        }else{
-            $IsUpdated = true;
+
+            if($IsUpdated){
+              return response()->json([
+                'response' => 'Success',
+                 'status' => $IsUpdated,
+                'message' => 'iOS version is in latest version.',
+              ]);
+            }else{
+              return response()->json([
+                'response' => 'Failed',
+                'status' => $IsUpdated,
+                'message' => 'We have released a new update of Precious App. Please download Version 1.0.0 update on Apple Store.',
+              ]);
+            }
         }
 
-
     }
 
-   if($IsUpdated){
-      return response()->json([
-        'response' => 'Success',
-         'status' => $IsUpdated,
-        'message' => 'Andoid version is in latest version.',
-      ]);
-    }else{
-      return response()->json([
-        'response' => 'Failed',
-        'status' => $IsUpdated,
-        'message' => 'We have released a new update of Precious App. Please download Version 1.0.0 update on Google Play Store.',
-      ]);
-    }
+
 
   }
   
