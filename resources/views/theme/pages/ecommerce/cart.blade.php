@@ -73,7 +73,29 @@
 	                            </td>
 
 	                            <td class="cart-product-thumbnail">
-	                                <a href="{{ route('product.details',$order->product->slug)}}"><img width="64" height="64" src="{{ asset('storage/products/'.$order->product->photoPrimary) }}" alt="{{ $order->product->name }}"></a>
+                                    <div style="position: relative; width: 64px; height: 64px; display: inline-block;">
+                                        <a href="{{ route('product.details', $order->product->slug) }}">
+                                            <img
+                                                width="64"
+                                                height="64"
+                                                src="{{ asset('storage/products/' . $order->product->photoPrimary) }}"
+                                                alt="{{ $order->product->name }}"
+                                                onerror="this.onerror=null;this.src='{{ asset('images/no-image.jpg') }}';"
+                                                style="object-fit: cover; border-radius: 5px;"
+                                            >
+                                            @if(strtolower($order->product->book_type) == "ebook" || strtolower($order->product->book_type) == "e-book")
+                                                <div class="sale-flash badge bg-info p-2" style="
+                                                    position: absolute;
+                                                    top: 0;
+                                                    left: 0;
+                                                    font-size: 12px;
+                                                    border-bottom-right-radius: 5px;
+                                                ">
+                                                    E-book
+                                                </div>
+                                            @endif
+                                        </a>
+                                    </div>
 	                            </td>
 
 	                            <td class="cart-product-name">
