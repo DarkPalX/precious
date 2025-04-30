@@ -570,12 +570,5 @@
                 $('#top-cart-total').val(subtotal);
                 $('#top-cart-total').html('₱'+subtotal.toFixed(2));
         }
-            // var totalDeduction = promoTotalDiscount + couponTotalDiscount;
-            // var grandtotal = subtotal - totalDeduction;
-            
-            // $('#subtotal').html('₱'+FormatAmount(subtotal,2));
-
-            $('#top-cart-total').val(subtotal);
-            $('#top-cart-total').html('₱'+subtotal.toFixed(2));
     </script>
 @endsection
