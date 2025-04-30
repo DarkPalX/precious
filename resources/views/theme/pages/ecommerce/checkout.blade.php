@@ -35,42 +35,42 @@
 						<tbody>
 							<tr>
 								<td><strong>First Name</strong> <span class="text-danger">*</span></td>
-								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_fname" id="customer_fname" value="{{$customer->firstname}}" required></td>
+								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_fname" id="customer_fname" value="{{$customer->firstname ?? '-' }}"  onclick="select()" required ></td>
 							</tr>
 							<tr>
 								<td><strong>Last Name</strong> <span class="text-danger">*</span></td>
-								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_lname" id="customer_lname" value="{{$customer->lastname}}" required></td>
+								<td class="p-2" width="80%"><input type="text" class="form-control" name="customer_lname" id="customer_lname" value="{{$customer->lastname ?? '-' }}"  onclick="select()" required ></td>
 							</tr>
 							<tr>
 								<td><strong>E-mail Address</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><input type="text" class="form-control" name="customer_email" id="customer_email" value="{{$customer->email}}" required></td>
+								<td class="p-2"><input type="text" class="form-control" name="customer_email" id="customer_email" value="{{$customer->email ?? '-' }}"  onclick="select()" required ></td>
 							</tr>
 							<tr>
 								<td><strong>Contact Number</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><input type="number" class="form-control" name="customer_contact_number" id="customer_contact_number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->mobile}}" required></td>
+								<td class="p-2"><input type="number" class="form-control" name="customer_contact_number" id="customer_contact_number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->mobile ?? '-' }}"  onclick="select()" required ></td>
 							</tr>
 							<tr>
 								<td><strong>Barangay</strong> <span class="text-danger">*</span></td>
 								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_barangay" name="customer_delivery_barangay" value="{{$customer->address_street}}" required>
+									<input type="text" class="form-control" id="customer_delivery_barangay" name="customer_delivery_barangay" value="{{$customer->address_street ?? '-' }}"  onclick="select()" required >
 								</td>
 								{{-- <td class="p-2"><textarea id="customer_delivery_barangay" name="customer_delivery_barangay" id="address_brgy" class="form-control" rows="3" required>{{$customer->address_street}}</textarea></td> --}}
 							</tr>
 							<tr>
 								<td><strong>City</strong> <span class="text-danger">*</span></td>
 								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_city" name="customer_delivery_city" value="{{$customer->address_city}}" required>
+									<input type="text" class="form-control" id="customer_delivery_city" name="customer_delivery_city" value="{{$customer->address_city ?? '-' }}"  onclick="select()" required >
 								</td>
 							</tr>
 							<tr>
 								<td><strong>Province</strong> <span class="text-danger">*</span></td>
 								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_province" name="customer_delivery_province" value="{{$customer->address_province}}" required>
+									<input type="text" class="form-control" id="customer_delivery_province" name="customer_delivery_province" value="{{$customer->address_province ?? '-' }}"  onclick="select()" required >
 								</td>
 							</tr>
 							<tr>
 								<td><strong>Zip Code</strong> <span class="text-danger">*</span></td>
-								<td class="p-2"><input type="number" name="customer_delivery_zip" id="customer_delivery_zip" class="form-control" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->address_zip}}" required></td>
+								<td class="p-2"><input type="number" name="customer_delivery_zip" id="customer_delivery_zip" class="form-control" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->address_zip ?? '8000' }}"  onclick="select()" required ></td>
 							</tr>
 							<tr>
 								<td><strong>Notes</td>
@@ -109,7 +109,7 @@
 								
 							</div>
 							<div class="row justify-content-center mt-5">
-								<span style="font-size: 12px">Note: <span class="text-danger">The cart has an e-book, and will be placed directly on the mobile app. Physical books will be delivered on scheduled time.</span></span>
+								<span style="font-size: 17px">Note: <span class="text-danger">The cart has an e-book, and will be placed directly on the mobile app. Physical books will be delivered on scheduled time.</span></span>
 							</div>
 							@else
 								<div class="row justify-content-center">
@@ -262,7 +262,7 @@
 							<div class="col-sm-4 col-md-4">
 								<label for="payment-option-card" class="w-100">
 									<div class="pricing-box text-center shadow-none border">
-										<input type="radio" name="payment_method" value="ecredit" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card3">
+										<input type="radio" name="payment_method" value="ecredit" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card3" checked>
 										<div class="pricing-price">
 											<h3 class="nott ls0 mb-0">E-Wallet</h3>
 										</div>
@@ -279,7 +279,7 @@
 						<div class="col-sm-4 col-md-4">
 							<label for="payment-option-card4" class="w-100">
 								<div class="pricing-box text-center shadow-none border">
-									<input type="radio" name="payment_method" value="paypal" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card4">
+									<input type="radio" name="payment_method" value="paypal" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card4" @if(auth()->user()->ecredits < $ordersubtotal) checked @endif>
 									<div class="pricing-price">
 										<h3 class="nott ls0 mb-0">Paypal</h3>
 									</div>
@@ -337,7 +337,30 @@
 								@endphp
 								<tr class="cart_item">
 									<td class="cart-product-thumbnail">
-										<a href="javascript:;"><img width="64" height="64" src="{{ asset('storage/products/'.$order->product->photoPrimary) }}" alt="{{$order->product->name}}"></a>
+										
+										<div style="position: relative; width: 64px; height: 64px; display: inline-block;">
+											<a href="{{ route('product.details', $order->product->slug) }}">
+												<img
+													width="64"
+													height="64"
+													src="{{ asset('storage/products/' . $order->product->photoPrimary) }}"
+													alt="{{ $order->product->name }}"
+													onerror="this.onerror=null;this.src='{{ asset('images/no-image.jpg') }}';"
+													style="object-fit: cover; border-radius: 5px;"
+												>
+												@if(strtolower($order->product->book_type) == "ebook" || strtolower($order->product->book_type) == "e-book")
+													<div class="sale-flash badge bg-info p-2" style="
+														position: absolute;
+														top: 0;
+														left: 0;
+														font-size: 12px;
+														border-bottom-right-radius: 5px;
+													">
+														E-book
+													</div>
+												@endif
+											</a>
+										</div>
 									</td>
 
 									<td class="cart-product-name">
