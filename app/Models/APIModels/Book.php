@@ -444,7 +444,7 @@ class Book extends Model
        }
      }
     else{
-        $query->orderBy("prds.created_at","DESC");   
+        $query->orderBy("prds.created_at","ASC");   
     }  
     
 
