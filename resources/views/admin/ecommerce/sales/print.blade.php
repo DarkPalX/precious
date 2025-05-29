@@ -30,7 +30,7 @@
             <div class="col-sm-5 col-lg-3 text-center">
                 <div class="mg-b-20">
                     <img height="100px" width="90%" src="{{ asset('storage/logos/'.Setting::info()->company_logo) }}" alt="">
-                    <p class="mb-0">181-C Sunset Drive, Brookside Hills,<br> Brgy. San Isidro, Cainta, Rizal 1900,<br>Philippines</p>
+                    <p class="mb-0">{{ Setting::info()->company_address }}</p>
                 </div>
             </div>
         </div>
