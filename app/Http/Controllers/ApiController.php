@@ -1097,6 +1097,39 @@ class ApiController extends Controller {
   }
 
   //LIBRARY=====================================================================
+
+public function getAllCustomerLibraryData(Request $request){
+    
+    $Misc = new Misc();
+    $Library = new Library();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['UserID']=0;
+   if(isset($data['UserID'])){
+       $data['UserID'] = $request->post('UserID');
+   }
+  
+    $data["SearchText"] = '';
+    $data["Status"] = '';
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+
+    $FreeBooks=$Books->getBookList($data);  
+    $MyLibraryBooks=$Library->getLibraryList($data);  
+    $SubscribedBooks=$Library->getSubscribedReadBooksList($data);  
+
+     return response()->json([
+         'response' => 'Success',
+         'FreeBooks' => $FreeBooks,
+         'MyLibraryBooks' => $MyLibraryBooks,
+         'SubscribedBooks' => $SubscribedBooks,
+        ]);
+    }
+
+}
+
 public function getCustomerLibraryList(Request $request){
     
     $Misc = new Misc();
