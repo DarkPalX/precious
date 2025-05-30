@@ -1126,7 +1126,6 @@ public function getAllCustomerLibraryData(Request $request){
          'LibraryBooks' => $MyLibraryBooks,
          'SubscribedBooks' => $SubscribedBooks,
         ]);
-    }
 
 }
 
