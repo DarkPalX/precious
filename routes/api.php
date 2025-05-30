@@ -176,6 +176,12 @@ Route::post('/get-city-list',[
 ]);
 
 //LIBRARY =========================================================================
+
+Route::post('/get-all-my-library-data',[
+   'uses'=>'App\Http\Controllers\ApiController@getAllCustomerLibraryData',
+   'as'=> 'get-all-my-library-data'
+]);
+
 Route::post('/get-library-list',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerLibraryList',
    'as'=> 'get-library-list'
