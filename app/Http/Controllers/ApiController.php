@@ -1113,12 +1113,16 @@ public function getAllCustomerLibraryData(Request $request){
    }
   
     $data["SearchText"] = '';
-    $data["Status"] = '';
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
-
+    
+    $data['Status'] = 'Free';
     $FreeBooks=$Books->getBookList($data);  
+
+    $data['Status'] = '';
     $MyLibraryBooks=$Library->getLibraryList($data);  
+
+    $data['Status'] = '';
     $SubscribedBooks=$Library->getSubscribedReadBooksList($data);  
 
      return response()->json([
