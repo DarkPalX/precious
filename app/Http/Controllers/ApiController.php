@@ -1123,7 +1123,7 @@ public function getAllCustomerLibraryData(Request $request){
      return response()->json([
          'response' => 'Success',
          'FreeBooks' => $FreeBooks,
-         'MyLibraryBooks' => $MyLibraryBooks,
+         'LibraryBooks' => $MyLibraryBooks,
          'SubscribedBooks' => $SubscribedBooks,
         ]);
     }
