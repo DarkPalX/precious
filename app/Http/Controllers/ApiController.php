@@ -1101,6 +1101,7 @@ class ApiController extends Controller {
 public function getAllCustomerLibraryData(Request $request){
     
     $Misc = new Misc();
+    $Book = new Book();
     $Library = new Library();
 
     $response = "Failed";
