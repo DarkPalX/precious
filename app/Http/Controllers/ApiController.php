@@ -1745,8 +1745,8 @@ public function getAllBookCategoryList(Request $request){
   $data['Filter_Star'] = $request->post('Filter_Star');
 
   $data["PageNo"] = 0;
-  $data["Limit"] = 0;
-
+  $data["Limit"] = $request->post('Limit');
+  
   $result=$Books->getSearchBookList($data);  
 
   return response()->json($result); 
