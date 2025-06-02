@@ -1338,37 +1338,12 @@ public function saveReadSubscribedBooks(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $IsFreeBook=0;
-    $IsPremium=0;
-
     $data['UserID']=$request->post('UserID');   
     $data['ProductID']=$request->post('ProductID'); 
     $data['IsRead']=$request->post('IsRead');
 
     $info=$Book->getBookInfoByID($data['ProductID']);
 
-    if(isset($info)>0){
-        $IsFreeBook=$info->is_free;
-        $IsPremium=$info->is_premium;
-    }
-
-    if($IsFreeBook==1){
-        $ResponseMessage ='Sorry. Cannot download free books.';
-         return response()->json([
-           'response' => 'Failed',         
-           'message' => $ResponseMessage,
-          ]);    
-    }
-
-    if($IsPremium==1){
-        $ResponseMessage ='Sorry. Cannot download premium books.';
-         return response()->json([
-           'response' => 'Failed',         
-           'message' => $ResponseMessage,
-          ]);    
-    }
-
-    //SAVE ALL NON FREE AND PREMIUM BOOKS   
     $result=$Library->saveReadSubscribedBooks($data);  
     return response()->json($result); 
     
