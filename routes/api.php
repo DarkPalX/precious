@@ -231,16 +231,16 @@ Route::post('/get-book-marks',[
    'as'=> 'get-book-marks'
 ]);
 
-//FAVORITE===========================================================================
-Route::post('/get-favorite-list',[
-   'uses'=>'App\Http\Controllers\ApiController@getCustomerFavoriteList',
-   'as'=> 'get-favorite-list'
-]);
+// //FAVORITE===========================================================================
+// Route::post('/get-favorite-list',[
+//    'uses'=>'App\Http\Controllers\ApiController@getCustomerFavoriteList',
+//    'as'=> 'get-favorite-list'
+// ]);
 
-Route::post('/add-to-favorites',[
-   'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
-   'as'=> 'add-to-favorites'
-]);
+// Route::post('/add-to-favorites',[
+//    'uses'=>'App\Http\Controllers\ApiController@addToFavorites',
+//    'as'=> 'add-to-favorites'
+// ]);
 
 
 //CART===============================================================================
