@@ -253,10 +253,6 @@ class Library extends Model
         COALESCE(prds.status,'') as status          
           
         ");    
-
-            
-    $query->where("prds.is_free",'=',0);        
-    $query->where("prds.is_premium",'=',0);        
     
     $query->where("rbooks.user_id",'=',$UserID);        
     $query->where("rbooks.deleted_at",'=',null);   
@@ -452,9 +448,9 @@ class Library extends Model
     $IsRead=$data['IsRead'];    
 
     $info = DB::table('subscribed_books')          
-        ->whereRaw('user_id=?',[$UserID])    
-        ->whereRaw('product_id=?',[$ProductID])          
-        ->first();
+          ->whereRaw('user_id=?',[$UserID])    
+          ->whereRaw('product_id=?',[$ProductID])          
+          ->first();
 
     if(isset($info)<=0){
 
