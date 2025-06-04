@@ -184,8 +184,6 @@ class Book extends Model
 
   public function getRandomBookList($data){
 
-    $UserID=$data['UserID'];
-
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
     
