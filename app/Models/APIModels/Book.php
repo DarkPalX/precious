@@ -258,9 +258,9 @@ class Book extends Model
             $query->where("prds.created_at","!=",null);    
           }
       }    
-
-      $query->get();
-      $list =$query->random(10);
+      
+      $query->random(10);
+      $list =$query->get();
                   
       return $list;             
            
