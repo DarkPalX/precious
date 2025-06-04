@@ -1792,6 +1792,7 @@ public function getRandomBookList(Request $request)
    if(isset($data['ProductID'])){
        $data['ProductID']=$request->post('ProductID');
    }
+    $data['ProductID']=85;
   
   $result=$Books->setBookAsReported($data);  
 
