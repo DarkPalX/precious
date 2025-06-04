@@ -1682,10 +1682,10 @@ public function getAllBookCategoryList(Request $request){
   $data['Status'] = 'All';
   $data['SearchText'] = '';
 
-  $data['UserID']=0;
+  $data['UserID']=52261;
    if(isset($data['UserID'])){
       // $data['UserID'] = $request->post('UserID');
-    $data['UserID'] = 52261;
+    //$data['UserID'] = 52261;
     
    }
 
