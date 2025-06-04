@@ -1695,6 +1695,29 @@ public function getAllBookCategoryList(Request $request){
   return response()->json($result); 
   }
 
+   public function getRandomBookList(Request $request){
+
+  $Books = new Book();
+
+  $response = "Failed";
+  $responseMessage = "";
+ 
+  $data['Status'] = 'All';
+  $data['SearchText'] = '';
+
+  $data['UserID']=0;
+   if(isset($data['UserID'])){
+       $data['UserID'] = $request->post('UserID');
+   }
+
+  $data["PageNo"] = 0;
+  $data["Limit"] = $request->post('Limit');
+
+  $result=$Books->getRandomBookList($data);  
+
+  return response()->json($result); 
+  }
+
  public function searchBookList(Request $request){
 
   $Books = new Book();

@@ -128,6 +128,11 @@ Route::post('/get-all-book-list',[
    'as'=> 'get-all-book-list'
 ]);
 
+Route::post('/get-random-book-list',[
+   'uses'=>'App\Http\Controllers\ApiController@getRandomBookList',
+   'as'=> 'get-random-book-list'
+]);
+
 Route::post('/search-book-list',[
    'uses'=>'App\Http\Controllers\ApiController@searchBookList',
    'as'=> 'search-book-list'

@@ -435,7 +435,7 @@ class Subscription extends Model
                   ]);   
             }            
 
-            //check current date if same as 3 days before the expiration date
+            //check current date if same as 2 days before the expiration date
             if($ExpiryDateTwoDaysBefore==$CurrentDay){               
               //send message expiration date 1 day before the expiration date  
                 $MessageNotificationID = DB::table('message_notification')
@@ -447,7 +447,7 @@ class Subscription extends Model
             }            
 
 
-            //check current date if same as 3 days before the expiration date
+            //check current date if same as 1 days before the expiration date
             if($ExpiryDateOneDayBefore==$CurrentDay){                              
               //send message expiration date 1 day before the expiration date  
                 $MessageNotificationID = DB::table('message_notification')
