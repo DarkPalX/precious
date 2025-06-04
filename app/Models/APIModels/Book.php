@@ -235,30 +235,6 @@ class Book extends Model
       $query->where("prds.deleted_at","=",null); 
       $query->where("prds.status","=",'PUBLISHED'); 
         
-      if($Status!='' && $Status!='All'){
-
-          if($Status=='Featured'){
-            $query->where("prds.is_featured","=",1);    
-          }  
-
-          if($Status=='Premium'){
-            $query->where("prds.is_premium","=",1);       
-          } 
-
-          if($Status=='Best Seller'){
-             $query->where("prds.is_best_seller","=",1);
-                     
-          } 
-
-          if($Status=='Free'){
-             $query->where("prds.is_free","=",1);    
-          } 
-
-          if($Status=='New Release'){
-            $query->where("prds.created_at","!=",null);    
-          }
-      }    
-      
       $query->random(10);
       $list =$query->get();
                   
