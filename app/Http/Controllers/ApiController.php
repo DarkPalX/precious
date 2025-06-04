@@ -1704,7 +1704,7 @@ public function getAllBookCategoryList(Request $request){
     $data['Status'] = 'All';
     $data['SearchText'] = '';
     $data['UserID'] = 0;
-    if(isset($data['UserID'])){
+    if($request->has('UserID')){
         $data['UserID'] = $request->post('UserID');    
     }
     $data["PageNo"] = 0;
@@ -1712,15 +1712,13 @@ public function getAllBookCategoryList(Request $request){
     
     $result = $Books->getBookList($data);
     
-    if(isset($result['data']) && count($result['data']) > 10) {
-
-        $randomKeys = array_rand($result['data'], 10);
-        $randomBooks = [];
+    if(isset($result['data']) && is_array($result['data']) && count($result['data']) > 0) {
+        $totalRecords = count($result['data']);
+        $recordsToGet = min(10, $totalRecords); 
         
-        foreach($randomKeys as $key) {
-            $randomBooks[] = $result['data'][$key];
+        if($totalRecords > 10) {
+            $result['data'] = collect($result['data'])->random($recordsToGet)->values()->toArray();
         }
-        $result['data'] = $randomBooks;
     }
     
     return response()->json($result); 
