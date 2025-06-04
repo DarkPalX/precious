@@ -1695,33 +1695,26 @@ public function getAllBookCategoryList(Request $request){
   return response()->json($result); 
   }
 
-   public function getRandomBookList(Request $request){
 
+public function getRandomBookList(Request $request)
+ {
     $Books = new Book();
-    $response = "Failed";
-    $responseMessage = "";
- 
+
     $data['Status'] = 'All';
     $data['SearchText'] = '';
-    $data['UserID'] = 52261;
-    // if(isset($data['UserID'])){
-    //     $data['UserID'] = $request->post('UserID');    
-    // }
+    $data['UserID'] = 52261; // Or use: $request->post('UserID', 0)
     $data["PageNo"] = 0;
-    $data["Limit"] = 100;
-    
+    $data["Limit"] = 100; // fetch enough data to randomize
+
     $list = $Books->getBookList($data);
-    
-    if(isset($list['data']) && count($list['data']) > 10) {
-        $randomKeys = array_rand($list['data'], 10);
-        $randomBooks = [];
-        foreach($randomKeys as $key) {
-            $randomBooks[] = $list['data'][$key];
-        }
-        $result = $randomBooks;
-    }
-    
-    return response()->json($result); 
+
+    // If $list contains a 'data' key, access it
+    $bookArray = isset($list['data']) ? $list['data'] : $list;
+
+    // Convert to collection and safely shuffle + take up to 10
+    $randomBooks = collect($bookArray)->shuffle()->take(10)->values();
+
+    return response()->json($randomBooks);
 }
 
  public function searchBookList(Request $request){
