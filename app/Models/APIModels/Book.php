@@ -361,7 +361,7 @@ class Book extends Model
                SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
                 WHERE rev.product_id = prds.id     
-                AND rev.status = 1 LIMIT 1                                
+                AND rev.status = 1                              
               )
         ,0) as rating,
 
