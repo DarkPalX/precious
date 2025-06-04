@@ -314,12 +314,12 @@ class Book extends Model
           }
       }    
                      
-      $query->inRandomOrder();
-      $query->limit(10);
-
+      $query->orderByRaw('RANDOM()')
+      $query->limit(10)
+   
       $list = $query->get();
                   
-     return $list;             
+      return $list;             
            
   }
 
