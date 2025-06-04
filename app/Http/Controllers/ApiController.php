@@ -1710,18 +1710,18 @@ public function getAllBookCategoryList(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 100;
     
-    $result = $Books->getBookList($data);
+    $list = $Books->getBookList($data);
     
-    if(isset($result['data']) && count($result['data']) > 10) {
-        $randomKeys = array_rand($result['data'], 10);
+    if(isset($list['data']) && count($list['data']) > 10) {
+        $randomKeys = array_rand($list['data'], 10);
         $randomBooks = [];
         foreach($randomKeys as $key) {
-            $randomBooks[] = $result['data'][$key];
+            $randomBooks[] = $list['data'][$key];
         }
-        $random['data'] = $randomBooks;
+        $result = $randomBooks;
     }
     
-    return response()->json($random); 
+    return response()->json($result); 
 }
 
  public function searchBookList(Request $request){
