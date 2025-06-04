@@ -1703,16 +1703,15 @@ public function getAllBookCategoryList(Request $request){
  
     $data['Status'] = 'All';
     $data['SearchText'] = '';
-    $data['UserID'] = 0;
-    if(isset($data['UserID'])){
-        $data['UserID'] = $request->post('UserID');    
-    }
+    $data['UserID'] = 52261;
+    // if(isset($data['UserID'])){
+    //     $data['UserID'] = $request->post('UserID');    
+    // }
     $data["PageNo"] = 0;
-    $data["Limit"] = $request->post('Limit');
+    $data["Limit"] = 20;
     
     $result = $Books->getBookList($data);
     
-    // Get 10 random records from the result
     if(isset($result['data']) && count($result['data']) > 10) {
         $randomKeys = array_rand($result['data'], 10);
         $randomBooks = [];
