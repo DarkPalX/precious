@@ -1768,12 +1768,15 @@ public function getRandomBookList(Request $request)
   $data["PageNo"] = 0;
   $data["Limit"] = 0;
 
-  $result=$Books->getBookList($data);  
+  $response=$Books->getBookList($data);  
 
-  return response()->json($result); 
+   return response()->json([                  
+         'response' => $response,
+         'message' => "Book has successfully reporeted.",
+       ]);   
   }
 
-    public function setBookAsReported(Request $request){
+ public function setBookAsReported(Request $request){
 
   $Books = new Book();
 
