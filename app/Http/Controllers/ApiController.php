@@ -1705,18 +1705,19 @@ public function getAllBookCategoryList(Request $request){
   $data['Status'] = 'All';
   $data['SearchText'] = '';
 
-  $data['UserID']=52261;
+  $data['UserID']=0;
    if(isset($data['UserID'])){
       $data['UserID'] = $request->post('UserID');    
    }
-
   $data["PageNo"] = 0;
-  //$data["Limit"] = $request->post('Limit');
-  $data["Limit"] =10;
+  $data["Limit"] = $request->post('Limit');
 
-  $result=$Books->getRandomBookList($data);  
+
+  $list=$Books->getBookList($data);  
+  $result = collect($list)->shuffle()->take(10)->values();
 
   return response()->json($result); 
+
   }
 
  public function searchBookList(Request $request){
