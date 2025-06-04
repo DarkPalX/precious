@@ -227,6 +227,61 @@ class Book extends Model
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
 
+          COALESCE((
+               SELECT 
+                  prod_img.path FROM 
+                      product_photos as prod_img                  
+                  LEFT JOIN products as prods ON prods.id = prod_img.product_id
+                      WHERE prod_img.product_id = prds.id     
+                      AND prod_img.is_primary = 1    
+                  LIMIT 1                                
+              )
+        ,'') as image_path,
+
+        COALESCE((
+              SELECT ROUND(avg(rating))
+                  FROM product_reviews as rev
+                WHERE rev.product_id = prds.id     
+                AND rev.status = 1 
+             LIMIT 1                                
+              )
+        ,0) as rating,
+
+        COALESCE((
+               SELECT 
+                  promo.discount FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prds.id  
+                       AND promo.applicable_product_type !='physical'
+                       AND promo.status = 'ACTIVE'                     
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
+              )
+        ,0) as promo_discount_percent,
+
+        COALESCE((
+               SELECT 
+                   (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
+                        promos as promo                  
+                  LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = prds.id 
+                       AND promo.applicable_product_type !='physical'                                              
+                       AND promo.status = 'ACTIVE'
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
+              )
+        ,0) as promo_discount_price,
+
+         COALESCE((
+               SELECT 
+                   bkmrk.chapter_no FROM 
+                        book_marks as bkmrk                  
+                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
+                         WHERE bkmrk.product_id = prds.id    
+                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
+              )
+          ,'') as chapter_no,
+
           COALESCE(prds.status,'') as status          
           
         ");    
@@ -236,7 +291,7 @@ class Book extends Model
       $query->where("prds.status","=",'PUBLISHED'); 
         
      $query->orderByRaw('RAND()');
-     $query->take(10);
+     $query->take($Limit);
      $list=$query->get();
                   
       return $list;             
