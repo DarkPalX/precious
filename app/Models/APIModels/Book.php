@@ -268,18 +268,8 @@ class Book extends Model
                        AND promo_prods.deleted_at IS NULL                                
               )
         ,0) as promo_discount_price,
-
-         COALESCE((
-               SELECT 
-                   bkmrk.chapter_no FROM 
-                        book_marks as bkmrk                  
-                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id=".$UserID."                           
-              )
-          ,'') as chapter_no,
-
-          COALESCE(prds.status,'') as status          
+        
+        COALESCE(prds.status,'') as status          
           
         ");    
 
