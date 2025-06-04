@@ -313,8 +313,7 @@ class Book extends Model
             $query->where("prds.created_at","!=",null);    
           }
       }    
-                   
-      $query->orderBy("prds.created_at","DESC");    
+                     
       $query->inRandomOrder();
       $query->limit($Limit);
 
