@@ -315,7 +315,7 @@ class Book extends Model
       }    
                      
       $query->inRandomOrder();
-      $query->limit($Limit);
+      $query->limit(10);
 
       $list = $query->get();
                   
