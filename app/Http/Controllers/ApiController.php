@@ -1712,7 +1712,6 @@ public function getAllBookCategoryList(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = $request->post('Limit');
 
-
   $list=$Books->getBookList($data);  
   $result = collect($list)->shuffle()->take(10)->values();
 
