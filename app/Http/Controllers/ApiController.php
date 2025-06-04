@@ -1705,7 +1705,8 @@ public function getAllBookCategoryList(Request $request){
   $data['Status'] = 'All';
   $data['SearchText'] = '';
   $data["PageNo"] = 0;
-  $data["Limit"] = $request->post('Limit');
+  //$data["Limit"] = $request->post('Limit');
+  $data["Limit"] =10;
 
   $result=$Books->getRandomBookList($data);  
 
