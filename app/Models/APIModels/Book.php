@@ -815,7 +815,7 @@ class Book extends Model
 
   }
 
-  public function setBookAsRepoted($data){
+  public function setBookAsReported($data){
 
     $UserID=$data['UserID'];    
     $ProductID=$data['ProductID'];   

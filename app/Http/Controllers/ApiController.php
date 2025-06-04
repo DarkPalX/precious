@@ -1789,7 +1789,7 @@ public function getRandomBookList(Request $request)
    }
 
    $data['ProductID']=0;
-   if(isset($data['UserID'])){
+   if(isset($data['ProductID'])){
        $data['ProductID']=$request->post('ProductID');
    }
   
