@@ -821,7 +821,7 @@ class Book extends Model
     $ProductID=$data['ProductID'];   
 
      DB::table('products')
-        ->where('product_id',$ProductID)
+        ->where('id',$ProductID)
         ->update([                                                       
           'is_reported' => 1,
        ]);
