@@ -227,27 +227,6 @@ class Book extends Model
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
 
-          COALESCE((
-               SELECT 
-                  prod_img.path FROM 
-                      product_photos as prod_img                  
-                  LEFT JOIN products as prods ON prods.id = prod_img.product_id
-                      WHERE prod_img.product_id = prds.id     
-                      AND prod_img.is_primary = 1    
-                  LIMIT 1                                
-              )
-        ,'') as image_path,
-
-        COALESCE((
-              SELECT ROUND(avg(rating))
-                  FROM product_reviews as rev
-                WHERE rev.product_id = prds.id     
-                AND rev.status = 1 
-             LIMIT 1                                
-              )
-        ,0) as rating,
-
-
           COALESCE(prds.status,'') as status          
           
         ");    
