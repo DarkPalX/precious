@@ -1684,11 +1684,14 @@ public function getAllBookCategoryList(Request $request){
 
   $data['UserID']=0;
    if(isset($data['UserID'])){
-       $data['UserID'] = $request->post('UserID');
+      // $data['UserID'] = $request->post('UserID');
+    $data['UserID'] = 52261;
+    
    }
 
   $data["PageNo"] = 0;
-  $data["Limit"] = $request->post('Limit');
+  //$data["Limit"] = $request->post('Limit');
+   $data["Limit"] =10;
 
   $result=$Books->getBookList($data);  
 
