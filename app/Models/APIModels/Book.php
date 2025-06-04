@@ -815,6 +815,21 @@ class Book extends Model
 
   }
 
+  public function setBookAsRepoted($data){
+
+    $UserID=$data['UserID'];    
+    $ProductID=$data['ProductID'];   
+
+     DB::table('products')
+        ->where('product_id',$ProductID)
+        ->update([                                                       
+          'is_reported' => 1,
+       ]);
+
+       return 'Success';   
+           
+  }
+
    public function saveBookMarks($data){
 
     $TODAY = date("Y-m-d H:i:s");

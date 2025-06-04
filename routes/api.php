@@ -138,29 +138,14 @@ Route::post('/search-book-list',[
    'as'=> 'search-book-list'
 ]);
 
-Route::post('/get-featured-list',[
-   'uses'=>'App\Http\Controllers\ApiController@getFeaturedBookList',
-   'as'=> 'get-featured-list'
-]);
-
-Route::post('/get-best-seller-list',[
-   'uses'=>'App\Http\Controllers\ApiController@getBestSellerBookList',
-   'as'=> 'get-best-seller-list'
-]);
-
-Route::post('/get-new-release-list',[
-   'uses'=>'App\Http\Controllers\ApiController@getNewReleaseBookList',
-   'as'=> 'get-new-release-list'
-]);
-
 Route::post('/get-free-book-list',[
    'uses'=>'App\Http\Controllers\ApiController@getFreeBookList',
    'as'=> 'get-free-book-list'
 ]);
 
-Route::post('/get-premium-list',[
-   'uses'=>'App\Http\Controllers\ApiController@getPremiumBookList',
-   'as'=> 'get-premium-list'
+Route::post('/set-book-reported',[
+   'uses'=>'App\Http\Controllers\ApiController@setBookAsReported',
+   'as'=> 'set-book-reported'
 ]);
 
 //CATALOGUE=========================================================================

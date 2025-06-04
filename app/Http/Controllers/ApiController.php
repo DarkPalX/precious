@@ -1750,7 +1750,6 @@ public function getRandomBookList(Request $request)
 
   }
 
-  
   public function getFreeBookList(Request $request){
 
   $Books = new Book();
@@ -1770,6 +1769,28 @@ public function getRandomBookList(Request $request)
   $data["Limit"] = 0;
 
   $result=$Books->getBookList($data);  
+
+  return response()->json($result); 
+  }
+
+    public function setBookAsReported(Request $request){
+
+  $Books = new Book();
+
+  $response = "Failed";
+  $responseMessage = "";
+ 
+   $data['UserID']=0;
+   if(isset($data['UserID'])){
+       $data['UserID'] = $request->post('UserID');
+   }
+
+   $data['ProductID']=0;
+   if(isset($data['UserID'])){
+       $data['ProductID']=$request->post('ProductID');
+   }
+  
+  $result=$Books->setBookAsReported($data);  
 
   return response()->json($result); 
   }
@@ -2819,7 +2840,6 @@ public function validateCouponCode(Request $request){
   $responseMessage = "";
  
   $data['MessageID'] = $request->post('MessageID');
-
   $data['Status'] = '';
   $data['SearchText'] = '';
 

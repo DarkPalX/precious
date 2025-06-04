@@ -55,7 +55,7 @@ class Messages extends Model
       $query->offset(($PageNo-1) * $Limit);
     }
    
-   $query->orderBy("mssg_notif.is_read","ASC");    
+    $query->orderBy("mssg_notif.is_read","ASC");    
     $query->orderBy("mssg_notif.created_at","DESC");    
     $list = $query->get();
                              
@@ -65,7 +65,7 @@ class Messages extends Model
 
   public function openSetReadMessageNotification($data){
 
-    $MessageID=$data['MessageID'];
+      $MessageID=$data['MessageID'];
 
        DB::table('message_notification')
           ->whereRaw('id = ?',[$MessageID])
