@@ -1682,16 +1682,13 @@ public function getAllBookCategoryList(Request $request){
   $data['Status'] = 'All';
   $data['SearchText'] = '';
 
-  $data['UserID']=52261;
+  $data['UserID']=0;
    if(isset($data['UserID'])){
-      // $data['UserID'] = $request->post('UserID');
-    //$data['UserID'] = 52261;
-    
+      $data['UserID'] = $request->post('UserID');    
    }
-
   $data["PageNo"] = 0;
-  //$data["Limit"] = $request->post('Limit');
-   $data["Limit"] =10;
+  $data["Limit"] = $request->post('Limit');
+
 
   $result=$Books->getBookList($data);  
 
@@ -1707,6 +1704,12 @@ public function getAllBookCategoryList(Request $request){
  
   $data['Status'] = 'All';
   $data['SearchText'] = '';
+
+  $data['UserID']=52261;
+   if(isset($data['UserID'])){
+      $data['UserID'] = $request->post('UserID');    
+   }
+
   $data["PageNo"] = 0;
   //$data["Limit"] = $request->post('Limit');
   $data["Limit"] =10;
