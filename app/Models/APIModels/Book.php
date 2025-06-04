@@ -235,8 +235,9 @@ class Book extends Model
       $query->where("prds.deleted_at","=",null); 
       $query->where("prds.status","=",'PUBLISHED'); 
         
-      $query->random(10);
-      $list =$query->get();
+     $query->orderByRaw('RAND()');
+     $query->take(10);
+     $list=$query->get();
                   
       return $list;             
            
