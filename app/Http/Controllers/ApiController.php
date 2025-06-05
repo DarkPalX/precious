@@ -1172,15 +1172,15 @@ public function getCustomerProductAPIInfoData(Request $request){
     $checkIfExiistLibrarySubscribeBook=false;
     $AllowToPost=false;
 
-    $data['UserID']=0;
-   if(isset($data['UserID'])){
-       $data['UserID'] = $request->post('UserID');
-   }
+    $data['UserID']=52261;
+   // if(isset($data['UserID'])){
+   //     $data['UserID'] = $request->post('UserID');
+   // }
 
-    $data['ProductID']=0;
-   if(isset($data['ProductID'])){
-       $data['ProductID'] = $request->post('ProductID');
-   }
+    $data['ProductID']=95;
+   // if(isset($data['ProductID'])){
+   //     $data['ProductID'] = $request->post('ProductID');
+   // }
   
    $data['Status'] = 'All';
    $data['SearchText'] = '';
@@ -1206,7 +1206,7 @@ public function getCustomerProductAPIInfoData(Request $request){
          'OtherBooks' => $OtherBooks,
          'BookReview' => $BookReview,
          'AllowToPost' => $AllowToPost,
-      ]);
+    ]);
 
 }
 
