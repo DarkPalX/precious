@@ -1098,7 +1098,7 @@ class ApiController extends Controller {
 
   //LIBRARY=====================================================================
 
-public function getAllCustomerLibraryData(Request $request){
+public function getAllCustomerLibraryAPIData(Request $request){
     
     $Misc = new Misc();
     $Books= new Book();
@@ -1155,6 +1155,59 @@ public function getCustomerLibraryList(Request $request){
     $result=$Library->getLibraryList($data);  
     return response()->json($result); 
     
+}
+
+
+public function getCustomerProductAPIInfoData(Request $request){
+    
+    $Misc = new Misc();
+    $Books= new Book();
+    $Review= new Review();
+    $Library = new Library();
+
+    $response = "Failed";
+    $responseMessage = "";
+    
+    $checkIfExistLibraryBook=false;
+    $checkIfExiistLibrarySubscribeBook=false;
+    $AllowToPost=false;
+
+    $data['UserID']=0;
+   if(isset($data['UserID'])){
+       $data['UserID'] = $request->post('UserID');
+   }
+
+    $data['ProductID']=0;
+   if(isset($data['ProductID'])){
+       $data['ProductID'] = $request->post('ProductID');
+   }
+  
+   $data['Status'] = 'All';
+   $data['SearchText'] = '';
+   $data["PageNo"] = 0;
+   $data["Limit"] = $request->post('Limit');
+   $OtherBooks=$Books->getBookList($data);  
+
+    $data["SearchText"] = '';
+    $data["Status"] = '';
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+    $BookReview=$Review->getReviewList($data);  
+
+    $checkIfExistLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID']);
+    $checkIfExiistLibrarySubscribeBook=$Library->checkProductsIfExistInSubscribeLibrary($data['ProductID'],$data['UserID']);
+
+    if($checkLibraryBook || $checkLibrarySubscribeBook){
+       $AllowToPost=true;
+    }
+
+     return response()->json([
+         'response' => 'Success',
+         'OtherBooks' => $OtherBooks,
+         'BookReview' => $BookReview,
+         'AllowToPost' => $AllowToPost,
+      ]);
+
 }
 
 public function checkCustomerLibraryBookExist(Request $request){
@@ -1678,17 +1731,16 @@ public function getAllBookCategoryList(Request $request){
 
   $response = "Failed";
   $responseMessage = "";
- 
-  $data['Status'] = 'All';
-  $data['SearchText'] = '';
 
   $data['UserID']=0;
    if(isset($data['UserID'])){
       $data['UserID'] = $request->post('UserID');    
    }
+
+  $data['Status'] = 'All';
+  $data['SearchText'] = '';
   $data["PageNo"] = 0;
   $data["Limit"] = $request->post('Limit');
-
 
   $result=$Books->getBookList($data);  
 
@@ -1723,7 +1775,7 @@ public function getAllBookCategoryList(Request $request){
   return response()->json($result); 
 
   }
-  
+
 public function getRandomBookList(Request $request)
  {
 
