@@ -1690,7 +1690,8 @@ public function getAllBookCategoryList(Request $request){
   $data["Limit"] = $request->post('Limit');
 
 
-  $result=$Books->getBookList($data);  
+  // $result=$Books->getBookList($data);  
+   $result=$Books->getSearchBookList($data);  
 
   return response()->json($result); 
   }
