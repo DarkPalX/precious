@@ -168,13 +168,18 @@ Route::post('/get-city-list',[
 //LIBRARY =========================================================================
 
 Route::post('/get-all-my-library-data',[
-   'uses'=>'App\Http\Controllers\ApiController@getAllCustomerLibraryData',
+   'uses'=>'App\Http\Controllers\ApiController@getAllCustomerLibraryAPIData',
    'as'=> 'get-all-my-library-data'
 ]);
 
 Route::post('/get-library-list',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerLibraryList',
    'as'=> 'get-library-list'
+]);
+
+Route::post('/get-all-product-info-data',[
+   'uses'=>'App\Http\Controllers\ApiController@getCustomerProductAPIInfoData',
+   'as'=> 'get-all-product-info-data'
 ]);
 
 Route::post('/check-library-book',[
