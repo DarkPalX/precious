@@ -1186,7 +1186,12 @@ public function getCustomerProductAPIInfoData(Request $request){
    $data['SearchText'] = '';
    $data["PageNo"] = 0;
    $data["Limit"] = $request->post('Limit');
-   $OtherBooks=$Books->getBookList($data);  
+   // $OtherBooks=$Books->getBookList($data);  
+    $data['Filter_Sort']='';
+    $data['Filter_Genre']='';
+    $data['Filter_Star']='';
+
+   $OtherBooks=$Books->getSearchBookList($data);  
 
     $data["SearchText"] = '';
     $data["Status"] = '';
