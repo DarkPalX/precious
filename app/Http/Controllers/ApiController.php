@@ -1695,33 +1695,6 @@ public function getAllBookCategoryList(Request $request){
   return response()->json($result); 
   }
 
-
-public function getRandomBookList(Request $request)
- {
-
-   $Books = new Book();
-
-  $response = "Failed";
-  $responseMessage = "";
- 
-  $data['Status'] = 'All';
-  $data['SearchText'] = '';
-
-  $data['UserID']=0;
-   if(isset($data['UserID'])){
-      $data['UserID'] = $request->post('UserID');    
-   }
-  $data["PageNo"] = 0;
-  $data["Limit"] = $request->post('Limit');
-
-    $list = $Books->getBookList($data);
-
-    $bookArray = isset($list['data']) ? $list['data'] : $list;
-    $randomBooks = collect($bookArray)->shuffle()->take(10)->values();
-
-    return response()->json($randomBooks);
-}
-
  public function searchBookList(Request $request){
 
   $Books = new Book();
@@ -1749,6 +1722,34 @@ public function getRandomBookList(Request $request)
   return response()->json($result); 
 
   }
+
+public function getRandomBookList(Request $request)
+ {
+
+   $Books = new Book();
+
+  $response = "Failed";
+  $responseMessage = "";
+ 
+  $data['Status'] = 'All';
+  $data['SearchText'] = '';
+
+  $data['UserID']=0;
+   if(isset($data['UserID'])){
+      $data['UserID'] = $request->post('UserID');    
+   }
+  $data["PageNo"] = 0;
+  $data["Limit"] = $request->post('Limit');
+
+    $list = $Books->getBookList($data);
+
+    $bookArray = isset($list['data']) ? $list['data'] : $list;
+    $randomBooks = collect($bookArray)->shuffle()->take(10)->values();
+
+    return response()->json($randomBooks);
+}
+
+
 
   public function getFreeBookList(Request $request){
 
