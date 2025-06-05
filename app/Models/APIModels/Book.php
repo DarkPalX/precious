@@ -134,9 +134,9 @@ class Book extends Model
           
         ");    
 
-      $query->where("prds.file_url","!=",null);    
+     $query->where("prds.file_url","!=",null); 
+      $query->where("prds.status","=",'PUBLISHED');    
       $query->where("prds.deleted_at","=",null); 
-      $query->where("prds.status","=",'PUBLISHED'); 
         
       if($Status!='' && $Status!='All'){
 
@@ -146,22 +146,22 @@ class Book extends Model
 
           if($Status=='Premium'){
             $query->where("prds.is_premium","=",1);    
-            // $query->where("prds.is_free","=",0);        
+            $query->where("prds.is_free","=",0);        
           } 
 
           if($Status=='Best Seller'){
-             $query->where("prds.is_best_seller","=",1);
-             // $query->where("prds.is_free","=",0);        
+            $query->where("prds.is_best_seller","=",1);
+            $query->where("prds.is_free","=",0);        
           } 
 
           if($Status=='Free'){
-             $query->where("prds.is_free","=",1);    
+            $query->where("prds.is_free","=",1);    
           } 
 
           if($Status=='New Release'){
             $query->where("prds.created_at","!=",null);    
           }
-      }    
+      }     
                                      
       if($SearchText != ''){
         $arSearchText = explode(" ",$SearchText);
@@ -282,9 +282,9 @@ class Book extends Model
           
         ");    
 
-      $query->where("prds.file_url","!=",null);    
+      $query->where("prds.file_url","!=",null); 
+      $query->where("prds.status","=",'PUBLISHED');    
       $query->where("prds.deleted_at","=",null); 
-      $query->where("prds.status","=",'PUBLISHED'); 
         
      $query->orderByRaw('RAND()');
      $query->take($Limit);
@@ -413,7 +413,6 @@ class Book extends Model
       $query->where("prds.status","=",'PUBLISHED');    
       $query->where("prds.deleted_at","=",null); 
         
-
       if($Status!='' && $Status!='All'){
 
           if($Status=='Featured'){
@@ -438,7 +437,6 @@ class Book extends Model
             $query->where("prds.created_at","!=",null);    
           }
       }    
-       
        
       //Filter By Star Rating
       if($Filter_Star!=''){
