@@ -121,7 +121,16 @@ class Book extends Model
               )
           ,'') as chapter_no,
 
-          COALESCE(prds.status,'') as status          
+        COALESCE((
+               SELECT 
+                  cust_lib.product_id FROM 
+                customer_libraries as cust_lib                                    
+                      WHERE cust_lib.product_id = prds.id 
+                      AND cust_lib.user_id=".$UserID." LIMIT 1                                
+              )
+         ,0) as product_library_exist,
+
+        COALESCE(prds.status,'') as status          
           
         ");    
 
@@ -500,7 +509,7 @@ class Book extends Model
      }  
 
      //Filter By Genre Category
-      if($Filter_Genre!=''){
+      if($Filter_Genre!='' && $Filter_Genre>0){
          $query->where("prds.category_id","=",$Filter_Genre);   
       }
                                   
