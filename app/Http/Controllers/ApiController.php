@@ -1689,15 +1689,12 @@ public function getAllBookCategoryList(Request $request){
   $data["PageNo"] = 0;
   $data["Limit"] = $request->post('Limit');
 
-  $data['Filter_Sort']="";
-  $data['Filter_Genre']="";
-  $data['Filter_Star']="";
 
-  // $result=$Books->getBookList($data);  
-   $result=$Books->getSearchBookList($data);  
+  $result=$Books->getBookList($data);  
 
   return response()->json($result); 
   }
+
 
  public function searchBookList(Request $request){
 
@@ -1726,7 +1723,7 @@ public function getAllBookCategoryList(Request $request){
   return response()->json($result); 
 
   }
-
+  
 public function getRandomBookList(Request $request)
  {
 
