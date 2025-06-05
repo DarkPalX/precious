@@ -1197,7 +1197,7 @@ public function getCustomerProductAPIInfoData(Request $request){
     $checkIfExistLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID']);
     $checkIfExiistLibrarySubscribeBook=$Library->checkProductsIfExistInSubscribeLibrary($data['ProductID'],$data['UserID']);
 
-    if($checkLibraryBook || $checkLibrarySubscribeBook){
+    if($checkIfExistLibraryBook || $checkIfExiistLibrarySubscribeBook){
        $AllowToPost=true;
     }
 
