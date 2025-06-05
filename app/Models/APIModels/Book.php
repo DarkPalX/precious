@@ -121,20 +121,11 @@ class Book extends Model
               )
           ,'') as chapter_no,
 
-        COALESCE((
-               SELECT 
-                  cust_lib.product_id FROM 
-                customer_libraries as cust_lib                                    
-                      WHERE cust_lib.product_id = prds.id 
-                      AND cust_lib.user_id=".$UserID." LIMIT 1                                
-              )
-         ,0) as product_library_exist,
-
         COALESCE(prds.status,'') as status          
           
         ");    
 
-     $query->where("prds.file_url","!=",null); 
+      $query->where("prds.file_url","!=",null); 
       $query->where("prds.status","=",'PUBLISHED');    
       $query->where("prds.deleted_at","=",null); 
         
