@@ -1386,6 +1386,23 @@ public function getBookMarks(Request $request){
     ]);  
     
 }
+
+public function removeSubscribedBooks(Request $request){
+    
+    $Misc = new Misc();
+    $Library = new Library();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['UserID']=$request->post('UserID');   
+    $data['ProductID']=$request->post('ProductID'); 
+
+    $result=$Library->removeSubscribedBooks($data);  
+    return response()->json($result); 
+    
+}
+
 // SET READ SUBCRIBE BOOKS PREMIUM AND FREE NOT INCLUDED====================================================
 public function saveReadSubscribedBooks(Request $request){
     
@@ -1403,139 +1420,6 @@ public function saveReadSubscribedBooks(Request $request){
     return response()->json($result); 
     
 }
-
-// //DOWNLOADED SECTION======================================================
-// public function saveDownloadedSubscribedBooks(Request $request){
-    
-//     $Misc = new Misc();
-//     $Book = new Book();
-//     $Library = new Library();
-
-//     $response = "Failed";
-//     $responseMessage = "";
-
-//     $IsFreeBook=0;
-//     $IsPremium=0;
-
-//     $data['UserID']=$request->post('UserID');
-//     $data['ProductID']=$request->post('ProductID');
-//     $data['IsSubscribed']=$request->post('IsSubscribed');
-//     $data['IsDownloaded']=$request->post('IsDownloaded');
-
-//     $info=$Book->getBookInfoByID($data['ProductID']);
-
-//     if(isset($info)>0){
-//         $IsFreeBook=$info->is_free;
-//         $IsPremium=$info->is_premium;
-//     }
-
-//     if($IsFreeBook==1){
-//         $ResponseMessage ='Sorry. Cannot download free books.';
-//          return response()->json([
-//            'response' => 'Failed',         
-//            'message' => $ResponseMessage,
-//           ]);    
-//     }
-
-//      if($IsPremium==1){
-//         $ResponseMessage ='Sorry. Cannot download premium books.';
-//          return response()->json([
-//            'response' => 'Failed',         
-//            'message' => $ResponseMessage,
-//           ]);    
-//     }
-
-//     if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
-//        $ResponseMessage ='Sorry. Cannot download book is already in your library section.';
-//        return response()->json([
-//          'response' => 'Failed',         
-//          'message' => $ResponseMessage,
-//         ]);    
-//     }
-
-//     if($Library->checkProductsIfExistInDownloadSubscribedBooks($data['ProductID'],$data['UserID'])){
-//        $ResponseMessage ='This book is already in your downloaded list.';
-//        return response()->json([
-//          'response' => 'Failed',         
-//          'message' => $ResponseMessage,
-//         ]);    
-//     }
-              
-//     $retVal=$Library->saveDownloadSubscribedBooks($data);
-//      return response()->json([
-//       'response' => 'Success',
-//       'message' => "Book has sucessfully added to downloaded books.",
-//     ]);  
-    
-// }
-
-// //FAVORITES=====================================================================
-// public function getCustomerFavoriteList(Request $request){
-    
-//     $Misc = new Misc();
-//     $Favorites = new Favorites();
-
-//     $response = "Failed";
-//     $responseMessage = "";
-
-        
-//     $data['UserID']=$request->post('UserID');
-
-//     $data["SearchText"] = '';
-//     $data["Status"] = '';
-//     $data["PageNo"] = 0;
-//     $data["Limit"] = 0;
-
-//     $result=$Favorites->getFavoriteList($data);  
-//     return response()->json($result); 
-    
-// }
-
-// public function addToFavorites(Request $request){
-
-//     $Misc = new Misc();
-//     $Favorites = new Favorites();
-
-//     $response = "Failed";
-//     $responseMessage = "";
-
-    
-
-//     $data['UserID'] = $request->post('UserID');
-//     $data['ProductID'] = $request->post('ProductID');
-
-//     if($data['ProductID']<=0){
-//       $ResponseMessage ='Select a book to add into your favorites.';
-//        return response()->json([
-//          'response' => 'Failed',         
-//          'message' => $ResponseMessage,
-//         ]);
-//     }
-    
-//     if($Favorites->checkProductsIfExist($data['ProductID'],$data['UserID'])){
-//        $ResponseMessage ='Book is already in your wishlist.';
-//        return response()->json([
-//          'response' => 'Failed',         
-//          'message' => $ResponseMessage,
-//         ]); 
-        
-//     }
-
-//     $response=$Favorites->addToFavorites($data);
-//     if($response=='Success'){      
-//         return response()->json([                  
-//          'response' => $response,
-//          'message' => "Book has successfully added to your wishlist",
-//        ]);    
-
-//     }else{
-//         return response()->json([
-//           'response' => $response,
-//           'message' => "Something wrong while adding book to your wishlist.",
-//        ]); 
-//     } 
-
-// }
 
 //CART ITEM LIST===========================================================================
 public function getCustomerCartList(Request $request){

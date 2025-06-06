@@ -276,6 +276,11 @@ Route::post('/save-read-books',[
    'as'=> 'save-read-books'
 ]);
 
+Route::post('/remove-subscribed-books',[
+   'uses'=>'App\Http\Controllers\ApiController@removeSubscribedBooks',
+   'as'=> 'remove-subscribed-books'
+]);
+
 //DOWNLOADED BOOKS====================================================================
 Route::post('/get-subscribed-downloaded-books-list',[
    'uses'=>'App\Http\Controllers\ApiController@getSubscribedDownloadedBooksList',

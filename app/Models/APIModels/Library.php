@@ -452,7 +452,7 @@ class Library extends Model
           ->whereRaw('product_id=?',[$ProductID])          
           ->first();
 
-    if(isset($info)<=0){
+        if(isset($info)<=0){
 
             $ReadBookID = DB::table('subscribed_books')
             ->insertGetId([                                            
@@ -463,8 +463,29 @@ class Library extends Model
               'created_at' => $TODAY             
             ]);
     } 
-            
-        
+                
+  }
+
+    public function removeSubscribedBooks($data){
+
+    $TODAY = date("Y-m-d H:i:s");
+    
+    $UserID=$data['UserID'];    
+    $ProductID=$data['ProductID'];     
+
+    $info = DB::table('subscribed_books')          
+          ->whereRaw('user_id=?',[$UserID])    
+          ->whereRaw('product_id=?',[$ProductID])          
+          ->first();
+
+        if(isset($info)>0){
+            DB::table('subscribed_books')
+            ->where('user_id', $UserID)
+            ->where('product_id', $ProductID)
+            ->delete();
+         } 
+          
+      return "Success";          
   }
 
   public function checkProductsIfExistInSubscribedBooks($ProductID,$CustomerID){
