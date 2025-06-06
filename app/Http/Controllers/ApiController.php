@@ -1398,9 +1398,13 @@ public function removeSubscribedBooks(Request $request){
     $data['UserID']=$request->post('UserID');   
     $data['ProductID']=$request->post('ProductID'); 
 
-    $result=$Library->removeSubscribedBooks($data);  
-    return response()->json($result); 
-    
+    $response=$Library->removeSubscribedBooks($data);  
+
+     return response()->json([
+      'response' => $response,
+      'message' => "Sucessfully removed from subscribed books",
+    ]);  
+  
 }
 
 // SET READ SUBCRIBE BOOKS PREMIUM AND FREE NOT INCLUDED====================================================
