@@ -62,8 +62,11 @@
                                         </div>
                                     </th>
                                     <td>
+                                        @if($product->is_reported)
+                                            <i class="text-danger fa fa-exclamation-triangle mr-1" title="This product has problems reported"></i>
+                                        @endif
                                         @if(!empty($product->file_url))
-                                            <a href="{{ route('generate.file.qr', ['product_id' => urlencode($product->id)]) }}" target="_blank" title="Generate QR Code"><i class="fa fa-qrcode mr-2"></i></a>
+                                            {{-- <a href="{{ route('generate.file.qr', ['product_id' => urlencode($product->id)]) }}" target="_blank" title="Generate QR Code"><i class="fa fa-qrcode mr-2"></i></a> --}}
                                             {{-- <a href="{{ route('generate.file.qr', ['file_url' => urlencode($product->file_url)]) }}" target="_blank" title="Generate QR Code"><i class="fa fa-qrcode mr-2"></i></a> --}}
                                         @endif
                                         <strong @if($product->trashed()) style="text-decoration:line-through;" @endif> {{ $product->name }}</strong><br>
