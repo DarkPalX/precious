@@ -75,6 +75,7 @@ class ListingHelper
         $orderBy = $this->get_selected_order_by($sortFields);
         $sortBy = $this->get_selected_sort_by();
         $showFreeOnly = $this->show_free_only();
+        $showReportedOnly = $this->show_reported_only();
         $showDeleted = $this->show_delete_data();
 
         $showApproved = $this->show_approved_data();
@@ -96,6 +97,10 @@ class ListingHelper
 
         if ($showFreeOnly) {
             $models->where('is_free', 1);
+        }
+
+        if ($showReportedOnly) {
+            $models->where('is_reported', 1);
         }
 
         if ($showDeleted) {
@@ -183,10 +188,15 @@ class ListingHelper
         $orderBy = $this->get_selected_order_by($sortFields);
         $sortBy = $this->get_selected_sort_by();
         $showFreeOnly = $this->show_free_only();
+        $showReportedOnly = $this->show_reported_only();
         $showDeleted = $this->show_delete_data();
 
         if ($showFreeOnly) {
             $queryBuilder->where('is_free', 1);
+        }
+
+        if ($showReportedOnly) {
+            $queryBuilder->where('is_reported', 1);
         }
 
         if ($showDeleted) {
@@ -268,6 +278,7 @@ class ListingHelper
         $parameters['orderBy'] = $this->get_selected_order_by($sortFields);
         $parameters['sortBy'] = $this->get_selected_sort_by();
         $parameters['showFreeOnly'] = $this->show_free_only();
+        $parameters['showReportedOnly'] = $this->show_reported_only();
         $parameters['showApproved'] = $this->show_approved_data();
         $parameters['showDisapproved'] = $this->show_disapproved_data();
         $parameters['showPending'] = $this->show_pending_data();
@@ -332,6 +343,11 @@ class ListingHelper
     private function show_free_only()
     {
         return (request()->has('showFreeOnly') && (request('showFreeOnly') == 'on') || request('showFreeOnly') == 1) ? true : false;
+    }
+
+    private function show_reported_only()
+    {
+        return (request()->has('showReportedOnly') && (request('showReportedOnly') == 'on') || request('showReportedOnly') == 1) ? true : false;
     }
 
     private function show_approved_data()

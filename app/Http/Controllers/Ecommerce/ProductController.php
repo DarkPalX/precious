@@ -396,10 +396,18 @@ class ProductController extends Controller
 
     public function change_status($id,$status)
     {
-        Product::where('id',$id)->update([
-            'status' => $status,
-            'created_by' => Auth::id()
-        ]);
+        if($status == "REPORTED"){
+            Product::where('id',$id)->update([
+                'is_reported' => 0,
+                'created_by' => Auth::id()
+            ]);
+        }
+        else{
+            Product::where('id',$id)->update([
+                'status' => $status,
+                'created_by' => Auth::id()
+            ]);
+        }
 
         return back()->with('success', __('standard.products.product.update_status_success', ['STATUS' => $status]));
     }

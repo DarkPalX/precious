@@ -37,6 +37,10 @@
                                     <label class="custom-control-label" for="showFreeOnly">Show Free Books only</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="showReportedOnly" name="showReportedOnly" class="custom-control-input" @if ($filter->showReportedOnly) checked @endif>
+                                    <label class="custom-control-label" for="showReportedOnly">Show Reported Books</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" id="showDeleted" name="showDeleted" class="custom-control-input" @if ($filter->showDeleted) checked @endif>
                                     <label class="custom-control-label" for="showDeleted">{{__('common.show_deleted')}}</label>
                                 </div>
