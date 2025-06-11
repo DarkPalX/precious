@@ -122,7 +122,7 @@
                                                             <a class="dropdown-item" href="{{ route('product.ebook-customer-assignment',$product->id) }}"> Assign Customers</a>
                                                         @endif
 
-                                                        @if($product->is_reported == 0)
+                                                        @if($product->is_reported)
                                                             <a class="dropdown-item" href="{{route('product.single-change-status',[$product->id,'REPORTED'])}}"> Remove Report Tag</a>
                                                         @endif
 
