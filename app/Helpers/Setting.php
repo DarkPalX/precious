@@ -144,7 +144,7 @@ class Setting {
 
         $hoursAgo = now()->subHours($setting->cart_notification_duration);
     
-        $isLeftOnCart = Cart::where('created_at', '<', $hoursAgo )->where('user_id', auth()->user()->id ?? -1)->exists();
+        $isLeftOnCart = Cart::where('created_at', '<', $hoursAgo )->where('user_id', auth()->user()->id ?? -1)->where('qty', '>', 0)->exists();
 
         return $isLeftOnCart;
     }
