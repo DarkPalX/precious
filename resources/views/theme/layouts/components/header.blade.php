@@ -31,9 +31,17 @@
 					</li>
 				</ul>
 			@else
-				<div class="header-buttons d-none d-sm-inline-block">								
-					<a href="#modal-register" data-lightbox="inline" class="button button-rounded button-white button-light button-small m-0">Log In</a>
+				<div class="header-buttons">
+					<a href="#modal-register" data-lightbox="inline"
+					class="button button-rounded button-white button-light button-small m-0 w-100 w-sm-auto">
+						Log In
+					</a>
 				</div>
+
+
+				{{-- <div class="header-buttons d-none d-sm-inline-block">								
+					<a href="#modal-register" data-lightbox="inline" class="button button-rounded button-white button-light button-small m-0">Log In</a>
+				</div> --}}
 			@endif
 		</div>
 	</div>
