@@ -454,7 +454,7 @@
 										@endforeach
 										
 										<input type="hidden" name="shippingOption" id="shippingOption" value="xde">
-										<input type="hidden" name="shippingRate" id="shippingRate" value="500">
+										<input type="hidden" name="shippingRate" id="shippingRate" value="{{ $has_ebook ? 0 : 500 }}">
 										<input type="hidden" name="shippingFeeDiscount" id="sf_discount_amount" value="0">
 							
 										<input type="hidden" id="coupon_total_discount" name="coupon_total_discount" value="{{$cart->coupon_discount}}">

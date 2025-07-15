@@ -570,9 +570,10 @@ class CartController extends Controller
 
             //FOR THE ECREDIT
             
-            $current_ecredit = number_format($request->ecredit_amount,2,'.','');
+            // $current_ecredit = number_format($request->ecredit_amount,2,'.','');
+            $current_ecredit = Auth::user()->ecredits;
             $new_ecredit = ($current_ecredit - $totalPrice) > 0 ? $current_ecredit - $totalPrice : 0;
-
+            
             User::where('id', Auth::user()->id)
             ->update([
                 'ecredits' => $new_ecredit
