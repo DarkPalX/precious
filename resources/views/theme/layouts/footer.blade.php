@@ -35,7 +35,7 @@
 			<div class="d-flex justify-content-between">
 				<h2 class="card-title text-white font-body">Subscribe to our Newsletter!</h2>
 			</div>
-			<p class="text-light">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum nisi beatae temporibus nobis optio eos?</p>
+			<p class="text-light">Join our community and Stay updated! Subscribe now for the latest news, releases, and updates.</p>
 
 			<div class="subscribe-widget" data-loader="button">
 
