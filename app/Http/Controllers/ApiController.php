@@ -1298,9 +1298,9 @@ public function checkCustomerLibraryDownloadBookExist(Request $request){
     $data['ProductID']=$request->post('ProductID');
 
    $checkLibraryBook=$Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID']);
-   $checkLibrarySubscribeDownloadBook=$Library->checkProductsIfExistInSubscribeDownloadLibrary($data['ProductID'],$data['UserID']);
+   // $checkLibrarySubscribeDownloadBook=$Library->checkProductsIfExistInSubscribeDownloadLibrary($data['ProductID'],$data['UserID']);
 
-   if($checkLibraryBook || $checkLibrarySubscribeDownloadBook){
+   if($checkLibraryBook){
        $responseMessage ='Book is already in library section';
        return response()->json([
          'response' => 'Success',         
@@ -1315,7 +1315,6 @@ public function checkCustomerLibraryDownloadBookExist(Request $request){
          'message' => "This book is not in listed in your library.",
         ]);  
     }
-
 }
 
 public function getSubscribedReadBooksList(Request $request){
