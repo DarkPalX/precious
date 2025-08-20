@@ -29,6 +29,8 @@
     
     <link rel="icon" href="{{ asset('storage').'/icons/'.Setting::getFaviconLogo()->website_favicon }}" type="image/x-icon">
 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4238943947470545" crossorigin="anonymous"></script>
+
     <style>
         @php
             $jsStyle = str_replace(array("'", "&#039;"), "", old('styles', $page->styles) );
