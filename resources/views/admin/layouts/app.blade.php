@@ -25,9 +25,6 @@
     <link rel="stylesheet" href="{{ asset('css/skin.deepblue.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-admin.css') }}">
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4238943947470545"
-     crossorigin="anonymous"></script>
-
     @yield('pagecss') <!-- Add your own custom style and css-->
 
 </head>
