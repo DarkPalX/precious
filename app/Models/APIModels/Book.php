@@ -868,21 +868,28 @@ class Book extends Model
 
     $ProductID=$data['ProductID'];        
 
-    $read_count =0;
+    $read_count=2;
 
-    $book_info = DB::table('products')          
-          ->whereRaw('product_id=?',[$ProductID])          
-          ->first();
+     DB::table('products')
+        ->where('product_id',$ProductID)
+        ->update([                                                       
+          'read_count' => $read_count  
+       ]);
+   }          
 
-        if(isset($book_info)<=0){
+    // $book_info = DB::table('products')          
+    //       ->whereRaw('product_id=?',[$ProductID])          
+    //       ->first();
 
-            $read_count=$book_info->read_count+1;
-            DB::table('products')
-                ->where('product_id',$ProductID)
-                ->update([                                                       
-                  'read_count' => $read_count  
-               ]);
-       }          
+       //  if(isset($book_info)<=0){
+
+       //      $read_count=$book_info->read_count+1;
+       //      DB::table('products')
+       //          ->where('product_id',$ProductID)
+       //          ->update([                                                       
+       //            'read_count' => $read_count  
+       //         ]);
+       // }          
   }
 
   public function getPageChapterBookMark($data){
