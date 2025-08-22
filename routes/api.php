@@ -276,6 +276,11 @@ Route::post('/save-read-books',[
    'as'=> 'save-read-books'
 ]);
 
+Route::post('/save-read-count',[
+   'uses'=>'App\Http\Controllers\ApiController@saveReadSubscribedBooks',
+   'as'=> 'save-read-count'
+]);
+
 Route::post('/remove-subscribed-books',[
    'uses'=>'App\Http\Controllers\ApiController@removeSubscribedBooks',
    'as'=> 'remove-subscribed-books'

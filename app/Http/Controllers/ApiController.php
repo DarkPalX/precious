@@ -1424,6 +1424,23 @@ public function saveReadSubscribedBooks(Request $request){
     
 }
 
+// SET READ SUBCRIBE BOOKS PREMIUM AND FREE NOT INCLUDED====================================================
+public function saveBookReadCount(Request $request){
+    
+    $Misc = new Misc();
+    $Book = new Book();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['ProductID']=$request->post('ProductID'); 
+
+    $result=$Book->saveBookReadCount($data);  
+    return response()->json($result); 
+    
+}
+
+
 //CART ITEM LIST===========================================================================
 public function getCustomerCartList(Request $request){
     

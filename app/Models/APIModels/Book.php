@@ -864,6 +864,27 @@ class Book extends Model
     }
   }
 
+  public function saveBookReadCount($data){
+
+    $ProductID=$data['ProductID'];        
+
+    $read_count =0;
+
+    $book_info = DB::table('products')          
+          ->whereRaw('product_id=?',[$ProductID])          
+          ->first();
+
+        if(isset($book_info)<=0){
+
+            $read_count=$read_count->read_count+1;
+            DB::table('products')
+                ->where('product_id',$ProductID)
+                ->update([                                                       
+                  'read_count' => $read_count  
+               ]);
+       }          
+  }
+
   public function getPageChapterBookMark($data){
       
     $ChapterPageNo = ""; 
