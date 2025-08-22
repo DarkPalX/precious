@@ -868,7 +868,7 @@ class Book extends Model
 
     $ProductID=$data['ProductID'];        
 
-    $read_count=1;     
+    $read_count=0;     
 
     $book_info = DB::table('products')          
           ->whereRaw('id=?',[$ProductID])          
