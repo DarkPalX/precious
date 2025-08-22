@@ -1433,11 +1433,19 @@ public function saveBookReadCount(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    // $data['ProductID']=$request->post('ProductID'); 
-    $data['ProductID']=153; 
+     $data['ProductID']=$request->post('ProductID'); 
+    //$data['ProductID']=153; 
 
-    $result=$Book->saveBookReadCount($data);  
-    return response()->json($result); 
+     if(empty($data['ProductID'])){
+      $ResponseMessage = 'Product ID is required.';
+       return response()->json([
+           'response' => 'Failed',
+           'message' => $ResponseMessage,
+       ]);
+    }
+
+    // $result=$Book->saveBookReadCount($data);  
+    // return response()->json($result); 
     
 }
 
