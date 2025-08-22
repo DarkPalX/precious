@@ -18,6 +18,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/test', fn() => 'test ok');
+
 //CUSTOMER LOGOUT==================================================================
 Route::get('/logout',[
    'uses'=>'App\Http\Controllers\ApiController@doCheckLogin',
@@ -277,7 +279,7 @@ Route::post('/save-read-books',[
 ]);
 
 Route::post('/save-read-count',[
-   'uses'=>'App\Http\Controllers\ApiController@saveReadSubscribedBooks',
+   'uses'=>'App\Http\Controllers\ApiController@saveBookReadCount',
    'as'=> 'save-read-count'
 ]);
 
