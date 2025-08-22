@@ -196,6 +196,61 @@ class MyAccountController extends Controller
         return view('theme.pages.customer.favorites', compact('member', 'user', 'page', 'customer_favorites'));
     }
 
+    public function downloads(Request $request)
+    {
+        $page = new Page;
+        $page->name = 'My Downloads';
+
+        $member = auth()->user();
+        $user = auth()->user();
+        $pageLimit = 12;
+
+        $customer_libraries = Product::select('products.*')
+        ->leftJoin('product_additional_infos', 'products.id', '=', 'product_additional_infos.product_id')
+        ->where('products.status', 'PUBLISHED')
+        ->join('customer_libraries', 'customer_libraries.product_id', '=', 'products.id')
+        ->where('customer_libraries.user_id', auth()->id());
+
+        $searchtxt = $request->get('keyword', false);
+        $sortBy = $request->get('sort_by', false);
+
+        if(!empty($searchtxt)){  
+            $keyword = Str::lower($request->keyword); 
+
+            $customer_libraries = $customer_libraries->where(function($query) use ($keyword){
+                $query->orWhereRaw('LOWER(products.name) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(products.author) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(products.description) like LOWER(?)', ["%{$keyword}%"])
+                ->orWhereRaw('LOWER(product_additional_infos.value) like LOWER(?)', ["%{$keyword}%"]);
+            });
+        }
+
+        if($sortBy == "name_asc"){
+            $customer_libraries = $customer_libraries->orderBy('name','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "name_desc"){
+            $customer_libraries = $customer_libraries->orderBy('name','desc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "price_asc"){
+            $customer_libraries = $customer_libraries->orderBy('price','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "price_desc"){
+            $customer_libraries = $customer_libraries->orderBy('price','desc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "date_asc"){
+            $customer_libraries = $customer_libraries->orderBy('created_at','asc')->paginate($pageLimit);
+        }
+        elseif($sortBy == "date_desc"){
+            $customer_libraries = $customer_libraries->orderBy('created_at','desc')->paginate($pageLimit);
+        }
+        else{
+            $customer_libraries = $customer_libraries->orderBy('name','asc')->paginate($pageLimit);
+        }
+
+
+        return view('theme.pages.customer.downloads', compact('member', 'user', 'page', 'customer_libraries'));
+    }
+
     // public function favorites(Request $request)
     // {
     //     $page = new Page;

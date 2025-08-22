@@ -160,6 +160,7 @@ Route::get('/phpinfo', function () {
             Route::get('/library', [MyAccountController::class, 'library'])->name('customer.library');
             Route::get('/wishlist', [MyAccountController::class, 'wishlist'])->name('customer.wishlist');
             Route::get('/favorites', [MyAccountController::class, 'favorites'])->name('customer.favorites');
+            Route::get('/downloads', [MyAccountController::class, 'downloads'])->name('customer.downloads');
             Route::get('/free-ebooks', [MyAccountController::class, 'free_ebooks'])->name('customer.free-ebooks');
             Route::get('/ecredits', [MyAccountController::class, 'ecredits'])->name('customer.ecredits');
             Route::post('/account-update', [MyAccountController::class, 'update_personal_info'])->name('my-account.update-personal-info');
@@ -571,6 +572,9 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/report/top-buyers/mobile', [ReportsController::class, 'top_buyers_mobile'])->name('report.top-buyers.mobile');
                 Route::get('/report/top-products/mobile', [ReportsController::class, 'top_products_mobile'])->name('report.top-products.mobile');
                 Route::get('/report/subscribers/mobile', [ReportsController::class, 'subscribers_mobile'])->name('report.subscribers.mobile');
+                Route::get('/report/downloads/mobile', [ReportsController::class, 'downloads'])->name('report.downloads.mobile');
+                Route::get('/report/customer-downloads/mobile/{product_id}', [ReportsController::class, 'customer_downloads'])->name('report.customer-downloads.mobile');
+                Route::get('/report/read-counts/mobile', [ReportsController::class, 'read_counts'])->name('report.read-counts.mobile');
             //
         ###### Ecommerce Routes ######
     });
