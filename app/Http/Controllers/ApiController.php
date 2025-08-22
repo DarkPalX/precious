@@ -1424,7 +1424,7 @@ public function saveReadSubscribedBooks(Request $request){
     
 }
 
-// SET READ SUBCRIBE BOOKS PREMIUM AND FREE NOT INCLUDED====================================================
+// SAVE BOOK READ COUNT====================================================
 public function saveBookReadCount(Request $request){
     
     $Misc = new Misc();
