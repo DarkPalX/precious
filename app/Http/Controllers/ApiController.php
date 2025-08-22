@@ -1425,7 +1425,7 @@ public function saveReadSubscribedBooks(Request $request){
 }
 
 // SAVE BOOK READ COUNT====================================================
-public function saveBookReadCount(Request $request){
+public function saveReadBookCount(Request $request){
     
     $Misc = new Misc();
     $Book = new Book();
@@ -1444,7 +1444,7 @@ public function saveBookReadCount(Request $request){
        ]);
     }
 
-    // $result=$Book->saveBookReadCount($data);  
+    // $result=$Book->saveReadBookCount($data);  
     // return response()->json($result); 
     
 }

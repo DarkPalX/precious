@@ -279,7 +279,7 @@ Route::post('/save-read-books',[
 ]);
 
 Route::post('/save-read-count',[
-   'uses'=>'App\Http\Controllers\ApiController@saveBookReadCount',
+   'uses'=>'App\Http\Controllers\ApiController@saveReadBookCount',
    'as'=> 'save-read-count'
 ]);
 

@@ -864,7 +864,7 @@ class Book extends Model
     }
   }
 
-  public function saveBookReadCount($data){
+  public function saveReadBookCount($data){
 
     $ProductID=$data['ProductID'];        
 
