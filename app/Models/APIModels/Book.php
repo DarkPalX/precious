@@ -873,9 +873,9 @@ class Book extends Model
      DB::table('products')
         ->where('id',153)
         ->update([                                                       
-          'read_count' => $read_count  
+          'read_count' => 2  
        ]);
-   }          
+     
 
     // $book_info = DB::table('products')          
     //       ->whereRaw('product_id=?',[$ProductID])          
