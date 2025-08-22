@@ -1433,7 +1433,8 @@ public function saveBookReadCount(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['ProductID']=$request->post('ProductID'); 
+    // $data['ProductID']=$request->post('ProductID'); 
+    $data['ProductID']=153; 
 
     $result=$Book->saveBookReadCount($data);  
     return response()->json($result); 
