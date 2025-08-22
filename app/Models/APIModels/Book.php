@@ -876,7 +876,7 @@ class Book extends Model
 
         if(isset($book_info)<=0){
 
-            $read_count=$read_count->read_count+1;
+            $read_count=$book_info->read_count+1;
             DB::table('products')
                 ->where('product_id',$ProductID)
                 ->update([                                                       
