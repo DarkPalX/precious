@@ -1482,31 +1482,31 @@ public function addToCart(Request $request){
     $data['PromoDiscountPercent'] = $request->post('PromoDiscountPercent');
     $data['PromoDiscountPrice'] = $request->post('PromoDiscountPrice');
 
-    if($data['ProductID']<=0){
-      $ResponseMessage ='Select a book to add into your cart.';
-       return response()->json([
-         'response' => 'Failed',
-         'message' => $ResponseMessage,
-        ]);
-    }
+    // if($data['ProductID']<=0){
+    //   $ResponseMessage ='Select a book to add into your cart.';
+    //    return response()->json([
+    //      'response' => 'Failed',
+    //      'message' => $ResponseMessage,
+    //     ]);
+    // }
     
-    if($Cart->checkProductsIfExist($data['ProductID'],$data['UserID'])){
-       $ResponseMessage ='Book is already in your cart.';
-       return response()->json([
-         'response' => 'Failed',         
-         'message' => $ResponseMessage,
-        ]); 
+    // if($Cart->checkProductsIfExist($data['ProductID'],$data['UserID'])){
+    //    $ResponseMessage ='Book is already in your cart.';
+    //    return response()->json([
+    //      'response' => 'Failed',         
+    //      'message' => $ResponseMessage,
+    //     ]); 
         
-    }
+    // }
 
-    if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
-       $ResponseMessage ='You already have purchased this book.';
-       return response()->json([
-         'response' => 'Failed',         
-         'message' => $ResponseMessage,
-        ]); 
+    // if($Library->checkProductsIfExistInLibrary($data['ProductID'],$data['UserID'])){
+    //    $ResponseMessage ='You already have purchased this book.';
+    //    return response()->json([
+    //      'response' => 'Failed',         
+    //      'message' => $ResponseMessage,
+    //     ]); 
         
-    }
+    // }
      
     $total_item_cart=0;
     $response=$Cart->addToCart($data);
