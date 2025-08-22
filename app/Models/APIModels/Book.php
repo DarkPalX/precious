@@ -871,7 +871,7 @@ class Book extends Model
     $read_count=2;
 
      DB::table('products')
-        ->where('product_id',153)
+        ->where('id',153)
         ->update([                                                       
           'read_count' => $read_count  
        ]);
