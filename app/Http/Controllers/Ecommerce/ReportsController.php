@@ -15,6 +15,7 @@ use App\Models\Ecommerce\{
 
 use App\Models\User;
 use App\Models\UsersSubscription;
+use App\Models\CustomerLibrary;
 
 use Auth;
 use DB;
@@ -442,6 +443,57 @@ class ReportsController extends Controller
         // dd($rs);
 
         return view('admin.ecommerce.reports-mobile.subscribers',compact('rs'));
+
+    }
+    
+    public function downloads(Request $request)
+    {
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+
+        $rs = SalesDetail::select('product_id',
+                          DB::raw('SUM(qty) as total_quantity'),
+                          DB::raw('SUM(net_amount) as total_net_amount'))
+                 ->where('qty', 0);
+
+      
+        if ($startDate && $endDate) {
+            $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+        }
+        
+        $rs = $rs->groupBy('product_id')->paginate(1000);
+
+        return view('admin.ecommerce.reports-mobile.downloads',compact('rs', 'startDate', 'endDate'));
+
+    }
+    
+    public function customer_downloads(Request $request, $product_id)
+    {
+        $product = Product::withTrashed()->find($product_id);
+        $rs = CustomerLibrary::where('product_id', $product_id)->paginate(100);
+
+        return view('admin.ecommerce.reports-mobile.customer-downloads',compact('rs', 'product'));
+
+    }
+    
+    public function read_counts(Request $request)
+    {
+        $startDate = $request->get('start', false);
+        $endDate   = $request->get('end', false);
+
+        $rs = SalesDetail::select('product_id',
+                          DB::raw('SUM(qty) as total_quantity'),
+                          DB::raw('SUM(net_amount) as total_net_amount'))
+                 ->where('qty', 0);
+
+      
+        if ($startDate && $endDate) {
+            $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+        }
+        
+        $rs = $rs->groupBy('product_id')->paginate(1000);
+
+        return view('admin.ecommerce.reports-mobile.read-counts',compact('rs', 'startDate', 'endDate'));
 
     }
 

@@ -18,6 +18,10 @@ class CustomerLibrary extends Model
     protected $table = "customer_libraries";
     protected $fillable = ['product_id', 'user_id', 'is_admin_selected'];
 
+    public static function download_count($product_id){
+        return CustomerLibrary::where('product_id', $product_id)->count();
+    }
+
     public static function already_purchased($product_id){
 
         $product = Product::where('id', $product_id)->first();

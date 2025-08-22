@@ -344,6 +344,14 @@
         <li class="nav-item @if (\Route::current()->getName() == 'report.subscribers.mobile')) active show @endif">
             <a href="{{ route('report.subscribers.mobile') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Subscribers</span></a>
         </li>
+    
+        <li class="nav-item @if (\Route::current()->getName() == 'report.best-sellers.mobile')) active show @endif">
+            <a href="{{ route('report.downloads.mobile') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Downloads</span></a>
+        </li>
+    
+        <li class="nav-item @if (\Route::current()->getName() == 'report.best-sellers.mobile')) active show @endif">
+            <a href="{{ route('report.read-counts.mobile') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Read Counts</span></a>
+        </li>
         
     @endif
 </ul>
