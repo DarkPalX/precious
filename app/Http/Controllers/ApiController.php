@@ -1434,7 +1434,7 @@ public function saveReadBookCount(Request $request){
     $responseMessage = "";
 
     $data['ProductID']=$request->post('ProductID'); 
-    $data['ProductID']=153; 
+    $data['ProductID']=135; 
 
     //  if(empty($data['ProductID'])){
     //   $ResponseMessage = 'Product ID is required.';
