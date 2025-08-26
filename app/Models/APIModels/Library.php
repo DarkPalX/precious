@@ -165,7 +165,7 @@ class Library extends Model
     $PageNo=$data['PageNo'];
     
     $query = DB::table('subscribed_books as rbooks')
-      ->join('products as prds', 'prds.id', '=', 'rbooks.product_id')        
+      ->leftjoin('products as prds', 'prds.id', '=', 'rbooks.product_id')        
     
        ->selectraw("
           prds.id as book_ID,
