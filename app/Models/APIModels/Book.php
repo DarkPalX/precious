@@ -62,7 +62,8 @@ class Book extends Model
           COALESCE(prds.ebook_price,0) as price,   
           COALESCE(prds.ebook_discount_price,0) as discount_price,      
           
-          COALESCE(prds.reorder_point,0) as reorder_point,  
+          COALESCE(prds.reorder_point,0) as reorder_point, 
+          COALESCE(prds.read_count,0) as read_count,   
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
 
@@ -224,6 +225,7 @@ class Book extends Model
           COALESCE(prds.ebook_discount_price,0) as discount_price,      
           
           COALESCE(prds.reorder_point,0) as reorder_point,  
+          COALESCE(prds.read_count,0) as read_count,  
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
 
@@ -331,6 +333,7 @@ class Book extends Model
           COALESCE(prds.ebook_discount_price,0) as discount_price,      
           
           COALESCE(prds.reorder_point,0) as reorder_point,  
+          COALESCE(prds.read_count,0) as read_count,  
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
 
@@ -735,6 +738,7 @@ class Book extends Model
           COALESCE(prds.ebook_discount_price,0) as discount_price,      
           
           COALESCE(prds.reorder_point,0) as reorder_point,  
+          COALESCE(prds.read_count,0) as read_count,  
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
 
