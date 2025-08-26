@@ -1119,15 +1119,14 @@ public function getAllCustomerLibraryAPIData(Request $request){
     // $data['Status'] = 'Free';
     // $FreeBooks=$Books->getBookList($data);  
 
-    $data['Status'] = '';
-    $MyLibraryBooks=$Library->getLibraryList($data);  
+    // $data['Status'] = '';
+    // $MyLibraryBooks=$Library->getLibraryList($data);  
 
     $data['Status'] = '';
     $SubscribedBooks=$Library->getSubscribedReadBooksList($data);  
 
      return response()->json([
          'response' => 'Success',
-         'LibraryBooks' => $MyLibraryBooks,
          'SubscribedBooks' => $SubscribedBooks,
         ]);
 
