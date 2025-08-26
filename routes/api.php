@@ -174,10 +174,10 @@ Route::post('/get-all-my-library-data',[
    'as'=> 'get-all-my-library-data'
 ]);
 
-Route::post('/get-library-list',[
-   'uses'=>'App\Http\Controllers\ApiController@getCustomerLibraryList',
-   'as'=> 'get-library-list'
-]);
+// Route::post('/get-library-list',[
+//    'uses'=>'App\Http\Controllers\ApiController@getCustomerLibraryList',
+//    'as'=> 'get-library-list'
+// ]);
 
 Route::post('/get-all-product-info-data',[
    'uses'=>'App\Http\Controllers\ApiController@getCustomerProductAPIInfoData',
