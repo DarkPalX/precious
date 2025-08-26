@@ -1116,8 +1116,8 @@ public function getAllCustomerLibraryAPIData(Request $request){
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
     
-    $data['Status'] = 'Free';
-    $FreeBooks=$Books->getBookList($data);  
+    // $data['Status'] = 'Free';
+    // $FreeBooks=$Books->getBookList($data);  
 
     $data['Status'] = '';
     $MyLibraryBooks=$Library->getLibraryList($data);  
