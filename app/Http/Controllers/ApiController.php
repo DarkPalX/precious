@@ -1127,7 +1127,6 @@ public function getAllCustomerLibraryAPIData(Request $request){
 
      return response()->json([
          'response' => 'Success',
-         'FreeBooks' => $FreeBooks,
          'LibraryBooks' => $MyLibraryBooks,
          'SubscribedBooks' => $SubscribedBooks,
         ]);
