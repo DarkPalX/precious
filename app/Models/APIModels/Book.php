@@ -176,7 +176,7 @@ class Book extends Model
       $query->offset(($PageNo-1) * $Limit);
     }
 
-    $query->orderBy("prds.created_at","DESC");    
+    $query->orderBy("prds.created_at","ASC");    
     $list = $query->get();
                              
      return $list;             
