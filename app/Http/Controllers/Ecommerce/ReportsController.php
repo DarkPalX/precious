@@ -451,17 +451,13 @@ class ReportsController extends Controller
         $startDate = $request->get('start', false);
         $endDate   = $request->get('end', false);
 
-        $rs = SalesDetail::select('product_id',
-                          DB::raw('SUM(qty) as total_quantity'),
-                          DB::raw('SUM(net_amount) as total_net_amount'))
-                 ->where('qty', 0);
-
+        $rs = Product::query();
       
         if ($startDate && $endDate) {
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
         }
         
-        $rs = $rs->groupBy('product_id')->paginate(1000);
+        $rs = $rs->paginate(1000);
 
         return view('admin.ecommerce.reports-mobile.downloads',compact('rs', 'startDate', 'endDate'));
 
@@ -481,17 +477,13 @@ class ReportsController extends Controller
         $startDate = $request->get('start', false);
         $endDate   = $request->get('end', false);
 
-        $rs = SalesDetail::select('product_id',
-                          DB::raw('SUM(qty) as total_quantity'),
-                          DB::raw('SUM(net_amount) as total_net_amount'))
-                 ->where('qty', 0);
-
+        $rs = Product::query();
       
         if ($startDate && $endDate) {
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
         }
         
-        $rs = $rs->groupBy('product_id')->paginate(1000);
+        $rs = $rs->paginate(1000);
 
         return view('admin.ecommerce.reports-mobile.read-counts',compact('rs', 'startDate', 'endDate'));
 
