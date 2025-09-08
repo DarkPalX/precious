@@ -466,6 +466,9 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::post('/admin/location-multiple-change-status',[DeliverablecitiesController::class, 'multiple_change_status'])->name('location.multiple.change.status');
                 Route::post('/admin/location-multiple-delete',[DeliverablecitiesController::class, 'multiple_delete'])->name('location.multiple.delete');
                 Route::get('/restore-rate/{id}', [DeliverablecitiesController::class, 'restore'])->name('location.restore');
+                Route::post('/delete-rate', [DeliverablecitiesController::class, 'delete'])->name('location.delete');
+                // Route::post('/admin/locations-delete', 'DeliverablecitiesController@delete')->name('admin.location.delete');
+
             //
 
             // Coupon
@@ -508,8 +511,8 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/display-added-payments', [SalesController::class, 'display_payments'])->name('display.added-payments');
                 Route::get('/display-delivery-history', [SalesController::class, 'display_delivery'])->name('display.delivery-history');
 
-                Route::get('/sales/update-payment/{id}','EcommerceControllers\JoborderController@staff_edit_payment')->name('staff-edit-payment');
-                Route::post('/sales/update-payment','EcommerceControllers\JoborderController@staff_update_payment')->name('staff-update-payment');
+                // Route::get('/sales/update-payment/{id}','EcommerceControllers\JoborderController@staff_edit_payment')->name('staff-edit-payment');
+                // Route::post('/sales/update-payment','EcommerceControllers\JoborderController@staff_update_payment')->name('staff-update-payment');
             //
 
             // Form Attributes

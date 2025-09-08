@@ -467,6 +467,29 @@ class CartController extends Controller
         $page = new Page();
         $page->name = 'Checkout';
 
+        $locations = DeliverableCities::query()
+            ->select('province', 'city', 'rate') // 👈 include rate
+            ->whereNotNull('province')->where('province', '!=', '')
+            ->whereNotNull('city')->where('city', '!=', '')
+            ->distinct() // if you only want unique province+city+rate combos
+            ->orderBy('province')
+            ->orderBy('city')
+            ->get()
+            ->groupBy('province');
+
+
+        // $locations = Deliverablecities::query()
+        //     ->select('province', 'city')
+        //     ->whereNotNull('province')->where('province', '!=', '')
+        //     ->whereNotNull('city')->where('city', '!=', '')
+        //     ->distinct() // 👈 keep only unique province + city pairs
+        //     ->orderBy('province')
+        //     ->orderBy('city')
+        //     ->get()
+        //     ->groupBy('province');
+
+
+
         $customer  = User::find(Auth::id());
         $orders    = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();    
         $cart      = CouponCartDiscount::where('customer_id',Auth::id())->first();
@@ -476,17 +499,37 @@ class CartController extends Controller
         $use_ecredit = session('use_ecredit');
 
         $has_ebook = false;
+        $has_physical = false;
 
-        foreach($orders as $order){
-            if (in_array(strtolower($order->product->book_type), ['e-book', 'ebook'])) {
+        foreach ($orders as $order) {
+            $type = strtolower($order->product->book_type);
+
+            if (in_array($type, ['e-book', 'ebook'])) {
                 $has_ebook = true;
+            } else {
+                $has_physical = true;
+            }
+
+            // If we already found both, no need to continue
+            if ($has_ebook && $has_physical) {
                 break;
             }
         }
 
+
+        // $has_ebook = false;
+
+        // foreach($orders as $order){
+        //     if (in_array(strtolower($order->product->book_type), ['e-book', 'ebook'])) {
+        //         $has_ebook = true;
+        //         break;
+        //     }
+        // }
+
         // $lbc_provinces = LBCHelper::provinces();
 
-        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'use_ecredit', 'has_ebook'));
+        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'locations', 'use_ecredit', 'has_ebook', 'has_physical'));
+        // return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'provinces', 'cities', 'use_ecredit', 'has_ebook'));
         // return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'lbc_provinces'));
     }
 
@@ -528,7 +571,6 @@ class CartController extends Controller
     
     public function save_sales(Request $request)
     {
-
         $user_id = Auth::user()->id;
         $mode_payment = $request->payment_method;
         $amount_paid =  $request->total_amount;

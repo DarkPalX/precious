@@ -199,7 +199,7 @@
     @endif
 
     @if (auth()->user()->has_access_to_module('delivery_flat_rate'))
-        {{--<li class="nav-item with-sub @if (request()->routeIs('locations*')) active show @endif">
+        <li class="nav-item with-sub @if (request()->routeIs('locations*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="box"></i> <span>Delivery Flat Rates</span></a>
             <ul>
                 <li @if (\Route::current()->getName() == 'locations.index' || \Route::current()->getName() == 'locations.edit') class="active" @endif><a href="{{ route('locations.index') }}">Manage Flat Rates</a></li>
@@ -207,8 +207,20 @@
                     <li @if (\Route::current()->getName() == 'locations.create') class="active" @endif><a href="{{ route('locations.create') }}">Create New Flat Rate</a></li>
                 @endif
             </ul>
-        </li>--}}
+        </li>
     @endif
+
+    {{-- @if (auth()->user()->has_access_to_module('delivery_flat_rate'))
+        <li class="nav-item with-sub @if (\Route::current()->getName() == 'admin.locations.index' || \Route::current()->getName() == 'admin.locations.create' || \Route::current()->getName() == 'admin.locations.edit') active show @endif">
+            <a href="" class="nav-link"><i data-feather="box"></i> <span>Delivery Rates</span></a>
+            <ul>
+                <li @if (\Route::current()->getName() == 'admin.locations.index' || \Route::current()->getName() == 'admin.locations.edit') class="active" @endif><a href="{{ route('admin.locations.index') }}">Manage Rates</a></li>
+                @if(auth()->user()->has_access_to_route('admin.locations.create'))
+                    <li @if (\Route::current()->getName() == 'admin.locations.create') class="active" @endif><a href="{{ route('admin.locations.create') }}">Create new rate</a></li>
+                @endif
+            </ul>
+        </li>
+    @endif --}}
 
     @if (auth()->user()->has_access_to_module('coupons'))
         <li class="nav-item with-sub @if (request()->routeIs('coupons*')) active show @endif">
