@@ -468,10 +468,10 @@ class CartController extends Controller
         $page->name = 'Checkout';
 
         $locations = DeliverableCities::query()
-            ->select('province', 'city', 'rate') // 👈 include rate
+            ->select('province', 'city', 'rate') //
             ->whereNotNull('province')->where('province', '!=', '')
             ->whereNotNull('city')->where('city', '!=', '')
-            ->distinct() // if you only want unique province+city+rate combos
+            ->distinct()
             ->orderBy('province')
             ->orderBy('city')
             ->get()
