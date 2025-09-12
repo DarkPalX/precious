@@ -575,7 +575,6 @@ class CartController extends Controller
         $mode_payment = $request->payment_method;
         $amount_paid =  $request->total_amount;
 
-
         if ($mode_payment == 'paypal') {
             // Store the entire request data in the session
             session(['paypal_request' => $request->all()]);
@@ -593,8 +592,8 @@ class CartController extends Controller
 
     public static function save_sales_process(Request $request) 
     {
-        $coupon_total_discount = number_format($request->coupon_total_discount,2,'.','');
-
+        $coupon_total_discount = number_format(($request->coupon_total_discount  + $request->shippingFeeDiscount),2,'.','');
+        
         $totalPrice = number_format($request->total_amount,2,'.','');
         // $totalPrice  = number_format($request->payment_method == 'ecredit' ? 0 : ($request->total_amount < 0 ? 0 : $request->total_amount), 2,'.','');
         $realTotalPrice  = number_format($totalPrice + $request->shippingRate - $request->shippingFeeDiscount, 2,'.','');
