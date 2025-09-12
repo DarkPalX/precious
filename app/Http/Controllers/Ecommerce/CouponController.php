@@ -52,9 +52,9 @@ class CouponController extends Controller
         $customers = User::where('role_id',6)->where('is_active',1)->get();
         $free_products = Product::whereNotIn('book_type', ['e-book', 'ebook'])->get();
         // $free_products = Product::where('category_id',15)->get();
-        
+
         $locations = DeliverableCities::query()
-            ->selectRaw("CONCAT(province, ', ', city) as name, rate")
+            ->selectRaw("province, city, CONCAT(province, ', ', city) as name, rate")
             ->whereNotNull('province')->where('province', '!=', '')
             ->whereNotNull('city')->where('city', '!=', '')
             ->distinct()
@@ -315,9 +315,9 @@ class CouponController extends Controller
         $customers = User::where('role_id',6)->where('is_active',1)->get();
         $free_products = Product::whereNotIn('book_type', ['e-book', 'ebook'])->get();
         // $free_products = Product::where('category_id',15)->get();
-        
+
         $locations = DeliverableCities::query()
-            ->selectRaw("CONCAT(province, ', ', city) as name, rate")
+            ->selectRaw("province, city, CONCAT(province, ', ', city) as name, rate")
             ->whereNotNull('province')->where('province', '!=', '')
             ->whereNotNull('city')->where('city', '!=', '')
             ->distinct()
