@@ -61,7 +61,7 @@
 					</div>
 					
 					<div class="col-md-6 form-group">
-						<label>Municipality:</label>
+						<label>Barangay:</label>
 						<input type="text" name="address_municipality" id="" class="form-control required" value="{{$member->address_municipality}}" placeholder="">
 					</div>
 					
@@ -71,7 +71,7 @@
 					</div>
 					
 					<div class="col-md-6 form-group">
-						<label>Region:</label>
+						<label>Province:</label>
 						<input type="text" name="address_province" id="" class="form-control required" value="{{$member->address_province}}" placeholder="">
 					</div>
 

@@ -50,9 +50,17 @@ class CouponController extends Controller
         $categories =  ProductCategory::has('published_products')->where('status','PUBLISHED')->get();
         $brands = Brand::where('status', 'Active')->orderBy('name','asc')->get();
         $customers = User::where('role_id',6)->where('is_active',1)->get();
+        $free_products = Product::whereNotIn('book_type', ['e-book', 'ebook'])->get();
+        // $free_products = Product::where('category_id',15)->get();
 
-        $locations = Deliverablecities::where('status','PUBLISHED')->get();
-        $free_products = Product::where('category_id',15)->get();
+        $locations = DeliverableCities::query()
+            ->selectRaw("province, city, CONCAT(province, ', ', city) as name, rate")
+            ->whereNotNull('province')->where('province', '!=', '')
+            ->whereNotNull('city')->where('city', '!=', '')
+            ->distinct()
+            ->orderBy('province')
+            ->orderBy('city')
+            ->get();
 
         return view('admin.ecommerce.coupon.create',compact('products','categories','brands','customers','locations','free_products'));
     }
@@ -305,8 +313,17 @@ class CouponController extends Controller
         $categories =  ProductCategory::has('published_products')->where('status','PUBLISHED')->get();
         $brands = Brand::where('status', 'Active')->orderBy('name','asc')->get();
         $customers = User::where('role_id',6)->where('is_active',1)->get();
-        $locations = Deliverablecities::where('status','PUBLISHED')->get();
-        $free_products = Product::where('category_id',15)->get();
+        $free_products = Product::whereNotIn('book_type', ['e-book', 'ebook'])->get();
+        // $free_products = Product::where('category_id',15)->get();
+
+        $locations = DeliverableCities::query()
+            ->selectRaw("province, city, CONCAT(province, ', ', city) as name, rate")
+            ->whereNotNull('province')->where('province', '!=', '')
+            ->whereNotNull('city')->where('city', '!=', '')
+            ->distinct()
+            ->orderBy('province')
+            ->orderBy('city')
+            ->get();
 
         return view('admin.ecommerce.coupon.edit',compact('coupon','products','categories','brands','customers','locations','free_products'));
     }

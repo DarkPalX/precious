@@ -41,9 +41,9 @@
         <tbody>
             @forelse($rs as $r)
             <tr>
-                <td>{{$r->product->sku}}</td>
-                <td>{{$r->product->name}}</td>
-                <td><a href="{{ route('report.customer-downloads.mobile', $r->product_id) }}">{{ \App\Models\CustomerLibrary::download_count($r->product_id) }}</a></td>
+                <td>{{$r->sku}}</td>
+                <td>{{$r->name}}</td>
+                <td><a href="{{ route('report.customer-downloads.mobile', $r->id) }}">{{ \App\Models\CustomerLibrary::download_count($r->id) }}</a></td>
             </tr>
             @empty
             <tr>

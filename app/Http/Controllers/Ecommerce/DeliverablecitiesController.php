@@ -2,42 +2,40 @@
 
 namespace App\Http\Controllers\Ecommerce;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-
-use Facades\App\Helpers\ListingHelper;
-
 use App\Models\Ecommerce\Deliverablecities;
+use App\Helpers\ListingHelper;
 use App\Models\Permission;
-
-use Auth;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class DeliverablecitiesController extends Controller
 {
-    private $searchFields = ['name'];
-
-    public function __construct()
-    {
-        Permission::module_init($this, 'delivery_flat_rate');
-    }
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        Permission::module_init($this, 'delivery_rate');
+    }
+
     public function index()
     {
-        $address = ListingHelper::simple_search(Deliverablecities::class, $this->searchFields);
+        $searchFields = ['city', 'province', 'item_type', 'barangay'];
+
+        $listing = new ListingHelper();
+
+        $address = $listing->simple_search(Deliverablecities::class, $searchFields);
 
         // Simple search init data
-        $filter =ListingHelper::get_filter($this->searchFields);
+        $filter = $listing->get_filter($searchFields);
+
         $searchType = 'simple_search';
 
-        return view('admin.ecommerce.deliverablelocations.index',compact('address', 'filter', 'searchType'));
-
+        return view('admin.ecommerce.deliverablelocations.index', compact('address', 'filter', 'searchType'));
     }
 
     /**
@@ -58,25 +56,33 @@ class DeliverablecitiesController extends Controller
      */
     public function store(Request $request)
     {
-        Validator::make($request->all(), [
-            'name' => 'required|max:150|unique:deliverable_cities,name',
-            'rate' => 'required',
-        ])->validate();
+        $validate = $request->validate([
+            'name' => 'nullable',
+            'rate' => 'required|numeric',
+            'area' => 'nullable',
+            'barangay' => 'nullable',
+            'province' => 'required',
+            'city' => 'required',
+            // 'item_type' => 'required'
+        ]);
 
-        $save = Deliverablecities::create([
-            'name' => $request->name,
+        Deliverablecities::create([
             'rate' => $request->rate,
-            'status' => (isset($request->visibility) ? 'PUBLISHED' : 'PRIVATE'),
+            'item_type' => $request->item_type,
+            'province' => $request->province,
+            'city' => $request->city,
+            'barangay' => $request->barangay,
+            'outside_manila' => ($request->has('outside_manila') ? '1' : '0'),
             'user_id' => Auth::id()
         ]);
 
-        return redirect(route('locations.index'))->with('success','The Location has been created.');
+        return back()->with('success','Successfully saved new location!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Deliverablecities  $deliverablecities
+     * @param  \App\Models\Deliverablecities  $deliverablecities
      * @return \Illuminate\Http\Response
      */
     public function show(Deliverablecities $deliverablecities)
@@ -87,7 +93,7 @@ class DeliverablecitiesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Deliverablecities  $deliverablecities
+     * @param  \App\Models\Deliverablecities  $deliverablecities
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -100,89 +106,51 @@ class DeliverablecitiesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Deliverablecities  $deliverablecities
+     * @param  \App\Models\Deliverablecities  $deliverablecities
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $save = Deliverablecities::findOrFail($id)->update([
-            'name' => $request->name,
-            'rate' => $request->rate,
-            'status' => (isset($request->visibility) ? 'PUBLISHED' : 'PRIVATE'),
-            'user_id' => Auth::id()
+        $validate = $request->validate([
+            'name' => 'nullable',
+            'rate' => 'required|numeric',
+            'area' => 'nullable',
+            'barangay' => 'nullable',
+            'province' => 'required',
+            'city' => 'required',
+            // 'item_type' => 'required'
         ]);
 
-        return redirect(route('locations.index'))->with('success', __('standard.locations.update_details_success'));
+        Deliverablecities::findOrFail($id)->update([
+            'rate' => $request->rate,
+            'province' => $request->province,
+            'city' => $request->city,
+            'barangay' => $request->barangay,
+            'item_type' => $request->item_type,
+            'outside_manila' => ($request->has('outside_manila') ? '1' : '0'),
+            'user_id' => Auth::id()
+        ]);
+        
+//        $address = Deliverablecities::all();
+//        return view('admin.ecommerce.deliverablelocations.index',compact('address'))->with('success','Successfully updated delivery rate!');
+
+        return redirect()->route('locations.index')->with('success','Successfully updated delivery rate!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Deliverablecities  $deliverablecities
+     * @param  \App\Models\Deliverablecities  $deliverablecities
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy(Deliverablecities $deliverablecities)
     {
-
-    }
-
-    public function update_status($id,$status)
-    {
-        Deliverablecities::find($id)->update([
-            'status' => $status,
-            'user_id' => Auth::id()
-        ]);
-
-        return back()->with('success', __('standard.locations.status_update_success', ['STATUS' => $status]));
-    }
-
-    public function single_delete(Request $request)
-    {
-        $promo = Deliverablecities::findOrFail($request->rates);
-        $promo->update([ 'user' => Auth::id() ]);
-        $promo->delete();
-
-        return back()->with('success', __('standard.locations.single_delete_success'));
-
+        //dd($deliverablecities);
     }
 
     public function delete(Request $request)
     {
-        $delete = Deliverablecities::whereId((int) $request->delete_id)->delete();
-        return back()->with('success','The location has been deleted.');
-    }
-
-    public function restore($id){
-        Deliverablecities::withTrashed()->find($id)->update(['user_id' => Auth::id() ]);
-        Deliverablecities::whereId((int) $id)->restore();
-
-        return back()->with('success', __('standard.locations.restore_success'));
-    }
-
-
-    public function multiple_change_status(Request $request)
-    {
-        $rates = explode("|", $request->rates);
-
-        foreach ($rates as $rate) {
-            $publish = Deliverablecities::where('status', '!=', $request->status)->whereId((int) $rate)->update([
-                'status'  => $request->status,
-                'user_id' => Auth::id()
-            ]);
-        }
-
-        return back()->with('success',  __('standard.locations.multiple_status_update_success', ['STATUS' => $request->status]));
-    }
-
-    public function multiple_delete(Request $request)
-    {
-        $rates = explode("|",$request->rates);
-
-        foreach($rates as $rate){
-            Deliverablecities::whereId((int) $rate)->update(['user_id' => Auth::id() ]);
-            Deliverablecities::whereId((int) $rate)->delete();
-        }
-
-        return back()->with('success', __('standard.locations.multiple_delete_success'));
+        Deliverablecities::whereId($request->add_id)->delete();
+        return back()->with('success','Successfully deleted location');
     }
 }

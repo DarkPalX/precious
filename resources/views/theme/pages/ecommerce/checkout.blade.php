@@ -14,7 +14,6 @@
 					<h5>Billing Information</h5>
 				</li>
 				<li class="col-sm-6 col-lg-3">
-					{{-- <a href="#ptab2" class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab2" rel="2">2</a> --}}
 					<a href="#ptab2"><button class="i-circled i-bordered i-alt mx-auto tab-linker tab-linker-top btn_ptab2" rel="2">2</button></a>
 					<h5>Shipping Options</h5>
 				</li>
@@ -49,23 +48,88 @@
 								<td><strong>Contact Number</strong> <span class="text-danger">*</span></td>
 								<td class="p-2"><input type="number" class="form-control" name="customer_contact_number" id="customer_contact_number" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11);" value="{{$customer->mobile ?? '-' }}"  onclick="select()" required ></td>
 							</tr>
+							
+
 							<tr>
-								<td><strong>Barangay</strong> <span class="text-danger">*</span></td>
-								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_barangay" name="customer_delivery_barangay" value="{{$customer->address_street ?? '-' }}"  onclick="select()" required >
-								</td>
-								{{-- <td class="p-2"><textarea id="customer_delivery_barangay" name="customer_delivery_barangay" id="address_brgy" class="form-control" rows="3" required>{{$customer->address_street}}</textarea></td> --}}
-							</tr>
-							<tr>
-								<td><strong>City</strong> <span class="text-danger">*</span></td>
-								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_city" name="customer_delivery_city" value="{{$customer->address_city ?? '-' }}"  onclick="select()" required >
+								<td colspan="2" class="mt-4">
+									<h3 class="mb-1">Delivery Address</h3>
+									<small class="text-muted">
+										If you can't find your address, please feel free to <a class="text-info" href="{{ route('contact-us') }}" target="_blank">contact us</a>
+									</small>
 								</td>
 							</tr>
+
 							<tr>
 								<td><strong>Province</strong> <span class="text-danger">*</span></td>
 								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_province" name="customer_delivery_province" value="{{$customer->address_province ?? '-' }}"  onclick="select()" required >
+									<select class="form-control" id="customer_delivery_province" name="customer_delivery_province" required>
+										<option value="0">Select Province</option>
+										@foreach($locations as $province => $cities)
+											<option value="{{ $province }}" {{ str_contains(strtolower($customer->address_province), strtolower($province)) ? 'selected' : '' }}>
+												{{ $province }}
+											</option>
+										@endforeach
+									</select>
+								</td>
+							</tr>
+
+							<tr>
+								<td><strong>City</strong> <span class="text-danger">*</span></td>
+								<td class="p-2">
+									<select class="form-control" id="customer_delivery_city" name="customer_delivery_city" required>
+										<option value="0">Select City</option>
+										@foreach($locations as $province => $cities)
+											@foreach($cities as $city)
+												<option 
+													value="{{ $city->city }}" 
+													data-province="{{ $province }}"
+													data-rate="{{ $city->rate }}"
+													data-area="{{ $city->area }}"
+													data-item-type="{{ $city->item_type }}"
+													data-outside-manila="{{ $city->outside_manila }}"
+													{{ str_contains(strtolower($customer->address_city), strtolower($city->city)) ? 'selected' : '' }}
+												>
+													{{ $city->city }}
+												</option>
+											@endforeach
+										@endforeach
+									</select>
+								</td>
+							</tr>
+
+							<tr hidden>
+								<td><strong>Rate</strong></td>
+								<td class="p-2">
+									<input type="text" id="delivery_rate" class="form-control" readonly>
+								</td>
+							</tr>
+
+							<tr hidden>
+								<td><strong>Area</strong></td>
+								<td class="p-2">
+									<input type="text" id="delivery_area" class="form-control" readonly>
+								</td>
+							</tr>
+
+							<tr hidden>
+								<td><strong>Item Type</strong></td>
+								<td class="p-2">
+									<input type="text" id="delivery_item_type" class="form-control" readonly>
+								</td>
+							</tr>
+
+							<tr hidden>
+								<td><strong>Outside Manila</strong></td>
+								<td class="p-2">
+									<input type="text" id="delivery_outside_manila" class="form-control" readonly>
+								</td>
+							</tr>
+
+
+							<tr>
+								<td><strong>Barangay</strong> <span class="text-danger">*</span></td>
+								<td class="p-2">
+									<input type="text" class="form-control" id="customer_delivery_barangay" name="customer_delivery_barangay" value="{{$customer->address_municipality ?? '-' }}"  onclick="select()" required >
 								</td>
 							</tr>
 							<tr>
@@ -227,6 +291,7 @@
 								</label>
 							</div>
 						@endif --}}
+						
 						{{-- FOR DEBIT/CREDIT --}}
 
 						{{-- <div class="col-sm-4 col-md-4">
@@ -485,7 +550,7 @@
 											</td>
 
 											<td class="cart-product-name text-end">
-												<span class="amount" id="delivery_fee" value="0"></span>
+												<span class="amount" id="delivery_fee">₱0.00</span>
 											</td>
 										</tr>
 										<tr class="cart_item">
@@ -547,34 +612,6 @@
 	}
 
 
-	// $(function() {
-	// 	$("#processTabs").tabs({ show: { effect: "fade", duration: 400 } });
-	// 	$(".tab-linker").click(function() {
-	// 		var current_tab = $(this).attr('rel');
-			
-	// 		if (current_tab == 2) {
-	// 			var fname = $('#customer_fname').val();
-	// 			var lname = $('#customer_lname').val();
-	// 			var email = $('#customer_email').val();
-	// 			var contact = $('#customer_contact_number').val();
-	// 			var brgy = $('#customer_delivery_barangay').val();
-	// 			var city = $('#customer_delivery_city').val();
-	// 			var province = $('#customer_delivery_province').val();
-	// 			var zipcode = $('#customer_delivery_zip').val();
-
-	// 			if (fname.length === 0 || lname.length === 0 || contact.length === 0 || IsEmail(email) == false || zipcode.length === 0 || brgy.length === 0 || city.length === 0 || province.length === 0) {
-					
-	// 				swal('Oops...', 'Please check required input fields.', 'error');
-	// 				return false;
-	// 			}
-	// 		}
-
-	// 		$( "#processTabs" ).tabs("option", "active", $(this).attr('rel') - 1);
-	// 		return false;
-	// 	});
-	// });
-
-
 	$(function() {
 
 		$( "#processTabs" ).tabs({ show: { effect: "fade", duration: 400 } });
@@ -591,7 +628,7 @@
 				var province = $('#customer_delivery_province').val();
 				var zipcode = $('#customer_delivery_zip').val();
 
-				if(fname.length === 0 || lname.length === 0 || contact.length === 0 || IsEmail(email) == false || zipcode.length === 0 || brgy.length === 0 || city.length === 0 || province.length === 0){
+				if(fname.length === 0 || lname.length === 0 || contact.length === 0 || IsEmail(email) == false || zipcode.length === 0 || brgy.length === 0 || city == 0 || province == 0){
                     swal('Oops...', 'Please check required input fields.', 'error');
 					
 		            return false;
@@ -646,24 +683,6 @@
 		$('#shippingOption').val(stype);
 	}
 
-    // function compute_total(){
-
-    //     var delivery_fee = parseFloat($('#delivery_fee').val());
-    //     var delivery_discount = parseFloat($('#sf_discount_amount').val());
-
-
-    //     var orderAmount = parseFloat($('#totalAmountWithoutCoupon').val());
-    //     var couponDiscount = parseFloat($('#coupon_total_discount').val());
-    //     var ecreditBalance = parseFloat($('#ecredit_balance').val());
-
-    //     var orderTotal  = (orderAmount-couponDiscount) - ecreditBalance;
-    //     var deliveryFee = delivery_fee-delivery_discount;
-
-    //     var grandTotal = parseFloat(orderTotal)+parseFloat(deliveryFee);
-
-    //     $('#span_total_amount').html(addCommas(parseFloat(grandTotal).toFixed(2)));
-    //     $('#total_amount').val(grandTotal.toFixed(2));
-    // }
 	function compute_total(){
 
 		var delivery_fee = parseFloat($('#shippingRate').val());
@@ -1141,4 +1160,58 @@
 	});
 
 </script>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		let provinceSelect = document.getElementById('customer_delivery_province');
+		let citySelect = document.getElementById('customer_delivery_city');
+		let shippingRateInput = document.getElementById('shippingRate');
+		let hasEbook = {{ $has_ebook ? 'true' : 'false' }};
+		let hasPhysical = {{ $has_physical ? 'true' : 'false' }};
+
+		function filterCities() {
+			let selectedProvince = provinceSelect.value.toLowerCase();
+
+			[...citySelect.options].forEach(option => {
+				if (option.value === "0") return;
+				let province = option.getAttribute('data-province').toLowerCase();
+				option.style.display = (province === selectedProvince) ? "block" : "none";
+			});
+
+			// don’t reset if already pre-selected
+			if (citySelect.querySelector(`option[value="${citySelect.value}"][style*="block"]`) === null) {
+				citySelect.value = "0";
+				shippingRateInput.value = 0; // reset
+			}
+		}
+
+		function updateRate() {
+			let selectedOption = citySelect.options[citySelect.selectedIndex];
+			if (!selectedOption || selectedOption.value === "0") {
+				shippingRateInput.value = 0;
+				compute_total();
+				return;
+			}
+
+			// shipping is FREE only if NO physical books
+			if (hasEbook && !hasPhysical) {
+				shippingRateInput.value = 0;
+			} else {
+				let rate = selectedOption.getAttribute('data-rate') || 0;
+				shippingRateInput.value = rate;
+			}
+
+			compute_total();
+		}
+
+		provinceSelect.addEventListener('change', filterCities);
+		citySelect.addEventListener('change', updateRate);
+
+		// Run once on page load
+		filterCities();
+		updateRate();
+		compute_total();
+	});
+</script>
+
 @endsection

@@ -41,9 +41,9 @@
         <tbody>
             @forelse($rs as $r)
             <tr>
-                <td>{{$r->product->sku}}</td>
-                <td>{{$r->product->name}}</td>
-                <td>{{$r->product->read_count}}</td>
+                <td>{{$r->sku}}</td>
+                <td>{{$r->name}}</td>
+                <td>{{$r->read_count}}</td>
             </tr>
             @empty
             <tr>

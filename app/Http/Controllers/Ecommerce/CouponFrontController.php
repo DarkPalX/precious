@@ -9,7 +9,7 @@ use App\Helpers\ListingHelper;
 
 use App\Models\{Page, Brand};
 use App\Models\Ecommerce\{
-    Coupon, CustomerCoupon, CouponSale, CouponCart, Product, Cart
+    Coupon, CustomerCoupon, CouponSale, CouponCart, Product, Cart, Deliverablecities
 };
 
 use Auth;
