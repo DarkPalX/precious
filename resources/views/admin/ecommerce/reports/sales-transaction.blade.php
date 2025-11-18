@@ -124,7 +124,7 @@
                         <td>{{$sale->header->user->fullname}}</td>
                         <td>{{$sale->header->customer_delivery_adress}}</td>
                         <td>{{$sale->product_name}}</td>
-                        <td>{{$sale->product_category}}</td>
+                        <td>{{ $sale->product->category->name ?? 'Uncategorized' }}</td>
                         <td class="text-right">{{$sale->qty}}</td>
                         <td class="text-right">{{number_format($sale->price,2)}}</td>
                         <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
