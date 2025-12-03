@@ -74,7 +74,10 @@ class ListingHelper
         $perPage = $this->get_count_per_page();
         $orderBy = $this->get_selected_order_by($sortFields);
         $sortBy = $this->get_selected_sort_by();
+        $showBestSellerOnly = $this->show_best_seller_only();
         $showFreeOnly = $this->show_free_only();
+        $showPremiumOnly = $this->show_premium_only();
+        $showPreorderOnly = $this->show_preorder_only();
         $showReportedOnly = $this->show_reported_only();
         $showDeleted = $this->show_delete_data();
 
@@ -95,8 +98,21 @@ class ListingHelper
             $models->leftJoin($table['name'], $table['field1'], $table['field2']);
         }
 
+
+        if ($showBestSellerOnly) {
+            $models->where('is_best_seller', 1);
+        }
+
         if ($showFreeOnly) {
             $models->where('is_free', 1);
+        }
+
+        if ($showPremiumOnly) {
+            $models->where('is_premium', 1);
+        }
+
+        if ($showPreorderOnly) {
+            $models->where('is_preorder', 1);
         }
 
         if ($showReportedOnly) {
@@ -187,22 +203,38 @@ class ListingHelper
         $perPage = $this->get_count_per_page();
         $orderBy = $this->get_selected_order_by($sortFields);
         $sortBy = $this->get_selected_sort_by();
+        $showBestSellerOnly = $this->show_best_seller_only();
         $showFreeOnly = $this->show_free_only();
+        $showPremiumOnly = $this->show_premium_only();
+        $showPreorderOnly = $this->show_preorder_only();
         $showReportedOnly = $this->show_reported_only();
         $showDeleted = $this->show_delete_data();
-
-        if ($showFreeOnly) {
-            $queryBuilder->where('is_free', 1);
-        }
-
-        if ($showReportedOnly) {
-            $queryBuilder->where('is_reported', 1);
-        }
+        
 
         if ($showDeleted) {
             $queryBuilder = $model::withTrashed();
         } else {
             $queryBuilder = $model::whereNotNull('id');
+        }
+        
+        if ($showBestSellerOnly) {
+            $models->where('is_best_seller', 1);
+        }
+
+        if ($showFreeOnly) {
+            $models->where('is_free', 1);
+        }
+
+        if ($showPremiumOnly) {
+            $models->where('is_premium', 1);
+        }
+
+        if ($showPreorderOnly) {
+            $models->where('is_preorder', 1);
+        }
+
+        if ($showReportedOnly) {
+            $queryBuilder->where('is_reported', 1);
         }
 
         foreach ($equalSearchFields as $fieldName) {
@@ -277,7 +309,10 @@ class ListingHelper
         $parameters['perPage'] = $this->get_count_per_page();
         $parameters['orderBy'] = $this->get_selected_order_by($sortFields);
         $parameters['sortBy'] = $this->get_selected_sort_by();
+        $parameters['showBestSellerOnly'] = $this->show_best_seller_only();
         $parameters['showFreeOnly'] = $this->show_free_only();
+        $parameters['showPremiumOnly'] = $this->show_premium_only();
+        $parameters['showPreorderOnly'] = $this->show_preorder_only();
         $parameters['showReportedOnly'] = $this->show_reported_only();
         $parameters['showApproved'] = $this->show_approved_data();
         $parameters['showDisapproved'] = $this->show_disapproved_data();
@@ -339,10 +374,25 @@ class ListingHelper
     {
         return request('search') ?? '';
     }
+        
+    private function show_best_seller_only()
+    {
+        return (request()->has('showBestSellerOnly') && (request('showBestSellerOnly') == 'on') || request('showBestSellerOnly') == 1) ? true : false;
+    }
 
     private function show_free_only()
     {
         return (request()->has('showFreeOnly') && (request('showFreeOnly') == 'on') || request('showFreeOnly') == 1) ? true : false;
+    }
+
+    private function show_premium_only()
+    {
+        return (request()->has('showPremiumOnly') && (request('showPremiumOnly') == 'on') || request('showPremiumOnly') == 1) ? true : false;
+    }
+
+    private function show_preorder_only()
+    {
+        return (request()->has('showPreorderOnly') && (request('showPreorderOnly') == 'on') || request('showPreorderOnly') == 1) ? true : false;
     }
 
     private function show_reported_only()
