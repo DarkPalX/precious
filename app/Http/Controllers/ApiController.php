@@ -1672,12 +1672,18 @@ public function getAllBookCategoryList(Request $request){
        $data['UserID'] = $request->post('UserID');
    }
 
-  $data['Filter_Sort'] = $request->post('Filter_Sort');
-  $data['Filter_Genre'] = $request->post('Filter_Genre');
-  $data['Filter_Star'] = $request->post('Filter_Star');
+  // $data['Filter_Sort'] = $request->post('Filter_Sort');
+  // $data['Filter_Genre'] = $request->post('Filter_Genre');
+  // $data['Filter_Star'] = $request->post('Filter_Star');
+
+  $data['Filter_Sort'] = '';
+  $data['Filter_Genre'] = '';
+  $data['Filter_Star'] = '';
 
   $data["PageNo"] = 0;
-  $data["Limit"] = $request->post('Limit');
+  // $data["Limit"] = $request->post('Limit');
+
+   $data["Limit"] = 20;
   
   $result=$Books->getSearchBookList($data);  
 
