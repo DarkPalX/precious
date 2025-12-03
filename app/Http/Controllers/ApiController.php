@@ -1667,7 +1667,7 @@ public function getAllBookCategoryList(Request $request){
   // $data['SearchText'] = $request->post('SearchText');
    $data['SearchText'] = 'Campus Girl: Vee, The Pretty Witch';
 
-  $data['UserID']=0;
+  $data['UserID']=52261;
    if(isset($data['UserID'])){
        $data['UserID'] = $request->post('UserID');
    }
