@@ -33,8 +33,20 @@
                             </div>
                             <div class="form-group">
                                 <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="showBestSellerOnly" name="showBestSellerOnly" class="custom-control-input" @if ($filter->showBestSellerOnly) checked @endif>
+                                    <label class="custom-control-label" for="showBestSellerOnly">Show Best Seller only</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" id="showFreeOnly" name="showFreeOnly" class="custom-control-input" @if ($filter->showFreeOnly) checked @endif>
                                     <label class="custom-control-label" for="showFreeOnly">Show Free Books only</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="showPremiumOnly" name="showPremiumOnly" class="custom-control-input" @if ($filter->showPremiumOnly) checked @endif>
+                                    <label class="custom-control-label" for="showPremiumOnly">Show Premium only</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="showPreorderOnly" name="showPreorderOnly" class="custom-control-input" @if ($filter->showPreorderOnly) checked @endif>
+                                    <label class="custom-control-label" for="showPreorderOnly">Show Preorder only</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" id="showReportedOnly" name="showReportedOnly" class="custom-control-input" @if ($filter->showReportedOnly) checked @endif>
