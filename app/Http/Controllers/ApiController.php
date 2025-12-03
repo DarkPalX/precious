@@ -1664,27 +1664,25 @@ public function getAllBookCategoryList(Request $request){
   $responseMessage = "";
  
   $data['Status'] = "All";
-  // $data['SearchText'] = $request->post('SearchText');
-   $data['SearchText'] = 'Campus Girl: Vee, The Pretty Witch';
+  $data['SearchText'] = $request->post('SearchText');
+   // $data['SearchText'] = 'Campus Girl: Vee, The Pretty Witch';
 
-  $data['UserID']=52261;
+  $data['UserID']=0;
    if(isset($data['UserID'])){
        $data['UserID'] = $request->post('UserID');
    }
 
-  // $data['Filter_Sort'] = $request->post('Filter_Sort');
-  // $data['Filter_Genre'] = $request->post('Filter_Genre');
-  // $data['Filter_Star'] = $request->post('Filter_Star');
+  $data['Filter_Sort'] = $request->post('Filter_Sort');
+  $data['Filter_Genre'] = $request->post('Filter_Genre');
+  $data['Filter_Star'] = $request->post('Filter_Star');
 
-  $data['Filter_Sort'] = '';
-  $data['Filter_Genre'] = '';
-  $data['Filter_Star'] = '';
-
+  // $data['Filter_Sort'] = '';
+  // $data['Filter_Genre'] = '';
+  // $data['Filter_Star'] = '';
   $data["PageNo"] = 0;
-  // $data["Limit"] = $request->post('Limit');
+  $data["Limit"] = $request->post('Limit');
 
-   $data["Limit"] = 20;
-  
+   // $data["Limit"] = 20;
   $result=$Books->getSearchBookList($data);  
 
   return response()->json($result); 
