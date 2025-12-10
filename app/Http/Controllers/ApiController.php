@@ -1485,7 +1485,7 @@ public function addToCart(Request $request){
     $data['ProductID'] = 1112;
      $data['ProductPrice'] = '45.00000';
     $data['PromoDiscountPercent'] = 0;
-    $data['ProductDiscount'] = 0.00
+    $data['ProductDiscount'] = 0.00;
 
     $data['ProductQty'] = $request->post('ProductQty');
     // $data['ProductPrice'] = $request->post('ProductPrice');
