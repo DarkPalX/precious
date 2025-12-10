@@ -1471,8 +1471,8 @@ public function addToCart(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
-    $data['UserID'] = $request->post('UserID');
-    $data['ProductID'] = $request->post('ProductID');
+    // $data['UserID'] = $request->post('UserID');
+    // $data['ProductID'] = $request->post('ProductID');
 
     $data['ProductQty'] = $request->post('ProductQty');
     $data['ProductPrice'] = $request->post('ProductPrice');
@@ -1480,6 +1480,14 @@ public function addToCart(Request $request){
 
     $data['PromoDiscountPercent'] = $request->post('PromoDiscountPercent');
     $data['PromoDiscountPrice'] = $request->post('PromoDiscountPrice');
+
+    $data['UserID'] = 52261;
+    $data['ProductID'] = 1112;
+     $data['ProductPrice'] = '45.00000';
+
+    $data['ProductQty'] = $request->post('ProductQty');
+    // $data['ProductPrice'] = $request->post('ProductPrice');
+    $data['ProductDiscount'] = $request->post('ProductDiscount');
 
     if($data['ProductID']<=0){
       $ResponseMessage ='Select a book to add into your cart.';
