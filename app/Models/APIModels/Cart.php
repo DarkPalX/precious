@@ -192,7 +192,7 @@ class Cart extends Model
           'product_id' => $ProductID, 
           'qty' => $ProductQty,                                            
           'price' => $ProductPrice,                                            
-          'discount_amount' => $ProductActualDiscountPrice,
+          'discount_amount' => 0,
           'created_at' => $TODAY             
         ]);          
 
