@@ -168,18 +168,17 @@ class Cart extends Model
     $ProductID=$data['ProductID'];
     // $ProductQty=$data['ProductQty'];
 
-    $ProductQty=0;    
-    $ProductActualDiscountPrice=0;
-    
     $ProductPrice=$data['ProductPrice'];
     $ProductDiscount=$data['ProductDiscount'];
 
     $PromoDiscountPercent=$data['PromoDiscountPercent'];
     $PromoDiscountPrice=$data['PromoDiscountPrice'];
 
+    $ProductQty=0;    
+    $ProductActualDiscountPrice=0;
     if($PromoDiscountPercent>0){        
         $ProductActualDiscountPrice=$PromoDiscountPrice;
-    }else{        
+    }else if(($PromoDiscountPercent==0){         
         $ProductActualDiscountPrice=$ProductDiscount;
     }
     
@@ -192,7 +191,7 @@ class Cart extends Model
           'product_id' => $ProductID, 
           'qty' => $ProductQty,                                            
           'price' => $ProductPrice,                                            
-          'discount_amount' => 0,
+          'discount_amount' => $ProductActualDiscountPrice,
           'created_at' => $TODAY             
         ]);          
 
