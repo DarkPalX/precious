@@ -178,7 +178,7 @@ class Cart extends Model
     $ProductActualDiscountPrice=0;
     if($PromoDiscountPercent>0){        
         $ProductActualDiscountPrice=$PromoDiscountPrice;
-    }else if(($PromoDiscountPercent==0){         
+    }else if($PromoDiscountPercent==0){         
         $ProductActualDiscountPrice=$ProductDiscount;
     }
     
