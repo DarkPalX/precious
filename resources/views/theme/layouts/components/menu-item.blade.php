@@ -21,7 +21,8 @@
 
 @elseif ($item->is_external_type())
     <li class="menu-item {{ Str::contains(url()->current(), $item->uri) ? 'current' : '' }}">
-        <a href="{{ env('APP_URL')."/".$item->uri }}" class="menu-link" target="{{ $item->target }}"><div>{{ $item->label }}</div></a>
+        {{-- <a href="{{ env('APP_URL')."/".$item->uri }}" class="menu-link" target="{{ $item->target }}"><div>{{ $item->label }}</div></a> --}}
+        <a href="{{ $item->uri }}" class="menu-link" target="{{ $item->target }}"><div>{{ $item->label }}</div></a>
         @if ($item->has_sub_menus())
             <ul class="sub-menu-container">
                 @foreach ($item->sub_pages as $subItem)
