@@ -268,7 +268,7 @@
 
     <script>
         let listingUrl = "{{ route('products.index') }}";
-        let advanceListingUrl = "";
+        let advanceListingUrl = "{{ route('product.index.advance-search') }}";
         let searchType = "{{ $searchType }}";
     </script>
     <script src="{{ asset('js/listing.js') }}"></script>

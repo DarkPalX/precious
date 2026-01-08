@@ -7,7 +7,7 @@
 <div style="margin: 40px 40px 200px 40px;font-family:Arial;">
     <h4 class="mg-b-0 tx-spacing--1">Read Counts</h4>
     
-    {{-- <form action="{{route('report.downloads.mobile')}}" method="get">
+    <form action="{{route('report.read-counts.mobile')}}" method="get">
         <input type="hidden" name="act" value="go">
         @csrf
         <table style="font-size:12px;">
@@ -26,11 +26,21 @@
                 <td><a href="{{ route('report.downloads.mobile') }}" class="btn btn-sm btn-success" style="margin:0px 0px 0px 5px;">Reset</a></td>
             </tr>
         </table>
-    </form> --}}
+    </form>
 
-    @if($rs <>'')
+    {{-- @if($rs <>'') --}}
     <br><br>
-    <table id="example" class="display nowrap" style="width:100%;font: normal 13px/150% Arial, sans-serif, Helvetica;">
+    <table id="example" class="ajax-table display nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Read Counts</th>
+            </tr>
+        </thead>
+    </table>
+
+    {{-- <table id="example" class="display nowrap" style="width:100%;font: normal 13px/150% Arial, sans-serif, Helvetica;">
         <thead>
             <tr>
                 <th align="left">Code</th>
@@ -51,10 +61,10 @@
             </tr>
             @endforelse
         </tbody>
-    </table>
-    @endif
+    </table> --}}
+    {{-- @endif --}}
     
-    <div class="row row-sm">
+    {{-- <div class="row row-sm">
 
         <div class="col-md-6">
             <div class="mg-t-5">
@@ -73,65 +83,93 @@
             </div>
         </div>
 
-    </div>
+    </div> --}}
 </div>
 
 
 @endsection
 
 @section('pagejs')
-@endsection
+    <script>
 
-@section('customjs')
-{{-- <script src="{{ asset('js/datatables/Buttons-1.6.1/js/buttons.colVis.min.js') }}"></script>
-<script>
+        $(document).ready(function () {
 
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+            }
 
-    $(document).ready(function() {
-        $('#example').DataTable( {
-            dom: 'Bfrtip',
-            pageLength: 20,
-            order: [[0,'desc']],
-            buttons: [
-            {
-                extend: 'print',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'csv',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'excel',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {   
-                extend: 'pdfHtml5',
-                text: 'PDF',
-                exportOptions: {
-                    modifier: {
-                        page: 'current'
-                    }
+            $('.ajax-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('report.read-counts.mobile') }}",
+                    type: "GET"
                 },
-                orientation : 'landscape',
-                pageSize : 'LEGAL'
-            },
-            'colvis'
-            ],
-            columnDefs: [ {
+                columns: [
+                    { data: 'sku' },
+                    { data: 'name' },
+                    { data: 'read_count' }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {   
+                        extend: 'pdfHtml5',
+                        text: 'PDF',
+                        exportOptions: {
+                            modifier: {
+                                page: 'current'
+                            }
+                        },
+                        orientation : 'landscape',
+                        pageSize : 'LEGAL'
+                    },
+                    'colvis'
+                ],
+                pageLength: 20
+            });
+        });
 
-                visible: false
-            } ]
-        } );
-    } );
-</script> --}}
+    </script>
+    {{-- <script>
+
+        $(document).ready(function () {
+
+            $('#example').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('report.read-counts.mobile') }}",
+                    type: "GET"
+                },
+                columns: [
+                    { data: 'sku' },
+                    { data: 'name' },
+                    { data: 'read_count' }
+                ],
+                pageLength: 20 // override parent default
+            });
+
+        });
+
+    </script> --}}
 @endsection
-
 
 

@@ -473,23 +473,46 @@ class ReportsController extends Controller
         return view('admin.ecommerce.reports-mobile.customer-downloads',compact('rs', 'product'));
 
     }
-    
+
     public function read_counts(Request $request)
     {
+    
         $startDate = $request->get('start', false);
         $endDate   = $request->get('end', false);
 
-        $rs = Product::query();
-      
-        if ($startDate && $endDate) {
-            $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+        // dd($startDate);
+        if ($request->ajax()) {
+            $query = Product::select(['sku', 'name', 'read_count']);
+
+            if ($startDate && $endDate) {
+                $query->whereBetween('created_at', [
+                    $startDate . ' 00:00:00',
+                    $endDate . ' 23:59:59'
+                ]);
+            }
+            return datatables()->of($query)->make(true);
         }
-        
-        $rs = $rs->paginate($this->pageCount);
 
-        return view('admin.ecommerce.reports-mobile.read-counts',compact('rs', 'startDate', 'endDate'));
-
+        return view('admin.ecommerce.reports-mobile.read-counts', compact('startDate', 'endDate'));
     }
+
+    
+    // public function read_counts(Request $request)
+    // {
+    //     $startDate = $request->get('start', false);
+    //     $endDate   = $request->get('end', false);
+
+    //     $rs = Product::query();
+      
+    //     if ($startDate && $endDate) {
+    //         $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
+    //     }
+        
+    //     $rs = $rs->paginate($this->pageCount);
+
+    //     return view('admin.ecommerce.reports-mobile.read-counts',compact('rs', 'startDate', 'endDate'));
+
+    // }
 
 
 }

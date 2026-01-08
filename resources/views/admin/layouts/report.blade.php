@@ -68,6 +68,51 @@
     <script src="{{ asset('js/dashforge.js') }}"></script>
 
     <script src="{{ asset('js/datatables/Buttons-1.6.1/js/buttons.colVis.min.js') }}"></script>
+    {{-- <script>
+        $(function () {
+            $.extend(true, $.fn.dataTable.defaults, {
+                dom: 'Bfrtip',
+                pageLength: 100,
+                order: [[0, 'desc']],
+                responsive: true,
+                language: {
+                    info: "",
+                    infoEmpty: "",
+                    infoFiltered: "",
+                    lengthMenu: "Show _MENU_ entries"
+                },
+                buttons: [
+                    {
+                        extend: 'print',
+                        exportOptions: { columns: ':visible' }
+                    },
+                    {
+                        extend: 'copy',
+                        exportOptions: { columns: ':visible' }
+                    },
+                    {
+                        extend: 'csv',
+                        exportOptions: { columns: ':visible' }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: { columns: ':visible' }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'PDF',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            modifier: { page: 'current' }
+                        }
+                    },
+                    'colvis'
+                ]
+            });
+        });
+    </script> --}}
+
     <script>
         $(document).ready(function() {
             $('#example').DataTable( {
