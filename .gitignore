@@ -1,4 +1,6 @@
 /vendor/
+vendor_old/
+vendor.zip
 node_modules/
 npm-debug.log
 yarn-error.log
