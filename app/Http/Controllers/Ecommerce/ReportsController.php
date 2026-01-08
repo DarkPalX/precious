@@ -482,7 +482,7 @@ class ReportsController extends Controller
 
         // dd($startDate);
         if ($request->ajax()) {
-            $query = Product::select(['sku', 'name', 'read_count']);
+            $query = Product::select(['sku', 'name', 'read_count'])->where('sku', '<>', '');
 
             if ($startDate && $endDate) {
                 $query->whereBetween('created_at', [
