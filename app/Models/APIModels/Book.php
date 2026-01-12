@@ -540,11 +540,17 @@ class Book extends Model
        if($Filter_Sort=='Publication Date'){
         $query->orderBy("prds.publication_date","ASC");   
        }
-        if($Filter_Sort=='A-Z Sort'){
+        if($Filter_Sort=='Title A-Z Sort'){
         $query->orderBy("prds.name","ASC");   
        }
-        if($Filter_Sort=='Z-A Sort'){
+        if($Filter_Sort=='Title Z-A Sort'){
         $query->orderBy("prds.name","DESC");   
+       }
+       if($Filter_Sort=='Author A-Z Sort'){
+        $query->orderBy("prds.author","ASC");   
+       }
+        if($Filter_Sort=='Author Z-A Sort'){
+        $query->orderBy("prds.author","DESC");   
        }
      }
     else{
