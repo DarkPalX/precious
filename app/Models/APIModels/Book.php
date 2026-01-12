@@ -906,9 +906,9 @@ class Book extends Model
           ->where('id',$ProductID) 
           ->first();
 
-        if(isset($book_info)>0){
-            $read_count=$book_info->read_count;
-       }    
+    if(isset($book_info)>0){
+        $read_count=$book_info->read_count;
+    }    
 
     return $read_count;      
   }
