@@ -1447,7 +1447,8 @@ public function getReadBookCount(Request $request){
 
     $response = "Failed";
     $responseMessage = "";
-
+    
+    $read_count_result=0;
     $data['ProductID']=$request->post('ProductID'); 
  
     $read_count_result=$Book->getReadBookCount($data);  
