@@ -1450,8 +1450,12 @@ public function getReadBookCount(Request $request){
 
     $data['ProductID']=$request->post('ProductID'); 
  
-    $result=$Book->getReadBookCount($data);  
-    return response()->json($result); 
+    $read_count_result=$Book->getReadBookCount($data);  
+     return response()->json([
+         'response' => 'Success',
+         'read_count' => $read_count_result,
+         'message' => $ResponseMessage,
+        ]);
     
 }
 
