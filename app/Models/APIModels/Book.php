@@ -875,25 +875,48 @@ class Book extends Model
     }
   }
 
-  public function saveReadBookCount($data){
+  public function getReadBookCount($data){
 
     $ProductID=$data['ProductID'];        
 
-    $read_count=1;     
+    $read_count=0;     
 
-    $book_info = DB::table('products')          
+    $info = DB::table('products')          
           ->where('id',$ProductID) 
           ->first();
 
         if(isset($book_info)>0){
-            $read_count=$book_info->read_count+1;
-            DB::table('products')
-                ->where('id',$ProductID)
-                ->update([                                                       
-                  'read_count' => $read_count  
-               ]);
-       }          
+             $read_count =$info->read_count; 
+       }  
+
+        return $read_count;        
   }
+
+  public function getPageChapterBookMark($data){
+      
+    $ChapterPageNo = ""; 
+    $ChapterPageDate = "";
+    $ResultChapter="";
+
+    $UserID=$data['UserID'];
+    $ProductID=$data['ProductID'];
+    
+    $info = DB::table('book_marks')          
+        ->whereRaw('customer_id=?',[$UserID])    
+        ->whereRaw('product_id=?',[$ProductID])                                          
+        ->first();
+
+        if(isset($info)>0){
+            $ChapterPageNo =$info->chapter_no; 
+            $ChapterPageDate = date('m/d/Y', strtotime($info->created_at));
+             
+            $ResultChapter=$ChapterPageNo.' - '.$ChapterPageDate;
+        }
+
+    return $ResultChapter;
+        
+
+    }
 
   public function getPageChapterBookMark($data){
       
