@@ -1455,7 +1455,7 @@ public function getReadBookCount(Request $request){
      return response()->json([
          'response' => 'Success',
          'read_count' => $read_count_result,
-         'message' => $ResponseMessage,
+         'message' => $responseMessage,
         ]);
     
 }
