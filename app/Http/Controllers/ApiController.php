@@ -1440,6 +1440,21 @@ public function saveReadBookCount(Request $request){
 }
 
 
+// GET BOOK READ COUNT====================================================
+public function getReadBookCount(Request $request){
+    
+    $Book = new Book();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['ProductID']=$request->post('ProductID'); 
+ 
+    $result=$Book->saveReadBookCount($data);  
+    return response()->json($result); 
+    
+}
+
 //CART ITEM LIST===========================================================================
 public function getCustomerCartList(Request $request){
     
