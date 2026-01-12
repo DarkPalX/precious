@@ -1439,28 +1439,6 @@ public function saveReadBookCount(Request $request){
     
 }
 
-// GET BOOK READ COUNT====================================================
-public function getReadBookCount(Request $request){
-    
-    // $Book = new Book();
-
-    // $response = "Failed";
-    // $responseMessage = "";
-
-    // $data['ProductID']=$request->post('ProductID'); 
- 
-    // $result=$Book->getReadBookCount($data);  
-    // return response()->json($result); 
-
-    // // return response()->json([
-    // //    'response' => 'Success',         
-    // //    'read_count' =>$Read_Count,      
-    // //    'message' => '',
-    // //   ]); 
-    
-    
-}
-
 
 //CART ITEM LIST===========================================================================
 public function getCustomerCartList(Request $request){

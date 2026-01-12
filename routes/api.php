@@ -288,12 +288,6 @@ Route::post('/remove-subscribed-books',[
    'as'=> 'remove-subscribed-books'
 ]);
 
-// Route::post('/get-read-count',[
-//    'uses'=>'App\Http\Controllers\ApiController@getReadBookCount',
-//    'as'=> 'get-read-count'
-// ]);
-
-
 //DOWNLOADED BOOKS====================================================================
 Route::post('/get-subscribed-downloaded-books-list',[
    'uses'=>'App\Http\Controllers\ApiController@getSubscribedDownloadedBooksList',
