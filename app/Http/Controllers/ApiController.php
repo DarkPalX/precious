@@ -1442,7 +1442,6 @@ public function saveReadBookCount(Request $request){
 // GET BOOK READ COUNT====================================================
 public function getReadBookCount(Request $request){
     
-    $Misc = new Misc();
     $Book = new Book();
 
     $response = "Failed";
@@ -1450,13 +1449,15 @@ public function getReadBookCount(Request $request){
 
     $data['ProductID']=$request->post('ProductID'); 
  
-    $Read_Count=$Book->getReadBookCount($data);  
+    $result=$Book->getReadBookCount($data);  
+    return response()->json($result); 
 
-    return response()->json([
-       'response' => 'Success',         
-       'read_count' =>$Read_Count,      
-       'message' => '',
-      ]); 
+    // return response()->json([
+    //    'response' => 'Success',         
+    //    'read_count' =>$Read_Count,      
+    //    'message' => '',
+    //   ]); 
+    
     
 }
 

@@ -885,7 +885,7 @@ class Book extends Model
           ->where('id',$ProductID) 
           ->first();
 
-        if(isset($book_info)>0){
+        if(isset($info)>0){
              $read_count =$info->read_count; 
        }  
 
