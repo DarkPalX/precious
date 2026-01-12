@@ -1442,21 +1442,21 @@ public function saveReadBookCount(Request $request){
 // GET BOOK READ COUNT====================================================
 public function getReadBookCount(Request $request){
     
-    $Book = new Book();
+    // $Book = new Book();
 
-    $response = "Failed";
-    $responseMessage = "";
+    // $response = "Failed";
+    // $responseMessage = "";
 
-    $data['ProductID']=$request->post('ProductID'); 
+    // $data['ProductID']=$request->post('ProductID'); 
  
-    $result=$Book->getReadBookCount($data);  
-    return response()->json($result); 
+    // $result=$Book->getReadBookCount($data);  
+    // return response()->json($result); 
 
-    // return response()->json([
-    //    'response' => 'Success',         
-    //    'read_count' =>$Read_Count,      
-    //    'message' => '',
-    //   ]); 
+    // // return response()->json([
+    // //    'response' => 'Success',         
+    // //    'read_count' =>$Read_Count,      
+    // //    'message' => '',
+    // //   ]); 
     
     
 }
