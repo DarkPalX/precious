@@ -20,8 +20,38 @@
 			</div>
 			@endif
 
+			{{-- FOR PROFILE PIC UPDATE --}}
+			<form id="profile-form" method="post" action="{{ route('my-account.update-profile-picture') }}" enctype="multipart/form-data">
+				@csrf
+
+				<div class="row">
+					<div class="col-12 d-flex justify-content-center">
+						<div class="position-relative text-center">
+
+							<!-- Profile Image -->
+							<img id="profilePreview"
+								src="{{ auth()->user()->avatar ?? asset('images/user.png') }}"
+								class="rounded-circle border"
+								style="width:150px;height:150px;object-fit:cover;">
+
+							<!-- Hidden File Input -->
+							<input type="file" id="profileInput" name="avatar" accept="image/*" style="display:none">
+
+							<!-- Camera Button -->
+							<label for="profileInput"
+								class="btn btn-dark rounded-circle position-absolute"
+								style="bottom:5px; right:5px; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer;">
+								<i class="fa fa-camera text-white"></i>
+							</label>
+
+						</div>
+					</div>
+				</div>
+			</form>
+			{{-- FOR PROFILE PIC UPDATE END --}}
+
 			<form method="post" action="{{ route('my-account.update-personal-info') }}">
-			@csrf
+				@csrf
 				<div class="row">
 					<div class="col-12">
 						<div class="fancy-title title-border-color title-left">
@@ -189,6 +219,22 @@
 			formGroup.remove();
 		}
 
+	</script>
+
+	<script>
+		$ = jQuery;
+
+		$('#profileInput').on('change', function(e){
+
+			const reader = new FileReader();
+			reader.onload = function(e){
+				$('#profilePreview').attr('src', e.target.result);
+			}
+			reader.readAsDataURL(this.files[0]);
+
+			// auto submit
+			$('#profile-form').submit();
+		});
 	</script>
 
 @endsection

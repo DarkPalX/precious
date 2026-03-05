@@ -164,6 +164,7 @@ Route::get('/phpinfo', function () {
             Route::get('/free-ebooks', [MyAccountController::class, 'free_ebooks'])->name('customer.free-ebooks');
             Route::get('/ecredits', [MyAccountController::class, 'ecredits'])->name('customer.ecredits');
             Route::post('/account-update', [MyAccountController::class, 'update_personal_info'])->name('my-account.update-personal-info');
+            Route::post('/profile-picture-update', [MyAccountController::class, 'update_profile_picture'])->name('my-account.update-profile-picture');
             Route::get('/account/change-password', [MyAccountController::class, 'change_password'])->name('my-account.change-password');
             Route::post('/account/change-password', [MyAccountController::class, 'update_password'])->name('my-account.update-password');
             Route::get('/account-logout', [CustomerFrontController::class, 'logout'])->name('account.logout');

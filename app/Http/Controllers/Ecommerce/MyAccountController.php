@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 use App\Mail\DeliveryStatusMail;
@@ -317,6 +318,50 @@ class MyAccountController extends Controller
         }
 
         return redirect()->back()->with('success', 'Account details has been updated');
+    }
+
+    public function update_profile_picture(Request $request)
+    {
+        // dd($request->avatar);
+        $updateData = [];
+
+        if ($request->hasFile('avatar')) {
+            Storage::disk('public')->delete(auth()->user()->get_image_url_storage_path());
+            $updateData['avatar'] = $this->upload_file_to_storage('avatars', $request->file('avatar'), 'url');
+        }
+
+        auth()->user()->update($updateData);
+
+        return redirect()->back()->with('success', 'Profile picture has been updated');
+    }
+
+    public function upload_file_to_storage($folder, $file, $key = '')
+    {
+        $fileName = $file->getClientOriginalName();
+        if (Storage::disk('public')->exists($folder.'/'.$fileName)) {
+            $fileNames = explode(".", $fileName);
+            $count = 2;
+            $newFilename = $fileNames[0].' ('.$count.').'.$fileNames[1];
+            while(Storage::disk('public')->exists($folder.'/'.$newFilename)) {
+                $count += 1;
+                $newFilename = $fileNames[0].' ('.$count.').'.$fileNames[1];
+            }
+
+            $fileName = $newFilename;
+        }
+
+        $path = Storage::disk('public')->putFileAs($folder, $file, $fileName);
+        $url = Storage::disk('public')->url($path);
+        $returnArr = [
+            'name' => $fileName,
+            'url' => $url
+        ];
+
+        if ($key == '') {
+            return $returnArr;
+        } else {
+            return $returnArr[$key];
+        }
     }
 
     public function change_password()

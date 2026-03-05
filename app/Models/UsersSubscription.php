@@ -12,7 +12,7 @@ class UsersSubscription extends Model
     use HasFactory;
 
     protected $table = 'users_subscriptions';
-    protected $fillable = ['user_id', 'plan_id', 'no_days', 'mode_payment', 'amount_paid', 'start_date', 'end_date', 'is_subscribe', 'is_expired', 'is_extended', 'is_cancelled', 'is_cancelled', 'remarks'];
+    protected $fillable = ['user_id', 'plan_id', 'no_days', 'mode_payment', 'amount_paid', 'start_date', 'end_date', 'is_subscribe', 'is_expired', 'is_extended', 'is_cancelled', 'is_cancelled', 'cancel_reason', 'remarks'];
 
     public function subscription()
     {

@@ -12,7 +12,7 @@ use App\Models\{
 class Deliverablecities extends Model
 {
     protected $table = 'deliverable_cities';
-    protected $fillable = ['name', 'rate','area',  'user_id','item_type','outside_manila', 'province', 'city', 'barangay', 'municipality'];
+    protected $fillable = ['name', 'rate', 'area', 'user_id', 'item_type', 'outside_manila', 'province', 'city', 'barangay', 'municipality'];
 
     public function user()
     {
