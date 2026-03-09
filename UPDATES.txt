@@ -1,0 +1,84 @@
+splashscreen_logo
+splashscreen_gif_animation
+onboard_screen_logo_1
+onboard_screen_title_1
+onboard_screen_content_1
+onboard_screen_logo_2
+onboard_screen_title_2
+onboard_screen_content_2
+onboard_screen_logo_3
+onboard_screen_title_3
+onboard_screen_content_3
+
+dashboard_profile_button
+dashboard_library_button
+dashboard_transactions_button
+dashboard_ecredits_button
+dashboard_contact_button
+dashboard_about_button
+dashboard_faqs_button
+dashboard_password_button
+dashboard_settings_button
+
+menubar_profile_button
+menubar_library_button
+menubar_home_button
+menubar_orders_button
+menubar_messages_button
+
+background_color_info
+background_img_info
+
+topbar_bg_color
+bottombar_bg_color
+button_bg_color
+font_color
+
+CREATE TABLE mobile_app_settings (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+    splashscreen_logo VARCHAR(255) NULL,
+    splashscreen_gif_animation VARCHAR(255) NULL,
+
+    onboard_screen_logo_1 VARCHAR(255) NULL,
+    onboard_screen_title_1 VARCHAR(255) NULL,
+    onboard_screen_content_1 VARCHAR(255) NULL,
+
+    onboard_screen_logo_2 VARCHAR(255) NULL,
+    onboard_screen_title_2 VARCHAR(255) NULL,
+    onboard_screen_content_2 VARCHAR(255) NULL,
+
+    onboard_screen_logo_3 VARCHAR(255) NULL,
+    onboard_screen_title_3 VARCHAR(255) NULL,
+    onboard_screen_content_3 VARCHAR(255) NULL,
+
+    dashboard_profile_button VARCHAR(255) NULL,
+    dashboard_library_button VARCHAR(255) NULL,
+    dashboard_transactions_button VARCHAR(255) NULL,
+    dashboard_ecredits_button VARCHAR(255) NULL,
+    dashboard_contact_button VARCHAR(255) NULL,
+    dashboard_about_button VARCHAR(255) NULL,
+    dashboard_faqs_button VARCHAR(255) NULL,
+    dashboard_password_button VARCHAR(255) NULL,
+    dashboard_settings_button VARCHAR(255) NULL,
+
+    menubar_profile_button VARCHAR(255) NULL,
+    menubar_library_button VARCHAR(255) NULL,
+    menubar_home_button VARCHAR(255) NULL,
+    menubar_orders_button VARCHAR(255) NULL,
+    menubar_messages_button VARCHAR(255) NULL,
+
+    background_color_info VARCHAR(255) NULL,
+    background_img_info VARCHAR(255) NULL,
+
+    topbar_bg_color VARCHAR(255) NULL,
+    bottombar_bg_color VARCHAR(255) NULL,
+    button_bg_color VARCHAR(255) NULL,
+    font_color VARCHAR(255) NULL,
+
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    updated_at TIMESTAMP NULL DEFAULT NULL
+);
+
+INSERT INTO mobile_app_settings (created_at, updated_at)
+VALUES (NOW(), NOW());

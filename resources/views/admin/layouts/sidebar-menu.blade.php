@@ -90,6 +90,10 @@
                     <li @if (\Route::current()->getName() == 'website-settings.edit') class="active" @endif><a href="{{ route('website-settings.edit') }}">Website Settings</a></li>
                 @endif
 
+                @if (auth()->user()->has_access_to_website_settings_module())
+                    <li @if (\Route::current()->getName() == 'mobile-app-settings.edit') class="active" @endif><a href="{{ route('mobile-app-settings.edit') }}">Mobile App Settings</a></li>
+                @endif
+
                 @if (auth()->user()->has_access_to_audit_logs_module())
                     <li @if (\Route::current()->getName() == 'audit-logs.index') class="active" @endif><a href="{{ route('audit-logs.index') }}">Audit Trail</a></li>
                 @endif

@@ -14,7 +14,7 @@ use App\Http\Controllers\Cms4Controllers\{
 
 // Settings
 use App\Http\Controllers\Settings\{
-    PermissionController, AccountController, AccessController, UserController, LogsController, RoleController, WebController
+    PermissionController, AccountController, AccessController, UserController, LogsController, RoleController, WebController, MobileAppSettingController
 };
 
 // Ecommerce Controller
@@ -256,6 +256,12 @@ Route::group(['prefix' => 'admin-panel'], function (){
             Route::post('/website-settings/remove_icon', [WebController::class, 'remove_icon'])->name('website-settings.remove-icon');
             Route::post('/website-settings/remove_media', [WebController::class, 'remove_media'])->name('website-settings.remove-media');
             Route::post('update-coupons-settings', [WebController::class, 'update_coupon_settings'])->name('website-settings.update-coupont-settings');
+        //
+
+        // Mobile App
+            Route::get('/mobile-app-settings/edit', [MobileAppSettingController::class, 'edit'])->name('mobile-app-settings.edit');
+            Route::put('/mobile-app-settings/update', [MobileAppSettingController::class, 'update'])->name('mobile-app-settings.update');
+            Route::post('/mobile-app-settings/remove_logo', [MobileAppSettingController::class, 'remove_logo'])->name('mobile-app-settings.remove-logo');
         //
 
         // Audit
