@@ -827,7 +827,7 @@ class ApiController extends Controller {
         $isImage = $file->getClientOriginalExtension(); 
 
 
-        $path = $file->storeAs('images',$ImageName,'public');    
+        $path = $file->storeAs('avatars',$ImageName,'public');    
         return response()->json(['path' => $path], 200);            
     }
 
