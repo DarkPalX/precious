@@ -141,7 +141,6 @@ class ApiController extends Controller {
     
     $data['UserID']=0;
  
-   
     $data['EmailAddress'] =  $request->post('EmailAddress');
     $data['Password'] =  $request->post('Password');
 
@@ -187,7 +186,7 @@ class ApiController extends Controller {
                 if($chkIsActive==1){
                   
                   $data['UserID']=$getUserID;
-                  $Subscription->checkSubscriptionStatus($data);
+                  //$Subscription->checkSubscriptionStatus($data);
 
                     return response()->json([
                       'data' => $info,                      
