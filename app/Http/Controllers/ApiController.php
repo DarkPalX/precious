@@ -809,6 +809,31 @@ class ApiController extends Controller {
     } 
   }
 
+//UPLOAD AVATAR===========================================================================================
+   public function uploadAvatarImage(Request $request){
+
+  $Misc = new Misc();
+  $Messages = new Messages();
+  
+  $response = "Failed";
+  $responseMessage = "";
+
+  $ImageName='image-'.date("Y-m-d").'-'.date("H:i:s").'.jpg';
+  $chk_extensions = ["jpg", "jpeg","png"];
+    
+   if ($request->hasFile('image_file')) {
+
+        $file = $request->file('image_file'); 
+        $isImage = $file->getClientOriginalExtension(); 
+
+
+        $path = $file->storeAs('images',$ImageName,'public');    
+        return response()->json(['path' => $path], 200);            
+    }
+
+  }
+
+
  // GET CUSTOMER INFORMATION========================================================================
  public function getCustomerInformationByEmail(Request $request){
 
@@ -2105,26 +2130,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
 
 
         $path = $file->storeAs('images',$ImageName,'public');    
-        return response()->json(['path' => $path], 200); 
-
-        // if (in_array($isImage,$chk_extensions){
-
-        //   $path = $file->storeAs('images',$ImageName,'public');    
-        //   return response()->json(['path' => $path], 200);
-
-        //   return response()->json([                  
-        //        'response' => "Success",
-        //        'message' => "Image is successfully uploaded.",
-        //     ],200); 
-
-        // }else{     
-
-        //     return response()->json([                  
-        //        'response' => "Failed",
-        //        'message' => "Sorry! Image file type is required.",
-        //     ],500);                              
-
-        // }               
+        return response()->json(['path' => $path], 200);            
     }
 
   }
