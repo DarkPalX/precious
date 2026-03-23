@@ -102,6 +102,12 @@ Route::post('/update-customer-info',[
    'as'=> 'update-customer-info'
 ]);
 
+//UPLOAD IMAGE PROFILE AVATAR====================================================================
+Route::post('/upload-image-avatar',[
+   'uses'=>'App\Http\Controllers\ApiController@uploadAvatarImage',
+   'as'=> 'upload-image-avatar'
+]);
+
 //CUSTOMER ADDRESS===================================================================
 Route::post('/update-customer-address',[
    'uses'=>'App\Http\Controllers\ApiController@doUpdateCustomerAddress',
