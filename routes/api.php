@@ -479,6 +479,12 @@ Route::post('/check-app-version-info',[
 ]);
 
 
+//GET MOBILE APP SETTINGS INFORMATION===========================================================
+Route::post('/get-mobile-setting-info',[
+   'uses'=>'App\Http\Controllers\ApiController@getMobileSettingsInformation',
+   'as'=> 'get-mobile-setting-info'
+]);
+
 // //EPUB VIEWER=============================================================================
 // Route::get('/show-viewer',[
 //    'uses'=>'App\Http\Controllers\ApiController@showViewerEpub',
