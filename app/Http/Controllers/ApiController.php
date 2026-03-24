@@ -2942,6 +2942,7 @@ public function getCompanyPrivacyPolicy(Request $request){
     $response = "Failed";
     $responseMessage = "";
 
+    $data['Type']=$request->post('Type');
     $Info=$Misc->getMobileSettingsInformation($data);
 
     if(isset($Info)>0){      
