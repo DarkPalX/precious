@@ -786,14 +786,23 @@ class UserCustomer extends Model
     $CityName=$data['CityName'];
     $ZipCode=$data['ZipCode'];
 
+    $ImageFileName=$data['ImageFileName'];
+
+    $Avatar='';  
+    if($ImageFileName!=''){
+      $Avatar='https://preciouspagesbookstore.com.ph/storage/avatars/'.$ImageFileName;  
+    } 
+
     if($UserID > 0){
 
-        if($BirthDate=='Not Set 00:00:00'){
+        if($BirthDate=='Not Set 00:00:00' &&  $ImageFileName!=''){
+
             DB::table('users')
             ->where('id',$UserID)
             ->update([      
               'firstname' => trim(ucwords($FirstName)),              
-              'lastname' => trim(ucwords($LastName)),              
+              'lastname' => trim(ucwords($LastName)), 
+              'avatar' => $Avatar,       
               'name' => trim(ucwords($FullName)),              
               'email' => trim($EmailAddress), 
               'mobile' => trim($MobileNo),
@@ -801,9 +810,28 @@ class UserCustomer extends Model
               'address_city' => $CityName,
               'address_zip' => $ZipCode,                                       
               'updated_at' => $TODAY
-        ]);     
+           ]);     
             
+        } else if($BirthDate!='Not Set 00:00:00' &&  $ImageFileName!=''){
+          
+           DB::table('users')
+            ->where('id',$UserID)
+            ->update([      
+              'firstname' => trim(ucwords($FirstName)),              
+              'lastname' => trim(ucwords($LastName)), 
+              'avatar' => $Avatar,       
+              'name' => trim(ucwords($FullName)),              
+              'email' => trim($EmailAddress), 
+              'birth_date' => $BirthDate,
+              'mobile' => trim($MobileNo),
+              'address_street' => $StreetAddress,                                      
+              'address_city' => $CityName,
+              'address_zip' => $ZipCode,                                       
+              'updated_at' => $TODAY
+           ]);
+
         }else{
+
             DB::table('users')
             ->where('id',$UserID)
             ->update([      
