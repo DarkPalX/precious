@@ -929,7 +929,7 @@ class ApiController extends Controller {
     $data['ZipCode'] = $request->post('ZipCode'); 
     
     $data['ImageFileName'] = $request->post('ImageFileName'); 
-      
+
     if(empty($data['FirstName'])){
       $ResponseMessage = 'First name is required.';
        return response()->json([
@@ -2933,5 +2933,31 @@ public function getCompanyPrivacyPolicy(Request $request){
   return response()->json($result); 
   }
 
+
+// GET MOBILE APP SETTINGAS INFORMATION========================================================================
+ public function getMobileSettingsInformation(Request $request){
+
+    $Misc = new Misc();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $Info=$Misc->getMobileSettingsInformation($data);
+
+    if(isset($Info)>0){      
+        return response()->json([                  
+         'response' => 'Success',
+         'data' => $Info,
+         'message' => "Successfully get mobile app settings",
+       ]);    
+
+    }else{
+        return response()->json([
+          'response' => 'Failed',
+          'data' => null,
+          'message' => "Something went wrong while getting mobile app settings",
+       ]); 
+    } 
+  }
 
 }
