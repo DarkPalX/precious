@@ -927,6 +927,8 @@ class ApiController extends Controller {
     $data['StreetAddress'] = $request->post('StreetAddress'); 
     $data['CityName'] = $request->post('CityName');      
     $data['ZipCode'] = $request->post('ZipCode'); 
+    
+    $data['ImageFileName'] = $request->post('ImageFileName'); 
       
     if(empty($data['FirstName'])){
       $ResponseMessage = 'First name is required.';
