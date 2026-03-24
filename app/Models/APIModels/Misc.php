@@ -51,6 +51,47 @@ class Misc extends Model
         return $IsUpdated;
 
     }  
+
+    public function getMobileSettingsInformation(){
+ 
+    $AppSettingID=1;
+
+    $info = DB::table('mobile_app_settings as app_setting')              
+    
+       ->selectraw("
+          app_setting.id as AppSettingID,
+
+          COALESCE(app_setting.splashscreen_logo,'') as splashscreen_logo,
+          COALESCE(app_setting.splashscreen_gif_animation,'') as splashscreen_gif_animation,
+
+          COALESCE(app_setting.onboard_screen_logo_1,'') as onboard_screen_logo_1,
+          COALESCE(app_setting.onboard_screen_title_1,'') as onboard_screen_title_1,
+          COALESCE(app_setting.onboard_screen_content_1,'') as onboard_screen_content_1,
+
+          COALESCE(app_setting.onboard_screen_logo_2,'') as onboard_screen_logo_2,
+          COALESCE(app_setting.onboard_screen_title_2,'') as onboard_screen_title_2,
+          COALESCE(app_setting.onboard_screen_content_2,'') as onboard_screen_content_2,
+
+          COALESCE(app_setting.onboard_screen_logo_3,'') as onboard_screen_logo_3,
+          COALESCE(app_setting.onboard_screen_title_3,'') as onboard_screen_title_3,
+          COALESCE(app_setting.onboard_screen_content_3,'') as onboard_screen_content_3,
+
+          COALESCE(app_setting.background_color_info,'') as background_color_info,    
+          COALESCE(app_setting.background_img_info,'') as background_img_info,
+
+          COALESCE(app_setting.topbar_bg_color,'') as topbar_bg_color,    
+          COALESCE(app_setting.bottombar_bg_color,'') as bottombar_bg_color,
+
+          COALESCE(app_setting.button_bg_color,'') as button_bg_color,
+          COALESCE(app_setting.font_color,'') as font_color         
+          
+        ")        
+        ->whereRaw('app_setting.id =?',[$AppSettingID])                                      
+        ->first();
+
+    return $info;
+
+  }
   
     // ADMIN DATA
     function SetAdminInitialData($data){
