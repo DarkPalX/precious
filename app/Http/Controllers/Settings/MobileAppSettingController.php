@@ -114,27 +114,57 @@ class MobileAppSettingController extends Controller
         |--------------------------------
         */
 
-        if ($request->background_type == 'color') {
+        // FOR BACKGROUND COLOR
+        $setting->background_color_info = $request->background_color_info;
 
-            $setting->background_color_info = $request->background_color_info;
-            $setting->background_img_info = null;
-        }
+        // REMOVE BACKGROUND IMAGE
+        if ($request->input('remove_background_img_info') == 1) {
 
-        if ($request->background_type == 'image') {
+            if ($setting->background_img_info) {
 
-            $setting->background_color_info = null;
+                $path = public_path('storage/mobile/' . $setting->background_img_info);
 
-            if ($request->hasFile('background_img_info')) {
+                if (file_exists($path)) {
+                    unlink($path);
+                }
 
-                $file = $request->file('background_img_info');
-
-                $filename = time() . '_' . $file->getClientOriginalName();
-
-                $file->move(public_path('storage/mobile'), $filename);
-
-                $setting->background_img_info = $filename;
+                $setting->background_img_info = null;
             }
         }
+
+        // UPLOAD NEW BACKGROUND IMAGE
+        if ($request->hasFile('background_img_info')) {
+
+            $file = $request->file('background_img_info');
+
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            $file->move(public_path('storage/mobile'), $filename);
+
+            $setting->background_img_info = $filename;
+        }
+
+        // if ($request->background_type == 'color') {
+
+        //     $setting->background_color_info = $request->background_color_info;
+        //     $setting->background_img_info = null;
+        // }
+
+        // if ($request->background_type == 'image') {
+
+        //     $setting->background_color_info = null;
+
+        //     if ($request->hasFile('background_img_info')) {
+
+        //         $file = $request->file('background_img_info');
+
+        //         $filename = time() . '_' . $file->getClientOriginalName();
+
+        //         $file->move(public_path('storage/mobile'), $filename);
+
+        //         $setting->background_img_info = $filename;
+        //     }
+        // }
 
         /*
         |--------------------------------

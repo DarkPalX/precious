@@ -265,7 +265,46 @@
 
             <h5>Background Settings ({{ env('MOBILE_BACKGROUND_WIDTH') }}x{{ env('MOBILE_BACKGROUND_HEIGHT') }})</h5>
 
-            <div class="form-group">
+            <div id="bg_color_div">
+                <label>Background Color</label>
+
+                <input type="color"
+                       name="background_color_info"
+                       class="form-control"
+                       value="{{ $mobile_setting->background_color_info }}">
+            </div>
+
+            <div id="bg_image_div">
+                <label>Background Image</label>
+
+                <input type="file"
+                    name="background_img_info"
+                    class="form-control image-input"
+                    data-preview="preview_bg"
+                    data-type="background">
+
+                <input type="hidden"
+                    name="remove_background_img_info"
+                    id="remove_background_img_info"
+                    value="0">
+
+                <div class="image-preview-container">
+                    <img id="preview_bg"
+                        src="{{ $mobile_setting->background_img_info ? asset('storage/mobile/'.$mobile_setting->background_img_info) : '' }}"
+                        class="preview-image">
+
+                    @if($mobile_setting->background_img_info)
+                        <button type="button"
+                                class="remove-image-btn remove-image"
+                                data-preview="preview_bg"
+                                data-input="remove_background_img_info">
+                            ×
+                        </button>
+                    @endif
+                </div>
+            </div>
+
+            {{-- <div class="form-group">
                 <label>Background Type</label>
 
                 <select id="background_type"
@@ -309,7 +348,7 @@
                          src="{{ $mobile_setting->background_img_info ? asset('storage/mobile/'.$mobile_setting->background_img_info) : '' }}"
                          class="preview-image">
                 </div>
-            </div>
+            </div> --}}
 
             <hr>
 
