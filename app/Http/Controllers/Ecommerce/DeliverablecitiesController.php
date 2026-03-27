@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Models\Ecommerce\{FormAttribute};
+
+use Response;
+
+
 class DeliverablecitiesController extends Controller
 {
     /**
@@ -24,7 +29,7 @@ class DeliverablecitiesController extends Controller
 
     public function index()
     {
-        $searchFields = ['city', 'province', 'item_type', 'barangay'];
+        $searchFields = ['province', 'city', 'municipality'];
 
         $listing = new ListingHelper();
 
@@ -153,4 +158,140 @@ class DeliverablecitiesController extends Controller
         Deliverablecities::whereId($request->add_id)->delete();
         return back()->with('success','Successfully deleted location');
     }
+
+    public function download_template()
+    {
+        $attributes = FormAttribute::orderBy('name', 'asc')->get();
+
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=location-rates.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $deliverable_cities = DeliverableCities::all();
+
+        $columns = ['Province', 'Name', 'City', 'Municipality', 'Outside Manila', 'Rate'];
+
+        foreach ($attributes as $attr) {
+            $columns[] = $attr->name;
+        }
+
+        $callback = function() use ($deliverable_cities, $columns, $attributes)
+        {
+            $file = fopen('php://output', 'w');
+
+            // ✅ Fix encoding for Excel
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            // Header
+            fputcsv($file, $columns);
+
+            foreach ($deliverable_cities as $row) {
+
+                $name = $row->city ?: $row->municipality;
+
+                $data = [
+                    $row->province,
+                    $name,
+                    $row->city,
+                    $row->municipality,
+                    $row->outside_manila,
+                    $row->rate
+                ];
+
+                foreach ($attributes as $attr) {
+                    $data[] = $row->{$attr->name} ?? '';
+                }
+
+                fputcsv($file, $data);
+            }
+
+            fclose($file);
+        };
+
+        return Response::stream($callback, 200, $headers);
+    }
+
+    public function upload_template(Request $request)
+    {
+        if (!$request->hasFile('csv')) {
+            return back()->with('error', 'No file uploaded.');
+        }
+
+        $file = $request->file('csv');
+        $path = $file->getRealPath();
+
+        // 1. Detect and fix encoding before processing
+        $content = file_get_contents($path);
+        
+        // Check if it's already UTF-8; if not, convert from Windows-1252 (Standard Excel CSV)
+        if (!mb_check_encoding($content, 'UTF-8')) {
+            $content = mb_convert_encoding($content, 'UTF-8', 'Windows-1252');
+        }
+
+        // Use a temporary stream to process the converted content
+        $handle = fopen('php://temp', 'r+');
+        fwrite($handle, $content);
+        rewind($handle);
+
+        set_time_limit(0);
+        $row = 0;
+
+        while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+            $row++;
+
+            if ($row == 1 || !$data || count(array_filter($data)) == 0) continue;
+
+            // 2. Clean and Normalize Data
+            $data = array_map(function ($value) {
+                // Remove weird hidden characters (like BOM) and trim
+                $clean = preg_replace('/[\x00-\x1F\x7F-\x9F]/u', '', $value);
+                return trim($clean);
+            }, $data);
+
+            // Map columns based on your image structure
+            $province     = $data[0] ?? null;
+            $name         = $data[1] ?? null; // e.g. "Las Piñas"
+            $city         = $data[2] ?? null;
+            $municipality = $data[3] ?? null;
+            $outside      = isset($data[4]) ? (int)$data[4] : 1;
+            $rawRate      = $data[5] ?? 0;
+
+            // 3. Robust Rate Parsing
+            $cleanRate = preg_replace('/[^0-9.]/', '', $rawRate); // Remove everything except numbers and dots
+            $rate = is_numeric($cleanRate) ? (float)$cleanRate : 0;
+
+            if (!$province || !$name) continue;
+
+            // Fallback logic
+            if (empty($city) && empty($municipality)) {
+                $municipality = $name;
+            }
+
+            // 4. Update or Create
+            DeliverableCities::updateOrCreate(
+                [
+                    'province' => $province,
+                    'name'     => $name, // Now correctly encoded, it will match existing records
+                ],
+                [
+                    'city'           => $city ?: null,
+                    'municipality'   => $municipality ?: null,
+                    'rate'           => $rate,
+                    'outside_manila' => $outside,
+                    'user_id'        => auth()->id(),
+                    'area'           => null,
+                    'item_type'      => null,
+                    'barangay'       => null,
+                ]
+            );
+        }
+
+        fclose($handle);
+        return back()->with('success', 'Locations uploaded successfully.');
+    }
+
 }

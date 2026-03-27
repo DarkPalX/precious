@@ -468,21 +468,33 @@ class CartController extends Controller
         $page->name = 'Checkout';
 
         $locations = DeliverableCities::query()
-            ->select('province', 'city', 'rate') //
-            ->whereNotNull('province')->where('province', '!=', '')
-            ->whereNotNull('city')->where('city', '!=', '')
-            ->distinct()
+            ->select(
+                'province',
+                'city',
+                'municipality',
+                'rate',
+                'area',
+                'item_type',
+                'outside_manila'
+            )
+            ->whereNotNull('province')
+            ->where('province', '!=', '')
+            ->where(function ($q) {
+                $q->whereNotNull('city')->where('city', '!=', '')
+                ->orWhere(function ($q2) {
+                    $q2->whereNotNull('municipality')->where('municipality', '!=', '');
+                });
+            })
             ->orderBy('province')
-            ->orderBy('city')
+            ->orderByRaw('COALESCE(city, municipality)')
             ->get()
             ->groupBy('province');
 
-
-        // $locations = Deliverablecities::query()
-        //     ->select('province', 'city')
+        // $locations = DeliverableCities::query()
+        //     ->select('province', 'city', 'rate') //
         //     ->whereNotNull('province')->where('province', '!=', '')
         //     ->whereNotNull('city')->where('city', '!=', '')
-        //     ->distinct() // 👈 keep only unique province + city pairs
+        //     ->distinct()
         //     ->orderBy('province')
         //     ->orderBy('city')
         //     ->get()
@@ -599,7 +611,7 @@ class CartController extends Controller
         $realTotalPrice  = number_format($totalPrice + $request->shippingRate - $request->shippingFeeDiscount, 2,'.','');
         $orderNumber = (new self())->next_order_number(); 
 
-        $customerAddress = $request->customer_delivery_barangay.', '.$request->customer_delivery_city.', '.$request->customer_delivery_province.', '.$request->customer_delivery_zip;
+        $customerAddress = $request->customer_delivery_street.', '.$request->customer_delivery_barangay.', '.$request->customer_delivery_city.', '.$request->customer_delivery_province.', '.$request->customer_delivery_zip;
 
         $ecredit_amount = 0;
         $new_ecredit = 0;

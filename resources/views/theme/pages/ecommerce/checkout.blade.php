@@ -80,16 +80,20 @@
 										<option value="0">Select City</option>
 										@foreach($locations as $province => $cities)
 											@foreach($cities as $city)
+												@php
+													$name = $city->city ?? $city->municipality;
+												@endphp
+												
 												<option 
-													value="{{ $city->city }}" 
+													value="{{ $name }}" 
 													data-province="{{ $province }}"
 													data-rate="{{ $city->rate }}"
 													data-area="{{ $city->area }}"
 													data-item-type="{{ $city->item_type }}"
 													data-outside-manila="{{ $city->outside_manila }}"
-													{{ str_contains(strtolower($customer->address_city), strtolower($city->city)) ? 'selected' : '' }}
+													{{ str_contains(strtolower($customer->address_city), strtolower($name)) ? 'selected' : '' }}
 												>
-													{{ $city->city }}
+													{{ $name }}
 												</option>
 											@endforeach
 										@endforeach
@@ -129,7 +133,13 @@
 							<tr>
 								<td><strong>Barangay</strong> <span class="text-danger">*</span></td>
 								<td class="p-2">
-									<input type="text" class="form-control" id="customer_delivery_barangay" name="customer_delivery_barangay" value="{{$customer->address_municipality ?? '-' }}"  onclick="select()" required >
+									<input type="text" class="form-control" id="customer_delivery_barangay" name="customer_delivery_barangay" value="{{$customer->address_municipality ?? ' ' }}"  onclick="select()" required >
+								</td>
+							</tr>
+							<tr>
+								<td><strong>Street</strong></td>
+								<td class="p-2">
+									<input type="text" class="form-control" id="customer_delivery_street" name="customer_delivery_street" value="{{$customer->address_street ?? ' ' }}"  onclick="select()" required >
 								</td>
 							</tr>
 							<tr>
