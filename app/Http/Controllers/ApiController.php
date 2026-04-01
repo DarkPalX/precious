@@ -1465,6 +1465,22 @@ public function saveReadBookCount(Request $request){
     
 }
 
+// SAVE READ BOOK AS CONTINUE READING====================================================
+public function saveContinueReadBook(Request $request){
+    
+    $Misc = new Misc();
+    $Book = new Book();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['UserID']=$request->post('UserID');   
+    $data['ProductID']=$request->post('ProductID'); 
+ 
+    $result=$Book->saveContinueReadBook($data);  
+    return response()->json($result); 
+    
+}
 
 // GET BOOK READ COUNT====================================================
 public function getReadBookCount(Request $request){
