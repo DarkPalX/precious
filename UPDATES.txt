@@ -1,3 +1,11 @@
+######################################### MARCH 25, 2026 #######################################
+
+UPDATE deliverable_cities using deliverable_cities.sql
+
+
+################################################################################################
+
+
 splashscreen_logo
 splashscreen_gif_animation
 onboard_screen_logo_1

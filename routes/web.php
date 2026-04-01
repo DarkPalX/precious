@@ -475,6 +475,8 @@ Route::group(['prefix' => 'admin-panel'], function (){
                 Route::get('/restore-rate/{id}', [DeliverablecitiesController::class, 'restore'])->name('location.restore');
                 Route::post('/delete-rate', [DeliverablecitiesController::class, 'delete'])->name('location.delete');
                 // Route::post('/admin/locations-delete', 'DeliverablecitiesController@delete')->name('admin.location.delete');
+                Route::get('/location-download-template',[DeliverablecitiesController::class, 'download_template'])->name('location.download.template');
+                Route::post('/location-upload-template',[DeliverablecitiesController::class, 'upload_template'])->name('location.upload.template');
 
             //
 

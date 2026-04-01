@@ -48,7 +48,7 @@
                                             </div>
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" id="orderBy2" name="orderBy" class="custom-control-input" value="name" @if ($filter->orderBy == 'name') checked @endif>
-                                                <label class="custom-control-label" for="orderBy2">{{__('common.title')}}</label>
+                                                <label class="custom-control-label" for="orderBy2">Name</label>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -81,13 +81,16 @@
 
                         <div class="ml-auto bd-highlight mg-t-10 mg-r-10">
                             <form class="form-inline" id="searchForm">
-                                <div class="search-form mg-r-10">
-                                    <input name="search" type="search" id="search" class="form-control"  placeholder="Search by Title" value="{{ $filter->search }}">
+                                <div class="search-form">
+                                    <input name="search" type="search" id="search" class="form-control"  placeholder="Search by Location" value="{{ $filter->search }}">
                                     <button class="btn filter" type="button" id="btnSearch"><i data-feather="search"></i></button>
                                 </div>
                             </form>
                         </div>
+                                    
                         <div class="mg-t-10">
+                            <a class="btn btn-info btn-sm mg-b-20" href="{{ route('location.download.template') }}">Download Template</a>
+                            <a class="btn btn-warning btn-sm mg-b-20" href="javascript:void(0)" onclick="$('#prompt-upload').modal('show');">Upload Rates</a>
                             @if (auth()->user()->has_access_to_route('locations.create'))
                                 <a class="btn btn-primary btn-sm mg-b-20" href="{{ route('locations.create') }}">Add New Location</a>
                             @endif
@@ -106,7 +109,7 @@
                             <thead>
                             <tr class="d-flex">
                                 <th class="col-4">Province</th>
-                                <th class="col-2">City</th>
+                                <th class="col-2">City/Municipality</th>
                                 {{-- <th class="col-1">Item Type</th> --}}
                                 <th class="col-2">Outside Manila</th>
                                 <th class="col-2">Rate</th>
@@ -117,7 +120,7 @@
                                 @forelse($address as $add)
                                     <tr class="d-flex">
                                         <td class="col-4">{{ $add->province }}</td>
-                                        <td class="col-2">{{ $add->city }}</td>
+                                        <td class="col-2">{{ $add->name }}</td>
                                         {{-- <td class="col-1">{{ $add->item_type }}</td> --}}
                                         <td class="col-2">{{ ($add->outside_manila == '1') ? 'Yes' : 'No' }}</td>
                                         <td class="col-2">{{ number_format($add->rate,2) }}</td>
@@ -183,6 +186,32 @@
                 </form>
             </div>
         </div>
+    </div>
+    <div class="modal effect-scale" id="prompt-upload" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <form action="{{ route('location.upload.template') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Upload Location Rates</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Note: Make sure you've used the correct csv template <br>
+                            <span class="text-danger" style="font-size:12px;">Update only the rates, if you updated location name it will be added as a new location</span>
+                        </p>
+                        <input type="file" name="csv" required="required" accept=".csv">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-danger">Upload</button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 @endsection
 
