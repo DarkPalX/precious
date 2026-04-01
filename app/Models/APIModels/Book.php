@@ -896,7 +896,9 @@ class Book extends Model
   }
 
  public function saveContinueReadBook($data){
-
+   
+    $TODAY = date("Y-m-d H:i:s");
+    
     $ProductID=$data['ProductID'];   
     $UserID=$data['ProductID'];         
 
