@@ -900,18 +900,18 @@ class Book extends Model
     $ProductID=$data['ProductID'];   
     $UserID=$data['ProductID'];         
 
-    $book_info = DB::table('continue_to_read_book')          
-          ->where('product_id',$ProductID) 
-          ->first();
+    // $book_info = DB::table('continue_to_read_book')          
+    //       ->where('product_id',$ProductID) 
+    //       ->first();
 
-    if(isset($book_info)<=0){
+    //if(isset($book_info)<=0){
          $BookID = DB::table('continue_to_read_book')
             ->insertGetId([                                            
               'customer_id' => $UserID,              
               'product_id' => $ProductID,                                                                                                                                                          
               'created_at' => $TODAY             
             ]); 
-      }
+      //}
   }
 
 
