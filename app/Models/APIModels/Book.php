@@ -898,22 +898,28 @@ class Book extends Model
  public function saveContinueReadBook($data){
    
     $TODAY = date("Y-m-d H:i:s");
-    
+
     $ProductID=$data['ProductID'];   
     $UserID=$data['ProductID'];         
 
-    // $book_info = DB::table('continue_to_read_book')          
-    //       ->where('product_id',$ProductID) 
-    //       ->first();
+    $book_info = DB::table('continue_to_read_book')          
+          ->where('product_id',$ProductID) 
+          ->first();
 
-    //if(isset($book_info)<=0){
-         $BookID = DB::table('continue_to_read_book')
+    if(isset($book_info)>0){
+         DB::table('continue_to_read_book')
+            ->where('product_id',$ProductID)
+            ->update([                                                       
+              'created_at' => $TODAY  
+           ]);
+      }else{
+        $BookID = DB::table('continue_to_read_book')
             ->insertGetId([                                            
               'customer_id' => $UserID,              
               'product_id' => $ProductID,                                                                                                                                                          
               'created_at' => $TODAY             
             ]); 
-      //}
+      }
   }
 
 
