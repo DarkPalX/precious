@@ -315,6 +315,11 @@ Route::post('/save-search-keywords',[
    'as'=> 'save-search-keywords'
 ]);
 
+Route::post('/get-search-keywords',[
+   'uses'=>'App\Http\Controllers\ApiController@getCustomerLibraryList',
+   'as'=> 'get-search-keywords'
+]);
+
 Route::post('/save-search-books',[
    'uses'=>'App\Http\Controllers\ApiController@saveSearchBooks',
    'as'=> 'save-search-books'

@@ -985,4 +985,42 @@ class UserCustomer extends Model
   }
 
 
+public function saveSearchKeyword($data){
+   
+    $TODAY = date("Y-m-d H:i:s");
+
+    $Keywords=$data['Keywords'];   
+    $UserID=$data['UserID'];         
+
+    
+    $SearchKeywordID = DB::table('searched_keywords')
+        ->insertGetId([                                            
+          'customer_id' => $UserID,              
+          'keyword' => $Keywords,                                                                                                                                                          
+          'created_at' => $TODAY             
+        ]); 
+      
+  }
+
+  public function getCustomerSearchKeyWords($data){
+
+   $TODAY = date("Y-m-d H:i:s");
+    $UserID=$data['UserID'];   
+
+      $query = DB::table('searched_keywords as kywrd')    
+
+       ->selectraw("
+          kywrd.id  as Keyword_ID,
+
+          COALESCE(kywrd.keyword,'') as Keyword,          
+          COALESCE(kywrd.customer_id,0) as CustomerID
+        ");
+
+      $query->whereRaw("kywrd.customer_id =?",[$UserID]);    
+      $list = $query->get();
+                             
+     return $list;  
+
+  }
+
 }

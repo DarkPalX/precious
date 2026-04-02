@@ -1486,7 +1486,7 @@ public function saveContinueReadBook(Request $request){
 public function saveSearchKeyword(Request $request){
     
     $Misc = new Misc();
-    $Book = new Book();
+    $UserCustomer = new UserCustomer();
 
     $response = "Failed";
     $responseMessage = "";
@@ -1494,10 +1494,34 @@ public function saveSearchKeyword(Request $request){
     $data['UserID']=$request->post('UserID');   
     $data['Keywords']=$request->post('Keywords'); 
  
-    $result=$Book->saveSearchKeyword($data);  
+    $result=$UserCustomer->saveSearchKeyword($data);  
     return response()->json($result); 
     
 }
+
+public function getCustomerSearchKeyWords(Request $request){
+    
+    $Misc = new Misc();
+    $UserCustomer = new UserCustomer();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['UserID']=0;
+   if(isset($data['UserID'])){
+       $data['UserID'] = $request->post('UserID');
+   }
+  
+    $data["SearchText"] = '';
+    $data["Status"] = '';
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+
+    $result=$UserCustomer->getCustomerSearchKeyWords($data);  
+    return response()->json($result); 
+    
+}
+
 
 // SAVE SEARCH BOOKS====================================================
 public function saveSearchBooks(Request $request){

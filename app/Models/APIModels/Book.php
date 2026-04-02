@@ -1126,23 +1126,6 @@ class Book extends Model
 
     }
 
- public function saveSearchKeyword($data){
-   
-    $TODAY = date("Y-m-d H:i:s");
-
-    $Keywords=$data['Keywords'];   
-    $UserID=$data['UserID'];         
-
-    
-    $SearchKeywordID = DB::table('searched_keywords')
-        ->insertGetId([                                            
-          'customer_id' => $UserID,              
-          'keyword' => $Keywords,                                                                                                                                                          
-          'created_at' => $TODAY             
-        ]); 
-      
-  }
-
   public function saveSearchBooks($data){
    
     $TODAY = date("Y-m-d H:i:s");
