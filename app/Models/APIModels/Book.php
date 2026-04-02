@@ -404,15 +404,10 @@ class Book extends Model
         ");    
 
 
-      // $query->whereRaw("cont.customer_id =?",[$UserID]); 
-      // $query->orderBy("cont.created_at","ASC");   
+      $query->whereRaw("cont.customer_id =?",[$UserID]); 
+      $query->orderBy("cont.created_at","ASC");   
          
-      // $list = $query->get();
-
-     $query->orderByRaw('RAND()');
-     $query->take($Limit);
-     $list=$query->get();
-                  
+      $list = $query->get();
                            
      return $list;           
            

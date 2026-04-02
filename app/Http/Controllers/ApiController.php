@@ -1790,21 +1790,6 @@ public function getRandomBookList(Request $request)
 public function getContinueToReadBookList(Request $request)
  {
 
-  //  $Books = new Book();
-
-  // $response = "Failed";
-  // $responseMessage = "";
-
-
-  // $data['UserID']=52261;
-  //  // if(isset($data['UserID'])){
-  //  //    $data['UserID'] = $request->post('UserID');    
-  //  // }
-  
-  //   $continueReadBooks = $Books->getContinueToReadBookList($data);
-
-  //  return response()->json($continueReadBooks);
-
   $Books = new Book();
 
   $response = "Failed";
@@ -1820,10 +1805,7 @@ public function getContinueToReadBookList(Request $request)
   $data["PageNo"] = 0;
   $data["Limit"] = $request->post('Limit');
 
-    $list = $Books->getContinueToReadBookList($data);
-
-    $bookArray = isset($list['data']) ? $list['data'] : $list;
-    $continueReadBooks = collect($bookArray)->shuffle()->take(10)->values();
+    $continueReadBooks = $Books->getContinueToReadBookList($data);
 
     return response()->json($continueReadBooks);
 }
