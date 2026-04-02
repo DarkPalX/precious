@@ -1805,7 +1805,7 @@ public function getContinueToReadBookList(Request $request)
   $data["PageNo"] = 0;
   $data["Limit"] = $request->post('Limit');
 
-   $bookArray = $Books->getContinueToReadBookList();
+   $bookArray = $Books->getContinueToReadBookList($data);
    $continueReadBooks=collect($bookArray)->take(10)->values();
 
     return response()->json($continueReadBooks);
