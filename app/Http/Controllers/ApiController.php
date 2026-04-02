@@ -1787,7 +1787,24 @@ public function getRandomBookList(Request $request)
     return response()->json($randomBooks);
 }
 
+public function getContinueToReadBookList(Request $request)
+ {
 
+   $Books = new Book();
+
+  $response = "Failed";
+  $responseMessage = "";
+ 
+
+  $data['UserID']=0;
+   if(isset($data['UserID'])){
+      $data['UserID'] = $request->post('UserID');    
+   }
+  
+    $randomBooks = $Books->getContinueToReadBookList($data);
+
+    return response()->json($randomBooks);
+}
 
   public function getFreeBookList(Request $request){
 

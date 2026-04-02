@@ -289,6 +289,11 @@ Route::post('/save-read-count',[
    'as'=> 'save-read-count'
 ]);
 
+Route::post('/get-continue-to-read-book-list',[
+   'uses'=>'App\Http\Controllers\ApiController@getContinueToReadBookList',
+   'as'=> 'get-continue-to-read-book-list'
+]);
+
 Route::post('/save-continue-read-book',[
    'uses'=>'App\Http\Controllers\ApiController@saveContinueReadBook',
    'as'=> 'save-continue-read-book'
