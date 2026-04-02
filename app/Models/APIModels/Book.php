@@ -112,15 +112,17 @@ class Book extends Model
               )
         ,0) as promo_discount_price,
 
-         COALESCE((
-               SELECT 
-                   bkmrk.chapter_no FROM 
-                        book_marks as bkmrk                  
-                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
-              )
-          ,'') as chapter_no,
+        COALESCE((
+           SELECT 
+               bkmrk.chapter_no FROM 
+                    book_marks as bkmrk                  
+                LEFT JOIN products as prods ON prods.id = bkmrk.product_id
+                     WHERE bkmrk.product_id = prds.id    
+                     AND bkmrk.customer_id=".$UserID." 
+                     ORDER BY bkmrk.created_at DESC
+                     LIMIT 1                                
+          )
+      ,'') as chapter_no,
 
         COALESCE(prds.status,'') as status          
           
@@ -272,14 +274,16 @@ class Book extends Model
         ,0) as promo_discount_price,
         
         COALESCE((
-               SELECT 
-                   bkmrk.chapter_no FROM 
-                        book_marks as bkmrk                  
-                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
-              )
-          ,'') as chapter_no,
+           SELECT 
+               bkmrk.chapter_no FROM 
+                    book_marks as bkmrk                  
+                LEFT JOIN products as prods ON prods.id = bkmrk.product_id
+                     WHERE bkmrk.product_id = prds.id    
+                     AND bkmrk.customer_id=".$UserID." 
+                     ORDER BY bkmrk.created_at DESC
+                     LIMIT 1                                
+          )
+      ,'') as chapter_no,
 
         COALESCE(prds.status,'') as status          
           
@@ -385,13 +389,15 @@ class Book extends Model
               )
         ,0) as promo_discount_price,
         
-          COALESCE((
+        COALESCE((
            SELECT 
                bkmrk.chapter_no FROM 
                     book_marks as bkmrk                  
                 LEFT JOIN products as prods ON prods.id = bkmrk.product_id
                      WHERE bkmrk.product_id = prds.id    
-                     AND bkmrk.customer_id=".$UserID." LIMIT 1                                
+                     AND bkmrk.customer_id=".$UserID." 
+                     ORDER BY bkmrk.created_at DESC
+                     LIMIT 1                                
           )
       ,'') as chapter_no,
 
@@ -503,15 +509,17 @@ class Book extends Model
               )
         ,0) as promo_discount_price,
 
-        COALESCE((
-               SELECT 
-                   bkmrk.chapter_no FROM 
-                        book_marks as bkmrk                  
-                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id   
-                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
-              )
-          ,'') as chapter_no,
+         COALESCE((
+           SELECT 
+               bkmrk.chapter_no FROM 
+                    book_marks as bkmrk                  
+                LEFT JOIN products as prods ON prods.id = bkmrk.product_id
+                     WHERE bkmrk.product_id = prds.id    
+                     AND bkmrk.customer_id=".$UserID." 
+                     ORDER BY bkmrk.created_at DESC
+                     LIMIT 1                                
+          )
+      ,'') as chapter_no,
 
          COALESCE((
                SELECT 
@@ -916,14 +924,16 @@ class Book extends Model
         ,0) as promo_discount_price,
 
          COALESCE((
-               SELECT 
-                   bkmrk.chapter_no FROM 
-                        book_marks as bkmrk                  
-                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
-              )
-          ,'') as chapter_no,
+           SELECT 
+               bkmrk.chapter_no FROM 
+                    book_marks as bkmrk                  
+                LEFT JOIN products as prods ON prods.id = bkmrk.product_id
+                     WHERE bkmrk.product_id = prds.id    
+                     AND bkmrk.customer_id=".$UserID." 
+                     ORDER BY bkmrk.created_at DESC
+                     LIMIT 1                                
+          )
+      ,'') as chapter_no,
 
          COALESCE((
                SELECT 
