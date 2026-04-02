@@ -292,7 +292,7 @@ class Book extends Model
     // $UserID=$data['UserID'];
      $UserID=52261;
 
-     $UserID=$data['UserID'];
+    // $UserID=$data['UserID'];
 
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
@@ -383,11 +383,16 @@ class Book extends Model
         ");    
 
 
-      $query->whereRaw("cont.customer_id =?",[$UserID]); 
-      $query->orderBy("cont.created_at","ASC");   
+      // $query->whereRaw("cont.customer_id =?",[$UserID]); 
+      // $query->orderBy("cont.created_at","ASC");   
          
-      $list = $query->get();
-                             
+      // $list = $query->get();
+
+     $query->orderByRaw('RAND()');
+     $query->take($Limit);
+     $list=$query->get();
+                  
+                           
      return $list;           
            
   }
