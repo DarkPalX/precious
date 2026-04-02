@@ -402,7 +402,7 @@ class Book extends Model
 
 
       $query->whereRaw("cont.customer_id =?",[$UserID]); 
-      $query->orderBy("cont.created_at","ASC");   
+      $query->orderBy("cont.created_at","DESC");   
          
       $list = $query->get();
                            
