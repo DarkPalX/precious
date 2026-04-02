@@ -997,7 +997,7 @@ class Book extends Model
     $TODAY = date("Y-m-d H:i:s");
 
     $ProductID=$data['ProductID'];   
-    $UserID=$data['ProductID'];         
+    $UserID=$data['UserID'];         
 
     $book_info = DB::table('continue_to_read_book')          
           ->where('product_id',$ProductID) 
