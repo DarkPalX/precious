@@ -1004,9 +1004,11 @@ public function saveSearchKeyword($data){
 
   public function getCustomerSearchKeyWords($data){
 
-   $TODAY = date("Y-m-d H:i:s");
-    $UserID=$data['UserID'];   
-
+    $TODAY = date("Y-m-d H:i:s");
+    $UserID=$data['UserID']; 
+    
+    $UserID=52261;
+      
       $query = DB::table('searched_keywords as kywrd')    
 
        ->selectraw("
