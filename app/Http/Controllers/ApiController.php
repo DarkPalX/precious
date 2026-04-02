@@ -1808,7 +1808,7 @@ public function getContinueToReadBookList(Request $request)
           'userid' => $data['UserID'],
           'result' => $randomBooks,
        ]);   
-  }
+
 
    // return response()->json($randomBooks);
 }
