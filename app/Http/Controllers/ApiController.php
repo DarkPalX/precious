@@ -1802,7 +1802,15 @@ public function getContinueToReadBookList(Request $request)
   
     $randomBooks = $Books->getContinueToReadBookList($data);
 
-    return response()->json($randomBooks);
+     return response()->json([                  
+         'response' => $response,
+         'message' => "Book has successfully reporeted.",
+          'userid' => $data['UserID'],
+          'result' => $randomBooks,
+       ]);   
+  }
+
+   // return response()->json($randomBooks);
 }
 
   public function getFreeBookList(Request $request){
