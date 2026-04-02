@@ -1790,20 +1790,42 @@ public function getRandomBookList(Request $request)
 public function getContinueToReadBookList(Request $request)
  {
 
-   $Books = new Book();
+  //  $Books = new Book();
+
+  // $response = "Failed";
+  // $responseMessage = "";
+
+
+  // $data['UserID']=52261;
+  //  // if(isset($data['UserID'])){
+  //  //    $data['UserID'] = $request->post('UserID');    
+  //  // }
+  
+  //   $continueReadBooks = $Books->getContinueToReadBookList($data);
+
+  //  return response()->json($continueReadBooks);
+
+  $Books = new Book();
 
   $response = "Failed";
   $responseMessage = "";
+ 
+  $data['Status'] = 'All';
+  $data['SearchText'] = '';
 
+  $data['UserID']=0;
+   if(isset($data['UserID'])){
+      $data['UserID'] = $request->post('UserID');    
+   }
+  $data["PageNo"] = 0;
+  $data["Limit"] = $request->post('Limit');
 
-  $data['UserID']=52261;
-   // if(isset($data['UserID'])){
-   //    $data['UserID'] = $request->post('UserID');    
-   // }
-  
-    $continueReadBooks = $Books->getContinueToReadBookList($data);
+    $list = $Books->getContinueToReadBookList($data);
 
-   return response()->json($continueReadBooks);
+    $bookArray = isset($list['data']) ? $list['data'] : $list;
+    $continueReadBooks = collect($bookArray)->shuffle()->take(10)->values();
+
+    return response()->json($continueReadBooks);
 }
 
   public function getFreeBookList(Request $request){

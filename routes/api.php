@@ -290,7 +290,7 @@ Route::post('/save-read-count',[
 ]);
 
 Route::post('/get-continue-to-read-book-list',[
-   'uses'=>'App\Http\Controllers\ApiController@getRandomBookList',
+   'uses'=>'App\Http\Controllers\ApiController@getContinueToReadBookList',
    'as'=> 'get-continue-to-read-book-list'
 ]);
 
