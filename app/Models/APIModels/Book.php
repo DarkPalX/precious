@@ -432,8 +432,8 @@ class Book extends Model
         COALESCE(prds.status,'') as status          
           
         ");    
-
-
+  
+      $query->where("prds.deleted_at","=",null);
       $query->whereRaw("cont.customer_id =?",[$UserID]); 
       $query->orderBy("cont.created_at","DESC");   
          
@@ -1063,11 +1063,13 @@ class Book extends Model
 
     $book_info = DB::table('continue_to_read_book')          
           ->where('product_id',$ProductID) 
+          ->where('customer_id',$UserID) 
           ->first();
 
     if(isset($book_info)>0){
          DB::table('continue_to_read_book')
             ->where('product_id',$ProductID)
+            ->where('customer_id',$UserID)
             ->update([                                                       
               'created_at' => $TODAY  
            ]);
@@ -1080,7 +1082,6 @@ class Book extends Model
             ]); 
       }
   }
-
 
   public function getReadBookCount($data){
 
@@ -1124,6 +1125,52 @@ class Book extends Model
         
 
     }
+
+ public function saveSearchKeyword($data){
+   
+    $TODAY = date("Y-m-d H:i:s");
+
+    $Keywords=$data['Keywords'];   
+    $UserID=$data['UserID'];         
+
+    
+    $SearchKeywordID = DB::table('searched_keywords')
+        ->insertGetId([                                            
+          'customer_id' => $UserID,              
+          'keyword' => $Keywords,                                                                                                                                                          
+          'created_at' => $TODAY             
+        ]); 
+      
+  }
+
+  public function saveSearchBooks($data){
+   
+    $TODAY = date("Y-m-d H:i:s");
+
+    $ProductID=$data['ProductID'];   
+    $UserID=$data['UserID'];         
+
+    $book_info = DB::table('searched_book')          
+          ->where('product_id',$ProductID) 
+          ->where('customer_id',$UserID) 
+          ->first();
+
+    if(isset($book_info)>0){
+         DB::table('searched_book')
+            ->where('product_id',$ProductID)
+            ->where('customer_id',$UserID)
+            ->update([                                                       
+              'created_at' => $TODAY  
+           ]);
+      }else{
+        $BookID = DB::table('searched_book')
+            ->insertGetId([                                            
+              'customer_id' => $UserID,              
+              'product_id' => $ProductID,                                                                                                                                                          
+              'created_at' => $TODAY             
+            ]); 
+      }
+  }
 
 
 }

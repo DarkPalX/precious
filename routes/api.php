@@ -309,6 +309,17 @@ Route::post('/remove-subscribed-books',[
    'as'=> 'remove-subscribed-books'
 ]);
 
+// SEARCHED KEYWORDS AND BOOKS==========================================================
+Route::post('/save-search-keywords',[
+   'uses'=>'App\Http\Controllers\ApiController@saveSearchKeyword',
+   'as'=> 'save-search-keywords'
+]);
+
+Route::post('/save-search-books',[
+   'uses'=>'App\Http\Controllers\ApiController@saveSearchBooks',
+   'as'=> 'save-search-books'
+]);
+
 //DOWNLOADED BOOKS====================================================================
 Route::post('/get-subscribed-downloaded-books-list',[
    'uses'=>'App\Http\Controllers\ApiController@getSubscribedDownloadedBooksList',

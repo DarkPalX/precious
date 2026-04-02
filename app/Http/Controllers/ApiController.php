@@ -1482,6 +1482,40 @@ public function saveContinueReadBook(Request $request){
     
 }
 
+// SAVE SEARCH KEYWORDS====================================================
+public function saveSearchKeyword(Request $request){
+    
+    $Misc = new Misc();
+    $Book = new Book();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['UserID']=$request->post('UserID');   
+    $data['Keywords']=$request->post('Keywords'); 
+ 
+    $result=$Book->saveSearchKeyword($data);  
+    return response()->json($result); 
+    
+}
+
+// SAVE SEARCH BOOKS====================================================
+public function saveSearchBooks(Request $request){
+    
+    $Misc = new Misc();
+    $Book = new Book();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    $data['UserID']=$request->post('UserID');   
+    $data['ProductID']=$request->post('ProductID'); 
+ 
+    $result=$Book->saveSearchBooks($data);  
+    return response()->json($result); 
+    
+}
+
 // GET BOOK READ COUNT====================================================
 public function getReadBookCount(Request $request){
     
