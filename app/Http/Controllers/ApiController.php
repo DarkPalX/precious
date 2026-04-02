@@ -1797,9 +1797,9 @@ public function getContinueToReadBookList(Request $request)
 
 
   $data['UserID']=52261;
-   if(isset($data['UserID'])){
-      $data['UserID'] = $request->post('UserID');    
-   }
+   // if(isset($data['UserID'])){
+   //    $data['UserID'] = $request->post('UserID');    
+   // }
   
     $randomBooks = $Books->getContinueToReadBookList($data);
 
