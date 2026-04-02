@@ -299,11 +299,8 @@ class Book extends Model
 
   public function getContinueToReadBookList($data){
 
-    // $UserID=$data['UserID'];
-     $UserID=52261;
-
-    // $UserID=$data['UserID'];
-
+  
+    $UserID=$data['UserID'];
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
     
