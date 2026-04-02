@@ -292,6 +292,14 @@ class Book extends Model
     // $UserID=$data['UserID'];
      $UserID=52261;
 
+     $UserID=$data['UserID'];
+
+    $Status=$data['Status'];
+    $SearchText=$data['SearchText'];
+    
+    $Limit=$data['Limit'];
+    $PageNo=$data['PageNo'];
+
       $query = DB::table('continue_to_read_book as cont')  
       ->join('products as prds', 'prds.id', '=', 'cont.product_id')   
 
