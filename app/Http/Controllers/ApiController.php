@@ -1795,7 +1795,7 @@ public function getContinueToReadBookList(Request $request)
   $response = "Failed";
   $responseMessage = "";
 
-  $data['UserID']=0;
+  $data['UserID']=52261;
    if(isset($data['UserID'])){
       $data['UserID'] = $request->post('UserID');    
    }
