@@ -289,7 +289,8 @@ class Book extends Model
 
   public function getContinueToReadBookList($data){
 
-    $UserID=$data['UserID'];
+    // $UserID=$data['UserID'];
+     $UserID=52261;
 
       $query = DB::table('continue_to_read_book as cont')  
       ->join('products as prds', 'prds.id', '=', 'cont.product_id')   
