@@ -989,7 +989,7 @@ public function saveSearchKeyword($data){
    
     $TODAY = date("Y-m-d H:i:s");
 
-    $Keywords=$data['Keywords'];   
+    $Keywords = ucwords(strtolower($data['Keywords']));   
     $UserID=$data['UserID'];         
 
 
