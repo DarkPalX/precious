@@ -1515,7 +1515,7 @@ public function getCustomerSearchKeyWords(Request $request){
     $data["SearchText"] = '';
     $data["Status"] = '';
     $data["PageNo"] = 0;
-    $data["Limit"] = 0;
+    $data["Limit"] = 5;
 
     $result=$UserCustomer->getCustomerSearchKeyWords($data);  
     return response()->json($result); 
