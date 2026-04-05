@@ -992,23 +992,38 @@ public function saveSearchKeyword($data){
     $Keywords=$data['Keywords'];   
     $UserID=$data['UserID'];         
 
+
+   $info = DB::table('searched_keywords')          
+        ->whereRaw('customer_id=?',[$UserID])    
+        ->whereRaw('keyword=?',[$Keywords])          
+        ->first();
+
+    if(isset($info)>0){
+
+        DB::table('searched_keywords')
+        ->where('customer_id',$UserID)
+        ->where('keyword',$Keywords)
+        ->update([                                                       
+         'created_at' => $TODAY  
+       ]);   
     
-    $SearchKeywordID = DB::table('searched_keywords')
+    }else{
+
+     $SearchKeywordID = DB::table('searched_keywords')
         ->insertGetId([                                            
           'customer_id' => $UserID,              
           'keyword' => $Keywords,                                                                                                                                                          
           'created_at' => $TODAY             
         ]); 
+      }
       
-  }
-
+   }
+  
   public function getCustomerSearchKeyWords($data){
 
     $TODAY = date("Y-m-d H:i:s");
     $UserID=$data['UserID']; 
-    
-    $UserID=52261;
-      
+     
       $query = DB::table('searched_keywords as kywrd')    
 
        ->selectraw("
