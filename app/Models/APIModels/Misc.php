@@ -83,7 +83,24 @@ class Misc extends Model
           COALESCE(app_setting.bottombar_bg_color,'') as bottombar_bg_color,
 
           COALESCE(app_setting.button_bg_color,'') as button_bg_color,
-          COALESCE(app_setting.font_color,'') as font_color         
+          COALESCE(app_setting.font_color,'') as font_color,
+
+          COALESCE(app_setting.dashboard_profile_button,'') as dashboard_profile_button,
+          COALESCE(app_setting.dashboard_library_button,'') as dashboard_library_button,
+          COALESCE(app_setting.dashboard_transactions_button,'') as dashboard_transactions_button,
+          COALESCE(app_setting.dashboard_ecredits_button,'') as dashboard_ecredits_button,
+          COALESCE(app_setting.dashboard_contact_button,'') as dashboard_contact_button,
+          COALESCE(app_setting.dashboard_about_button,'') as dashboard_about_button,
+          COALESCE(app_setting.dashboard_faqs_button,'') as dashboard_faqs_button,
+          COALESCE(app_setting.dashboard_password_button,'') as dashboard_password_button,
+          COALESCE(app_setting.dashboard_settings_button,'') as dashboard_settings_button,
+
+          COALESCE(app_setting.menubar_profile_button,'') as menubar_profile_button,
+          COALESCE(app_setting.menubar_library_button,'') as menubar_library_button,
+          COALESCE(app_setting.menubar_home_button,'') as menubar_home_button,
+          COALESCE(app_setting.menubar_orders_button,'') as menubar_orders_button,
+          COALESCE(app_setting.menubar_messages_button,'') as menubar_messages_button
+                   
           
         ")        
         ->whereRaw('app_setting.id =?',[$AppSettingID])                                      
