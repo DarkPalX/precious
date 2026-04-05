@@ -1019,8 +1019,8 @@ public function saveSearchKeyword($data){
         ");
 
       $query->whereRaw("kywrd.customer_id =?",[$UserID]);   
-      $query->orderBy("kywrd.created_at","ASC");   
-      
+      $query->orderBy("kywrd.created_at","DESC");   
+
       $list = $query->get();
                              
      return $list;  
