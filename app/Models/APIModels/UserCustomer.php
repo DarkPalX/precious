@@ -1018,7 +1018,9 @@ public function saveSearchKeyword($data){
           COALESCE(kywrd.customer_id,0) as CustomerID
         ");
 
-      $query->whereRaw("kywrd.customer_id =?",[$UserID]);    
+      $query->whereRaw("kywrd.customer_id =?",[$UserID]);   
+      $query->orderBy("prds.created_at","ASC");   
+      
       $list = $query->get();
                              
      return $list;  
