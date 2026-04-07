@@ -192,7 +192,7 @@ class MobileAppSettingController extends Controller
             $setting = new MobileAppSetting();
         }
 
-        $setting->splashscreen_logo = env('APP_URL') .'/images/'. 'default_mobile_avatar.png';
+        $setting->splashscreen_logo = env('APP_URL') .'/images/'. 'default_mobile_logo.png';
         $setting->splashscreen_gif_animation = env('APP_URL') .'/images/'. 'default_mobile_animatted_gif.gif';
 
         $setting->onboard_screen_logo_1 = null;
