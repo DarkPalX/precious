@@ -261,6 +261,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
         // Mobile App
             Route::get('/mobile-app-settings/edit', [MobileAppSettingController::class, 'edit'])->name('mobile-app-settings.edit');
             Route::put('/mobile-app-settings/update', [MobileAppSettingController::class, 'update'])->name('mobile-app-settings.update');
+            Route::get('/mobile-app-settings/reset', [MobileAppSettingController::class, 'reset'])->name('mobile-app-settings.reset');
             Route::post('/mobile-app-settings/remove_logo', [MobileAppSettingController::class, 'remove_logo'])->name('mobile-app-settings.remove-logo');
         //
 
