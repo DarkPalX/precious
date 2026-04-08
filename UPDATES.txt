@@ -1,3 +1,9 @@
+######################################### APRIL 8, 2026 #######################################
+ALTER TABLE mobile_app_settings 
+    ADD 
+    empty_library_icon VARCHAR(255) NULL;
+
+
 ######################################### MARCH 25, 2026 #######################################
 
 UPDATE deliverable_cities using deliverable_cities.sql
@@ -83,6 +89,8 @@ CREATE TABLE mobile_app_settings (
     bottombar_bg_color VARCHAR(255) NULL,
     button_bg_color VARCHAR(255) NULL,
     font_color VARCHAR(255) NULL,
+
+    empty_library_icon VARCHAR(255) NULL,
 
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL

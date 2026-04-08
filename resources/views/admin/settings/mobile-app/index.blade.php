@@ -236,7 +236,8 @@
                     'menubar_library_button',
                     'menubar_home_button',
                     'menubar_orders_button',
-                    'menubar_messages_button'
+                    'menubar_messages_button',
+                    'empty_library_icon'
                 ];
             @endphp
 

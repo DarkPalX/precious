@@ -53,6 +53,7 @@ class MobileAppSettingController extends Controller
             'menubar_home_button',
             'menubar_orders_button',
             'menubar_messages_button',
+            'empty_library_icon'
         ];
 
         foreach ($fields as $field) {
@@ -227,6 +228,8 @@ class MobileAppSettingController extends Controller
         $setting->bottombar_bg_color = "#ffffff";
         $setting->button_bg_color = "#ffffff";
         $setting->font_color = "#ffffff";
+
+        $setting->empty_library_icon = env('APP_URL') .'/images/'. 'empty_library_icon.png';
 
         $setting->save();
 

@@ -49,5 +49,7 @@ class MobileAppSetting extends Model
         'bottombar_bg_color',
         'button_bg_color',
         'font_color',
+
+        'empty_library_icon'
     ];
 }
