@@ -445,7 +445,7 @@
     <script>
         const LIMITS = {
             background: { w: {{ env('MOBILE_BACKGROUND_WIDTH', 300) }}, h: {{ env('MOBILE_BACKGROUND_HEIGHT', 300) }} },
-            logo: { w: {{ env('MOBILE_LOGO_WIDTH', 300) }}, h: {{ env('MOBILE_LOGO_HEIGHT', 300) }} },
+            // logo: { w: {{ env('MOBILE_LOGO_WIDTH', 300) }}, h: {{ env('MOBILE_LOGO_HEIGHT', 300) }} },
             gif: { w: {{ env('MOBILE_GIF_WIDTH', 300) }}, h: {{ env('MOBILE_GIF_HEIGHT', 300) }} },
             icon: { w: {{ env('MOBILE_ICON_WIDTH', 130) }}, h: {{ env('MOBILE_ICON_HEIGHT', 130) }} }
         };
