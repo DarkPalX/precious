@@ -1884,19 +1884,16 @@ public function getAudioBookList(Request $request)
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $bookArray = $Books->getBookList($data);
-
-    $AudioBooks = collect();
-    if (!empty($bookArray) || count($bookArray)>0) {
-        foreach ($bookArray as $book) {
-            if(!empty($book['short_description'])) {
-
-                if(str_contains($book['short_description'], 'Audio Book') || str_contains($book['short_description'], 'youtube.com') || str_contains($book['short_description'], 'https://www.youtube.com/')){
-                    $AudioBooks->push($book);
-                }
-            }
+     $bookArray = $Books->getBookList($data);
+      $AudioBooks = collect($bookArray)->filter(function ($book) {
+        if (empty($book['short_description'])) {
+            return false;
         }
-    }
+
+        return str_contains($book['short_description'], 'Audio Book') ||
+               str_contains($book['short_description'], 'youtube.com') ||
+               str_contains($book['short_description'], 'https://www.youtube.com/');
+    })->values(); 
 
     return response()->json($AudioBooks);
 }
