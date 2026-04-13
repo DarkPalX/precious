@@ -1893,7 +1893,7 @@ public function getAudioBookList(Request $request)
         foreach ($bookArray as $book) {
             if(!empty($book['description'])) {
 
-                if(str_contains($book['description'], 'youtube.com') || str_contains($book['description'], 'https://www.youtube.com/')){
+                if(str_contains($book['description'], 'Audio Book') || str_contains($book['description'], 'youtube.com') || str_contains($book['description'], 'https://www.youtube.com/')){
                     $AudioBooks->push($book);
                 }
             }
