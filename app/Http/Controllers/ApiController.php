@@ -1839,7 +1839,7 @@ public function getSuggestedRandomBookList(Request $request)
 
     // $list = $Books->getBookList($data);
 
-    $list = $Books->getRandomBookList($data);
+    $list = $Books->getSuggestedRandomBookList($data);
 
     $bookArray = isset($list['data']) ? $list['data'] : $list;
     $randomBooks = collect($bookArray)->shuffle()->take(10)->values();
