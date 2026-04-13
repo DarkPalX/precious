@@ -194,7 +194,7 @@ class Book extends Model
            
   }
 
-  public function getRandomBookList($data){
+  public function getSuggestedRandomBookList($data){
 
     $UserID=$data['UserID'];
 
