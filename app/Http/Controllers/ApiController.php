@@ -1886,13 +1886,13 @@ public function getAudioBookList(Request $request)
 
      $bookArray = $Books->getBookList($data);
       $AudioBooks = collect($bookArray)->filter(function ($book) {
-        if (empty($book['short_description'])) {
+        if (empty($book['description'])) {
             return false;
         }
 
-        return str_contains($book['short_description'], 'Audio Book') ||
-               str_contains($book['short_description'], 'youtube.com') ||
-               str_contains($book['short_description'], 'https://www.youtube.com/');
+        return str_contains($book['description'], 'Audio Book') ||
+               str_contains($book['description'], 'youtube.com') ||
+               str_contains($book['description'], 'https://www.youtube.com/');
     })->values(); 
 
     return response()->json($AudioBooks);
