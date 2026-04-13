@@ -1887,9 +1887,7 @@ public function getAudioBookList(Request $request)
     $bookArray = $Books->getBookList($data);
 
     $AudioBooks = collect();
-    if (!empty($list)) {
-        // $bookArray = isset($list['data']) ? $list['data'] : $list;
-
+    if (!empty($bookArray) || count($bookArray)>0) {
         foreach ($bookArray as $book) {
             if(!empty($book['short_description'])) {
 
