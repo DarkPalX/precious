@@ -1819,7 +1819,7 @@ public function getAllBookCategoryList(Request $request){
 
   }
 
-public function getSuggestedRandomBookList(Request $request)
+public function getRandomBookList(Request $request)
  {
 
    $Books = new Book();
@@ -1837,22 +1837,12 @@ public function getSuggestedRandomBookList(Request $request)
   $data["PageNo"] = 0;
   $data["Limit"] = $request->post('Limit');
 
-    // $list = $Books->getBookList($data);
-
-    $list = $Books->getSuggestedRandomBookList($data);
+    $list = $Books->getBookList($data);
 
     $bookArray = isset($list['data']) ? $list['data'] : $list;
     $randomBooks = collect($bookArray)->shuffle()->take(10)->values();
 
-    // return response()->json($randomBooks);
-
-   return response()->json([                  
-         'response' => $response,
-         'message' => "Book has fetch successfully.",
-         'randomBooks' => $randomBooks,
-         'book_list' => $list,
-       ]);  
-
+    return response()->json($randomBooks);
 }
 
 public function getContinueToReadBookList(Request $request)

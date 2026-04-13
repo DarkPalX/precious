@@ -315,7 +315,7 @@ class Book extends Model
      $query->take($Limit);
      $list=$query->get();
                   
-      return $list;             
+    return $list;             
            
   }
 
@@ -442,7 +442,6 @@ class Book extends Model
      return $list;           
            
   }
-
 
   public function getSearchBookList($data){
 
