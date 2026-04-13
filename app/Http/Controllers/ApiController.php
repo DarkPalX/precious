@@ -1880,21 +1880,20 @@ public function getAudioBookList(Request $request)
    if(isset($data['UserID'])){
       $data['UserID'] = $request->post('UserID');    
    }
-   
+
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
     $list = $Books->getBookList($data);
 
     $AudioBooks = collect();
-
     if (!empty($list)) {
         $bookArray = isset($list['data']) ? $list['data'] : $list;
 
         foreach ($bookArray as $book) {
-            if (!empty($book['description'])) {
+            if(!empty($book['description'])) {
 
-                if (str_contains($book['description'], 'youtube.com')){
+                if(str_contains($book['description'], 'youtube.com') || str_contains($book['description'], 'https://www.youtube.com/')){
                     $AudioBooks->push($book);
                 }
             }
