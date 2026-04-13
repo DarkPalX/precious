@@ -53,6 +53,7 @@ class MobileAppSettingController extends Controller
             'menubar_home_button',
             'menubar_orders_button',
             'menubar_messages_button',
+            'empty_library_icon'
         ];
 
         foreach ($fields as $field) {
@@ -184,6 +185,56 @@ class MobileAppSettingController extends Controller
             ->with('success', 'Mobile App Settings Updated Successfully.');
     }
 
+    public function reset(Request $request)
+    {
+        $setting = MobileAppSetting::first();
+
+        if (!$setting) {
+            $setting = new MobileAppSetting();
+        }
+
+        $setting->splashscreen_logo = env('APP_URL') .'/images/'. 'default_mobile_logo.png';
+        $setting->splashscreen_gif_animation = env('APP_URL') .'/images/'. 'default_mobile_animatted_gif.gif';
+
+        $setting->onboard_screen_logo_1 = null;
+        $setting->onboard_screen_title_1 = null;
+        $setting->onboard_screen_content_1 = null;
+        $setting->onboard_screen_logo_2 = null;
+        $setting->onboard_screen_title_2 = null;
+        $setting->onboard_screen_content_2 = null;
+        $setting->onboard_screen_logo_3 = null;
+        $setting->onboard_screen_title_3 = null;
+        $setting->onboard_screen_content_3 = null;
+
+        $setting->dashboard_profile_button = env('APP_URL') .'/images/'. 'default_mobile_profile_button_icon.png';
+        $setting->dashboard_library_button = env('APP_URL') .'/images/'. 'default_mobile_library_button_icon.png';
+        $setting->dashboard_transactions_button = env('APP_URL') .'/images/'. 'default_mobile_orders_button_icon.png';
+        $setting->dashboard_ecredits_button = env('APP_URL') .'/images/'. 'default_mobile_ecredits_button_icon.png';
+        $setting->dashboard_contact_button = env('APP_URL') .'/images/'. 'default_mobile_contact_us_button_icon.png';
+        $setting->dashboard_about_button = env('APP_URL') .'/images/'. 'default_mobile_about_us_button_icon.png';
+        $setting->dashboard_faqs_button = env('APP_URL') .'/images/'. 'default_mobile_faq_button_icon.png';
+        $setting->dashboard_password_button = env('APP_URL') .'/images/'. 'default_mobile_set_password_button_icon.png';
+        $setting->dashboard_settings_button = env('APP_URL') .'/images/'. 'default_mobile_app_setting_button_icon.png';
+
+        $setting->menubar_profile_button = env('APP_URL') .'/images/'. 'default_mobile_profile_menu_icon.png';
+        $setting->menubar_library_button = env('APP_URL') .'/images/'. 'default_mobile_libray_menu_icon.png';
+        $setting->menubar_home_button = env('APP_URL') .'/images/'. 'default_mobile_home_menu_icon.png';
+        $setting->menubar_orders_button = env('APP_URL') .'/images/'. 'default_mobile_order_menu_icon.png';
+        $setting->menubar_messages_button = env('APP_URL') .'/images/'. 'default_mobile_message_menu_icon.png';
+        
+        $setting->background_color_info = "#ffffff";
+        $setting->background_img_info = env('APP_URL') .'/images/'. 'default_mobile_background.jpg';
+        $setting->topbar_bg_color = "#ffffff";
+        $setting->bottombar_bg_color = "#ffffff";
+        $setting->button_bg_color = "#ffffff";
+        $setting->font_color = "#ffffff";
+
+        $setting->empty_library_icon = env('APP_URL') .'/images/'. 'empty_library_icon.png';
+
+        $setting->save();
+
+         return redirect()->back()->with('success', 'Mobile App Settings Reset Successfully.');
+    }
 
     public function remove_logo(Request $request)
     {

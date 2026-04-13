@@ -52,6 +52,17 @@
             @csrf
             @method('PUT')
 
+            <div class="d-flex align-items-center justify-content-end">
+                <button class="btn btn-primary btn-sm mb-3 m-1">
+                    Save Settings
+                </button>
+                <button class="btn btn-secondary btn-sm mb-3 m-1" type="button" onclick="window.location.href='{{ route('mobile-app-settings.reset') }}'">
+                    Reset to Default
+                </button>
+
+            </div>
+
+
             {{-- SPLASHSCREEN --}}
 
             <h5>Splashscreen</h5>
@@ -84,7 +95,7 @@
 
                     <div class="image-preview-container">
                         <img id="preview_{{ $fieldName }}"
-                            src="{{ $mobile_setting->$fieldName ? asset('storage/mobile/'.$mobile_setting->$fieldName) : '' }}"
+                            src="{{ $mobile_setting->$fieldName && strpos($mobile_setting->$fieldName, '/') === false ? asset('storage/mobile/'.$mobile_setting->$fieldName) : $mobile_setting->$fieldName }}"
                             class="preview-image">
 
                         @if($mobile_setting->$fieldName)
@@ -125,7 +136,9 @@
 
                         <div class="image-preview-container">
                             <img id="preview_onboard_{{ $i }}"
-                                 src="{{ $mobile_setting['onboard_screen_logo_'.$i] ? asset('storage/mobile/'.$mobile_setting['onboard_screen_logo_'.$i]) : '' }}"
+                                 {{-- src="{{ $mobile_setting['onboard_screen_logo_'.$i] ? asset('storage/mobile/'.$mobile_setting['onboard_screen_logo_'.$i]) : '' }}" --}}
+                                src="{{ $mobile_setting['onboard_screen_logo_'.$i] && strpos($mobile_setting['onboard_screen_logo_'.$i], '/') === false ? asset('storage/mobile/'.$mobile_setting['onboard_screen_logo_'.$i]) : $mobile_setting['onboard_screen_logo_'.$i] }}"
+
                                  class="preview-image">
 
                             @if($mobile_setting['onboard_screen_logo_'.$i])
@@ -194,7 +207,8 @@
 
                     <div class="image-preview-container">
                         <img id="preview_{{ $field }}"
-                             src="{{ $mobile_setting->$field ? asset('storage/mobile/'.$mobile_setting->$field) : '' }}"
+                            src="{{ $mobile_setting->$field && strpos($mobile_setting->$field, '/') === false ? asset('storage/mobile/'.$mobile_setting->$field) : $mobile_setting->$field }}"
+
                              class="preview-image"
                              style="height:80px;">
 
@@ -222,7 +236,8 @@
                     'menubar_library_button',
                     'menubar_home_button',
                     'menubar_orders_button',
-                    'menubar_messages_button'
+                    'menubar_messages_button',
+                    'empty_library_icon'
                 ];
             @endphp
 
@@ -243,7 +258,8 @@
 
                     <div class="image-preview-container">
                         <img id="preview_{{ $field }}"
-                             src="{{ $mobile_setting->$field ? asset('storage/mobile/'.$mobile_setting->$field) : '' }}"
+                            src="{{ $mobile_setting->$field && strpos($mobile_setting->$field, '/') === false ? asset('storage/mobile/'.$mobile_setting->$field) : $mobile_setting->$field }}"
+
                              class="preview-image"
                              style="height:80px;">
 
@@ -290,7 +306,8 @@
 
                 <div class="image-preview-container">
                     <img id="preview_bg"
-                        src="{{ $mobile_setting->background_img_info ? asset('storage/mobile/'.$mobile_setting->background_img_info) : '' }}"
+                        src="{{ $mobile_setting->background_img_info && strpos($mobile_setting->background_img_info, '/') === false ? asset('storage/mobile/'.$mobile_setting->background_img_info) : $mobile_setting->background_img_info }}"
+                        
                         class="preview-image">
 
                     @if($mobile_setting->background_img_info)
@@ -395,6 +412,9 @@
             <button class="btn btn-primary btn-sm mt-3">
                 Save Settings
             </button>
+            <button class="btn btn-secondary btn-sm mt-3" type="button" onclick="window.location.href='{{ route('mobile-app-settings.reset') }}'">
+                Reset to Default
+            </button>
 
         </form>
     </div>
@@ -426,7 +446,7 @@
         const LIMITS = {
             background: { w: {{ env('MOBILE_BACKGROUND_WIDTH', 300) }}, h: {{ env('MOBILE_BACKGROUND_HEIGHT', 300) }} },
             logo: { w: {{ env('MOBILE_LOGO_WIDTH', 300) }}, h: {{ env('MOBILE_LOGO_HEIGHT', 300) }} },
-            gif: { w: {{ env('MOBILE_GIF_WIDTH', 300) }}, h: {{ env('MOBILE_GIF_HEIGHT', 300) }} },
+            // gif: { w: {{ env('MOBILE_GIF_WIDTH', 300) }}, h: {{ env('MOBILE_GIF_HEIGHT', 300) }} },
             icon: { w: {{ env('MOBILE_ICON_WIDTH', 130) }}, h: {{ env('MOBILE_ICON_HEIGHT', 130) }} }
         };
 
