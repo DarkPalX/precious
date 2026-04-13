@@ -1869,6 +1869,41 @@ public function getContinueToReadBookList(Request $request)
     return response()->json($continueReadBooks);
 }
 
+public function getAudioBookList(Request $request)
+{
+    $Books = new Book();
+
+    $data['Status'] = 'All';
+    $data['SearchText'] = '';
+
+    $data['UserID']=0;
+   if(isset($data['UserID'])){
+      $data['UserID'] = $request->post('UserID');    
+   }
+   
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+
+    $list = $Books->getBookList($data);
+
+    $AudioBooks = collect();
+
+    if (!empty($list)) {
+        $bookArray = isset($list['data']) ? $list['data'] : $list;
+
+        foreach ($bookArray as $book) {
+            if (!empty($book['description'])) {
+
+                if (str_contains($book['description'], 'youtube.com')){
+                    $AudioBooks->push($book);
+                }
+            }
+        }
+    }
+
+    return response()->json($AudioBooks);
+}
+
   public function getFreeBookList(Request $request){
 
   $Books = new Book();
