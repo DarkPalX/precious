@@ -176,8 +176,8 @@ class Book extends Model
                         COALESCE(prds.author,''),                        
                         COALESCE(prds.subtitle,''),
                         COALESCE(prds.book_type,''),
-                        COALESCE(prds.name,''),
-                        COALESCE(prod_cat.short_description,'')
+                        COALESCE(prod_cat.name,''),
+                        COALESCE(prds.short_description,'')
                     ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
              }
         }
@@ -674,8 +674,8 @@ class Book extends Model
                         COALESCE(prds.author,''),                        
                         COALESCE(prds.subtitle,''),
                         COALESCE(prds.book_type,''),
-                        COALESCE(prds.name,''),
-                        COALESCE(prod_cat.short_description,'')
+                        COALESCE(prod_cat.name,''),
+                        COALESCE(prds.short_description,'')
                     ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
              }
         }
