@@ -40,8 +40,7 @@ class Book extends Model
           COALESCE(prds.name,'') as name,
           COALESCE(prds.author,'') as author,
           COALESCE(prds.subtitle,'') as subtitle,
-          COALESCE(prds.short_description,'') as  short_description,
-          COALESCE(prds.description,'') as  description,
+          COALESCE(prds.description,'') as  short_description,
           
           COALESCE(prds.slug,'') as slug,
           COALESCE(prds.file_url,'') as file_url,          
@@ -214,8 +213,7 @@ class Book extends Model
           COALESCE(prds.name,'') as name,
           COALESCE(prds.author,'') as author,
           COALESCE(prds.subtitle,'') as subtitle,
-          COALESCE(prds.short_description,'') as  short_description,
-          COALESCE(prds.description,'') as  description,
+          COALESCE(prds.description,'') as  short_description,
           
           COALESCE(prds.slug,'') as slug,
           COALESCE(prds.file_url,'') as file_url,          
@@ -340,8 +338,7 @@ class Book extends Model
           COALESCE(prds.name,'') as name,
           COALESCE(prds.author,'') as author,
           COALESCE(prds.subtitle,'') as subtitle,
-           COALESCE(prds.short_description,'') as  short_description,
-          COALESCE(prds.description,'') as  description,
+          COALESCE(prds.description,'') as  short_description,
           
           COALESCE(prds.slug,'') as slug,
           COALESCE(prds.file_url,'') as file_url,          
@@ -470,8 +467,7 @@ class Book extends Model
           COALESCE(prds.name,'') as name,
           COALESCE(prds.author,'') as author,
           COALESCE(prds.subtitle,'') as subtitle,
-          COALESCE(prds.short_description,'') as  short_description,
-          COALESCE(prds.description,'') as  description,
+          COALESCE(prds.description,'') as  short_description,
           
           COALESCE(prds.slug,'') as slug,
           COALESCE(prds.file_url,'') as file_url,          
@@ -738,8 +734,7 @@ class Book extends Model
           COALESCE(prds.name,'') as name,
           COALESCE(prds.author,'') as author,
           COALESCE(prds.subtitle,'') as subtitle,
-          COALESCE(prds.short_description,'') as  short_description,
-          COALESCE(prds.description,'') as  description,
+          COALESCE(prds.description,'') as  short_description,
           
           COALESCE(prds.slug,'') as slug,
           COALESCE(prds.file_url,'') as file_url,          
@@ -885,8 +880,7 @@ class Book extends Model
           COALESCE(prds.name,'') as name,
           COALESCE(prds.author,'') as author,
           COALESCE(prds.subtitle,'') as subtitle,
-          COALESCE(prds.short_description,'') as  short_description,
-          COALESCE(prds.description,'') as  description,
+          COALESCE(prds.description,'') as  short_description,
           
           COALESCE(prds.slug,'') as slug,
           COALESCE(prds.file_url,'') as file_url,          
