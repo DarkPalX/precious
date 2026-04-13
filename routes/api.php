@@ -146,6 +146,12 @@ Route::post('/search-book-list',[
    'as'=> 'search-book-list'
 ]);
 
+Route::post('/get-audio-book-list',[
+   'uses'=>'App\Http\Controllers\ApiController@getAudioBookList',
+   'as'=> 'get-audio-book-list'
+]);
+
+
 Route::post('/get-free-book-list',[
    'uses'=>'App\Http\Controllers\ApiController@getFreeBookList',
    'as'=> 'get-free-book-list'
