@@ -1884,11 +1884,11 @@ public function getAudioBookList(Request $request)
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
-    $list = $Books->getBookList($data);
+    $bookArray = $Books->getBookList($data);
 
     $AudioBooks = collect();
     if (!empty($list)) {
-        $bookArray = isset($list['data']) ? $list['data'] : $list;
+        // $bookArray = isset($list['data']) ? $list['data'] : $list;
 
         foreach ($bookArray as $book) {
             if(!empty($book['short_description'])) {
