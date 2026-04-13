@@ -1840,7 +1840,7 @@ public function getRandomBookList(Request $request)
     $list = $Books->getBookList($data);
 
     $bookArray = isset($list['data']) ? $list['data'] : $list;
-    $randomBooks = collect($bookArray)->shuffle()->take(10)->values();
+    $randomBooks = collect($bookArray)->shuffle()->take($data["Limit"])->values();
 
     return response()->json($randomBooks);
 }
