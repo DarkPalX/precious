@@ -1873,7 +1873,7 @@ public function getAudioBookList(Request $request)
 {
     $Books = new Book();
     $data['Status'] = 'All';
-    $data['SearchText'] = '';
+    $data['SearchText'] = 'youtube';
 
     $data['UserID'] = 0;
     if ($request->has('UserID')) {
@@ -1884,9 +1884,10 @@ public function getAudioBookList(Request $request)
     $data["Limit"] = 0;
 
     $bookArray = $Books->getBookList($data);
-    $filteredBooks = $bookArray->filter(function ($book) {
-        return stripos($book->short_description, 'youtube') !== false;
-    })->values();
+
+    // $filteredBooks = $bookArray->filter(function ($book) {
+    //     return stripos($book->short_description, 'youtube') !== false;
+    // })->values();
 
     return response()->json($filteredBooks);
 }
