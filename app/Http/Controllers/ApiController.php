@@ -1884,12 +1884,11 @@ public function getAudioBookList(Request $request)
     $data["Limit"] = 0;
 
     $bookArray = $Books->getBookList($data);
-
     // $filteredBooks = $bookArray->filter(function ($book) {
     //     return stripos($book->short_description, 'youtube') !== false;
     // })->values();
 
-    return response()->json($filteredBooks);
+    return response()->json($bookArray);
 }
 
   public function getFreeBookList(Request $request){
