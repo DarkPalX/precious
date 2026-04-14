@@ -1872,32 +1872,23 @@ public function getContinueToReadBookList(Request $request)
 public function getAudioBookList(Request $request)
 {
     $Books = new Book();
-
     $data['Status'] = 'All';
     $data['SearchText'] = '';
+    $data['UserID'] = 0;
 
-    $data['UserID']=0;
-   if(isset($data['UserID'])){
-      $data['UserID'] = $request->post('UserID');    
-   }
+    if ($request->has('UserID')) {
+        $data['UserID'] = $request->post('UserID');
+    }
 
     $data["PageNo"] = 0;
     $data["Limit"] = 0;
 
     $bookArray = $Books->getBookList($data);
-    $AudioBooks = collect($bookArray)->filter(function ($book) {
-        $desc = is_array($book)
-            ? ($book['short_description'] ?? '')
-            : ($book->short_description ?? '');
-
-        return !empty($desc) && (
-            stripos($desc, 'audio book') !== false ||
-            stripos($desc, 'audiobook') !== false ||
-            stripos($desc, 'youtube') !== false
-        );
+    $filteredBooks = $bookArray->filter(function ($book) {
+        return stripos($book->description, 'youtube') !== false;
     })->values();
 
-    return response()->json($AudioBooks);
+    return response()->json($filteredBooks);
 }
 
   public function getFreeBookList(Request $request){
