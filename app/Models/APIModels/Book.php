@@ -321,7 +321,6 @@ class Book extends Model
 
   public function getContinueToReadBookList($data){
 
-  
     $UserID=$data['UserID'];
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
@@ -725,20 +724,16 @@ class Book extends Model
 
   public function getSearchAudioBookList($data){
 
-    $Status=$data['Status'];
-    $SearchText=$data['SearchText'];
-
     $UserID=$data['UserID'];
 
-    $Filter_Sort=$data['Filter_Sort'];
-    $Filter_Genre=$data['Filter_Genre'];
-    $Filter_Star=$data['Filter_Star'];
+    $Status=$data['Status'];
+    $SearchText=$data['SearchText'];
     
     $Limit=$data['Limit'];
     $PageNo=$data['PageNo'];
 
     $query = DB::table('products as prds')
-    ->leftjoin('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id') 
+    ->join('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id') 
     
        ->selectraw("
           prds.id as book_ID,
@@ -768,8 +763,8 @@ class Book extends Model
           COALESCE(prds.ebook_price,0) as price,   
           COALESCE(prds.ebook_discount_price,0) as discount_price,      
           
-          COALESCE(prds.reorder_point,0) as reorder_point,  
-          COALESCE(prds.read_count,0) as read_count,  
+          COALESCE(prds.reorder_point,0) as reorder_point, 
+          COALESCE(prds.read_count,0) as read_count,   
 
           CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
 
@@ -779,15 +774,17 @@ class Book extends Model
                       product_photos as prod_img                  
                   LEFT JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = prds.id     
-                      AND prod_img.is_primary = 1 LIMIT 1                                
+                      AND prod_img.is_primary = 1    
+                  LIMIT 1                                
               )
         ,'') as image_path,
 
         COALESCE((
-               SELECT ROUND(avg(rating))
+              SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
                 WHERE rev.product_id = prds.id     
-                AND rev.status = 1 LIMIT 1                                
+                AND rev.status = 1 
+             LIMIT 1                                
               )
         ,0) as rating,
 
@@ -799,23 +796,24 @@ class Book extends Model
                        WHERE promo_prods.product_id = prds.id  
                        AND promo.applicable_product_type !='physical'
                        AND promo.status = 'ACTIVE'                     
-                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
+                       AND promo_prods.deleted_at IS NULL                     
+                  LIMIT 1                                
               )
         ,0) as promo_discount_percent,
 
-          COALESCE((
+        COALESCE((
                SELECT 
                    (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
                         promos as promo                  
                   LEFT JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = prds.id  
-                       AND promo.applicable_product_type !='physical'
-                       AND promo.status = 'ACTIVE'                     
+                       WHERE promo_prods.product_id = prds.id 
+                       AND promo.applicable_product_type !='physical'                                              
+                       AND promo.status = 'ACTIVE'
                        AND promo_prods.deleted_at IS NULL LIMIT 1                                
               )
         ,0) as promo_discount_price,
 
-         COALESCE((
+        COALESCE((
            SELECT 
                bkmrk.chapter_no FROM 
                     book_marks as bkmrk                  
@@ -826,7 +824,7 @@ class Book extends Model
           )
       ,'') as chapter_no,
 
-         COALESCE((
+      COALESCE((
                SELECT 
                   cust_lib.product_id FROM 
                 customer_libraries as cust_lib                                    
@@ -867,81 +865,8 @@ class Book extends Model
           if($Status=='New Release'){
             $query->where("prds.created_at","!=",null);    
           }
-      }    
-       
-      //Filter By Star Rating
-      if($Filter_Star!=''){
-         if($Filter_Star=='5'){             
-           $query->whereRaw("
-              COALESCE((
-               SELECT AVG(rating)
-                  FROM product_reviews as rev
-                    WHERE rev.product_id = prds.id     
-                    AND rev.status = 1 
-                  LIMIT 1                                
-                )
-              ,0)=5
-          ");
-        }
-
-        if($Filter_Star=='4'){
-                 $query->whereRaw("
-              COALESCE((
-               SELECT AVG(rating)
-                  FROM product_reviews as rev
-                    WHERE rev.product_id = prds.id     
-                    AND rev.status = 1 
-                  LIMIT 1                                
-                )
-              ,0)=4
-          ");
-        }
-
-         if($Filter_Star=='3'){
-                 $query->whereRaw("
-              COALESCE((
-               SELECT AVG(rating)
-                  FROM product_reviews as rev
-                    WHERE rev.product_id = prds.id     
-                    AND rev.status = 1 
-                  LIMIT 1                                
-                )
-              ,0)=3
-          ");
-        }
-
-        if($Filter_Star=='2'){
-                 $query->whereRaw("
-              COALESCE((
-               SELECT AVG(rating)
-                  FROM product_reviews as rev
-                    WHERE rev.product_id = prds.id     
-                    AND rev.status = 1 
-                  LIMIT 1                                
-                )
-              ,0)=2
-          ");
-        }
-
-        if($Filter_Star=='1'){
-                 $query->whereRaw("
-              COALESCE((
-               SELECT AVG(rating)
-                  FROM product_reviews as rev
-                    WHERE rev.product_id = prds.id     
-                    AND rev.status = 1 
-                  LIMIT 1                                
-                )
-              ,0)=1
-          ");
-        }
-     }  
-
-     //Filter By Genre Category
-      if($Filter_Genre!='' && $Filter_Genre>0){
-         $query->where("prds.category_id","=",$Filter_Genre);   
-      }
-                                  
+      }     
+                                     
       if($SearchText != ''){
         $arSearchText = explode(" ",$SearchText);
         if(count($arSearchText) > 0){
@@ -963,47 +888,14 @@ class Book extends Model
       $query->limit($Limit);
       $query->offset(($PageNo-1) * $Limit);
     }
-   
-    //Sorting Option
-    if($Filter_Sort!=''){
-      if($Filter_Sort=='Featured Books'){
-        $query->orderBy("prds.is_featured","DESC");   
-       }
-       if($Filter_Sort=='Price: Low-High'){
-        $query->orderBy("prds.ebook_price","ASC");   
-       }
-        if($Filter_Sort=='Price: High-Low'){
-        $query->orderBy("prds.ebook_price","DESC");   
-       }
-       if($Filter_Sort=='Publication Date'){
-        $query->orderBy("prds.publication_date","ASC");   
-       }
-        if($Filter_Sort=='Title A-Z Sort'){
-        $query->orderBy("prds.name","ASC");   
-       }
-        if($Filter_Sort=='Title Z-A Sort'){
-        $query->orderBy("prds.name","DESC");   
-       }
-       if($Filter_Sort=='Author A-Z Sort'){
-        $query->orderBy("prds.author","ASC");   
-       }
-        if($Filter_Sort=='Author Z-A Sort'){
-        $query->orderBy("prds.author","DESC");   
-       }
-     }
-    else{
-        $query->orderBy("prds.created_at","ASC");   
-    }  
-    
 
-
+    $query->orderBy("prds.created_at","ASC");    
     $list = $query->get();
                              
      return $list;             
            
   }
-  
-  
+
   public function getBookInfoByID($BookID){
 
 
