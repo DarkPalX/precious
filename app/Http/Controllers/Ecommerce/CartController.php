@@ -587,6 +587,7 @@ class CartController extends Controller
         $mode_payment = $request->payment_method;
         $amount_paid =  $request->total_amount;
 
+        // dd($mode_payment);
         if ($mode_payment == 'paypal') {
             // Store the entire request data in the session
             session(['paypal_request' => $request->all()]);
@@ -597,6 +598,17 @@ class CartController extends Controller
                 'user_id' => $user_id,
                 'amount_paid' => $amount_paid
             ]);
+        }
+        
+        if ($mode_payment == 'bank') {
+            $page = new Page();
+            $page->name = 'Bank Payment';
+
+            // Store the entire request data in the session
+            session(['transaction_info_request' => $request->all()]);
+
+            // Redirect to PayPal
+            return view('theme.pages.ecommerce.bank-payment', compact('page'));
         }
 
         return $this->save_sales_process($request);

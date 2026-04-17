@@ -409,6 +409,33 @@
                        value="{{ $mobile_setting->font_color }}">
             </div>
 
+            <div class="form-group">
+                <label>Bottom Menu Font Color</label>
+
+                <input type="color"
+                       name="bottom_menu_font_color"
+                       class="form-control"
+                       value="{{ $mobile_setting->bottom_menu_font_color }}">
+            </div>
+
+            <div class="form-group">
+                <label>Bottom Menu Active Font Color</label>
+
+                <input type="color"
+                       name="bottom_menu_front_color_active"
+                       class="form-control"
+                       value="{{ $mobile_setting->bottom_menu_front_color_active }}">
+            </div>
+
+            <div class="form-group">
+                <label>Title and Paragraph Font Color</label>
+
+                <input type="color"
+                       name="title_and_paragrapgh_font_color"
+                       class="form-control"
+                       value="{{ $mobile_setting->title_and_paragrapgh_font_color }}">
+            </div>
+
             <button class="btn btn-primary btn-sm mt-3">
                 Save Settings
             </button>

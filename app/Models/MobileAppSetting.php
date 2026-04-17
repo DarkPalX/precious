@@ -49,6 +49,9 @@ class MobileAppSetting extends Model
         'bottombar_bg_color',
         'button_bg_color',
         'font_color',
+        'bottom_menu_font_color',
+        'bottom_menu_front_color_active',
+        'title_and_paragrapgh_font_color',
 
         'empty_library_icon'
     ];

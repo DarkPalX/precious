@@ -177,6 +177,9 @@ class MobileAppSettingController extends Controller
         $setting->bottombar_bg_color = $request->bottombar_bg_color;
         $setting->button_bg_color = $request->button_bg_color;
         $setting->font_color = $request->font_color;
+        $setting->bottom_menu_font_color = $request->bottom_menu_font_color;
+        $setting->bottom_menu_front_color_active = $request->bottom_menu_front_color_active;
+        $setting->title_and_paragrapgh_font_color = $request->title_and_paragrapgh_font_color;
 
         $setting->save();
 
@@ -228,6 +231,9 @@ class MobileAppSettingController extends Controller
         $setting->bottombar_bg_color = "#ffffff";
         $setting->button_bg_color = "#ffffff";
         $setting->font_color = "#ffffff";
+        $setting->bottom_menu_font_color = "#ffffff";
+        $setting->bottom_menu_front_color_active = "#ffffff";
+        $setting->title_and_paragrapgh_font_color = "#ffffff";
 
         $setting->empty_library_icon = env('APP_URL') .'/images/'. 'empty_library_icon.png';
 

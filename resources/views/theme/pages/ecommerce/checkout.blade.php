@@ -270,7 +270,7 @@
 						{{-- FOR COD --}}
 
 						@if(method_exists(\App\Models\Ecommerce\Cart::class, 'has_ebooks_in_cart') && !\App\Models\Ecommerce\Cart::has_ebooks_in_cart())
-							<div class="col-sm-4 col-md-4">
+							<div class="col-sm-3 col-md-3">
 								<label for="payment-option-card2" class="w-100">
 									<div class="pricing-box text-center shadow-none border">
 										<input type="radio" name="payment_method" value="cod" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card1" checked>
@@ -287,7 +287,7 @@
 
 
 						{{-- @if(method_exists(\App\Models\Ecommerce\Cart::class, 'has_ebooks_in_cart') && !(\App\Models\Ecommerce\Cart::has_ebooks_in_cart()))
-							<div class="col-sm-4 col-md-4">
+							<div class="col-sm-3 col-md-3">
 								<label for="payment-option-card2" class="w-100">
 									<div class="pricing-box text-center shadow-none border">
 										<input type="radio" name="payment_method" value="cod" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card1" checked>
@@ -304,7 +304,7 @@
 						
 						{{-- FOR DEBIT/CREDIT --}}
 
-						{{-- <div class="col-sm-4 col-md-4">
+						{{-- <div class="col-sm-3 col-md-3">
 							<label for="payment-option-card" class="w-100">
 								<div class="pricing-box text-center shadow-none border">
 									<input type="radio" name="payment_method" value="credit" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card2">
@@ -334,7 +334,7 @@
 
 
 						@if(auth()->user()->ecredits >= $ordersubtotal)
-							<div class="col-sm-4 col-md-4">
+							<div class="col-sm-3 col-md-3">
 								<label for="payment-option-card" class="w-100">
 									<div class="pricing-box text-center shadow-none border">
 										<input type="radio" name="payment_method" value="ecredit" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card3" checked>
@@ -351,8 +351,8 @@
 
 						{{-- FOR PAYPAL --}}
 						
-						<div class="col-sm-4 col-md-4">
-							<label for="payment-option-card4" class="w-100">
+						<div class="col-sm-3 col-md-3">
+							<label for="payment-option-card" class="w-100">
 								<div class="pricing-box text-center shadow-none border">
 									<input type="radio" name="payment_method" value="paypal" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card4" @if(auth()->user()->ecredits < $ordersubtotal) checked @endif>
 									<div class="pricing-price">
@@ -364,6 +364,22 @@
 								</div>
 							</label>
 						</div>
+
+						{{-- FOR BANK --}}
+						
+						{{-- <div class="col-sm-3 col-md-3">
+							<label for="payment-option-card" class="w-100">
+								<div class="pricing-box text-center shadow-none border">
+									<input type="radio" name="payment_method" value="bank" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card4" @if(auth()->user()->ecredits < $ordersubtotal) checked @endif>
+									<div class="pricing-price">
+										<h3 class="nott ls0 mb-0">Bank Transfer	</h3>
+									</div>
+									<div class="px-3">
+										<p class="">Pay with Bank Transfer</p>
+									</div>
+								</div>
+							</label>
+						</div> --}}
 
 					</div>
 					
