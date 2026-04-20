@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 
 use App\Mail\SalesCompleted;
+use App\Mail\BankPaymentStatusMail;
 use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Http\Request;
@@ -600,16 +601,16 @@ class CartController extends Controller
             ]);
         }
         
-        if ($mode_payment == 'bank') {
-            $page = new Page();
-            $page->name = 'Bank Payment';
+        // if ($mode_payment == 'bank') {
+        //     $page = new Page();
+        //     $page->name = 'Bank Payment';
 
-            // Store the entire request data in the session
-            session(['transaction_info_request' => $request->all()]);
+        //     // Store the entire request data in the session
+        //     session(['transaction_info_request' => $request->all()]);
 
-            // Redirect to PayPal
-            return view('theme.pages.ecommerce.bank-payment', compact('page'));
-        }
+        //     // Redirect to Bank Payment Page
+        //     return view('theme.pages.ecommerce.bank-payment', compact('page'));
+        // }
 
         return $this->save_sales_process($request);
     }
@@ -671,7 +672,14 @@ class CartController extends Controller
         (new self())->update_coupon_status($request, $salesHeader->id);
 
         Cart::where('user_id', Auth::id())->delete();
-        Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
+
+        if (env('MAIL_HOST') !== 'sandbox.smtp.mailtrap.io') {
+            Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
+        }
+
+        if ($request->payment_method == 'bank') {
+            Mail::to(Auth::user())->send(new BankPaymentStatusMail($salesHeader, Setting::info()));
+        }
 
         //to check update coupon availability
         Coupon::checkCouponAvailability();

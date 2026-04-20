@@ -367,7 +367,7 @@
 
 						{{-- FOR BANK --}}
 						
-						{{-- <div class="col-sm-3 col-md-3">
+						<div class="col-sm-3 col-md-3">
 							<label for="payment-option-card" class="w-100">
 								<div class="pricing-box text-center shadow-none border">
 									<input type="radio" name="payment_method" value="bank" class="required mt-3 payment-option" autocomplete="off" id="payment-option-card4" @if(auth()->user()->ecredits < $ordersubtotal) checked @endif>
@@ -379,7 +379,7 @@
 									</div>
 								</div>
 							</label>
-						</div> --}}
+						</div>
 
 					</div>
 					
