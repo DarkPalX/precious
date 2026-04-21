@@ -174,7 +174,7 @@
                                                 <i data-feather="settings"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                @if($sale->PaymentStatus == 'UNPAID')
+                                                @if($sale->PaymentStatus == 'UNPAID' && $sale->status<>'CANCELLED' && $sale->payment_method == 'bank')
                                                         <a class="dropdown-item" href="javascript:void(0);" onclick="$('#prompt-change-payment-status{{ $sale->id }}').modal('show');" title="Update Payment Status" data-id="{{$sale->id}}">Update Payment Status</a>
                                                     {{-- <a class="dropdown-item" data-toggle="modal" data-target="#prompt-change-status" title="Update Sales Transaction" data-id="{{$sale->id}}" data-status="PAID">Paid</a> --}}
                                                 @else
