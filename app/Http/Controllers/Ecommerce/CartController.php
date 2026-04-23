@@ -584,6 +584,7 @@ class CartController extends Controller
     
     public function save_sales(Request $request)
     {
+        dd($request->shippingOption);
         $user_id = Auth::user()->id;
         $mode_payment = $request->payment_method;
         $amount_paid =  $request->total_amount;

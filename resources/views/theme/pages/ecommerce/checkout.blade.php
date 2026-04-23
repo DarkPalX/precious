@@ -169,7 +169,7 @@
 
 								<label for="shipping-option-d2d" class="col-sm-6 col-md-4">
 									<div class="pricing-box text-center shadow-none border">
-										<input type="radio" class="mt-3" autocomplete="off" name="devlivery_type" id="shipping-option-d2d" value="d2d" onclick="shipping_type('d2d');" checked>
+										<input type="radio" class="mt-3" autocomplete="off" name="delivery_type" id="shipping-option-d2d" value="d2d" onclick="shipping_type('d2d');" checked>
 										<div class="pricing-price">
 											<h3 class="nott ls0 mb-0">Door-to-Door</h3>
 										</div>
@@ -179,7 +179,7 @@
 									</div>
 								</label>
 
-								<input type="hidden" name="shippingOption" id="shippingOption" value="d2d">
+								{{-- <input type="hidden" name="shippingOption" id="shippingOption" value="d2d"> --}}
 								
 							</div>
 							<div class="row justify-content-center mt-5">
@@ -190,7 +190,7 @@
 
 									<label for="shipping-option-d2d" class="col-sm-6 col-md-4">
 										<div class="pricing-box text-center shadow-none border">
-											<input type="radio" class="mt-3" autocomplete="off" name="devlivery_type" id="shipping-option-d2d" value="d2d" onclick="shipping_type('d2d');" checked>
+											<input type="radio" class="mt-3" autocomplete="off" name="delivery_type" id="shipping-option-d2d" value="d2d" onclick="shipping_type('d2d');" checked>
 											<div class="pricing-price">
 												<h3 class="nott ls0 mb-0">Door-to-Door</h3>
 											</div>
@@ -202,7 +202,7 @@
 
 									<label for="shipping-option-pickup" class="col-sm-6 col-md-4">
 										<div class="pricing-box text-center shadow-none border">
-											<input type="radio" class="mt-3" autocomplete="off" name="devlivery_type" id="shipping-option-pickup" value="pickup" onclick="shipping_type('pickup');">
+											<input type="radio" class="mt-3" autocomplete="off" name="delivery_type" id="shipping-option-pickup" value="pickup" onclick="shipping_type('pickup');">
 											<div class="pricing-price">
 												<h3 class="nott ls0 mb-0">For Pickup</h3>
 											</div>
@@ -212,7 +212,7 @@
 										</div>
 									</label>
 
-									<input type="hidden" name="shippingOption" id="shippingOption" value="d2d">
+									{{-- <input type="hidden" name="shippingOption" id="shippingOption" value="d2d"> --}}
 
 								</div>
 							@endif
@@ -544,7 +544,7 @@
 										@endphp
 										@endforeach
 										
-										<input type="hidden" name="shippingOption" id="shippingOption" value="xde">
+										<input type="hidden" name="shippingOption" id="shippingOption" value="d2d">
 										<input type="hidden" name="shippingRate" id="shippingRate" value="{{ $has_ebook ? 0 : 500 }}">
 										<input type="hidden" name="shippingFeeDiscount" id="sf_discount_amount" value="0">
 							

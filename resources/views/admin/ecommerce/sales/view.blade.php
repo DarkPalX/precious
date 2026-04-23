@@ -67,16 +67,17 @@
 
         <div class="col-sm-6 col-lg-8 mg-t-10">
             <label class="tx-sans tx-uppercase tx-10 tx-medium tx-spacing-1 tx-color-03">Customer Details</label>
+            <p class="mg-b-3">Mobile No: {{$sales->customer_contact_number}}</p>
             <p class="mg-b-3 tx-semibold">{{$sales->customer_name}}</p>
             <p class="mg-b-3">{{$sales->customer_details->email}}</p>
-            <p class="mg-b-20">Mobile No: {{$sales->customer_contact_number}}</p>
+            <p class="mg-b-20">{{$sales->customer_details->address}}</p>
 
             <label class="tx-sans tx-uppercase tx-10 tx-medium tx-spacing-1 tx-color-03">Order Details</label>
             <p class="mg-b-3">Invoice No.: {{$sales->order_number}}</p>
             <p class="mg-b-3">Order Date: {{ date('F d, Y', strtotime($sales->created_at))}}</p>
             <p class="mg-b-3">Delivery Type: {{ strtoupper($sales->delivery_type) }}</p>
             <p class="mg-b-3">Order Status: <span class="tx-success tx-semibold">{{$status}}</span></p>
-            <p class="mg-b-3">Delivery Status: <span class="tx-success tx-semibold tx-uppercase">{{$deliveryStatus}}</span></p>
+            {{-- <p class="mg-b-3">Delivery Status: <span class="tx-success tx-semibold tx-uppercase">{{$deliveryStatus}}</span></p> --}}
             @if($sales->cancellation_request === 1)
                 <p class="mg-b-3">Cancellation Reason: <span class="tx-success tx-semibold">{{$sales->cancellation_reason}}</span></p>
                 <p class="mg-b-3">Cancellation Remark: <span class="tx-success tx-semibold">{{$sales->cancellation_remarks}}</span></p>
