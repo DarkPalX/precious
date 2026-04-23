@@ -89,6 +89,9 @@ CREATE TABLE mobile_app_settings (
     bottombar_bg_color VARCHAR(255) NULL,
     button_bg_color VARCHAR(255) NULL,
     font_color VARCHAR(255) NULL,
+    bottom_menu_font_color VARCHAR(255) NULL,
+    bottom_menu_front_color_active VARCHAR(255) NULL,
+    title_and_paragrapgh_font_color VARCHAR(255) NULL,
 
     empty_library_icon VARCHAR(255) NULL,
 
@@ -98,3 +101,17 @@ CREATE TABLE mobile_app_settings (
 
 INSERT INTO mobile_app_settings (created_at, updated_at)
 VALUES (NOW(), NOW());
+
+
+
+
+
+
+
+
+
+
+ALTER TABLE mobile_app_settings 
+    ADD bottom_menu_font_color VARCHAR(255) NULL,
+    ADD bottom_menu_front_color_active VARCHAR(255) NULL,
+    ADD title_and_paragrapgh_font_color VARCHAR(255) NULL;

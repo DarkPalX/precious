@@ -66,9 +66,9 @@
                                         <ul class="dropdown-menu" role="menu">
                                             <a class="dropdown-item" href="#" onclick="view_items('{{$sale->id}}');">View Details</a>
                                             @if($sale->status != 'CANCELLED')
-                                                @if($sale->payment_status == 'UNPAID')
+                                                {{-- @if($sale->payment_status == 'UNPAID')
                                                     <a href="{{route('my-account.pay-again',$sale->id)}}"  class="dropdown-item">Pay Now</a>
-                                                @endif
+                                                @endif --}}
 
                                                 <a class="dropdown-item" href="#" onclick="view_deliveries('{{$sale->id}}');">View Deliveries</a>
                                                 <a class="dropdown-item" href="#" 

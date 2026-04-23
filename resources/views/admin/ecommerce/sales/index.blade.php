@@ -97,6 +97,7 @@
                             <th>Payment Date</th>
                             <th>Customer</th>
                             <th>Total Amount</th>
+                            <th>Payment Method</th> 
                             <th>Payment Status</th> 
                             <th>Order Status</th>
                             <th class="exclude_export">Action</th>
@@ -126,8 +127,9 @@
                                         {{-- {{ number_format($sale->net_amount - $sale->discount_amount + $sale->ecredit_amount,2) }} --}}
                                     @endif
                                 </td>
-                                {{-- <td>{{ $sale->payment_status }}</td> --}}
-                                <td>{{ $sale->Paymentstatus }}</td>
+                                <td class="text-uppercase">{{ $sale->payment_method }}</td>
+                                <td>{{ $sale->payment_status }}</td>
+                                {{-- <td>{{ $sale->Paymentstatus }}</td> --}}
                                 {{-- <td><a href="{{route('admin.report.delivery_report',$sale->id)}}" target="_blank">{{$sale->delivery_status}}</a></td> --}}
                                 <td>
                                     @if($sale->cancellation_request == 1)
@@ -172,8 +174,9 @@
                                                 <i data-feather="settings"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                @if($sale->status == 'UNPAID')
-                                                    <a class="dropdown-item" data-toggle="modal" data-target="#prompt-change-status" title="Update Sales Transaction" data-id="{{$sale->id}}" data-status="PAID">Paid</a>
+                                                @if($sale->PaymentStatus == 'UNPAID' && $sale->status<>'CANCELLED' && $sale->payment_method == 'bank')
+                                                        <a class="dropdown-item" href="javascript:void(0);" onclick="$('#prompt-change-payment-status{{ $sale->id }}').modal('show');" title="Update Payment Status" data-id="{{$sale->id}}">Update Payment Status</a>
+                                                    {{-- <a class="dropdown-item" data-toggle="modal" data-target="#prompt-change-status" title="Update Sales Transaction" data-id="{{$sale->id}}" data-status="PAID">Paid</a> --}}
                                                 @else
                                                 @endif
 
@@ -197,6 +200,34 @@
 
                                 </td>
                             </tr>
+
+                            {{-- Payment Status Update --}}
+                            <div class="modal effect-scale" id="prompt-change-payment-status{{ $sale->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalCenterTitle">{{__('Payment Status')}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form id="dd_form" method="POST" action="{{route('sales-transaction.payment_status')}}">
+                                            @csrf
+                                            @method('POST')
+                                            <div class="modal-body">
+                                                <h3>Are you sure you want to mark this transaction as PAID?</h3>
+                                                <p class="text-danger">Note: This action cannot be undone.</p>
+                                            </div>
+                                            <input type="hidden" name="trx_id" value="{{ $sale->id }}">
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </form>
+                            
+                                    </div>
+                                </div>
+                            </div>
 
 
                             {{-- Delivery Status Update --}}

@@ -299,6 +299,16 @@ class SalesController extends Controller
 
     }
 
+    public function payment_status(Request $request)
+    {
+        $update = SalesHeader::whereId((int) $request->trx_id)->update([
+            'payment_status' => "PAID"
+        ]);
+
+        return back()->with('success','Successfully updated payment status!');
+
+    }
+
     public function delivery_status(Request $request)
     {
         $sales = explode(",", $request->del_id);
