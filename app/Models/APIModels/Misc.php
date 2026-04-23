@@ -95,11 +95,17 @@ class Misc extends Model
           COALESCE(app_setting.dashboard_password_button,'') as dashboard_password_button,
           COALESCE(app_setting.dashboard_settings_button,'') as dashboard_settings_button,
 
+          COALESCE(app_setting.empty_library_icon,'') as empty_library_icon,
+
           COALESCE(app_setting.menubar_profile_button,'') as menubar_profile_button,
           COALESCE(app_setting.menubar_library_button,'') as menubar_library_button,
           COALESCE(app_setting.menubar_home_button,'') as menubar_home_button,
           COALESCE(app_setting.menubar_orders_button,'') as menubar_orders_button,
-          COALESCE(app_setting.menubar_messages_button,'') as menubar_messages_button
+          COALESCE(app_setting.menubar_messages_button,'') as menubar_messages_button,
+
+          COALESCE(app_setting.bottom_menu_font_color,'') as bottom_menu_font_color,
+          COALESCE(app_setting.bottom_menu_front_color_active,'') as bottom_menu_front_color_active,
+          COALESCE(app_setting.title_and_paragrapgh_font_color,'') as title_and_paragrapgh_font_color,
                    
           
         ")        
