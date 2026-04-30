@@ -1,3 +1,20 @@
+######################################### APRIL 30, 2026 #######################################
+ALTER TABLE settings 
+    ADD (
+        payment_email VARCHAR(255) NULL,
+        bpi_account_name VARCHAR(255) NULL,
+        bpi_account_number VARCHAR(255) NULL,
+        bdo_account_name VARCHAR(255) NULL,
+        bdo_account_number VARCHAR(255) NULL,
+        gcash_account_name VARCHAR(255) NULL,
+        gcash_account_number VARCHAR(255) NULL,
+        maya_account_name VARCHAR(255) NULL,
+        maya_account_number VARCHAR(255) NULL
+    );
+    
+    
+    
+    
 ######################################### APRIL 8, 2026 #######################################
 ALTER TABLE mobile_app_settings 
     ADD 

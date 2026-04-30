@@ -37,16 +37,16 @@
                     <tr>
                         <td style="padding:15px;">
                             <strong>Bank Details</strong><br><br>
-                            Bank Name: <strong>{{ $bank_name ?? 'BDO Unibank' }}</strong><br>
-                            Account Name: <strong>{{ $owner_name ?? 'Precious Pages Corporation' }}</strong><br>
-                            Account Number: <strong>{{ $bank_account ?? '0064 2000 1187' }}</strong>
+                            Bank Name: <strong>BDO Unibank</strong><br>
+                            Account Name: <strong>{{ $setting->bdo_account_name }}</strong><br>
+                            Account Number: <strong>{{ $setting->bdo_account_number }}</strong>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:15px;">
-                            Bank Name: <strong>{{ $bank_name ?? 'BPI' }}</strong><br>
-                            Account Name: <strong>{{ $owner_name ?? 'JRICH HOLDINGs' }}</strong><br>
-                            Account Number: <strong>{{ $bank_account ?? '324 320 8121' }}</strong>
+                            Bank Name: <strong>BPI</strong><br>
+                            Account Name: <strong>{{ $setting->bpi_account_name }}</strong><br>
+                            Account Number: <strong>{{ $setting->bpi_account_number }}</strong>
                         </td>
                     </tr>
                 </table>
@@ -70,7 +70,7 @@
 
                 {{-- EMAIL BOX --}}
                 <p style="background:#eef2ff; padding:10px; border-radius:5px;">
-                    <strong>{{ $setting->company_email ?? 'preciouspayment@gmail.com' }}</strong>
+                    <strong>{{ $setting->payment_email }}</strong>
                 </p>
 
                 <p>

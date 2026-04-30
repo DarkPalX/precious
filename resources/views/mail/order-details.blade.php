@@ -107,7 +107,7 @@
 
                                 <p style="margin: 20px 0 5px 0; font-weight: bold; font-size: 15px;">For NON-COD:</p>
                                 <p style="margin: 0 0 25px 0; color: #555555; line-height: 22px;">
-                                    Please settle your payment using any of the methods listed below. Once completed, take a screenshot of your successful transaction or receipt and email it to <strong style="color: #333333;">preciouspayment@gmail.com</strong>. Please include your <strong>Full Name</strong> and <strong>Order Invoice Number</strong> for verification.
+                                    Please settle your payment using any of the methods listed below. Once completed, take a screenshot of your successful transaction or receipt and email it to <strong style="color: #333333;">{{ $setting->payment_email }}</strong>. Please include your <strong>Full Name</strong> and <strong>Order Invoice Number</strong> for verification.
                                 </p>
                             </div>
 
@@ -122,8 +122,8 @@
                                                     <img src="https://play-lh.googleusercontent.com/UblHlJXPdYZjXR9jJgkbVdKYQX2iLBGbFvbcITooYpg89d-_QBD5o_wfPtpJeo0Br6g=w240-h480-rw" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
                                                 </td>
                                                 <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
-                                                    Acct. Name: Precious Pages Corporation<br>
-                                                    Account No.: 0064 2000 1187
+                                                    Acct. Name: {{ $setting->bpi_account_name }}<br>
+                                                    Account No.: {{ $setting->bpi_account_number }}
                                                 </td>
                                             </tr>
                                         </table>
@@ -134,8 +134,8 @@
                                                     <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ8sURHYDshjhBfNJkE-mWMnV3U7n256pfSwiHCjTcuxQ1pvDpG" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
                                                 </td>
                                                 <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
-                                                    Acct. Name: JRICH HOLDINGs<br>
-                                                    Account No.: 324 320 8121
+                                                    Acct. Name: {{ $setting->bdo_account_name }}<br>
+                                                    Account No.: {{ $setting->bdo_account_number }}
                                                 </td>
                                             </tr>
                                         </table>
@@ -148,8 +148,8 @@
                                             <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRyy8v3V7-y007pb8gxyd6qESCGq4NG0iBb-vQrBpG6xMoylS3h" width="50" style="background: white; border-radius: 4px; padding: 5px; margin: 0 5px;">
                                         </div>
                                         <p style="font-size: 12px; color: #ffffff; text-align: center; margin-top: 15px; line-height: 18px;">
-                                            Account. Name: Segundo Matias<br>
-                                            Account No.: 0969 216 0533
+                                            Account. Name: {{ $setting->gcash_account_name }}<br>
+                                            Account No.: {{ $setting->gcash_account_number }}
                                         </p>
                                     </td>
                                 </tr>

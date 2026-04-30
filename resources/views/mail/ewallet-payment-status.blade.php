@@ -25,12 +25,12 @@
                             <strong>Payment Details</strong><br><br>
                             
                             <strong>GCash:</strong><br>
-                            Account Name: <strong>{{ $gcash_name ?? 'Segundo Matias' }}</strong><br>
-                            Account Number: <strong>{{ $gcash_number ?? '0969-216-0533' }}</strong><br><br>
+                            Account Name: <strong>{{ $setting->gcash_account_name }}</strong><br>
+                            Account Number: <strong>{{ $setting->gcash_account_number }}</strong><br><br>
                             
                             <strong>Maya:</strong><br>
-                            Account Name: <strong>{{ $maya_name ?? 'Segundo Matias' }}</strong><br>
-                            Account Number: <strong>{{ $maya_number ?? '0969-216-0533' }}</strong>
+                            Account Name: <strong>{{ $setting->maya_account_name }}</strong><br>
+                            Account Number: <strong>{{ $setting->maya_account_number }}</strong>
                         </td>
                     </tr>
                 </table>
@@ -48,7 +48,7 @@
                 <p> Send your confirmation to: </p>
                 {{-- EMAIL BOX --}}
                 <p style="background:#eef2ff; padding:10px; border-radius:5px;">
-                    <strong>{{ $setting->company_email ?? 'preciouspayment@gmail.com' }}</strong>
+                    <strong>{{ $setting->payment_email }}</strong>
                 </p>
 
                 <p> Once verified, we will process your order and notify you. </p>

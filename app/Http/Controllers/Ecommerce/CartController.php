@@ -674,8 +674,6 @@ class CartController extends Controller
 
         Cart::where('user_id', Auth::id())->delete();
 
-            Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
-
         if (env('MAIL_HOST') !== 'sandbox.smtp.mailtrap.io') {
             Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
         }

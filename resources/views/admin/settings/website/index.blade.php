@@ -41,10 +41,13 @@
                         <a class="nav-link" id="ecommerce-tab" data-toggle="tab" href="#ecommerce" role="tab" aria-controls="ecommerce" aria-selected="false">Ecommerce</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="paynamics-tab" data-toggle="tab" href="#paynamics" role="tab" aria-controls="paynamics" aria-selected="false">Paynamics Accepted Payments</a>
+                        <a class="nav-link" id="paynamics-tab" data-toggle="tab" href="#paynamics" role="tab" aria-controls="paynamics" aria-selected="false">Paynamics</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="false">Third Party Sign-in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="email-bank-tab" data-toggle="tab" href="#email-bank" role="tab" aria-controls="email-bank" aria-selected="false">Email & Banking</a>
                     </li>
                 </ul>
                 <div class="tab-content rounded bd bd-gray-300 bd-t-0 pd-20" id="myTabContent">
@@ -634,7 +637,84 @@
                         </div>
                     </div>
 
-                    
+                    <!-- Email and Banking Information -->
+                    <div class="tab-pane fade" id="email-bank" role="tabpanel" aria-labelledby="email-bank-tab">
+                        <div class="col-lg-6 mg-t-15">
+                            <form action="{{ route('website-settings.update-email-bank-info') }}" method="post" class="parsley-style-1" data-parsley-validate novalidate>
+                                @csrf
+                                <div class="col-md-12">
+                                    <h4>Email and Banking Information</h4>
+                                    
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Payment Email <span class="tx-danger">*</span></label>
+                                            <input type="text" name="payment_email" data-toggle="tooltip" data-placement="right" data-title="The payment email will be used for receiving payment notifications" class="form-control" value="{{ old('payment_email',$web->payment_email) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
+                                        </div>
+                                    </div>
+
+                                    <hr>
+                                    <h5>Banks</h5>
+
+                                    <h6>BPI</h6>
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Account Name <span class="tx-danger">*</span></label>
+                                            <input type="text" name="bpi_account_name" data-toggle="tooltip" data-placement="right" class="form-control" value="{{ old('bpi_account_name',$web->bpi_account_name) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
+                                        </div>
+                                        <div class="parsley-input">
+                                            <label>Account Number <span class="tx-danger">*</span></label>
+                                            <input type="text" name="bpi_account_number" data-toggle="tooltip" data-placement="right" class="form-control" value="{{ old('bpi_account_number',$web->bpi_account_number) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
+                                        </div>
+                                    </div>
+
+                                    <h6>BDO</h6>
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Account Name <span class="tx-danger">*</span></label>
+                                            <input type="text" name="bdo_account_name" data-toggle="tooltip" data-placement="right" class="form-control" value="{{ old('bdo_account_name',$web->bdo_account_name) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
+                                        </div>
+                                        <div class="parsley-input">
+                                            <label>Account Number <span class="tx-danger">*</span></label>
+                                            <input type="text" name="bdo_account_number" data-toggle="tooltip" data-placement="right" class="form-control" value="{{ old('bdo_account_number',$web->bdo_account_number) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
+                                        </div>
+                                    </div>
+
+                                    <hr>
+                                    <h5>E-Wallets</h5>
+
+                                    <h6>GCash</h6>
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Account Name <span class="tx-danger">*</span></label>
+                                            <input type="text" name="gcash_account_name" data-toggle="tooltip" data-placement="right" class="form-control" value="{{ old('gcash_account_name',$web->gcash_account_name) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
+                                        </div>
+                                        <div class="parsley-input">
+                                            <label>Account Number <span class="tx-danger">*</span></label>
+                                            <input type="text" name="gcash_account_number" data-toggle="tooltip" data-placement="right" class="form-control" value="{{ old('gcash_account_number',$web->gcash_account_number) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
+                                        </div>
+                                    </div>
+
+                                    <h6>Maya</h6>
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Account Name <span class="tx-danger">*</span></label>
+                                            <input type="text" name="maya_account_name" data-toggle="tooltip" data-placement="right" class="form-control" value="{{ old('maya_account_name',$web->maya_account_name) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
+                                        </div>
+                                        <div class="parsley-input">
+                                            <label>Account Number <span class="tx-danger">*</span></label>
+                                            <input type="text" name="maya_account_number" data-toggle="tooltip" data-placement="right" class="form-control" value="{{ old('maya_account_number',$web->maya_account_number) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-12 mg-t-30">
+                                    <button class="btn btn-primary btn-sm btn-uppercase" type="submit">Save Settings</button>
+                                    <a href="{{ route('website-settings.edit') }}" class="btn btn-outline-secondary btn-sm btn-uppercase">Discard Changes</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

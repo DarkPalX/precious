@@ -193,8 +193,8 @@
                             <th>Reference #</th>
                             <th>Date</th>
                             <th>Type</th>
-                            <th>Amount</th>
                             <th>Status</th>
+                            <th>Amount</th>
                         </thead>
                         <tbody id="added_payments_tbl">
 

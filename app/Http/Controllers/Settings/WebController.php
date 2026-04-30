@@ -194,6 +194,29 @@ class WebController extends Controller
         }
     }
 
+    public function update_email_bank_info(Request $request)
+    {
+        $ecommerce = Setting::first();
+
+        $ecommerce->payment_email = $request->payment_email;
+        $ecommerce->bpi_account_name = $request->bpi_account_name;
+        $ecommerce->bpi_account_number = $request->bpi_account_number;
+        $ecommerce->bdo_account_name = $request->bdo_account_name;
+        $ecommerce->bdo_account_number = $request->bdo_account_number;
+        $ecommerce->gcash_account_name = $request->gcash_account_name;
+        $ecommerce->gcash_account_number = $request->gcash_account_number;
+        $ecommerce->maya_account_name = $request->maya_account_name;
+        $ecommerce->maya_account_number = $request->maya_account_number;
+
+        $ecommerce->save();
+
+        if($ecommerce){
+            return back()->with('success','Successfully Updated Email and Bank Information');
+        } else {
+            return back()->with('error','Failed to update Email and Bank Information');
+        }
+    }
+
     public function update_media_accounts(Request $request)
     {
         $data   = $request->all();
