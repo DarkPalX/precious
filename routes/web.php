@@ -92,9 +92,11 @@ Route::get('/phpinfo', function () {
     Route::get('login/{provider}', [SocialiteController::class, 'redirectToProvider'])->name('login.provider');
     Route::get('login/{provider}/callback', [SocialiteController::class, 'handleProviderCallback']);
 
-    Route::post('facebook/data-deletion', [FacebookDataDeletionController::class, 'handle'])->name('facebook.data-deletion');
-    Route::post('google/data-deletion', [GoogleDataDeletionController::class, 'handle'])->name('google.data-deletion');
-    
+    // Route::post('facebook/data-deletion', [FacebookDataDeletionController::class, 'handle'])->name('facebook.data-deletion');
+    // Route::post('google/data-deletion', [GoogleDataDeletionController::class, 'handle'])->name('google.data-deletion');
+    Route::match(['get', 'post'], 'facebook/data-deletion', [FacebookDataDeletionController::class, 'handle'])->name('facebook.data-deletion');
+    Route::match(['get', 'post'], 'google/data-deletion', [GoogleDataDeletionController::class, 'handle'])->name('google.data-deletion');
+
     //Chat Plugin
     Route::post('/setup-chat-plugin', [FacebookController::class, 'setupChatPlugin']);
 
