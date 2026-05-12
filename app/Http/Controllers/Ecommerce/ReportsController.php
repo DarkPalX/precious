@@ -49,45 +49,94 @@ class ReportsController extends Controller
 
     public function sales_list(Request $request)
     {
-        $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', 'ecommerce_sales_headers.id')
-            ->where('order_source', '<>', 'Android')
-            ->orWhereNull('order_source')
+        $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
+            ->where(function($query) {
+                $query->where('order_source', '<>', 'Android')
+                    ->orWhereNull('order_source');
+            })
+            ->where('product_category', '<>', 0)
             ->whereNotNull('ecommerce_sales_headers.id');
 
+        $startDate = $request->get('start');
+        $endDate   = $request->get('end');
+        $customer  = $request->get('customer');
+        $product   = $request->get('product');
+        $category  = $request->get('category');
+        $status    = $request->get('del_status');
 
-        $startDate = $request->get('start', false);
-        $endDate   = $request->get('end', false);
-        $customer  = $request->get('customer', false);
-        $product   = $request->get('product', false);
-        $category   = $request->get('category', false);
-        $status    = $request->get('del_status', false);
-
-
-        if(isset($customer) && $customer <> ''){
+        if ($customer) {
             $sales->where('ecommerce_sales_headers.customer_name', $customer);
         }
 
-        if(isset($product) && $product <> ''){
+        if ($product) {
             $sales->where('ecommerce_sales_details.product_name', $product);
         }
 
-        if(isset($category) && $category <> ''){
+        if ($category) {
             $sales->where('ecommerce_sales_details.product_category', $category);
         }
 
-        if(isset($status) && $status <> ''){
+        if ($status) {
             $sales->where('ecommerce_sales_headers.delivery_status', $status);
         }
-      
-        if(isset($startDate) && strlen($startDate)>=1){
-            $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
+
+        // Date Filter Fix: Ensure dates exist before applying
+        if ($startDate && $endDate) {
+            $sales->whereBetween('ecommerce_sales_headers.created_at', [
+                $startDate . " 00:00:00", 
+                $endDate . " 23:59:59"
+            ]);
         }
 
-        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->paginate($this->pageCount);
+        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')
+                    ->paginate($this->pageCount);
 
-        return view('admin.ecommerce.reports.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'));
-
+        return view('admin.ecommerce.reports.sales-transaction', compact(
+            'sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'
+        ));
     }
+
+    // public function sales_list(Request $request)
+    // {
+    //     $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', 'ecommerce_sales_headers.id')
+    //         ->where('order_source', '<>', 'Android')
+    //         ->orWhereNull('order_source')
+    //         ->whereNotNull('ecommerce_sales_headers.id');
+
+
+    //     $startDate = $request->get('start', false);
+    //     $endDate   = $request->get('end', false);
+    //     $customer  = $request->get('customer', false);
+    //     $product   = $request->get('product', false);
+    //     $category   = $request->get('category', false);
+    //     $status    = $request->get('del_status', false);
+
+
+    //     if(isset($customer) && $customer <> ''){
+    //         $sales->where('ecommerce_sales_headers.customer_name', $customer);
+    //     }
+
+    //     if(isset($product) && $product <> ''){
+    //         $sales->where('ecommerce_sales_details.product_name', $product);
+    //     }
+
+    //     if(isset($category) && $category <> ''){
+    //         $sales->where('ecommerce_sales_details.product_category', $category);
+    //     }
+
+    //     if(isset($status) && $status <> ''){
+    //         $sales->where('ecommerce_sales_headers.delivery_status', $status);
+    //     }
+      
+    //     if(isset($startDate) && strlen($startDate)>=1){
+    //         $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
+    //     }
+
+    //     $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->paginate($this->pageCount);
+
+    //     return view('admin.ecommerce.reports.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'));
+
+    // }
 
     public function top_buyers(Request $request)
     {       
