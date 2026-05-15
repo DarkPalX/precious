@@ -399,13 +399,22 @@ class ReportsController extends Controller
 
     public function sales_list_mobile(Request $request)
     {
+        $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', 'ecommerce_sales_headers.id')
+        // Grouping the source logic ensures it doesn't "leak" into the date filter
+        ->where(function($query) {
+            $query->where('order_source', '<>', 'Android')
+                ->orWhereNull('order_source');
+        })
+        ->whereNotNull('ecommerce_sales_headers.id');
+
+
         // 1. Start the query with grouped OR logic
-        $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
-            ->where(function($query) {
-                $query->where('order_source', '<>', 'Android')
-                    ->orWhereNull('order_source');
-            })
-            ->whereNotNull('ecommerce_sales_headers.id');
+        // $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
+        //     ->where(function($query) {
+        //         $query->where('order_source', '<>', 'Android')
+        //             ->orWhereNull('order_source');
+        //     })
+        //     ->whereNotNull('ecommerce_sales_headers.id');
 
         // 2. Capture inputs (using null as default for cleaner checks)
         $startDate = $request->input('start');
