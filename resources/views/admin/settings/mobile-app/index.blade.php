@@ -70,7 +70,8 @@
             @php
                 $splashFields = [
                         ['name' => 'splashscreen_logo', 'type' => 'logo', 'w' => env('MOBILE_LOGO_WIDTH'), 'h' => env('MOBILE_LOGO_HEIGHT')],
-                        ['name' => 'splashscreen_gif_animation', 'type' => 'gif', 'w' => env('MOBILE_GIF_WIDTH'), 'h' => env('MOBILE_GIF_HEIGHT')]
+                        ['name' => 'splashscreen_gif_animation', 'type' => 'gif', 'w' => env('MOBILE_GIF_WIDTH'), 'h' => env('MOBILE_GIF_HEIGHT')],
+                        ['name' => 'loading_animation', 'type' => 'gif', 'w' => env('MOBILE_GIF_WIDTH'), 'h' => env('MOBILE_GIF_HEIGHT')]
                     ];
             @endphp
 
@@ -473,8 +474,8 @@
         const LIMITS = {
             background: { w: {{ env('MOBILE_BACKGROUND_WIDTH', 300) }}, h: {{ env('MOBILE_BACKGROUND_HEIGHT', 300) }} },
             logo: { w: {{ env('MOBILE_LOGO_WIDTH', 300) }}, h: {{ env('MOBILE_LOGO_HEIGHT', 300) }} },
-            // gif: { w: {{ env('MOBILE_GIF_WIDTH', 300) }}, h: {{ env('MOBILE_GIF_HEIGHT', 300) }} },
             icon: { w: {{ env('MOBILE_ICON_WIDTH', 130) }}, h: {{ env('MOBILE_ICON_HEIGHT', 130) }} }
+            // gif: { w: {{ env('MOBILE_GIF_WIDTH', 300) }}, h: {{ env('MOBILE_GIF_HEIGHT', 300) }} },
         };
 
         $(document).on('change', '.image-input', function() {
@@ -487,6 +488,21 @@
                 let reader = new FileReader();
 
                 reader.onload = function(e) {
+                    // --- FIX FOR GIF ---
+                    // If the type is 'gif', skip checking dimensions completely and just show it
+                    if (type === 'gif') {
+                        $('#' + previewId).attr('src', e.target.result);
+                        $(`button[data-preview="${previewId}"]`).show();
+                        $(`#remove_${previewId.replace('preview_', '')}`).val(0);
+                        return; // Stop execution here for gifs
+                    }
+
+                    // --- STANDARD LOGIC FOR OTHER IMAGES ---
+                    if (!limit) {
+                        console.error(`Dimension limits for type "${type}" are not defined.`);
+                        return;
+                    }
+
                     let img = new Image();
                     img.src = e.target.result;
 
@@ -506,6 +522,30 @@
 
                 reader.readAsDataURL(input.files[0]);
             }
+
+            // if (input.files && input.files[0]) {
+            //     let reader = new FileReader();
+
+            //     reader.onload = function(e) {
+            //         let img = new Image();
+            //         img.src = e.target.result;
+
+            //         img.onload = function() {
+            //             if (img.width != limit.w || img.height != limit.h) {
+            //                 $('#sizeErrorMessage').html(`The selected image is <b>${img.width}x${img.height}px</b>.<br>Required dimensions are <b>${limit.w}x${limit.h}px</b>.`);
+            //                 $('#sizeErrorModal').modal('show');
+            //                 $(input).val('');
+            //                 $('#' + previewId).attr('src', '');
+            //             } else {
+            //                 $('#' + previewId).attr('src', e.target.result);
+            //                 $(`button[data-preview="${previewId}"]`).show();
+            //                 $(`#remove_${previewId.replace('preview_', '')}`).val(0);
+            //             }
+            //         };
+            //     };
+
+            //     reader.readAsDataURL(input.files[0]);
+            // }
         });
 
         $(document).on('click', '.remove-image', function() {

@@ -30,6 +30,7 @@ class MobileAppSettingController extends Controller
             // Splash
             'splashscreen_logo',
             'splashscreen_gif_animation',
+            'loading_animation',
 
             // Onboard
             'onboard_screen_logo_1',
@@ -198,6 +199,7 @@ class MobileAppSettingController extends Controller
 
         $setting->splashscreen_logo = env('APP_URL') .'/images/'. 'default_mobile_logo.png';
         $setting->splashscreen_gif_animation = env('APP_URL') .'/images/'. 'default_mobile_animatted_gif.gif';
+        $setting->loading_animation = env('APP_URL') .'/images/'. 'default_loading_animation.gif';
 
         $setting->onboard_screen_logo_1 = null;
         $setting->onboard_screen_title_1 = null;

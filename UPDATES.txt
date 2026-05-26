@@ -82,6 +82,7 @@ CREATE TABLE mobile_app_settings (
 
     splashscreen_logo VARCHAR(255) NULL,
     splashscreen_gif_animation VARCHAR(255) NULL,
+    loading_animation VARCHAR(255) NULL,
 
     onboard_screen_logo_1 VARCHAR(255) NULL,
     onboard_screen_title_1 VARCHAR(255) NULL,
@@ -141,6 +142,4 @@ VALUES (NOW(), NOW());
 
 
 ALTER TABLE mobile_app_settings 
-    ADD bottom_menu_font_color VARCHAR(255) NULL,
-    ADD bottom_menu_front_color_active VARCHAR(255) NULL,
-    ADD title_and_paragrapgh_font_color VARCHAR(255) NULL;
+    ADD loading_animation VARCHAR(255) NULL;
