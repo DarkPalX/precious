@@ -402,7 +402,7 @@
 					
 					<br>
 					<a href="#" class="btn bg-color text-white tab-linker float-start" rel="2"><i class="icon-arrow-circle-left"></i> Previous</a>
-					<a href="#" class="btn bg-color text-white tab-linker float-end" rel="4" onclick="rateBasedOnShippingOption()">Next <i class="icon-arrow-circle-right"></i></a>
+					<a href="#" class="btn bg-color text-white tab-linker float-end" rel="4" onclick="alert('hahaha');">Next <i class="icon-arrow-circle-right"></i></a>
 				</div>
 
 				<div id="ptab4">
@@ -562,7 +562,6 @@
 										
 										<input type="hidden" name="shippingOption" id="shippingOption" value="d2d">
 										<input type="hidden" name="shippingRate" id="shippingRate" value="{{ $has_ebook ? 0 : 500 }}">
-										<input type="hidden" id="shippingRateD2D" value="{{ $has_ebook ? 0 : 500 }}">
 										<input type="hidden" name="shippingFeeDiscount" id="sf_discount_amount" value="0">
 							
 										<input type="hidden" id="coupon_total_discount" name="coupon_total_discount" value="{{$cart->coupon_discount}}">
@@ -1209,7 +1208,6 @@
 		let provinceSelect = document.getElementById('customer_delivery_province');
 		let citySelect = document.getElementById('customer_delivery_city');
 		let shippingRateInput = document.getElementById('shippingRate');
-		let shippingRateD2DInput = document.getElementById('shippingRateD2D');
 		let hasEbook = {{ $has_ebook ? 'true' : 'false' }};
 		let hasPhysical = {{ $has_physical ? 'true' : 'false' }};
 
@@ -1226,7 +1224,6 @@
 			if (citySelect.querySelector(`option[value="${citySelect.value}"][style*="block"]`) === null) {
 				citySelect.value = "0";
 				shippingRateInput.value = 0; // reset
-				shippingRateD2DInput.value = 0; // reset
 			}
 		}
 
@@ -1234,7 +1231,6 @@
 			let selectedOption = citySelect.options[citySelect.selectedIndex];
 			if (!selectedOption || selectedOption.value === "0") {
 				shippingRateInput.value = 0;
-				shippingRateD2DInput.value = 0;
 				compute_total();
 				return;
 			}
@@ -1242,11 +1238,9 @@
 			// shipping is FREE only if NO physical books
 			if (hasEbook && !hasPhysical) {
 				shippingRateInput.value = 0;
-				shippingRateD2DInput.value = 0;
 			} else {
 				let rate = selectedOption.getAttribute('data-rate') || 0;
 				shippingRateInput.value = rate;
-				shippingRateD2DInput.value = rate;
 			}
 
 			compute_total();
@@ -1260,23 +1254,6 @@
 		updateRate();
 		compute_total();
 	});
-</script>
-
-<script>
-	function rateBasedOnShippingOption() {
-		let shippingOption = document.getElementById('shippingOption').value;
-		let shippingRateInput = document.getElementById('shippingRate');
-		let shippingRateD2DInput = document.getElementById('shippingRateD2D');
-
-		// shipping is FREE only if NO physical books
-		if (shippingOption === 'pickup') {
-			shippingRateInput.value = 0;
-		} else {
-			shippingRateInput.value = shippingRateD2DInput.value;
-		}
-
-		compute_total();
-	}
 </script>
 
 @endsection

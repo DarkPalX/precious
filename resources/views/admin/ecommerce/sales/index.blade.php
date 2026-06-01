@@ -174,7 +174,7 @@
                                                 <i data-feather="settings"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                @if($sale->PaymentStatus == 'UNPAID' && $sale->status<>'CANCELLED' && $sale->payment_method == 'bank')
+                                                @if($sale->PaymentStatus == 'UNPAID' && $sale->status<>'CANCELLED' && ($sale->payment_method == 'bank' || $sale->payment_method == 'ewallet'))
                                                         <a class="dropdown-item" href="javascript:void(0);" onclick="$('#prompt-change-payment-status{{ $sale->id }}').modal('show');" title="Update Payment Status" data-id="{{$sale->id}}">Update Payment Status</a>
                                                     {{-- <a class="dropdown-item" data-toggle="modal" data-target="#prompt-change-status" title="Update Sales Transaction" data-id="{{$sale->id}}" data-status="PAID">Paid</a> --}}
                                                 @else
@@ -217,6 +217,32 @@
                                             <div class="modal-body">
                                                 <h3>Are you sure you want to mark this transaction as PAID?</h3>
                                                 <p class="text-danger">Note: This action cannot be undone.</p>
+
+                                                <div class="form-group">
+                                                    <label for="order_number">Order #</label>
+                                                    <input type="text" name="order_number" class="form-control" value="{{ $sale->order_number }}" readonly required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="payment_type">Payment Method</label>
+                                                    <input type="text" name="payment_method" class="form-control" value="{{ strtoupper($sale->payment_method) }}" readonly required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="payment_status">Receipt #</label>
+                                                    <input type="text" name="receipt_number" class="form-control" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="amount">Amount</label>
+                                                    <input type="text" name="amount" class="form-control" value="{{ number_format($sale->net_amount, 2) }}" readonly required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="remarks">Remarks</label>
+                                                    <textarea name="remarks" class="form-control" cols="30" rows="4"></textarea>
+                                                </div>
+
                                             </div>
                                             <input type="hidden" name="trx_id" value="{{ $sale->id }}">
                                             <div class="modal-footer">

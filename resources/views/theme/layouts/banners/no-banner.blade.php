@@ -31,7 +31,7 @@
 							@if($category != null)
 								<img src="{{ env('APP_URL') . '/' . $category->banner_url }}" />
 							@else
-								<img src="{{ asset('theme/images/banners/sub1.jpg') }}" />
+								<img src="{{ asset('theme/images/banners/no-banner.jpg') }}" />
 							@endif
 						</div>
 					</div>

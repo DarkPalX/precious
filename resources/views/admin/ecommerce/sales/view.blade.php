@@ -76,7 +76,7 @@
             <p class="mg-b-3">Invoice No.: {{$sales->order_number}}</p>
             <p class="mg-b-3">Order Date: {{ date('F d, Y', strtotime($sales->created_at))}}</p>
             <p class="mg-b-3">Delivery Type: {{ strtoupper($sales->delivery_type) }}</p>
-            <p class="mg-b-3">Order Status: <span class="tx-success tx-semibold">{{$status}}</span></p>
+            <p class="mg-b-3">Payment Status: <span class="tx-success tx-semibold">{{$status}}</span></p>
             {{-- <p class="mg-b-3">Delivery Status: <span class="tx-success tx-semibold tx-uppercase">{{$deliveryStatus}}</span></p> --}}
             @if($sales->cancellation_request === 1)
                 <p class="mg-b-3">Cancellation Reason: <span class="tx-success tx-semibold">{{$sales->cancellation_reason}}</span></p>

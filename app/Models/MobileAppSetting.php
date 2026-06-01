@@ -13,6 +13,7 @@ class MobileAppSetting extends Model
     protected $fillable = [
         'splashscreen_logo',
         'splashscreen_gif_animation',
+        'loading_animation',
 
         'onboard_screen_logo_1',
         'onboard_screen_title_1',

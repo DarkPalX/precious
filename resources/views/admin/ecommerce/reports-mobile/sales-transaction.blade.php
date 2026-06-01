@@ -116,7 +116,30 @@
         </thead>
         <tbody>
             @forelse($sales as $sale)
-                @if($sale->product && $sale->product->sku && $sale->header->user)
+                @if(isset($sale->header->user->id))
+                    <tr>
+                        <td>{{SettingHelper::datetimeFormat2($sale->header->created_at)}}</td>
+                        <td>{{$sale->order_number}}</td>
+                        <td>{{str_pad(($sale->header->user->id), 8, '0', STR_PAD_LEFT)}}</td>
+                        <td>{{$sale->header->user->fullname}}</td>
+                        <td>{{$sale->header->customer_delivery_adress}}</td>
+                        <td>{{$sale->product_name}}</td>
+                        <td>{{ $sale->product->category->name ?? 'Uncategorized' }}</td>
+                        <td class="text-right">{{$sale->qty}}</td>
+                        <td class="text-right">{{number_format($sale->price,2)}}</td>
+                        <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
+                        <td class="text-right">{{number_format($sale->discount_amount,2)}}</td>
+                        <td class="text-right">{{number_format(($sale->price*$sale->qty) - $sale->discount_amount,2)}}</td>
+                        <td>{{$sale->payment_method}}</td>
+                        @if(in_array(strtolower($sale->product->book_type ?? ''), ['ebook', 'e-book']))
+                            <td>Delivered</td>
+                        @else
+                            <td>{{$sale->header->delivery_status}} @if($sale->cancellation_request == 1) | {{ $sale->cancellation_reason }} : {{ $sale->cancellation_remarks }} @else {{ optional($sale->header->deliveries->last())->remarks != '' ? ' | '. optional($sale->header->deliveries->last())->remarks : '' }} @endif</td>
+                        @endif
+                    </tr>
+                @endif
+
+                {{-- @if($sale->product && $sale->product->sku && $sale->header->user)
                     <tr>
                         <td>{{SettingHelper::datetimeFormat2($sale->header->created_at)}}</td>
                         <td>{{$sale->order_number}}</td>
@@ -133,7 +156,7 @@
                         <td>{{$sale->payment_method}}</td>
                         <td>{{$sale->header->delivery_status}}</td>
                     </tr>
-                @endif
+                @endif --}}
             @empty
                 <tr>
                     <td colspan="10">No sales transaction found.</td>

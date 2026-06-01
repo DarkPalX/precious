@@ -19,7 +19,16 @@ class Setting extends Model
                             'third_party_signin',
                             'modal_title',
                             'modal_content',
-                            'modal_status'
+                            'modal_status',
+                            'payment_email',
+                            'bpi_account_name',
+                            'bpi_account_number',
+                            'bdo_account_name',
+                            'bdo_account_number',
+                            'gcash_account_name',
+                            'gcash_account_number',
+                            'maya_account_name',
+                            'maya_account_number'
                         ];
 
     public static function getWebsiteName()
@@ -75,7 +84,16 @@ class Setting extends Model
         'cart_product_duration' => 'cart product duration',
         'modal_title' => 'modal title',
         'modal_content' => 'modal content',
-        'modal_status' => 'modal status'
+        'modal_status' => 'modal status',
+        'payment_email' => 'payment email',
+        'bpi_account_name' => 'BPI account name',
+        'bpi_account_number' => 'BPI account number',
+        'bdo_account_name' => 'BDO account name',
+        'bdo_account_number' => 'BDO account number',
+        'gcash_account_name' => 'GCash account name',
+        'gcash_account_number' => 'GCash account number',
+        'maya_account_name' => 'Maya account name',
+        'maya_account_number' => 'Maya account number'
 
     ];
     // END Need to change every model

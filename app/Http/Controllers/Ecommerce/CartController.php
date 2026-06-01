@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ecommerce;
 
 use App\Mail\SalesCompleted;
 use App\Mail\BankPaymentStatusMail;
+use App\Mail\EwalletPaymentStatusMail;
 use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Http\Request;
@@ -679,6 +680,10 @@ class CartController extends Controller
 
         if ($request->payment_method == 'bank') {
             Mail::to(Auth::user())->send(new BankPaymentStatusMail($salesHeader, Setting::info()));
+        }
+
+        if ($request->payment_method == 'ewallet') {
+            Mail::to(Auth::user())->send(new EwalletPaymentStatusMail($salesHeader, Setting::info()));
         }
 
         //to check update coupon availability

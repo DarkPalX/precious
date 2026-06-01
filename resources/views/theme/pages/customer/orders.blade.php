@@ -142,7 +142,7 @@
                                                 <div class="transaction-status">
                                                     <span><strong>Order Date:</strong> '.$sale->created_at.'</span><br>
                                                     <span><strong>Payment Status:</strong> '.$sale->payment_status.'</span><br>
-                                                    <span><strong>Delivery Courier:</strong> '.strtoupper($sale->delivery_type).'</span><br>
+                                                    <span><strong>Delivery Type:</strong> '.strtoupper($sale->delivery_type).'</span><br>
                                                     <span><strong>Delivery Status:</strong> '.$sale->delivery_status.'</span><br>
                                                     <span><strong>Delivery Remarks:</strong> '. ($sale->cancellation_request == 1 ? $sale->cancellation_reason . ' / ' . $sale->cancellation_remarks : optional($sale->deliveries->last())->remarks) .'</span><br>
                                                     <span><strong>Delivery Tracking #:</strong> '.$sale->delivery_tracking_number.'</span><br>

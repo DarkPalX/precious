@@ -301,6 +301,17 @@ class SalesController extends Controller
 
     public function payment_status(Request $request)
     {
+        
+        SalesPayment::create([
+            'sales_header_id' => $request->trx_id,
+            'payment_type' => $request->payment_method,
+            'amount' => $request->amount,
+            'status' => 'PAID',
+            'payment_date' => today(),
+            'receipt_number' => $request->receipt_number,
+            'created_by' => Auth::id()
+        ]);
+
         $update = SalesHeader::whereId((int) $request->trx_id)->update([
             'payment_status' => "PAID"
         ]);
