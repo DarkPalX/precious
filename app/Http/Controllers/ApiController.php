@@ -1182,7 +1182,6 @@ public function getCustomerLibraryList(Request $request){
     
 }
 
-
 public function getCustomerProductAPIInfoData(Request $request){
     
     $Misc = new Misc();

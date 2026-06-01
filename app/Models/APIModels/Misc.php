@@ -105,7 +105,9 @@ class Misc extends Model
 
           COALESCE(app_setting.bottom_menu_font_color,'') as bottom_menu_font_color,
           COALESCE(app_setting.bottom_menu_front_color_active,'') as bottom_menu_front_color_active,
-          COALESCE(app_setting.title_and_paragrapgh_font_color,'') as title_and_paragrapgh_font_color
+          COALESCE(app_setting.title_and_paragrapgh_font_color,'') as title_and_paragrapgh_font_color,
+
+          COALESCE(app_setting.loading_animation,'') as loading_animation
                    
         ")        
         ->whereRaw('app_setting.id =?',[$AppSettingID])                                      
