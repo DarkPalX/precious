@@ -117,8 +117,8 @@ class ApiController extends Controller {
     // $RetVal['ShowSubscriptionModule'] = config("app.ShowSubscriptionModule");
 
     $RetVal['ShowGoogleLogin'] = 'Y';
-    $RetVal['ShowContactUsImageAttach'] = 'N';
-    $RetVal['ShowSubscriptionModule'] = 'N';
+    $RetVal['ShowContactUsImageAttach'] = 'Y';
+    $RetVal['ShowSubscriptionModule'] = 'Y';
 
     return response()->json($RetVal);
 
