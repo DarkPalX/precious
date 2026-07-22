@@ -68,6 +68,15 @@
                                                 @endforeach
                                         </select>
                                     </div>
+                                    &nbsp;
+                                    <div class="mg-b-10 mg-r-5">
+                                        <select name="order_source_filter" id="order_source_filter" class="form-control" style="font-size:12px;width: 150px;">
+                                                <option value="">Order Source</option>
+                                                <option value="null">Website</option>
+                                                <option value="iOS">iOS</option>
+                                                <option value="Android">Android</option>
+                                        </select>
+                                    </div>
                                     
                                     <div class="mg-b-10 mg-r-5">
                                         <input name="search" type="search" id="search" class="form-control" style="font-size:12px;width: 150px;"  placeholder="Search Order Number" value="{{ $filter->search }}">
@@ -100,6 +109,7 @@
                             <th>Payment Method</th> 
                             <th>Payment Status</th> 
                             <th>Order Status</th>
+                            <th>Source</th>
                             <th class="exclude_export">Action</th>
                         </tr>
                         </thead>
@@ -161,6 +171,7 @@
                                         
                                     @endif
                                 </td>
+                                <td>{{ $sale->order_source ?? 'Website' }}</td>
                                 <td>
                                     <nav class="nav table-options">
                                         @if($sale->trashed())

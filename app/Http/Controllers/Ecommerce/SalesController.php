@@ -189,6 +189,7 @@ class SalesController extends Controller
         $startDate = $request->get('startdate', false);
         $endDate = $request->get('enddate', false);
         $customer = $request->get('customer_filter', false);
+        $order_source = $request->get('order_source_filter', false);
 
         $sales = SalesHeader::where('id','>','0');
         if(isset($_GET['startdate']) && $_GET['startdate']<>'')
@@ -199,6 +200,8 @@ class SalesController extends Controller
             $sales = $sales->where('order_number','like','%'.$_GET['search'].'%');
         if(isset($_GET['customer_filter']) && $_GET['customer_filter']<>'')
             $sales = $sales->where('customer_name','like','%'.$_GET['customer_filter'].'%');
+        if(isset($_GET['order_source_filter']) && $_GET['order_source_filter']<>'')
+            $sales = $sales->where('order_source','like','%'.$_GET['order_source_filter'].'%');
         if(isset($_GET['del_status']) && $_GET['del_status']<>'')
             $sales = $sales->where('delivery_status','like',''.$_GET['del_status'].'');
         $sales = $sales->orderBy('id','desc');
@@ -211,7 +214,7 @@ class SalesController extends Controller
             $sale->updateOrderStatus();
         }
 
-        return view('admin.ecommerce.sales.index',compact('sales','filter','searchType', 'deliveryStatus', 'startDate', 'endDate', 'customer'));
+        return view('admin.ecommerce.sales.index',compact('sales','filter','searchType', 'deliveryStatus', 'startDate', 'endDate', 'customer', 'order_source'));
 
     }
 
