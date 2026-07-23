@@ -71,10 +71,10 @@
                                     &nbsp;
                                     <div class="mg-b-10 mg-r-5">
                                         <select name="order_source_filter" id="order_source_filter" class="form-control" style="font-size:12px;width: 150px;">
-                                                <option value="">Order Source</option>
-                                                <option value="null">Website</option>
-                                                <option value="iOS">iOS</option>
-                                                <option value="Android">Android</option>
+                                                <option value="" @if($order_source == '') selected @endif>Order Source</option>
+                                                <option value="null" @if($order_source == 'null') selected @endif>Website</option>
+                                                <option value="iOS" @if($order_source == 'iOS') selected @endif>iOS</option>
+                                                <option value="Android" @if($order_source == 'Android') selected @endif>Android</option>
                                         </select>
                                     </div>
                                     

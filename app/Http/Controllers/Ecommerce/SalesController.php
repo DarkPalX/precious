@@ -200,8 +200,17 @@ class SalesController extends Controller
             $sales = $sales->where('order_number','like','%'.$_GET['search'].'%');
         if(isset($_GET['customer_filter']) && $_GET['customer_filter']<>'')
             $sales = $sales->where('customer_name','like','%'.$_GET['customer_filter'].'%');
-        if(isset($_GET['order_source_filter']) && $_GET['order_source_filter']<>'')
-            $sales = $sales->where('order_source','like','%'.$_GET['order_source_filter'].'%');
+        // if(isset($_GET['order_source_filter']) && $_GET['order_source_filter']<>'')
+        //     $sales = $sales->where('order_source','like','%'.$_GET['order_source_filter'].'%');
+
+        if(isset($_GET['order_source_filter']) && $_GET['order_source_filter']<>'') {
+            if ($_GET['order_source_filter'] === 'null') {
+                $sales = $sales->whereNull('order_source');
+            } else {
+                $sales = $sales->where('order_source', '=', $_GET['order_source_filter']);
+            }
+        }
+
         if(isset($_GET['del_status']) && $_GET['del_status']<>'')
             $sales = $sales->where('delivery_status','like',''.$_GET['del_status'].'');
         $sales = $sales->orderBy('id','desc');
