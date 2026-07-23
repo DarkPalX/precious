@@ -20,7 +20,7 @@
                         </div>
 
                         <div style="font-size:14px;color:#efe7f8;padding-top:8px;">
-                            A new inquiry has been submitted from your website.
+                            A new inquiry has been submitted from your website & app.
                         </div>
                     </td>
 
