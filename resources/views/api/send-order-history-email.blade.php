@@ -1,3 +1,7 @@
+
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Purchase Order Email</title></head>
+<body style="margin:0;background:#fafafa;font-family:Arial,sans-serif;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#fafafa"><tr><td align="center">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="margin:30px auto;border-radius:8px;">
 <tr><td bgcolor="#7E57C2" style="padding:30px 40px;">
@@ -32,3 +36,4 @@ This is a system generated email. Please do not reply.<br><br>
 <a href="https://preciouspagesbookstore.com.ph/terms-of-use-agreement">Terms &amp; Conditions</a> |
 <a href="#">Unsubscribe</a>
 </td></tr></table></td></tr></table>
+</body></html>
