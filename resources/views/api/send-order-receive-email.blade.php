@@ -114,8 +114,8 @@
                         <td align="center" style="padding: 35px 35px 20px 35px; background-color: #ffffff;" bgcolor="#ffffff">
                             <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:1000px;">
                                 <tr>
-                                    <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 25px;"> <img src="https://preciouspagesbookstore.com.ph/storage/logos/ebooklat-logo-horizontal.png" width="125" height="120" style="display: block; border: 0px;" /><br>
-                                        <h2 style="font-size: 30px; font-weight: 800; line-height: 36px; color: #333333; margin: 0;"> Thank You For Your Order! </h2>
+                                    <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 25px;background-color: rgb(126, 87, 194);"> <img src="https://preciouspagesbookstore.com.ph/storage/logos/catha-email-logo.png" width="125" height="120" style="display: block; border: 0px;" /><br>
+                                        <h2 style="font-size: 30px; font-weight: 800; line-height: 36px; color: #ffff; margin: 0;"> Thank You For Your Order! </h2>
                                     </td>
                                 </tr>
                                 <tr>
