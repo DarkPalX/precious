@@ -12,7 +12,7 @@
 </td></tr>
 <tr><td style="padding:40px 50px;font-size:14px;line-height:24px;color:#333;">
 <p>Dear Customer,</p>
-<p>We noticed that you haven't yet verified your account with us at {{ config("app.CompanyName") }}. Please use the verification code below:</p>
+<p>We noticed that your account has not yet been verified. To complete your account activation, please use the verification code below:</p>
 <table align="center" cellpadding="0" cellspacing="0"><tr><td style="border:2px dashed #7E57C2;background:#F4F0FA;padding:18px 40px;font-size:34px;letter-spacing:8px;color:#6F42C1;font-weight:bold;">{{ $VerificationCode }}</td></tr></table>
 <p>If you did not request this verification code, please ignore this email.</p>
 
