@@ -12,13 +12,12 @@
 </td></tr>
 <tr><td style="padding:40px 50px;font-size:14px;line-height:24px;color:#333;">
 <p>Dear Customer,</p>
-<p>This email confirms that you have been successfully subscribed from {{ config("app.CompanyName") }} mailing list.</p>
+<p>This email confirms that you have been successfully subscribed from our mailing list.</p>
 <table align="center" cellpadding="0" cellspacing="0"><tr><td style="border: 2px dashed #7E57C2;background: #F4F0FA;padding: 20px;color: #6F42C1;">
     If you did not intend to subscribe, you may unsubscribe from our mailing list at any time.  You may click here: <a href="#">Unsubscribe</a>
 </td></tr>
 </table>
 
-<p>Thank you,<br>{{ config("app.CompanyName") }}<br>Admin & Team Staff</p>
 </td></tr>
 <tr><td bgcolor="#f5f6f6" style="padding:25px 40px;font-size:12px;color:#666;line-height:20px;">
 This is a system generated email. Please do not reply.<br><br>

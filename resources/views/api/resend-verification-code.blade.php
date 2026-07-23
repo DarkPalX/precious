@@ -15,7 +15,7 @@
 <p>We noticed that you haven't yet verified your account with us at {{ config("app.CompanyName") }}. Please use the verification code below:</p>
 <table align="center" cellpadding="0" cellspacing="0"><tr><td style="border:2px dashed #7E57C2;background:#F4F0FA;padding:18px 40px;font-size:34px;letter-spacing:8px;color:#6F42C1;font-weight:bold;">{{ $VerificationCode }}</td></tr></table>
 <p>If you did not request this verification code, please ignore this email.</p>
-<p>Thank you,<br>{{ config("app.CompanyName") }}<br>Admin & Team Staff</p>
+
 </td></tr>
 <tr><td bgcolor="#f5f6f6" style="padding:25px 40px;font-size:12px;color:#666;line-height:20px;">
 This is a system generated email. Please do not reply.<br><br>

@@ -91,12 +91,6 @@
                 </tr>
             </table>
 
-            <p style="margin-top:35px;">
-                Thank you,<br>
-                {{ config("app.CompanyName") }}<br>
-                Admin &amp; Team Staff
-            </p>
-
         </td>
     </tr>
 
