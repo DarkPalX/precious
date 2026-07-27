@@ -49,14 +49,6 @@ class ReportsController extends Controller
 
     public function sales_list(Request $request)
     {
-        $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
-            ->where(function($query) {
-                $query->where('order_source', '<>', 'Android')
-                    ->orWhereNull('order_source');
-            })
-            ->where('product_category', '<>', 0)
-            ->whereNotNull('ecommerce_sales_headers.id');
-
         $startDate = $request->get('start');
         $endDate   = $request->get('end');
         $customer  = $request->get('customer');
@@ -64,78 +56,150 @@ class ReportsController extends Controller
         $category  = $request->get('category');
         $status    = $request->get('del_status');
 
-        if ($customer) {
-            $sales->where('ecommerce_sales_headers.customer_name', $customer);
-        }
+        if ($request->ajax()) {
+            $query = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
+                ->where(function($q) {
+                    $q->where('ecommerce_sales_headers.order_source', '<>', 'Android')
+                    ->orWhereNull('ecommerce_sales_headers.order_source', '<>', 'iOS')
+                    ->orWhereNull('ecommerce_sales_headers.order_source');
+                })
+                ->where('ecommerce_sales_details.product_category', '<>', 0)
+                ->whereNotNull('ecommerce_sales_headers.id')
+                ->whereHas('header.user') // Enforces Blade template condition: isset($sale->header->user->id)
+                ->with(['header.user', 'product.category', 'header.deliveries'])
+                ->select([
+                    'ecommerce_sales_details.*',
+                    'ecommerce_sales_headers.order_number', 
+                    'ecommerce_sales_headers.payment_method',
+                    'ecommerce_sales_headers.created_at as header_created_at',
+                    'ecommerce_sales_headers.delivery_status',
+                    'ecommerce_sales_headers.customer_delivery_adress'
+                ]);
 
-        if ($product) {
-            $sales->where('ecommerce_sales_details.product_name', $product);
-        }
+            // Filters applied directly to server-side dataset execution
+            if ($customer) {
+                $query->where('ecommerce_sales_headers.customer_name', $customer);
+            }
+            if ($product) {
+                $query->where('ecommerce_sales_details.product_name', $product);
+            }
+            if ($category) {
+                $query->where('ecommerce_sales_details.product_category', $category);
+            }
+            if ($status) {
+                $query->where('ecommerce_sales_headers.delivery_status', $status);
+            }
+            if ($startDate && $endDate) {
+                $query->whereBetween('ecommerce_sales_headers.created_at', [
+                    $startDate . " 00:00:00", 
+                    $endDate . " 23:59:59"
+                ]);
+            }
 
-        if ($category) {
-            $sales->where('ecommerce_sales_details.product_category', $category);
+            return datatables()->of($query)
+                ->addColumn('date', function($sale) {
+                    return \SettingHelper::datetimeFormat2($sale->header_created_at);
+                })
+                ->addColumn('order_number', function($sale) {
+                    // If order_number is already a string like "INV-001", just return it. 
+                    // If it's a numeric ID that needs padding, keep the str_pad.
+                    return is_numeric($sale->order_number) 
+                        ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) 
+                        : ($sale->order_number ?? $sale->header->order_number ?? '');
+                })
+                ->addColumn('customer_no', function($sale) {
+                    return str_pad(($sale->header->user->id ?? 0), 8, '0', STR_PAD_LEFT);
+                })
+                ->addColumn('client_name', function($sale) {
+                    return $sale->header->customer_name ?? '';
+                })
+                ->addColumn('category_name', function($sale) {
+                    return $sale->product->category->name ?? 'Uncategorized';
+                })
+                ->addColumn('gross', function($sale) {
+                    return number_format($sale->price * $sale->qty, 2);
+                })
+                ->addColumn('discount', function($sale) {
+                    return number_format($sale->discount_amount, 2);
+                })
+                ->addColumn('net_price', function($sale) {
+                    return number_format(($sale->price * $sale->qty) - $sale->discount_amount, 2);
+                })
+                ->addColumn('price_formatted', function($sale) {
+                    return number_format($sale->price, 2);
+                })
+                ->addColumn('payment_method', function($sale) {
+                    // Explicitly ensuring it is returned from either details or header table
+                    return $sale->payment_method ?? $sale->header->payment_method ?? '';
+                })
+                ->addColumn('status_display', function($sale) {
+                    if (in_array(strtolower($sale->product->book_type ?? ''), ['ebook', 'e-book'])) {
+                        return 'Delivered';
+                    }
+                    if ($sale->cancellation_request == 1) {
+                        return $sale->delivery_status . ' | ' . $sale->cancellation_reason . ' : ' . $sale->cancellation_remarks;
+                    }
+                    $lastDelivery = optional($sale->header->deliveries->last());
+                    return $lastDelivery && $lastDelivery->remarks != '' 
+                        ? $sale->delivery_status . ' | ' . $lastDelivery->remarks 
+                        : $sale->delivery_status;
+                })
+                ->rawColumns(['status_display'])
+                ->make(true);
         }
-
-        if ($status) {
-            $sales->where('ecommerce_sales_headers.delivery_status', $status);
-        }
-
-        // Date Filter Fix: Ensure dates exist before applying
-        if ($startDate && $endDate) {
-            $sales->whereBetween('ecommerce_sales_headers.created_at', [
-                $startDate . " 00:00:00", 
-                $endDate . " 23:59:59"
-            ]);
-        }
-
-        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')
-                    ->paginate($this->pageCount);
 
         return view('admin.ecommerce.reports.sales-transaction', compact(
-            'sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'
+            'startDate', 'endDate', 'customer', 'product', 'category', 'status'
         ));
     }
 
     // public function sales_list(Request $request)
     // {
-    //     $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', 'ecommerce_sales_headers.id')
-    //         ->where('order_source', '<>', 'Android')
-    //         ->orWhereNull('order_source')
+    //     $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
+    //         ->where(function($query) {
+    //             $query->where('order_source', '<>', 'Android')
+    //                 ->orWhereNull('order_source');
+    //         })
+    //         ->where('product_category', '<>', 0)
     //         ->whereNotNull('ecommerce_sales_headers.id');
 
+    //     $startDate = $request->get('start');
+    //     $endDate   = $request->get('end');
+    //     $customer  = $request->get('customer');
+    //     $product   = $request->get('product');
+    //     $category  = $request->get('category');
+    //     $status    = $request->get('del_status');
 
-    //     $startDate = $request->get('start', false);
-    //     $endDate   = $request->get('end', false);
-    //     $customer  = $request->get('customer', false);
-    //     $product   = $request->get('product', false);
-    //     $category   = $request->get('category', false);
-    //     $status    = $request->get('del_status', false);
-
-
-    //     if(isset($customer) && $customer <> ''){
+    //     if ($customer) {
     //         $sales->where('ecommerce_sales_headers.customer_name', $customer);
     //     }
 
-    //     if(isset($product) && $product <> ''){
+    //     if ($product) {
     //         $sales->where('ecommerce_sales_details.product_name', $product);
     //     }
 
-    //     if(isset($category) && $category <> ''){
+    //     if ($category) {
     //         $sales->where('ecommerce_sales_details.product_category', $category);
     //     }
 
-    //     if(isset($status) && $status <> ''){
+    //     if ($status) {
     //         $sales->where('ecommerce_sales_headers.delivery_status', $status);
     //     }
-      
-    //     if(isset($startDate) && strlen($startDate)>=1){
-    //         $sales->whereBetween('ecommerce_sales_headers.created_at',[$startDate." 00:00:00.000", $endDate." 23:59:59.999"]);  
+
+    //     // Date Filter Fix: Ensure dates exist before applying
+    //     if ($startDate && $endDate) {
+    //         $sales->whereBetween('ecommerce_sales_headers.created_at', [
+    //             $startDate . " 00:00:00", 
+    //             $endDate . " 23:59:59"
+    //         ]);
     //     }
 
-    //     $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')->paginate($this->pageCount);
+    //     $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')
+    //                 ->paginate($this->pageCount);
 
-    //     return view('admin.ecommerce.reports.sales-transaction',compact('sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'));
-
+    //     return view('admin.ecommerce.reports.sales-transaction', compact(
+    //         'sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'
+    //     ));
     // }
 
     public function top_buyers(Request $request)
@@ -399,64 +463,168 @@ class ReportsController extends Controller
 
     public function sales_list_mobile(Request $request)
     {
-        $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', 'ecommerce_sales_headers.id')
-        // Grouping the source logic ensures it doesn't "leak" into the date filter
-        ->where(function($query) {
-            $query->where('order_source', '<>', 'Android')
-                ->orWhereNull('order_source');
-        })
-        ->whereNotNull('ecommerce_sales_headers.id');
+        $startDate = $request->get('start');
+        $endDate   = $request->get('end');
+        $customer  = $request->get('customer');
+        $product   = $request->get('product');
+        $category  = $request->get('category');
+        $status    = $request->get('del_status');
 
+        if ($request->ajax()) {
+            $query = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
+                ->where(function($q) {
+                    // FIXED: Replaced the broken orWhereNull syntax with clean logical matching conditions
+                    $q->where('ecommerce_sales_headers.order_source', 'Android')
+                    ->orWhere('ecommerce_sales_headers.order_source', 'iOS');
+                })
+                // ->where('ecommerce_sales_details.product_category', '<>', 0) // Safely removed
+                ->whereNotNull('ecommerce_sales_headers.id')
+                ->whereHas('header.user') 
+                ->with(['header.user', 'product.category', 'header.deliveries'])
+                ->select([
+                    'ecommerce_sales_details.*',
+                    'ecommerce_sales_headers.order_number', 
+                    'ecommerce_sales_headers.payment_method',
+                    'ecommerce_sales_headers.created_at as header_created_at',
+                    'ecommerce_sales_headers.delivery_status',
+                    'ecommerce_sales_headers.customer_delivery_adress'
+                ]);
 
-        // 1. Start the query with grouped OR logic
-        // $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
-        //     ->where(function($query) {
-        //         $query->where('order_source', '<>', 'Android')
-        //             ->orWhereNull('order_source');
-        //     })
-        //     ->whereNotNull('ecommerce_sales_headers.id');
+            // Filters applied directly to server-side dataset execution
+            if ($customer) {
+                $query->where('ecommerce_sales_headers.customer_name', $customer);
+            }
+            if ($product) {
+                $query->where('ecommerce_sales_details.product_name', $product);
+            }
+            if ($category) {
+                $query->where('ecommerce_sales_details.product_category', $category);
+            }
+            if ($status) {
+                $query->where('ecommerce_sales_headers.delivery_status', $status);
+            }
+            if ($startDate && $endDate) {
+                $query->whereBetween('ecommerce_sales_headers.created_at', [
+                    $startDate . " 00:00:00", 
+                    $endDate . " 23:59:59"
+                ]);
+            }
 
-        // 2. Capture inputs (using null as default for cleaner checks)
-        $startDate = $request->input('start');
-        $endDate   = $request->input('end');
-        $customer  = $request->input('customer');
-        $product   = $request->input('product');
-        $category  = $request->input('category');
-        $status    = $request->input('del_status');
-
-        // 3. Apply Filters conditionally
-        if ($customer) {
-            $sales->where('ecommerce_sales_headers.customer_name', $customer);
+            return datatables()->of($query)
+                ->addColumn('date', function($sale) {
+                    return \SettingHelper::datetimeFormat2($sale->header_created_at);
+                })
+                ->addColumn('order_number', function($sale) {
+                    return is_numeric($sale->order_number) 
+                        ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) 
+                        : ($sale->order_number ?? $sale->header->order_number ?? '');
+                })
+                ->addColumn('customer_no', function($sale) {
+                    return str_pad(($sale->header->user->id ?? 0), 8, '0', STR_PAD_LEFT);
+                })
+                ->addColumn('client_name', function($sale) {
+                    return $sale->header->customer_name ?? '';
+                })
+                ->addColumn('category_name', function($sale) {
+                    // FIXED: Added null-safe navigation to handle instances where product or category is null/0
+                    return $sale->product->category->name ?? 'Uncategorized';
+                })
+                ->addColumn('gross', function($sale) {
+                    return number_format($sale->price * $sale->qty, 2);
+                })
+                ->addColumn('discount', function($sale) {
+                    return number_format($sale->discount_amount, 2);
+                })
+                ->addColumn('net_price', function($sale) {
+                    return number_format(($sale->price * $sale->qty) - $sale->discount_amount, 2);
+                })
+                ->addColumn('price_formatted', function($sale) {
+                    return number_format($sale->price, 2);
+                })
+                ->addColumn('payment_method', function($sale) {
+                    return $sale->payment_method ?? $sale->header->payment_method ?? '';
+                })
+                ->addColumn('status_display', function($sale) {
+                    if (in_array(strtolower($sale->product->book_type ?? ''), ['ebook', 'e-book'])) {
+                        return 'Delivered';
+                    }
+                    if ($sale->cancellation_request == 1) {
+                        return $sale->delivery_status . ' | ' . $sale->cancellation_reason . ' : ' . $sale->cancellation_remarks;
+                    }
+                    $lastDelivery = optional($sale->header->deliveries->last());
+                    return $lastDelivery && $lastDelivery->remarks != '' 
+                        ? $sale->delivery_status . ' | ' . $lastDelivery->remarks 
+                        : $sale->delivery_status;
+                })
+                ->rawColumns(['status_display'])
+                ->make(true);
         }
-
-        if ($product) {
-            $sales->where('ecommerce_sales_details.product_name', $product);
-        }
-
-        if ($category) {
-            $sales->where('ecommerce_sales_details.product_category', $category);
-        }
-
-        if ($status) {
-            $sales->where('ecommerce_sales_headers.delivery_status', $status);
-        }
-    
-        // 4. Date Filter - Now applies to the results of the group above
-        if ($startDate && $endDate) {
-            $sales->whereBetween('ecommerce_sales_headers.created_at', [
-                $startDate . " 00:00:00", 
-                $endDate . " 23:59:59"
-            ]);  
-        }
-
-        // 5. Finalize
-        $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')
-                    ->paginate($this->pageCount);
 
         return view('admin.ecommerce.reports-mobile.sales-transaction', compact(
-            'sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'
+            'startDate', 'endDate', 'customer', 'product', 'category', 'status'
         ));
     }
+
+    // public function sales_list_mobile(Request $request)
+    // {
+    //     $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', 'ecommerce_sales_headers.id')
+    //     // Grouping the source logic ensures it doesn't "leak" into the date filter
+    //     ->where(function($query) {
+    //         $query->where('order_source', '<>', 'Android')
+    //             ->orWhereNull('order_source');
+    //     })
+    //     ->whereNotNull('ecommerce_sales_headers.id');
+
+
+    //     // 1. Start the query with grouped OR logic
+    //     // $sales = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
+    //     //     ->where(function($query) {
+    //     //         $query->where('order_source', '<>', 'Android')
+    //     //             ->orWhereNull('order_source');
+    //     //     })
+    //     //     ->whereNotNull('ecommerce_sales_headers.id');
+
+    //     // 2. Capture inputs (using null as default for cleaner checks)
+    //     $startDate = $request->input('start');
+    //     $endDate   = $request->input('end');
+    //     $customer  = $request->input('customer');
+    //     $product   = $request->input('product');
+    //     $category  = $request->input('category');
+    //     $status    = $request->input('del_status');
+
+    //     // 3. Apply Filters conditionally
+    //     if ($customer) {
+    //         $sales->where('ecommerce_sales_headers.customer_name', $customer);
+    //     }
+
+    //     if ($product) {
+    //         $sales->where('ecommerce_sales_details.product_name', $product);
+    //     }
+
+    //     if ($category) {
+    //         $sales->where('ecommerce_sales_details.product_category', $category);
+    //     }
+
+    //     if ($status) {
+    //         $sales->where('ecommerce_sales_headers.delivery_status', $status);
+    //     }
+    
+    //     // 4. Date Filter - Now applies to the results of the group above
+    //     if ($startDate && $endDate) {
+    //         $sales->whereBetween('ecommerce_sales_headers.created_at', [
+    //             $startDate . " 00:00:00", 
+    //             $endDate . " 23:59:59"
+    //         ]);  
+    //     }
+
+    //     // 5. Finalize
+    //     $sales = $sales->orderBy('ecommerce_sales_headers.created_at', 'desc')
+    //                 ->paginate($this->pageCount);
+
+    //     return view('admin.ecommerce.reports-mobile.sales-transaction', compact(
+    //         'sales', 'startDate', 'endDate', 'customer', 'product', 'category', 'status'
+    //     ));
+    // }
 
     // public function sales_list_mobile(Request $request)
     // {
