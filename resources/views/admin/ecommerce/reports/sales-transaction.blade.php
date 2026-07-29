@@ -20,8 +20,8 @@
                 <td>Status</td>
             </tr>
             <tr>
-                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="start" autocomplete="off" value="{{$startDate}}"></td>
-                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="end" autocomplete="off" value="{{$endDate}}"></td>
+                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="start_date" autocomplete="off" value="{{$startDate}}"></td>
+                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="end_date" autocomplete="off" value="{{$endDate}}"></td>
                 <td>
                     <select style="font-size:12px;width: 140px;" name="customer" id="customer" class="form-control input-sm">
                         <option value="">Select</option>
@@ -114,8 +114,8 @@
                 url: "{{ route('report.sales-transaction') }}",
                 type: "GET",
                 data: function(d) {
-                    d.start = $('input[name="start"]').val();
-                    d.end = $('input[name="end"]').val();
+                    d.start_date = $('input[name="start_date"]').val();
+                    d.end_date = $('input[name="end_date"]').val();
                     d.customer = $('#customer').val();
                     d.product = $('#product').val();
                     d.category = $('#category').val();

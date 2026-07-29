@@ -49,8 +49,8 @@ class ReportsController extends Controller
 
     public function sales_list(Request $request)
     {
-        $startDate = $request->get('start');
-        $endDate   = $request->get('end');
+        $startDate = $request->get('start_date');
+        $endDate   = $request->get('end_date');
         $customer  = $request->get('customer');
         $product   = $request->get('product');
         $category  = $request->get('category');
@@ -463,8 +463,8 @@ class ReportsController extends Controller
 
     public function sales_list_mobile(Request $request)
     {
-        $startDate = $request->get('start');
-        $endDate   = $request->get('end');
+        $startDate = $request->get('start_date');
+        $endDate   = $request->get('end_date');
         $customer  = $request->get('customer');
         $product   = $request->get('product');
         $category  = $request->get('category');
