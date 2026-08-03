@@ -4,8 +4,6 @@
 @endsection
 
 @section('content')
-
-
 <div style="margin:0px 40px 200px 40px;font-family:Arial;">
     <br><br>
     <h4 class="mg-b-0 tx-spacing--1">Mobile Sales Transaction Report</h4>
@@ -22,24 +20,14 @@
                 <td>Status</td>
             </tr>
             <tr>
-                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="start" autocomplete="off"
-                    value="{{$startDate}}">
-                </td>
-                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="end" autocomplete="off"
-                    value="{{$endDate}}">
-                </td>
+                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="start_date" autocomplete="off" value="{{$startDate}}"></td>
+                <td><input style="font-size:12px;width: 140px;" type="date" class="form-control input-sm" name="end_date" autocomplete="off" value="{{$endDate}}"></td>
                 <td>
                     <select style="font-size:12px;width: 140px;" name="customer" id="customer" class="form-control input-sm">
                         <option value="">Select</option>
-                        @php
-                        $customers = \App\Models\User::where('role_id','6')->orderBy('name')->get();
-                        @endphp
+                        @php $customers = \App\Models\User::where('role_id','6')->orderBy('name')->get(); @endphp
                         @forelse($customers as $cu)
-                        <option value="{{$cu->fullname}}"
-                            @if(isset($customer) and $customer == $cu->fullname) selected="selected" @endif 
-                            >
-                            {{$cu->name}}
-                        </option>
+                            <option value="{{$cu->fullname}}" @if(isset($customer) and $customer == $cu->fullname) selected="selected" @endif>{{$cu->name}}</option>
                         @empty
                         @endforelse
                     </select>
@@ -47,15 +35,9 @@
                 <td>
                     <select style="font-size:12px;width: 140px;" name="product" id="product" class="form-control input-sm">
                         <option value="">Select</option>
-                        @php
-                        $products = \App\Models\Ecommerce\Product::orderBy('name')->get();
-                        @endphp
+                        @php $products = \App\Models\Ecommerce\Product::orderBy('name')->get(); @endphp
                         @forelse($products as $p)
-                        <option value="{{$p->name}}"
-                            @if(isset($product) and $product == $p->name) selected="selected" @endif 
-                            >
-                            {{$p->name}}
-                        </option>
+                            <option value="{{$p->name}}" @if(isset($product) and $product == $p->name) selected="selected" @endif>{{$p->name}}</option>
                         @empty
                         @endforelse
                     </select>
@@ -63,15 +45,9 @@
                 <td>
                     <select style="font-size:12px;width: 140px;" name="category" id="category" class="form-control input-sm">
                         <option value="">Select</option>
-                        @php
-                        $categories = \App\Models\Ecommerce\ProductCategory::orderBy('name')->get();
-                        @endphp
+                        @php $categories = \App\Models\Ecommerce\ProductCategory::orderBy('name')->get(); @endphp
                         @forelse($categories as $c)
-                        <option value="{{$c->id}}"
-                            @if(isset($category) && $category == $c->id) selected="selected" @endif 
-                            >
-                            {{$c->name}}
-                        </option>
+                            <option value="{{$c->id}}" @if(isset($category) && $category == $c->id) selected="selected" @endif>{{$c->name}}</option>
                         @empty
                         @endforelse
                     </select>
@@ -84,7 +60,7 @@
                         <option @if(isset($status) && $status == 'In Transit') selected="selected" @endif value="In Transit">In Transit</option>
                         <option @if(isset($status) && $status == 'Delivered') selected="selected" @endif value="Delivered">Delivered</option>
                         <option @if(isset($status) && $status == 'Returned') selected="selected" @endif value="Returned">Returned</option>
-                        <option @if(isset($status) && $status == 'Cancelled') selected="selected" @endif value="Cancelled">Cancelled</option>                                     
+                        <option @if(isset($status) && $status == 'Cancelled') selected="selected" @endif value="Cancelled">Cancelled</option>                                    
                     </select>
                 </td>
                 <td><button type="submit" class="btn btn-sm btn-primary" style="margin:0px 0px 0px 10px;">Generate</button></td>
@@ -93,98 +69,27 @@
         </table>
     </form>
 
-
     <br><br>
-    <table id="example" class="display nowrap" style="width:100%;font: normal 13px/150% Arial, sans-serif, Helvetica;">
+    <table id="sales-table" class="display nowrap" style="width:100%;font: normal 13px/150% Arial, sans-serif, Helvetica;">
         <thead>
             <tr>
-                <td>Date</td>
-                <td>Transaction Ref#</td>
-                <td>Customer No.</td>
-                <td>Client/Customer Name</td>
-                <td>Delivery Address</td>
-                <td>Item/Purchase Description</td>
-                <td>Category</td>
-                <td>Quantity</td>
-                <td>Unit Price</td>
-                <td>Gross</td>
-                <td>Discount</td>
-                <td>Net Price</td>
-                <td>Payment Method</td>
-                <td>Status</td>
+                <th>Date</th>
+                <th>Transaction Ref#</th>
+                <th>Customer No.</th>
+                <th>Client/Customer Name</th>
+                <th>Delivery Address</th>
+                <th>Item/Purchase Description</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Gross</th>
+                <th>Discount</th>
+                <th>Net Price</th>
+                <th>Payment Method</th>
+                <th>Status</th>
             </tr>
         </thead>
-        <tbody>
-            @forelse($sales as $sale)
-                @if(isset($sale->header->user->id))
-                    <tr>
-                        <td>{{SettingHelper::datetimeFormat2($sale->header->created_at)}}</td>
-                        <td>{{$sale->order_number}}</td>
-                        <td>{{str_pad(($sale->header->user->id), 8, '0', STR_PAD_LEFT)}}</td>
-                        <td>{{$sale->header->user->fullname}}</td>
-                        <td>{{$sale->header->customer_delivery_adress}}</td>
-                        <td>{{$sale->product_name}}</td>
-                        <td>{{ $sale->product->category->name ?? 'Uncategorized' }}</td>
-                        <td class="text-right">{{$sale->qty}}</td>
-                        <td class="text-right">{{number_format($sale->price,2)}}</td>
-                        <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
-                        <td class="text-right">{{number_format($sale->discount_amount,2)}}</td>
-                        <td class="text-right">{{number_format(($sale->price*$sale->qty) - $sale->discount_amount,2)}}</td>
-                        <td>{{$sale->payment_method}}</td>
-                        @if(in_array(strtolower($sale->product->book_type ?? ''), ['ebook', 'e-book']))
-                            <td>Delivered</td>
-                        @else
-                            <td>{{$sale->header->delivery_status}} @if($sale->cancellation_request == 1) | {{ $sale->cancellation_reason }} : {{ $sale->cancellation_remarks }} @else {{ optional($sale->header->deliveries->last())->remarks != '' ? ' | '. optional($sale->header->deliveries->last())->remarks : '' }} @endif</td>
-                        @endif
-                    </tr>
-                @endif
-
-                {{-- @if($sale->product && $sale->product->sku && $sale->header->user)
-                    <tr>
-                        <td>{{SettingHelper::datetimeFormat2($sale->header->created_at)}}</td>
-                        <td>{{$sale->order_number}}</td>
-                        <td>{{str_pad(($sale->header->user->id), 8, '0', STR_PAD_LEFT)}}</td>
-                        <td>{{$sale->header->user->fullname}}</td>
-                        <td>{{$sale->header->customer_delivery_adress}}</td>
-                        <td>{{$sale->product->name}}</td>
-                        <td>{{$sale->product->category->name}}</td>
-                        <td class="text-right">{{$sale->qty}}</td>
-                        <td class="text-right">{{number_format($sale->price,2)}}</td>
-                        <td class="text-right">{{number_format($sale->price*$sale->qty,2)}}</td>
-                        <td class="text-right">{{number_format($sale->discount_amount,2)}}</td>
-                        <td class="text-right">{{number_format(($sale->price*$sale->qty) - $sale->discount_amount,2)}}</td>
-                        <td>{{$sale->payment_method}}</td>
-                        <td>{{$sale->header->delivery_status}}</td>
-                    </tr>
-                @endif --}}
-            @empty
-                <tr>
-                    <td colspan="10">No sales transaction found.</td>
-                </tr>
-            @endforelse
-        </tbody>
     </table>
-    
-    <div class="row row-sm">
-
-        <div class="col-md-6">
-            <div class="mg-t-5">
-                @if ($sales->firstItem() == null)
-                    <p class="tx-gray-400 tx-12 d-inline">{{__('common.showing_zero_items')}}</p>
-                @else
-                    <p class="tx-gray-400 tx-12 d-inline">Showing {{ $sales->firstItem() }} to {{ $sales->lastItem() }} of {{ $sales->total() }} items</p>
-                @endif
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="text-md-right float-md-right mg-t-5">
-                <div>
-                    {{ $sales->links() }}
-                </div>
-            </div>
-        </div>
-
-    </div>
 </div>
 @endsection
 
@@ -193,65 +98,74 @@
 <script src="{{ asset('lib/bselect/dist/js/i18n/defaults-en_US.js') }}"></script>
 <script src="{{ asset('lib/prismjs/prism.js') }}"></script>
 <script src="{{ asset('lib/jqueryui/jquery-ui.min.js') }}"></script>
-
 @endsection
 
 @section('customjs')
-{{-- <script src="{{ asset('js/datatables/Buttons-1.6.1/js/buttons.colVis.min.js') }}"></script>
 <script>
+    $(document).ready(function () {
+        if ($.fn.DataTable.isDataTable('#sales-table')) {
+            $('#sales-table').DataTable().destroy();
+        }
 
-
-    $(document).ready(function() {
-        $('#example').DataTable( {
-            dom: 'Bfrtip',
-            pageLength: 20,
-            order: [[0,'desc']],
-            buttons: [
-            {
-                extend: 'print',
-                exportOptions: {
-                    columns: ':visible'
+        $('#sales-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('report.sales-transaction.mobile') }}",
+                type: "GET",
+                data: function(d) {
+                    d.start_date = $('input[name="start_date"]').val();
+                    d.end_date = $('input[name="end_date"]').val();
+                    d.customer = $('#customer').val();
+                    d.product = $('#product').val();
+                    d.category = $('#category').val();
+                    d.del_status = $('#del_status').val();
                 }
             },
-            {
-                extend: 'copy',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'csv',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'excel',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {   
-                extend: 'pdfHtml5',
-                text: 'PDF',
-                exportOptions: {
-                    modifier: {
-                        page: 'current'
-                    }
-                },
-                orientation : 'landscape',
-                pageSize : 'LEGAL'
-            },
-            'colvis'
+            columns: [
+                { data: 'date', name: 'ecommerce_sales_headers.created_at' },
+                { data: 'order_number', name: 'ecommerce_sales_headers.order_number' }, 
+                { data: 'customer_no', name: 'header.user.id', orderable: false },
+                { data: 'client_name', name: 'ecommerce_sales_headers.customer_name', orderable: false }, 
+                { data: 'customer_delivery_adress', name: 'ecommerce_sales_headers.customer_delivery_adress' },
+                { data: 'product_name', name: 'ecommerce_sales_details.product_name' },
+                { data: 'category_name', name: 'product.category.name', orderable: false },
+                { data: 'qty', name: 'ecommerce_sales_details.qty', className: 'text-right' },
+                { data: 'price_formatted', name: 'ecommerce_sales_details.price', className: 'text-right' },
+                { data: 'gross', name: 'ecommerce_sales_details.price', className: 'text-right', orderable: false },
+                { data: 'discount', name: 'ecommerce_sales_details.discount_amount', className: 'text-right' },
+                { data: 'net_price', name: 'ecommerce_sales_details.price', className: 'text-right', orderable: false },
+                { data: 'payment_method', name: 'ecommerce_sales_headers.payment_method' }, 
+                { data: 'status_display', name: 'ecommerce_sales_headers.delivery_status', orderable: false }
             ],
-            columnDefs: [ {
-
-                visible: false
-            } ]
-        } );
-    } );
-</script> --}}
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+                    exportOptions: { columns: ':visible' }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: { columns: ':visible' }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: { columns: ':visible' }
+                },
+                {   
+                    extend: 'pdfHtml5',
+                    text: 'PDF',
+                    exportOptions: {
+                        modifier: { page: 'current' }
+                    },
+                    orientation : 'landscape',
+                    pageSize : 'LEGAL'
+                },
+                'colvis'
+            ],
+            pageLength: 20,
+            order: [[0, 'desc']]
+        });
+    });
+</script>
 @endsection
-
-
-
