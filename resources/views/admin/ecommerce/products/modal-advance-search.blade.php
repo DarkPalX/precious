@@ -13,9 +13,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Name</label>
+                        <label class="control-label">Book / eBook</label>
                         <div>
                             <input type="text" class="form-control input-sm" name="name" value="{{ $advanceSearchData->name }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Author</label>
+                        <div>
+                            <input type="text" class="form-control input-sm" name="author" value="{{ $advanceSearchData->author }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -99,7 +105,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-info" href="{{ route('pages.index') }}">Reset</a>
+                    <a class="btn btn-info" href="{{ route('products.index') }}">Reset</a>
                     <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
                     <input type="submit" value="{{__('common.search')}}" class="btn btn-success">
                 </div>

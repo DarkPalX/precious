@@ -44,6 +44,7 @@
                                         </div>
                                     </th>
                                     <th style="width: 20%;overflow: hidden;">Name</th>
+                                    <th style="width: 10%;">Author</th>
                                     <th style="width: 10%;">Category</th>
                                     <th style="width: 10%;">Price</th>
                                     <th style="width: 10%;">Inventory</th>
@@ -74,6 +75,7 @@
                                         <span class="badge badge-primary" {{ !$product->is_free  ? 'hidden' : '' }}>Free</span>
                                         <span class="badge badge-danger" {{ !$product->is_premium  ? 'hidden' : '' }}>Premium</span>
                                     </td>
+                                    <td>{{ $product->author ?? 'Unknown' }}</td>
                                     <td>{{ $product->category->name }}</td>
                                     <td>
                                         @if($product->discount_price > 0)
