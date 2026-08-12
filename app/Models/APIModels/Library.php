@@ -142,6 +142,11 @@ class Library extends Model
         }
     }
 
+    //Maximum 50 records per request
+    $Limit = min((int)$data['Limit'], 50);
+    $PageNo = max((int)$data['PageNo'], 1);
+
+
     if($Limit > 0){
       $query->limit($Limit);
       $query->offset(($PageNo-1) * $Limit);
@@ -275,6 +280,10 @@ class Library extends Model
              }
         }
     }
+  
+    //Maximum 50 records per request
+    $Limit = min((int)$data['Limit'], 50);
+    $PageNo = max((int)$data['PageNo'], 1);
 
     if($Limit > 0){
       $query->limit($Limit);
