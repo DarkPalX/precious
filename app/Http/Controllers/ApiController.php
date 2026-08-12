@@ -1834,9 +1834,10 @@ public function getRandomBookList(Request $request)
       $data['UserID'] = $request->post('UserID');    
    }
   $data["PageNo"] = 0;
-  $data["Limit"] = $request->post('Limit');
+  //$data["Limit"] = $request->post('Limit');
 
-    $list = $Books->getBookList($data);
+   $data["Limit"]=10; // set temporary limit to 10
+   $list = $Books->getBookList($data);
 
     $bookArray = isset($list['data']) ? $list['data'] : $list;
     $randomBooks = collect($bookArray)->shuffle()->take($data["Limit"])->values();
