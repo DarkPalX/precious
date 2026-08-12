@@ -126,7 +126,7 @@ class Misc extends Model
     $AppSettingID = 1;
     $cacheKey = 'mobile_app_settings:' . $AppSettingID;
 
-    // Cache for 24 hours — this data (colors, logos, onboarding copy) rarely changes,
+    // Set Cache Mobile Setting to 24 Hours
     return Cache::remember($cacheKey, 86400, function() use ($AppSettingID) {
 
         return DB::table('mobile_app_settings as app_setting')
