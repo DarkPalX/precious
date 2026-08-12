@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+
 use Session;
 use Hash;
 use View;
 use Input;
 use Image;
-use DB;
 
 use App\Models\APIModels\Misc;
 
@@ -124,9 +126,8 @@ class Library extends Model
                SELECT 
                    bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
-                    INNER JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id= ?
+                    WHERE bkmrk.product_id = prds.id    
+                    AND bkmrk.customer_id= ?
                          LIMIT 1                                
               )
           ,'') as chapter_no,
@@ -257,9 +258,8 @@ class Library extends Model
                SELECT 
                    bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
-                    INNER JOIN products as prods ON prods.id = bkmrk.product_id
-                         WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id= ?
+                    WHERE bkmrk.product_id = prds.id    
+                    AND bkmrk.customer_id= ?
                          LIMIT 1                                
               )
           ,'') as chapter_no,
