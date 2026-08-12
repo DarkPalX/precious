@@ -2643,11 +2643,11 @@ public function checkSubscriberStatus(Request $request){
     $data['UserID'] = $request->post('UserID');  
 
     $info=$UserCustomer->getCustomerInformation($data);
-    if(isset($info)>0){
-       $getEmailAddress= $info->emailaddress;     
-      }   
+    // if(isset($info)>0){
+    //    $getEmailAddress= $info->emailaddress;     
+    //   }   
      
-     $info=$UserCustomer->getCustomerNewsLetterSubscriberInfo($getEmailAddress);
+    //  $info=$UserCustomer->getCustomerNewsLetterSubscriberInfo($getEmailAddress);
 
      if(isset($info)>0){          
           return response()->json([                  
