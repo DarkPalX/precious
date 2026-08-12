@@ -410,7 +410,7 @@ class Library extends Model
                SELECT 
                   prod_img.path FROM 
                       product_photos as prod_img                  
-                  LEFT JOIN products as prods ON prods.id = prod_img.product_id
+                  INNER JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = rbooks.product_id
                       AND prod_img.is_primary = 1 LIMIT 1                                
               )
