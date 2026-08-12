@@ -22,260 +22,146 @@ use App\Models\APIModels\Misc;
 class Library extends Model
 {
   
-  // public function getLibraryList($data){
+  public function getLibraryList($data){
     
-  //   $UserID=$data['UserID'];
+    $UserID=$data['UserID'];
     
-  //   $Status=$data['Status'];
-  //   $SearchText=$data['SearchText'];
+    $Status=$data['Status'];
+    $SearchText=$data['SearchText'];
     
-  //   $Limit=$data['Limit'];
-  //   $PageNo=$data['PageNo'];
+    $Limit=$data['Limit'];
+    $PageNo=$data['PageNo'];
     
-  //   $query = DB::table('customer_libraries as lib')
-  //     ->join('products as prds', 'prds.id', '=', 'lib.product_id') 
-      
-  //      ->selectraw("
-  //         prds.id as book_ID,
-
-  //         COALESCE(prds.name,'') as name,
-  //         COALESCE(prds.author,'') as author,
-  //         COALESCE(prds.subtitle,'') as subtitle,
-  //         COALESCE(prds.description,'') as short_description,
-          
-  //         COALESCE(prds.slug,'') as slug,
-  //         COALESCE(prds.file_url,'') as file_url,          
-
-  //         COALESCE(prds.category_id,0) as category_id,
-  //         COALESCE(prds.book_type,'') as book_type,          
-      
-  //         COALESCE(prds.sku,'') as sku,          
-  //         COALESCE(prds.size,'') as size,
-  //         COALESCE(prds.weight,'') as weight,
-  //         COALESCE(prds.texture,'') as texture,
-  //         COALESCE(prds.uom,'') as uom,
-
-  //         COALESCE(prds.is_featured,0) as is_featured,
-  //         COALESCE(prds.is_best_seller,0) as is_best_seller,
-  //         COALESCE(prds.is_free,0) as is_free,
-  //         COALESCE(prds.is_premium,0) as is_premium,
-
-  //         COALESCE(prds.ebook_price,0) as price,   
-  //         COALESCE(prds.ebook_discount_price,0) as discount_price,      
-          
-  //         COALESCE(prds.reorder_point,0) as reorder_point,  
-  //         COALESCE(prds.read_count,0) as read_count,  
-          
-  //         CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,  
-
-  //         COALESCE((
-  //              SELECT 
-  //                 prod_img.path FROM 
-  //                     product_photos as prod_img                  
-  //                 LEFT JOIN products as prods ON prods.id = prod_img.product_id
-  //                     WHERE prod_img.product_id = lib.product_id
-  //                     AND prod_img.is_primary = 1 LIMIT 1                                
-  //             )
-  //       ,'') as image_path,
-
-  //       COALESCE((
-  //              SELECT ROUND(avg(rating))
-  //                 FROM product_reviews as rev
-  //               WHERE rev.product_id = prds.id     
-  //               AND rev.status = 1 LIMIT 1                                
-  //             )
-  //       ,0) as rating,
-
-  //       COALESCE((
-  //              SELECT 
-  //                 promo.discount FROM 
-  //                       promos as promo                  
-  //                 INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-  //                      WHERE promo_prods.product_id = lib.product_id 
-  //                      AND promo.applicable_product_type !='physical'                   
-  //                      AND promo.status = 'ACTIVE'
-  //                      AND promo_prods.deleted_at IS NULL LIMIT 1                                
-  //             )
-  //       ,0) as promo_discount_percent,
-
-
-  //       COALESCE((
-  //              SELECT 
-  //                  (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
-  //                       promos as promo                  
-  //                 INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-  //                      WHERE promo_prods.product_id = lib.product_id 
-  //                      AND promo.applicable_product_type !='physical'                   
-  //                      AND promo.status = 'ACTIVE'
-  //                      AND promo_prods.deleted_at IS NULL LIMIT 1                                
-  //             )
-  //       ,0) as promo_discount_price,
-
-  //      COALESCE((
-  //              SELECT 
-  //                  bkmrk.chapter_no FROM 
-  //                       book_marks as bkmrk                  
-  //                   LEFT JOIN products as prods ON prods.id = bkmrk.product_id
-  //                        WHERE bkmrk.product_id = prds.id    
-  //                        AND bkmrk.customer_id=".$UserID." LIMIT 1                                
-  //             )
-  //         ,'') as chapter_no,
-
-  //         COALESCE(prds.status,'') as status          
-          
-  //       ");    
-
-  //   $query->where("lib.user_id",'=',$UserID);  
-  //   $query->where("prds.file_url","!=",null);      
-                  
-  //     if($SearchText != ''){
-  //       $arSearchText = explode(" ",$SearchText);
-  //       if(count($arSearchText) > 0){
-  //           for($x=0; $x< count($arSearchText); $x++) {
-  //               $query->whereraw(
-  //                   "CONCAT_WS(' ',
-  //                       COALESCE(prds.name,''),
-  //                       COALESCE(prds.author,''),                        
-  //                       COALESCE(prds.subtitle,'')
-  //                   ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
-  //            }
-  //       }
-  //   }
-
-  //   if($Limit > 0){
-  //     $query->limit($Limit);
-  //     $query->offset(($PageNo-1) * $Limit);
-  //   }
-
-  //   $query->orderBy("prds.name","ASC");    
-  //   $list = $query->limit(50)->get(); // get temp 50
-                             
-  //    return $list;             
-           
-  // }
- 
-
- public function getLibraryList($data){
-
-    $UserID     = (int)$data['UserID'];
-    $Status     = $data['Status'];
-    $SearchText = $data['SearchText'];
-    $Limit      = $data['Limit'];
-    $PageNo     = $data['PageNo'];
-
     $query = DB::table('customer_libraries as lib')
-        ->join('products as prds', 'prds.id', '=', 'lib.product_id')
+      ->join('products as prds', 'prds.id', '=', 'lib.product_id') 
+      
+       ->selectraw("
+          prds.id as book_ID,
 
-        // PRIMARY IMAGE — one row per product
-        ->leftJoin(DB::raw("(
-            SELECT product_id, MIN(id) as photo_id
-            FROM product_photos
-            WHERE is_primary = 1
-            GROUP BY product_id
-        ) as prod_img_pick"), 'prod_img_pick.product_id', '=', 'prds.id')
-        ->leftJoin('product_photos as prod_img', 'prod_img.id', '=', 'prod_img_pick.photo_id')
+          COALESCE(prds.name,'') as name,
+          COALESCE(prds.author,'') as author,
+          COALESCE(prds.subtitle,'') as subtitle,
+          COALESCE(prds.description,'') as short_description,
+          
+          COALESCE(prds.slug,'') as slug,
+          COALESCE(prds.file_url,'') as file_url,          
 
-        // RATING — one row per product
-        ->leftJoin(DB::raw("(
-            SELECT product_id, ROUND(AVG(rating)) as rating
-            FROM product_reviews
-            WHERE status = 1
-            GROUP BY product_id
-        ) as rev"), 'rev.product_id', '=', 'prds.id')
+          COALESCE(prds.category_id,0) as category_id,
+          COALESCE(prds.book_type,'') as book_type,          
+      
+          COALESCE(prds.sku,'') as sku,          
+          COALESCE(prds.size,'') as size,
+          COALESCE(prds.weight,'') as weight,
+          COALESCE(prds.texture,'') as texture,
+          COALESCE(prds.uom,'') as uom,
 
-        // PROMO — one row per product, reused for both % and price
-        ->leftJoin(DB::raw("(
-            SELECT pp.product_id, MIN(promo.discount) as discount
-            FROM promo_products as pp
-            INNER JOIN promos as promo ON promo.id = pp.promo_id
-            WHERE promo.applicable_product_type != 'physical'
-              AND promo.status = 'ACTIVE'
-              AND pp.deleted_at IS NULL
-            GROUP BY pp.product_id
-        ) as promo"), 'promo.product_id', '=', 'prds.id')
+          COALESCE(prds.is_featured,0) as is_featured,
+          COALESCE(prds.is_best_seller,0) as is_best_seller,
+          COALESCE(prds.is_free,0) as is_free,
+          COALESCE(prds.is_premium,0) as is_premium,
 
-        // BOOKMARK — one row per product for this customer
-        ->leftJoin(DB::raw("(
-            SELECT product_id, MAX(chapter_no) as chapter_no
-            FROM book_marks
-            WHERE customer_id = ".$UserID."
-            GROUP BY product_id
-        ) as bkmrk"), 'bkmrk.product_id', '=', 'prds.id')
+          COALESCE(prds.ebook_price,0) as price,   
+          COALESCE(prds.ebook_discount_price,0) as discount_price,      
+          
+          COALESCE(prds.reorder_point,0) as reorder_point,  
+          COALESCE(prds.read_count,0) as read_count,  
+          
+           CONCAT(
+                COALESCE(prds.name, ''),
+                ' ',
+                COALESCE(prds.author, ''),
+                '',
+                COALESCE(prds.book_type, ''),
+                '',
+                COALESCE(prds.subtitle, '')
+            ) AS search_fields, 
 
-        ->selectRaw("
-            prds.id as book_ID,
+          COALESCE((
+               SELECT 
+                  prod_img.path FROM 
+                      product_photos as prod_img                  
+                      WHERE prod_img.product_id = lib.product_id
+                      AND prod_img.is_primary = 1 LIMIT 1                                
+              )
+        ,'') as image_path,
 
-            COALESCE(prds.name,'') as name,
-            COALESCE(prds.author,'') as author,
-            COALESCE(prds.subtitle,'') as subtitle,
-            COALESCE(prds.description,'') as short_description,
+        COALESCE((
+               SELECT ROUND(avg(rating))
+                  FROM product_reviews as rev
+                WHERE rev.product_id = prds.id     
+                AND rev.status = 1 LIMIT 1                                
+              )
+        ,0) as rating,
 
-            COALESCE(prds.slug,'') as slug,
-            COALESCE(prds.file_url,'') as file_url,
+        COALESCE((
+               SELECT 
+                  promo.discount FROM 
+                        promos as promo                  
+                  INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = lib.product_id 
+                       AND promo.applicable_product_type !='physical'                   
+                       AND promo.status = 'ACTIVE'
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
+              )
+        ,0) as promo_discount_percent,
 
-            COALESCE(prds.category_id,0) as category_id,
-            COALESCE(prds.book_type,'') as book_type,
 
-            COALESCE(prds.sku,'') as sku,
-            COALESCE(prds.size,'') as size,
-            COALESCE(prds.weight,'') as weight,
-            COALESCE(prds.texture,'') as texture,
-            COALESCE(prds.uom,'') as uom,
+        COALESCE((
+               SELECT 
+                   (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
+                        promos as promo                  
+                  INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+                       WHERE promo_prods.product_id = lib.product_id 
+                       AND promo.applicable_product_type !='physical'                   
+                       AND promo.status = 'ACTIVE'
+                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
+              )
+        ,0) as promo_discount_price,
 
-            COALESCE(prds.is_featured,0) as is_featured,
-            COALESCE(prds.is_best_seller,0) as is_best_seller,
-            COALESCE(prds.is_free,0) as is_free,
-            COALESCE(prds.is_premium,0) as is_premium,
+       COALESCE((
+               SELECT 
+                   bkmrk.chapter_no FROM 
+                        book_marks as bkmrk                  
+                    INNER JOIN products as prods ON prods.id = bkmrk.product_id
+                         WHERE bkmrk.product_id = prds.id    
+                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
+              )
+          ,'') as chapter_no,
 
-            COALESCE(prds.ebook_price,0) as price,
-            COALESCE(prds.ebook_discount_price,0) as discount_price,
+          COALESCE(prds.status,'') as status          
+          
+        ");    
 
-            COALESCE(prds.reorder_point,0) as reorder_point,
-            COALESCE(prds.read_count,0) as read_count,
-
-            CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
-
-            COALESCE(prod_img.path,'') as image_path,
-
-            COALESCE(rev.rating,0) as rating,
-
-            COALESCE(promo.discount,0) as promo_discount_percent,
-
-            COALESCE(prds.ebook_price - (promo.discount/100 * prds.ebook_price), 0) as promo_discount_price,
-
-            COALESCE(bkmrk.chapter_no,'') as chapter_no,
-
-            COALESCE(prds.status,'') as status
-        ")
-
-        ->where('lib.user_id', '=', $UserID)
-        ->whereNotNull('prds.file_url');
-
-    if ($SearchText != '') {
-        $arSearchText = array_filter(explode(" ", trim($SearchText)));
-        foreach ($arSearchText as $word) {
-            $query->where(function($q) use ($word) {
-                $like = '%'.str_replace(['%','_'], ['\%','\_'], $word).'%';
-                $q->where('prds.name', 'like', $like)
-                  ->orWhere('prds.author', 'like', $like)
-                  ->orWhere('prds.subtitle', 'like', $like);
-            });
+    $query->where("lib.user_id",'=',$UserID);  
+    $query->where("prds.file_url","!=",null);      
+                  
+      if($SearchText != ''){
+        $arSearchText = explode(" ",$SearchText);
+        if(count($arSearchText) > 0){
+            for($x=0; $x< count($arSearchText); $x++) {
+                $query->whereraw(
+                    "CONCAT_WS(' ',
+                        COALESCE(prds.name,''),
+                        COALESCE(prds.author,''),                        
+                        COALESCE(prds.subtitle,'')
+                    ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+             }
         }
     }
 
-    $query->orderBy('prds.name', 'ASC');
+    if($Limit > 0){
+      $query->limit($Limit);
+      $query->offset(($PageNo-1) * $Limit);
+    }
 
-    // fixed: original set limit($Limit) then overrode it with limit(50) below.
-    // Now the explicit $Limit (when provided) is respected, with 50 only as the fallback cap.
-    // if ($Limit > 0) {
-    //     $query->limit($Limit)->offset(($PageNo - 1) * $Limit);
-    // } else {
-    //     $query->limit(50);
-    // }
-   
-     $query->limit(10);
-    return $query->get();
-}
+    $query->orderBy("prds.name","ASC");    
+    $list = $query->limit(50)->get(); // get temp 50
+                             
+     return $list;             
+           
+  }
+ 
+
 
    public function getSubscribedReadBooksList($data){
     
@@ -327,7 +213,6 @@ class Library extends Model
                SELECT 
                   prod_img.path FROM 
                       product_photos as prod_img                  
-                  LEFT JOIN products as prods ON prods.id = prod_img.product_id
                       WHERE prod_img.product_id = rbooks.product_id
                       AND prod_img.is_primary = 1 LIMIT 1                                
               )
@@ -369,7 +254,7 @@ class Library extends Model
                SELECT 
                    bkmrk.chapter_no FROM 
                         book_marks as bkmrk                  
-                    LEFT JOIN products as prods ON prods.id = bkmrk.product_id
+                    INNER JOIN products as prods ON prods.id = bkmrk.product_id
                          WHERE bkmrk.product_id = prds.id    
                          AND bkmrk.customer_id=".$UserID." LIMIT 1                                
               )
