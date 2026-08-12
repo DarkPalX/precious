@@ -24,13 +24,15 @@ class Library extends Model
   
   public function getLibraryList($data){
     
-    $UserID=$data['UserID'];
+    //$UserID=$data['UserID'];
     
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
     
     $Limit=$data['Limit'];
     $PageNo=$data['PageNo'];
+
+    $UserID = isset($data['UserID']) ? (int)$data['UserID'] : 0;
     
     $query = DB::table('customer_libraries as lib')
       ->join('products as prds', 'prds.id', '=', 'lib.product_id') 
@@ -124,13 +126,14 @@ class Library extends Model
                         book_marks as bkmrk                  
                     INNER JOIN products as prods ON prods.id = bkmrk.product_id
                          WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
+                         AND bkmrk.customer_id= ?
+                         LIMIT 1                                
               )
           ,'') as chapter_no,
 
           COALESCE(prds.status,'') as status          
           
-        ");    
+      ", [$UserID]);
 
     $query->where("lib.user_id",'=',$UserID);  
     $query->where("prds.file_url","!=",null);      
@@ -149,10 +152,10 @@ class Library extends Model
         }
     }
 
-    if($Limit > 0){
-      $query->limit($Limit);
-      $query->offset(($PageNo-1) * $Limit);
-    }
+    // if($Limit > 0){
+    //   $query->limit($Limit);
+    //   $query->offset(($PageNo-1) * $Limit);
+    // }
 
     $query->orderBy("prds.name","ASC");    
     $list = $query->limit(50)->get(); // get temp 50
@@ -161,18 +164,18 @@ class Library extends Model
            
   }
  
-
-
    public function getSubscribedReadBooksList($data){
     
-    $UserID=$data['UserID'];
-    
+    //$UserID=$data['UserID'];
+
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
     
     $Limit=$data['Limit'];
     $PageNo=$data['PageNo'];
     
+    $UserID = isset($data['UserID']) ? (int)$data['UserID'] : 0;
+
     $query = DB::table('subscribed_books as rbooks')
       ->leftjoin('products as prds', 'prds.id', '=', 'rbooks.product_id')        
     
@@ -256,17 +259,17 @@ class Library extends Model
                         book_marks as bkmrk                  
                     INNER JOIN products as prods ON prods.id = bkmrk.product_id
                          WHERE bkmrk.product_id = prds.id    
-                         AND bkmrk.customer_id=".$UserID." LIMIT 1                                
+                         AND bkmrk.customer_id= ?
+                         LIMIT 1                                
               )
           ,'') as chapter_no,
 
         COALESCE(prds.status,'') as status          
           
-        ");    
+    ", [$UserID]);   
     
     $query->where("rbooks.user_id",'=',$UserID);        
     $query->where("rbooks.deleted_at",'=',null);   
-
     $query->where("rbooks.is_read",'=',1);
   
                                   
@@ -284,10 +287,10 @@ class Library extends Model
         }
     }
 
-    if($Limit > 0){
-      $query->limit($Limit);
-      $query->offset(($PageNo-1) * $Limit);
-    }
+    // if($Limit > 0){
+    //   $query->limit($Limit);
+    //   $query->offset(($PageNo-1) * $Limit);
+    // }
 
     $query->orderBy("prds.name","ASC");    
     $list = $query->limit(50)->get();  // get temp 50
