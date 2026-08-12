@@ -2003,7 +2003,7 @@ public function getAllBookDetailsCatalogueList(Request $request){
    if(isset($data['UserID'])){
        $data['UserID'] = $request->post('UserID');
    }
-  
+     
   $data['Status'] = 'All';
   $data['SearchText'] = '';
 
@@ -2582,49 +2582,49 @@ public function extendSubscriptionPlan(Request $request){
 // CHECK SUBSCRIPTION STATUS==========================================================
 public function checkSubscriptionStatus(Request $request){
     
-    // $Cart = new Cart();
-    // $UserCustomer = new UserCustomer();
-    // $Subscription = new Subscription();
+    $Cart = new Cart();
+    $UserCustomer = new UserCustomer();
+    $Subscription = new Subscription();
     
-    // $response = "Failed";
-    // $responseMessage = "";
+    $response = "Failed";
+    $responseMessage = "";
 
-    // $has_subscription=false;
-    // $SubscriptionPlanID=0;
+    $has_subscription=false;
+    $SubscriptionPlanID=0;
 
     
-    // $data['UserID'] = $request->post('UserID'); 
+    $data['UserID'] = $request->post('UserID'); 
 
-    // $SubscriptionPlanID=$Subscription->checkCustomerSubscriptionIfExist($data['UserID']);  
+    $SubscriptionPlanID=$Subscription->checkCustomerSubscriptionIfExist($data['UserID']);  
 
-    // if($SubscriptionPlanID>0){
-    //   $has_subscription=true;  
-    //   $Subscription->checkSubscriptionStatus($data);//check plan subscription
-    //   $info=$UserCustomer->getCustomerCurrentSubscriptionInfo($data['UserID']);
+    if($SubscriptionPlanID>0){
+      $has_subscription=true;  
+      $Subscription->checkSubscriptionStatus($data);//check plan subscription
+      $info=$UserCustomer->getCustomerCurrentSubscriptionInfo($data['UserID']);
 
-    //    return response()->json([                  
-    //        'response' => 'Success',
-    //        'data' => $info,                     
-    //        'message' => "You have successfully check customer subscription plan.",
-    //      ]);   
+       return response()->json([                  
+           'response' => 'Success',
+           'data' => $info,                     
+           'message' => "You have successfully check customer subscription plan.",
+         ]);   
 
-    // }else{
+    }else{
 
-    //   $has_subscription=false;
-    //   $info=null;
+      $has_subscription=false;
+      $info=null;
 
-    //    return response()->json([
-    //       'response' => 'Failed',
-    //       'data' => null,          
-    //       'message' => "User has no subscription plan.",
-    //    ]);
-    // }  
-
-    return response()->json([
+       return response()->json([
           'response' => 'Failed',
           'data' => null,          
           'message' => "User has no subscription plan.",
        ]);
+    }  
+
+   // return response()->json([
+   //        'response' => 'Failed',
+   //        'data' => null,          
+   //        'message' => "User has no subscription plan.",
+   //     ]);
          
 }
 
@@ -2643,11 +2643,11 @@ public function checkSubscriberStatus(Request $request){
     $data['UserID'] = $request->post('UserID');  
 
     $info=$UserCustomer->getCustomerInformation($data);
-    // if(isset($info)>0){
-    //    $getEmailAddress= $info->emailaddress;     
-    //   }   
+    if(isset($info)>0){
+       $getEmailAddress= $info->emailaddress;     
+      }   
      
-    //  $info=$UserCustomer->getCustomerNewsLetterSubscriberInfo($getEmailAddress);
+     $info=$UserCustomer->getCustomerNewsLetterSubscriberInfo($getEmailAddress);
 
      if(isset($info)>0){          
           return response()->json([                  
