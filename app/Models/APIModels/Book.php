@@ -188,7 +188,7 @@ class Book extends Model
     }
 
     $query->orderBy("prds.created_at","ASC");    
-     $list = $query->limit(50)->get();  // get temp 10
+     $list = $query->limit(20)->get();  // get temp 10
                              
      return $list;             
            
@@ -716,7 +716,7 @@ class Book extends Model
     }  
     
 
-    $list = $query->limit(50)->get();  // get temp 10
+    $list = $query->limit(20)->get();  // get temp 10
                              
      return $list;             
            
@@ -1319,6 +1319,7 @@ class Book extends Model
               'created_at' => $TODAY  
            ]);
       }else{
+
         $BookID = DB::table('searched_book')
             ->insertGetId([                                            
               'customer_id' => $UserID,              
