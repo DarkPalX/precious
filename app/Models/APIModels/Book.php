@@ -197,7 +197,6 @@ class Book extends Model
            
   // }
 
-   
   public function getBookList($data){
 
     $UserID     = (int)$data['UserID'];
@@ -214,7 +213,7 @@ class Book extends Model
         $Limit
     );
 
-    // SET To Cached— cached, shared across all users (no $UserID in the key or the query)
+    // Set To Cached— cached, shared across all users (no $UserID in the key or the query)
     $catalogPage = Cache::remember($cacheKey, 600, function() use ($Status, $SearchText, $Limit, $PageNo) {
 
         $query = DB::table('products as prds')
@@ -474,7 +473,6 @@ class Book extends Model
   //                     AND cust_lib.user_id=".$UserID." LIMIT 1                                
   //             )
   //       ,0) as product_library_exist,
-
 
   //       COALESCE(prds.status,'') as status          
           
