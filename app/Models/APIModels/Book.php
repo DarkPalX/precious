@@ -312,7 +312,8 @@ class Book extends Model
       $query->where("prds.deleted_at","=",null); 
         
      $query->orderByRaw('RAND()');
-     $query->take($Limit);
+
+     //$query->take($Limit);
      $list=$query->get();
                   
       return $list;             
@@ -434,7 +435,8 @@ class Book extends Model
   
       $query->where("prds.deleted_at","=",null);
       $query->whereRaw("cont.customer_id =?",[$UserID]); 
-      $query->orderBy("cont.created_at","DESC");   
+      $query->orderBy("cont.created_at","DESC");  
+      $query->limit(10); 
          
       $list = $query->get();
                            
@@ -678,6 +680,10 @@ class Book extends Model
         }
     }
 
+   // Maximum 50 records per request
+    $Limit = min((int)$data['Limit'], 50);
+    $PageNo = max((int)$data['PageNo'], 1);
+
     if($Limit > 0){
       $query->limit($Limit);
       $query->offset(($PageNo-1) * $Limit);
@@ -884,15 +890,17 @@ class Book extends Model
         }
     }
 
-    if($Limit > 0){
-      $query->limit($Limit);
-      $query->offset(($PageNo-1) * $Limit);
-    }
+    $Limit = min((int)$data['Limit'], 50);
+    $PageNo = max((int)$data['PageNo'], 1);
 
-    $query->orderBy("prds.created_at","ASC");    
+    $query->orderBy("prds.created_at","ASC");
+
+    $query->limit($Limit);
+    $query->offset(($PageNo - 1) * $Limit);
+
     $list = $query->get();
-                             
-     return $list;             
+
+    return $list;          
            
   }
 
@@ -1149,6 +1157,7 @@ class Book extends Model
 
        $query->where("prds.deleted_at","=",null);
        $query->whereRaw("prod_det_cat.product_catalog_header_id =?",[$HeaderID]); 
+       $query->limit(10);
          
       $list = $query->get();
                              
