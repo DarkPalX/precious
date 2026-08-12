@@ -9,6 +9,8 @@ use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 use Session;
@@ -54,84 +56,124 @@ class Misc extends Model
 
     }  
 
-    public function getMobileSettingsInformation(){
+  //   public function getMobileSettingsInformation(){
  
-    // $AppSettingID=1;
+  //   $AppSettingID=1;
 
-    // $info = DB::table('mobile_app_settings as app_setting')              
+  //   $info = DB::table('mobile_app_settings as app_setting')              
     
-    //    ->selectraw("
-    //       app_setting.id as AppSettingID,
+  //      ->selectraw("
+  //         app_setting.id as AppSettingID,
 
-    //       COALESCE(app_setting.splashscreen_logo,'') as splashscreen_logo,
-    //       COALESCE(app_setting.splashscreen_gif_animation,'') as splashscreen_gif_animation,
+  //         COALESCE(app_setting.splashscreen_logo,'') as splashscreen_logo,
+  //         COALESCE(app_setting.splashscreen_gif_animation,'') as splashscreen_gif_animation,
 
-    //       COALESCE(app_setting.onboard_screen_logo_1,'') as onboard_screen_logo_1,
-    //       COALESCE(app_setting.onboard_screen_title_1,'') as onboard_screen_title_1,
-    //       COALESCE(app_setting.onboard_screen_content_1,'') as onboard_screen_content_1,
+  //         COALESCE(app_setting.onboard_screen_logo_1,'') as onboard_screen_logo_1,
+  //         COALESCE(app_setting.onboard_screen_title_1,'') as onboard_screen_title_1,
+  //         COALESCE(app_setting.onboard_screen_content_1,'') as onboard_screen_content_1,
 
-    //       COALESCE(app_setting.onboard_screen_logo_2,'') as onboard_screen_logo_2,
-    //       COALESCE(app_setting.onboard_screen_title_2,'') as onboard_screen_title_2,
-    //       COALESCE(app_setting.onboard_screen_content_2,'') as onboard_screen_content_2,
+  //         COALESCE(app_setting.onboard_screen_logo_2,'') as onboard_screen_logo_2,
+  //         COALESCE(app_setting.onboard_screen_title_2,'') as onboard_screen_title_2,
+  //         COALESCE(app_setting.onboard_screen_content_2,'') as onboard_screen_content_2,
 
-    //       COALESCE(app_setting.onboard_screen_logo_3,'') as onboard_screen_logo_3,
-    //       COALESCE(app_setting.onboard_screen_title_3,'') as onboard_screen_title_3,
-    //       COALESCE(app_setting.onboard_screen_content_3,'') as onboard_screen_content_3,
+  //         COALESCE(app_setting.onboard_screen_logo_3,'') as onboard_screen_logo_3,
+  //         COALESCE(app_setting.onboard_screen_title_3,'') as onboard_screen_title_3,
+  //         COALESCE(app_setting.onboard_screen_content_3,'') as onboard_screen_content_3,
 
-    //       COALESCE(app_setting.background_color_info,'') as background_color_info,    
-    //       COALESCE(app_setting.background_img_info,'') as background_img_info,
+  //         COALESCE(app_setting.background_color_info,'') as background_color_info,    
+  //         COALESCE(app_setting.background_img_info,'') as background_img_info,
 
-    //       COALESCE(app_setting.topbar_bg_color,'') as topbar_bg_color,    
-    //       COALESCE(app_setting.bottombar_bg_color,'') as bottombar_bg_color,
+  //         COALESCE(app_setting.topbar_bg_color,'') as topbar_bg_color,    
+  //         COALESCE(app_setting.bottombar_bg_color,'') as bottombar_bg_color,
 
-    //       COALESCE(app_setting.button_bg_color,'') as button_bg_color,
-    //       COALESCE(app_setting.font_color,'') as font_color,
+  //         COALESCE(app_setting.button_bg_color,'') as button_bg_color,
+  //         COALESCE(app_setting.font_color,'') as font_color,
 
-    //       COALESCE(app_setting.dashboard_profile_button,'') as dashboard_profile_button,
-    //       COALESCE(app_setting.dashboard_library_button,'') as dashboard_library_button,
-    //       COALESCE(app_setting.dashboard_transactions_button,'') as dashboard_transactions_button,
-    //       COALESCE(app_setting.dashboard_ecredits_button,'') as dashboard_ecredits_button,
-    //       COALESCE(app_setting.dashboard_contact_button,'') as dashboard_contact_button,
-    //       COALESCE(app_setting.dashboard_about_button,'') as dashboard_about_button,
-    //       COALESCE(app_setting.dashboard_faqs_button,'') as dashboard_faqs_button,
-    //       COALESCE(app_setting.dashboard_password_button,'') as dashboard_password_button,
-    //       COALESCE(app_setting.dashboard_settings_button,'') as dashboard_settings_button,
+  //         COALESCE(app_setting.dashboard_profile_button,'') as dashboard_profile_button,
+  //         COALESCE(app_setting.dashboard_library_button,'') as dashboard_library_button,
+  //         COALESCE(app_setting.dashboard_transactions_button,'') as dashboard_transactions_button,
+  //         COALESCE(app_setting.dashboard_ecredits_button,'') as dashboard_ecredits_button,
+  //         COALESCE(app_setting.dashboard_contact_button,'') as dashboard_contact_button,
+  //         COALESCE(app_setting.dashboard_about_button,'') as dashboard_about_button,
+  //         COALESCE(app_setting.dashboard_faqs_button,'') as dashboard_faqs_button,
+  //         COALESCE(app_setting.dashboard_password_button,'') as dashboard_password_button,
+  //         COALESCE(app_setting.dashboard_settings_button,'') as dashboard_settings_button,
 
-    //       COALESCE(app_setting.empty_library_icon,'') as empty_library_icon,
+  //         COALESCE(app_setting.empty_library_icon,'') as empty_library_icon,
 
-    //       COALESCE(app_setting.menubar_profile_button,'') as menubar_profile_button,
-    //       COALESCE(app_setting.menubar_library_button,'') as menubar_library_button,
-    //       COALESCE(app_setting.menubar_home_button,'') as menubar_home_button,
-    //       COALESCE(app_setting.menubar_orders_button,'') as menubar_orders_button,
-    //       COALESCE(app_setting.menubar_messages_button,'') as menubar_messages_button,
+  //         COALESCE(app_setting.menubar_profile_button,'') as menubar_profile_button,
+  //         COALESCE(app_setting.menubar_library_button,'') as menubar_library_button,
+  //         COALESCE(app_setting.menubar_home_button,'') as menubar_home_button,
+  //         COALESCE(app_setting.menubar_orders_button,'') as menubar_orders_button,
+  //         COALESCE(app_setting.menubar_messages_button,'') as menubar_messages_button,
 
-    //       COALESCE(app_setting.bottom_menu_font_color,'') as bottom_menu_font_color,
-    //       COALESCE(app_setting.bottom_menu_front_color_active,'') as bottom_menu_front_color_active,
-    //       COALESCE(app_setting.title_and_paragrapgh_font_color,'') as title_and_paragrapgh_font_color,
+  //         COALESCE(app_setting.bottom_menu_font_color,'') as bottom_menu_font_color,
+  //         COALESCE(app_setting.bottom_menu_front_color_active,'') as bottom_menu_front_color_active,
+  //         COALESCE(app_setting.title_and_paragrapgh_font_color,'') as title_and_paragrapgh_font_color,
 
-    //       COALESCE(app_setting.loading_animation,'') as loading_animation
+  //         COALESCE(app_setting.loading_animation,'') as loading_animation
                    
-    //     ")        
-    //     ->whereRaw('app_setting.id =?',[$AppSettingID])                                      
-    //     ->first();
+  //       ")        
+  //       ->whereRaw('app_setting.id =?',[$AppSettingID])                                      
+  //       ->first();
 
-    // return $info;
-  
+  //   return $info;
 
-    // USE LARAVEL CACHE 
-     $info = Cache::remember(
-        'mobile_app_settings_1',
-        now()->addHours(6),
-        function () {
-            return DB::table('mobile_app_settings')
-                ->where('id', 1)
-                ->first();
-        }
-    );
+  // }
 
-    return $info;
+    public function getMobileSettingsInformation(){
 
-  }
+    $AppSettingID = 1;
+    $cacheKey = 'mobile_app_settings:' . $AppSettingID;
+
+    // Cache for 24 hours — this data (colors, logos, onboarding copy) rarely changes,
+    return Cache::remember($cacheKey, 86400, function() use ($AppSettingID) {
+
+        return DB::table('mobile_app_settings as app_setting')
+
+            ->selectRaw("
+                app_setting.id as AppSettingID,
+                COALESCE(app_setting.splashscreen_logo,'') as splashscreen_logo,
+                COALESCE(app_setting.splashscreen_gif_animation,'') as splashscreen_gif_animation,
+                COALESCE(app_setting.onboard_screen_logo_1,'') as onboard_screen_logo_1,
+                COALESCE(app_setting.onboard_screen_title_1,'') as onboard_screen_title_1,
+                COALESCE(app_setting.onboard_screen_content_1,'') as onboard_screen_content_1,
+                COALESCE(app_setting.onboard_screen_logo_2,'') as onboard_screen_logo_2,
+                COALESCE(app_setting.onboard_screen_title_2,'') as onboard_screen_title_2,
+                COALESCE(app_setting.onboard_screen_content_2,'') as onboard_screen_content_2,
+                COALESCE(app_setting.onboard_screen_logo_3,'') as onboard_screen_logo_3,
+                COALESCE(app_setting.onboard_screen_title_3,'') as onboard_screen_title_3,
+                COALESCE(app_setting.onboard_screen_content_3,'') as onboard_screen_content_3,
+                COALESCE(app_setting.background_color_info,'') as background_color_info,
+                COALESCE(app_setting.background_img_info,'') as background_img_info,
+                COALESCE(app_setting.topbar_bg_color,'') as topbar_bg_color,
+                COALESCE(app_setting.bottombar_bg_color,'') as bottombar_bg_color,
+                COALESCE(app_setting.button_bg_color,'') as button_bg_color,
+                COALESCE(app_setting.font_color,'') as font_color,
+                COALESCE(app_setting.dashboard_profile_button,'') as dashboard_profile_button,
+                COALESCE(app_setting.dashboard_library_button,'') as dashboard_library_button,
+                COALESCE(app_setting.dashboard_transactions_button,'') as dashboard_transactions_button,
+                COALESCE(app_setting.dashboard_ecredits_button,'') as dashboard_ecredits_button,
+                COALESCE(app_setting.dashboard_contact_button,'') as dashboard_contact_button,
+                COALESCE(app_setting.dashboard_about_button,'') as dashboard_about_button,
+                COALESCE(app_setting.dashboard_faqs_button,'') as dashboard_faqs_button,
+                COALESCE(app_setting.dashboard_password_button,'') as dashboard_password_button,
+                COALESCE(app_setting.dashboard_settings_button,'') as dashboard_settings_button,
+                COALESCE(app_setting.empty_library_icon,'') as empty_library_icon,
+                COALESCE(app_setting.menubar_profile_button,'') as menubar_profile_button,
+                COALESCE(app_setting.menubar_library_button,'') as menubar_library_button,
+                COALESCE(app_setting.menubar_home_button,'') as menubar_home_button,
+                COALESCE(app_setting.menubar_orders_button,'') as menubar_orders_button,
+                COALESCE(app_setting.menubar_messages_button,'') as menubar_messages_button,
+                COALESCE(app_setting.bottom_menu_font_color,'') as bottom_menu_font_color,
+                COALESCE(app_setting.bottom_menu_front_color_active,'') as bottom_menu_front_color_active,
+                COALESCE(app_setting.title_and_paragrapgh_font_color,'') as title_and_paragrapgh_font_color,
+                COALESCE(app_setting.loading_animation,'') as loading_animation
+            ")
+            ->where('app_setting.id', '=', $AppSettingID)
+            ->first();
+    });
+}
   
     // ADMIN DATA
     function SetAdminInitialData($data){
