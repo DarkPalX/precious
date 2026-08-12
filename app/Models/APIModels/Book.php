@@ -849,13 +849,15 @@ class Book extends Model
 
   public function getSearchAudioBookList($data){
 
-    $UserID=$data['UserID'];
+    //$UserID=$data['UserID'];
 
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
     
     $Limit=$data['Limit'];
     $PageNo=$data['PageNo'];
+    
+    $UserID = isset($data['UserID']) ? (int)$data['UserID'] : 0;
 
     $query = DB::table('products as prds')
     ->join('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id') 
@@ -967,8 +969,8 @@ class Book extends Model
                         FROM book_marks AS bkmrk
                     INNER JOIN products AS prods
                         ON prods.id = bkmrk.product_id
-                    WHERE bkmrk.product_id = prds.id
-                      AND bkmrk.customer_id=".$UserID." 
+                    WHERE bkmrk.product_id = ?
+                      AND bkmrk.customer_id= 
                     LIMIT 1
                 ),
                 ''
@@ -980,7 +982,7 @@ class Book extends Model
                     SELECT cust_lib.product_id
                     FROM customer_libraries AS cust_lib
                     WHERE cust_lib.product_id = prds.id
-                      AND cust_lib.user_id=".$UserID."
+                      AND cust_lib.user_id= ?
                     LIMIT 1
                 ),
                 0
@@ -988,7 +990,7 @@ class Book extends Model
 
             COALESCE(prds.status, '') AS status            
           
-        ");    
+       ", [$UserID, $UserID]);
 
       $query->where("prds.file_url","!=",null); 
       $query->where("prds.status","=",'PUBLISHED');    
