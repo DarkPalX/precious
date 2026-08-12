@@ -18,7 +18,6 @@ use Hash;
 use View;
 use Input;
 use Image;
-use DB;
 
 use App\Models\APIModels\UserAccount;
 use App\Models\APIModels\ContentManagement;
