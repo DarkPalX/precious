@@ -312,8 +312,8 @@ class Book extends Model
       $query->where("prds.deleted_at","=",null); 
         
      $query->orderByRaw('RAND()');
-     $query->take($Limit);
-     
+     //$query->take(10);
+
      $list = $query->limit(10)->get();  // get temp 10
                   
       return $list;             
@@ -679,10 +679,10 @@ class Book extends Model
         }
     }
 
-    if($Limit > 0){
-      $query->limit($Limit);
-      $query->offset(($PageNo-1) * $Limit);
-    }
+    // if($Limit > 0){
+    //   $query->limit($Limit);
+    //   $query->offset(($PageNo-1) * $Limit);
+    // }
    
     //Sorting Option
     if($Filter_Sort!=''){
@@ -884,10 +884,10 @@ class Book extends Model
         }
     }
 
-    if($Limit > 0){
-      $query->limit($Limit);
-      $query->offset(($PageNo-1) * $Limit);
-    }
+    // if($Limit > 0){
+    //   $query->limit($Limit);
+    //   $query->offset(($PageNo-1) * $Limit);
+    // }
 
     $query->orderBy("prds.created_at","ASC");    
      $list = $query->limit(10)->get();  // get temp 10
@@ -1029,7 +1029,7 @@ class Book extends Model
 
        $query->where("prod_hdrs_cat.status","=",1); 
          
-      $list = $query->get();
+      $list = $query->limit(10)->get(); // get temp 10
                              
      return $list;  
 
