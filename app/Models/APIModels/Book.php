@@ -188,7 +188,7 @@ class Book extends Model
     }
 
     $query->orderBy("prds.created_at","ASC");    
-    $list = $query->get();
+     $list = $query->limit(50)->get();  // get temp 10
                              
      return $list;             
            
@@ -313,7 +313,8 @@ class Book extends Model
         
      $query->orderByRaw('RAND()');
      $query->take($Limit);
-     $list=$query->get();
+     
+     $list = $query->limit(10)->get();  // get temp 10
                   
       return $list;             
            
@@ -436,7 +437,7 @@ class Book extends Model
       $query->whereRaw("cont.customer_id =?",[$UserID]); 
       $query->orderBy("cont.created_at","DESC");   
          
-      $list = $query->get();
+      $list = $query->limit(10)->get();  // get temp 10
                            
      return $list;           
            
@@ -715,8 +716,7 @@ class Book extends Model
     }  
     
 
-
-    $list = $query->get();
+    $list = $query->limit(50)->get();  // get temp 10
                              
      return $list;             
            
@@ -890,7 +890,7 @@ class Book extends Model
     }
 
     $query->orderBy("prds.created_at","ASC");    
-    $list = $query->get();
+     $list = $query->limit(10)->get();  // get temp 10
                              
      return $list;             
            
@@ -1150,7 +1150,7 @@ class Book extends Model
        $query->where("prds.deleted_at","=",null);
        $query->whereRaw("prod_det_cat.product_catalog_header_id =?",[$HeaderID]); 
          
-      $list = $query->get();
+     $list = $query->limit(10)->get();  // get temp 10
                              
      return $list;  
 
