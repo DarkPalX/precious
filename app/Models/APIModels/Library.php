@@ -142,18 +142,13 @@ class Library extends Model
         }
     }
 
-    //Maximum 50 records per request
-    $Limit = min((int)$data['Limit'], 50);
-    $PageNo = max((int)$data['PageNo'], 1);
-
-
     if($Limit > 0){
       $query->limit($Limit);
       $query->offset(($PageNo-1) * $Limit);
     }
 
     $query->orderBy("prds.name","ASC");    
-    $list = $query->get();
+    $list = $query->limit(50)->get(); // get temp 50
                              
      return $list;             
            
@@ -280,10 +275,6 @@ class Library extends Model
              }
         }
     }
-  
-    //Maximum 50 records per request
-    $Limit = min((int)$data['Limit'], 50);
-    $PageNo = max((int)$data['PageNo'], 1);
 
     if($Limit > 0){
       $query->limit($Limit);
@@ -291,7 +282,7 @@ class Library extends Model
     }
 
     $query->orderBy("prds.name","ASC");    
-    $list = $query->get();
+    $list = $query->limit(50)->get();  // get temp 50
                              
      return $list;             
            
@@ -444,8 +435,7 @@ class Library extends Model
     $query->where("rbooks.is_downloaded",'=',1);        
     $query->where("rbooks.deleted_at",'=',null);   
    
-
-    $list = $query->get();
+    $list = $query->limit(20)->get();  // get temp 50
                              
      return $list;             
            
