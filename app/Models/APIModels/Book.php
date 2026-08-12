@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+
 use Session;
 use Hash;
 use View;
@@ -194,163 +197,175 @@ class Book extends Model
            
   // }
 
-    public function getBookList($data){
+   
+  public function getBookList($data){
 
     $UserID     = (int)$data['UserID'];
     $Status     = $data['Status'];
     $SearchText = $data['SearchText'];
-    $Limit      = $data['Limit'];
-    $PageNo     = $data['PageNo'];
+    $Limit      = isset($data['Limit']) && $data['Limit'] > 0 ? (int)$data['Limit'] : 10;
+    $PageNo     = isset($data['PageNo']) && $data['PageNo'] > 0 ? (int)$data['PageNo'] : 1;
 
-    $query = DB::table('products as prds')
-        ->join('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id')
+    $cacheKey = sprintf(
+        'book_list:%s:%s:%d:%d',
+        $Status ?: 'all',
+        md5($SearchText ?: ''),
+        $PageNo,
+        $Limit
+    );
 
-        // PRIMARY IMAGE — collapsed to exactly one photo row per product before joining
-        ->leftJoin(DB::raw("(
-            SELECT product_id, MIN(id) as photo_id
-            FROM product_photos
-            WHERE is_primary = 1
-            GROUP BY product_id
-        ) as prod_img_pick"), 'prod_img_pick.product_id', '=', 'prds.id')
-        ->leftJoin('product_photos as prod_img', 'prod_img.id', '=', 'prod_img_pick.photo_id')
+    // SET To Cached— cached, shared across all users (no $UserID in the key or the query)
+    $catalogPage = Cache::remember($cacheKey, 600, function() use ($Status, $SearchText, $Limit, $PageNo) {
 
-        // RATING — aggregated, one row per product
-        ->leftJoin(DB::raw("(
-            SELECT product_id, ROUND(AVG(rating)) as rating
-            FROM product_reviews
-            WHERE status = 1
-            GROUP BY product_id
-        ) as rev"), 'rev.product_id', '=', 'prds.id')
+        $query = DB::table('products as prds')
+            ->join('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id')
 
-        // PROMO — aggregated, one row per product (also merges old duplicate discount% / discount_price subqueries)
-        ->leftJoin(DB::raw("(
-            SELECT pp.product_id, MIN(promo.discount) as discount
-            FROM promo_products as pp
-            INNER JOIN promos as promo ON promo.id = pp.promo_id
-            WHERE promo.applicable_product_type != 'physical'
-              AND promo.status = 'ACTIVE'
-              AND pp.deleted_at IS NULL
-            GROUP BY pp.product_id
-        ) as promo"), 'promo.product_id', '=', 'prds.id')
+            ->leftJoin(DB::raw("(
+                SELECT product_id, MIN(id) as photo_id
+                FROM product_photos
+                WHERE is_primary = 1
+                GROUP BY product_id
+            ) as prod_img_pick"), 'prod_img_pick.product_id', '=', 'prds.id')
+            ->leftJoin('product_photos as prod_img', 'prod_img.id', '=', 'prod_img_pick.photo_id')
 
-        // BOOKMARK — one row per product for this customer
-        ->leftJoin(DB::raw("(
-            SELECT product_id, MAX(chapter_no) as chapter_no
-            FROM book_marks
-            WHERE customer_id = ".$UserID."
-            GROUP BY product_id
-        ) as bkmrk"), 'bkmrk.product_id', '=', 'prds.id')
+            ->leftJoin(DB::raw("(
+                SELECT product_id, ROUND(AVG(rating)) as rating
+                FROM product_reviews
+                WHERE status = 1
+                GROUP BY product_id
+            ) as rev"), 'rev.product_id', '=', 'prds.id')
 
-        // LIBRARY — one row per product for this user (existence check only)
-        ->leftJoin(DB::raw("(
-            SELECT DISTINCT product_id
-            FROM customer_libraries
-            WHERE user_id = ".$UserID."
-        ) as lib"), 'lib.product_id', '=', 'prds.id')
+            ->leftJoin(DB::raw("(
+                SELECT pp.product_id, MIN(promo.discount) as discount
+                FROM promo_products as pp
+                INNER JOIN promos as promo ON promo.id = pp.promo_id
+                WHERE promo.applicable_product_type != 'physical'
+                  AND promo.status = 'ACTIVE'
+                  AND pp.deleted_at IS NULL
+                GROUP BY pp.product_id
+            ) as promo"), 'promo.product_id', '=', 'prds.id')
 
-        ->selectRaw("
-            prds.id as book_ID,
+            ->selectRaw("
+                prds.id as book_ID,
 
-            COALESCE(prds.name,'') as name,
-            COALESCE(prds.author,'') as author,
-            COALESCE(prds.subtitle,'') as subtitle,
-            COALESCE(prds.description,'') as short_description,
+                COALESCE(prds.name,'') as name,
+                COALESCE(prds.author,'') as author,
+                COALESCE(prds.subtitle,'') as subtitle,
+                COALESCE(prds.description,'') as short_description,
 
-            COALESCE(prds.slug,'') as slug,
-            COALESCE(prds.file_url,'') as file_url,
+                COALESCE(prds.slug,'') as slug,
+                COALESCE(prds.file_url,'') as file_url,
 
-            COALESCE(prds.category_id,0) as category_id,
-            COALESCE(prds.book_type,'') as book_type,
+                COALESCE(prds.category_id,0) as category_id,
+                COALESCE(prds.book_type,'') as book_type,
 
-            COALESCE(prds.sku,'') as sku,
-            COALESCE(prds.size,'') as size,
-            COALESCE(prds.weight,'') as weight,
-            COALESCE(prds.texture,'') as texture,
-            COALESCE(prds.uom,'') as uom,
+                COALESCE(prds.sku,'') as sku,
+                COALESCE(prds.size,'') as size,
+                COALESCE(prds.weight,'') as weight,
+                COALESCE(prds.texture,'') as texture,
+                COALESCE(prds.uom,'') as uom,
 
-            COALESCE(prds.is_featured,0) as is_featured,
-            COALESCE(prds.is_best_seller,0) as is_best_seller,
-            COALESCE(prds.is_free,0) as is_free,
-            COALESCE(prds.is_premium,0) as is_premium,
+                COALESCE(prds.is_featured,0) as is_featured,
+                COALESCE(prds.is_best_seller,0) as is_best_seller,
+                COALESCE(prds.is_free,0) as is_free,
+                COALESCE(prds.is_premium,0) as is_premium,
 
-            COALESCE(prds.ebook_price,0) as price,
-            COALESCE(prds.ebook_discount_price,0) as discount_price,
+                COALESCE(prds.ebook_price,0) as price,
+                COALESCE(prds.ebook_discount_price,0) as discount_price,
 
-            COALESCE(prds.reorder_point,0) as reorder_point,
-            COALESCE(prds.read_count,0) as read_count,
+                COALESCE(prds.reorder_point,0) as reorder_point,
+                COALESCE(prds.read_count,0) as read_count,
 
-            CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
+                CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
 
-            COALESCE(prod_img.path,'') as image_path,
+                COALESCE(prod_img.path,'') as image_path,
 
-            COALESCE(rev.rating,0) as rating,
+                COALESCE(rev.rating,0) as rating,
 
-            COALESCE(promo.discount,0) as promo_discount_percent,
+                COALESCE(promo.discount,0) as promo_discount_percent,
 
-            COALESCE(prds.ebook_price - (promo.discount/100 * prds.ebook_price), 0) as promo_discount_price,
+                COALESCE(prds.ebook_price - (promo.discount/100 * prds.ebook_price), 0) as promo_discount_price,
 
-            COALESCE(bkmrk.chapter_no,'') as chapter_no,
+                COALESCE(prds.status,'') as status
+            ")
 
-            CASE WHEN lib.product_id IS NOT NULL THEN 1 ELSE 0 END as product_library_exist,
+            ->whereNotNull('prds.file_url')
+            ->where('prds.status', '=', 'PUBLISHED')
+            ->whereNull('prds.deleted_at');
 
-            COALESCE(prds.status,'') as status
-        ")
+        if ($Status != '' && $Status != 'All') {
 
-        ->whereNotNull('prds.file_url')
-        ->where('prds.status', '=', 'PUBLISHED')
-        ->whereNull('prds.deleted_at');
+            if ($Status == 'Featured') {
+                $query->where('prds.is_featured', '=', 1);
+            }
 
-       if ($Status != '' && $Status != 'All') {
+            if ($Status == 'Premium') {
+                $query->where('prds.is_premium', '=', 1)
+                      ->where('prds.is_free', '=', 0);
+            }
 
-        if ($Status == 'Featured') {
-            $query->where('prds.is_featured', '=', 1);
+            if ($Status == 'Best Seller') {
+                $query->where('prds.is_best_seller', '=', 1)
+                      ->where('prds.is_free', '=', 0);
+            }
+
+            if ($Status == 'Free') {
+                $query->where('prds.is_free', '=', 1);
+            }
+
+            if ($Status == 'New Release') {
+                $query->whereNotNull('prds.created_at');
+            }
         }
 
-        if ($Status == 'Premium') {
-            $query->where('prds.is_premium', '=', 1)
-                  ->where('prds.is_free', '=', 0);
+        if ($SearchText != '') {
+            $arSearchText = array_filter(explode(" ", trim($SearchText)));
+            foreach ($arSearchText as $word) {
+                $query->where(function($q) use ($word) {
+                    $like = '%'.str_replace(['%','_'], ['\%','\_'], $word).'%';
+                    $q->where('prds.name', 'like', $like)
+                      ->orWhere('prds.author', 'like', $like)
+                      ->orWhere('prds.subtitle', 'like', $like)
+                      ->orWhere('prds.book_type', 'like', $like)
+                      ->orWhere('prod_cat.name', 'like', $like);
+                });
+            }
         }
 
-        if ($Status == 'Best Seller') {
-            $query->where('prds.is_best_seller', '=', 1)
-                  ->where('prds.is_free', '=', 0);
-        }
+        $query->orderBy('prds.created_at', 'ASC');
+        $query->limit($Limit)->offset(($PageNo - 1) * $Limit); // fixed — was hardcoded to 10, ignoring real pagination
 
-        if ($Status == 'Free') {
-            $query->where('prds.is_free', '=', 1);
-        }
+        return $query->get();
+    });
 
-        if ($Status == 'New Release') {
-            $query->whereNotNull('prds.created_at');
-        }
+    if ($catalogPage->isEmpty()) {
+        return $catalogPage;
     }
 
-    if ($SearchText != '') {
-        $arSearchText = array_filter(explode(" ", trim($SearchText)));
-        foreach ($arSearchText as $word) {
-            $query->where(function($q) use ($word) {
-                $like = '%'.str_replace(['%','_'], ['\%','\_'], $word).'%';
-                $q->where('prds.name', 'like', $like)
-                  ->orWhere('prds.author', 'like', $like)
-                  ->orWhere('prds.subtitle', 'like', $like)
-                  ->orWhere('prds.book_type', 'like', $like)
-                  ->orWhere('prod_cat.name', 'like', $like);
-            });
-        }
-    }
+    //  dynamic live per-user fields, cheap indexed lookups on just this page's IDs
+    $ids = $catalogPage->pluck('book_ID')->all();
 
-    $query->orderBy('prds.created_at', 'ASC');
+    $bookmarks = DB::table('book_marks')
+        ->where('customer_id', $UserID)
+        ->whereIn('product_id', $ids)
+        ->orderBy('id', 'desc')
+        ->pluck('chapter_no', 'product_id');
 
-    // if ($Limit > 0) {
-    //     $query->limit($Limit)->offset(($PageNo - 1) * $Limit);
-    // } else {
-    //     $query->limit(10);
-    // }
-   
-    $query->limit(10);
+    $library = DB::table('customer_libraries')
+        ->where('user_id', $UserID)
+        ->whereIn('product_id', $ids)
+        ->pluck('product_id')
+        ->flip();
 
-    return $query->get();
-  }
+    //  merge, cloning so cached objects are never mutated in place
+    return $catalogPage->map(function($book) use ($bookmarks, $library) {
+        $book = clone $book;
+        $book->chapter_no = $bookmarks[$book->book_ID] ?? '';
+        $book->product_library_exist = isset($library[$book->book_ID]) ? 1 : 0;
+        return $book;
+    });
+}
+
 
   // public function getRandomBookList($data){
 
@@ -2107,7 +2122,7 @@ public function getSearchBookList($data){
         ->whereNull('prds.deleted_at')
         ->where('prod_det_cat.product_catalog_header_id', '=', $HeaderID);
 
-    return $query->limit(10)->get();
+     return $query->limit(10)->get();
 }
 
   public function setBookAsReported($data){
