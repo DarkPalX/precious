@@ -50,7 +50,7 @@ class BannerAds extends Model
 
      
     $query->orderBy("mob_ban.order","ASC");     
-    $list = $query->get();
+   $list = $query->limit(10)->get(); // get temp 10
                              
      return $list;    
     
@@ -85,7 +85,8 @@ class BannerAds extends Model
        $query->where("mob_ban.deleted_at","=",null); 
              
       $query->orderBy("mob_ban.order","ASC");          
-     $list = $query->get();                           
+     $list = $query->limit(10)->get(); // get temp 10   
+
      return $list;     
     
   }
@@ -119,7 +120,8 @@ class BannerAds extends Model
        $query->where("mob_ban.deleted_at","=",null); 
              
       $query->orderBy("mob_ban.order","ASC");          
-     $list = $query->get();                           
+     $list = $query->limit(10)->get(); // get temp 10  
+                         
      return $list;     
     
   }
