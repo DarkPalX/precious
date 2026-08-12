@@ -841,7 +841,7 @@ class Book extends Model
     }  
     
 
-    $list = $query->limit(10)->get();  // get temp 10
+    $list = $query->limit(50)->get();  // get temp 10
                              
      return $list;             
            
