@@ -1261,7 +1261,7 @@ class Book extends Model
          COALESCE((
              SELECT ROUND(avg(rating))
                   FROM product_reviews as rev
-                WHERE rev.product_id = prod_det_cat.product_id   
+                  WHERE rev.product_id = prds.id
                 AND rev.status = 1 
                 LIMIT 1                                
               )
