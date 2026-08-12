@@ -62,8 +62,7 @@ class BannerAds extends Model
   public function getHomeSliderBannerList($data){
 
     $cacheKey = 'home_slider_banners';
-    // 1 hour TTL — since banners change daily, this keeps staleness to under an hour
-    // even if an admin update somehow skips the invalidation call below.
+    // 1 Hour Set To Cache
     return Cache::remember($cacheKey, 3600, function() {
 
         $query = DB::table('mobile_banners as mob_ban')
@@ -133,8 +132,7 @@ class BannerAds extends Model
 
     $cacheKey = 'popup_banner_list';
 
-    // 1 hour TTL, same reasoning as the slider banners — daily changes,
-    // invalidation on write keeps this from ever going stale for long.
+    // 1 Hour Set To Cache
     return Cache::remember($cacheKey, 3600, function() {
 
         $query = DB::table('mobile_banners as mob_ban')
