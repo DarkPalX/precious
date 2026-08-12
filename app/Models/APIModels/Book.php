@@ -143,8 +143,6 @@ class Book extends Model
                 (
                     SELECT bkmrk.chapter_no
                         FROM book_marks AS bkmrk
-                    INNER JOIN products AS prods
-                        ON prods.id = bkmrk.product_id
                     WHERE bkmrk.product_id = prds.id
                       AND bkmrk.customer_id= ?
                     LIMIT 1
@@ -345,8 +343,6 @@ class Book extends Model
                 (
                     SELECT bkmrk.chapter_no
                         FROM book_marks AS bkmrk
-                    INNER JOIN products AS prods
-                        ON prods.id = bkmrk.product_id
                     WHERE bkmrk.product_id = prds.id
                       AND bkmrk.customer_id= ?
                     LIMIT 1
@@ -661,8 +657,6 @@ class Book extends Model
                 (
                     SELECT bkmrk.chapter_no
                         FROM book_marks AS bkmrk
-                    INNER JOIN products AS prods
-                        ON prods.id = bkmrk.product_id
                     WHERE bkmrk.product_id = prds.id
                       AND bkmrk.customer_id= ?
                     LIMIT 1
@@ -967,10 +961,8 @@ class Book extends Model
                 (
                     SELECT bkmrk.chapter_no
                         FROM book_marks AS bkmrk
-                    INNER JOIN products AS prods
-                        ON prods.id = bkmrk.product_id
-                    WHERE bkmrk.product_id = ?
-                      AND bkmrk.customer_id= 
+                    WHERE bkmrk.product_id = prds.id
+                      AND bkmrk.customer_id= ?
                     LIMIT 1
                 ),
                 ''
@@ -1307,7 +1299,6 @@ class Book extends Model
          SELECT 
              bkmrk.chapter_no FROM 
                   book_marks as bkmrk                  
-              INNER JOIN products as prods ON prods.id = bkmrk.product_id
                    WHERE bkmrk.product_id = prds.id    
                    AND bkmrk.customer_id= ?
                    LIMIT 1                                
