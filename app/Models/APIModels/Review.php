@@ -73,13 +73,13 @@ class Review extends Model
         }
     }
 
-    if($Limit > 0){
-      $query->limit($Limit);
-      $query->offset(($PageNo-1) * $Limit);
-    }
+    // if($Limit > 0){
+    //   $query->limit($Limit);
+    //   $query->offset(($PageNo-1) * $Limit);
+    // }
 
     $query->orderBy("revs.created_at","DESC");    
-    $list = $query->get();
+    $list = $query->limit(20)->get(); // get temp 50
                              
      return $list;             
            
