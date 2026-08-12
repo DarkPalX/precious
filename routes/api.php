@@ -522,4 +522,24 @@ Route::post('/get-mobile-setting-info',[
 //    'as'=> 'show-viewer'
 // ]);
 
+//CHECK SERVER and LARAVEL STATUS
+Route::get('/health', function () {
+    try {
+        DB::connection()->getPdo();
 
+        return response()->json([
+            'status' => 'ok',
+            'server' => 'online',
+            'database' => 'online',
+            'timestamp' => now(),
+        ], 200);
+
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'server' => 'online',
+            'database' => 'offline',
+            'timestamp' => now(),
+        ], 503);
+    }
+});
