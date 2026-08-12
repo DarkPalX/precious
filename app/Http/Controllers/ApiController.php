@@ -1834,10 +1834,9 @@ public function getRandomBookList(Request $request)
       $data['UserID'] = $request->post('UserID');    
    }
   $data["PageNo"] = 0;
-  //$data["Limit"] = $request->post('Limit');
+  $data["Limit"] = $request->post('Limit');
 
-   $data["Limit"]=10; // set temporary limit to 10
-   $list = $Books->getBookList($data);
+    $list = $Books->getBookList($data);
 
     $bookArray = isset($list['data']) ? $list['data'] : $list;
     $randomBooks = collect($bookArray)->shuffle()->take($data["Limit"])->values();
@@ -3048,67 +3047,31 @@ public function getCompanyPrivacyPolicy(Request $request){
   }
 
 
-// // GET MOBILE APP SETTINGAS INFORMATION========================================================================
-//  public function getMobileSettingsInformation(Request $request){
+// GET MOBILE APP SETTINGAS INFORMATION========================================================================
+ public function getMobileSettingsInformation(Request $request){
 
-//     $Misc = new Misc();
-
-//     $response = "Failed";
-//     $responseMessage = "";
-
-//     $data['Type']=$request->post('Type');
-//     $Info=$Misc->getMobileSettingsInformation($data);
-
-//     if(isset($Info)>0){      
-//         return response()->json([                  
-//          'response' => 'Success',
-//          'data' => $Info,
-//          'message' => "Successfully get mobile app settings",
-//        ]);    
-
-//     }else{
-//         return response()->json([
-//           'response' => 'Failed',
-//           'data' => null,
-//           'message' => "Something went wrong while getting mobile app settings",
-//        ]); 
-//     } 
-//   }
-
-public function getMobileSettingsInformation(Request $request)
-{
     $Misc = new Misc();
 
-    $data['Type'] = $request->post('Type');
+    $response = "Failed";
+    $responseMessage = "";
 
-    try {
-        $Info = $Misc->getMobileSettingsInformation($data);
+    $data['Type']=$request->post('Type');
+    $Info=$Misc->getMobileSettingsInformation($data);
 
-        if (!empty($Info)) {
-            return response()->json([
-                'response' => 'Success',
-                'server_status' => 'Online',
-                'data' => $Info,
-                'message' => 'Successfully get mobile app settings',
-            ], 200);
-        }
+    if(isset($Info)>0){      
+        return response()->json([                  
+         'response' => 'Success',
+         'data' => $Info,
+         'message' => "Successfully get mobile app settings",
+       ]);    
 
+    }else{
         return response()->json([
-            'response' => 'Failed',
-            'server_status' => 'Online',
-            'data' => null,
-            'message' => 'No mobile app settings found',
-        ], 404);
-
-    } catch (\Throwable $e) {
-
-        return response()->json([
-            'response' => 'Failed',
-            'server_status' => 'Error',
-            'data' => null,
-            'message' => 'Something went wrong while getting mobile app settings',
-        ], 500);
-    }
- }
+          'response' => 'Failed',
+          'data' => null,
+          'message' => "Something went wrong while getting mobile app settings",
+       ]); 
+    } 
+  }
 
 }
