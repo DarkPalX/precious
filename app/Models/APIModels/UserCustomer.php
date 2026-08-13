@@ -439,154 +439,283 @@ class UserCustomer extends Model
 
   }
 
-public function doRegisterCustomer($data) {
+// public function doRegisterCustomer($data) {
 
-    $Misc  = New Misc();
-    $TODAY = date("Y-m-d H:i:s");
+//     $Misc  = New Misc();
+//     $TODAY = date("Y-m-d H:i:s");
 
-    $UserID=$data['UserID'];
+//     $UserID=$data['UserID'];
     
-    $FirstName=$data['FirstName'];
-    $LastName=$data['LastName'];
-    $FullName=$data['FullName'];
+//     $FirstName=$data['FirstName'];
+//     $LastName=$data['LastName'];
+//     $FullName=$data['FullName'];
     
-    $EmailAddress=$data['EmailAddress'];
-    $MobileNo=$data['MobileNo'];
-    $Password=$data['Password'];
+//     $EmailAddress=$data['EmailAddress'];
+//     $MobileNo=$data['MobileNo'];
+//     $Password=$data['Password'];
 
-    if($UserID> 0){
-          DB::table('users')
-            ->where('id',$UserID)
-            ->update([      
-              'firstname' => trim(ucwords($FirstName)),
-              'lastname' => trim(ucwords($LastName)),
-              'name' => trim(ucwords($FullName)),              
-              'email' => trim($data['EmailAddress']), 
-              'mobile' => trim($MobileNo),                
-              'password' => bcrypt(trim($Password)),              
-              'updated_at' => $TODAY
-            ]);
+//     if($UserID> 0){
+//           DB::table('users')
+//             ->where('id',$UserID)
+//             ->update([      
+//               'firstname' => trim(ucwords($FirstName)),
+//               'lastname' => trim(ucwords($LastName)),
+//               'name' => trim(ucwords($FullName)),              
+//               'email' => trim($data['EmailAddress']), 
+//               'mobile' => trim($MobileNo),                
+//               'password' => bcrypt(trim($Password)),              
+//               'updated_at' => $TODAY
+//             ]);
           
-    }else{
+//     }else{
       
-      $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
-      $UserID = DB::table('users')
-            ->insertGetId([                                    
-              'firstname' => trim(ucwords($FirstName)),
-              'lastname' => trim(ucwords($LastName)),
-              'name' => trim(ucwords($FullName)),              
-              'email' => trim($data['EmailAddress']), 
-              'mobile' => trim($MobileNo),             
-              'password' => bcrypt(trim($Password)),                                  
-              'verification_code' => $VerificationCode,
-              'provider' => 'none',  
-              'role_id' => 6,              
-              'is_active' => 1,              
-              'created_at' => $TODAY             
-            ]);
+//       $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
+//       $UserID = DB::table('users')
+//             ->insertGetId([                                    
+//               'firstname' => trim(ucwords($FirstName)),
+//               'lastname' => trim(ucwords($LastName)),
+//               'name' => trim(ucwords($FullName)),              
+//               'email' => trim($data['EmailAddress']), 
+//               'mobile' => trim($MobileNo),             
+//               'password' => bcrypt(trim($Password)),                                  
+//               'verification_code' => $VerificationCode,
+//               'provider' => 'none',  
+//               'role_id' => 6,              
+//               'is_active' => 1,              
+//               'created_at' => $TODAY             
+//             ]);
           
-             //Send Notification Message
-               $MessageNotificationID = DB::table('message_notification')
-                    ->insertGetId([                                            
-                      'user_id' => $UserID,                                                         
-                      'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
-                      'created_at' => $TODAY             
-                  ]);    
+//              //Send Notification Message
+//                $MessageNotificationID = DB::table('message_notification')
+//                     ->insertGetId([                                            
+//                       'user_id' => $UserID,                                                         
+//                       'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
+//                       'created_at' => $TODAY             
+//                   ]);    
 
-          // CALL EMAIL HERE FOR REGISTRATION W/ ACTIVATION
-          if(!empty($EmailAddress)){      
+//           // CALL EMAIL HERE FOR REGISTRATION W/ ACTIVATION
+//           if(!empty($EmailAddress)){      
 
-             $param['FullName']=trim($FullName);
-             $param['EmailAddress']=trim($EmailAddress);
-             $param['VerificationCode']=$VerificationCode;
+//              $param['FullName']=trim($FullName);
+//              $param['EmailAddress']=trim($EmailAddress);
+//              $param['VerificationCode']=$VerificationCode;
                                                 
-             $Email = new Email();
-             $Email->SendCustomerRegistrationEmail($param);      
-          }
+//              $Email = new Email();
+//              $Email->SendCustomerRegistrationEmail($param);      
+//           }
 
-       }
+//        }
 
-    return 'Success';
+//     return 'Success';
 
-  }
-  
-  public function doRegisterSocial($data)
+//   }
+
+
+public function doRegisterCustomer($data)
 {
-    $Misc = new Misc();
+    $Misc  = new Misc();
     $TODAY = date('Y-m-d H:i:s');
- 
+
+    $UserID       = $data['UserID'];
+    $FirstName    = trim($data['FirstName']);
+    $LastName     = trim($data['LastName']);
+    $FullName     = trim($data['FullName']);
+    $EmailAddress = strtolower(trim($data['EmailAddress']));
+    $MobileNo     = trim($data['MobileNo']);
+    $Password     = trim($data['Password']);
+
+    // Validate email format first, regardless of update or insert.
+    $validator = \Validator::make(
+        ['email' => $EmailAddress],
+        [
+            'email' => [
+                'required',
+                'email:rfc,dns',
+                'max:255',
+            ],
+        ]
+    );
+
+    if ($validator->fails()) {
+        return 'InvalidEmail';
+    }
+
+    if ($UserID > 0) {
+        // ---- UPDATE EXISTING USER ----
+
+        // If they're changing their email, make sure the new one
+        // isn't already taken by someone else.
+        $EmailTaken = DB::table('users')
+            ->useWritePdo()
+            ->whereRaw('LOWER(TRIM(email)) = ?', [$EmailAddress])
+            ->where('id', '!=', $UserID)
+            ->exists();
+
+        if ($EmailTaken) {
+            return 'EmailAlreadyExists';
+        }
+
+        DB::table('users')
+            ->where('id', $UserID)
+            ->update([
+                'firstname'  => ucwords($FirstName),
+                'lastname'   => ucwords($LastName),
+                'name'       => ucwords($FullName),
+                'email'      => $EmailAddress,
+                'mobile'     => $MobileNo,
+                'password'   => bcrypt($Password),
+                'updated_at' => $TODAY,
+            ]);
+
+        return 'Success';
+    }
+
+    // ---- NEW REGISTRATION ----
+
+    return DB::transaction(function () use (
+        $Misc, $TODAY, $FirstName, $LastName, $FullName,
+        $EmailAddress, $MobileNo, $Password
+    ) {
+        // Lock any matching row for the duration of the transaction,
+        // closing the same race window we fixed in doRegisterSocial.
+        $ExistingUser = DB::table('users')
+            ->useWritePdo()
+            ->whereRaw('LOWER(TRIM(email)) = ?', [$EmailAddress])
+            ->lockForUpdate()
+            ->first();
+
+        if ($ExistingUser) {
+            return 'EmailAlreadyExists';
+        }
+
+        $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
+
+        try {
+            $UserID = DB::table('users')->insertGetId([
+                'firstname'         => ucwords($FirstName),
+                'lastname'          => ucwords($LastName),
+                'name'              => ucwords($FullName),
+                'email'             => $EmailAddress,
+                'mobile'            => $MobileNo,
+                'password'          => bcrypt($Password),
+                'verification_code' => $VerificationCode,
+                'provider'          => 'none',
+                'role_id'           => 6,
+                'is_active'         => 1,
+                'created_at'        => $TODAY,
+            ]);
+        } catch (QueryException $e) {
+            $MySqlErrorCode    = (int) ($e->errorInfo[1] ?? 0);
+            $MySqlErrorMessage = (string) ($e->errorInfo[2] ?? $e->getMessage());
+
+            if (
+                $MySqlErrorCode === 1062 &&
+                strpos($MySqlErrorMessage, 'users_email_unique') !== false
+            ) {
+                return 'EmailAlreadyExists';
+            }
+
+            throw $e;
+        }
+
+        // Notification row - only for genuinely new accounts.
+        DB::table('message_notification')->insertGetId([
+            'user_id' => $UserID,
+            'message_notification' =>
+                'Welcome to Precious Pages Corp! Thank you for signing up. ' .
+                'Here at Precious Pages, we offer a vast and wide variety of ' .
+                'books across all genres, from bestsellers to hidden treasures. ' .
+                'Whether you are searching for your next captivating read or a ' .
+                'special gift for a fellow book enthusiast, you are sure to find ' .
+                'something you love. Welcome aboard, and happy reading!',
+            'created_at' => $TODAY,
+        ]);
+
+        // Registration/activation email - only for genuinely new accounts.
+        $Email = new Email();
+        $Email->SendCustomerRegistrationEmail([
+            'FullName'         => $FullName,
+            'EmailAddress'     => $EmailAddress,
+            'VerificationCode' => $VerificationCode,
+        ]);
+
+        return 'Success';
+    });
+}
+
+public function doRegisterSocial($data)
+{
+    $Misc  = new Misc();
+    $TODAY = date('Y-m-d H:i:s');
+
     $FirstName    = trim($data['FirstName']);
     $LastName     = trim($data['LastName']);
     $FullName     = trim($data['FullName']);
     $EmailAddress = strtolower(trim($data['EmailAddress']));
     $SocialMedia  = trim($data['SocialMedia']);
- 
-    // Force the lookup to use the primary/write database.
-    $ExistingUser = DB::table('users')
-        ->useWritePdo()
-        ->where('email', $EmailAddress)
-        ->first();
- 
-    if ($ExistingUser) {
-        return 'Success';
-    }
- 
-    $VerificationCode = $Misc->GenerateRandomNo(
-        4,
-        'users',
-        'verification_code'
-    );
- 
-    try {
-        $UserID = DB::table('users')->insertGetId([
-            'firstname'         => $FirstName,
-            'lastname'          => $LastName,
-            'name'              => $FullName,
-            'email'             => $EmailAddress,
-            'email_verified_at' => $TODAY,
-            'password'          => bcrypt(Str::random(40)),
-            'verification_code' => $VerificationCode,
-            'provider'          => $SocialMedia,
-            'role_id'           => 6,
-            'is_active'         => 1,
-            'created_at'        => $TODAY,
-            'updated_at'        => $TODAY,
-        ]);
-    } catch (QueryException $e) {
-        $MySqlErrorCode = (int) ($e->errorInfo[1] ?? 0);
-        $MySqlErrorMessage = (string) (
-            $e->errorInfo[2] ?? $e->getMessage()
-        );
- 
-        /*
-         * Another request created the same email between
-         * our email check and insert.
-         */
-        if (
-            $MySqlErrorCode === 1062 &&
-            strpos($MySqlErrorMessage, 'users_email_unique') !== false
-        ) {
+
+    return DB::transaction(function () use (
+        $Misc, $TODAY, $FirstName, $LastName, $FullName, $EmailAddress, $SocialMedia) 
+    {
+        
+        $ExistingUser = DB::table('users')
+            ->useWritePdo()
+            ->whereRaw('LOWER(TRIM(email)) = ?', [$EmailAddress])
+            ->lockForUpdate()
+            ->first();
+
+        if ($ExistingUser) {
+            // Already registered - do NOT insert, do NOT notify.
             return 'Success';
         }
- 
-        // Do not hide unrelated database errors.
-        throw $e;
-    }
- 
-    // Only newly created accounts receive this notification.
-    DB::table('message_notification')->insert([
-        'user_id' => $UserID,
-        'message_notification' =>
-            'Welcome to Precious Pages Corp! Thank you for signing up. ' .
-            'Here at Precious Pages, we offer a vast and wide variety of ' .
-            'books across all genres, from bestsellers to hidden treasures. ' .
-            'Whether you are searching for your next captivating read or a ' .
-            'special gift for a fellow book enthusiast, you are sure to find ' .
-            'something you love. Welcome aboard, and happy reading!',
-        'created_at' => $TODAY,
-    ]);
- 
-    return 'Success';
+
+        $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
+
+        try {
+            $UserID = DB::table('users')->insertGetId([
+                'firstname'         => $FirstName,
+                'lastname'          => $LastName,
+                'name'              => $FullName,
+                'email'             => $EmailAddress,
+                'email_verified_at' => $TODAY,
+                'password'          => bcrypt(Str::random(40)),
+                'verification_code' => $VerificationCode,
+                'provider'          => $SocialMedia,
+                'role_id'           => 6,
+                'is_active'         => 1,
+                'created_at'        => $TODAY,
+                'updated_at'        => $TODAY,
+            ]);
+        } catch (QueryException $e) {
+            $MySqlErrorCode    = (int) ($e->errorInfo[1] ?? 0);
+            $MySqlErrorMessage = (string) ($e->errorInfo[2] ?? $e->getMessage());
+
+            if (
+                $MySqlErrorCode === 1062 &&
+                strpos($MySqlErrorMessage, 'users_email_unique') !== false
+            ) {
+                // Someone else won the race - fine, they already exist.
+                return 'Success';
+            }
+
+            throw $e;
+        }
+
+        // Only newly created accounts get this notification.
+        DB::table('message_notification')->insert([
+            'user_id' => $UserID,
+            'message_notification' =>
+                'Welcome to Precious Pages Corp! Thank you for signing up. ' .
+                'Here at Precious Pages, we offer a vast and wide variety of ' .
+                'books across all genres, from bestsellers to hidden treasures. ' .
+                'Whether you are searching for your next captivating read or a ' .
+                'special gift for a fellow book enthusiast, you are sure to find ' .
+                'something you love. Welcome aboard, and happy reading!',
+            'created_at' => $TODAY,
+        ]);
+
+        return 'Success';
+    });
 }
 
 
@@ -728,72 +857,63 @@ public function doRegisterCustomer($data) {
 
   }
 
-  public function getCustomerInformationByEmail($data){
-        
-    $EmailAddress = $data['EmailAddress'];   
+  public function getCustomerInformationByEmail($data)
+{
+    $EmailAddress = strtolower(trim($data['EmailAddress']));
 
-    $info = DB::table('users as usrs')              
-    
-       ->selectraw("
+    $info = DB::table('users as usrs')
+        ->useWritePdo()
+        ->selectraw("
           usrs.id as user_ID,
-
           COALESCE(usrs.firstname,'') as firstname,
           COALESCE(usrs.lastname,'') as lastname,
           COALESCE(usrs.name,'') as fullname,
           COALESCE(usrs.avatar,'') as avatar,
-
           COALESCE(usrs.email,'') as emailaddress,
           COALESCE(usrs.email_verified_at,'') as email_verified_at,
           COALESCE(usrs.password,'') as password,
           COALESCE(usrs.mobile,'') as mobile,
           COALESCE(usrs.phone,'') as phone,
-
           COALESCE(usrs.birth_date,'') as birth_date,
           DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
           DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-
           COALESCE(usrs.address_street,'') as address_street,
           COALESCE(usrs.address_city,'') as address_city,
           COALESCE(usrs.address_municipality,'') as address_municipality,
           COALESCE(usrs.address_province,'') as address_province,
           COALESCE(usrs.address_zip,'') as address_zip,
-
           COALESCE(usrs.ecredits,0) as ecredits,
           COALESCE(usrs.verification_code,'') as verification_code,
           COALESCE(usrs.remember_token,'') as remember_token,
-          
+
           COALESCE((
-               SELECT 
-                   COUNT(cart.qty) FROM 
-                      ecommerce_shopping_cart as cart                                    
-                  WHERE cart.user_id = usrs.id                           
-                  AND cart.qty=0 
+               SELECT
+                   COUNT(cart.qty) FROM
+                      ecommerce_shopping_cart as cart
+                  WHERE cart.user_id = usrs.id
+                  AND cart.qty=0
                   LIMIT 1
-                                              
+
               )
         ,0) as item_cart,
-
         COALESCE((
-               SELECT 
-                   COUNT(mssg_notif.id ) FROM 
-                      message_notification as mssg_notif                                    
-                  WHERE mssg_notif.user_id = usrs.id                           
-                  AND mssg_notif.is_read=0 
+               SELECT
+                   COUNT(mssg_notif.id ) FROM
+                      message_notification as mssg_notif
+                  WHERE mssg_notif.user_id = usrs.id
+                  AND mssg_notif.is_read=0
                   LIMIT 1
-                                              
+
               )
          ,0) as item_message,
+          COALESCE(usrs.is_active,0) as is_active
 
-
-          COALESCE(usrs.is_active,0) as is_active         
-          
-        ")        
-        ->whereRaw('usrs.email =?',[$EmailAddress])                                      
+        ")
+        ->whereRaw('LOWER(TRIM(usrs.email)) = ?', [$EmailAddress])
         ->first();
 
     return $info;
-
-  }
+}
 
   //subscription plan status
   public function getCustomerCurrentSubscriptionInfo($UserID){
