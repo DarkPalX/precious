@@ -236,33 +236,58 @@ class BannerAds extends Model
 }
 
 
-  //PAGE BODY SECTION ADS
-  public function getBannerAds($data){
+  // //PAGE BODY SECTION ADS
+  // public function getBannerAds($data){
 
-   $Page=$data['Page'];
+  //  $Page=$data['Page'];
 
-   $query = DB::table('banner_ads as ban_ads')
-     ->join('banner_ad_pages as  ban_ads_pg', 'ban_ads_pg.banner_ad_id', '=', 'ban_ads.id') 
+  //  $query = DB::table('banner_ads as ban_ads')
+  //    ->join('banner_ad_pages as  ban_ads_pg', 'ban_ads_pg.banner_ad_id', '=', 'ban_ads.id') 
     
-       ->selectraw("
-           ban_ads.id as banner_Ads_ID,
-           COALESCE(ban_ads.mobile_file_url,'') as mobile_file_url,
-           COALESCE(ban_ads.url,'') as url,
-           COALESCE(ban_ads_pg.page_id,'') as page,
+  //      ->selectraw("
+  //          ban_ads.id as banner_Ads_ID,
+  //          COALESCE(ban_ads.mobile_file_url,'') as mobile_file_url,
+  //          COALESCE(ban_ads.url,'') as url,
+  //          COALESCE(ban_ads_pg.page_id,'') as page,
 
-          COALESCE(ban_ads.click_counts,0) as click_counts
+  //         COALESCE(ban_ads.click_counts,0) as click_counts
                         
-        ");    
+  //       ");    
               
-       $query->where("ban_ads_pg.page_id",'=',$Page);   
-       $query->where("ban_ads.is_mobile","=",1);              
-       $query->where("ban_ads.status","=",1);           
-       $query->where("ban_ads.deleted_at","=",null); 
-       $query->whereRaw('ban_ads_pg.page_id NOT REGEXP "^[0-9]+$"');  // Make sure page id is not in numeric ID but name of the page
+  //      $query->where("ban_ads_pg.page_id",'=',$Page);   
+  //      $query->where("ban_ads.is_mobile","=",1);              
+  //      $query->where("ban_ads.status","=",1);           
+  //      $query->where("ban_ads.deleted_at","=",null); 
+  //      $query->whereRaw('ban_ads_pg.page_id NOT REGEXP "^[0-9]+$"');  // Make sure page id is not in numeric ID but name of the page
                    
-     $list = $query->first();                           
-     return $list;     
+  //    $list = $query->first();                           
+  //    return $list;     
     
+  // }
+
+  //PAGE BODY SECTION ADS
+  public function getBannerAds($data)
+  {
+    
+    $Page = $data['Page'];
+
+    $list = DB::table('banner_ads as ban_ads')
+        ->join('banner_ad_pages as ban_ads_pg', 'ban_ads_pg.banner_ad_id', '=', 'ban_ads.id')
+        ->selectRaw("
+            ban_ads.id as banner_Ads_ID,
+            COALESCE(ban_ads.mobile_file_url, '') as mobile_file_url,
+            COALESCE(ban_ads.url, '') as url,
+            COALESCE(ban_ads_pg.page_id, '') as page,
+            COALESCE(ban_ads.click_counts, 0) as click_counts
+        ")
+        ->where('ban_ads_pg.page_id', '=', $Page)
+        ->where('ban_ads.is_mobile', '=', 1)
+        ->where('ban_ads.status', '=', 1)
+        ->whereNull('ban_ads.deleted_at')
+        ->whereRaw('ban_ads_pg.page_id NOT REGEXP "^[0-9]+$"') // page id must not be numeric
+        ->first();
+
+    return $list;
   }
 
    public function getBannerAdsInfo($BannerAdsID){
