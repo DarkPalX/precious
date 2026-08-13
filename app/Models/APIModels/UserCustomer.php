@@ -510,42 +510,109 @@ class UserCustomer extends Model
 
   }
 
-   public function doRegisterSocial($data) {
+  //  public function doRegisterSocial($data) {
 
-    $Misc  = New Misc();
-    $TODAY = date("Y-m-d H:i:s");
+  //   $Misc  = New Misc();
+  //   $TODAY = date("Y-m-d H:i:s");
           
-    $FirstName=$data['FirstName'];    
-    $LastName=$data['LastName'];        
-    $FullName=$data['FullName']; 
+  //   $FirstName=$data['FirstName'];    
+  //   $LastName=$data['LastName'];        
+  //   $FullName=$data['FullName']; 
 
-    $EmailAddress=$data['EmailAddress'];
-    $SocialMedia=$data['SocialMedia'];
+  //   $EmailAddress=$data['EmailAddress'];
+  //   $SocialMedia=$data['SocialMedia'];
         
-    $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
-    $UserID = DB::table('users')
-            ->insertGetId([                                    
-              'firstname' => $FirstName,
-              'lastname' => $LastName,
-              'name' => $FullName,              
-              'email' => $EmailAddress,   
-              'email_verified_at' => $TODAY,    
-              'password' => bcrypt('123456'),                                                   
-              'verification_code' => $VerificationCode,
-              'provider' => $SocialMedia,
-              'role_id' => 6,              
-              'is_active' => 1,              
-              'created_at' => $TODAY             
-            ]);
+  //   $VerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
+  //   $UserID = DB::table('users')
+  //           ->insertGetId([                                    
+  //             'firstname' => $FirstName,
+  //             'lastname' => $LastName,
+  //             'name' => $FullName,              
+  //             'email' => $EmailAddress,   
+  //             'email_verified_at' => $TODAY,    
+  //             'password' => bcrypt('123456'),                                                   
+  //             'verification_code' => $VerificationCode,
+  //             'provider' => $SocialMedia,
+  //             'role_id' => 6,              
+  //             'is_active' => 1,              
+  //             'created_at' => $TODAY             
+  //           ]);
 
-             //Send Notification Message
-               $MessageNotificationID = DB::table('message_notification')
-                    ->insertGetId([                                            
-                      'user_id' => $UserID,                                                         
-                      'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
-                      'created_at' => $TODAY             
-             ]);    
+  //            //Send Notification Message
+  //              $MessageNotificationID = DB::table('message_notification')
+  //                   ->insertGetId([                                            
+  //                     'user_id' => $UserID,                                                         
+  //                     'message_notification' => 'Welcome to Precious Pages Corp! Thank you for your for signing-up. Here at Precious Pages, we offer a vast & wide variety selection of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
+  //                     'created_at' => $TODAY             
+  //            ]);    
        
+  //   return 'Success';
+
+  // }
+  
+
+  public function doRegisterSocial($data) {
+
+    $Misc = new Misc();
+    $TODAY = date("Y-m-d H:i:s");
+
+    $FirstName = $data['FirstName'];
+    $LastName = $data['LastName'];
+    $FullName = $data['FullName'];
+
+    $EmailAddress = strtolower(trim($data['EmailAddress']));
+    $SocialMedia = $data['SocialMedia'];
+
+    // Reuse an existing account instead of attempting a duplicate insert.
+    $ExistingUser = DB::table('users')
+        ->where('email', $EmailAddress)
+        ->first();
+
+    if ($ExistingUser) {
+      return 'Success';
+    }
+
+    $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
+
+    try {
+      $UserID = DB::table('users')
+          ->insertGetId([
+            'firstname' => $FirstName,
+            'lastname' => $LastName,
+            'name' => $FullName,
+            'email' => $EmailAddress,
+            'email_verified_at' => $TODAY,
+            'password' => bcrypt(Str::random(40)),
+            'verification_code' => $VerificationCode,
+            'provider' => $SocialMedia,
+            'role_id' => 6,
+            'is_active' => 1,
+            'created_at' => $TODAY,
+            'updated_at' => $TODAY
+          ]);
+    } catch (QueryException $e) {
+      // Another request may have created the same social account at the same time.
+      if ((int) ($e->errorInfo[1] ?? 0) === 1062) {
+        $ExistingUser = DB::table('users')
+            ->where('email', $EmailAddress)
+            ->first();
+
+        if ($ExistingUser) {
+          return 'Success';
+        }
+      }
+
+      throw $e;
+    }
+
+    // Send the welcome notification only when a new user was created.
+    DB::table('message_notification')
+        ->insert([
+          'user_id' => $UserID,
+          'message_notification' => 'Welcome to Precious Pages Corp! Thank you for signing up. Here at Precious Pages, we offer a vast and wide variety of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
+          'created_at' => $TODAY
+        ]);
+
     return 'Success';
 
   }
@@ -812,7 +879,7 @@ class UserCustomer extends Model
               'updated_at' => $TODAY
            ]);     
             
-        } else if($BirthDate!='Not Set 00:00:00' &&  $ImageFileName!=''){
+        } else if($BirthDate!='Not Set 00:00:00' && $ImageFileName!=''){
           
            DB::table('users')
             ->where('id',$UserID)
