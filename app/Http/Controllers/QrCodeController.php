@@ -22,6 +22,7 @@ class QrCodeController extends Controller
 
         // For debugging: Log the file_url to ensure it's received correctly
         // \Log::info('Generating QR code for URL: ' . $file_url);
+        // UPDATED
 
         // Generate the QR code as an SVG
         $qrCode = QrCode::size(300)->generate(env('APP_URL') . '/public/' . $file_url);
