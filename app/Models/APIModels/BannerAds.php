@@ -233,7 +233,7 @@ class BannerAds extends Model
 
 //         return $query->get();
 //     });
-}
+// }
 
 
   // //PAGE BODY SECTION ADS
