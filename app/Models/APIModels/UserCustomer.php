@@ -867,8 +867,8 @@ class UserCustomer extends Model
 
     if($UserID > 0){
 
-        if($BirthDate=='Not Set 00:00:00' &&  $ImageFileName!=''){
-
+      if (str_contains($BirthDate, 'Not Set')) { // has Containt the word Not Set
+            
             DB::table('users')
             ->where('id',$UserID)
             ->update([      
@@ -882,11 +882,11 @@ class UserCustomer extends Model
               'address_city' => $CityName,
               'address_zip' => $ZipCode,                                       
               'updated_at' => $TODAY
-           ]);     
-            
-        } else if($BirthDate!='Not Set 00:00:00' && $ImageFileName!=''){
-          
-           DB::table('users')
+           ]); 
+
+      }else{
+
+          DB::table('users')
             ->where('id',$UserID)
             ->update([      
               'firstname' => trim(ucwords($FirstName)),              
@@ -902,22 +902,6 @@ class UserCustomer extends Model
               'updated_at' => $TODAY
            ]);
 
-        }else{
-
-            DB::table('users')
-            ->where('id',$UserID)
-            ->update([      
-              'firstname' => trim(ucwords($FirstName)),              
-              'lastname' => trim(ucwords($LastName)),              
-              'name' => trim(ucwords($FullName)),              
-              'email' => trim($EmailAddress), 
-              'birth_date' => $BirthDate, 
-              'mobile' => trim($MobileNo),
-              'address_street' => $StreetAddress,                                      
-              'address_city' => $CityName,
-              'address_zip' => $ZipCode,                                       
-              'updated_at' => $TODAY
-          ]);     
       }
 
         //Send Notification Message
