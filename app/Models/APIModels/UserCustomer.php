@@ -570,14 +570,13 @@ public function doRegisterCustomer($data)
         return 'Success';
     }
 
-    // ---- NEW REGISTRATION ----
-
+   
+   // DB lock trans
     return DB::transaction(function () use (
         $Misc, $TODAY, $FirstName, $LastName, $FullName,
         $EmailAddress, $MobileNo, $Password
     ) {
-        // Lock any matching row for the duration of the transaction,
-        // closing the same race window we fixed in doRegisterSocial.
+        
         $ExistingUser = DB::table('users')
             ->useWritePdo()
             ->whereRaw('LOWER(TRIM(email)) = ?', [$EmailAddress])
@@ -605,6 +604,7 @@ public function doRegisterCustomer($data)
                 'created_at'        => $TODAY,
             ]);
         } catch (QueryException $e) {
+
             $MySqlErrorCode    = (int) ($e->errorInfo[1] ?? 0);
             $MySqlErrorMessage = (string) ($e->errorInfo[2] ?? $e->getMessage());
 
@@ -653,7 +653,9 @@ public function doRegisterSocial($data)
     $FullName     = trim($data['FullName']);
     $EmailAddress = strtolower(trim($data['EmailAddress']));
     $SocialMedia  = trim($data['SocialMedia']);
+   
 
+   //DB Lock trans
     return DB::transaction(function () use (
         $Misc, $TODAY, $FirstName, $LastName, $FullName, $EmailAddress, $SocialMedia) 
     {
@@ -665,13 +667,13 @@ public function doRegisterSocial($data)
             ->first();
 
         if ($ExistingUser) {
-            // Already registered - do NOT insert, do NOT notify.
             return 'Success';
         }
 
         $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
 
         try {
+
             $UserID = DB::table('users')->insertGetId([
                 'firstname'         => $FirstName,
                 'lastname'          => $LastName,
@@ -686,7 +688,9 @@ public function doRegisterSocial($data)
                 'created_at'        => $TODAY,
                 'updated_at'        => $TODAY,
             ]);
+
         } catch (QueryException $e) {
+
             $MySqlErrorCode    = (int) ($e->errorInfo[1] ?? 0);
             $MySqlErrorMessage = (string) ($e->errorInfo[2] ?? $e->getMessage());
 
@@ -694,7 +698,7 @@ public function doRegisterSocial($data)
                 $MySqlErrorCode === 1062 &&
                 strpos($MySqlErrorMessage, 'users_email_unique') !== false
             ) {
-                // Someone else won the race - fine, they already exist.
+               
                 return 'Success';
             }
 
