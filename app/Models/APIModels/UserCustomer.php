@@ -571,48 +571,53 @@ class UserCustomer extends Model
     if ($ExistingUser) {
       return 'Success';
     }
+    else{
 
-    $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
+        $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
+        try {
 
-    try {
-      $UserID = DB::table('users')
-          ->insertGetId([
-            'firstname' => $FirstName,
-            'lastname' => $LastName,
-            'name' => $FullName,
-            'email' => $EmailAddress,
-            'email_verified_at' => $TODAY,
-            'password' => bcrypt(Str::random(40)),
-            'verification_code' => $VerificationCode,
-            'provider' => $SocialMedia,
-            'role_id' => 6,
-            'is_active' => 1,
-            'created_at' => $TODAY,
-            'updated_at' => $TODAY
-          ]);
-    } catch (QueryException $e) {
-      // Another request may have created the same social account at the same time.
-      if ((int) ($e->errorInfo[1] ?? 0) === 1062) {
-        $ExistingUser = DB::table('users')
-            ->where('email', $EmailAddress)
-            ->first();
+          $UserID = DB::table('users')
+              ->insertGetId([
+                'firstname' => $FirstName,
+                'lastname' => $LastName,
+                'name' => $FullName,
+                'email' => $EmailAddress,
+                'email_verified_at' => $TODAY,
+                'password' => bcrypt(Str::random(40)),
+                'verification_code' => $VerificationCode,
+                'provider' => $SocialMedia,
+                'role_id' => 6,
+                'is_active' => 1,
+                'created_at' => $TODAY,
+                'updated_at' => $TODAY
+              ]);
+               
 
-        if ($ExistingUser) {
-          return 'Success';
+           // Send the welcome notification only when a new user was created.
+            DB::table('message_notification')
+              ->insert([
+                'user_id' => $UserID,
+                'message_notification' => 'Welcome to Precious Pages Corp! Thank you for signing up. Here at Precious Pages, we offer a vast and wide variety of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
+                 'created_at' => $TODAY
+            ]); 
+
+        } catch (QueryException $e) {
+          // Another request may have created the same social account at the same time.
+          if ((int) ($e->errorInfo[1] ?? 0) === 1062) {
+            $ExistingUser = DB::table('users')
+                ->where('email', $EmailAddress)
+                ->first();
+
+            if ($ExistingUser) {
+              return 'Success';
+            }
+          }
+
+          throw $e;
         }
-      }
-
-      throw $e;
+ 
     }
-
-    // Send the welcome notification only when a new user was created.
-    DB::table('message_notification')
-        ->insert([
-          'user_id' => $UserID,
-          'message_notification' => 'Welcome to Precious Pages Corp! Thank you for signing up. Here at Precious Pages, we offer a vast and wide variety of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
-          'created_at' => $TODAY
-        ]);
-
+    
     return 'Success';
 
   }
