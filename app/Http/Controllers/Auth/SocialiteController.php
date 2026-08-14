@@ -66,7 +66,7 @@ class SocialiteController extends Controller
     public function findOrCreateUser($socialUser, $provider)
     {
         $providerId   = $socialUser->getId();
-        $providerName = strtolower($provider); // Normalizes for enum ('google','facebook', etc.)
+        $providerName = ucfirst(strtolower($provider));
         $socialEmail  = $socialUser->getEmail();
 
         // 1. Check if user already linked this social account by provider_id
