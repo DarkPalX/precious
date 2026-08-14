@@ -8,7 +8,6 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 
 class SocialiteController extends Controller
 {
@@ -40,45 +39,40 @@ class SocialiteController extends Controller
 
     public function findOrCreateUser($socialUser, $provider)
     {
-        $providerId = $socialUser->getId();
-        $email = $socialUser->getEmail() ? strtolower($socialUser->getEmail()) : null;
-
-        // 1. Check if user already linked this social account (match provider + provider_id)
-        $authUser = User::where('provider', $provider)->where('provider_id', $providerId)->first();
+        // 1. Check if user already linked this social account
+        $authUser = User::where('provider_id', $socialUser->getId())->first();
+        
         if ($authUser) {
             return $authUser;
         }
 
-        // 2. If we have an email from the provider, try to find an existing account
-        if ($email) {
-            $existingUser = User::where('email', $email)->first();
-            if ($existingUser) {
-                $existingUser->update([
-                    'provider' => $provider,
-                    'provider_id' => $providerId,
-                    'firstname' => $existingUser->firstname ?? $socialUser->getName(),
-                ]);
-                return $existingUser;
-            }
+        // 2. Check if the email exists but isn't linked to a provider yet
+        // This prevents the "Duplicate Entry" error
+        $existingUser = User::where('email', $socialUser->getEmail())->first();
+
+        if ($existingUser) {
+            $existingUser->update([
+                'provider' => $provider,
+                'provider_id' => $socialUser->getId(),
+                // Update name if it was missing
+                'firstname' => $existingUser->firstname ?? $socialUser->getName(),
+            ]);
+            return $existingUser;
         }
 
-        // 3. If provider didn't return an email, create a unique placeholder to avoid DB unique errors
-        $createEmail = $email ?? ($provider . '_' . $providerId . '@local.' . env('APP_ENV', 'local'));
-
-        // Use a transaction to reduce race conditions where two requests try to create the same user
-        return DB::transaction(function () use ($socialUser, $provider, $providerId, $createEmail) {
-            return User::create([
-                'name' => $socialUser->getName() ?? '',
-                'firstname' => $socialUser->getName() ?? '',
-                'email' => $createEmail,
-                'provider' => $provider,
-                'provider_id' => $providerId,
-                'password' => Hash::make(Str::random(24)),
-                'role_id' => 6,
-                'is_active' => 1,
-                'social_login' => 1,
-            ]);
-        });
+        // 3. Create a brand new user
+        return User::create([
+            'name' => $socialUser->getName(),
+            'firstname' => $socialUser->getName(),
+            'email' => $socialUser->getEmail(),
+            'provider' => $provider,
+            'provider_id' => $socialUser->getId(),
+            // Secure random password since they use Social Login
+            'password' => Hash::make(Str::random(24)), 
+            'role_id' => 6,
+            'is_active' => 1,
+            'social_login' => 1,
+        ]);
     }
 }
 
