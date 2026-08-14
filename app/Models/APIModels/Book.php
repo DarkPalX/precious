@@ -1345,7 +1345,7 @@ public function getSearchBookList($data){
         $query->orderBy("prds.created_at","ASC");
     }
 
-    return $query->limit(50)->get();  // get temp 10
+    return $query->limit(150)->get();  // get temp 10
 
 }
 

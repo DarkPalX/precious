@@ -306,7 +306,7 @@ public function getLibraryList($data){
     // }
 
     $query->orderBy("prds.name","ASC");
-    return $query->limit(70)->get(); // get temp 50
+    return $query->limit(100)->get(); // get temp 50
 
 }
 
