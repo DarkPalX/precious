@@ -379,6 +379,11 @@ class UserCustomer extends Model
     $EmailAddress  = $data['EmailAddress'];
     
     $NewVerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
+
+   if ($NewVerificationCode == '') {
+      $NewVerificationCode = rand(1000, 9999);
+   }
+
     if($usersID>0){
         DB::table('users')
            ->whereRaw('id = ?',[$usersID])
