@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+
 use Session;
 use Hash;
 use View;
 use Input;
 use Image;
-use DB;
 
 use App\Models\APIModels\Misc;
 use App\Models\APIModels\Email;

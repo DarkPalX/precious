@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+
 use Session;
 use Hash;
 use View;
 use Input;
 use Image;
-use DB;
 
 use App\Models\APIModels\Misc;
 use App\Models\APIModels\Book;
@@ -76,7 +78,7 @@ class Messages extends Model
 
     $CacheKey = "message_notification_list_{$UserID}_{$Status}_{$SearchText}_{$Limit}_{$PageNo}";
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(10), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(3), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
 
         $query = DB::table('message_notification as mssg_notif')
           ->join('users as usrs', 'usrs.id', '=', 'mssg_notif.user_id')       
@@ -106,7 +108,7 @@ class Messages extends Model
      return $list;             
            
   }
-  
+
   public function openSetReadMessageNotification($data){
 
       $MessageID=$data['MessageID'];
