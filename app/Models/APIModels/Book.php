@@ -37,7 +37,7 @@ class Book extends Model
 
     $CacheKey = 'book_list_' . $UserID . '_' . md5($Status . '|' . $SearchText . '|' . $Limit . '|' . $PageNo);
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(10), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
 
         $query = DB::table('products as prds')
         ->join('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id')
@@ -757,7 +757,7 @@ public function getSearchBookList($data){
         $Status . '|' . $SearchText . '|' . $Filter_Sort . '|' . $Filter_Genre . '|' . $Filter_Star
     );
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () use ($UserID, $Status, $SearchText, $Filter_Sort, $Filter_Genre, $Filter_Star) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(10), function () use ($UserID, $Status, $SearchText, $Filter_Sort, $Filter_Genre, $Filter_Star) {
 
         $query = DB::table('products as prds')
         ->leftjoin('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id')
