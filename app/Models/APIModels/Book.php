@@ -221,7 +221,7 @@ class Book extends Model
         }
 
          $query->orderBy("prds.created_at","ASC");
-         return $query->limit(10)->get();  // get temp 10
+         return $query->limit(20)->get();  // get temp 10
     });
 
     return $list;
@@ -441,7 +441,7 @@ public function getContinueToReadBookList($data){
 
     $CacheKey = 'continue_to_read_' . $UserID;
 
-    $list = Cache::remember($CacheKey, now()->addSeconds(20), function () use ($UserID) {
+    $list = Cache::remember($CacheKey, now()->addSeconds(30), function () use ($UserID) {
 
           $query = DB::table('continue_to_read_book as cont')
           ->join('products as prds', 'prds.id', '=', 'cont.product_id')
@@ -1363,7 +1363,7 @@ public function getSearchAudioBookList($data){
 
     $CacheKey = 'search_audio_book_list_' . $UserID . '_' . md5($Status . '|' . $SearchText);
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () use ($UserID, $Status, $SearchText) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(10), function () use ($UserID, $Status, $SearchText) {
 
         $query = DB::table('products as prds')
         ->join('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id')
@@ -1918,7 +1918,7 @@ public function getSearchAudioBookList($data){
 
     $CacheKey = 'details_catalogue_list_' . $HeaderID . '_' . $UserID;
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(6), function () use ($HeaderID, $UserID) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(10), function () use ($HeaderID, $UserID) {
 
         $query = DB::table('product_catalog_details as prod_det_cat')
         ->join('product_catalog_headers as prod_hdrs_cat', 'prod_hdrs_cat.id', '=', 'prod_det_cat.product_catalog_header_id')
