@@ -324,7 +324,7 @@ class Library extends Model
 
     $CacheKey = 'subscribed_read_books_' . $UserID . '_' . md5($SearchText);
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(6), function () use ($UserID, $SearchText) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () use ($UserID, $SearchText) {
 
         $query = DB::table('subscribed_books as rbooks')
           ->leftjoin('products as prds', 'prds.id', '=', 'rbooks.product_id')

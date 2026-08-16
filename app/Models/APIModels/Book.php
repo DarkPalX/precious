@@ -37,7 +37,7 @@ class Book extends Model
 
     $CacheKey = 'book_list_' . $UserID . '_' . md5($Status . '|' . $SearchText . '|' . $Limit . '|' . $PageNo);
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(6), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
 
         $query = DB::table('products as prds')
         ->join('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id')
@@ -441,7 +441,7 @@ public function getContinueToReadBookList($data){
 
     $CacheKey = 'continue_to_read_' . $UserID;
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(6), function () use ($UserID) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () use ($UserID) {
 
           $query = DB::table('continue_to_read_book as cont')
           ->join('products as prds', 'prds.id', '=', 'cont.product_id')
@@ -757,7 +757,7 @@ public function getSearchBookList($data){
         $Status . '|' . $SearchText . '|' . $Filter_Sort . '|' . $Filter_Genre . '|' . $Filter_Star
     );
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(6), function () use ($UserID, $Status, $SearchText, $Filter_Sort, $Filter_Genre, $Filter_Star) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () use ($UserID, $Status, $SearchText, $Filter_Sort, $Filter_Genre, $Filter_Star) {
 
         $query = DB::table('products as prds')
         ->leftjoin('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id')
@@ -1363,7 +1363,7 @@ public function getSearchAudioBookList($data){
 
     $CacheKey = 'search_audio_book_list_' . $UserID . '_' . md5($Status . '|' . $SearchText);
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(6), function () use ($UserID, $Status, $SearchText) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () use ($UserID, $Status, $SearchText) {
 
         $query = DB::table('products as prds')
         ->join('product_categories as prod_cat', 'prod_cat.id', '=', 'prds.category_id')
