@@ -441,7 +441,7 @@ public function getContinueToReadBookList($data){
 
     $CacheKey = 'continue_to_read_' . $UserID;
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () use ($UserID) {
+    $list = Cache::remember($CacheKey, now()->addSeconds(20), function () use ($UserID) {
 
           $query = DB::table('continue_to_read_book as cont')
           ->join('products as prds', 'prds.id', '=', 'cont.product_id')
