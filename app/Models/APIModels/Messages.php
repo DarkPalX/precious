@@ -23,6 +23,47 @@ use App\Models\APIModels\UserCustomer;
 class Messages extends Model
 {
   
+  // public function getMessageNotificationList($data){
+    
+  //   $UserID=$data['UserID'];
+    
+  //   $Status=$data['Status'];
+  //   $SearchText=$data['SearchText'];
+    
+  //   $Limit=$data['Limit'];
+  //   $PageNo=$data['PageNo'];
+    
+  //   $query = DB::table('message_notification as mssg_notif')
+  //     ->join('users as usrs', 'usrs.id', '=', 'mssg_notif.user_id')       
+    
+  //      ->selectraw("
+  //         mssg_notif.id as message_ID,
+          
+  //         COALESCE(mssg_notif.message_notification,'') as message_notification,        
+  //         DATE_FORMAT(mssg_notif.created_at,'%m/%d/%Y') as create_date_format,
+  //         COALESCE(mssg_notif.is_read,0) as is_read,   
+  //         COALESCE(mssg_notif.created_at,'') as created_at      
+          
+  //       ");    
+
+  //     $query->where("mssg_notif.user_id",'=',$UserID);                                
+  //     $query->where("mssg_notif.deleted_at",'=',null);
+
+
+  //   if($Limit > 0){
+  //     $query->limit($Limit);
+  //     $query->offset(($PageNo-1) * $Limit);
+  //   }
+   
+  //   $query->orderBy("mssg_notif.is_read","ASC");    
+  //   $query->orderBy("mssg_notif.created_at","DESC");    
+  //   $list = $query->get();
+                             
+  //    return $list;             
+           
+  // }
+  
+
   public function getMessageNotificationList($data){
     
     $UserID=$data['UserID'];
@@ -32,37 +73,40 @@ class Messages extends Model
     
     $Limit=$data['Limit'];
     $PageNo=$data['PageNo'];
-    
-    $query = DB::table('message_notification as mssg_notif')
-      ->join('users as usrs', 'usrs.id', '=', 'mssg_notif.user_id')       
-    
-       ->selectraw("
-          mssg_notif.id as message_ID,
-          
-          COALESCE(mssg_notif.message_notification,'') as message_notification,        
-          DATE_FORMAT(mssg_notif.created_at,'%m/%d/%Y') as create_date_format,
-          COALESCE(mssg_notif.is_read,0) as is_read,   
-          COALESCE(mssg_notif.created_at,'') as created_at      
-          
-        ");    
 
-      $query->where("mssg_notif.user_id",'=',$UserID);                                
-      $query->where("mssg_notif.deleted_at",'=',null);
+    $CacheKey = "message_notification_list_{$UserID}_{$Status}_{$SearchText}_{$Limit}_{$PageNo}";
 
+    $list = Cache::remember($CacheKey, now()->addMinutes(10), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
 
-    if($Limit > 0){
-      $query->limit($Limit);
-      $query->offset(($PageNo-1) * $Limit);
-    }
-   
-    $query->orderBy("mssg_notif.is_read","ASC");    
-    $query->orderBy("mssg_notif.created_at","DESC");    
-    $list = $query->get();
+        $query = DB::table('message_notification as mssg_notif')
+          ->join('users as usrs', 'usrs.id', '=', 'mssg_notif.user_id')       
+        
+           ->selectraw("
+              mssg_notif.id as message_ID,
+              
+              COALESCE(mssg_notif.message_notification,'') as message_notification,        
+              DATE_FORMAT(mssg_notif.created_at,'%m/%d/%Y') as create_date_format,
+              COALESCE(mssg_notif.is_read,0) as is_read,   
+              COALESCE(mssg_notif.created_at,'') as created_at      
+              
+            ");    
+          $query->where("mssg_notif.user_id",'=',$UserID);                                
+          $query->where("mssg_notif.deleted_at",'=',null);
+        if($Limit > 0){
+          $query->limit($Limit);
+          $query->offset(($PageNo-1) * $Limit);
+        }
+       
+        $query->orderBy("mssg_notif.is_read","ASC");    
+        $query->orderBy("mssg_notif.created_at","DESC");    
+        return $query->get();
+
+    });
                              
      return $list;             
            
   }
-
+  
   public function openSetReadMessageNotification($data){
 
       $MessageID=$data['MessageID'];

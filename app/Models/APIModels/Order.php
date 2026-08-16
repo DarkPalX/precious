@@ -26,84 +26,161 @@ use App\Models\APIModels\UserCustomer;
 class Order extends Model
 {
   
-  public function getOrderList($data){
+  // public function getOrderList($data){
+    
+  //   $UserID=$data['UserID'];
+
+  //   $Status=$data['Status'];
+  //   $SearchText=$data['SearchText'];
+    
+  //   $Limit=$data['Limit'];
+  //   $PageNo=$data['PageNo'];
+
+  //    $query = DB::table('ecommerce_sales_headers as sales_hdr')
+  //    ->join('ecommerce_sales_payments as sales_pay', 'sales_pay.sales_header_id', '=', 'sales_hdr.id') 
+     
+  //      ->selectraw("
+  //         sales_hdr.id as sales_Header_ID,
+
+  //         COALESCE(sales_hdr.created_at,'') as order_date,
+  //         DATE_FORMAT(sales_hdr.created_at,'%m/%d/%Y') as order_date_format,
+          
+  //         COALESCE(sales_hdr.order_number,'') as order_number,
+  //         COALESCE(sales_hdr.order_source,'') as order_source,
+  //         COALESCE(sales_hdr.customer_name,'') as customer_name,
+          
+  //         COALESCE(sales_hdr.customer_email,'') as customer_email,
+  //         COALESCE(sales_hdr.customer_contact_number,'') as customer_contact_number,
+
+  //         COALESCE(sales_hdr.customer_address,'') as customer_address,   
+
+  //         COALESCE(sales_hdr.customer_delivery_adress,'') as customer_delivery_adress,                
+  //         COALESCE(sales_hdr.customer_delivery_zip,'') as customer_delivery_zip,                
+          
+  //         COALESCE(sales_hdr.delivery_type,'') as delivery_type,          
+  //         COALESCE(sales_hdr.delivery_fee_amount,0) as delivery_fee_amount,
+
+  //         COALESCE(sales_hdr.gross_amount,0) as gross_amount,  
+  //         COALESCE(sales_hdr.tax_amount,0) as tax_amount,
+  //         COALESCE(sales_hdr.net_amount,0) as net_amount,
+  //         COALESCE(sales_hdr.discount_amount,0) as discount_amount,
+
+  //         COALESCE(sales_hdr.other_instruction,'') as order_instruction,
+          
+  //         COALESCE(sales_hdr.payment_status,'') as payment_status,        
+  //         COALESCE(sales_hdr.other_instruction,'') as other_instruction,  
+
+  //         COALESCE(sales_pay.payment_type,'') as payment_method,        
+  //         COALESCE(sales_pay.amount,0) as payment_amount,        
+  //         COALESCE(sales_pay.status,'') as payment_status,        
+  //         COALESCE(sales_pay.receipt_number,'') as receipt_number,
+
+  //         COALESCE(sales_hdr.status,'') as status          
+          
+  //       ");  
+
+  //      $query->whereIn("sales_hdr.order_source",['Android','iOS']);    
+  //      $query->where("sales_hdr.user_id",'=',$UserID);    
+
+                                      
+  //     if($SearchText != ''){
+  //       $arSearchText = explode(" ",$SearchText);
+  //       if(count($arSearchText) > 0){
+  //           for($x=0; $x< count($arSearchText); $x++) {
+  //               $query->whereraw(
+  //                   "CONCAT_WS(' ',
+  //                       COALESCE(sales_hdr.order_number,''),
+  //                       COALESCE(sales_hdr.order_source,''),                        
+  //                       COALESCE(sales_hdr.status,'')
+  //                   ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+  //            }
+  //       }
+  //   }
+
+  //   // if($Limit > 0){
+  //   //   $query->limit($Limit);
+  //   //   $query->offset(($PageNo-1) * $Limit);
+  //   // }
+
+  //   $query->orderBy("sales_hdr.created_at","DESC");    
+  //    $list = $query->limit(20)->get(); // get temp 20
+                             
+  //    return $list;             
+           
+  // }
+
+    public function getOrderList($data){
     
     $UserID=$data['UserID'];
-
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
     
     $Limit=$data['Limit'];
     $PageNo=$data['PageNo'];
 
-     $query = DB::table('ecommerce_sales_headers as sales_hdr')
-     ->join('ecommerce_sales_payments as sales_pay', 'sales_pay.sales_header_id', '=', 'sales_hdr.id') 
-     
-       ->selectraw("
-          sales_hdr.id as sales_Header_ID,
+    $CacheKey = "order_list_{$UserID}_{$Status}_{$SearchText}_{$Limit}_{$PageNo}";
 
-          COALESCE(sales_hdr.created_at,'') as order_date,
-          DATE_FORMAT(sales_hdr.created_at,'%m/%d/%Y') as order_date_format,
-          
-          COALESCE(sales_hdr.order_number,'') as order_number,
-          COALESCE(sales_hdr.order_source,'') as order_source,
-          COALESCE(sales_hdr.customer_name,'') as customer_name,
-          
-          COALESCE(sales_hdr.customer_email,'') as customer_email,
-          COALESCE(sales_hdr.customer_contact_number,'') as customer_contact_number,
+    $list = Cache::remember($CacheKey, now()->addMinutes(3), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
 
-          COALESCE(sales_hdr.customer_address,'') as customer_address,   
-
-          COALESCE(sales_hdr.customer_delivery_adress,'') as customer_delivery_adress,                
-          COALESCE(sales_hdr.customer_delivery_zip,'') as customer_delivery_zip,                
-          
-          COALESCE(sales_hdr.delivery_type,'') as delivery_type,          
-          COALESCE(sales_hdr.delivery_fee_amount,0) as delivery_fee_amount,
-
-          COALESCE(sales_hdr.gross_amount,0) as gross_amount,  
-          COALESCE(sales_hdr.tax_amount,0) as tax_amount,
-          COALESCE(sales_hdr.net_amount,0) as net_amount,
-          COALESCE(sales_hdr.discount_amount,0) as discount_amount,
-
-          COALESCE(sales_hdr.other_instruction,'') as order_instruction,
-          
-          COALESCE(sales_hdr.payment_status,'') as payment_status,        
-          COALESCE(sales_hdr.other_instruction,'') as other_instruction,  
-
-          COALESCE(sales_pay.payment_type,'') as payment_method,        
-          COALESCE(sales_pay.amount,0) as payment_amount,        
-          COALESCE(sales_pay.status,'') as payment_status,        
-          COALESCE(sales_pay.receipt_number,'') as receipt_number,
-
-          COALESCE(sales_hdr.status,'') as status          
-          
-        ");  
-
-       $query->whereIn("sales_hdr.order_source",['Android','iOS']);    
-       $query->where("sales_hdr.user_id",'=',$UserID);    
-
-                                      
-      if($SearchText != ''){
-        $arSearchText = explode(" ",$SearchText);
-        if(count($arSearchText) > 0){
-            for($x=0; $x< count($arSearchText); $x++) {
-                $query->whereraw(
-                    "CONCAT_WS(' ',
-                        COALESCE(sales_hdr.order_number,''),
-                        COALESCE(sales_hdr.order_source,''),                        
-                        COALESCE(sales_hdr.status,'')
-                    ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
-             }
+        $query = DB::table('ecommerce_sales_headers as sales_hdr')
+         ->join('ecommerce_sales_payments as sales_pay', 'sales_pay.sales_header_id', '=', 'sales_hdr.id') 
+         
+           ->selectraw("
+              sales_hdr.id as sales_Header_ID,
+              COALESCE(sales_hdr.created_at,'') as order_date,
+              DATE_FORMAT(sales_hdr.created_at,'%m/%d/%Y') as order_date_format,
+              
+              COALESCE(sales_hdr.order_number,'') as order_number,
+              COALESCE(sales_hdr.order_source,'') as order_source,
+              COALESCE(sales_hdr.customer_name,'') as customer_name,
+              
+              COALESCE(sales_hdr.customer_email,'') as customer_email,
+              COALESCE(sales_hdr.customer_contact_number,'') as customer_contact_number,
+              COALESCE(sales_hdr.customer_address,'') as customer_address,   
+              COALESCE(sales_hdr.customer_delivery_adress,'') as customer_delivery_adress,                
+              COALESCE(sales_hdr.customer_delivery_zip,'') as customer_delivery_zip,                
+              
+              COALESCE(sales_hdr.delivery_type,'') as delivery_type,          
+              COALESCE(sales_hdr.delivery_fee_amount,0) as delivery_fee_amount,
+              COALESCE(sales_hdr.gross_amount,0) as gross_amount,  
+              COALESCE(sales_hdr.tax_amount,0) as tax_amount,
+              COALESCE(sales_hdr.net_amount,0) as net_amount,
+              COALESCE(sales_hdr.discount_amount,0) as discount_amount,
+              COALESCE(sales_hdr.other_instruction,'') as order_instruction,
+              
+              COALESCE(sales_hdr.payment_status,'') as payment_status,        
+              COALESCE(sales_hdr.other_instruction,'') as other_instruction,  
+              COALESCE(sales_pay.payment_type,'') as payment_method,        
+              COALESCE(sales_pay.amount,0) as payment_amount,        
+              COALESCE(sales_pay.status,'') as payment_status,        
+              COALESCE(sales_pay.receipt_number,'') as receipt_number,
+              COALESCE(sales_hdr.status,'') as status          
+              
+            ");  
+           $query->whereIn("sales_hdr.order_source",['Android','iOS']);    
+           $query->where("sales_hdr.user_id",'=',$UserID);    
+                                          
+          if($SearchText != ''){
+            $arSearchText = explode(" ",$SearchText);
+            if(count($arSearchText) > 0){
+                for($x=0; $x< count($arSearchText); $x++) {
+                    $query->whereraw(
+                        "CONCAT_WS(' ',
+                            COALESCE(sales_hdr.order_number,''),
+                            COALESCE(sales_hdr.order_source,''),                        
+                            COALESCE(sales_hdr.status,'')
+                        ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+                 }
+            }
         }
-    }
+        // if($Limit > 0){
+        //   $query->limit($Limit);
+        //   $query->offset(($PageNo-1) * $Limit);
+        // }
+        $query->orderBy("sales_hdr.created_at","DESC");    
+        return $query->limit(20)->get(); // get temp 20
 
-    // if($Limit > 0){
-    //   $query->limit($Limit);
-    //   $query->offset(($PageNo-1) * $Limit);
-    // }
-
-    $query->orderBy("sales_hdr.created_at","DESC");    
-     $list = $query->limit(20)->get(); // get temp 20
+    });
                              
      return $list;             
            
