@@ -3,126 +3,111 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
+    /**
+     * Redirect the user to the Social Provider authentication page.
+     */
     public function redirectToProvider($provider)
     {
-        // Removed stateless() here to ensure session consistency for web login
-        return Socialite::driver($provider)->redirect();
+        $providerKey = strtolower($provider);
+
+        // Request 'email' scope explicitly to maximize chance of returning an email
+        return Socialite::driver($providerKey)
+            ->scopes(['email'])
+            ->redirect();
     }
 
-    public function handleProviderCallback($provider)
+    /**
+     * Obtain the user information from Social Provider.
+     */
+    public function handleProviderCallback(Request $request, $provider)
     {
-        try {
-            // Using standard user() for web apps; use stateless() ONLY if using a separate frontend (like React/Vue)
-            $socialUser = Socialite::driver($provider)->user();
-        } catch (\Exception $e) {
-            // Log the error so you can see why it failed in storage/logs/laravel.log
-            \Log::error("Socialite Login Error: " . $e->getMessage());
-            return redirect('/login')->withErrors(['msg' => 'Authentication failed. Please try again.']);
+        $providerKey = strtolower($provider);
+
+        // 1. Handle user cancellation or missing OAuth authorization code
+        if ($request->has('error') || ! $request->has('code')) {
+            return redirect('/login')->withErrors([
+                'msg' => 'Authentication was canceled or failed. Please try again.'
+            ]);
         }
 
-        $authUser = $this->findOrCreateUser($socialUser, $provider);
-        
-        // Log the user in and "remember" them
+        try {
+            $socialUser = Socialite::driver($providerKey)->user();
+        } catch (Exception $e) {
+            Log::error("Socialite Login Error ({$providerKey}): " . $e->getMessage());
+
+            return redirect('/login')->withErrors([
+                'msg' => 'Unable to authenticate. Please try again.'
+            ]);
+        }
+
+        $authUser = $this->findOrCreateUser($socialUser, $providerKey);
+
+        // Log the user in and set "remember me"
         Auth::login($authUser, true);
 
-        // Clear session and redirect to home
         return redirect()->intended('/home');
     }
 
+    /**
+     * Find an existing user or create a new one safely.
+     */
     public function findOrCreateUser($socialUser, $provider)
     {
-        // 1. Check if user already linked this social account
-        $authUser = User::where('provider_id', $socialUser->getId())->first();
-        
+        $providerId   = $socialUser->getId();
+        $providerName = ucfirst(strtolower($provider));
+        $socialEmail  = $socialUser->getEmail();
+
+        // 1. Check if user already linked this social account by provider_id
+        $authUser = User::where('provider_id', $providerId)->first();
         if ($authUser) {
             return $authUser;
         }
 
-        // 2. Check if the email exists but isn't linked to a provider yet
-        // This prevents the "Duplicate Entry" error
-        $existingUser = User::where('email', $socialUser->getEmail())->first();
+        // Fallback placeholder email if Facebook/OAuth didn't provide one
+        $emailToSave = $socialEmail ?: "{$providerId}@{$providerName}.placeholder.com";
 
-        if ($existingUser) {
-            $existingUser->update([
-                'provider' => $provider,
-                'provider_id' => $socialUser->getId(),
-                // Update name if it was missing
-                'firstname' => $existingUser->firstname ?? $socialUser->getName(),
+        // Wrap database writes in a transaction to handle race conditions safely
+        return DB::transaction(function () use ($socialUser, $providerId, $providerName, $socialEmail, $emailToSave) {
+
+            // 2. If a real email was provided, check if standard user already exists
+            if ($socialEmail) {
+                $existingUser = User::where('email', $socialEmail)->first();
+
+                if ($existingUser) {
+                    $existingUser->update([
+                        'provider'    => $providerName,
+                        'provider_id' => $providerId,
+                        'firstname'   => $existingUser->firstname ?? $socialUser->getName() ?? '',
+                    ]);
+
+                    return $existingUser;
+                }
+            }
+
+            // 3. Create a brand new user record
+            return User::create([
+                'name'         => $socialUser->getName() ?? 'User',
+                'firstname'    => $socialUser->getName() ?? 'User',
+                'email'        => $emailToSave,
+                'provider'     => $providerName,
+                'provider_id'  => $providerId,
+                'password'     => Hash::make(Str::random(24)),
+                'role_id'      => 6,
+                'is_active'    => 1,
+                'social_login' => 1,
             ]);
-            return $existingUser;
-        }
-
-        // 3. Create a brand new user
-        return User::create([
-            'name' => $socialUser->getName(),
-            'firstname' => $socialUser->getName(),
-            'email' => $socialUser->getEmail(),
-            'provider' => $provider,
-            'provider_id' => $socialUser->getId(),
-            // Secure random password since they use Social Login
-            'password' => Hash::make(Str::random(24)), 
-            'role_id' => 6,
-            'is_active' => 1,
-            'social_login' => 1,
-        ]);
+        });
     }
 }
-
-// namespace App\Http\Controllers\Auth;
-
-// use App\Http\Controllers\Controller;
-// use Illuminate\Support\Facades\Auth;
-// use Laravel\Socialite\Facades\Socialite;
-// use App\Models\User;
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Hash;
-
-// class SocialiteController extends Controller
-// {
-//     public function redirectToProvider($provider)
-//     {
-//         return Socialite::driver($provider)->redirect();
-//     }
-
-//     public function handleProviderCallback($provider)
-//     {
-//         try {
-//             $socialUser = Socialite::driver($provider)->stateless()->user();
-//         } catch (\Exception $e) {
-//             return redirect('/login')->withErrors(['msg' => 'Unable to login using ' . ucfirst($provider) . '. Please try again.']);
-//         }
-
-//         $authUser = $this->findOrCreateUser($socialUser, $provider);
-//         Auth::login($authUser, true);
-
-//         return redirect()->intended('/home');
-//     }
-
-//     public function findOrCreateUser($socialUser, $provider)
-//     {
-//         $authUser = User::where('provider_id', $socialUser->id)->first();
-//         if ($authUser) {
-//             return $authUser;
-//         }
-
-//         return User::create([
-//             'name' => $socialUser->name,
-//             'firstname' => $socialUser->name,
-//             'email' => $socialUser->email,
-//             'provider' => $provider,
-//             'provider_id' => $socialUser->id,
-//             'password' => Hash::make('password'),
-//             'role_id' => 1,
-//             'is_active' => 1,
-//         ]);
-//     }
-// }
-
