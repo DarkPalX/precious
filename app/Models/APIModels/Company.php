@@ -102,7 +102,7 @@ class Company extends Model
 
     return Cache::remember(
         'company_about_us',
-        now()->addDay(),
+       now()->addSeconds(30),
         function () {
 
             $query = DB::table('pages as pg')
@@ -125,7 +125,7 @@ public function getCompanyFAQ($data){
 
     return Cache::remember(
         'company_faq',
-        now()->addDay(),
+        now()->addSeconds(30),
         function () {
 
             $query = DB::table('pages as pg')
@@ -148,7 +148,7 @@ public function getCompanyPrivacyPolicy($data){
 
     return Cache::remember(
         'company_privacy_policy',
-        now()->addDay(),
+       now()->addSeconds(30),
         function () {
 
             $query = DB::table('pages as pg')
@@ -171,7 +171,7 @@ public function getCompanyTermsCondition($data){
 
     return Cache::remember(
         'company_terms_condition',
-        now()->addDay(),
+       now()->addSeconds(30),
         function () {
 
             $query = DB::table('pages as pg')
