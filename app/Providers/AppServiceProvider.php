@@ -61,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Strict API
-        // 15 requests per minute per authenticated user or IP
+        // 3 requests per minute per authenticated user or IP
         RateLimiter::for('api-strict', function (Request $request) {
             return Limit::perMinute(3)
                 ->by($request->user()?->id ?: $request->ip());
