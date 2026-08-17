@@ -35,70 +35,174 @@ use DB;
 
 class CartController extends Controller
 {
+    // public function add_to_cart(Request $request)
+    // {       
+    //     $product = Product::whereId((int) $request->product_id)->first();
+
+    //     $promo = DB::table('promos')
+    //         ->join('promo_products','promos.id','=','promo_products.promo_id')
+    //         ->where('promos.status','ACTIVE')
+    //         ->where('promos.is_expire',0)
+    //         ->where('promo_products.product_id',$request->product_id);
+
+    //     $discountedAmount = 0;
+    //     if($promo->count() > 0){
+    //         $discount = $promo->max('promos.discount');
+    //         $percentage = ($discount/100);
+    //         $discountedAmount = ($request->price * $percentage);
+    //         $price = number_format(($request->price - $discountedAmount), 2, '.', '');
+    //     } else {
+    //         $price = number_format($request->price, 2, '.', '');
+    //     }
+
+    //     if (auth()->check()) {
+    //         $cart = Cart::where('product_id', $request->product_id)
+    //             ->where('user_id', Auth::id())
+    //             ->first();
+
+    //         if (!empty($cart)) {
+    //             $newQty = $cart->qty + $request->qty;
+                
+    //             $save = $cart->update([
+    //                 'qty' => $newQty,
+    //                 'price' => $price
+    //             ]);
+    //             $cartId = $cart->id; // Define $cartId here
+    //         } else {
+    //             $cart = Cart::create([
+    //                 'product_id' => $request->product_id,
+    //                 'user_id' => Auth::id(),
+    //                 'qty' => $request->qty,
+    //                 'price' => $price,
+    //                 'discount_amount' => $discountedAmount
+    //             ]);
+    //             $cartId = $cart->id; // Define $cartId here
+    //         }
+    //     } else {
+    //         $cart = session('cart', []);
+    //         $not_exist = true;
+
+    //         foreach ($cart as $key => $order) {
+    //             if ($order->product_id == $request->product_id) {
+    //                 $cart[$key]->qty += $request->qty;
+    //                 $cart[$key]->price = $price;
+    //                 $not_exist = false;
+    //                 $cartId = $order->id; // Define $cartId here
+    //                 break;
+    //             }
+    //         }
+
+    //         if ($not_exist) {
+    //             $order = new \stdClass();
+    //             $order->product_id = $request->product_id;
+    //             $order->qty = $request->qty;
+    //             $order->price = $price;
+    //             array_push($cart, $order);
+    //             $cartId = $order->id; // Define $cartId here
+    //         }
+
+    //         session(['cart' => $cart]);
+    //     }
+
+    //     $inventory_remark = true;
+
+    //     //FOR AUTO APPLY COUPONS CONTINUE HERE
+
+    //     if ($inventory_remark) {
+    //         return response()->json([
+    //             'success' => true,
+    //             'cartId' => $cartId,
+    //             'totalItems' => Setting::EcommerceCartTotalItems()                
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'success' => false,
+    //             'totalItems' => Setting::EcommerceCartTotalItems()                
+    //         ]);
+    //     }
+    // }
+
     public function add_to_cart(Request $request)
     {       
-        $product = Product::whereId((int) $request->product_id)->first();
+        // Validate request inputs
+        $request->validate([
+            'product_id' => 'required|integer|exists:products,id',
+            'qty'        => 'required|integer|min:1',
+        ]);
 
-        $promo = DB::table('promos')
-            ->join('promo_products','promos.id','=','promo_products.promo_id')
-            ->where('promos.status','ACTIVE')
-            ->where('promos.is_expire',0)
-            ->where('promo_products.product_id',$request->product_id);
+        $product = Product::findOrFail((int) $request->product_id);
 
+        // Fetch active promo discount
+        $discount = DB::table('promos')
+            ->join('promo_products', 'promos.id', '=', 'promo_products.promo_id')
+            ->where('promos.status', 'ACTIVE')
+            ->where('promos.is_expire', 0)
+            ->where('promo_products.product_id', $product->id)
+            ->max('promos.discount');
+
+        // Calculate prices using database product price for security
+        $basePrice = $product->price; 
         $discountedAmount = 0;
-        if($promo->count() > 0){
-            $discount = $promo->max('promos.discount');
-            $percentage = ($discount/100);
-            $discountedAmount = ($request->price * $percentage);
-            $price = number_format(($request->price - $discountedAmount), 2, '.', '');
+
+        if ($discount > 0) {
+            $percentage = ($discount / 100);
+            $discountedAmount = ($basePrice * $percentage);
+            $finalPrice = number_format(($basePrice - $discountedAmount), 2, '.', '');
         } else {
-            $price = number_format($request->price, 2, '.', '');
+            $finalPrice = number_format($basePrice, 2, '.', '');
         }
 
+        $cartId = null;
+
         if (auth()->check()) {
-            $cart = Cart::where('product_id', $request->product_id)
+            $cart = Cart::where('product_id', $product->id)
                 ->where('user_id', Auth::id())
                 ->first();
 
-            if (!empty($cart)) {
-                $newQty = $cart->qty + $request->qty;
-                
-                $save = $cart->update([
-                    'qty' => $newQty,
-                    'price' => $price
+            if ($cart) {
+                $cart->update([
+                    'qty'             => $cart->qty + $request->qty,
+                    'price'           => $finalPrice,
+                    'discount_amount' => $discountedAmount,
                 ]);
-                $cartId = $cart->id; // Define $cartId here
+                $cartId = $cart->id;
             } else {
                 $cart = Cart::create([
-                    'product_id' => $request->product_id,
-                    'user_id' => Auth::id(),
-                    'qty' => $request->qty,
-                    'price' => $price,
-                    'discount_amount' => $discountedAmount
+                    'product_id'      => $product->id,
+                    'user_id'         => Auth::id(),
+                    'qty'             => $request->qty,
+                    'price'           => $finalPrice,
+                    'discount_amount' => $discountedAmount,
                 ]);
-                $cartId = $cart->id; // Define $cartId here
+                $cartId = $cart->id;
             }
         } else {
             $cart = session('cart', []);
-            $not_exist = true;
+            $found = false;
 
             foreach ($cart as $key => $order) {
-                if ($order->product_id == $request->product_id) {
+                if ($order->product_id == $product->id) {
                     $cart[$key]->qty += $request->qty;
-                    $cart[$key]->price = $price;
-                    $not_exist = false;
-                    $cartId = $order->id; // Define $cartId here
+                    $cart[$key]->price = $finalPrice;
+                    $cart[$key]->discount_amount = $discountedAmount;
+                    
+                    // Fallback to product_id or existing ID if present
+                    $cartId = $order->id ?? $order->product_id; 
+                    $found = true;
                     break;
                 }
             }
 
-            if ($not_exist) {
+            if (!$found) {
                 $order = new \stdClass();
-                $order->product_id = $request->product_id;
+                $order->id = (string) \Illuminate\Support\Str::uuid(); // Generate unique ID for guest item
+                $order->product_id = $product->id;
                 $order->qty = $request->qty;
-                $order->price = $price;
-                array_push($cart, $order);
-                $cartId = $order->id; // Define $cartId here
+                $order->price = $finalPrice;
+                $order->discount_amount = $discountedAmount;
+
+                $cart[] = $order;
+                $cartId = $order->id;
             }
 
             session(['cart' => $cart]);
@@ -106,20 +210,18 @@ class CartController extends Controller
 
         $inventory_remark = true;
 
-        //FOR AUTO APPLY COUPONS CONTINUE HERE
-
         if ($inventory_remark) {
             return response()->json([
-                'success' => true,
-                'cartId' => $cartId,
-                'totalItems' => Setting::EcommerceCartTotalItems()                
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'totalItems' => Setting::EcommerceCartTotalItems()                
+                'success'    => true,
+                'cartId'     => $cartId,
+                'totalItems' => Setting::EcommerceCartTotalItems(),
             ]);
         }
+
+        return response()->json([
+            'success'    => false,
+            'totalItems' => Setting::EcommerceCartTotalItems(),
+        ]);
     }
 
 
@@ -352,54 +454,105 @@ class CartController extends Controller
 
     public function cart_update(Request $request)
     {
-        $productCart = Cart::find($request->orderID);
-        if (auth()->check()) {            
-            if (Cart::where('user_id', auth()->id())->count() == 0) {
-                return;
+        $request->validate([
+            'orderID'  => 'required',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $inventory = 0;
+
+        if (auth()->check()) {
+            $cartItem = Cart::where('id', $request->orderID)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if ($cartItem) {
+                $cartItem->update([
+                    'qty' => $request->quantity
+                ]);
+
+                // Fetch inventory safely from product relationship or model query
+                $product = $cartItem->product ?? Product::find($cartItem->product_id);
+                $inventory = $product ? $product->inventory : 0;
             }
-
-            $qry = Cart::find($request->orderID);
-
-            $qry->update([
-                'qty' => $request->quantity
-            ]);
-
-            // $cart_qty = $qry->first();
-
-            // $price_before = $cart_qty->product->price*$cart_qty->qty;
-
-
-            // $carts = Cart::where('user_id', auth()->id())->get();
-            // $total_promo_discount = 0;
-            // $subtotal = 0;
-
-            // foreach($carts as $cart){
-
-            //     $promo_discount = $cart->product->price-$cart->product->discountedprice;
-            //     $total_promo_discount += $promo_discount*$cart->qty;
-            //     $subtotal += $cart->product->price*$cart->qty;
-            // }
         } else {
             $cart = session('cart', []);
-                foreach ($cart as $key => $order) {
-                    if ($order->product_id == $request->orderID) {
-                        $cart[$key]->qty = $request->quantity;
-                        break;
-                    }
+            $productId = null;
+
+            foreach ($cart as $key => $order) {
+                // Check both order id and product_id for guest items
+                if ((isset($order->id) && $order->id == $request->orderID) || $order->product_id == $request->orderID) {
+                    $cart[$key]->qty = $request->quantity;
+                    $productId = $order->product_id;
+                    break;
                 }
+            }
+
             session(['cart' => $cart]);
+
+            if ($productId) {
+                $product = Product::find($productId);
+                $inventory = $product ? $product->inventory : 0;
+            }
         }
 
         return response()->json([
-            'success' => true,
-            'maxOrder' => $productCart->product->inventory,
+            'success'    => true,
+            'maxOrder'   => $inventory,
             'totalItems' => Setting::EcommerceCartTotalItems()
-            // 'total_promo_discount' => $total_promo_discount,
-            // 'subtotal' => $subtotal,
-            // 'recordid' => $request->orderID,
-            // 'price_before' => $price_before        
         ]);
     }
+
+    // public function cart_update(Request $request)
+    // {
+    //     $productCart = Cart::find($request->orderID);
+    //     if (auth()->check()) {            
+    //         if (Cart::where('user_id', auth()->id())->count() == 0) {
+    //             return;
+    //         }
+
+    //         $qry = Cart::find($request->orderID);
+
+    //         $qry->update([
+    //             'qty' => $request->quantity
+    //         ]);
+
+    //         // $cart_qty = $qry->first();
+
+    //         // $price_before = $cart_qty->product->price*$cart_qty->qty;
+
+
+    //         // $carts = Cart::where('user_id', auth()->id())->get();
+    //         // $total_promo_discount = 0;
+    //         // $subtotal = 0;
+
+    //         // foreach($carts as $cart){
+
+    //         //     $promo_discount = $cart->product->price-$cart->product->discountedprice;
+    //         //     $total_promo_discount += $promo_discount*$cart->qty;
+    //         //     $subtotal += $cart->product->price*$cart->qty;
+    //         // }
+    //     } else {
+    //         $cart = session('cart', []);
+    //             foreach ($cart as $key => $order) {
+    //                 if ($order->product_id == $request->orderID) {
+    //                     $cart[$key]->qty = $request->quantity;
+    //                     break;
+    //                 }
+    //             }
+    //         session(['cart' => $cart]);
+    //     }
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'maxOrder' => $productCart->product->inventory,
+    //         'totalItems' => Setting::EcommerceCartTotalItems()
+    //         // 'total_promo_discount' => $total_promo_discount,
+    //         // 'subtotal' => $subtotal,
+    //         // 'recordid' => $request->orderID,
+    //         // 'price_before' => $price_before        
+    //     ]);
+    // }
 
     public function proceed_checkout(Request $request)
     {
