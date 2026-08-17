@@ -39,7 +39,7 @@ class Library extends Model
     // Build a cache key unique to this user + search combo
     $CacheKey = 'library_list_' . $UserID . '_' . md5($SearchText);
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(3), function () use ($UserID, $SearchText) {
+    $list = Cache::remember($CacheKey, now()->addSeconds(20), function () use ($UserID, $SearchText) {
 
         $query = DB::table('customer_libraries as lib')
           ->join('products as prds', 'prds.id', '=', 'lib.product_id')
