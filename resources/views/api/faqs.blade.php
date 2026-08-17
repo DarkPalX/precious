@@ -2,9 +2,9 @@
     .img-responsive {
         display: block;
         width: 100%;
-        max-width: 800px;
+        max-width: 400px;
         height: auto;
-        margin: 20px auto;
+        margin: 20px 0;
     }
 </style>
 
