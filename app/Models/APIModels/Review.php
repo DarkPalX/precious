@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+
 use Session;
 use Hash;
 use View;
 use Input;
 use Image;
-use DB;
 
 use App\Models\APIModels\Misc;
 use App\Models\APIModels\Book;
@@ -23,67 +25,77 @@ use App\Models\APIModels\UserCustomer;
 class Review extends Model
 {
   
-  public function getReviewList($data){
+ public function getReviewList($data){
     
-    $ProductID=$data['ProductID'];
+    $ProductID  = $data['ProductID'];
+    $Status     = $data['Status'];
+    $SearchText = $data['SearchText'];
     
-    $Status=$data['Status'];
-    $SearchText=$data['SearchText'];
-    
-    $Limit=$data['Limit'];
-    $PageNo=$data['PageNo'];
-    
-    $query = DB::table('product_reviews as revs')
-      ->join('users as usrs', 'usrs.id', '=', 'revs.user_id') 
-      // ->join('products as prds', 'prds.id', '=', 'revs.product_id') 
-    
-       ->selectraw("
-          revs.id as review_ID,
+    $Limit  = $data['Limit'];
+    $PageNo = $data['PageNo'];
 
-          COALESCE(usrs.avatar,'') as avatar,        
-          
-          COALESCE(revs.product_id,0) as product_id,
-          COALESCE(revs.product_name,'') as product_name,
-          COALESCE(revs.user_id,0) as user_id,
-          COALESCE(revs.name,'') as name,
-          COALESCE(revs.email,'') as email,
-          COALESCE(revs.comment,'') as comment,
-          COALESCE(revs.rating,0) as rating,
-          DATE_FORMAT(revs.created_at,'%m/%d/%Y %H:%i') as rating_date_format,
+    // Create unique cache key based on request parameters
+    $cacheKey = 'review_list_' . $ProductID . '_' . $Status . '_' . md5($SearchText);
 
-          COALESCE(revs.status,'') as status,        
-          COALESCE(revs.created_at,'') as created_at      
-          
-        ");    
+    return Cache::remember($cacheKey, now()->addMinutes(10), function () use (
+        $ProductID,
+        $Status,
+        $SearchText
+    ) {
 
-      $query->where("revs.product_id",'=',$ProductID);    
-      $query->where("revs.status",'=',1);    
-                            
+        $query = DB::table('product_reviews as revs')
+            ->join('users as usrs', 'usrs.id', '=', 'revs.user_id')
 
-      if($SearchText != ''){
-        $arSearchText = explode(" ",$SearchText);
-        if(count($arSearchText) > 0){
-            for($x=0; $x< count($arSearchText); $x++) {
-                $query->whereraw(
-                    "CONCAT_WS(' ',                        
-                        COALESCE(revs.product_name,''),                        
-                        COALESCE(revs.comment,'')
-                    ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
-             }
+            ->selectraw("
+                revs.id as review_ID,
+
+                COALESCE(usrs.avatar,'') as avatar,
+
+                COALESCE(revs.product_id,0) as product_id,
+                COALESCE(revs.product_name,'') as product_name,
+                COALESCE(revs.user_id,0) as user_id,
+                COALESCE(revs.name,'') as name,
+                COALESCE(revs.email,'') as email,
+                COALESCE(revs.comment,'') as comment,
+                COALESCE(revs.rating,0) as rating,
+
+                DATE_FORMAT(
+                    revs.created_at,
+                    '%m/%d/%Y %H:%i'
+                ) as rating_date_format,
+
+                COALESCE(revs.status,'') as status,
+                COALESCE(revs.created_at,'') as created_at
+            ");
+
+        $query->where('revs.product_id', '=', $ProductID);
+        $query->where('revs.status', '=', 1);
+
+        if($SearchText != ''){
+
+            $arSearchText = explode(" ", $SearchText);
+
+            if(count($arSearchText) > 0){
+
+                for($x = 0; $x < count($arSearchText); $x++) {
+
+                    $search = str_replace("'", "''", $arSearchText[$x]);
+
+                    $query->whereRaw(
+                        "CONCAT_WS(' ',
+                            COALESCE(revs.product_name,''),
+                            COALESCE(revs.comment,'')
+                        ) LIKE '%".$search."%'"
+                    );
+                }
+            }
         }
-    }
 
-    // if($Limit > 0){
-    //   $query->limit($Limit);
-    //   $query->offset(($PageNo-1) * $Limit);
-    // }
+        $query->orderBy('revs.created_at', 'DESC');
 
-    $query->orderBy("revs.created_at","DESC");    
-    $list = $query->limit(20)->get(); // get temp 50
-                             
-     return $list;             
-           
-  }
+        return $query->limit(50)->get();
+    });
+}
 
   public function doPostComment($data) {
 
