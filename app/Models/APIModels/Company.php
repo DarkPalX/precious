@@ -42,23 +42,23 @@ class Company extends Model
     
   // }
 
-  // public function getCompanyFAQ($data){
+  public function getCompanyFAQ($data){
 
-  //    $query = DB::table('pages as pg')
+     $query = DB::table('pages as pg')
          
-  //      ->selectraw("
-  //         pg.id as Page_ID,
-  //         COALESCE(pg.contents,'') as faq                        
-  //       ");    
+       ->selectraw("
+          pg.id as Page_ID,
+          COALESCE(pg.contents,'') as faq                        
+        ");    
        
-  //      $query->where("pg.status","=",'PUBLISHED');  
-  //      $query->where("pg.label","=",'FAQs');           
-  //      $query->where("pg.deleted_at","=",null);  
+       $query->where("pg.status","=",'PUBLISHED');  
+       $query->where("pg.label","=",'FAQs');           
+       $query->where("pg.deleted_at","=",null);  
      
-  //   $list = $query->first();                           
-  //    return $list;    
+    $list = $query->first();                           
+     return $list;    
     
-  // }
+  }
 
   // public function getCompanyPrivacyPolicy($data){
 
@@ -121,27 +121,27 @@ class Company extends Model
 }
 
 
-public function getCompanyFAQ($data){
+// public function getCompanyFAQ($data){
 
-    return Cache::remember(
-        'company_faq',
-        now()->addSeconds(30),
-        function () {
+//     return Cache::remember(
+//         'company_faq',
+//         now()->addSeconds(30),
+//         function () {
 
-            $query = DB::table('pages as pg')
-                ->selectraw("
-                    pg.id as Page_ID,
-                    COALESCE(pg.contents,'') as faq
-                ");
+//             $query = DB::table('pages as pg')
+//                 ->selectraw("
+//                     pg.id as Page_ID,
+//                     COALESCE(pg.contents,'') as faq
+//                 ");
 
-            $query->where("pg.status", "=", "PUBLISHED");
-            $query->where("pg.label", "=", "FAQs");
-            $query->whereNull("pg.deleted_at");
+//             $query->where("pg.status", "=", "PUBLISHED");
+//             $query->where("pg.label", "=", "FAQs");
+//             $query->whereNull("pg.deleted_at");
 
-            return $query->first();
-        }
-    );
-}
+//             return $query->first();
+//         }
+//     );
+// }
 
 
 public function getCompanyPrivacyPolicy($data){
