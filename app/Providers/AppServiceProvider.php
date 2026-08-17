@@ -53,18 +53,19 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
 
-        // General API
-        // 60 requests per minute per authenticated user or IP
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(30)
-                ->by($request->user()?->id ?: $request->ip());
-        });
+        // // General API
+        // // 30 requests per minute per authenticated user or IP
+        // RateLimiter::for('api', function (Request $request) {
+        //     return Limit::perMinute(30)
+        //         ->by($request->user()?->id ?: $request->ip());
+        // });
 
-        // Strict API
-        // 3 requests per minute per authenticated user or IP
-        RateLimiter::for('api-strict', function (Request $request) {
-            return Limit::perMinute(3)
-                ->by($request->user()?->id ?: $request->ip());
-        });
+        // // Strict API
+        // // 3 requests per minute per authenticated user or IP
+        // RateLimiter::for('api-strict', function (Request $request) {
+        //     return Limit::perMinute(3)
+        //         ->by($request->user()?->id ?: $request->ip());
+        // });
+        
     }
 }
