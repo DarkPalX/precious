@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\QueryException;
 
 use Session;
@@ -17,7 +19,7 @@ use Hash;
 use View;
 use Input;
 use Image;
-use DB;
+
 
 use App\Models\APIModels\Misc;
 use App\Models\APIModels\Email;
@@ -977,72 +979,141 @@ public function doRegisterSocial($data)
 
   // }
 
-  public function getCustomerInformation($data){
+  // public function getCustomerInformation($data){
         
-    $UserID = $data['UserID'];   
+  //   $UserID = $data['UserID'];   
 
-    $info = DB::table('users as usrs')              
+  //   $info = DB::table('users as usrs')              
     
-       ->selectraw("
-          usrs.id as user_ID,
+  //      ->selectraw("
+  //         usrs.id as user_ID,
 
-          COALESCE(usrs.firstname,'') as firstname,
-          COALESCE(usrs.lastname,'') as lastname,
-          COALESCE(usrs.name,'') as fullname,
-          COALESCE(usrs.avatar,'') as avatar,
+  //         COALESCE(usrs.firstname,'') as firstname,
+  //         COALESCE(usrs.lastname,'') as lastname,
+  //         COALESCE(usrs.name,'') as fullname,
+  //         COALESCE(usrs.avatar,'') as avatar,
 
-          COALESCE(usrs.email,'') as emailaddress,
-          COALESCE(usrs.email_verified_at,'') as email_verified_at,
-          COALESCE(usrs.password,'') as password,
-          COALESCE(usrs.mobile,'') as mobile,
-          COALESCE(usrs.phone,'') as phone,
+  //         COALESCE(usrs.email,'') as emailaddress,
+  //         COALESCE(usrs.email_verified_at,'') as email_verified_at,
+  //         COALESCE(usrs.password,'') as password,
+  //         COALESCE(usrs.mobile,'') as mobile,
+  //         COALESCE(usrs.phone,'') as phone,
 
-          COALESCE(usrs.birth_date,'') as birth_date,
-          DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-          DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
+  //         COALESCE(usrs.birth_date,'') as birth_date,
+  //         DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+  //         DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
 
-          COALESCE(usrs.address_street,'') as address_street,
-          COALESCE(usrs.address_city,'') as address_city,
-          COALESCE(usrs.address_municipality,'') as address_municipality,
-          COALESCE(usrs.address_province,'') as address_province,
-          COALESCE(usrs.address_zip,'') as address_zip,
+  //         COALESCE(usrs.address_street,'') as address_street,
+  //         COALESCE(usrs.address_city,'') as address_city,
+  //         COALESCE(usrs.address_municipality,'') as address_municipality,
+  //         COALESCE(usrs.address_province,'') as address_province,
+  //         COALESCE(usrs.address_zip,'') as address_zip,
 
-          COALESCE(usrs.ecredits,0) as ecredits,
-          COALESCE(usrs.verification_code,'') as verification_code,
-          COALESCE(usrs.remember_token,'') as remember_token,
+  //         COALESCE(usrs.ecredits,0) as ecredits,
+  //         COALESCE(usrs.verification_code,'') as verification_code,
+  //         COALESCE(usrs.remember_token,'') as remember_token,
           
-          COALESCE((
-               SELECT 
-                   COUNT(cart.qty) FROM 
-                      ecommerce_shopping_cart as cart                                    
-                  WHERE cart.user_id = usrs.id                           
-                  AND cart.qty=0 
-                  LIMIT 1
+  //         COALESCE((
+  //              SELECT 
+  //                  COUNT(cart.qty) FROM 
+  //                     ecommerce_shopping_cart as cart                                    
+  //                 WHERE cart.user_id = usrs.id                           
+  //                 AND cart.qty=0 
+  //                 LIMIT 1
                                               
-              )
-        ,0) as item_cart,
+  //             )
+  //       ,0) as item_cart,
 
-        COALESCE((
-               SELECT 
-                   COUNT(mssg_notif.id ) FROM 
-                      message_notification as mssg_notif                                    
-                  WHERE mssg_notif.user_id = usrs.id                           
-                  AND mssg_notif.is_read=0 
-                  LIMIT 1
+  //       COALESCE((
+  //              SELECT 
+  //                  COUNT(mssg_notif.id ) FROM 
+  //                     message_notification as mssg_notif                                    
+  //                 WHERE mssg_notif.user_id = usrs.id                           
+  //                 AND mssg_notif.is_read=0 
+  //                 LIMIT 1
                                               
-              )
-         ,0) as item_message,
+  //             )
+  //        ,0) as item_message,
 
 
-          COALESCE(usrs.is_active,0) as is_active         
+  //         COALESCE(usrs.is_active,0) as is_active         
           
-        ")        
-        ->whereRaw('usrs.id =?',[$UserID])                                      
-        ->first();
+  //       ")        
+  //       ->whereRaw('usrs.id =?',[$UserID])                                      
+  //       ->first();
 
-    return $info;
+  //   return $info;
 
-  }
+  // }
+ 
+
+ public function getCustomerInformation($data){
+        
+    $UserID = $data['UserID'];
+
+    $cacheKey = 'customer_information_' . $UserID;
+
+    return Cache::remember(
+        $cacheKey,
+        now()->addSeconds(30),
+        function () use ($UserID) {
+
+            $info = DB::table('users as usrs')
+            
+                ->selectraw("
+                    usrs.id as user_ID,
+
+                    COALESCE(usrs.firstname,'') as firstname,
+                    COALESCE(usrs.lastname,'') as lastname,
+                    COALESCE(usrs.name,'') as fullname,
+                    COALESCE(usrs.avatar,'') as avatar,
+
+                    COALESCE(usrs.email,'') as emailaddress,
+                    COALESCE(usrs.email_verified_at,'') as email_verified_at,
+                    COALESCE(usrs.password,'') as password,
+                    COALESCE(usrs.mobile,'') as mobile,
+                    COALESCE(usrs.phone,'') as phone,
+
+                    COALESCE(usrs.birth_date,'') as birth_date,
+                    DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+                    DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
+
+                    COALESCE(usrs.address_street,'') as address_street,
+                    COALESCE(usrs.address_city,'') as address_city,
+                    COALESCE(usrs.address_municipality,'') as address_municipality,
+                    COALESCE(usrs.address_province,'') as address_province,
+                    COALESCE(usrs.address_zip,'') as address_zip,
+
+                    COALESCE(usrs.ecredits,0) as ecredits,
+                    COALESCE(usrs.verification_code,'') as verification_code,
+                    COALESCE(usrs.remember_token,'') as remember_token,
+
+                    COALESCE((
+                        SELECT COUNT(cart.qty)
+                        FROM ecommerce_shopping_cart as cart
+                        WHERE cart.user_id = usrs.id
+                        AND cart.qty = 0
+                        LIMIT 1
+                    ),0) as item_cart,
+
+                    COALESCE((
+                        SELECT COUNT(mssg_notif.id)
+                        FROM message_notification as mssg_notif
+                        WHERE mssg_notif.user_id = usrs.id
+                        AND mssg_notif.is_read = 0
+                        LIMIT 1
+                    ),0) as item_message,
+
+                    COALESCE(usrs.is_active,0) as is_active
+                ")
+
+                ->where('usrs.id', '=', $UserID)
+                ->first();
+
+            return $info;
+        }
+    );
+}
 
   public function getCustomerInformationByEmail($data)
 {
