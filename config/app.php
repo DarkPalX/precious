@@ -292,24 +292,24 @@ return [
     'EmailDebugMode' => '0',
 
     //PayPal Setting SandBox Environment TEST NI Developer
-    // 'PayPalSandBoxEnvironmentMode'=>true,  //TRUE meaning sandbox environment
-    // 'PayPalClientID'=>'AeBIXT1-kv9wfiws93iQQLuKMRYKv3ENXhnfixHpeV1xhiCbUvmoGpA4c7JmZqs1E7_WR3lHS_AfxRzH',
-    // 'PayPalSecretKey' =>'ENUU_-qN_S9kU3-K8jv8bI16NDQNAWtBFTrevAcHa9wyb0GBDfFuVayafXuzUoeLXES-wnePXnm-gLi3',
-    // 'PaypalReturnURL'=>'https://preciouspagesbookstore.com.ph/return',
-    // 'PaypalCancelURL'=>'https://preciouspagesbookstore.com.ph/cancel',
-    // 'PayPalCurrency'=>'PHP',
-    // 'PayPalCountryCode'=>'PH',
-
-    //===========================================================================
-
-    //PayPal Setting Live Environment NI PRECIOUS
-    'PayPalSandBoxEnvironmentMode'=>false, //FALSE meaning live environment
-    'PayPalClientID'=>'AQA2j0P4zaDuAAp38hP4PxyuvEtiszJBbk65NArwODHigueyFuyypla9TxAWpZvSeZ7QoGQirW9Ezvn6',
-    'PayPalSecretKey' =>'EHAkFcrJ_QeYU9fa5lfwL3_WvmFwFJ31GRFOTKD2XJwud5wcSmYtICZp_ns2ud-gzX1VTKeHMhMSvW2F',
+    'PayPalSandBoxEnvironmentMode'=>true,  //TRUE meaning sandbox environment
+    'PayPalClientID'=>'AeBIXT1-kv9wfiws93iQQLuKMRYKv3ENXhnfixHpeV1xhiCbUvmoGpA4c7JmZqs1E7_WR3lHS_AfxRzH',
+    'PayPalSecretKey' =>'ENUU_-qN_S9kU3-K8jv8bI16NDQNAWtBFTrevAcHa9wyb0GBDfFuVayafXuzUoeLXES-wnePXnm-gLi3',
     'PaypalReturnURL'=>'https://preciouspagesbookstore.com.ph/return',
     'PaypalCancelURL'=>'https://preciouspagesbookstore.com.ph/cancel',
     'PayPalCurrency'=>'PHP',
     'PayPalCountryCode'=>'PH',
+
+    //===========================================================================
+
+    //PayPal Setting Live Environment NI PRECIOUS
+    // 'PayPalSandBoxEnvironmentMode'=>false, //FALSE meaning live environment
+    // 'PayPalClientID'=>'AQA2j0P4zaDuAAp38hP4PxyuvEtiszJBbk65NArwODHigueyFuyypla9TxAWpZvSeZ7QoGQirW9Ezvn6',
+    // 'PayPalSecretKey' =>'EHAkFcrJ_QeYU9fa5lfwL3_WvmFwFJ31GRFOTKD2XJwud5wcSmYtICZp_ns2ud-gzX1VTKeHMhMSvW2F',
+    // 'PaypalReturnURL'=>'https://preciouspagesbookstore.com.ph/return',
+    // 'PaypalCancelURL'=>'https://preciouspagesbookstore.com.ph/cancel',
+    // 'PayPalCurrency'=>'PHP',
+    // 'PayPalCountryCode'=>'PH',
 
     //SHOW/HIDE SETTING
     'ShowGoogleLogin'=>'N',
