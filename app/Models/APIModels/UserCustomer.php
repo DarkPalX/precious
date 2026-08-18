@@ -901,22 +901,20 @@ public function doRegisterSocial($data)
 {
     $Misc  = new Misc();
     $TODAY = date('Y-m-d H:i:s');
-
     $FirstName    = trim($data['FirstName']);
     $LastName     = trim($data['LastName']);
     $FullName     = trim($data['FullName']);
     $EmailAddress = strtolower(trim($data['EmailAddress']));
     $SocialMedia  = trim($data['SocialMedia']);
-   
 
-   //DB Lock trans
+    //DB Lock trans
     return DB::transaction(function () use (
-        $Misc, $TODAY, $FirstName, $LastName, $FullName, $EmailAddress, $SocialMedia) 
+        $Misc, $TODAY, $FirstName, $LastName, $FullName, $EmailAddress, $SocialMedia)
     {
-        
+
         $ExistingUser = DB::table('users')
             ->useWritePdo()
-            ->where('users.email = ?', [$EmailAddress])
+            ->where('users.email', $EmailAddress)
             ->lockForUpdate()
             ->first();
 
@@ -926,9 +924,7 @@ public function doRegisterSocial($data)
 
         //$VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
         $VerificationCode = random_int(1000, 9999);
-
         try {
-
             $UserID = DB::table('users')->insertGetId([
                 'firstname'         => $FirstName,
                 'lastname'          => $LastName,
@@ -943,20 +939,15 @@ public function doRegisterSocial($data)
                 'created_at'        => $TODAY,
                 'updated_at'        => $TODAY,
             ]);
-
         } catch (QueryException $e) {
-
             $MySqlErrorCode    = (int) ($e->errorInfo[1] ?? 0);
             $MySqlErrorMessage = (string) ($e->errorInfo[2] ?? $e->getMessage());
-
             if (
                 $MySqlErrorCode === 1062 &&
                 strpos($MySqlErrorMessage, 'users_email_unique') !== false
             ) {
-               
                 return 'Success';
             }
-
             throw $e;
         }
 
