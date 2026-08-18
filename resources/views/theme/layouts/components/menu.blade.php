@@ -18,4 +18,10 @@
     {{-- <li class="menu-item" @if(!auth()->user()) hidden @endif>
         <a class="menu-link" href="{{ route('customer.subscription') }}"><div>Subscriptions</div></a>
     </li> --}}
+
+    @if(session('is_ios'))
+        <li class="menu-item">
+            <a class="menu-link" href="{{ route('product.front.ebook-list') }}"><div>E-Books</div></a>
+        </li>
+    @endif
 </ul>
