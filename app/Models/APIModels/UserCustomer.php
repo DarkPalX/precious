@@ -1167,7 +1167,7 @@ public function getCustomerInformation($data){
 
     return Cache::remember(
         $cacheKey,
-        now()->addSeconds(60),
+        now()->addSeconds(30),
         function () use ($UserID) {
             $info = DB::table('users as usrs')
                 ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
