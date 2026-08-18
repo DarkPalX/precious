@@ -260,10 +260,11 @@ public function getUserLoginPassword($EmailAddress){
     $EmailAddress = $data['EmailAddress'];
 
     //GENERATE RANDOM PASSWORD
-     $Misc = new Misc();
-     $GeneratedTempPassword=$Misc->GenerateRandomNo(6,'users','verification_code');  
+     //$Misc = new Misc();
+     //$GeneratedTempPassword=$Misc->GenerateRandomNo(6,'users','verification_code');  
 
      //SET BYCRYPT PASSWORD
+     $GeneratedTempPassword = random_int(100000, 999999);
      $NewPassword=bcrypt($GeneratedTempPassword);
   
      $usersID = DB::table('users')          
@@ -300,10 +301,11 @@ public function getUserLoginPassword($EmailAddress){
     $EmailAddress = $data['EmailAddress'];
 
     //GENERATE RANDOM PASSWORD
-     $Misc = new Misc();
-     $GeneratedTempPassword=$Misc->GenerateRandomNo(4,'users','verification_code');  
+     //$Misc = new Misc();
+     //$GeneratedTempPassword=$Misc->GenerateRandomNo(4,'users','verification_code');  
 
      //SET BYCRYPT PASSWORD
+     $GeneratedTempPassword = random_int(1000, 9999);
      $NewPassword=bcrypt($GeneratedTempPassword);
   
      $UserID = DB::table('users')          
@@ -465,16 +467,18 @@ public function getUserLoginPassword($EmailAddress){
 
   public function doResendVerificationCode($data){
           
-    $Misc=new Misc();   
     $usersID  = $data['UserID'];
     $EmailAddress  = $data['EmailAddress'];
     
-    $NewVerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
+    //$Misc=new Misc(); 
+    //$NewVerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
 
-   if ($NewVerificationCode == '') {
-      $NewVerificationCode = rand(1000, 9999);
-   }
-
+   // if ($NewVerificationCode == '') {
+   //    $NewVerificationCode = rand(1000, 9999);
+   // }
+    
+    $NewVerificationCode = rand(1000, 9999);
+    
     if($usersID>0){
         DB::table('users')
            ->whereRaw('id = ?',[$usersID])
