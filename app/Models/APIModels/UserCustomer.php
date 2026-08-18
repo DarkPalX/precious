@@ -555,9 +555,7 @@ public function doRegisterCustomer($data)
     $FirstName = trim($data['FirstName'] ?? '');
     $LastName = trim($data['LastName'] ?? '');
     $FullName = trim($data['FullName'] ?? '');
-    $EmailAddress = strtolower(
-        trim($data['EmailAddress'] ?? '')
-    );
+    $EmailAddress = strtolower(trim($data['EmailAddress'] ?? ''));
     $MobileNo = trim($data['MobileNo'] ?? '');
     $Password = trim($data['Password'] ?? '');
  
@@ -617,6 +615,7 @@ public function doRegisterCustomer($data)
                 ]);
  
             if ($UpdatedRows === 0) {
+
                 $UserExists = DB::table('users')
                     ->useWritePdo()
                     ->where('id', $UserID)
@@ -682,11 +681,8 @@ public function doRegisterCustomer($data)
                 return null;
             }
  
-            $VerificationCode = $Misc->GenerateRandomNo(
-                4,
-                'users',
-                'verification_code'
-            );
+            //$VerificationCode = $Misc->GenerateRandomNo(4,'users','verification_code');
+            $VerificationCode = random_int(1000, 9999);
  
             $NewUserID = DB::table('users')
                 ->insertGetId([
@@ -721,6 +717,7 @@ public function doRegisterCustomer($data)
             ]);
  
             return [
+
                 'user_id' => $NewUserID,
                 'verification_code' => $VerificationCode,
             ];
@@ -944,7 +941,7 @@ public function doRegisterSocial($data)
         
         $ExistingUser = DB::table('users')
             ->useWritePdo()
-            ->whereRaw('LOWER(TRIM(email)) = ?', [$EmailAddress])
+            ->where('usrs.email = ?', [$EmailAddress])
             ->lockForUpdate()
             ->first();
 
@@ -952,7 +949,8 @@ public function doRegisterSocial($data)
             return 'Success';
         }
 
-        $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
+        //$VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
+        $VerificationCode = random_int(1000, 9999);
 
         try {
 
@@ -1263,7 +1261,7 @@ public function getCustomerInformation($data){
 
 public function getCustomerInformationByEmail($data)
 {
-    $EmailAddress = strtolower(trim($data['EmailAddress']));
+  $EmailAddress = strtolower(trim($data['EmailAddress']));
 
     $info = DB::table('users as usrs')
         ->useWritePdo()
@@ -1297,7 +1295,7 @@ public function getCustomerInformationByEmail($data)
 
             COALESCE(usrs.is_active,0) as is_active
         ")
-        ->whereRaw('LOWER(TRIM(usrs.email)) = ?', [$EmailAddress])
+        ->where('usrs.email = ?', [$EmailAddress])
         ->first();
 
     return $info;
