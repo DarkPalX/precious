@@ -1649,56 +1649,82 @@ public function saveSearchKeyword($data){
     $TODAY = date("Y-m-d H:i:s");
 
     $Keywords = ucwords(strtolower($data['Keywords']));   
-    $UserID=$data['UserID'];         
+    $UserID=$data['UserID'];  
 
+    $SearchKeywordID = DB::table('searched_keywords')
+            ->insertGetId([                                            
+              'customer_id' => $UserID,              
+              'keyword' => $Keywords,                                                                                                                                                          
+              'created_at' => $TODAY             
+            ]);        
 
-   $info = DB::table('searched_keywords')          
-        ->whereRaw('customer_id=?',[$UserID])    
-        ->whereRaw('keyword=?',[$Keywords])          
-        ->first();
+   // $info = DB::table('searched_keywords')          
+   //      ->whereRaw('customer_id=?',[$UserID])    
+   //      ->whereRaw('keyword=?',[$Keywords])          
+   //      ->first();
 
-    if(isset($info)>0){
+   //  if(isset($info)>0){
 
-        DB::table('searched_keywords')
-        ->where('customer_id',$UserID)
-        ->where('keyword',$Keywords)
-        ->update([                                                       
-         'created_at' => $TODAY  
-       ]);   
+   //      DB::table('searched_keywords')
+   //      ->where('customer_id',$UserID)
+   //      ->where('keyword',$Keywords)
+   //      ->update([                                                       
+   //       'created_at' => $TODAY  
+   //     ]);   
     
-    }else{
+   //  }else{
 
-     $SearchKeywordID = DB::table('searched_keywords')
-        ->insertGetId([                                            
-          'customer_id' => $UserID,              
-          'keyword' => $Keywords,                                                                                                                                                          
-          'created_at' => $TODAY             
-        ]); 
-      }
+   //   $SearchKeywordID = DB::table('searched_keywords')
+   //      ->insertGetId([                                            
+   //        'customer_id' => $UserID,              
+   //        'keyword' => $Keywords,                                                                                                                                                          
+   //        'created_at' => $TODAY             
+   //      ]); 
+   //    }
       
    }
   
-  public function getCustomerSearchKeyWords($data){
+  // public function getCustomerSearchKeyWords($data){
 
-    $TODAY = date("Y-m-d H:i:s");
-    $UserID=$data['UserID']; 
+  //   $TODAY = date("Y-m-d H:i:s");
+  //   $UserID=$data['UserID']; 
      
-      $query = DB::table('searched_keywords as kywrd')    
+  //     $query = DB::table('searched_keywords as kywrd')    
 
-       ->selectraw("
-          kywrd.id  as Keyword_ID,
+  //      ->selectraw("
+  //         kywrd.id  as Keyword_ID,
 
-          COALESCE(kywrd.keyword,'') as Keyword,          
-          COALESCE(kywrd.customer_id,0) as CustomerID
+  //         COALESCE(kywrd.keyword,'') as Keyword,          
+  //         COALESCE(kywrd.customer_id,0) as CustomerID
+  //       ");
+
+  //     $query->whereRaw("kywrd.customer_id =?",[$UserID]);   
+  //     $query->orderBy("kywrd.created_at","DESC");   
+
+  //     $list = $query->get();
+                             
+  //    return $list;  
+
+  // }
+
+   public function getCustomerSearchKeyWords($data)
+{
+    $UserID = $data['UserID'];
+
+    $query = DB::table('searched_keywords as kywrd')
+        ->selectRaw("
+            kywrd.id as Keyword_ID,
+            COALESCE(kywrd.keyword, '') as Keyword,
+            COALESCE(kywrd.customer_id, 0) as CustomerID
         ");
 
-      $query->whereRaw("kywrd.customer_id =?",[$UserID]);   
-      $query->orderBy("kywrd.created_at","DESC");   
+    $query->where('kywrd.customer_id', $UserID);
+    $query->orderBy('kywrd.created_at', 'DESC');
+    $query->limit(8);
 
-      $list = $query->get();
-                             
-     return $list;  
+    $list = $query->get();
 
-  }
+    return $list;
+}
 
 }
