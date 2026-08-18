@@ -136,127 +136,102 @@ public function getUserLoginPassword($EmailAddress){
 
   // }
 
-  // public function doCheckUserLogin($data){
-    
-  //   $IsVerified = "Failed";
-  //   $Platform = $data['Platform'];
-     
-  //   $EmailAddress = $data['EmailAddress'];
-  //   $UserPassword = bcrypt($data['Password']);
-
-  //   $info = DB::table('users as usrs')   
-    
-  //      ->selectraw("
-  //         usrs.id as user_ID,
-
-  //         COALESCE(usrs.firstname,'') as firstname,
-  //         COALESCE(usrs.lastname,'') as lastname,
-  //         COALESCE(usrs.name,'') as fullname,
-  //         COALESCE(usrs.avatar,'') as avatar,
-
-  //         COALESCE(usrs.email,'') as emailaddress,
-  //         COALESCE(usrs.email_verified_at,'') as email_verified_at,
-  //         COALESCE(usrs.password,'') as password,
-  //         COALESCE(usrs.mobile,'') as mobile,
-  //         COALESCE(usrs.phone,'') as phone,
-
-  //         COALESCE(usrs.birth_date,'') as birth_date,
-  //         DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-  //         DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-
-  //         COALESCE(usrs.address_street,'') as address_street,
-  //         COALESCE(usrs.address_city,'') as address_city,
-  //         COALESCE(usrs.address_municipality,'') as address_municipality,
-  //         COALESCE(usrs.address_province,'') as address_province,
-  //         COALESCE(usrs.address_zip,'') as address_zip,
-        
-  //         COALESCE(usrs.ecredits,0) as ecredits,
-  //         COALESCE(usrs.verification_code,'') as verification_code,
-  //         COALESCE(usrs.remember_token,'') as remember_token,
-      
-  //         COALESCE((
-  //              SELECT 
-  //                  COUNT(cart.qty) FROM 
-  //                     ecommerce_shopping_cart as cart                                    
-  //                 WHERE cart.user_id = usrs.id                           
-  //                 AND cart.qty=0 
-  //                 LIMIT 1
-                                              
-  //             )
-  //       ,0) as item_cart,
-
-  //       COALESCE((
-  //              SELECT 
-  //                  COUNT(mssg_notif.id ) FROM 
-  //                     message_notification as mssg_notif                                    
-  //                 WHERE mssg_notif.user_id = usrs.id                           
-  //                 AND mssg_notif.is_read=0 
-  //                 LIMIT 1
-                                              
-  //             )
-  //        ,0) as item_message,
-
-  //         COALESCE(usrs.is_active,0) as is_active          
-          
-  //       ")                
-  //       ->whereRaw('usrs.email =?',[$EmailAddress])                
-  //       ->whereRaw('usrs.password=?',[$UserPassword])
-  //       ->where('usrs.is_active',1)                
-  //       ->first();
-
-  //   return $info;
-
-  // }
-
   public function doCheckUserLogin($data){
-
     $IsVerified = "Failed";
     $Platform = $data['Platform'];
-
     $EmailAddress = $data['EmailAddress'];
     $UserPassword = bcrypt($data['Password']);
 
-    $info = DB::table('users as usrs')
-        ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
-        ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
-        ->selectraw("
+    $cacheKey = 'user_login_check_' . md5(strtolower(trim($EmailAddress)) . '_' . $UserPassword);
 
-            usrs.id as user_ID,
-            COALESCE(usrs.firstname,'') as firstname,
-            COALESCE(usrs.lastname,'') as lastname,
-            COALESCE(usrs.name,'') as fullname,
-            COALESCE(usrs.avatar,'') as avatar,
-            COALESCE(usrs.email,'') as emailaddress,
-            COALESCE(usrs.email_verified_at,'') as email_verified_at,
-            COALESCE(usrs.password,'') as password,
-            COALESCE(usrs.mobile,'') as mobile,
-            COALESCE(usrs.phone,'') as phone,
-
-            COALESCE(usrs.birth_date,'') as birth_date,
-            DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-            DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-            COALESCE(usrs.address_street,'') as address_street,
-            COALESCE(usrs.address_city,'') as address_city,
-            COALESCE(usrs.address_municipality,'') as address_municipality,
-            COALESCE(usrs.address_province,'') as address_province,
-            COALESCE(usrs.address_zip,'') as address_zip,
-
-            COALESCE(usrs.ecredits,0) as ecredits,
-            COALESCE(usrs.verification_code,'') as verification_code,
-            COALESCE(usrs.remember_token,'') as remember_token,
-
-            COALESCE(cart.item_cart, 0) as item_cart,
-            COALESCE(msg.item_message, 0) as item_message,
-
-            COALESCE(usrs.is_active,0) as is_active
-        ")
-        ->whereRaw('usrs.email = ?', [$EmailAddress])
-        ->whereRaw('usrs.password = ?', [$UserPassword])
-        ->where('usrs.is_active', 1)
-        ->first();
+    $info = Cache::remember($cacheKey, now()->addSeconds(60), function () use ($EmailAddress, $UserPassword) {
+        return DB::table('users as usrs')
+            ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
+            ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
+            ->selectraw("
+                usrs.id as user_ID,
+                COALESCE(usrs.firstname,'') as firstname,
+                COALESCE(usrs.lastname,'') as lastname,
+                COALESCE(usrs.name,'') as fullname,
+                COALESCE(usrs.avatar,'') as avatar,
+                COALESCE(usrs.email,'') as emailaddress,
+                COALESCE(usrs.email_verified_at,'') as email_verified_at,
+                COALESCE(usrs.password,'') as password,
+                COALESCE(usrs.mobile,'') as mobile,
+                COALESCE(usrs.phone,'') as phone,
+                COALESCE(usrs.birth_date,'') as birth_date,
+                DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+                DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
+                COALESCE(usrs.address_street,'') as address_street,
+                COALESCE(usrs.address_city,'') as address_city,
+                COALESCE(usrs.address_municipality,'') as address_municipality,
+                COALESCE(usrs.address_province,'') as address_province,
+                COALESCE(usrs.address_zip,'') as address_zip,
+                COALESCE(usrs.ecredits,0) as ecredits,
+                COALESCE(usrs.verification_code,'') as verification_code,
+                COALESCE(usrs.remember_token,'') as remember_token,
+                COALESCE(cart.item_cart, 0) as item_cart,
+                COALESCE(msg.item_message, 0) as item_message,
+                COALESCE(usrs.is_active,0) as is_active
+            ")
+            ->whereRaw('usrs.email = ?', [$EmailAddress])
+            ->whereRaw('usrs.password = ?', [$UserPassword])
+            ->where('usrs.is_active', 1)
+            ->first();
+    });
 
     return $info;
 }
+
+//   public function doCheckUserLogin($data){
+
+//     $IsVerified = "Failed";
+//     $Platform = $data['Platform'];
+
+//     $EmailAddress = $data['EmailAddress'];
+//     $UserPassword = bcrypt($data['Password']);
+
+//     $info = DB::table('users as usrs')
+//         ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
+//         ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
+//         ->selectraw("
+
+//             usrs.id as user_ID,
+//             COALESCE(usrs.firstname,'') as firstname,
+//             COALESCE(usrs.lastname,'') as lastname,
+//             COALESCE(usrs.name,'') as fullname,
+//             COALESCE(usrs.avatar,'') as avatar,
+//             COALESCE(usrs.email,'') as emailaddress,
+//             COALESCE(usrs.email_verified_at,'') as email_verified_at,
+//             COALESCE(usrs.password,'') as password,
+//             COALESCE(usrs.mobile,'') as mobile,
+//             COALESCE(usrs.phone,'') as phone,
+
+//             COALESCE(usrs.birth_date,'') as birth_date,
+//             DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+//             DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
+//             COALESCE(usrs.address_street,'') as address_street,
+//             COALESCE(usrs.address_city,'') as address_city,
+//             COALESCE(usrs.address_municipality,'') as address_municipality,
+//             COALESCE(usrs.address_province,'') as address_province,
+//             COALESCE(usrs.address_zip,'') as address_zip,
+
+//             COALESCE(usrs.ecredits,0) as ecredits,
+//             COALESCE(usrs.verification_code,'') as verification_code,
+//             COALESCE(usrs.remember_token,'') as remember_token,
+
+//             COALESCE(cart.item_cart, 0) as item_cart,
+//             COALESCE(msg.item_message, 0) as item_message,
+
+//             COALESCE(usrs.is_active,0) as is_active
+//         ")
+//         ->whereRaw('usrs.email = ?', [$EmailAddress])
+//         ->whereRaw('usrs.password = ?', [$UserPassword])
+//         ->where('usrs.is_active', 1)
+//         ->first();
+
+//     return $info;
+// }
 
   public function doForgotPassword($data){
         
@@ -1218,7 +1193,7 @@ public function getCustomerInformation($data){
 
     return Cache::remember(
         $cacheKey,
-        now()->addSeconds(30),
+        now()->addSeconds(60),
         function () use ($UserID) {
             $info = DB::table('users as usrs')
                 ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
@@ -1259,105 +1234,88 @@ public function getCustomerInformation($data){
     );
 }
 
-public function getCustomerInformationByEmail($data)
-{
-  $EmailAddress = strtolower(trim($data['EmailAddress']));
-
-    $info = DB::table('users as usrs')
-        ->useWritePdo()
-        ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
-        ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
-        ->selectraw("
-            usrs.id as user_ID,
-            COALESCE(usrs.firstname,'') as firstname,
-            COALESCE(usrs.lastname,'') as lastname,
-            COALESCE(usrs.name,'') as fullname,
-            COALESCE(usrs.avatar,'') as avatar,
-            COALESCE(usrs.email,'') as emailaddress,
-            COALESCE(usrs.email_verified_at,'') as email_verified_at,
-            COALESCE(usrs.password,'') as password,
-            COALESCE(usrs.mobile,'') as mobile,
-            COALESCE(usrs.phone,'') as phone,
-            COALESCE(usrs.birth_date,'') as birth_date,
-            DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-            DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-            COALESCE(usrs.address_street,'') as address_street,
-            COALESCE(usrs.address_city,'') as address_city,
-            COALESCE(usrs.address_municipality,'') as address_municipality,
-            COALESCE(usrs.address_province,'') as address_province,
-            COALESCE(usrs.address_zip,'') as address_zip,
-            COALESCE(usrs.ecredits,0) as ecredits,
-            COALESCE(usrs.verification_code,'') as verification_code,
-            COALESCE(usrs.remember_token,'') as remember_token,
-
-            COALESCE(cart.item_cart, 0) as item_cart,
-            COALESCE(msg.item_message, 0) as item_message,
-
-            COALESCE(usrs.is_active,0) as is_active
-        ")
-        ->where('usrs.email = ?', [$EmailAddress])
-        ->first();
-
-    return $info;
-}
-
-//   public function getCustomerInformationByEmail($data)
+// public function getCustomerInformationByEmail($data)
 // {
-//     $EmailAddress = strtolower(trim($data['EmailAddress']));
+//   $EmailAddress = strtolower(trim($data['EmailAddress']));
 
 //     $info = DB::table('users as usrs')
 //         ->useWritePdo()
+//         ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
+//         ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
 //         ->selectraw("
-//           usrs.id as user_ID,
-//           COALESCE(usrs.firstname,'') as firstname,
-//           COALESCE(usrs.lastname,'') as lastname,
-//           COALESCE(usrs.name,'') as fullname,
-//           COALESCE(usrs.avatar,'') as avatar,
-//           COALESCE(usrs.email,'') as emailaddress,
-//           COALESCE(usrs.email_verified_at,'') as email_verified_at,
-//           COALESCE(usrs.password,'') as password,
-//           COALESCE(usrs.mobile,'') as mobile,
-//           COALESCE(usrs.phone,'') as phone,
-//           COALESCE(usrs.birth_date,'') as birth_date,
-//           DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-//           DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-//           COALESCE(usrs.address_street,'') as address_street,
-//           COALESCE(usrs.address_city,'') as address_city,
-//           COALESCE(usrs.address_municipality,'') as address_municipality,
-//           COALESCE(usrs.address_province,'') as address_province,
-//           COALESCE(usrs.address_zip,'') as address_zip,
-//           COALESCE(usrs.ecredits,0) as ecredits,
-//           COALESCE(usrs.verification_code,'') as verification_code,
-//           COALESCE(usrs.remember_token,'') as remember_token,
+//             usrs.id as user_ID,
+//             COALESCE(usrs.firstname,'') as firstname,
+//             COALESCE(usrs.lastname,'') as lastname,
+//             COALESCE(usrs.name,'') as fullname,
+//             COALESCE(usrs.avatar,'') as avatar,
+//             COALESCE(usrs.email,'') as emailaddress,
+//             COALESCE(usrs.email_verified_at,'') as email_verified_at,
+//             COALESCE(usrs.password,'') as password,
+//             COALESCE(usrs.mobile,'') as mobile,
+//             COALESCE(usrs.phone,'') as phone,
+//             COALESCE(usrs.birth_date,'') as birth_date,
+//             DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+//             DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
+//             COALESCE(usrs.address_street,'') as address_street,
+//             COALESCE(usrs.address_city,'') as address_city,
+//             COALESCE(usrs.address_municipality,'') as address_municipality,
+//             COALESCE(usrs.address_province,'') as address_province,
+//             COALESCE(usrs.address_zip,'') as address_zip,
+//             COALESCE(usrs.ecredits,0) as ecredits,
+//             COALESCE(usrs.verification_code,'') as verification_code,
+//             COALESCE(usrs.remember_token,'') as remember_token,
 
-//           COALESCE((
-//                SELECT
-//                    COUNT(cart.qty) FROM
-//                       ecommerce_shopping_cart as cart
-//                   WHERE cart.user_id = usrs.id
-//                   AND cart.qty=0
-//                   LIMIT 1
+//             COALESCE(cart.item_cart, 0) as item_cart,
+//             COALESCE(msg.item_message, 0) as item_message,
 
-//               )
-//         ,0) as item_cart,
-//         COALESCE((
-//                SELECT
-//                    COUNT(mssg_notif.id ) FROM
-//                       message_notification as mssg_notif
-//                   WHERE mssg_notif.user_id = usrs.id
-//                   AND mssg_notif.is_read=0
-//                   LIMIT 1
-
-//               )
-//          ,0) as item_message,
-//           COALESCE(usrs.is_active,0) as is_active
-
+//             COALESCE(usrs.is_active,0) as is_active
 //         ")
-//         ->whereRaw('LOWER(TRIM(usrs.email)) = ?', [$EmailAddress])
+//         ->where('usrs.email = ?', [$EmailAddress])
 //         ->first();
 
 //     return $info;
 // }
+
+public function getCustomerInformationByEmail($data)
+{
+    $EmailAddress = strtolower(trim($data['EmailAddress']));
+    $cacheKey = 'customer_information_email_' . md5($EmailAddress);
+
+    return Cache::remember($cacheKey, now()->addSeconds(60), function () use ($EmailAddress) {
+        return DB::table('users as usrs')
+            ->useWritePdo()
+            ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
+            ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
+            ->selectraw("
+                usrs.id as user_ID,
+                COALESCE(usrs.firstname,'') as firstname,
+                COALESCE(usrs.lastname,'') as lastname,
+                COALESCE(usrs.name,'') as fullname,
+                COALESCE(usrs.avatar,'') as avatar,
+                COALESCE(usrs.email,'') as emailaddress,
+                COALESCE(usrs.email_verified_at,'') as email_verified_at,
+                COALESCE(usrs.password,'') as password,
+                COALESCE(usrs.mobile,'') as mobile,
+                COALESCE(usrs.phone,'') as phone,
+                COALESCE(usrs.birth_date,'') as birth_date,
+                DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
+                DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
+                COALESCE(usrs.address_street,'') as address_street,
+                COALESCE(usrs.address_city,'') as address_city,
+                COALESCE(usrs.address_municipality,'') as address_municipality,
+                COALESCE(usrs.address_province,'') as address_province,
+                COALESCE(usrs.address_zip,'') as address_zip,
+                COALESCE(usrs.ecredits,0) as ecredits,
+                COALESCE(usrs.verification_code,'') as verification_code,
+                COALESCE(usrs.remember_token,'') as remember_token,
+                COALESCE(cart.item_cart, 0) as item_cart,
+                COALESCE(msg.item_message, 0) as item_message,
+                COALESCE(usrs.is_active,0) as is_active
+            ")
+            ->whereRaw('usrs.email = ?', [$EmailAddress])
+            ->first();
+    });
+}
 
   //subscription plan status
   public function getCustomerCurrentSubscriptionInfo($UserID){
@@ -1708,7 +1666,7 @@ public function saveSearchKeyword($data){
   // }
 
    public function getCustomerSearchKeyWords($data)
-{
+   {
     $UserID = $data['UserID'];
 
     $query = DB::table('searched_keywords as kywrd')
@@ -1725,6 +1683,6 @@ public function saveSearchKeyword($data){
     $list = $query->get();
 
     return $list;
-}
+  }
 
 }
