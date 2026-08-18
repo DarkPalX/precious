@@ -1642,47 +1642,47 @@ public function saveSearchKeyword($data){
       
    }
   
-  // public function getCustomerSearchKeyWords($data){
 
-  //   $TODAY = date("Y-m-d H:i:s");
-  //   $UserID=$data['UserID']; 
-     
-  //     $query = DB::table('searched_keywords as kywrd')    
+  //  public function getCustomerSearchKeyWords($data)
+  //  {
+  //   $UserID = $data['UserID'];
 
-  //      ->selectraw("
-  //         kywrd.id  as Keyword_ID,
-
-  //         COALESCE(kywrd.keyword,'') as Keyword,          
-  //         COALESCE(kywrd.customer_id,0) as CustomerID
+  //   $query = DB::table('searched_keywords as kywrd')
+  //       ->selectRaw("
+  //           kywrd.id as Keyword_ID,
+  //           COALESCE(kywrd.keyword, '') as Keyword,
+  //           COALESCE(kywrd.customer_id, 0) as CustomerID
   //       ");
 
-  //     $query->whereRaw("kywrd.customer_id =?",[$UserID]);   
-  //     $query->orderBy("kywrd.created_at","DESC");   
+  //   $query->where('kywrd.customer_id', $UserID);
+  //   $query->orderBy('kywrd.created_at', 'DESC');
+  //   $query->limit(8);
 
-  //     $list = $query->get();
-                             
-  //    return $list;  
+  //   $list = $query->get();
 
+  //   return $list;
   // }
 
    public function getCustomerSearchKeyWords($data)
    {
     $UserID = $data['UserID'];
 
-    $query = DB::table('searched_keywords as kywrd')
-        ->selectRaw("
-            kywrd.id as Keyword_ID,
-            COALESCE(kywrd.keyword, '') as Keyword,
-            COALESCE(kywrd.customer_id, 0) as CustomerID
-        ");
+    $cacheKey = "customer_search_keywords_{$UserID}";
 
-    $query->where('kywrd.customer_id', $UserID);
-    $query->orderBy('kywrd.created_at', 'DESC');
-    $query->limit(8);
+    return Cache::remember($cacheKey, 30, function () use ($UserID) {
+        $query = DB::table('searched_keywords as kywrd')
+            ->selectRaw("
+                kywrd.id as Keyword_ID,
+                COALESCE(kywrd.keyword, '') as Keyword,
+                COALESCE(kywrd.customer_id, 0) as CustomerID
+            ");
+        $query->where('kywrd.customer_id', $UserID);
+        $query->distinct();
+        $query->orderBy('kywrd.created_at', 'DESC');
+        $query->limit(8);
 
-    $list = $query->get();
-
-    return $list;
+        return $query->get();
+    });
   }
 
 }
