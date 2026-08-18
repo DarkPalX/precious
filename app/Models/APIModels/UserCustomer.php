@@ -1312,7 +1312,7 @@ public function getCustomerInformationByEmail($data)
                 COALESCE(msg.item_message, 0) as item_message,
                 COALESCE(usrs.is_active,0) as is_active
             ")
-            ->whereRaw('usrs.email = ?', [$EmailAddress])
+            ->whereRaw('users.email = ?', [$EmailAddress])
             ->first();
     });
 }
