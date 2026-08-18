@@ -1664,25 +1664,24 @@ public function saveSearchKeyword($data){
   // }
 
    public function getCustomerSearchKeyWords($data)
-   {
+{
     $UserID = $data['UserID'];
-
     $cacheKey = "customer_search_keywords_{$UserID}";
-
     return Cache::remember($cacheKey, 30, function () use ($UserID) {
         $query = DB::table('searched_keywords as kywrd')
             ->selectRaw("
-                kywrd.id as Keyword_ID,
+                MAX(kywrd.id) as Keyword_ID,
                 COALESCE(kywrd.keyword, '') as Keyword,
-                COALESCE(kywrd.customer_id, 0) as CustomerID
-            ");
-        $query->where('kywrd.customer_id', $UserID);
-        $query->distinct();
-        $query->orderBy('kywrd.created_at', 'DESC');
-        $query->limit(8);
+                COALESCE(kywrd.customer_id, 0) as CustomerID,
+                MAX(kywrd.created_at) as LastSearchedAt
+            ")
+            ->where('kywrd.customer_id', $UserID)
+            ->groupBy('kywrd.keyword', 'kywrd.customer_id')
+            ->orderBy('LastSearchedAt', 'DESC')
+            ->limit(8);
 
         return $query->get();
     });
-  }
+}
 
 }
