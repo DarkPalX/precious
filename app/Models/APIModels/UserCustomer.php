@@ -170,11 +170,9 @@ class UserCustomer extends Model
     $usersID=0;
     $EmailAddress = $data['EmailAddress'];
 
-     //GENERATE RANDOM PASSWORD
-     // $Misc = new Misc();
-     // $GeneratedTempPassword=$Misc->GenerateRandomNo(6,'users','verification_code');  
-
-     $GeneratedTempPassword = random_int(100000, 999999);
+    //GENERATE RANDOM PASSWORD
+     $Misc = new Misc();
+     $GeneratedTempPassword=$Misc->GenerateRandomNo(6,'users','verification_code');  
 
      //SET BYCRYPT PASSWORD
      $NewPassword=bcrypt($GeneratedTempPassword);
@@ -213,10 +211,8 @@ class UserCustomer extends Model
     $EmailAddress = $data['EmailAddress'];
 
     //GENERATE RANDOM PASSWORD
-     // $Misc = new Misc();
-     // $GeneratedTempPassword=$Misc->GenerateRandomNo(4,'users','verification_code');  
-
-     $GeneratedTempPassword = random_int(100000, 999999);
+     $Misc = new Misc();
+     $GeneratedTempPassword=$Misc->GenerateRandomNo(4,'users','verification_code');  
 
      //SET BYCRYPT PASSWORD
      $NewPassword=bcrypt($GeneratedTempPassword);
@@ -384,12 +380,11 @@ class UserCustomer extends Model
     $usersID  = $data['UserID'];
     $EmailAddress  = $data['EmailAddress'];
     
-    //$NewVerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
-   // if ($NewVerificationCode == '') {
-   //    $NewVerificationCode = rand(1000, 9999);
-   // }
+    $NewVerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
 
-    $NewVerificationCode = random_int(1000, 9999);
+   if ($NewVerificationCode == '') {
+      $NewVerificationCode = rand(1000, 9999);
+   }
 
     if($usersID>0){
         DB::table('users')
@@ -589,16 +584,12 @@ public function doRegisterCustomer($data)
             if ($ExistingUser) {
                 return null;
             }
-             
-
-            // $VerificationCode = $Misc->GenerateRandomNo(
-            //     4,
-            //     'users',
-            //     'verification_code'
-            // );
-
-
-            $VerificationCode = random_int(1000, 9999);
+ 
+            $VerificationCode = $Misc->GenerateRandomNo(
+                4,
+                'users',
+                'verification_code'
+            );
  
             $NewUserID = DB::table('users')
                 ->insertGetId([
@@ -864,9 +855,8 @@ public function doRegisterSocial($data)
             return 'Success';
         }
 
-        //$VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
+        $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
 
-        $VerificationCode = random_int(1000, 9999);
         try {
 
             $UserID = DB::table('users')->insertGetId([
