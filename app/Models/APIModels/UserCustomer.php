@@ -571,6 +571,7 @@ public function doRegisterCustomer($data)
                     'email' => $EmailAddress,
                     'mobile' => $MobileNo,
                     'password' => bcrypt($Password),
+                    'email_verified_at' => $TODAY,
                     'updated_at' => $TODAY,
                 ]);
  
@@ -627,10 +628,7 @@ public function doRegisterCustomer($data)
             $MobileNo,
             $Password
         ) {
-            /*
-             * Check again inside the transaction in case another
-             * request registered the email at the same time.
-             */
+            
             $ExistingUser = DB::table('users')
                 ->useWritePdo()
                 ->where('email', $EmailAddress)
@@ -641,7 +639,8 @@ public function doRegisterCustomer($data)
                 return null;
             }
  
-       $VerificationCode = random_int(1000, 9999);
+            $VerificationCode = random_int(1000, 9999);
+
             $NewUserID = DB::table('users')
                 ->insertGetId([
                     'firstname' => ucwords($FirstName),
@@ -654,6 +653,7 @@ public function doRegisterCustomer($data)
                     'provider' => 'none',
                     'role_id' => 6,
                     'is_active' => 1,
+                    'email_verified_at' => $TODAY,
                     'created_at' => $TODAY,
                     'updated_at' => $TODAY,
                 ]);
