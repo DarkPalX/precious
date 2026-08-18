@@ -35,6 +35,7 @@ public function getUserLoginPassword($EmailAddress){
         ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
         ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
         ->selectraw("
+
             usrs.id as user_ID,
             COALESCE(usrs.firstname,'') as firstname,
             COALESCE(usrs.lastname,'') as lastname,
@@ -45,6 +46,7 @@ public function getUserLoginPassword($EmailAddress){
             COALESCE(usrs.password,'') as password,
             COALESCE(usrs.mobile,'') as mobile,
             COALESCE(usrs.phone,'') as phone,
+            
             COALESCE(usrs.birth_date,'') as birth_date,
             DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
             DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
@@ -218,6 +220,7 @@ public function getUserLoginPassword($EmailAddress){
         ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
         ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
         ->selectraw("
+
             usrs.id as user_ID,
             COALESCE(usrs.firstname,'') as firstname,
             COALESCE(usrs.lastname,'') as lastname,
@@ -228,6 +231,7 @@ public function getUserLoginPassword($EmailAddress){
             COALESCE(usrs.password,'') as password,
             COALESCE(usrs.mobile,'') as mobile,
             COALESCE(usrs.phone,'') as phone,
+
             COALESCE(usrs.birth_date,'') as birth_date,
             DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
             DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
@@ -478,7 +482,7 @@ public function getUserLoginPassword($EmailAddress){
    // }
     
     $NewVerificationCode = rand(1000, 9999);
-    
+
     if($usersID>0){
         DB::table('users')
            ->whereRaw('id = ?',[$usersID])
