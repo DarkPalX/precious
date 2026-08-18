@@ -39,7 +39,7 @@ class Library extends Model
     // Build a cache key unique to this user + search combo
     $CacheKey = 'library_list_' . $UserID . '_' . md5($SearchText);
 
-    $list = Cache::remember($CacheKey, now()->addSeconds(20), function () use ($UserID, $SearchText) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(1), function () use ($UserID, $SearchText) {
 
         $query = DB::table('customer_libraries as lib')
           ->join('products as prds', 'prds.id', '=', 'lib.product_id')
@@ -144,19 +144,19 @@ class Library extends Model
         $query->where("lib.user_id",'=',$UserID);
         $query->where("prds.file_url","!=",null);
 
-          if($SearchText != ''){
-            $arSearchText = explode(" ",$SearchText);
-            if(count($arSearchText) > 0){
-                for($x=0; $x< count($arSearchText); $x++) {
-                    $query->whereraw(
-                        "CONCAT_WS(' ',
-                            COALESCE(prds.name,''),
-                            COALESCE(prds.author,''),
-                            COALESCE(prds.subtitle,'')
-                        ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
-                 }
-            }
-        }
+        //   if($SearchText != ''){
+        //     $arSearchText = explode(" ",$SearchText);
+        //     if(count($arSearchText) > 0){
+        //         for($x=0; $x< count($arSearchText); $x++) {
+        //             $query->whereraw(
+        //                 "CONCAT_WS(' ',
+        //                     COALESCE(prds.name,''),
+        //                     COALESCE(prds.author,''),
+        //                     COALESCE(prds.subtitle,'')
+        //                 ) like '%".str_replace("'", "''", $arSearchText[$x])."%'");
+        //          }
+        //     }
+        // }
 
         // if($Limit > 0){
         //   $query->limit($Limit);
