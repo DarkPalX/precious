@@ -238,10 +238,6 @@ public function getUserLoginPassword($EmailAddress){
     $usersID=0;
     $EmailAddress = $data['EmailAddress'];
 
-    //GENERATE RANDOM PASSWORD
-     //$Misc = new Misc();
-     //$GeneratedTempPassword=$Misc->GenerateRandomNo(6,'users','verification_code');  
-
      //SET BYCRYPT PASSWORD
      $GeneratedTempPassword = random_int(100000, 999999);
      $NewPassword=bcrypt($GeneratedTempPassword);
@@ -278,10 +274,6 @@ public function getUserLoginPassword($EmailAddress){
     
     $UserID=0;
     $EmailAddress = $data['EmailAddress'];
-
-    //GENERATE RANDOM PASSWORD
-     //$Misc = new Misc();
-     //$GeneratedTempPassword=$Misc->GenerateRandomNo(4,'users','verification_code');  
 
      //SET BYCRYPT PASSWORD
      $GeneratedTempPassword = random_int(1000, 9999);
@@ -448,13 +440,6 @@ public function getUserLoginPassword($EmailAddress){
           
     $usersID  = $data['UserID'];
     $EmailAddress  = $data['EmailAddress'];
-    
-    //$Misc=new Misc(); 
-    //$NewVerificationCode=$Misc->GenerateRandomNo(4,'users','verification_code');
-
-   // if ($NewVerificationCode == '') {
-   //    $NewVerificationCode = rand(1000, 9999);
-   // }
     
     $NewVerificationCode = rand(1000, 9999);
 
@@ -656,9 +641,7 @@ public function doRegisterCustomer($data)
                 return null;
             }
  
-            //$VerificationCode = $Misc->GenerateRandomNo(4,'users','verification_code');
-            $VerificationCode = random_int(1000, 9999);
- 
+       $VerificationCode = random_int(1000, 9999);
             $NewUserID = DB::table('users')
                 ->insertGetId([
                     'firstname' => ucwords($FirstName),
@@ -907,7 +890,7 @@ public function doRegisterSocial($data)
     $EmailAddress = strtolower(trim($data['EmailAddress']));
     $SocialMedia  = trim($data['SocialMedia']);
 
-    //DB Lock trans
+
     return DB::transaction(function () use (
         $Misc, $TODAY, $FirstName, $LastName, $FullName, $EmailAddress, $SocialMedia)
     {
@@ -922,7 +905,7 @@ public function doRegisterSocial($data)
             return 'Success';
         }
 
-        //$VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
+        
         $VerificationCode = random_int(1000, 9999);
         try {
             $UserID = DB::table('users')->insertGetId([
