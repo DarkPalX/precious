@@ -25,34 +25,41 @@
         </td>
     </tr>
 
-    <tr>
-        <td style="padding:40px 50px;font-family:Arial,sans-serif;font-size:14px;line-height:24px;color:#333333;">
+  <tr>
+    <td style="padding:40px 50px;font-family:Arial,sans-serif;font-size:14px;line-height:24px;color:#333333;">
 
-            <p style="margin-top:0;">
-                Dear <strong>{{ $FullName }}</strong>,
-            </p>
-            <p>
-                Welcome to Catha! We're excited to have you join our growing community of readers. Your account has been successfully created and you're just one step away from activating it.
-            </p>
-            <p>
-                Please use the verification code below to confirm your email address and complete your registration.
-            </p>
-            <table align="center" cellpadding="0" cellspacing="0" style="margin:30px auto;">
-                <tr>
-                    <td style="border:2px dashed #7E57C2;background:#F4F0FA;padding:18px 40px;font-size:34px;letter-spacing:8px;color:#6F42C1;font-weight:bold;font-family:Arial,sans-serif;">
-                        {{ $VerificationCode }}
-                    </td>
-                </tr>
-            </table>
-            <p>
-                After verification, you'll be able to browse thousands of books, purchase your favorite titles, manage your library, and enjoy a seamless reading experience.
-            </p>
-            <p>
-                If you did not create this account, no further action is required. You may safely ignore this email.
-            </p>
+        <p style="margin-top:0;">
+            Dear <strong>{{ $FullName }}</strong>,
+        </p>
 
-        </td>
-    </tr>
+        <p>
+            Welcome to Cat-ha! Your account has now been successfully activated.
+        </p>
+
+        <p>
+            You can now sign in and start browsing thousands of books, purchase your favorite titles,
+            manage your library, and enjoy a seamless reading experience.
+        </p>
+
+        <p>
+            If your account has not been activated yet, please use the 4-digit verification code below
+            to complete the activation of your account.
+        </p>
+
+        <table align="center" cellpadding="0" cellspacing="0" style="margin:30px auto;">
+            <tr>
+                <td style="border:2px dashed #7E57C2;background:#F4F0FA;padding:18px 40px;font-size:34px;letter-spacing:8px;color:#6F42C1;font-weight:bold;font-family:Arial,sans-serif;">
+                    {{ $VerificationCode }}
+                </td>
+            </tr>
+        </table>
+
+        <p>
+            If you did not create this account, no further action is required. You may safely ignore this email.
+        </p>
+
+    </td>
+</tr>
 
     <tr>
         <td bgcolor="#f5f6f6" style="padding:25px 40px;font-family:Arial,sans-serif;font-size:12px;color:#666666;line-height:20px;">
