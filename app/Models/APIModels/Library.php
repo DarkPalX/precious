@@ -24,7 +24,7 @@ use App\Models\APIModels\Misc;
 class Library extends Model
 {
 
-    public function getLibraryList($data){
+ public function getLibraryList($data){
 
     $Status=$data['Status'];
     $SearchText=$data['SearchText'];
@@ -508,7 +508,6 @@ public function getSubscribedReadBooksList($data){
 //     return $list;
 
 // }
-
 
 
  public function checkProductsIfExistInLibrary($ProductID,$CustomerID){
