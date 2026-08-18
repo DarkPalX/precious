@@ -916,7 +916,7 @@ public function doRegisterSocial($data)
         
         $ExistingUser = DB::table('users')
             ->useWritePdo()
-            ->where('usrs.email = ?', [$EmailAddress])
+            ->where('users.email = ?', [$EmailAddress])
             ->lockForUpdate()
             ->first();
 
