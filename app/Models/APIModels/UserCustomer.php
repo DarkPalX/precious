@@ -1280,7 +1280,6 @@ public function getCustomerInformationByEmail($data)
 {
     $EmailAddress = strtolower(trim($data['EmailAddress']));
     $cacheKey = 'customer_information_email_' . md5($EmailAddress);
-
     return Cache::remember($cacheKey, now()->addSeconds(60), function () use ($EmailAddress) {
         return DB::table('users as usrs')
             ->useWritePdo()
@@ -1312,7 +1311,7 @@ public function getCustomerInformationByEmail($data)
                 COALESCE(msg.item_message, 0) as item_message,
                 COALESCE(usrs.is_active,0) as is_active
             ")
-            ->whereRaw('users.email = ?', [$EmailAddress])
+            ->whereRaw('usrs.email = ?', [$EmailAddress])
             ->first();
     });
 }
