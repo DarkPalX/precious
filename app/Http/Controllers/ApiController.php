@@ -1725,19 +1725,23 @@ public function proceedToCheckOut(Request $request){
 
     $data['PayPalParamResponse']='';
    
-   //TRAP AND CHECK CURRENT EWALLETS
-   $walletRow = DB::table('users')
+   //TRAP AND CHECK CURRENT EWALLETS IF PAYMENT IS EWALLET
+   if($data['PaymentMethod']=='EWallet'){ 
+
+      $walletRow = DB::table('users')
               ->where('id', $data['UserID'])
               ->first();
 
-    $CurrentEwallet = (float) ($walletRow->ecredits ?? 0);
+        $CurrentEwallet = (float) ($walletRow->ecredits ?? 0);
 
-    if (!preg_match('/^\d+(\.\d{1,2})?$/', (string) $CurrentEwallet)) {
-          return response()->json([
-              'response' => 'Failed',
-              'message'  => 'Cannot Proceed. Theres something wrong with your credits. Please contact our admin.',
-          ]);
+        if (!preg_match('/^\d+(\.\d{1,2})?$/', (string) $CurrentEwallet)) {
+              return response()->json([
+                  'response' => 'Failed',
+                  'message'  => 'Cannot Proceed. Theres something wrong with your credits. Please contact our admin.',
+              ]);
+         }
     }
+   
 
    //PAYPAL
     if(isset($request['PayPalParamResponse'])){
