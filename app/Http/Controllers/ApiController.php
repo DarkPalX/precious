@@ -1725,7 +1725,7 @@ public function proceedToCheckOut(Request $request){
 
     $data['PayPalParamResponse']='';
    
-   //TRAP WEIRD EWALLETS
+   //TRAP AND CHECK CURRENT EWALLETS
    $walletRow = DB::table('users')
               ->where('id', $UserID)
               ->first();
