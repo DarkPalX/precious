@@ -50,70 +50,19 @@
 <script>
     $(document).ready(function () {
 
-        // Custom Export/Print Handler
-        // Fetches ALL records silently in the background and mounts them to an off-screen DOM element
-        var newExportAction = function (e, dt, button, config) {
-            var self = this;
-            
-            // Prepare AJAX parameters for all records (length = -1)
-            var params = $.extend({}, dt.ajax.params(), {
-                start: 0,
-                length: -1
-            });
-
-            // Show processing indicator on main table
-            dt.processing(true);
-
-            // Fetch complete dataset
-            $.ajax({
-                url: "{{ route('report.read-counts.mobile') }}",
-                type: 'GET',
-                data: params,
-                success: function (json) {
-                    dt.processing(false);
-
-                    // 1. Create off-screen container and append to DOM (required by Print extension)
-                    var $container = $('<div style="position: absolute; left: -9999px; top: -9999px;"></div>');
-                    var $tempTable = $('<table class="display nowrap" style="width:100%">').append($('#example thead').clone());
-                    
-                    $container.append($tempTable);
-                    $('body').append($container);
-
-                    // 2. Initialize temporary DataTables instance with full dataset
-                    var tempDt = $tempTable.DataTable({
-                        dom: 'Bfrtip',
-                        data: json.data,
-                        columns: [
-                            { data: 'sku' },
-                            { data: 'name' },
-                            { data: 'read_count' }
-                        ],
-                        paging: false,
-                        searching: false,
-                        info: false
-                    });
-
-                    // 3. Trigger requested export/print action against full dataset
-                    $.fn.dataTable.ext.buttons[config.extend].action.call(self, e, tempDt, button, config);
-
-                    // 4. Delay destruction by 1 second to give print preview engine time to read DOM
-                    setTimeout(function () {
-                        tempDt.destroy();
-                        $container.remove();
-                    }, 1000);
-                },
-                error: function () {
-                    dt.processing(false);
-                    alert('Export failed. Please try again.');
-                }
-            });
-        };
-
         if ($.fn.DataTable.isDataTable('#example')) {
             $('#example').DataTable().destroy();
         }
 
-        // Initialize visible table
+        // Export rule: Only include visible columns and rows where read_count > 0
+        var exportOptionsFiltered = {
+            columns: ':visible',
+            rows: function (idx, data, node) {
+                return Number(data.read_count) > 0;
+            }
+        };
+
+        // Initialize main visible table (Displays 0 read counts)
         $('.ajax-table').DataTable({
             processing: true,
             serverSide: true,
@@ -134,61 +83,25 @@
             buttons: [
                 {
                     extend: 'print',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
+                    exportOptions: exportOptionsFiltered
                 },
                 {
                     extend: 'csv',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
+                    exportOptions: exportOptionsFiltered
                 },
                 {
                     extend: 'excel',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
+                    exportOptions: exportOptionsFiltered
                 },
                 {   
                     extend: 'pdfHtml5',
                     text: 'PDF',
-                    exportOptions: {
-                        modifier: {
-                            page: 'current'
-                        }
-                    },
-                    orientation : 'landscape',
-                    pageSize : 'LEGAL'
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    exportOptions: exportOptionsFiltered
                 },
                 'colvis'
             ],
-            // buttons: [
-            //     {
-            //         extend: 'print',
-            //         exportOptions: { columns: ':visible' },
-            //         action: newExportAction
-            //     },
-            //     {
-            //         extend: 'csv',
-            //         exportOptions: { columns: ':visible' },
-            //         action: newExportAction
-            //     },
-            //     {
-            //         extend: 'excel',
-            //         exportOptions: { columns: ':visible' },
-            //         action: newExportAction
-            //     },
-            //     {   
-            //         extend: 'pdfHtml5',
-            //         text: 'PDF',
-            //         exportOptions: { columns: ':visible' },
-            //         orientation: 'landscape',
-            //         pageSize: 'LEGAL',
-            //         action: newExportAction
-            //     },
-            //     'colvis'
-            // ],
             pageLength: 10000
         });
 
