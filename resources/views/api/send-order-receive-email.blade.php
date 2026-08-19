@@ -42,8 +42,8 @@
             <table width="100%"><tr>
                 <td width="200"><img src="https://preciouspagesbookstore.com.ph/storage/logos/catha-email-logo.png" width="170"></td>
                 <td style="border-left:2px solid #9b7ad1;padding-left:25px;color:#fff">
-                    <div style="font-size:32px;font-weight:bold">Thank You For Your Order!</div>
-                    <div style="font-size:14px;color:#efe7f8">We've received your order and it's on its way.</div>
+                    <div style="font-size:32px;font-weight:bold">Thank You for Your Purchase!</div>
+                    <div style="font-size:14px;color:#efe7f8">We have received your order and your ebook has been added to your library.</div>
                 </td>
             </tr></table>
         </td>
@@ -54,7 +54,7 @@
         <td style="padding:35px 40px">
 
             <p>Hi {{$FullName}}!</p>
-            <p>Thank you for your order and you will find your order details below.</p>
+            <p>Your ebook purchase was successfully completed. Please find your order details below. Your new ebook is now available and ready for you to read anytime.</p>
 
             <!-- ORDER DETAILS -->
             <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top:20px">
@@ -66,13 +66,13 @@
                     <td width="60%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">{{$FullName}} </td>
                 </tr>
                 <tr>
-                    <td width="60%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 50px 10px 0px 10px;"> {{$EmailAddress}} </td>
+                    <td width="60%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 10px 10px 0px 10px;"> {{$EmailAddress}} </td>
                 </tr>
                 <tr>
                     <td width="60%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;"> {{$MobileNo}}</td>
                 </tr>
                 <tr>
-                    <td width="60%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 30px 10px 0px 10px;">  {{$Address}}</td>
+                    <td width="60%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 10px 10px 0px 10px;">  {{$Address}}</td>
                 </tr>
             </table>
 
