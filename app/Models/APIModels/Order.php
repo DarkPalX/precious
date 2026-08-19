@@ -190,799 +190,478 @@ class Order extends Model
   }
 
   public function proceedToCheckOut($data){
-    
-    $Misc  = New Misc();
+
+    $Misc = new Misc();
     $Cart = new Cart();
-    $UserCustomer  = New UserCustomer();
-    $Voucher  = New Voucher();
+    $UserCustomer = new UserCustomer();
+    $Voucher = new Voucher();
 
     $TODAY = date("Y-m-d H:i:s");
     $PaymentDate = date("Y-m-d");
-    
-    // CUSTOMER
-    $CustomerName='';
-    $CustomerEmailAddress='';
-    $CustomerMobileNo='';
 
-    $ZipCode='';
-    $CompleteAddress='';
-    $CompleteDeliveryAddress='';
-    
-    $GrossAmount='0';
-    $TaxAmount='0';
-    $NetAmount='0';    
-    
-    $Platform=$data['Platform'];
-    $UserID=$data['UserID'];
-    
-    // $SubTotal=$data['SubTotal'];
-    $AmountPaid=$data['AmountPaid'];
-    $PaymentMethod=$data['PaymentMethod'];
+    $Platform = $data['Platform'];
+    $UserID   = (int) $data['UserID'];
 
-    $UsedECredit=$data['ApplyECredit'];  
-    $CurrentEWalletCredit=0;  
-
-    $VoucherCode=$data['VoucherCode'];    
-    $VoucherDiscountAmount=$data['VoucherDiscountAmount'];    
-
-    if($PaymentMethod=='Debit Card/Credit Card' ||  $PaymentMethod=='EWallet' || $PaymentMethod=='PayPal'){
-       $PaymentStatus='PAID';
-    }else{
-        $PaymentStatus='UNPAID';
+    if ($UserID <= 0) {
+        return ['status' => 'error', 'message' => 'Invalid user.'];
     }
 
-    $PayPalParamResponse=$data['PayPalParamResponse'];  
+    $PaymentMethod = $data['PaymentMethod'];
+    $VoucherCode   = $data['VoucherCode'] ?? '';
+    $PayPalParamResponse = $data['PayPalParamResponse'] ?? null;
 
-    if($UserID>0){
+    // NEVER trust VoucherDiscountAmount or ApplyECredit blindly from client.
+    // Recompute/validate everything server-side.
+    $RequestedECredit = isset($data['ApplyECredit']) ? (float) $data['ApplyECredit'] : 0;
 
-     $customer_info=$UserCustomer->getCustomerInformation($data);
-       if(isset($customer_info)>0){
-          $CustomerName=$customer_info->fullname;
-          $CustomerEmailAddress=$customer_info->emailaddress;
-          $CustomerMobileNo=$customer_info->mobile;
+    if ($PaymentMethod == 'Debit Card/Credit Card' || $PaymentMethod == 'EWallet' || $PaymentMethod == 'PayPal') {
+        $PaymentStatus = 'PAID';
+    } else {
+        $PaymentStatus = 'UNPAID';
+    }
 
-          $CompleteAddress=$customer_info->address_street.' ,'.$customer_info->address_city;
-          $CompleteDeliveryAddress=$customer_info->address_street.' ,'.$customer_info->address_city;
-          $ZipCode=$customer_info->address_zip;  
-          $CurrentEWalletCredit=$customer_info->ecredits;                      
-       } 
+    try {
+        return DB::transaction(function () use (
+            $Misc, $Cart, $UserCustomer, $Voucher,
+            $TODAY, $PaymentDate, $Platform, $UserID,
+            $PaymentMethod, $VoucherCode, $PayPalParamResponse,
+            $RequestedECredit, $PaymentStatus, $data
+        ) {
 
-      $ProductPrice=0;
-      $cart_info = $Cart->getCartInfoByUserID($UserID);
-      if(count($cart_info)>0){
-        foreach($cart_info as $list){
-            if($list->discount_amount>0){
-                $ProductPrice=$list->discount_amount;
-            }else{
-                $ProductPrice=$list->price;    
+            $customer_info = $UserCustomer->getCustomerInformation($data);
+            if (!$customer_info) {
+                throw new \Exception('Customer not found.');
             }
-           $GrossAmount= $GrossAmount + $ProductPrice;
-        } 
 
-        $NetAmount=$GrossAmount - $VoucherDiscountAmount;
-      }
+            $CustomerName          = $customer_info->fullname;
+            $CustomerEmailAddress  = $customer_info->emailaddress;
+            $CustomerMobileNo      = $customer_info->mobile;
+            $CompleteAddress       = $customer_info->address_street . ' ,' . $customer_info->address_city;
+            $CompleteDeliveryAddress = $CompleteAddress;
+            $ZipCode                = $customer_info->address_zip;
+
+            // Lock the user's wallet row for this transaction to prevent race conditions
+            // (two simultaneous checkouts both reading the same "current" balance).
+            $walletRow = DB::table('users')->where('id', $UserID)->lockForUpdate()->first();
+            $CurrentEWalletCredit = (float) $walletRow->ecredits;
+
+            // Rebuild cart totals server-side. Never trust client-sent totals.
+            $cart_info = $Cart->getCartInfoByUserID($UserID);
+            if (count($cart_info) == 0) {
+                throw new \Exception('Cart is empty.');
+            }
+
+            $GrossAmount = 0;
+            foreach ($cart_info as $list) {
+                $ProductPrice = $list->discount_amount > 0 ? $list->discount_amount : $list->price;
+                $GrossAmount += $ProductPrice;
+            }
+
+            // Validate voucher server-side and compute the discount ourselves.
+            $VoucherDiscountAmount = 0;
+            $CouponID = 0;
+            if ($VoucherCode != '') {
+                $voucherInfo = $Voucher->getVoucherInfoByCode($VoucherCode);
+                if ($voucherInfo) {
+                    $CouponID = $voucherInfo->coupon_ID;
+                    // Trust your Voucher model to return the *correct* discount value here,
+                    // not $data['VoucherDiscountAmount'].
+                    $VoucherDiscountAmount = $voucherInfo->discount_amount ?? 0;
+                }
+            }
+
+            $NetAmount = max(0, $GrossAmount - $VoucherDiscountAmount);
+
+            // ---- THE CRITICAL FIX ----
+            // Clamp e-credit usage to what's actually available AND to what's actually owed.
+            // This single block closes the exploit.
+            $UsedECredit = 0;
+            if ($PaymentMethod == 'EWallet') {
+                if ($RequestedECredit < 0) {
+                    throw new \Exception('Invalid e-credit amount.');
+                }
+                $UsedECredit = min($RequestedECredit, $CurrentEWalletCredit, $NetAmount);
+                $UsedECredit = round($UsedECredit, 2);
+            }
+
+            $NetAmount = round($NetAmount - $UsedECredit, 2);
+
+            $OrderNo = $Misc->getNextOrderNumberFormat();
+
+            $SalesHeaderID = DB::table('ecommerce_sales_headers')->insertGetId([
+                'user_id'                  => $UserID,
+                'order_number'             => $OrderNo,
+                'order_source'             => $Platform,
+                'customer_name'            => $CustomerName,
+                'customer_email'           => $CustomerEmailAddress,
+                'customer_contact_number'  => $CustomerMobileNo,
+                'customer_address'         => $CompleteAddress,
+                'customer_delivery_adress' => $CompleteDeliveryAddress,
+                'customer_delivery_zip'    => $ZipCode,
+                'gross_amount'             => $GrossAmount,
+                'net_amount'               => $NetAmount,
+                'discount_amount'          => $VoucherDiscountAmount,
+                'payment_method'           => $PaymentMethod,
+                'payment_status'           => $PaymentStatus,
+                'ecredit_amount'           => $UsedECredit,
+                'delivery_type'            => 'd2d',
+                'delivery_status'          => 'Delivered',
+                'delivery_fee_amount'      => 0,
+                'delivery_fee_discount'    => 0,
+                'status'                   => 'Active',
+                'created_at'               => $TODAY,
+            ]);
+
+            $ReceiptNo = $Misc->GenerateRandomNo(6, 'ecommerce_sales_headers', 'order_number');
+            DB::table('ecommerce_sales_payments')->insertGetId([
+                'sales_header_id' => $SalesHeaderID,
+                'payment_type'    => $PaymentMethod,
+                'amount'          => $NetAmount,
+                'status'          => $PaymentStatus,
+                'payment_date'    => $PaymentDate,
+                'receipt_number'  => $ReceiptNo,
+                'created_by'      => $UserID,
+                'created_at'      => $TODAY,
+            ]);
+
+            if ($VoucherCode != '' && $CouponID > 0) {
+                DB::table('coupon_sales')->insertGetId([
+                    'customer_id'     => $UserID,
+                    'coupon_id'       => $CouponID,
+                    'coupon_code'     => $VoucherCode,
+                    'sales_header_id' => $SalesHeaderID,
+                    'order_status'    => $PaymentStatus,
+                    'created_at'      => $TODAY,
+                ]);
+            }
+
+            foreach ($cart_info as $item_list) {
+                DB::table('ecommerce_sales_details')->insertGetId([
+                    'sales_header_id'   => $SalesHeaderID,
+                    'product_id'        => $item_list->book_ID,
+                    'product_name'      => $item_list->name,
+                    'product_category'  => $item_list->category_id,
+                    'price'             => $item_list->price,
+                    'qty'               => 1,
+                    'uom'               => $item_list->uom,
+                    'tax_amount'        => 0,
+                    'promo_id'          => 0,
+                    'promo_description' => '',
+                    'discount_amount'   => $item_list->discount_amount,
+                    'gross_amount'      => $GrossAmount,
+                    'net_amount'        => $NetAmount,
+                    'created_by'        => $UserID,
+                    'created_at'        => $TODAY,
+                ]);
+
+                DB::table('customer_libraries')->insertGetId([
+                    'user_id'    => $UserID,
+                    'product_id' => $item_list->book_ID,
+                    'created_at' => $TODAY,
+                ]);
+            }
+
+            DB::table('ecommerce_shopping_cart')->where('user_id', $UserID)->delete();
+
+            if ($PaymentMethod == 'EWallet' && $UsedECredit > 0) {
+                $BalanceEWalletCredit = round($CurrentEWalletCredit - $UsedECredit, 2);
+
+                DB::table('ecredits')->insertGetId([
+                    'user_id'      => $UserID,
+                    'used_credits' => $UsedECredit,
+                    'balance'      => $BalanceEWalletCredit,
+                    'remarks'      => 'Used ' . $UsedECredit . ' e-credit as payment for order no. ' . $OrderNo,
+                    'created_at'   => $TODAY,
+                ]);
+
+                DB::table('users')->where('id', $UserID)->update([
+                    'ecredits'   => $BalanceEWalletCredit,
+                    'updated_at' => $TODAY,
+                ]);
+            } elseif ($PaymentMethod == 'PayPal') {
+                DB::table('paypal_payment')->insertGetId([
+                    'user_id'                => $UserID,
+                    'paypal_param_response'  => $PayPalParamResponse,
+                    'sales_header_id'        => $SalesHeaderID,
+                    'Status'                 => 'Success',
+                    'payment_date_time'      => $TODAY,
+                ]);
+            }
+
+            // Send email notification (wrap so a mail failure never rolls back a paid order)
+            try {
+                $OrderInfo = $this->getOrderInfo($SalesHeaderID);
+                if ($OrderInfo && $OrderInfo->SalesHeaderID > 0) {
+                    $param = [
+                        'OrderID'      => $OrderInfo->SalesHeaderID,
+                        'EmailAddress' => $OrderInfo->customer_email,
+                        'MobileNo'     => $OrderInfo->customer_contact_number,
+                        'OrderNo'      => $OrderInfo->order_number,
+                        'OrderInfo'    => $OrderInfo,
+                        'OrderItem'    => $this->getOrderItemList($SalesHeaderID),
+                    ];
+                    (new Email())->SendOrderReceivedEmail($param);
+                }
+            } catch (\Throwable $mailEx) {
+                Log::warning('Order email failed for order ' . $OrderNo . ': ' . $mailEx->getMessage());
+            }
+
+            return ['status' => 'success', 'order_number' => $OrderNo, 'sales_header_id' => $SalesHeaderID];
+        });
+    } catch (\Throwable $e) {
+        Log::error('Checkout failed for user ' . $UserID . ': ' . $e->getMessage());
+        return ['status' => 'error', 'message' => 'Checkout failed. Please try again.'];
+    }
+}
+
+ //  public function proceedToCheckOut($data){
+    
+ //    $Misc  = New Misc();
+ //    $Cart = new Cart();
+ //    $UserCustomer  = New UserCustomer();
+ //    $Voucher  = New Voucher();
+
+ //    $TODAY = date("Y-m-d H:i:s");
+ //    $PaymentDate = date("Y-m-d");
+    
+ //    // CUSTOMER
+ //    $CustomerName='';
+ //    $CustomerEmailAddress='';
+ //    $CustomerMobileNo='';
+
+ //    $ZipCode='';
+ //    $CompleteAddress='';
+ //    $CompleteDeliveryAddress='';
+    
+ //    $GrossAmount='0';
+ //    $TaxAmount='0';
+ //    $NetAmount='0';    
+    
+ //    $Platform=$data['Platform'];
+ //    $UserID=$data['UserID'];
+    
+ //    // $SubTotal=$data['SubTotal'];
+ //    $AmountPaid=$data['AmountPaid'];
+ //    $PaymentMethod=$data['PaymentMethod'];
+
+ //    $UsedECredit=$data['ApplyECredit'];  
+ //    $CurrentEWalletCredit=0;  
+
+ //    $VoucherCode=$data['VoucherCode'];    
+ //    $VoucherDiscountAmount=$data['VoucherDiscountAmount'];    
+
+ //    if($PaymentMethod=='Debit Card/Credit Card' ||  $PaymentMethod=='EWallet' || $PaymentMethod=='PayPal'){
+ //       $PaymentStatus='PAID';
+ //    }else{
+ //        $PaymentStatus='UNPAID';
+ //    }
+
+ //    $PayPalParamResponse=$data['PayPalParamResponse'];  
+
+ //    if($UserID>0){
+
+ //     $customer_info=$UserCustomer->getCustomerInformation($data);
+ //       if(isset($customer_info)>0){
+ //          $CustomerName=$customer_info->fullname;
+ //          $CustomerEmailAddress=$customer_info->emailaddress;
+ //          $CustomerMobileNo=$customer_info->mobile;
+
+ //          $CompleteAddress=$customer_info->address_street.' ,'.$customer_info->address_city;
+ //          $CompleteDeliveryAddress=$customer_info->address_street.' ,'.$customer_info->address_city;
+ //          $ZipCode=$customer_info->address_zip;  
+ //          $CurrentEWalletCredit=$customer_info->ecredits;                      
+ //       } 
+
+ //      $ProductPrice=0;
+ //      $cart_info = $Cart->getCartInfoByUserID($UserID);
+ //      if(count($cart_info)>0){
+ //        foreach($cart_info as $list){
+ //            if($list->discount_amount>0){
+ //                $ProductPrice=$list->discount_amount;
+ //            }else{
+ //                $ProductPrice=$list->price;    
+ //            }
+ //           $GrossAmount= $GrossAmount + $ProductPrice;
+ //        } 
+
+ //        $NetAmount=$GrossAmount - $VoucherDiscountAmount;
+ //      }
      
 
      
-    //SAVE SALES HEADER
-    $OrderNo=$Misc->getNextOrderNumberFormat();      
-    $SalesHeaderID = DB::table('ecommerce_sales_headers')
-        ->insertGetId([                                            
-          'user_id' => $UserID,              
-          'order_number' => $OrderNo,                                            
-          'order_source' => $Platform,                                            
-          'customer_name' => $CustomerName, 
-          'customer_email' => $CustomerEmailAddress, 
-          'customer_contact_number' => $CustomerMobileNo, 
-          'customer_address' => $CompleteAddress, 
-          'customer_delivery_adress' => $CompleteDeliveryAddress, 
-          'customer_delivery_zip' => $ZipCode,                           
-          'gross_amount' => $GrossAmount, 
-          'net_amount' => $NetAmount, 
-          'discount_amount' => $VoucherDiscountAmount, 
-          'gross_amount' => $GrossAmount, 
-          'payment_method' => $PaymentMethod,
-          'payment_status' => $PaymentStatus, 
-          'ecredit_amount' => $UsedECredit, 
-          'delivery_type' => 'd2d', 
-          'delivery_status' => 'Delivered', 
-          'delivery_fee_amount' => 0, 
-          'delivery_fee_discount' => 0, 
-          'status' => 'Active', 
-          'created_at' => $TODAY             
-        ]); 
+ //    //SAVE SALES HEADER
+ //    $OrderNo=$Misc->getNextOrderNumberFormat();      
+ //    $SalesHeaderID = DB::table('ecommerce_sales_headers')
+ //        ->insertGetId([                                            
+ //          'user_id' => $UserID,              
+ //          'order_number' => $OrderNo,                                            
+ //          'order_source' => $Platform,                                            
+ //          'customer_name' => $CustomerName, 
+ //          'customer_email' => $CustomerEmailAddress, 
+ //          'customer_contact_number' => $CustomerMobileNo, 
+ //          'customer_address' => $CompleteAddress, 
+ //          'customer_delivery_adress' => $CompleteDeliveryAddress, 
+ //          'customer_delivery_zip' => $ZipCode,                           
+ //          'gross_amount' => $GrossAmount, 
+ //          'net_amount' => $NetAmount, 
+ //          'discount_amount' => $VoucherDiscountAmount, 
+ //          'gross_amount' => $GrossAmount, 
+ //          'payment_method' => $PaymentMethod,
+ //          'payment_status' => $PaymentStatus, 
+ //          'ecredit_amount' => $UsedECredit, 
+ //          'delivery_type' => 'd2d', 
+ //          'delivery_status' => 'Delivered', 
+ //          'delivery_fee_amount' => 0, 
+ //          'delivery_fee_discount' => 0, 
+ //          'status' => 'Active', 
+ //          'created_at' => $TODAY             
+ //        ]); 
         
-   if($SalesHeaderID>0){
+ //   if($SalesHeaderID>0){
 
-      //SAVE TO SALES PAYMENT
-      $ReceiptNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
-      $PaymentHeaderID = DB::table('ecommerce_sales_payments')
-         ->insertGetId([                                            
-          'sales_header_id' => $SalesHeaderID,              
-          'payment_type' => $PaymentMethod,                                            
-          'amount' => $NetAmount,                                            
-          'status' => $PaymentStatus, 
-          'payment_date' => $PaymentDate, 
-          'receipt_number' => $ReceiptNo,
-          'created_by' => $UserID,
-          'created_at' => $TODAY             
-        ]); 
+ //      //SAVE TO SALES PAYMENT
+ //      $ReceiptNo=$Misc->GenerateRandomNo(6,'ecommerce_sales_headers','order_number'); 
+ //      $PaymentHeaderID = DB::table('ecommerce_sales_payments')
+ //         ->insertGetId([                                            
+ //          'sales_header_id' => $SalesHeaderID,              
+ //          'payment_type' => $PaymentMethod,                                            
+ //          'amount' => $NetAmount,                                            
+ //          'status' => $PaymentStatus, 
+ //          'payment_date' => $PaymentDate, 
+ //          'receipt_number' => $ReceiptNo,
+ //          'created_by' => $UserID,
+ //          'created_at' => $TODAY             
+ //        ]); 
 
-      //SAVE COUPON TO COUPON SALES
-       if($VoucherCode!=''){
+ //      //SAVE COUPON TO COUPON SALES
+ //       if($VoucherCode!=''){
 
-         $CouponID=0;
-         $info=$Voucher->getVoucherInfoByCode($VoucherCode);
+ //         $CouponID=0;
+ //         $info=$Voucher->getVoucherInfoByCode($VoucherCode);
 
-         if(isset($info)>0){
+ //         if(isset($info)>0){
 
-            $CouponID=$info->coupon_ID;         
-             $CopuponSalesID = DB::table('coupon_sales')
-                  ->insertGetId([                                            
-                  'customer_id' => $UserID,              
-                  'coupon_id' => $CouponID,
-                  'coupon_code' => $VoucherCode,
-                  'sales_header_id' => $SalesHeaderID,
-                  'order_status' => $PaymentStatus,                                                                
-                  'created_at' => $TODAY             
-                ]); 
-         }
-     }         
+ //            $CouponID=$info->coupon_ID;         
+ //             $CopuponSalesID = DB::table('coupon_sales')
+ //                  ->insertGetId([                                            
+ //                  'customer_id' => $UserID,              
+ //                  'coupon_id' => $CouponID,
+ //                  'coupon_code' => $VoucherCode,
+ //                  'sales_header_id' => $SalesHeaderID,
+ //                  'order_status' => $PaymentStatus,                                                                
+ //                  'created_at' => $TODAY             
+ //                ]); 
+ //         }
+ //     }         
    
 
-     // SAVE TO SALES DETAIL
-     $cart_info = $Cart->getCartInfoByUserID($UserID);
-     if(count($cart_info)>0){
-        foreach($cart_info as $item_list){
+ //     // SAVE TO SALES DETAIL
+ //     $cart_info = $Cart->getCartInfoByUserID($UserID);
+ //     if(count($cart_info)>0){
+ //        foreach($cart_info as $item_list){
         
-        // SAVE TO SALES DETAIL
-        $SalesDetailID = DB::table('ecommerce_sales_details')
-            ->insertGetId([                                            
-              'sales_header_id' => $SalesHeaderID,              
-              'product_id' => $item_list->book_ID,              
-              'product_name' => $item_list->name, 
-              'product_category' => $item_list->category_id,              
-              'price' => $item_list->price,              
-              'qty' => 0, 
-              'uom' => $item_list->uom, 
-              'tax_amount' =>0,              
-              'promo_id' =>0,  
-              'promo_description' =>'',  
-              'tax_amount' =>0,  
-              'discount_amount' => $item_list->discount_amount,                        
-              'gross_amount' => $GrossAmount,                                                        
-              'net_amount' => $NetAmount,
-              'created_by' => $UserID,                        
-              'created_at' => $TODAY             
-          ]); 
+ //        // SAVE TO SALES DETAIL
+ //        $SalesDetailID = DB::table('ecommerce_sales_details')
+ //            ->insertGetId([                                            
+ //              'sales_header_id' => $SalesHeaderID,              
+ //              'product_id' => $item_list->book_ID,              
+ //              'product_name' => $item_list->name, 
+ //              'product_category' => $item_list->category_id,              
+ //              'price' => $item_list->price,              
+ //              'qty' => 0, 
+ //              'uom' => $item_list->uom, 
+ //              'tax_amount' =>0,              
+ //              'promo_id' =>0,  
+ //              'promo_description' =>'',  
+ //              'tax_amount' =>0,  
+ //              'discount_amount' => $item_list->discount_amount,                        
+ //              'gross_amount' => $GrossAmount,                                                        
+ //              'net_amount' => $NetAmount,
+ //              'created_by' => $UserID,                        
+ //              'created_at' => $TODAY             
+ //          ]); 
 
-          // SAVE TO CUSATOMER LIBRARY BOOKS
-           $SalesDetailID = DB::table('customer_libraries')
-            ->insertGetId([                                            
-              'user_id' => $UserID,              
-              'product_id' => $item_list->book_ID,                                              
-              'created_at' => $TODAY             
-          ]); 
+ //          // SAVE TO CUSATOMER LIBRARY BOOKS
+ //           $SalesDetailID = DB::table('customer_libraries')
+ //            ->insertGetId([                                            
+ //              'user_id' => $UserID,              
+ //              'product_id' => $item_list->book_ID,                                              
+ //              'created_at' => $TODAY             
+ //          ]); 
       
-      }
+ //      }
         
-      //DELET CART ITEMS
-       DB::table('ecommerce_shopping_cart')
-          ->where('user_id', $UserID)->delete();  
+ //      //DELET CART ITEMS
+ //       DB::table('ecommerce_shopping_cart')
+ //          ->where('user_id', $UserID)->delete();  
 
 
-       // EWALLET PAYMENT METHOD
-       if($PaymentMethod=='EWallet'){
-             if($UsedECredit>0){
+ //       // EWALLET PAYMENT METHOD
+ //       if($PaymentMethod=='EWallet'){
+ //             if($UsedECredit>0){
 
-                //UPDATE CURRENT BALANCE EWALLET
-                 $BalanceEWalletCredit=$CurrentEWalletCredit-$UsedECredit;
+ //                //UPDATE CURRENT BALANCE EWALLET
+ //                 $BalanceEWalletCredit=$CurrentEWalletCredit-$UsedECredit;
 
-                   $CreditBalanceID = DB::table('ecredits')
-                    ->insertGetId([                                            
-                      'user_id' => $UserID,              
-                      'used_credits' => $UsedECredit,                                              
-                      'balance' => $BalanceEWalletCredit,  
-                      'remarks' => 'Used '.$UsedECredit.' e-credit as payment for order no. '.$OrderNo,
-                      'created_at' => $TODAY             
-                  ]); 
+ //                   $CreditBalanceID = DB::table('ecredits')
+ //                    ->insertGetId([                                            
+ //                      'user_id' => $UserID,              
+ //                      'used_credits' => $UsedECredit,                                              
+ //                      'balance' => $BalanceEWalletCredit,  
+ //                      'remarks' => 'Used '.$UsedECredit.' e-credit as payment for order no. '.$OrderNo,
+ //                      'created_at' => $TODAY             
+ //                  ]); 
 
                  
-                 DB::table('users')
-                  ->where('id',$UserID)
-                  ->update([                              
-                    'ecredits' => $BalanceEWalletCredit,                                                            
-                    'updated_at' => $TODAY
-                ]);    
+ //                 DB::table('users')
+ //                  ->where('id',$UserID)
+ //                  ->update([                              
+ //                    'ecredits' => $BalanceEWalletCredit,                                                            
+ //                    'updated_at' => $TODAY
+ //                ]);    
 
-             }
+ //             }
  
-        // PAYPAL PAYMENT METHOD
-       }else if($PaymentMethod=='PayPal'){
+ //        // PAYPAL PAYMENT METHOD
+ //       }else if($PaymentMethod=='PayPal'){
 
-             $PayPalTransID = DB::table('paypal_payment')
-                ->insertGetId([                                            
-                  'user_id' => $UserID,                                                   
-                  'paypal_param_response' =>$PayPalParamResponse,
-                  'sales_header_id' => $SalesHeaderID,    
-                   'Status' => 'Success',                   
-                  'payment_date_time' => $TODAY             
-              ]); 
+ //             $PayPalTransID = DB::table('paypal_payment')
+ //                ->insertGetId([                                            
+ //                  'user_id' => $UserID,                                                   
+ //                  'paypal_param_response' =>$PayPalParamResponse,
+ //                  'sales_header_id' => $SalesHeaderID,    
+ //                   'Status' => 'Success',                   
+ //                  'payment_date_time' => $TODAY             
+ //              ]); 
 
-         }        
-      } 
-  }
+ //         }        
+ //      } 
+ //  }
         
    
-    //SEND EMAIL NOTIF
-     if($SalesHeaderID>0){
+ //    //SEND EMAIL NOTIF
+ //     if($SalesHeaderID>0){
 
-        $OrderInfo= $this->getOrderInfo($SalesHeaderID);        
-          if($OrderInfo->SalesHeaderID>0){
-              $param['OrderID']=$OrderInfo->SalesHeaderID;
-              $param['EmailAddress']=$OrderInfo->customer_email;
-              $param["MobileNo"] = $OrderInfo->customer_contact_number;
-              $param['OrderNo']=$OrderInfo->order_number;        
-              $param['OrderInfo']=$OrderInfo;
-              $param['OrderItem']=$this->getOrderItemList($SalesHeaderID);
+ //        $OrderInfo= $this->getOrderInfo($SalesHeaderID);        
+ //          if($OrderInfo->SalesHeaderID>0){
+ //              $param['OrderID']=$OrderInfo->SalesHeaderID;
+ //              $param['EmailAddress']=$OrderInfo->customer_email;
+ //              $param["MobileNo"] = $OrderInfo->customer_contact_number;
+ //              $param['OrderNo']=$OrderInfo->order_number;        
+ //              $param['OrderInfo']=$OrderInfo;
+ //              $param['OrderItem']=$this->getOrderItemList($SalesHeaderID);
               
-              $Email = new Email();
-              $Email->SendOrderReceivedEmail($param);    
-          }
+ //              $Email = new Email();
+ //              $Email->SendOrderReceivedEmail($param);    
+ //          }
 
-       }
+ //       }
     
-    }
-    return 'Success';
-  }
+ //    }
+ //    return 'Success';
+ // }
 
 
-// public function proceedToCheckOut($data)
-// {
-//     $Misc         = new Misc();
-//     $Cart         = new Cart();
-//     $UserCustomer = new UserCustomer();
-//     $Voucher      = new Voucher();
-
-//     $TODAY       = date("Y-m-d H:i:s");
-//     $PaymentDate = date("Y-m-d");
-
-//     // CUSTOMER
-//     $CustomerName            = '';
-//     $CustomerEmailAddress    = '';
-//     $CustomerMobileNo        = '';
-//     $ZipCode                 = '';
-//     $CompleteAddress         = '';
-//     $CompleteDeliveryAddress = '';
-
-//     $GrossAmount = 0;
-//     $TaxAmount   = 0;
-//     $NetAmount   = 0;
-
-//     $Platform              = $data['Platform'] ?? '';
-//     $UserID                = $data['UserID'] ?? 0;
-//     $AmountPaid            = $data['AmountPaid'] ?? 0;
-//     $PaymentMethod         = $data['PaymentMethod'] ?? '';
-//     $UsedECredit           = $data['ApplyECredit'] ?? 0;
-//     $VoucherCode           = $data['VoucherCode'] ?? '';
-//     $VoucherDiscountAmount = $data['VoucherDiscountAmount'] ?? 0;
-//     $PayPalParamResponse   = $data['PayPalParamResponse'] ?? '';
-
-   
-//     if (!is_numeric($UserID) || (int) $UserID <= 0) {
-//         return 'Invalid user.';
-//     }
-
-//     $UserID = (int) $UserID;
-
-   
-//     if (!is_numeric($UsedECredit)) {
-
-//         \Log::error('Invalid e-credit request', [
-//             'user_id' => $UserID,
-//             'used_ecredit' => $UsedECredit,
-//         ]);
-
-//         return 'Invalid e-credit amount.';
-//     }
-
-//     $UsedECredit = (float) $UsedECredit;
-
-//     if (!is_finite($UsedECredit)) {
-
-//         \Log::error('Non-finite e-credit request', [
-//             'user_id' => $UserID,
-//             'used_ecredit' => $UsedECredit,
-//         ]);
-
-//         return 'Invalid e-credit amount.';
-//     }
-
-//     if ($UsedECredit < 0) {
-//         return 'Invalid e-credit amount.';
-//     }
-
-   
-//     $MaxECredit = 99999999999999.99;
-
-//     if ($UsedECredit > $MaxECredit) {
-
-//         \Log::error('E-credit request exceeds maximum', [
-//             'user_id' => $UserID,
-//             'used_ecredit' => $UsedECredit,
-//         ]);
-
-//         return 'Invalid e-credit amount.';
-//     }
-
-   
-//     if (
-//         $PaymentMethod == 'Debit Card/Credit Card' ||
-//         $PaymentMethod == 'EWallet' ||
-//         $PaymentMethod == 'PayPal'
-//     ) {
-//         $PaymentStatus = 'PAID';
-//     } else {
-//         $PaymentStatus = 'UNPAID';
-//     }
-
-  
-//     $customer_info = $UserCustomer->getCustomerInformation($data);
-
-//     if (!$customer_info) {
-//         return 'Customer information not found.';
-//     }
-
-//     $CustomerName         = $customer_info->fullname;
-//     $CustomerEmailAddress = $customer_info->emailaddress;
-//     $CustomerMobileNo     = $customer_info->mobile;
-
-//     $CompleteAddress =
-//         $customer_info->address_street . ' ,' .
-//         $customer_info->address_city;
-
-//     $CompleteDeliveryAddress =
-//         $customer_info->address_street . ' ,' .
-//         $customer_info->address_city;
-
-//     $ZipCode = $customer_info->address_zip;
-
-//     $cart_info = $Cart->getCartInfoByUserID($UserID);
-
-//     if (!$cart_info || count($cart_info) == 0) {
-//         return 'Your cart is empty.';
-//     }
-
-  
-//     foreach ($cart_info as $list) {
-
-//         if (
-//             !is_numeric($list->price) ||
-//             !is_numeric($list->discount_amount)
-//         ) {
-//             return 'Invalid product price.';
-//         }
-
-//         if ((float) $list->discount_amount > 0) {
-//             $ProductPrice = (float) $list->discount_amount;
-//         } else {
-//             $ProductPrice = (float) $list->price;
-//         }
-
-//         $GrossAmount += $ProductPrice;
-//     }
-
-    
-//     if (!is_numeric($VoucherDiscountAmount)) {
-//         return 'Invalid voucher discount.';
-//     }
-
-//     $VoucherDiscountAmount = (float) $VoucherDiscountAmount;
-
-//     if ($VoucherDiscountAmount < 0) {
-//         return 'Invalid voucher discount.';
-//     }
-
-//     $NetAmount = $GrossAmount - $VoucherDiscountAmount;
-
-//     if ($NetAmount < 0) {
-//         $NetAmount = 0;
-//     }
-
-  
-//     if ($PaymentMethod == 'EWallet') {
-
-//         if ($UsedECredit <= 0) {
-//             return 'Please enter a valid e-credit amount.';
-//         }
-
-//         if ($UsedECredit > $NetAmount) {
-
-//             \Log::warning('E-credit exceeds order total', [
-//                 'user_id' => $UserID,
-//                 'used_ecredit' => $UsedECredit,
-//                 'net_amount' => $NetAmount,
-//             ]);
-
-//             return 'E-credit amount cannot be greater than the order total.';
-//         }
-//     }
-
-   
-//     try {
-
-//         DB::beginTransaction();
-
-    
-//         $user = DB::table('users')
-//             ->where('id', $UserID)
-//             ->lockForUpdate()
-//             ->first();
-
-//         if (!$user) {
-//             throw new \Exception('User not found.');
-//         }
-
-     
-//         $CurrentEWalletCredit = $user->ecredits;
-
-       
-//         if (!is_numeric($CurrentEWalletCredit)) {
-
-//             \Log::error('Invalid e-credit balance - non numeric', [
-//                 'user_id' => $UserID,
-//                 'balance' => $CurrentEWalletCredit,
-//             ]);
-
-//             throw new \Exception(
-//                 'Your e-credit balance is invalid. Please contact support.'
-//             );
-//         }
-
-//         $CurrentEWalletCredit = (float) $CurrentEWalletCredit;
-
-      
-//         if (!is_finite($CurrentEWalletCredit)) {
-
-//             \Log::error('Invalid e-credit balance - non finite', [
-//                 'user_id' => $UserID,
-//                 'balance' => $CurrentEWalletCredit,
-//             ]);
-
-//             throw new \Exception(
-//                 'Your e-credit balance is invalid. Please contact support.'
-//             );
-//         }
-
-      
-
-//         if ($CurrentEWalletCredit < 0) {
-
-//             \Log::error('Negative e-credit balance detected', [
-//                 'user_id' => $UserID,
-//                 'balance' => $CurrentEWalletCredit,
-//             ]);
-
-//             throw new \Exception(
-//                 'Your e-credit balance is invalid. Please contact support.'
-//             );
-//         }
-
-    
-
-//         if ($CurrentEWalletCredit > $MaxECredit) {
-
-//             \Log::error('Corrupted e-credit balance detected', [
-//                 'user_id' => $UserID,
-//                 'balance' => $CurrentEWalletCredit,
-//                 'maximum_allowed' => $MaxECredit,
-//             ]);
-
-//             throw new \Exception(
-//                 'Your e-credit balance is invalid. Please contact support.'
-//             );
-//         }
-
-       
-//         if ($PaymentMethod == 'EWallet') {
-
-           
-
-//             if ($UsedECredit > $CurrentEWalletCredit) {
-
-//                 \Log::warning('Insufficient e-credit balance', [
-//                     'user_id' => $UserID,
-//                     'balance' => $CurrentEWalletCredit,
-//                     'requested' => $UsedECredit,
-//                 ]);
-
-//                 throw new \Exception(
-//                     'Insufficient e-credit balance.'
-//                 );
-//             }
-
-         
-//             $BalanceEWalletCredit =
-//                 $CurrentEWalletCredit - $UsedECredit;
-
-          
-//             if ($BalanceEWalletCredit < 0) {
-
-//                 \Log::error('Negative e-credit result detected', [
-//                     'user_id' => $UserID,
-//                     'current_balance' => $CurrentEWalletCredit,
-//                     'used_ecredit' => $UsedECredit,
-//                     'new_balance' => $BalanceEWalletCredit,
-//                 ]);
-
-//                 throw new \Exception(
-//                     'Invalid e-credit calculation.'
-//                 );
-//             }
-
-        
-
-//             $BalanceEWalletCredit =
-//                 round($BalanceEWalletCredit, 2);
-
-         
-//             if (!is_finite($BalanceEWalletCredit)) {
-
-//                 throw new \Exception(
-//                     'Invalid e-credit calculation.'
-//                 );
-//             }
-
-//             if ($BalanceEWalletCredit > $MaxECredit) {
-
-//                 throw new \Exception(
-//                     'Invalid e-credit calculation.'
-//                 );
-//             }
-
-//         } else {
-
-//             $BalanceEWalletCredit = $CurrentEWalletCredit;
-//         }
-
-    
-//         $OrderNo = $Misc->getNextOrderNumberFormat();
-
-
-//         $SalesHeaderID = DB::table('ecommerce_sales_headers')
-//             ->insertGetId([
-//                 'user_id' => $UserID,
-//                 'order_number' => $OrderNo,
-//                 'order_source' => $Platform,
-//                 'customer_name' => $CustomerName,
-//                 'customer_email' => $CustomerEmailAddress,
-//                 'customer_contact_number' => $CustomerMobileNo,
-//                 'customer_address' => $CompleteAddress,
-//                 'customer_delivery_adress' => $CompleteDeliveryAddress,
-//                 'customer_delivery_zip' => $ZipCode,
-//                 'gross_amount' => $GrossAmount,
-//                 'net_amount' => $NetAmount,
-//                 'discount_amount' => $VoucherDiscountAmount,
-//                 'payment_method' => $PaymentMethod,
-//                 'payment_status' => $PaymentStatus,
-//                 'ecredit_amount' => $UsedECredit,
-//                 'delivery_type' => 'd2d',
-//                 'delivery_status' => 'Delivered',
-//                 'delivery_fee_amount' => 0,
-//                 'delivery_fee_discount' => 0,
-//                 'status' => 'Active',
-//                 'created_at' => $TODAY
-//             ]);
-
-//         if (!$SalesHeaderID) {
-//             throw new \Exception(
-//                 'Unable to create sales order.'
-//             );
-//         }
-
-     
-//         $ReceiptNo = $Misc->GenerateRandomNo(
-//             6,
-//             'ecommerce_sales_headers',
-//             'order_number'
-//         );
-
-//         $PaymentHeaderID = DB::table('ecommerce_sales_payments')
-//             ->insertGetId([
-//                 'sales_header_id' => $SalesHeaderID,
-//                 'payment_type' => $PaymentMethod,
-//                 'amount' => $NetAmount,
-//                 'status' => $PaymentStatus,
-//                 'payment_date' => $PaymentDate,
-//                 'receipt_number' => $ReceiptNo,
-//                 'created_by' => $UserID,
-//                 'created_at' => $TODAY
-//             ]);
-
-//         if (!$PaymentHeaderID) {
-//             throw new \Exception(
-//                 'Unable to create payment record.'
-//             );
-//         }
-
-       
-//         if ($VoucherCode != '') {
-
-//             $info = $Voucher->getVoucherInfoByCode($VoucherCode);
-
-//             if ($info) {
-
-//                 DB::table('coupon_sales')
-//                     ->insertGetId([
-//                         'customer_id' => $UserID,
-//                         'coupon_id' => $info->coupon_ID,
-//                         'coupon_code' => $VoucherCode,
-//                         'sales_header_id' => $SalesHeaderID,
-//                         'order_status' => $PaymentStatus,
-//                         'created_at' => $TODAY
-//                     ]);
-//             }
-//         }
-
-       
-//         foreach ($cart_info as $item_list) {
-
-//             DB::table('ecommerce_sales_details')
-//                 ->insertGetId([
-//                     'sales_header_id' => $SalesHeaderID,
-//                     'product_id' => $item_list->book_ID,
-//                     'product_name' => $item_list->name,
-//                     'product_category' => $item_list->category_id,
-//                     'price' => $item_list->price,
-//                     'qty' => 0,
-//                     'uom' => $item_list->uom,
-//                     'tax_amount' => 0,
-//                     'promo_id' => 0,
-//                     'promo_description' => '',
-//                     'discount_amount' => $item_list->discount_amount,
-//                     'gross_amount' => $GrossAmount,
-//                     'net_amount' => $NetAmount,
-//                     'created_by' => $UserID,
-//                     'created_at' => $TODAY
-//                 ]);
-
-          
-//             DB::table('customer_libraries')
-//                 ->insertGetId([
-//                     'user_id' => $UserID,
-//                     'product_id' => $item_list->book_ID,
-//                     'created_at' => $TODAY
-//                 ]);
-//         }
-
-      
-
-//         DB::table('ecommerce_shopping_cart')
-//             ->where('user_id', $UserID)
-//             ->delete();
-
-     
-//         if ($PaymentMethod == 'EWallet') {
-
-        
-//             DB::table('ecredits')
-//                 ->insertGetId([
-//                     'user_id' => $UserID,
-//                     'used_credits' => $UsedECredit,
-//                     'balance' => $BalanceEWalletCredit,
-//                     'remarks' =>
-//                         'Used ' .
-//                         $UsedECredit .
-//                         ' e-credit as payment for order no. ' .
-//                         $OrderNo,
-//                     'created_at' => $TODAY
-//                 ]);
-
-          
-//             $updated = DB::table('users')
-//                 ->where('id', $UserID)
-//                 ->update([
-//                     'ecredits' => $BalanceEWalletCredit,
-//                     'updated_at' => $TODAY
-//                 ]);
-
-//             if (!$updated) {
-//                 throw new \Exception(
-//                     'Unable to update e-credit balance.'
-//                 );
-//             }
-//         }
-
-       
-//         if ($PaymentMethod == 'PayPal') {
-
-//             DB::table('paypal_payment')
-//                 ->insertGetId([
-//                     'user_id' => $UserID,
-//                     'paypal_param_response' => $PayPalParamResponse,
-//                     'sales_header_id' => $SalesHeaderID,
-//                     'Status' => 'Success',
-//                     'payment_date_time' => $TODAY
-//                 ]);
-//         }
-
-//         /*
-//         |--------------------------------------------------------------------------
-//         | COMMIT
-//         |--------------------------------------------------------------------------
-//         */
-
-//         DB::commit();
-
-//     } catch (\Throwable $e) {
-
-      
-
-//         DB::rollBack();
-
-//         \Log::error(
-//             'Checkout failed - transaction rolled back',
-//             [
-//                 'user_id' => $UserID,
-//                 'payment_method' => $PaymentMethod,
-//                 'used_ecredit' => $UsedECredit,
-//                 'error' => $e->getMessage(),
-//                 'file' => $e->getFile(),
-//                 'line' => $e->getLine(),
-//             ]
-//         );
-
-//         return $e->getMessage();
-//     }
-
- 
-//     if ($SalesHeaderID > 0) {
-
-//         try {
-
-//             $OrderInfo = $this->getOrderInfo($SalesHeaderID);
-
-//             if ($OrderInfo && $OrderInfo->SalesHeaderID > 0) {
-
-//                 $param['OrderID'] =
-//                     $OrderInfo->SalesHeaderID;
-
-//                 $param['EmailAddress'] =
-//                     $OrderInfo->customer_email;
-
-//                 $param['MobileNo'] =
-//                     $OrderInfo->customer_contact_number;
-
-//                 $param['OrderNo'] =
-//                     $OrderInfo->order_number;
-
-//                 $param['OrderInfo'] =
-//                     $OrderInfo;
-
-//                 $param['OrderItem'] =
-//                     $this->getOrderItemList($SalesHeaderID);
-
-//                 $Email = new Email();
-
-//                 $Email->SendOrderReceivedEmail($param);
-//             }
-
-//         } catch (\Throwable $e) {
-
-         
-//             \Log::error(
-//                 'Order created but email failed',
-//                 [
-//                     'sales_header_id' => $SalesHeaderID,
-//                     'order_number' => $OrderNo,
-//                     'error' => $e->getMessage(),
-//                 ]
-//             );
-//         }
-//     }
-
-//     return 'Success';
-// }
 
  // function getOrderInfo($SalesHeaderID){
    
