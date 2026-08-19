@@ -1727,7 +1727,7 @@ public function proceedToCheckOut(Request $request){
    
    //TRAP AND CHECK CURRENT EWALLETS
    $walletRow = DB::table('users')
-              ->where('id', $UserID)
+              ->where('id', $data['UserID'])
               ->first();
 
     $CurrentEwallet = (float) ($walletRow->ecredits ?? 0);
