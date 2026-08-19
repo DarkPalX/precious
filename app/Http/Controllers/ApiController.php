@@ -1725,13 +1725,12 @@ public function proceedToCheckOut(Request $request){
 
     $data['PayPalParamResponse']='';
 
-    if (!preg_match('/^\d+(\.\d{1,2})?$/', $data['ApplyECredit'])) {
-      return response()->json([
-          'response' => 'Failed',
-          'message'  => 'Cannot Proceed. Theres something wrong with your credits. Please contact our admin.',
-      ]);
+   if (!preg_match('/^\d+(\.\d{1,2})?$/', (string) $data['ApplyECredit'])) {
+     return response()->json([
+        'response' => 'Failed',
+        'message'  => 'Cannot Proceed. Theres something wrong with your credits. Please contact our admin.',
+     ], 400);
    }
-   
 
    //PAYPAL
     if(isset($request['PayPalParamResponse'])){
