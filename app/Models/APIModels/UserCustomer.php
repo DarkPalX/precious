@@ -33,7 +33,7 @@ class UserCustomer extends Model
 {
     $cacheKey = 'user_login_password_' . md5(strtolower(trim($EmailAddress)));
 
-    return Cache::remember($cacheKey, now()->addSeconds(20), function () use ($EmailAddress) {
+    return Cache::remember($cacheKey, now()->addSeconds(10), function () use ($EmailAddress) {
 
         return DB::table('users as usrs')
             ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
@@ -125,7 +125,7 @@ class UserCustomer extends Model
 
     $cacheKey = 'user_login_check_' . md5(strtolower(trim($EmailAddress)) . '_' . $UserPassword);
 
-    $info = Cache::remember($cacheKey, now()->addSeconds(20), function () use ($EmailAddress, $UserPassword) {
+    $info = Cache::remember($cacheKey, now()->addSeconds(10), function () use ($EmailAddress, $UserPassword) {
         return DB::table('users as usrs')
             ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
             ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
@@ -1148,7 +1148,7 @@ public function getCustomerInformation($data){
 
     return Cache::remember(
         $cacheKey,
-        now()->addSeconds(20),
+        now()->addSeconds(10),
         function () use ($UserID) {
             $info = DB::table('users as usrs')
                 ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
@@ -1235,7 +1235,7 @@ public function getCustomerInformationByEmail($data)
 {
     $EmailAddress = strtolower(trim($data['EmailAddress']));
     $cacheKey = 'customer_information_email_' . md5($EmailAddress);
-    return Cache::remember($cacheKey, now()->addSeconds(20), function () use ($EmailAddress) {
+    return Cache::remember($cacheKey, now()->addSeconds(10), function () use ($EmailAddress) {
         return DB::table('users as usrs')
             ->useWritePdo()
             ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
