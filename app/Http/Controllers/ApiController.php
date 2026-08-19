@@ -1724,13 +1724,20 @@ public function proceedToCheckOut(Request $request){
     $data['VoucherDiscountAmount'] = $request->post('VoucherAmount');
 
     $data['PayPalParamResponse']='';
+   
+   //TRAP WEIRD EWALLETS
+   $walletRow = DB::table('users')
+              ->where('id', $UserID)
+              ->first();
 
-   if (!preg_match('/^\d+(\.\d{1,2})?$/', (string) $data['ApplyECredit'])) {
-     return response()->json([
-        'response' => 'Failed',
-        'message'  => 'Cannot Proceed. Theres something wrong with your credits. Please contact our admin.',
-     ], 400);
-   }
+    $CurrentEwallet = (float) ($walletRow->ecredits ?? 0);
+
+    if (!preg_match('/^\d+(\.\d{1,2})?$/', (string) $CurrentEwallet)) {
+          return response()->json([
+              'response' => 'Failed',
+              'message'  => 'Cannot Proceed. Theres something wrong with your credits. Please contact our admin.',
+          ], 400);
+    }
 
    //PAYPAL
     if(isset($request['PayPalParamResponse'])){
