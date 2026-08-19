@@ -1736,7 +1736,7 @@ public function proceedToCheckOut(Request $request){
           return response()->json([
               'response' => 'Failed',
               'message'  => 'Cannot Proceed. Theres something wrong with your credits. Please contact our admin.',
-          ], 400);
+          ]);
     }
 
    //PAYPAL
