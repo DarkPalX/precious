@@ -78,7 +78,7 @@ class Messages extends Model
 
     $CacheKey = "message_notification_list_{$UserID}_{$Status}_{$SearchText}_{$Limit}_{$PageNo}";
 
-    $list = Cache::remember($CacheKey, now()->addSeconds(30), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
+    $list = Cache::remember($CacheKey, now()->addSeconds(10), function () use ($UserID, $Status, $SearchText, $Limit, $PageNo) {
 
         $query = DB::table('message_notification as mssg_notif')
           ->join('users as usrs', 'usrs.id', '=', 'mssg_notif.user_id')       
