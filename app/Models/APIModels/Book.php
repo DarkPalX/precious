@@ -153,7 +153,7 @@ class Book extends Model
         }
 
         $query->orderBy("prds.created_at","ASC");
-        return $query->limit(20)->get();  // get temp 10
+        return $query->limit(60)->get();  // get temp 10
     });
 
     return $list;
