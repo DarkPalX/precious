@@ -559,7 +559,7 @@ class ApiController extends Controller {
     }
     
     //Deactivation Process
-     $getEmailAddress=''; 
+    $getEmailAddress=''; 
     $info=$UserCustomer->getCustomerInformation($data);
     if(isset($info)>0){
         
@@ -1712,7 +1712,10 @@ public function proceedToCheckOut(Request $request){
     $data['Platform'] = $request->post('Platform');   
 
     $data['UserID'] = $request->post('UserID');    
-    $data['ApplyECredit'] = $request->post('ApplyECredit');
+
+    // $data['ApplyECredit'] = $request->post('ApplyECredit');
+    $data['ApplyECredit'] = str_replace(',', '', $request->post('ApplyECredit'));
+
     $data['PaymentMethod'] = $request->post('PaymentMethod');
     $data['SubTotal'] = $request->post('SubTotal');
     $data['AmountPaid'] = $request->post('AmountPaid');
@@ -1722,7 +1725,16 @@ public function proceedToCheckOut(Request $request){
 
     $data['PayPalParamResponse']='';
 
-     if(isset($request['PayPalParamResponse'])){
+    if (!preg_match('/^\d+(\.\d{1,2})?$/', $data['ApplyECredit'])) {
+      return response()->json([
+          'response' => 'Failed',
+          'message'  => 'Cannot Proceed. Theres something wrong with your credits. Please contact our admin.',
+      ], 400);
+    }
+   
+
+   //PAYPAL
+    if(isset($request['PayPalParamResponse'])){
         $data['PayPalParamResponse']=$request->post('PayPalParamResponse');
      }
 
