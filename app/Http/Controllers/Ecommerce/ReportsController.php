@@ -796,25 +796,50 @@ class ReportsController extends Controller
 
     public function read_counts(Request $request)
     {
-    
         $startDate = $request->get('start', false);
         $endDate   = $request->get('end', false);
 
-        // dd($startDate);
         if ($request->ajax()) {
-            $query = Product::select(['sku', 'name', 'read_count'])->where('sku', '<>', '');
+            // Query excluding empty SKUs and products with 0 read counts
+            $query = Product::select(['sku', 'name', 'read_count'])
+                ->where('sku', '<>', '')
+                ->where('read_count', '>', 0); // Exclude 0 read counts
 
+            // Apply date filters if selected
             if ($startDate && $endDate) {
                 $query->whereBetween('created_at', [
                     $startDate . ' 00:00:00',
                     $endDate . ' 23:59:59'
                 ]);
             }
+
             return datatables()->of($query)->make(true);
         }
 
         return view('admin.ecommerce.reports-mobile.read-counts', compact('startDate', 'endDate'));
     }
+
+    // public function read_counts(Request $request)
+    // {
+    
+    //     $startDate = $request->get('start', false);
+    //     $endDate   = $request->get('end', false);
+
+    //     // dd($startDate);
+    //     if ($request->ajax()) {
+    //         $query = Product::select(['sku', 'name', 'read_count'])->where('sku', '<>', '');
+
+    //         if ($startDate && $endDate) {
+    //             $query->whereBetween('created_at', [
+    //                 $startDate . ' 00:00:00',
+    //                 $endDate . ' 23:59:59'
+    //             ]);
+    //         }
+    //         return datatables()->of($query)->make(true);
+    //     }
+
+    //     return view('admin.ecommerce.reports-mobile.read-counts', compact('startDate', 'endDate'));
+    // }
 
     
     // public function read_counts(Request $request)
