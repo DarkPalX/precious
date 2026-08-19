@@ -229,6 +229,7 @@ class Order extends Model
         ) {
 
             $customer_info = $UserCustomer->getCustomerInformation($data);
+
             if (!$customer_info) {
                 throw new \Exception('Customer not found.');
             }
@@ -240,12 +241,10 @@ class Order extends Model
             $CompleteDeliveryAddress = $CompleteAddress;
             $ZipCode                = $customer_info->address_zip;
 
-            // Lock the user's wallet row for this transaction to prevent race conditions
-            // (two simultaneous checkouts both reading the same "current" balance).
             $walletRow = DB::table('users')->where('id', $UserID)->lockForUpdate()->first();
             $CurrentEWalletCredit = (float) $walletRow->ecredits;
 
-            // Rebuild cart totals server-side. Never trust client-sent totals.
+            // Recheck Cart Total
             $cart_info = $Cart->getCartInfoByUserID($UserID);
             if (count($cart_info) == 0) {
                 throw new \Exception('Cart is empty.');
@@ -257,7 +256,7 @@ class Order extends Model
                 $GrossAmount += $ProductPrice;
             }
 
-            // Validate voucher server-side and compute the discount ourselves.
+            //Validate and Recompute
             $VoucherDiscountAmount = 0;
             $CouponID = 0;
             if ($VoucherCode != '') {
@@ -272,14 +271,14 @@ class Order extends Model
 
             $NetAmount = max(0, $GrossAmount - $VoucherDiscountAmount);
 
-            // ---- THE CRITICAL FIX ----
-            // Clamp e-credit usage to what's actually available AND to what's actually owed.
-            // This single block closes the exploit.
+            //Compute and Checking
+
             $UsedECredit = 0;
             if ($PaymentMethod == 'EWallet') {
                 if ($RequestedECredit < 0) {
                     throw new \Exception('Invalid e-credit amount.');
                 }
+
                 $UsedECredit = min($RequestedECredit, $CurrentEWalletCredit, $NetAmount);
                 $UsedECredit = round($UsedECredit, 2);
             }
@@ -362,7 +361,11 @@ class Order extends Model
             }
 
             DB::table('ecommerce_shopping_cart')->where('user_id', $UserID)->delete();
+             
 
+             //Recompute and Current Ewallet Credits
+
+            //If EWallet Payment
             if ($PaymentMethod == 'EWallet' && $UsedECredit > 0) {
                 $BalanceEWalletCredit = round($CurrentEWalletCredit - $UsedECredit, 2);
 
@@ -378,7 +381,8 @@ class Order extends Model
                     'ecredits'   => $BalanceEWalletCredit,
                     'updated_at' => $TODAY,
                 ]);
-            } elseif ($PaymentMethod == 'PayPal') {
+                
+            } elseif ($PaymentMethod == 'PayPal') {   //If Paypal Payment
                 DB::table('paypal_payment')->insertGetId([
                     'user_id'                => $UserID,
                     'paypal_param_response'  => $PayPalParamResponse,
