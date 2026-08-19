@@ -42,20 +42,7 @@
         </p>
 
         <p>
-            If your account has not been activated yet, please use the 4-digit verification code below
-            to complete the activation of your account.
-        </p>
-
-        <table align="center" cellpadding="0" cellspacing="0" style="margin:30px auto;">
-            <tr>
-                <td style="border:2px dashed #7E57C2;background:#F4F0FA;padding:18px 40px;font-size:34px;letter-spacing:8px;color:#6F42C1;font-weight:bold;font-family:Arial,sans-serif;">
-                    {{ $VerificationCode }}
-                </td>
-            </tr>
-        </table>
-
-        <p>
-            If you did not create this account, no further action is required. You may safely ignore this email.
+            If you did not create this account, no further action is required. You may safely ignore and delete this email.
         </p>
 
     </td>
