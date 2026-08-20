@@ -66,7 +66,7 @@
 
                             <div class="form-group">
                                 <label class="d-block">Ecredits</label>
-                                <input type="decimal" min="0" name="ecredits" class="form-control" value="{{$user->ecredits}}" oninput="this.value = Math.max(0, this.value);" onclick="select()">
+                                <input type="decimal" min="0" max="999999" name="ecredits" class="form-control" value="{{$user->ecredits}}" oninput="this.value = Math.max(0, this.value);" onclick="select()">
                             </div>
 
                             @php 
