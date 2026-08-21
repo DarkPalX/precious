@@ -20,10 +20,8 @@ use View;
 use Input;
 use Image;
 
-
 use App\Models\APIModels\Misc;
 use App\Models\APIModels\Email;
-
 
 class UserCustomer extends Model
 
@@ -74,50 +72,8 @@ class UserCustomer extends Model
     });
 }
 
-// public function getUserLoginPassword($EmailAddress){
+ public function doCheckUserLogin($data){
 
-//     $info = DB::table('users as usrs')
-//         ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
-//         ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
-//         ->selectraw("
-
-//             usrs.id as user_ID,
-//             COALESCE(usrs.firstname,'') as firstname,
-//             COALESCE(usrs.lastname,'') as lastname,
-//             COALESCE(usrs.name,'') as fullname,
-//             COALESCE(usrs.avatar,'') as avatar,
-//             COALESCE(usrs.email,'') as emailaddress,
-//             COALESCE(usrs.email_verified_at,'') as email_verified_at,
-//             COALESCE(usrs.password,'') as password,
-//             COALESCE(usrs.mobile,'') as mobile,
-//             COALESCE(usrs.phone,'') as phone,
-
-//             COALESCE(usrs.birth_date,'') as birth_date,
-//             DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-//             DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-//             COALESCE(usrs.address_street,'') as address_street,
-//             COALESCE(usrs.address_city,'') as address_city,
-//             COALESCE(usrs.address_municipality,'') as address_municipality,
-//             COALESCE(usrs.address_province,'') as address_province,
-//             COALESCE(usrs.address_zip,'') as address_zip,
-
-//             COALESCE(usrs.ecredits,0) as ecredits,
-//             COALESCE(usrs.verification_code,'') as verification_code,
-//             COALESCE(usrs.remember_token,'') as remember_token,
-
-//             COALESCE(cart.item_cart, 0) as item_cart,
-//             COALESCE(msg.item_message, 0) as item_message,
-
-//             COALESCE(usrs.is_active,0) as is_active
-//         ")
-//         ->whereRaw('usrs.email = ?', [$EmailAddress])
-//         ->first();
-
-//     return $info;
-// }
-
-  
-  public function doCheckUserLogin($data){
     $IsVerified = "Failed";
     $Platform = $data['Platform'];
     $EmailAddress = $data['EmailAddress'];
@@ -163,56 +119,6 @@ class UserCustomer extends Model
 
     return $info;
 }
-
-//   public function doCheckUserLogin($data){
-
-//     $IsVerified = "Failed";
-//     $Platform = $data['Platform'];
-
-//     $EmailAddress = $data['EmailAddress'];
-//     $UserPassword = bcrypt($data['Password']);
-
-//     $info = DB::table('users as usrs')
-//         ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
-//         ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
-//         ->selectraw("
-
-//             usrs.id as user_ID,
-//             COALESCE(usrs.firstname,'') as firstname,
-//             COALESCE(usrs.lastname,'') as lastname,
-//             COALESCE(usrs.name,'') as fullname,
-//             COALESCE(usrs.avatar,'') as avatar,
-//             COALESCE(usrs.email,'') as emailaddress,
-//             COALESCE(usrs.email_verified_at,'') as email_verified_at,
-//             COALESCE(usrs.password,'') as password,
-//             COALESCE(usrs.mobile,'') as mobile,
-//             COALESCE(usrs.phone,'') as phone,
-
-//             COALESCE(usrs.birth_date,'') as birth_date,
-//             DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-//             DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-//             COALESCE(usrs.address_street,'') as address_street,
-//             COALESCE(usrs.address_city,'') as address_city,
-//             COALESCE(usrs.address_municipality,'') as address_municipality,
-//             COALESCE(usrs.address_province,'') as address_province,
-//             COALESCE(usrs.address_zip,'') as address_zip,
-
-//             COALESCE(usrs.ecredits,0) as ecredits,
-//             COALESCE(usrs.verification_code,'') as verification_code,
-//             COALESCE(usrs.remember_token,'') as remember_token,
-
-//             COALESCE(cart.item_cart, 0) as item_cart,
-//             COALESCE(msg.item_message, 0) as item_message,
-
-//             COALESCE(usrs.is_active,0) as is_active
-//         ")
-//         ->whereRaw('usrs.email = ?', [$EmailAddress])
-//         ->whereRaw('usrs.password = ?', [$UserPassword])
-//         ->where('usrs.is_active', 1)
-//         ->first();
-
-//     return $info;
-// }
 
   public function doForgotPassword($data){
         
@@ -729,138 +635,6 @@ public function doRegisterCustomer($data)
     return 'Success';
 }
 
-// public function doRegisterCustomer($data)
-// {
-//     $Misc  = new Misc();
-//     $TODAY = date('Y-m-d H:i:s');
-
-//     $UserID       = $data['UserID'];
-//     $FirstName    = trim($data['FirstName']);
-//     $LastName     = trim($data['LastName']);
-//     $FullName     = trim($data['FullName']);
-//     $EmailAddress = strtolower(trim($data['EmailAddress']));
-//     $MobileNo     = trim($data['MobileNo']);
-//     $Password     = trim($data['Password']);
-
-//     // Validate email format first, regardless of update or insert.
-//     $validator = \Validator::make(
-//         ['email' => $EmailAddress],
-//         [
-//             'email' => [
-//                 'required',
-//                 'email:rfc,dns',
-//                 'max:255',
-//             ],
-//         ]
-//     );
-
-//     if ($validator->fails()) {
-//         return 'InvalidEmail';
-//     }
-
-//     if ($UserID > 0) {
-//         // ---- UPDATE EXISTING USER ----
-
-//         // If they're changing their email, make sure the new one
-//         // isn't already taken by someone else.
-//         $EmailTaken = DB::table('users')
-//             ->useWritePdo()
-//             ->whereRaw('LOWER(TRIM(email)) = ?', [$EmailAddress])
-//             ->where('id', '!=', $UserID)
-//             ->exists();
-
-//         if ($EmailTaken) {
-//             return 'EmailAlreadyExists';
-//         }
-
-//         DB::table('users')
-//             ->where('id', $UserID)
-//             ->update([
-//                 'firstname'  => ucwords($FirstName),
-//                 'lastname'   => ucwords($LastName),
-//                 'name'       => ucwords($FullName),
-//                 'email'      => $EmailAddress,
-//                 'mobile'     => $MobileNo,
-//                 'password'   => bcrypt($Password),
-//                 'updated_at' => $TODAY,
-//             ]);
-
-//         return 'Success';
-//     }
-
-   
-//    // DB lock trans
-//     return DB::transaction(function () use (
-//         $Misc, $TODAY, $FirstName, $LastName, $FullName,
-//         $EmailAddress, $MobileNo, $Password
-//     ) {
-        
-//         $ExistingUser = DB::table('users')
-//             ->useWritePdo()
-//             ->whereRaw('LOWER(TRIM(email)) = ?', [$EmailAddress])
-//             ->lockForUpdate()
-//             ->first();
-
-//         if ($ExistingUser) {
-//             return 'EmailAlreadyExists';
-//         }
-
-//         $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
-
-//         try {
-//             $UserID = DB::table('users')->insertGetId([
-//                 'firstname'         => ucwords($FirstName),
-//                 'lastname'          => ucwords($LastName),
-//                 'name'              => ucwords($FullName),
-//                 'email'             => $EmailAddress,
-//                 'mobile'            => $MobileNo,
-//                 'password'          => bcrypt($Password),
-//                 'verification_code' => $VerificationCode,
-//                 'provider'          => 'none',
-//                 'role_id'           => 6,
-//                 'is_active'         => 1,
-//                 'created_at'        => $TODAY,
-//             ]);
-//         } catch (QueryException $e) {
-
-//             $MySqlErrorCode    = (int) ($e->errorInfo[1] ?? 0);
-//             $MySqlErrorMessage = (string) ($e->errorInfo[2] ?? $e->getMessage());
-
-//             if (
-//                 $MySqlErrorCode === 1062 &&
-//                 strpos($MySqlErrorMessage, 'users_email_unique') !== false
-//             ) {
-//                 return 'EmailAlreadyExists';
-//             }
-
-//             throw $e;
-//         }
-
-//         // Notification row - only for genuinely new accounts.
-//         DB::table('message_notification')->insertGetId([
-//             'user_id' => $UserID,
-//             'message_notification' =>
-//                 'Welcome to Precious Pages Corp! Thank you for signing up. ' .
-//                 'Here at Precious Pages, we offer a vast and wide variety of ' .
-//                 'books across all genres, from bestsellers to hidden treasures. ' .
-//                 'Whether you are searching for your next captivating read or a ' .
-//                 'special gift for a fellow book enthusiast, you are sure to find ' .
-//                 'something you love. Welcome aboard, and happy reading!',
-//             'created_at' => $TODAY,
-//         ]);
-
-//         // Registration/activation email - only for genuinely new accounts.
-//         $Email = new Email();
-//         $Email->SendCustomerRegistrationEmail([
-//             'FullName'         => $FullName,
-//             'EmailAddress'     => $EmailAddress,
-//             'VerificationCode' => $VerificationCode,
-//         ]);
-
-//         return 'Success';
-//     });
-// }
-
 public function doRegisterSocial($data)
 {
     $Misc  = new Misc();
@@ -932,215 +706,6 @@ public function doRegisterSocial($data)
     });
 }
 
-
-  // public function doRegisterSocial($data) {
-
-  //   $Misc = new Misc();
-  //   $TODAY = date("Y-m-d H:i:s");
-
-  //   $FirstName = $data['FirstName'];
-  //   $LastName = $data['LastName'];
-  //   $FullName = $data['FullName'];
-
-  //   $EmailAddress = strtolower(trim($data['EmailAddress']));
-  //   $SocialMedia = $data['SocialMedia'];
-
-  //   // Reuse an existing account instead of attempting a duplicate insert.
-  //   $ExistingUser = DB::table('users')
-  //       ->where('email', $EmailAddress)
-  //       ->first();
-
-  //   if ($ExistingUser) {
-  //     return 'Success';
-  //   }
-  //   else{
-
-  //       try {
-
-  //          $VerificationCode = $Misc->GenerateRandomNo(4, 'users', 'verification_code');
-  //          $UserID = DB::table('users')
-  //             ->insertGetId([
-  //               'firstname' => $FirstName,
-  //               'lastname' => $LastName,
-  //               'name' => $FullName,
-  //               'email' => $EmailAddress,
-  //               'email_verified_at' => $TODAY,
-  //               'password' => bcrypt(Str::random(40)),
-  //               'verification_code' => $VerificationCode,
-  //               'provider' => $SocialMedia,
-  //               'role_id' => 6,
-  //               'is_active' => 1,
-  //               'created_at' => $TODAY,
-  //               'updated_at' => $TODAY
-  //             ]);
-               
-
-  //          // Send the welcome notification only when a new user was created.
-  //           DB::table('message_notification')
-  //             ->insert([
-  //               'user_id' => $UserID,
-  //               'message_notification' => 'Welcome to Precious Pages Corp! Thank you for signing up. Here at Precious Pages, we offer a vast and wide variety of books across all genres, from bestsellers to hidden treasures. Whether you are searching for your next captivating read or a special gift for a fellow book enthusiast, you are sure to find something you love. Welcome aboard, and happy reading!',
-  //                'created_at' => $TODAY
-  //           ]); 
-
-  //       } catch (QueryException $e) {
-  //         // Another request may have created the same social account at the same time.
-  //         if ((int) ($e->errorInfo[1] ?? 0) === 1062) {
-  //           $ExistingUser = DB::table('users')
-  //               ->where('email', $EmailAddress)
-  //               ->first();
-
-  //           if ($ExistingUser) {
-  //             return 'Success';
-  //           }
-  //         }
-
-  //         throw $e;
-  //       }
- 
-  //   }
-    
-  //   return 'Success';
-
-  // }
-
-  // public function getCustomerInformation($data){
-        
-  //   $UserID = $data['UserID'];   
-
-  //   $info = DB::table('users as usrs')              
-    
-  //      ->selectraw("
-  //         usrs.id as user_ID,
-
-  //         COALESCE(usrs.firstname,'') as firstname,
-  //         COALESCE(usrs.lastname,'') as lastname,
-  //         COALESCE(usrs.name,'') as fullname,
-  //         COALESCE(usrs.avatar,'') as avatar,
-
-  //         COALESCE(usrs.email,'') as emailaddress,
-  //         COALESCE(usrs.email_verified_at,'') as email_verified_at,
-  //         COALESCE(usrs.password,'') as password,
-  //         COALESCE(usrs.mobile,'') as mobile,
-  //         COALESCE(usrs.phone,'') as phone,
-
-  //         COALESCE(usrs.birth_date,'') as birth_date,
-  //         DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-  //         DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-
-  //         COALESCE(usrs.address_street,'') as address_street,
-  //         COALESCE(usrs.address_city,'') as address_city,
-  //         COALESCE(usrs.address_municipality,'') as address_municipality,
-  //         COALESCE(usrs.address_province,'') as address_province,
-  //         COALESCE(usrs.address_zip,'') as address_zip,
-
-  //         COALESCE(usrs.ecredits,0) as ecredits,
-  //         COALESCE(usrs.verification_code,'') as verification_code,
-  //         COALESCE(usrs.remember_token,'') as remember_token,
-          
-  //         COALESCE((
-  //              SELECT 
-  //                  COUNT(cart.qty) FROM 
-  //                     ecommerce_shopping_cart as cart                                    
-  //                 WHERE cart.user_id = usrs.id                           
-  //                 AND cart.qty=0 
-  //                 LIMIT 1
-                                              
-  //             )
-  //       ,0) as item_cart,
-
-  //       COALESCE((
-  //              SELECT 
-  //                  COUNT(mssg_notif.id ) FROM 
-  //                     message_notification as mssg_notif                                    
-  //                 WHERE mssg_notif.user_id = usrs.id                           
-  //                 AND mssg_notif.is_read=0 
-  //                 LIMIT 1
-                                              
-  //             )
-  //        ,0) as item_message,
-
-
-  //         COALESCE(usrs.is_active,0) as is_active         
-          
-  //       ")        
-  //       ->whereRaw('usrs.id =?',[$UserID])                                      
-  //       ->first();
-
-  //   return $info;
-
-  // }
- 
-
-//  public function getCustomerInformation($data){
-        
-//     $UserID = $data['UserID'];
-
-//     $cacheKey = 'customer_information_' . $UserID;
-
-//     return Cache::remember(
-//         $cacheKey,
-//         now()->addSeconds(30),
-//         function () use ($UserID) {
-
-//             $info = DB::table('users as usrs')
-            
-//                 ->selectraw("
-//                     usrs.id as user_ID,
-
-//                     COALESCE(usrs.firstname,'') as firstname,
-//                     COALESCE(usrs.lastname,'') as lastname,
-//                     COALESCE(usrs.name,'') as fullname,
-//                     COALESCE(usrs.avatar,'') as avatar,
-
-//                     COALESCE(usrs.email,'') as emailaddress,
-//                     COALESCE(usrs.email_verified_at,'') as email_verified_at,
-//                     COALESCE(usrs.password,'') as password,
-//                     COALESCE(usrs.mobile,'') as mobile,
-//                     COALESCE(usrs.phone,'') as phone,
-
-//                     COALESCE(usrs.birth_date,'') as birth_date,
-//                     DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-//                     DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-
-//                     COALESCE(usrs.address_street,'') as address_street,
-//                     COALESCE(usrs.address_city,'') as address_city,
-//                     COALESCE(usrs.address_municipality,'') as address_municipality,
-//                     COALESCE(usrs.address_province,'') as address_province,
-//                     COALESCE(usrs.address_zip,'') as address_zip,
-
-//                     COALESCE(usrs.ecredits,0) as ecredits,
-//                     COALESCE(usrs.verification_code,'') as verification_code,
-//                     COALESCE(usrs.remember_token,'') as remember_token,
-
-//                     COALESCE((
-//                         SELECT COUNT(cart.qty)
-//                         FROM ecommerce_shopping_cart as cart
-//                         WHERE cart.user_id = usrs.id
-//                         AND cart.qty = 0
-//                         LIMIT 1
-//                     ),0) as item_cart,
-
-//                     COALESCE((
-//                         SELECT COUNT(mssg_notif.id)
-//                         FROM message_notification as mssg_notif
-//                         WHERE mssg_notif.user_id = usrs.id
-//                         AND mssg_notif.is_read = 0
-//                         LIMIT 1
-//                     ),0) as item_message,
-
-//                     COALESCE(usrs.is_active,0) as is_active
-//                 ")
-
-//                 ->where('usrs.id', '=', $UserID)
-//                 ->first();
-
-//             return $info;
-//         }
-//     );
-// }
-
-
 public function getCustomerInformation($data){
 
     $UserID = $data['UserID'];
@@ -1188,105 +753,6 @@ public function getCustomerInformation($data){
         }
     );
 }
-
-
-// public function getCustomerInformation($data)
-// {
-//     $UserID = $data['UserID'];
-
-//     $info = DB::table('users as usrs')
-//         ->leftJoin(
-//             'vw_user_cart_zero_qty_count as cart',
-//             'cart.user_id',
-//             '=',
-//             'usrs.id'
-//         )
-//         ->leftJoin(
-//             'vw_user_unread_message_count as msg',
-//             'msg.user_id',
-//             '=',
-//             'usrs.id'
-//         )
-//         ->selectRaw("
-//             usrs.id as user_ID,
-
-//             COALESCE(usrs.firstname, '') as firstname,
-//             COALESCE(usrs.lastname, '') as lastname,
-//             COALESCE(usrs.name, '') as fullname,
-//             COALESCE(usrs.avatar, '') as avatar,
-//             COALESCE(usrs.email, '') as emailaddress,
-//             COALESCE(usrs.email_verified_at, '') as email_verified_at,
-//             COALESCE(usrs.password, '') as password,
-//             COALESCE(usrs.mobile, '') as mobile,
-//             COALESCE(usrs.phone, '') as phone,
-//             COALESCE(usrs.birth_date, '') as birth_date,
-
-//             DATE_FORMAT(usrs.birth_date, '%Y-%m-%d') as birth_date_format,
-//             DATE_FORMAT(usrs.birth_date, '%m/%d/%Y') as birth_date_proper_format,
-
-//             COALESCE(usrs.address_street, '') as address_street,
-//             COALESCE(usrs.address_city, '') as address_city,
-//             COALESCE(usrs.address_municipality, '') as address_municipality,
-//             COALESCE(usrs.address_province, '') as address_province,
-//             COALESCE(usrs.address_zip, '') as address_zip,
-
-//             COALESCE(usrs.ecredits, 0) as ecredits,
-
-//             COALESCE(usrs.verification_code, '') as verification_code,
-//             COALESCE(usrs.remember_token, '') as remember_token,
-
-//             COALESCE(cart.item_cart, 0) as item_cart,
-//             COALESCE(msg.item_message, 0) as item_message,
-
-//             COALESCE(usrs.is_active, 0) as is_active
-//         ")
-//         ->where('usrs.id', $UserID)
-//         ->first();
-
-//     return $info;
-// }
-
-// public function getCustomerInformationByEmail($data)
-// {
-//   $EmailAddress = strtolower(trim($data['EmailAddress']));
-
-//     $info = DB::table('users as usrs')
-//         ->useWritePdo()
-//         ->leftJoin('vw_user_cart_zero_qty_count as cart', 'cart.user_id', '=', 'usrs.id')
-//         ->leftJoin('vw_user_unread_message_count as msg', 'msg.user_id', '=', 'usrs.id')
-//         ->selectraw("
-//             usrs.id as user_ID,
-//             COALESCE(usrs.firstname,'') as firstname,
-//             COALESCE(usrs.lastname,'') as lastname,
-//             COALESCE(usrs.name,'') as fullname,
-//             COALESCE(usrs.avatar,'') as avatar,
-//             COALESCE(usrs.email,'') as emailaddress,
-//             COALESCE(usrs.email_verified_at,'') as email_verified_at,
-//             COALESCE(usrs.password,'') as password,
-//             COALESCE(usrs.mobile,'') as mobile,
-//             COALESCE(usrs.phone,'') as phone,
-//             COALESCE(usrs.birth_date,'') as birth_date,
-//             DATE_FORMAT(usrs.birth_date,'%Y-%m-%d') as birth_date_format,
-//             DATE_FORMAT(usrs.birth_date,'%m/%d/%Y') as birth_date_proper_format,
-//             COALESCE(usrs.address_street,'') as address_street,
-//             COALESCE(usrs.address_city,'') as address_city,
-//             COALESCE(usrs.address_municipality,'') as address_municipality,
-//             COALESCE(usrs.address_province,'') as address_province,
-//             COALESCE(usrs.address_zip,'') as address_zip,
-//             COALESCE(usrs.ecredits,0) as ecredits,
-//             COALESCE(usrs.verification_code,'') as verification_code,
-//             COALESCE(usrs.remember_token,'') as remember_token,
-
-//             COALESCE(cart.item_cart, 0) as item_cart,
-//             COALESCE(msg.item_message, 0) as item_message,
-
-//             COALESCE(usrs.is_active,0) as is_active
-//         ")
-//         ->where('usrs.email = ?', [$EmailAddress])
-//         ->first();
-
-//     return $info;
-// }
 
 public function getCustomerInformationByEmail($data)
 {
@@ -1410,85 +876,152 @@ public function getCustomerInformationByEmail($data)
     return  $Status;
  }
 
- public function doUpdateCustomerProfile($data) {
-
-    $Misc  = New Misc();
+ public function doUpdateCustomerProfile($data)
+{
     $TODAY = date("Y-m-d H:i:s");
 
-    $UserID=$data['UserID'];
-    
-    $FirstName=$data['FirstName'];
-    $LastName=$data['LastName'];
+    $UserID = $data['UserID'] ?? 0;
 
-    $FullName=$data['FullName'];
-    $BirthDate=$data['BirthDate'].' 00:00:00';
+    $FirstName = $data['FirstName'] ?? '';
+    $LastName = $data['LastName'] ?? '';
+    $FullName = $data['FullName'] ?? '';
 
-    $EmailAddress=$data['EmailAddress'];
-    $MobileNo=$data['MobileNo'];
+    $BirthDate = $data['BirthDate'] ?? '';
 
-    $StreetAddress=$data['StreetAddress'];
-    $CityName=$data['CityName'];
-    $ZipCode=$data['ZipCode'];
+    $EmailAddress = $data['EmailAddress'] ?? '';
+    $MobileNo = $data['MobileNo'] ?? '';
 
-    $ImageFileName=$data['ImageFileName'];
+    $StreetAddress = $data['StreetAddress'] ?? '';
+    $CityName = $data['CityName'] ?? '';
+    $ZipCode = $data['ZipCode'] ?? '';
 
-    $Avatar='';  
-    if($ImageFileName!=''){
-      $Avatar='https://preciouspagesbookstore.com.ph/storage/avatars/'.$ImageFileName;  
-    } 
+    $ImageFileName = $data['ImageFileName'] ?? '';
 
-    if($UserID > 0){
+    if ($UserID > 0) {
 
-      if (str_contains($BirthDate, 'Not Set')) { // has Containt the word Not Set
-            
-            DB::table('users')
-            ->where('id',$UserID)
-            ->update([      
-              'firstname' => trim(ucwords($FirstName)),              
-              'lastname' => trim(ucwords($LastName)), 
-              'avatar' => $Avatar,       
-              'name' => trim(ucwords($FullName)),              
-              'email' => trim($EmailAddress), 
-              'mobile' => trim($MobileNo),
-              'address_street' => $StreetAddress,                                      
-              'address_city' => $CityName,
-              'address_zip' => $ZipCode,                                       
-              'updated_at' => $TODAY
-           ]); 
+        //BASE USER UPDATE
+        $updateData = [
+            'firstname'      => trim(ucwords($FirstName)),
+            'lastname'       => trim(ucwords($LastName)),
+            'name'           => trim(ucwords($FullName)),
+            'email'          => trim($EmailAddress),
+            'mobile'         => trim($MobileNo),
+            'address_street' => $StreetAddress,
+            'address_city'   => $CityName,
+            'address_zip'    => $ZipCode,
+            'updated_at'     => $TODAY,
+        ];
+        
 
-      }else{
+        //CHECK BIRTH DATE
+        if (!empty(trim($BirthDate)) &&!str_contains($BirthDate, 'Not Set')){
+            $updateData['birth_date'] = trim($BirthDate) . ' 00:00:00';
+        }
 
-          DB::table('users')
-            ->where('id',$UserID)
-            ->update([      
-              'firstname' => trim(ucwords($FirstName)),              
-              'lastname' => trim(ucwords($LastName)), 
-              'avatar' => $Avatar,       
-              'name' => trim(ucwords($FullName)),              
-              'email' => trim($EmailAddress), 
-              'birth_date' => $BirthDate,
-              'mobile' => trim($MobileNo),
-              'address_street' => $StreetAddress,                                      
-              'address_city' => $CityName,
-              'address_zip' => $ZipCode,                                       
-              'updated_at' => $TODAY
-           ]);
+        if (!empty(trim($ImageFileName))) {
 
-      }
+            $updateData['avatar'] ='https://preciouspagesbookstore.com.ph/storage/avatars/'. trim($ImageFileName);
+        }
 
-        //Send Notification Message
-           $MessageNotificationID = DB::table('message_notification')
-                ->insertGetId([                                            
-                  'user_id' => $UserID,                                                         
-                  'message_notification' => 'Your profile information has been successfully updated! We appreciate you for keeping & taking your time to ensure your detail information always updated.',
-                  'created_at' => $TODAY             
-              ]);  
-           
+        // UPDATE TABLE
+        DB::table('users')
+            ->where('id', $UserID)
+            ->update($updateData);
+
+        //SEND NOTIF
+        DB::table('message_notification')
+            ->insertGetId([
+                'user_id' => $UserID,
+                'message_notification' =>
+                    'Your profile information has been successfully updated! '
+                    . 'We appreciate you for keeping & taking your time to ensure '
+                    . 'your detail information always updated.',
+                'created_at' => $TODAY,
+            ]);
     }
-   
-    return 'Success';
 
-  }
+    return 'Success';
+}
+
+ // public function doUpdateCustomerProfile($data) {
+
+ //    $Misc  = New Misc();
+ //    $TODAY = date("Y-m-d H:i:s");
+
+ //    $UserID=$data['UserID'];
+    
+ //    $FirstName=$data['FirstName'];
+ //    $LastName=$data['LastName'];
+
+ //    $FullName=$data['FullName'];
+ //    $BirthDate=$data['BirthDate'].' 00:00:00';
+
+ //    $EmailAddress=$data['EmailAddress'];
+ //    $MobileNo=$data['MobileNo'];
+
+ //    $StreetAddress=$data['StreetAddress'];
+ //    $CityName=$data['CityName'];
+ //    $ZipCode=$data['ZipCode'];
+
+ //    $ImageFileName=$data['ImageFileName'];
+
+ //    $Avatar='';  
+ //    if($ImageFileName!=''){
+ //      $Avatar='https://preciouspagesbookstore.com.ph/storage/avatars/'.$ImageFileName;  
+ //    } 
+
+ //    if($UserID > 0){
+
+ //      if (str_contains($BirthDate, 'Not Set')) { // has Containt the word Not Set
+            
+ //            DB::table('users')
+ //            ->where('id',$UserID)
+ //            ->update([      
+ //              'firstname' => trim(ucwords($FirstName)),              
+ //              'lastname' => trim(ucwords($LastName)), 
+ //              'avatar' => $Avatar,       
+ //              'name' => trim(ucwords($FullName)),              
+ //              'email' => trim($EmailAddress), 
+ //              'mobile' => trim($MobileNo),
+ //              'address_street' => $StreetAddress,                                      
+ //              'address_city' => $CityName,
+ //              'address_zip' => $ZipCode,                                       
+ //              'updated_at' => $TODAY
+ //           ]); 
+
+ //      }else{
+
+ //          DB::table('users')
+ //            ->where('id',$UserID)
+ //            ->update([      
+ //              'firstname' => trim(ucwords($FirstName)),              
+ //              'lastname' => trim(ucwords($LastName)), 
+ //              'avatar' => $Avatar,       
+ //              'name' => trim(ucwords($FullName)),              
+ //              'email' => trim($EmailAddress), 
+ //              'birth_date' => $BirthDate,
+ //              'mobile' => trim($MobileNo),
+ //              'address_street' => $StreetAddress,                                      
+ //              'address_city' => $CityName,
+ //              'address_zip' => $ZipCode,                                       
+ //              'updated_at' => $TODAY
+ //           ]);
+
+ //      }
+
+ //        //Send Notification Message
+ //        $MessageNotificationID = DB::table('message_notification')
+ //                ->insertGetId([                                            
+ //                  'user_id' => $UserID,                                                         
+ //                  'message_notification' => 'Your profile information has been successfully updated! We appreciate you for keeping & taking your time to ensure your detail information always updated.',
+ //                  'created_at' => $TODAY             
+ //              ]);  
+           
+ //    }
+   
+ //    return 'Success';
+
+ //  }
 
   public function SubscribedToNewsLetter($data){
 
@@ -1625,57 +1158,11 @@ public function saveSearchKeyword($data){
               'customer_id' => $UserID,              
               'keyword' => $Keywords,                                                                                                                                                          
               'created_at' => $TODAY             
-            ]);        
-
-   // $info = DB::table('searched_keywords')          
-   //      ->whereRaw('customer_id=?',[$UserID])    
-   //      ->whereRaw('keyword=?',[$Keywords])          
-   //      ->first();
-
-   //  if(isset($info)>0){
-
-   //      DB::table('searched_keywords')
-   //      ->where('customer_id',$UserID)
-   //      ->where('keyword',$Keywords)
-   //      ->update([                                                       
-   //       'created_at' => $TODAY  
-   //     ]);   
-    
-   //  }else{
-
-   //   $SearchKeywordID = DB::table('searched_keywords')
-   //      ->insertGetId([                                            
-   //        'customer_id' => $UserID,              
-   //        'keyword' => $Keywords,                                                                                                                                                          
-   //        'created_at' => $TODAY             
-   //      ]); 
-   //    }
-      
+            ]);           
    }
   
-
-  //  public function getCustomerSearchKeyWords($data)
-  //  {
-  //   $UserID = $data['UserID'];
-
-  //   $query = DB::table('searched_keywords as kywrd')
-  //       ->selectRaw("
-  //           kywrd.id as Keyword_ID,
-  //           COALESCE(kywrd.keyword, '') as Keyword,
-  //           COALESCE(kywrd.customer_id, 0) as CustomerID
-  //       ");
-
-  //   $query->where('kywrd.customer_id', $UserID);
-  //   $query->orderBy('kywrd.created_at', 'DESC');
-  //   $query->limit(8);
-
-  //   $list = $query->get();
-
-  //   return $list;
-  // }
-
-   public function getCustomerSearchKeyWords($data)
-{
+ public function getCustomerSearchKeyWords($data)
+  {
     $UserID = $data['UserID'];
     $cacheKey = "customer_search_keywords_{$UserID}";
     return Cache::remember($cacheKey, 30, function () use ($UserID) {
@@ -1693,6 +1180,6 @@ public function saveSearchKeyword($data){
 
         return $query->get();
     });
-}
+ }
 
 }
