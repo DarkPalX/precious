@@ -29,7 +29,7 @@ class CustomerController extends Controller
 {
     use SendsPasswordResetEmails;
 
-    private $searchFields = ['name', 'is_active'];
+    private $searchFields = ['name', 'email', 'is_active'];
 
     public function index($param = null)
     {   
