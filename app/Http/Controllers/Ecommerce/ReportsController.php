@@ -800,19 +800,27 @@ class ReportsController extends Controller
         $endDate   = $request->get('end', false);
 
         if ($request->ajax()) {
-            $query = Product::select(['sku', 'name', 'read_count'])
-                ->where('sku', '<>', '');
+            $query = Product::query()
+                ->select('products.sku', 'products.name')
+                ->selectRaw('COALESCE(SUM(readcount_details.read_count), 0) as read_count')
+                ->leftJoin('readcount_details', function ($join) use ($startDate, $endDate) {
+                    $join->on('products.id', '=', 'readcount_details.product_id')
+                        ->whereNull('readcount_details.deleted_at');
 
-            // Exclude 0 read counts ONLY during file export or print
+                    // Apply date range filter to readcount_details creation date
+                    if ($startDate && $endDate) {
+                        $join->whereBetween('readcount_details.created_at', [
+                            $startDate . ' 00:00:00',
+                            $endDate . ' 23:59:59'
+                        ]);
+                    }
+                })
+                ->where('products.sku', '<>', '')
+                ->groupBy('products.id', 'products.sku', 'products.name');
+
+            // Exclude products with total read_count of 0 during export
             if ($request->get('is_export') == 1) {
-                $query->where('read_count', '>', 0);
-            }
-
-            if ($startDate && $endDate) {
-                $query->whereBetween('created_at', [
-                    $startDate . ' 00:00:00',
-                    $endDate . ' 23:59:59'
-                ]);
+                $query->havingRaw('COALESCE(SUM(readcount_details.read_count), 0) > 0');
             }
 
             return datatables()->of($query)->make(true);
@@ -820,6 +828,46 @@ class ReportsController extends Controller
 
         return view('admin.ecommerce.reports-mobile.read-counts', compact('startDate', 'endDate'));
     }
+
+    // FOR ADDING THE CURRENT READ COUNTS OF PRODUCTS BUT TAKE NOTE THE DATE RANGE WONT TAKE EFFECT FOR THIS
+
+    // INSERT INTO readcount_details (product_id, read_count, created_at)
+    // SELECT 
+    //     id, 
+    //     read_count, 
+    //     NOW()
+    // FROM products
+    // WHERE read_count > 0;
+
+
+    
+
+    // public function read_counts(Request $request)
+    // {
+    //     $startDate = $request->get('start', false);
+    //     $endDate   = $request->get('end', false);
+
+    //     if ($request->ajax()) {
+    //         $query = Product::select(['sku', 'name', 'read_count'])
+    //             ->where('sku', '<>', '');
+
+    //         // Exclude 0 read counts ONLY during file export or print
+    //         if ($request->get('is_export') == 1) {
+    //             $query->where('read_count', '>', 0);
+    //         }
+
+    //         if ($startDate && $endDate) {
+    //             $query->whereBetween('created_at', [
+    //                 $startDate . ' 00:00:00',
+    //                 $endDate . ' 23:59:59'
+    //             ]);
+    //         }
+
+    //         return datatables()->of($query)->make(true);
+    //     }
+
+    //     return view('admin.ecommerce.reports-mobile.read-counts', compact('startDate', 'endDate'));
+    // }
 
     // public function read_counts(Request $request)
     // {
