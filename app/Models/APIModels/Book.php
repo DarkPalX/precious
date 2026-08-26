@@ -673,7 +673,7 @@ public function getDetailsCatalogueList($data){
 
     $CacheKey = 'details_catalogue_list_' . $HeaderID . '_' . $UserID;
 
-    $list = Cache::remember($CacheKey, now()->addMinutes(10), function () use ($HeaderID, $UserID) {
+    $list = Cache::remember($CacheKey, now()->addMinutes(5), function () use ($HeaderID, $UserID) {
 
         $query = DB::table('product_catalog_details as prod_det_cat')
             ->join('product_catalog_headers as prod_hdrs_cat', 'prod_hdrs_cat.id', '=', 'prod_det_cat.product_catalog_header_id')
