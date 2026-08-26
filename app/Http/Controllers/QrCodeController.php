@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
 use App\Models\Ecommerce\Product;
-
 
 class QrCodeController extends Controller
 {
     public function generate_file_qr(Request $request)
     {
-        $product = Product::where('id', $request->product_id)->first();
+        $product = Product::findOrFail($request->product_id);
+
         // Retrieve the file_url parameter from the request
         $file_url = $product->file_url;
 
@@ -33,7 +32,7 @@ class QrCodeController extends Controller
     
     public function generate_product_qr(Request $request)
     {
-        $product = Product::where('id', $request->product_id)->first();
+        $product = Product::findOrFail($request->product_id);
 
         $page = new Page();
         $page->name = $product->name  . ' QR Code';
@@ -54,12 +53,11 @@ class QrCodeController extends Controller
         return view('theme.pages.ecommerce.product-qr', compact('qrCode', 'product', 'page'));
     }
 
-    public function product_series(){
-
+    public function product_series()
+    {
         $page = new Page();
         $page->name = 'Product Series';
         
         return view('theme.pages.ecommerce.product-series', compact('page'));
     }
 }
-
