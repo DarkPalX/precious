@@ -647,7 +647,7 @@ public function getSearchAudioBookList($data){
 
     $CacheKey = 'header_catalogue_list';
 
-    $list = Cache::remember($CacheKey, now()->addHours(5), function () {
+    $list = Cache::remember($CacheKey, now()->addMinutes(5), function () {
 
         $query = DB::table('product_catalog_headers as prod_hdrs_cat')
            ->selectraw("
@@ -799,6 +799,7 @@ public function getDetailsCatalogueList($data){
         ]);
 
     }
+
   }
 
   // public function saveReadBookCount($data){
