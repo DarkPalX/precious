@@ -2001,7 +2001,9 @@ public function getAllBookHeaderCatalogueList(Request $request){
   $response = "Failed";
   $responseMessage = "";
  
-  $data['Status'] = 'All';
+  // $data['Status'] = 'All';
+
+  $data['Status'] =1; // Active
   $data['SearchText'] = '';
 
   $data["PageNo"] = 0;
