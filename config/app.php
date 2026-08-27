@@ -281,6 +281,7 @@ return [
     'CompanyName' => 'PRECIOUS PAGES CORP',
     'CompanyEmail'=>'info@preciouspages.com.ph',
     'CompanySupportEmail'=>'',
+    'CompanyPaymentEmail'=>'preciouspagespay@gmail.com',
     'CompanyNoReplyEmail'=>'no-reply@preciouspagesbookstore.com.ph',
     'CompanyMobileNo' => '0922 868 4362',
     'CompanyTelephoneNo' => '8518-7610',
