@@ -841,7 +841,6 @@ public function saveReadBookCount($data)
                 'product_id' => $ProductID,
                 'read_count' => 1,
                 'created_at' => now(),
-                'updated_at' => now(),
                 'deleted_at' => null,
             ]);
         });
