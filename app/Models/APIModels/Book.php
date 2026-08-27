@@ -802,35 +802,37 @@ public function getDetailsCatalogueList($data){
 
   }
 
-  // public function saveReadBookCount($data){
+// public function saveReadBookCount($data)
+// {
+//     $ProductID = $data['ProductID'];
 
-  //   $ProductID=$data['ProductID'];        
-  //   $read_count=1;     
-  //   $book_info = DB::table('products')          
-  //         ->where('id',$ProductID) 
-  //         ->first();
-  //       if(isset($book_info)>0){
-  //           $read_count=$book_info->read_count+1;
-  //           DB::table('products')
-  //               ->where('id',$ProductID)
-  //               ->update([                                                       
-  //                 'read_count' => $read_count  
-  //              ]);
-  //      }          
-  // }
+//     DB::transaction(function () use ($ProductID) {
 
-public function saveReadBookCount($data)
-{
-    $ProductID = $data['ProductID'];
+//         DB::table('products')
+//             ->where('id', $ProductID)
+//             ->increment('read_count');
+        
+
+//         //SAVE DETAILS
+//         DB::table('readcount_details')->insert([
+//             'product_id' => $ProductID,
+//             'read_count' => 1,
+//             'created_at' => now(),
+//             'deleted_at' => null,
+//         ]);
+
+
+
+//     });
+// }
+
+  public function saveReadBookCount($data){
+
+  $ProductID = $data['ProductID'];
 
     DB::transaction(function () use ($ProductID) {
 
-        DB::table('products')
-            ->where('id', $ProductID)
-            ->increment('read_count');
-        
-
-        //SAVE DETAILS
+        // Save read count detail
         DB::table('readcount_details')->insert([
             'product_id' => $ProductID,
             'read_count' => 1,
@@ -838,7 +840,20 @@ public function saveReadBookCount($data)
             'deleted_at' => null,
         ]);
 
+        // Get total read count for this product base for actual date of reading
+        $totalReadCount = DB::table('readcount_details')
+            ->where('product_id', $ProductID)
+            ->whereNull('deleted_at')
+            ->sum('read_count');
+
+        // Update products.read_count
+        DB::table('products')
+            ->where('id', $ProductID)
+            ->update([
+                'read_count' => $totalReadCount,
+            ]);
     });
+
 }
 
  public function saveContinueReadBook($data){
