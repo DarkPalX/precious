@@ -117,7 +117,6 @@ class Email extends Model
       }  
    
       // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc  
-
       $param['AdminEmailAddress'] = $contactList;    
       
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
@@ -137,7 +136,7 @@ class Email extends Model
 
 	          $message->from($param['CompanyNoReplyEmail'],'noreply');
 	          $message->to($param["EmailAddress"]);
-	          //$message->cc($param['AdminEmailAddress']);
+	          $message->cc($param['AdminEmailAddress']);
 	          $message->subject('Inquiry Received - ' . $param['FullName'] . ' - Mobile App');
 
 	          $message->attach($param['FullPathImageFileName'], [
@@ -161,7 +160,7 @@ class Email extends Model
 	        function($message) use ($param){
 	         $message->from($param['CompanyNoReplyEmail'],'noreply');
 	          $message->to($param["EmailAddress"]);
-	          //$message->cc($param['AdminEmailAddress']);
+	          $message->cc($param['AdminEmailAddress']);
 	          $message->subject('Inquiry Received - ' . $param['FullName'] . ' - Mobile App');
 	        }
 	      );	
