@@ -831,22 +831,39 @@ public function getDetailsCatalogueList($data){
 public function saveReadBookCount($data)
 {
     $ProductID = $data['ProductID'];
+
     try {
         DB::transaction(function () use ($ProductID) {
-            DB::table('products')
-                ->where('id', $ProductID)
-                ->increment('read_count');
-
+            // Save read count detail
             DB::table('readcount_details')->insert([
                 'product_id' => $ProductID,
                 'read_count' => 1,
                 'created_at' => now(),
                 'deleted_at' => null,
             ]);
+
+            // Get total read count for this product
+            $totalReadCount = DB::table('readcount_details')
+                ->where('product_id', $ProductID)
+                ->whereNull('deleted_at')
+                ->sum('read_count');
+
+            // Update products.read_count
+            DB::table('products')
+                ->where('id', $ProductID)
+                ->update([
+                    'read_count' => $totalReadCount,
+             ]);
+
         });
+
     } catch (\Throwable $e) {
-        \Log::error('saveReadBookCount failed: ' . $e->getMessage());
-        throw $e; // or return response with error for debugging
+        \Log::error('saveReadBookCount failed', [
+            'product_id' => $ProductID,
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+        throw $e;
     }
 }
 
