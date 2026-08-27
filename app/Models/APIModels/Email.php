@@ -94,7 +94,9 @@ class Email extends Model
 
    public function SendContactUsEmail($param){
 
-	    $param["AdminEmailAddress"]=config('app.CompanyEmail');
+	    //$param["AdminEmailAddress"]=config('app.CompanyEmail');
+
+   	    $param["AdminEmailAddress"]=config('app.CompanyPaymentEmail'); // using gmail: preciouspagespay@gmail.com 
     	$param["CompanyNoReplyEmail"]=config('app.CompanyNoReplyEmail');
 
     	$ImageFileName=$param['ImageFileName'];
@@ -103,7 +105,8 @@ class Email extends Model
     	//$ccEmails = DB::table('email_recipients')->pluck('email')->toArray();
     
       $i=0;
-    	$contactList= [];         
+
+      $contactList= [];         
       $info_list=$this->getAdminEmailList();
 
       if(count($info_list)>0){
@@ -114,6 +117,7 @@ class Email extends Model
       }  
    
       // $param['AdminEmailAddress'] = ['fransadan@gmail.com', 'zira0814@gmail.com']; //fix sample emails via ->cc or ->bcc  
+
       $param['AdminEmailAddress'] = $contactList;    
       
 	    if (filter_var($param['EmailAddress'], FILTER_VALIDATE_EMAIL) && config('app.EmailDebugMode') == '0'){
@@ -131,10 +135,11 @@ class Email extends Model
 	        ],
 	        function($message) use ($param){
 
-	          $message->from($param['CompanyNoReplyEmail']);
+	          $message->from($param['CompanyNoReplyEmail'],'noreply');
 	          $message->to($param["EmailAddress"]);
-	          $message->cc($param['AdminEmailAddress']);
-	          $message->subject('Contact Us - Inquiry');
+	          //$message->cc($param['AdminEmailAddress']);
+	          $message->subject('Inquiry Received - ' . $param['FullName'] . ' - Mobile App');
+
 	          $message->attach($param['FullPathImageFileName'], [
                     'as' => basename($param['FullPathImageFileName']),
                     'mime' => mime_content_type($param['FullPathImageFileName']),
@@ -154,10 +159,10 @@ class Email extends Model
              'Message'=> $param['Message']
 	        ],
 	        function($message) use ($param){
-	          $message->from($param['CompanyNoReplyEmail']);
+	         $message->from($param['CompanyNoReplyEmail'],'noreply');
 	          $message->to($param["EmailAddress"]);
-	          $message->cc($param['AdminEmailAddress']);
-	          $message->subject('Contact Us - Inquiry');
+	          //$message->cc($param['AdminEmailAddress']);
+	          $message->subject('Inquiry Received - ' . $param['FullName'] . ' - Mobile App');
 	        }
 	      );	
 
