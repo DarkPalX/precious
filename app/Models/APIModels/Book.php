@@ -827,7 +827,8 @@ public function getDetailsCatalogueList($data){
 // }
 
   public function saveReadBookCount($data){
-
+  
+  $totalReadCount=0;
   $ProductID = $data['ProductID'];
 
     DB::transaction(function () use ($ProductID) {
