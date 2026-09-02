@@ -801,7 +801,7 @@ class ReportsController extends Controller
 
         if ($request->ajax()) {
             $query = Product::query()
-                ->select('products.sku', 'products.name')
+                ->select('products.sku', 'products.name', 'products.author')
                 ->selectRaw('COALESCE(SUM(readcount_details.read_count), 0) as read_count')
                 ->leftJoin('readcount_details', function ($join) use ($startDate, $endDate) {
                     $join->on('products.id', '=', 'readcount_details.product_id')
@@ -816,7 +816,7 @@ class ReportsController extends Controller
                     }
                 })
                 ->where('products.sku', '<>', '')
-                ->groupBy('products.id', 'products.sku', 'products.name');
+                ->groupBy('products.id', 'products.sku', 'products.name', 'products.author');
 
             // Exclude products with total read_count of 0 during export
             if ($request->get('is_export') == 1) {

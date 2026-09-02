@@ -1,48 +1,59 @@
 @extends('admin.layouts.report')
 
 @section('pagecss')
+<style>
+    /* Prevent table cell content from breaking out and enforce word wrap */
+    #example td, #example th {
+        white-space: normal !important;
+        word-wrap: break-word;
+    }
+</style>
 @endsection
 
 @section('content')
-<div style="margin: 40px 40px 200px 40px; font-family: Arial;">
+<div style="margin: 20px 15px 100px 15px; font-family: Arial;">
     <h4 class="mg-b-0 tx-spacing--1">Read Counts</h4>
     
     <form action="{{ route('report.read-counts.mobile') }}" method="get">
         <input type="hidden" name="act" value="go">
         @csrf
-        <table style="font-size: 12px;">
+        <table style="font-size: 12px; margin-bottom: 15px;">
             <tr>
                 <td>Start Date</td>
                 <td>End Date</td>
             </tr>
             <tr>
                 <td>
-                    <input style="font-size: 12px; width: 140px;" type="date" class="form-control input-sm" name="start" autocomplete="off" value="{{ $startDate }}">
+                    <input style="font-size: 12px; width: 130px;" type="date" class="form-control input-sm" name="start" autocomplete="off" value="{{ $startDate }}">
                 </td>
                 <td>
-                    <input style="font-size: 12px; width: 140px;" type="date" class="form-control input-sm" name="end" autocomplete="off" value="{{ $endDate }}">
+                    <input style="font-size: 12px; width: 130px;" type="date" class="form-control input-sm" name="end" autocomplete="off" value="{{ $endDate }}">
                 </td>
                 <td>
-                    <button type="submit" class="btn btn-sm btn-primary" style="margin: 0px 0px 0px 10px;">Generate</button>
+                    <button type="submit" class="btn btn-sm btn-primary" style="margin-left: 5px;">Generate</button>
                 </td>
                 <td>
-                    <a href="{{ route('report.read-counts.mobile') }}" class="btn btn-sm btn-success" style="margin: 0px 0px 0px 5px;">Reset</a>
+                    <a href="{{ route('report.read-counts.mobile') }}" class="btn btn-sm btn-success" style="margin-left: 5px;">Reset</a>
                 </td>
             </tr>
         </table>
     </form>
 
-    <br><br>
+    <br>
 
-    <table id="example" class="ajax-table display nowrap" style="width: 100%;">
-        <thead>
-            <tr>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Read Counts</th>
-            </tr>
-        </thead>
-    </table>
+    <!-- Scroll wrapper guarantees the page layout will never break -->
+    <div style="width: 100%; overflow-x: auto;">
+        <table id="example" class="ajax-table display" style="width: 100%; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Code</th>
+                    <th style="width: 40%;">Name</th>
+                    <th style="width: 25%;">Author</th>
+                    <th style="width: 15%;">Read Counts</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 @endsection
 
@@ -62,10 +73,11 @@
             }
         };
 
-        // Initialize main visible table (Displays 0 read counts)
+        // Initialize main visible table
         $('.ajax-table').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false, // Prevents DataTables from calculating huge fixed widths
             ajax: {
                 url: "{{ route('report.read-counts.mobile') }}",
                 type: "GET",
@@ -75,9 +87,10 @@
                 }
             },
             columns: [
-                { data: 'sku' },
-                { data: 'name' },
-                { data: 'read_count' }
+                { data: 'sku', width: '20%' },
+                { data: 'name', width: '40%' },
+                { data: 'author', width: '25%' },
+                { data: 'read_count', width: '15%' }
             ],
             dom: 'Bfrtip',
             buttons: [
