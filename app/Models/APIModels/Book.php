@@ -327,7 +327,7 @@ public function getTopReadsBookList($data){
             ");
 
         $query->whereNull("prds.deleted_at");
-        $query->orderBy("cont.read_count", "DESC");
+        $query->orderBy("prds.read_count", "DESC");
 
         return $query->limit(10)->get();  // get temp 10
     });
