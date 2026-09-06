@@ -248,6 +248,95 @@ public function getContinueToReadBookList($data){
     return $list;
 }
 
+public function getTopReadsBookList($data){
+
+    $Status=$data['Status'];
+    $SearchText=$data['SearchText'];
+    $Limit=$data['Limit'];
+    $PageNo=$data['PageNo'];
+
+    $UserID = isset($data['UserID']) ? (int)$data['UserID'] : 0;
+
+    $CacheKey = 'top_read_' . $UserID;
+
+    $list = Cache::remember($CacheKey, now()->addSeconds(30), function () use ($UserID) {
+
+        $query = DB::table('products as prds')
+           
+            ->leftJoin('vw_product_primary_image as img', 'img.product_id', '=', 'prds.id')
+            ->leftJoin('vw_product_rating as rt', 'rt.product_id', '=', 'prds.id')
+            ->leftJoin('vw_product_active_promo as promo', 'promo.product_id', '=', 'prds.id')
+            ->leftJoin('vw_customer_bookmarks as bm', function ($join) use ($UserID) {
+                $join->on('bm.product_id', '=', 'prds.id')
+                     ->where('bm.customer_id', '=', $UserID);
+            })
+            ->leftJoin('vw_customer_library as cl', function ($join) use ($UserID) {
+                $join->on('cl.product_id', '=', 'prds.id')
+                     ->where('cl.user_id', '=', $UserID);
+            })
+            ->selectraw("
+                prds.id as book_ID,
+
+                COALESCE(prds.name,'') as name,
+                COALESCE(prds.author,'') as author,
+                COALESCE(prds.subtitle,'') as subtitle,
+                COALESCE(prds.description,'') as short_description,
+
+                COALESCE(prds.slug,'') as slug,
+                COALESCE(prds.file_url,'') as file_url,
+
+                COALESCE(prds.category_id,0) as category_id,
+                COALESCE(prds.book_type,'') as book_type,
+
+                COALESCE(prds.sku,'') as sku,
+                COALESCE(prds.size,'') as size,
+                COALESCE(prds.weight,'') as weight,
+                COALESCE(prds.texture,'') as texture,
+                COALESCE(prds.uom,'') as uom,
+
+                COALESCE(prds.is_featured,0) as is_featured,
+                COALESCE(prds.is_best_seller,0) as is_best_seller,
+                COALESCE(prds.is_free,0) as is_free,
+                COALESCE(prds.is_premium,0) as is_premium,
+
+                COALESCE(prds.ebook_price,0) as price,
+                COALESCE(prds.ebook_discount_price,0) as discount_price,
+
+                COALESCE(prds.reorder_point,0) as reorder_point,
+                COALESCE(prds.read_count,0) as read_count,
+
+                CONCAT(
+                    COALESCE(prds.name, ''), ' ',
+                    COALESCE(prds.author, ''), '',
+                    COALESCE(prds.book_type, ''), '',
+                    COALESCE(prds.subtitle, '')
+                ) AS search_fields,
+
+                COALESCE(img.image_path, '') AS image_path,
+                COALESCE(rt.rating, 0) AS rating,
+                COALESCE(promo.promo_discount_percent, 0) AS promo_discount_percent,
+                COALESCE(
+                    prds.ebook_price - (promo.promo_discount_percent / 100 * prds.ebook_price),
+                    0
+                ) AS promo_discount_price,
+
+                COALESCE(bm.chapter_no, '') AS chapter_no,
+                COALESCE(cl.product_id, 0) AS product_library_exist,
+
+                COALESCE(prds.status, '') AS status
+            ");
+
+        $query->whereNull("prds.deleted_at");
+        $query->orderBy("cont.read_count", "DESC");
+
+        return $query->limit(10)->get();  // get temp 10
+    });
+
+    return $list;
+}
+
+
+
 public function getSearchBookList($data){
 
     $Status=$data['Status'];
