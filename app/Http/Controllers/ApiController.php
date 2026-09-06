@@ -1867,6 +1867,31 @@ public function getRandomBookList(Request $request)
     return response()->json($randomBooks);
 }
 
+
+public function getTopReadsBookList(Request $request)
+ {
+
+   $Books = new Book();
+
+  $response = "Failed";
+  $responseMessage = "";
+
+  $data['Status'] = 'All';
+  $data['SearchText'] = '';
+
+  $data['UserID']=0;
+   if(isset($data['UserID'])){
+      $data['UserID'] = $request->post('UserID');    
+   }
+
+  $data["PageNo"] = 0;
+  $data["Limit"] = $request->post('Limit');
+
+  $topReadsBook = $Books->getTopReadsBookList($data);
+
+  return response()->json($topReadsBook);
+}
+
 public function getContinueToReadBookList(Request $request)
  {
 
