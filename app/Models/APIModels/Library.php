@@ -196,7 +196,7 @@ public function getSubscribedReadBooksList($data){
         $query->where("rbooks.user_id",'=',$UserID);
         $query->whereNull("rbooks.deleted_at");
         $query->where("rbooks.is_read",'=',1);
-        $query->where("rbooks.status",'=','PUBLISHED');
+        $query->where("prds.status",'=','PUBLISHED');
         
         if($SearchText != ''){
             $arSearchText = explode(" ",$SearchText);
