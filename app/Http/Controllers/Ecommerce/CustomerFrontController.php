@@ -192,10 +192,24 @@ class CustomerFrontController extends Controller
 
             session()->forget('cart');
             $cnt = Cart::where('user_id',Auth::id())->count();
-            if($cnt > 0)
-                return redirect(route('cart.front.show'));
-            else
-                return redirect(route('product.front.list'));
+
+            // if($cnt > 0)
+            //     return redirect(route('cart.front.show'));
+            // else
+            //     return redirect(route('product.front.list'));
+
+            if ($isIosSource) {
+                if ($isIosDevice) {
+                    return redirect(route('product.front.ebook-list'));
+                }
+            }
+            else{
+                if($cnt > 0)
+                    return redirect(route('cart.front.show'));
+                else
+                    return redirect(route('product.front.list'));
+            }
+
         } else {
             Auth::logout();
             return back()->with('error', __('auth.login.incorrect_input'));    

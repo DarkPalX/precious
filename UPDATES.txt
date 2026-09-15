@@ -1,4 +1,13 @@
-######################################### MAY 12, 2026 #######################################
+######################################### SEPTEMBER 15, 2026 #######################################
+FOR ADDING THE CURRENT READ COUNTS OF PRODUCTS BUT TAKE NOTE THE DATE RANGE WONT TAKE EFFECT FOR THIS
+
+    INSERT INTO readcount_details (product_id, read_count, created_at)
+    SELECT 
+        id, 
+        read_count, 
+        NOW()
+    FROM products
+    WHERE read_count > 0;
 
 
 
