@@ -79,7 +79,7 @@ class Book extends Model
                 COALESCE(prds.ebook_discount_price, 0) AS discount_price,
 
                 COALESCE(prds.reorder_point, 0) AS reorder_point,
-                COALESCE(prds.read_count, 0) AS read_count,
+                COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
 
                 CONCAT(
                     COALESCE(prds.name, ''), ' ',
@@ -215,7 +215,7 @@ public function getContinueToReadBookList($data){
                 COALESCE(prds.ebook_discount_price,0) as discount_price,
 
                 COALESCE(prds.reorder_point,0) as reorder_point,
-                COALESCE(prds.read_count,0) as read_count,
+               COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
 
                 CONCAT(
                     COALESCE(prds.name, ''), ' ',
