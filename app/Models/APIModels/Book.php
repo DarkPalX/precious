@@ -215,7 +215,7 @@ public function getContinueToReadBookList($data){
                 COALESCE(prds.ebook_discount_price,0) as discount_price,
 
                 COALESCE(prds.reorder_point,0) as reorder_point,
-               COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
+                COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
 
                 CONCAT(
                     COALESCE(prds.name, ''), ' ',
@@ -303,7 +303,7 @@ public function getTopReadsBookList($data){
                 COALESCE(prds.ebook_discount_price,0) as discount_price,
 
                 COALESCE(prds.reorder_point,0) as reorder_point,
-                COALESCE(prds.read_count,0) as read_count,
+                COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
 
                 CONCAT(
                     COALESCE(prds.name, ''), ' ',
@@ -327,7 +327,13 @@ public function getTopReadsBookList($data){
             ");
 
         $query->whereNull("prds.deleted_at");
-        $query->orderBy("prds.read_count", "DESC");
+        // $query->orderBy("prds.read_count", "DESC");
+         $query->orderByRaw("
+                COALESCE(prds.read_count, 0) +
+                COALESCE(prds.old_read_count, 0)
+                DESC
+        ");
+
 
         return $query->limit(10)->get();  // get temp 10
     });
@@ -399,7 +405,7 @@ public function getSearchBookList($data){
                 COALESCE(prds.ebook_discount_price,0) as discount_price,
 
                 COALESCE(prds.reorder_point,0) as reorder_point,
-                COALESCE(prds.read_count,0) as read_count,
+                COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
 
                 CONCAT(
                     COALESCE(prds.name, ''), ' ',
@@ -570,7 +576,7 @@ public function getSearchAudioBookList($data){
                 COALESCE(prds.ebook_discount_price,0) as discount_price,
 
                 COALESCE(prds.reorder_point,0) as reorder_point,
-                COALESCE(prds.read_count,0) as read_count,
+                 COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
 
                 CONCAT(
                     COALESCE(prds.name, ''), ' ',
@@ -678,7 +684,7 @@ public function getSearchAudioBookList($data){
             COALESCE(prds.ebook_discount_price,0) as discount_price,
 
             COALESCE(prds.reorder_point,0) as reorder_point,
-            COALESCE(prds.read_count,0) as read_count,
+             COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
 
             CONCAT(
                 COALESCE(prds.name, ''), ' ',
@@ -813,7 +819,7 @@ public function getDetailsCatalogueList($data){
                 COALESCE(prds.ebook_discount_price,0) as discount_price,
 
                 COALESCE(prds.reorder_point,0) as reorder_point,
-                COALESCE(prds.read_count,0) as read_count,
+                COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
 
                 CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,
 
