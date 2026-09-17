@@ -93,6 +93,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            width: 100%;
             gap: 1.5rem;
             margin-bottom: 1rem;
         }
@@ -103,10 +104,15 @@
             white-space: nowrap;
         }
         .report-toolbar form {
+            flex: 0 0 auto;
+            max-width: none;
+            overflow-x: visible;
+            margin: 0 0 0 auto !important;
+        }
+        .report-toolbar form.wide-filter {
             flex: 0 1 auto;
             max-width: calc(100% - 260px);
             overflow-x: auto;
-            margin: 0 !important;
         }
         .report-toolbar form table {
             margin: 0 !important;
@@ -197,6 +203,9 @@
                 $toolbar.insertBefore($title);
                 $toolbar.append($title);
                 if ($form.length) {
+                    if ($form.find('td').length > 8) {
+                        $form.addClass('wide-filter');
+                    }
                     $toolbar.append($form);
                 }
             });
