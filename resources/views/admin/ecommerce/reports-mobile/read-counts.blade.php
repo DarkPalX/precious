@@ -12,34 +12,37 @@
 
 @section('content')
 <div style="margin: 20px 15px 100px 15px; font-family: Arial;">
-    <h4 class="mg-b-0 tx-spacing--1">Read Counts</h4>
     
-    <form action="{{ route('report.read-counts.mobile') }}" method="get">
-        <input type="hidden" name="act" value="go">
-        @csrf
-        <table style="font-size: 12px; margin-bottom: 15px;">
-            <tr>
-                <td>Start Date</td>
-                <td>End Date</td>
-            </tr>
-            <tr>
-                <td>
-                    <input style="font-size: 12px; width: 130px;" type="date" class="form-control input-sm" name="start" autocomplete="off" value="{{ $startDate }}">
-                </td>
-                <td>
-                    <input style="font-size: 12px; width: 130px;" type="date" class="form-control input-sm" name="end" autocomplete="off" value="{{ $endDate }}">
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-sm btn-primary" style="margin-left: 5px;">Generate</button>
-                </td>
-                <td>
-                    <a href="{{ route('report.read-counts.mobile') }}" class="btn btn-sm btn-success" style="margin-left: 5px;">Reset</a>
-                </td>
-            </tr>
-        </table>
-    </form>
+   <div class="flex items-end justify-between mb-3">
+        <h2 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Read Counts Report</h2>
 
-    <br>
+        <form action="{{ route('report.read-counts.mobile') }}" method="get">
+            <input type="hidden" name="act" value="go">
+            @csrf
+            <table style="font-size: 12px; margin-bottom: 0;">
+                <tr>
+                    <td>Start Date</td>
+                    <td>End Date</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input style="font-size: 12px; width: 130px;" type="date" class="form-control input-sm" name="start" autocomplete="off" value="{{ $startDate }}">
+                    </td>
+                    <td>
+                        <input style="font-size: 12px; width: 130px;" type="date" class="form-control input-sm" name="end" autocomplete="off" value="{{ $endDate }}">
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-sm btn-primary" style="margin-left: 5px;">Generate</button>
+                    </td>
+                    <td>
+                        <a href="{{ route('report.read-counts.mobile') }}" class="btn btn-sm btn-success" style="margin-left: 5px;">Reset</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    
+
 
     <!-- Scroll wrapper guarantees the page layout will never break -->
     <div style="width: 100%; overflow-x: auto;">
@@ -85,11 +88,7 @@
 
         // Fetch all export rows into a hidden DataTable. The visible table
         // remains server-side paginated at 20 rows and is never changed.
-        function exportAllFromServer(e, dt, button, config) {
-            var builtInName = {
-                excel: 'excelHtml5'
-            }[config.extend] || config.extend;
-
+        function exportAllFromServer(e, dt, button, config, builtInName) {
             $.ajax({
                 url: "{{ route('report.read-counts.mobile') }}",
                 type: 'GET',
@@ -101,7 +100,20 @@
                     is_export: 1
                 },
                 success: function (response) {
-                    var exportTable = $('<table>').appendTo('body').hide();
+                    var exportTable = $('<table>')
+                        .append('<thead><tr><th>Code</th><th>Name</th><th>Author</th><th>Read Counts</th></tr></thead>')
+                        .appendTo('body')
+                        .hide();
+                    var exportConfig = $.extend(true, {}, config);
+                    delete exportConfig.action;
+                    exportConfig.extend = builtInName;
+                    exportConfig.exportOptions = $.extend(true, {}, exportConfig.exportOptions, {
+                        // The temporary table is hidden, so ':visible' would
+                        // select no columns for Excel/PDF/Print exports.
+                        columns: [0, 1, 2, 3],
+                        modifier: { page: 'all' }
+                    });
+
                     var exportDt = exportTable.DataTable({
                         data: response.data,
                         columns: [
@@ -113,11 +125,12 @@
                         paging: false,
                         searching: false,
                         ordering: false,
-                        dom: 't'
+                        dom: 'B t',
+                        buttons: [exportConfig]
                     });
 
-                    var builtInAction = $.fn.dataTable.ext.buttons[builtInName].action;
-                    builtInAction.call(this, e, exportDt, button, config);
+                    // Let Buttons resolve and execute its own built-in action.
+                    exportDt.button(0).trigger();
                     exportDt.destroy();
                     exportTable.remove();
                 }
@@ -148,7 +161,9 @@
                 {
                     extend: 'print',
                     exportOptions: exportOptionsFiltered,
-                    action: exportAllFromServer
+                    action: function (e, dt, button, config) {
+                        exportAllFromServer(e, dt, button, config, 'print');
+                    }
                 },
                 {
                     extend: 'csv',
@@ -158,7 +173,9 @@
                 {
                     extend: 'excel',
                     exportOptions: exportOptionsFiltered,
-                    action: exportAllFromServer
+                    action: function (e, dt, button, config) {
+                        exportAllFromServer(e, dt, button, config, 'excelHtml5');
+                    }
                 },
                 {   
                     extend: 'pdfHtml5',
@@ -166,7 +183,9 @@
                     orientation: 'landscape',
                     pageSize: 'LEGAL',
                     exportOptions: exportOptionsFiltered,
-                    action: exportAllFromServer
+                    action: function (e, dt, button, config) {
+                        exportAllFromServer(e, dt, button, config, 'pdfHtml5');
+                    }
                 },
                 'colvis'
             ],
