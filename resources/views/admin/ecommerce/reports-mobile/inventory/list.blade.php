@@ -122,7 +122,7 @@
                     text: 'PDF',
                     exportOptions: {
                         modifier: {
-                            page: 'current'
+                            page: 'all'
                         }
                     },
                     orientation : 'landscape',
@@ -138,6 +138,5 @@
     } );
 </script>
 @endsection
-
 
 

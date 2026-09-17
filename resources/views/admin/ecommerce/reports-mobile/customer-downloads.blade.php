@@ -50,26 +50,6 @@
     </table>
     @endif
     
-    <div class="row row-sm">
-
-        <div class="col-md-6">
-            <div class="mg-t-5">
-                @if ($rs->firstItem() == null)
-                    <p class="tx-gray-400 tx-12 d-inline">{{__('common.showing_zero_items')}}</p>
-                @else
-                    <p class="tx-gray-400 tx-12 d-inline">Showing {{ $rs->firstItem() }} to {{ $rs->lastItem() }} of {{ $rs->total() }} items</p>
-                @endif
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="text-md-right float-md-right mg-t-5">
-                <div>
-                    {{ $rs->links() }}
-                </div>
-            </div>
-        </div>
-
-    </div>
 </div>
 
 
@@ -112,7 +92,7 @@
                 text: 'PDF',
                 exportOptions: {
                     modifier: {
-                        page: 'current'
+                        page: 'all'
                     }
                 },
                 orientation : 'landscape',
@@ -128,6 +108,4 @@
     } );
 </script> --}}
 @endsection
-
-
 

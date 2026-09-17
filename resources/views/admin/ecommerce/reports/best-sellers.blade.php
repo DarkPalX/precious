@@ -5,7 +5,7 @@
 
 @section('content')
 <div style="margin: 40px 40px 200px 40px;font-family:Arial;">
-    <h4 class="mg-b-0 tx-spacing--1">Best Sellers</h4>
+    <h2 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Best Sellers Report</h2>
     
     <form action="{{route('report.best-sellers')}}" method="get">
         <input type="hidden" name="act" value="go">
@@ -58,26 +58,6 @@
     </table>
     @endif
 
-    <div class="row row-sm">
-
-        <div class="col-md-6">
-            <div class="mg-t-5">
-                @if ($rs->firstItem() == null)
-                    <p class="tx-gray-400 tx-12 d-inline">{{__('common.showing_zero_items')}}</p>
-                @else
-                    <p class="tx-gray-400 tx-12 d-inline">Showing {{ $rs->firstItem() }} to {{ $rs->lastItem() }} of {{ $rs->total() }} items</p>
-                @endif
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="text-md-right float-md-right mg-t-5">
-                <div>
-                    {{ $rs->links() }}
-                </div>
-            </div>
-        </div>
-
-    </div>
 </div>
 
 
@@ -120,7 +100,7 @@
                 text: 'PDF',
                 exportOptions: {
                     modifier: {
-                        page: 'current'
+                        page: 'all'
                     }
                 },
                 orientation : 'landscape',
@@ -136,6 +116,3 @@
     } );
 </script> --}}
 @endsection
-
-
-

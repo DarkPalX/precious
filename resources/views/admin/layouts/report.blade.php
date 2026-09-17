@@ -88,6 +88,43 @@
             border-color: #1b365d !important;
             box-shadow: 0 0 0 3px rgba(27, 54, 93, 0.15) !important;
         }
+
+        .report-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .report-toolbar h2,
+        .report-toolbar h4 {
+            flex: 1 1 auto;
+            margin: 0 !important;
+            white-space: nowrap;
+        }
+        .report-toolbar form {
+            flex: 0 1 auto;
+            max-width: calc(100% - 260px);
+            overflow-x: auto;
+            margin: 0 !important;
+        }
+        .report-toolbar form table {
+            margin: 0 !important;
+        }
+        @media (max-width: 768px) {
+            .report-toolbar {
+                align-items: stretch;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .report-toolbar form {
+                max-width: 100%;
+            }
+            .report-toolbar h2,
+            .report-toolbar h4 {
+                white-space: normal;
+            }
+        }
     </style>
 
     @yield('pagecss')
@@ -152,31 +189,45 @@
 
     <script>
         $(document).ready(function() {
-            $('#example').DataTable({
-                dom: 'Bfrti',
-                pageLength: 1000,
-                order: [[0, 'desc']],
-                buttons: [
-                    { extend: 'print', exportOptions: { columns: ':visible' } },
-                    { extend: 'copy', exportOptions: { columns: ':visible' } },
-                    { extend: 'csv', exportOptions: { columns: ':visible' } },
-                    { extend: 'excel', exportOptions: { columns: ':visible' } },
-                    { 
-                        extend: 'pdfHtml5',
-                        text: 'PDF',
-                        exportOptions: { modifier: { page: 'current' } },
-                        orientation: 'landscape',
-                        pageSize: 'LEGAL'
-                    },
-                    'colvis'
-                ],
-                columnDefs: [ { visible: false } ],
-                language: {
-                    info: "",
-                    infoEmpty: "",
-                    infoFiltered: "",
-                    lengthMenu: "Show _MENU_ entries"
+            $('main h2, main h4').each(function() {
+                var $title = $(this);
+                var $form = $title.closest('main').find('form').first();
+                var $toolbar = $('<div class="report-toolbar"></div>');
+
+                $toolbar.insertBefore($title);
+                $toolbar.append($title);
+                if ($form.length) {
+                    $toolbar.append($form);
                 }
+            });
+
+        });
+
+        // Some legacy report templates contain a disabled/old initializer.
+        // Initialize only tables that are still untouched by their page script.
+        $(window).on('load', function() {
+            $('table.display').each(function() {
+                if ($.fn.DataTable.isDataTable(this)) {
+                    return;
+                }
+
+                $(this).DataTable({
+                    dom: 'Bfrtip',
+                    pageLength: 20,
+                    buttons: [
+                        { extend: 'print', exportOptions: { columns: ':visible', modifier: { page: 'all' } } },
+                        { extend: 'csv', exportOptions: { columns: ':visible', modifier: { page: 'all' } } },
+                        { extend: 'excel', exportOptions: { columns: ':visible', modifier: { page: 'all' } } },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            exportOptions: { columns: ':visible', modifier: { page: 'all' } },
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL'
+                        },
+                        'colvis'
+                    ]
+                });
             });
         });
     </script>

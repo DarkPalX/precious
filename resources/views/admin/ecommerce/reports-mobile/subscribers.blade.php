@@ -5,7 +5,7 @@
 
 @section('content')
 <div style="margin: 40px 40px 200px 40px;font-family:Arial;">
-    <h4 class="mg-b-0 tx-spacing--1">Subscribers List</h4>
+    <h2 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Subscribers List</h2>
     @if($rs <>'')
     <br><br>
     <table id="subscribers" class="display nowrap" style="width:100%;font: normal 13px/150% Arial, sans-serif, Helvetica;">
@@ -100,7 +100,7 @@
                 text: 'PDF',
                 exportOptions: {
                     modifier: {
-                        page: 'current'
+                        page: 'all'
                     }
                 },
                 orientation : 'landscape',
@@ -117,6 +117,4 @@
     } );
 </script>
 @endsection
-
-
 
