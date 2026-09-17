@@ -511,6 +511,10 @@ class ReportsController extends Controller
             }
 
             return datatables()->of($query)
+                ->editColumn('qty', function($sale) {
+                    // Ebook transactions must display and export at least one item.
+                    return max(1, (int) $sale->qty);
+                })
                 ->addColumn('date', function($sale) {
                     return \SettingHelper::datetimeFormat2($sale->header_created_at);
                 })
