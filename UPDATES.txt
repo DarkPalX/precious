@@ -1,11 +1,42 @@
 ######################################### SEPTEMBER 15, 2026 #######################################
+ALTER TABLE products 
+    ADD (
+        old_read_count BIGINT(20) DEFAULT 0
+    );
+
+
+
+CREATE TABLE temp_read_counts (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    author VARCHAR(255),
+    read_count INT
+);
+
+
+ ####### then import the csv file ########
+
+
+UPDATE products p
+JOIN temp_read_counts t ON p.id = t.id
+SET p.old_read_count = t.read_count;
+
+
+
+
+
+
+
+
+!!!!!!!!!!!!! DON'T INCLUDE THIS !!!!!!!!!!!!!!!
+
 FOR ADDING THE CURRENT READ COUNTS OF PRODUCTS BUT TAKE NOTE THE DATE RANGE WONT TAKE EFFECT FOR THIS
 
     INSERT INTO readcount_details (product_id, read_count, created_at)
     SELECT 
         id, 
         read_count, 
-        NOW()
+        '1900-01-01 00:00:00'
     FROM products
     WHERE read_count > 0;
 

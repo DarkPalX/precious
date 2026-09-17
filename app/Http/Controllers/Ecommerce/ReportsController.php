@@ -56,7 +56,7 @@ class ReportsController extends Controller
         $category  = $request->get('category');
         $status    = $request->get('del_status');
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->get('export') === 'csv') {
             $query = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
                 ->where(function($q) {
                     $q->where('ecommerce_sales_headers.order_source', '<>', 'Android')
@@ -796,13 +796,48 @@ class ReportsController extends Controller
 
     public function read_counts(Request $request)
     {
-        $startDate = $request->get('start', false);
-        $endDate   = $request->get('end', false);
+        // Keep date filters separate from DataTables' reserved `start` offset.
+        $startDate = $request->get('start_date', $request->get('start', false));
+        $endDate   = $request->get('end_date', $request->get('end', false));
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->get('export') === 'csv') {
+
+            // $query = Product::query()
+            //     ->select('products.sku', 'products.name', 'products.author')
+            //     ->selectRaw('COALESCE(SUM(readcount_details.read_count), 0) as read_count')
+            //     ->leftJoin('readcount_details', function ($join) use ($startDate, $endDate) {
+            //         $join->on('products.id', '=', 'readcount_details.product_id')
+            //             ->whereNull('readcount_details.deleted_at');
+
+            //         // Apply date range filter to readcount_details creation date
+            //         if ($startDate && $endDate) {
+            //             $join->whereBetween('readcount_details.created_at', [
+            //                 $startDate . ' 00:00:00',
+            //                 $endDate . ' 23:59:59'
+            //             ]);
+            //         }
+            //     })
+            //     ->where('products.sku', '<>', '')
+            //     ->groupBy('products.id', 'products.sku', 'products.name', 'products.author');
+
+
+                
+            // When no date range is provided, include product.old_read_count in the total.
+            // When a date range is provided, only sum the readcount_details within that range.
+            if ($startDate && $endDate) {
+                $readCountSelect = 'COALESCE(SUM(readcount_details.read_count), 0) as read_count';
+                $havingCondition = 'COALESCE(SUM(readcount_details.read_count), 0) > 0';
+            } else {
+                // The join produces one row per read-count detail, so aggregate the
+                // product-level historical count as well. This keeps the query valid
+                // with MySQL's ONLY_FULL_GROUP_BY mode enabled.
+                $readCountSelect = 'COALESCE(SUM(readcount_details.read_count), 0) + COALESCE(MAX(products.old_read_count), 0) as read_count';
+                $havingCondition = 'COALESCE(SUM(readcount_details.read_count), 0) + COALESCE(MAX(products.old_read_count), 0) > 0';
+            }
+
             $query = Product::query()
                 ->select('products.sku', 'products.name', 'products.author')
-                ->selectRaw('COALESCE(SUM(readcount_details.read_count), 0) as read_count')
+                ->selectRaw($readCountSelect)
                 ->leftJoin('readcount_details', function ($join) use ($startDate, $endDate) {
                     $join->on('products.id', '=', 'readcount_details.product_id')
                         ->whereNull('readcount_details.deleted_at');
@@ -815,12 +850,58 @@ class ReportsController extends Controller
                         ]);
                     }
                 })
+                // Only include ebook product types (case-insensitive, accepts e-book, EBook, etc.)
+                ->whereRaw("LOWER(REPLACE(products.book_type, '-', '')) = 'ebook'")
                 ->where('products.sku', '<>', '')
                 ->groupBy('products.id', 'products.sku', 'products.name', 'products.author');
 
+            // $query = Product::query()
+            //     ->select('products.sku', 'products.name', 'products.author')
+            //     ->selectRaw($readCountSelect)
+            //     ->leftJoin('readcount_details', function ($join) use ($startDate, $endDate) {
+            //         $join->on('products.id', '=', 'readcount_details.product_id')
+            //             ->whereNull('readcount_details.deleted_at');
+
+            //         if ($startDate && $endDate) {
+            //             $join->whereBetween('readcount_details.created_at', [
+            //                 $startDate . ' 00:00:00',
+            //                 $endDate . ' 23:59:59'
+            //             ]);
+            //         }
+            //     })
+            //     ->whereRaw("LOWER(REPLACE(products.book_type, '-', '')) = 'ebook'")
+            //     ->where('products.sku', '<>', '')
+            //     // Group only by SKU, Name, and Author to remove redundancy
+            //     ->groupBy('products.sku', 'products.name', 'products.author');
+
             // Exclude products with total read_count of 0 during export
             if ($request->get('is_export') == 1) {
-                $query->havingRaw('COALESCE(SUM(readcount_details.read_count), 0) > 0');
+                // $query->havingRaw('COALESCE(SUM(readcount_details.read_count), 0) > 0');
+                $query->havingRaw($havingCondition);
+            }
+
+            // Stream CSV exports directly from the server. This avoids loading
+            // every row into the browser and does not affect table pagination.
+            if ($request->get('export') === 'csv') {
+                $query->havingRaw($havingCondition);
+
+                return response()->streamDownload(function () use ($query) {
+                    $handle = fopen('php://output', 'w');
+                    fputcsv($handle, ['Code', 'Name', 'Author', 'Read Counts']);
+
+                    foreach ($query->orderBy('products.sku')->cursor() as $row) {
+                        fputcsv($handle, [
+                            $row->sku,
+                            $row->name,
+                            $row->author,
+                            $row->read_count,
+                        ]);
+                    }
+
+                    fclose($handle);
+                }, 'read-counts.csv', [
+                    'Content-Type' => 'text/csv; charset=UTF-8',
+                ]);
             }
 
             return datatables()->of($query)->make(true);

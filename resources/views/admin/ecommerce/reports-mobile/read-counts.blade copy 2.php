@@ -73,57 +73,6 @@
             }
         };
 
-        function exportCsvFromServer() {
-            var params = new URLSearchParams({
-                start_date: $('input[name="start"]').val() || '',
-                end_date: $('input[name="end"]').val() || '',
-                export: 'csv'
-            });
-
-            window.location.href = "{{ route('report.read-counts.mobile') }}?" + params.toString();
-        }
-
-        // Fetch all export rows into a hidden DataTable. The visible table
-        // remains server-side paginated at 20 rows and is never changed.
-        function exportAllFromServer(e, dt, button, config) {
-            var builtInName = {
-                excel: 'excelHtml5'
-            }[config.extend] || config.extend;
-
-            $.ajax({
-                url: "{{ route('report.read-counts.mobile') }}",
-                type: 'GET',
-                data: {
-                    start_date: $('input[name="start"]').val(),
-                    end_date: $('input[name="end"]').val(),
-                    start: 0,
-                    length: -1,
-                    is_export: 1
-                },
-                success: function (response) {
-                    var exportTable = $('<table>').appendTo('body').hide();
-                    var exportDt = exportTable.DataTable({
-                        data: response.data,
-                        columns: [
-                            { data: 'sku' },
-                            { data: 'name' },
-                            { data: 'author' },
-                            { data: 'read_count' }
-                        ],
-                        paging: false,
-                        searching: false,
-                        ordering: false,
-                        dom: 't'
-                    });
-
-                    var builtInAction = $.fn.dataTable.ext.buttons[builtInName].action;
-                    builtInAction.call(this, e, exportDt, button, config);
-                    exportDt.destroy();
-                    exportTable.remove();
-                }
-            });
-        }
-
         // Initialize main visible table
         $('.ajax-table').DataTable({
             processing: true,
@@ -133,8 +82,8 @@
                 url: "{{ route('report.read-counts.mobile') }}",
                 type: "GET",
                 data: function (d) {
-                    d.start_date = $('input[name="start"]').val();
-                    d.end_date = $('input[name="end"]').val();
+                    d.start = $('input[name="start"]').val();
+                    d.end = $('input[name="end"]').val();
                 }
             },
             columns: [
@@ -147,32 +96,26 @@
             buttons: [
                 {
                     extend: 'print',
-                    exportOptions: exportOptionsFiltered,
-                    action: exportAllFromServer
+                    exportOptions: exportOptionsFiltered
                 },
                 {
                     extend: 'csv',
-                    exportOptions: exportOptionsFiltered,
-                    action: exportCsvFromServer
+                    exportOptions: exportOptionsFiltered
                 },
                 {
                     extend: 'excel',
-                    exportOptions: exportOptionsFiltered,
-                    action: exportAllFromServer
+                    exportOptions: exportOptionsFiltered
                 },
                 {   
                     extend: 'pdfHtml5',
                     text: 'PDF',
                     orientation: 'landscape',
                     pageSize: 'LEGAL',
-                    exportOptions: exportOptionsFiltered,
-                    action: exportAllFromServer
+                    exportOptions: exportOptionsFiltered
                 },
                 'colvis'
             ],
-            paging: true,
-            pageLength: 20,
-            lengthMenu: [[20], [20]]
+            pageLength: 10000
         });
 
     });
