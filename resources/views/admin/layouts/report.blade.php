@@ -117,6 +117,36 @@
         .report-toolbar form table {
             margin: 0 !important;
         }
+        #report-export-loading {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, .45);
+        }
+        #report-export-loading .loading-card {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: 1rem 1.25rem;
+            border-radius: .75rem;
+            background: #fff;
+            color: #1e293b;
+            font-size: .875rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, .2);
+        }
+        #report-export-loading .spinner {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 3px solid #cbd5e1;
+            border-top-color: #1b365d;
+            border-radius: 50%;
+            animation: report-export-spin .7s linear infinite;
+        }
+        @keyframes report-export-spin { to { transform: rotate(360deg); } }
         @media (max-width: 768px) {
             .report-toolbar {
                 align-items: stretch;
@@ -137,6 +167,10 @@
 </head>
 
 <body class="bg-slate-100/70 text-slate-800 antialiased selection:bg-slate-800 selection:text-white dark:bg-slate-950 dark:text-slate-100">
+
+    <div id="report-export-loading" aria-live="polite" aria-busy="true">
+        <div class="loading-card"><span class="spinner"></span><span>Preparing export, please wait...</span></div>
+    </div>
 
     <div class="min-h-screen p-3 sm:p-5 lg:p-6">
         <div class="mx-auto max-w-[96%] space-y-5 transition-all duration-300">
@@ -194,6 +228,24 @@
     <script src="{{ asset('js/datatables/Buttons-1.6.1/js/buttons.colVis.min.js') }}"></script>
 
     <script>
+        $(document).on('click', '.dt-button', function() {
+            var buttonText = $(this).text().trim().toLowerCase();
+            var isExportButton = ['print', 'csv', 'excel', 'pdf'].some(function (type) {
+                return buttonText.indexOf(type) === 0;
+            });
+
+            if (!isExportButton) {
+                return;
+            }
+
+            $('#report-export-loading').css('display', 'flex');
+            // Standard client-side exports finish immediately. Server-side
+            // exports use their own request and are covered by this timeout.
+            window.setTimeout(function () {
+                $('#report-export-loading').hide();
+            }, 5000);
+        });
+
         $(document).ready(function() {
             $('main h2, main h4').each(function() {
                 var $title = $(this);

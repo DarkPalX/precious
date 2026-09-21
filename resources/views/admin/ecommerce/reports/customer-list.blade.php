@@ -5,10 +5,18 @@
         .customer-report-filters { display: flex; flex-wrap: wrap; align-items: end; gap: .75rem; margin-bottom: 1.5rem; }
         .customer-report-filters label { display: block; margin-bottom: .35rem; font-size: .75rem; font-weight: 600; color: #64748b; }
         .customer-report-filters .form-control { min-width: 150px; border-radius: .5rem; }
+        #customer-export-loading { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; background: rgba(15, 23, 42, .45); }
+        #customer-export-loading .loading-card { display: flex; align-items: center; gap: .75rem; padding: 1rem 1.25rem; border-radius: .75rem; background: #fff; color: #1e293b; font-size: .875rem; font-weight: 600; box-shadow: 0 10px 30px rgba(15, 23, 42, .2); }
+        #customer-export-loading .spinner { width: 1.25rem; height: 1.25rem; border: 3px solid #cbd5e1; border-top-color: #1b365d; border-radius: 50%; animation: customer-export-spin .7s linear infinite; }
+        @keyframes customer-export-spin { to { transform: rotate(360deg); } }
     </style>
 @endsection
 
 @section('content')
+    <div id="customer-export-loading" aria-live="polite" aria-busy="true">
+        <div class="loading-card"><span class="spinner"></span><span>Preparing export, please wait...</span></div>
+    </div>
+
     <div style="margin:0px 40px 200px 40px;font-family:Arial;">
         <br><br>
         <h2 class="text-xl font-bold tracking-tight text-slate-800 dark:text-slate-100">Customers List Report</h2>
@@ -50,7 +58,16 @@
 @section('customjs')
     <script>
         $(function () {
+            function showExportLoading() {
+                $('#customer-export-loading').css('display', 'flex');
+            }
+
+            function hideExportLoading() {
+                $('#customer-export-loading').hide();
+            }
+
             function exportAllFromServer(e, dt, button, config, builtInName) {
+                showExportLoading();
                 $.ajax({
                     url: "{{ route('report.customer-list') }}",
                     type: 'GET',
@@ -95,6 +112,11 @@
                         exportDt.button(0).trigger();
                         exportDt.destroy();
                         exportTable.remove();
+                        hideExportLoading();
+                    },
+                    error: function () {
+                        hideExportLoading();
+                        alert('The export could not be prepared. Please try again.');
                     }
                 });
             }
@@ -137,6 +159,7 @@
                     {
                         extend: 'csv',
                         action: function () {
+                            showExportLoading();
                             const params = new URLSearchParams({
                                 start: $('input[name="start"]').val() || '',
                                 end: $('input[name="end"]').val() || '',
@@ -144,6 +167,7 @@
                                 export: 'csv'
                             });
                             window.location.href = "{{ route('report.customer-list') }}?" + params.toString();
+                            setTimeout(hideExportLoading, 3000);
                         }
                     },
                     {
