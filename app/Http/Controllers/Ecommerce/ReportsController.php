@@ -252,12 +252,93 @@ class ReportsController extends Controller
 
     public function customer_list(Request $request)
     {
-        
-        $rs = User::where('role_id','6')->get();        
+        $startDate = $request->get('start_date', $request->get('start'));
+        $endDate = $request->get('end_date', $request->get('end'));
+        $platform = strtolower(trim((string) $request->get('platform', '')));
 
-        return view('admin.ecommerce.reports.customer-list',compact('rs'));
+        $query = User::where('role_id', 6)
+            ->where('is_active', 1)
+            ->select([
+                'id', 'firstname', 'lastname', 'email', 'mobile', 'phone',
+                'address_street', 'address_municipality',
+                'address_city', 'address_zip', 'email_verified_at',
+                'verification_code'
+            ])
+            ->when($startDate, function ($query) use ($startDate) {
+                $query->where('email_verified_at', '>=', $startDate . ' 00:00:00');
+            })
+            ->when($endDate, function ($query) use ($endDate) {
+                $query->where('email_verified_at', '<=', $endDate . ' 23:59:59');
+            })
+            ->when($platform === 'web', function ($query) {
+                $query->whereNull('verification_code');
+            })
+            ->when($platform === 'mobile', function ($query) {
+                $query->whereNotNull('verification_code');
+            })
+            ->orderByDesc('email_verified_at');
+
+        if ($request->ajax() || $request->get('export') === 'csv') {
+            if ($request->get('export') === 'csv') {
+                return response()->streamDownload(function () use ($query) {
+                    $handle = fopen('php://output', 'w');
+                    fputcsv($handle, ['Name', 'Email', 'Mobile', 'Address', 'Account Created', 'Platform']);
+
+                    foreach ($query->cursor() as $customer) {
+                        fputcsv($handle, [
+                            trim($customer->firstname . ' ' . $customer->lastname),
+                            $customer->email,
+                            $customer->mobile,
+                            trim(implode(', ', array_filter([
+                                $customer->address_street,
+                                $customer->address_municipality,
+                                $customer->address_city,
+                                $customer->address_zip,
+                            ]))),
+                            optional($customer->email_verified_at)->format('Y-m-d H:i'),
+                            is_null($customer->verification_code) ? 'Web' : 'Mobile',
+                        ]);
+                    }
+
+                    fclose($handle);
+                }, 'customers-list.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+            }
+
+            return datatables()->of($query)
+                ->addColumn('customer_name', function ($customer) {
+                    return trim($customer->firstname . ' ' . $customer->lastname);
+                })
+                ->addColumn('address', function ($customer) {
+                    return implode(', ', array_filter([
+                        $customer->address_street,
+                        $customer->address_municipality,
+                        $customer->address_city,
+                        $customer->address_zip,
+                    ]));
+                })
+                ->addColumn('account_created', function ($customer) {
+                    return optional($customer->email_verified_at)->format('Y-m-d H:i');
+                })
+                ->addColumn('platform', function ($customer) {
+                    return is_null($customer->verification_code) ? 'Web' : 'Mobile';
+                })
+                ->make(true);
+        }
+
+        return view('admin.ecommerce.reports.customer-list', compact(
+            'startDate', 'endDate', 'platform'
+        ));
 
     }
+
+    // public function customer_list(Request $request)
+    // {
+        
+    //     $rs = User::where('role_id','6')->get();
+
+    //     return view('admin.ecommerce.reports.customer-list',compact('rs'));
+
+    // }
 
     public function inventory_reorder_point(Request $request)
     {
@@ -446,7 +527,7 @@ class ReportsController extends Controller
         $endDate   = $request->get('end', false);
 
         $rs = SalesDetail::select('product_id',
-                          DB::raw('SUM(qty) as total_quantity'),
+                          DB::raw('SUM(CASE WHEN qty = 0 THEN 1 ELSE qty END) as total_quantity'),
                           DB::raw('SUM(net_amount) as total_net_amount'))
                  ->where('qty', 0);
 
@@ -777,7 +858,9 @@ class ReportsController extends Controller
         $startDate = $request->get('start', false);
         $endDate   = $request->get('end', false);
 
-        $rs = Product::query();
+        $rs = Product::query()
+            ->whereNotNull('name')
+            ->whereRaw("TRIM(name) <> ''");
       
         if ($startDate && $endDate) {
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);
