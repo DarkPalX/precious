@@ -563,6 +563,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
 
             // Reports
+                Route::get('/report/export', [ReportsController::class, 'report_export'])->name('report.export');
                 Route::get('/report/best-sellers', [ReportsController::class, 'best_sellers'])->name('report.best-sellers');
                 Route::get('/report/sales-transaction', [ReportsController::class, 'sales_list'])->name('report.sales-transaction');
                 Route::get('/report/top-buyers', [ReportsController::class, 'top_buyers'])->name('report.top-buyers');

@@ -228,6 +228,21 @@
     <script src="{{ asset('js/datatables/Buttons-1.6.1/js/buttons.colVis.min.js') }}"></script>
 
     <script>
+        function serverReportExport(format) {
+            var params = new URLSearchParams(window.location.search);
+            params.set('source', window.location.pathname);
+            params.set('format', format);
+            window.location.href = "{{ route('report.export') }}?" + params.toString();
+        }
+
+        ['csvHtml5', 'excelHtml5', 'pdfHtml5', 'pdf'].forEach(function (buttonName) {
+            if ($.fn.dataTable && $.fn.dataTable.ext.buttons[buttonName]) {
+                $.fn.dataTable.ext.buttons[buttonName].action = function (e, dt, button, config) {
+                    serverReportExport(buttonName === 'csvHtml5' ? 'csv' : (buttonName === 'excelHtml5' ? 'excel' : 'pdf'));
+                };
+            }
+        });
+
         $(document).on('click', '.dt-button', function() {
             var buttonText = $(this).text().trim().toLowerCase();
             var isExportButton = ['print', 'csv', 'excel', 'pdf'].some(function (type) {
