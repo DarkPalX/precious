@@ -66,61 +66,6 @@
                 $('#customer-export-loading').hide();
             }
 
-            function exportAllFromServer(e, dt, button, config, builtInName) {
-                showExportLoading();
-                $.ajax({
-                    url: "{{ route('report.customer-list') }}",
-                    type: 'GET',
-                    data: {
-                        start_date: $('input[name="start"]').val(),
-                        end_date: $('input[name="end"]').val(),
-                        platform: $('select[name="platform"]').val(),
-                        start: 0,
-                        length: -1,
-                        is_export: 1
-                    },
-                    success: function (response) {
-                        const exportTable = $('<table>')
-                            .append('<thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Address</th><th>Account Created</th><th>Platform</th></tr></thead>')
-                            .appendTo('body')
-                            .hide();
-                        const exportConfig = $.extend(true, {}, config);
-                        delete exportConfig.action;
-                        exportConfig.extend = builtInName;
-                        exportConfig.exportOptions = $.extend(true, {}, exportConfig.exportOptions, {
-                            columns: [0, 1, 2, 3, 4, 5],
-                            modifier: { page: 'all' }
-                        });
-
-                        const exportDt = exportTable.DataTable({
-                            data: response.data,
-                            columns: [
-                                { data: 'customer_name' },
-                                { data: 'email' },
-                                { data: 'mobile' },
-                                { data: 'address' },
-                                { data: 'account_created' },
-                                { data: 'platform' }
-                            ],
-                            paging: false,
-                            searching: false,
-                            ordering: false,
-                            dom: 'B t',
-                            buttons: [exportConfig]
-                        });
-
-                        exportDt.button(0).trigger();
-                        exportDt.destroy();
-                        exportTable.remove();
-                        hideExportLoading();
-                    },
-                    error: function () {
-                        hideExportLoading();
-                        alert('The export could not be prepared. Please try again.');
-                    }
-                });
-            }
-
             const customerTable = $('#customer-report').DataTable({
                 processing: true,
                 serverSide: true,
@@ -153,7 +98,9 @@
                         extend: 'print',
                         exportOptions: { columns: ':visible' },
                         action: function (e, dt, button, config) {
-                            exportAllFromServer(e, dt, button, config, 'print');
+                            // Print the current server-side page. File exports
+                            // below are streamed by the server and support all rows.
+                            $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
                         }
                     },
                     {
@@ -172,10 +119,7 @@
                     },
                     {
                         extend: 'excel',
-                        exportOptions: { columns: ':visible' },
-                        action: function (e, dt, button, config) {
-                            exportAllFromServer(e, dt, button, config, 'excelHtml5');
-                        }
+                        action: function () { downloadCustomerExport('excel'); }
                     },
                     {
                         extend: 'pdfHtml5',
@@ -183,13 +127,23 @@
                         exportOptions: { columns: ':visible' },
                         orientation: 'landscape',
                         pageSize: 'LEGAL',
-                        action: function (e, dt, button, config) {
-                            exportAllFromServer(e, dt, button, config, 'pdfHtml5');
-                        }
+                        action: function () { downloadCustomerExport('pdf'); }
                     },
                     'colvis'
                 ]
             });
+
+            function downloadCustomerExport(format) {
+                showExportLoading();
+                const params = new URLSearchParams({
+                    start: $('input[name="start"]').val() || '',
+                    end: $('input[name="end"]').val() || '',
+                    platform: $('select[name="platform"]').val() || '',
+                    export: format
+                });
+                window.location.href = "{{ route('report.customer-list') }}?" + params.toString();
+                setTimeout(hideExportLoading, 3000);
+            }
 
             $('select[name="platform"]').on('change', function () {
                 customerTable.ajax.reload(null, true);

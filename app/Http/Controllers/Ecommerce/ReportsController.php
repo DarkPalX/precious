@@ -278,31 +278,32 @@ class ReportsController extends Controller
             })
             ->orderByDesc('email_verified_at');
 
-        if ($request->ajax() || $request->get('export') === 'csv') {
-            if ($request->get('export') === 'csv') {
-                return response()->streamDownload(function () use ($query) {
-                    $handle = fopen('php://output', 'w');
-                    fputcsv($handle, ['Name', 'Email', 'Mobile', 'Address', 'Account Created', 'Platform']);
+        $export = $request->get('export');
+        if ($export === 'csv') {
+            return response()->streamDownload(function () use ($query) {
+                @set_time_limit(0);
+                $handle = fopen('php://output', 'w');
+                fputcsv($handle, ['Name', 'Email', 'Mobile', 'Address', 'Account Created', 'Platform']);
 
-                    foreach ($query->cursor() as $customer) {
-                        fputcsv($handle, [
-                            trim($customer->firstname . ' ' . $customer->lastname),
-                            $customer->email,
-                            $customer->mobile,
-                            trim(implode(', ', array_filter([
-                                $customer->address_street,
-                                $customer->address_municipality,
-                                $customer->address_city,
-                                $customer->address_zip,
-                            ]))),
-                            optional($customer->email_verified_at)->format('Y-m-d H:i'),
-                            is_null($customer->verification_code) ? 'Web' : 'Mobile',
-                        ]);
-                    }
+                foreach ($query->cursor() as $customer) {
+                    fputcsv($handle, $this->customerExportRow($customer));
+                }
 
-                    fclose($handle);
-                }, 'customers-list.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
-            }
+                fclose($handle);
+            }, 'customers-list.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+        }
+
+        // Do not send all rows to DataTables for file exports. Production servers
+        // commonly hit PHP/proxy limits when 49k rows are returned as one JSON body.
+        if ($export === 'excel') {
+            return $this->streamCustomerExcel($query);
+        }
+
+        if ($export === 'pdf') {
+            return $this->streamCustomerPdf($query);
+        }
+
+        if ($request->ajax()) {
 
             return datatables()->of($query)
                 ->addColumn('customer_name', function ($customer) {
@@ -329,6 +330,152 @@ class ReportsController extends Controller
             'startDate', 'endDate', 'platform'
         ));
 
+    }
+
+    private function customerExportRow($customer)
+    {
+        return [
+            trim($customer->firstname . ' ' . $customer->lastname),
+            $customer->email,
+            $customer->mobile,
+            trim(implode(', ', array_filter([
+                $customer->address_street,
+                $customer->address_municipality,
+                $customer->address_city,
+                $customer->address_zip,
+            ]))),
+            optional($customer->email_verified_at)->format('Y-m-d H:i'),
+            is_null($customer->verification_code) ? 'Web' : 'Mobile',
+        ];
+    }
+
+    private function streamCustomerExcel($query)
+    {
+        return response()->streamDownload(function () use ($query) {
+            @set_time_limit(0);
+            // Excel opens this streamed HTML workbook as an .xls file. It keeps
+            // memory usage constant and does not require PhpSpreadsheet.
+            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>td,th{border:1px solid #ccc;padding:4px;}th{font-weight:bold;background:#eee;}</style></head><body><table>';
+            echo '<tr><th>Name</th><th>Email</th><th>Mobile</th><th>Address</th><th>Account Created</th><th>Platform</th></tr>';
+            foreach ($query->cursor() as $customer) {
+                echo '<tr>';
+                foreach ($this->customerExportRow($customer) as $value) {
+                    echo '<td>' . e($value) . '</td>';
+                }
+                echo '</tr>';
+            }
+            echo '</table></body></html>';
+        }, 'customers-list.xls', ['Content-Type' => 'application/vnd.ms-excel; charset=UTF-8']);
+    }
+
+    private function streamCustomerPdf($query)
+    {
+        return response()->streamDownload(function () use ($query) {
+            @set_time_limit(0);
+            $file = tempnam(sys_get_temp_dir(), 'customer-report-');
+            $handle = fopen($file, 'w+b');
+            $offsets = [0];
+            fwrite($handle, "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+
+            $writeObject = function ($number, $body) use ($handle, &$offsets) {
+                $offsets[$number] = ftell($handle);
+                fwrite($handle, $number . " 0 obj\n" . $body . "\nendobj\n");
+            };
+
+            // Object 1 points to the pages object, which is written after all
+            // streamed pages have been discovered.
+            $writeObject(1, '<< /Type /Catalog /Pages 2 0 R >>');
+            $pageReferences = [];
+            $pageNumber = 0;
+            $rows = [];
+            $writePage = function ($pageRows) use (&$pageNumber, &$pageReferences, $writeObject) {
+                $pageNumber++;
+                $pageObject = 4 + (($pageNumber - 1) * 2);
+                $contentObject = $pageObject + 1;
+                $pageReferences[] = $pageObject . ' 0 R';
+
+                // Landscape Legal table: fixed widths keep every page aligned,
+                // while clipping long values prevents cells from overflowing.
+                $x = 24;
+                $top = 588;
+                $headerHeight = 18;
+                $rowHeight = 12;
+                $widths = [150, 190, 90, 300, 140, 90];
+                $headers = ['Name', 'Email', 'Mobile', 'Address', 'Account Created', 'Platform'];
+                $content = "0.75 w\n";
+                $content .= "0.92 0.92 0.92 rg\n" . $x . ' ' . ($top - $headerHeight) . ' 960 ' . $headerHeight . " re f\n";
+                // Reset both stroke and fill colors after the gray header fill;
+                // otherwise all cell text inherits the light-gray fill color.
+                $content .= "0 0 0 RG\n0 0 0 rg\n";
+
+                $verticals = [$x];
+                foreach ($widths as $width) {
+                    $x += $width;
+                    $verticals[] = $x;
+                }
+                foreach ($verticals as $vertical) {
+                    $content .= $vertical . ' ' . ($top - $headerHeight - (count($pageRows) * $rowHeight)) . ' m ' . $vertical . ' ' . $top . " l S\n";
+                }
+                for ($line = 0; $line <= count($pageRows) + 1; $line++) {
+                    $y = $top - ($line === 0 ? 0 : ($line === 1 ? $headerHeight : $headerHeight + (($line - 1) * $rowHeight)));
+                    $content .= '24 ' . $y . ' m 984 ' . $y . " l S\n";
+                }
+
+                $drawCellText = function ($text, $cellX, $baseline, $cellWidth) {
+                    $text = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', (string) $text);
+                    $maxCharacters = max(1, floor(($cellWidth - 6) / 3.6));
+                    if (strlen($text) > $maxCharacters) {
+                        $text = substr($text, 0, max(1, $maxCharacters - 3)) . '...';
+                    }
+                    $text = str_replace(['\\', '(', ')'], ['\\\\', '\\(', '\\)'], $text);
+                    return "BT\n/F1 6 Tf\n" . ($cellX + 3) . ' ' . $baseline . " Td\n(" . $text . ") Tj\nET\n";
+                };
+
+                $cellX = 24;
+                foreach ($headers as $index => $header) {
+                    $content .= $drawCellText($header, $cellX, $top - 13, $widths[$index]);
+                    $cellX += $widths[$index];
+                }
+                foreach ($pageRows as $rowIndex => $row) {
+                    $cellX = 24;
+                    $baseline = $top - $headerHeight - ($rowIndex * $rowHeight) - 9;
+                    foreach ($row as $columnIndex => $value) {
+                        $content .= $drawCellText($value, $cellX, $baseline, $widths[$columnIndex]);
+                        $cellX += $widths[$columnIndex];
+                    }
+                }
+                $writeObject($contentObject, '<< /Length ' . strlen($content) . " >>\nstream\n" . $content . 'endstream');
+                $writeObject($pageObject, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1008 612] /Resources << /Font << /F1 3 0 R >> >> /Contents ' . $contentObject . ' 0 R >>');
+            };
+
+            foreach ($query->cursor() as $customer) {
+                $rows[] = $this->customerExportRow($customer);
+                if (count($rows) === 45) {
+                    $writePage($rows);
+                    $rows = [];
+                }
+            }
+            if ($rows || !$pageNumber) {
+                $writePage($rows);
+            }
+            $writeObject(3, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+            $writeObject(2, '<< /Type /Pages /Kids [' . implode(' ', $pageReferences) . '] /Count ' . count($pageReferences) . ' >>');
+
+            $xref = ftell($handle);
+            $maxObject = max(array_keys($offsets));
+            fwrite($handle, "xref\n0 " . ($maxObject + 1) . "\n0000000000 65535 f \n");
+            for ($i = 1; $i <= $maxObject; $i++) {
+                fwrite($handle, sprintf("%010d 00000 n \n", $offsets[$i]));
+            }
+            fwrite($handle, "trailer\n<< /Size " . ($maxObject + 1) . " /Root 1 0 R >>\nstartxref\n" . $xref . "\n%%EOF");
+            fflush($handle);
+            rewind($handle);
+            while (!feof($handle)) {
+                echo fread($handle, 1024 * 1024);
+            }
+            fclose($handle);
+            @unlink($file);
+        }, 'customers-list.pdf', ['Content-Type' => 'application/pdf']);
     }
 
     // public function customer_list(Request $request)
