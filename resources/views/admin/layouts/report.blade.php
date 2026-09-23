@@ -282,7 +282,7 @@
         // Some legacy report templates contain a disabled/old initializer.
         // Initialize only tables that are still untouched by their page script.
         $(window).on('load', function() {
-            $('table.display').each(function() {
+            $('table.display:not([data-dt-managed="true"])').each(function() {
                 if ($.fn.DataTable.isDataTable(this)) {
                     return;
                 }

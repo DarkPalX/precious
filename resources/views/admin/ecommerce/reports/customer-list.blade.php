@@ -43,7 +43,7 @@
         </form>
 
         <div class="table-responsive">
-            <table id="customer-report" class="display nowrap" style="width:100%;font-size:13px;">
+            <table id="customer-report" class="display nowrap" data-dt-managed="true" style="width:100%;font-size:13px;">
                 <thead>
                     <tr>
                         <th>Name</th><th>Email</th><th>Mobile</th><th>Address</th>
@@ -64,6 +64,15 @@
 
             function hideExportLoading() {
                 $('#customer-export-loading').hide();
+            }
+
+            const customerReportElement = document.getElementById('customer-report');
+
+            // The shared report layout has a legacy fallback initializer. Do
+            // not initialise this server-side table twice if load timing
+            // differs between desktop and mobile browsers.
+            if ($.fn.DataTable.isDataTable(customerReportElement)) {
+                return;
             }
 
             const customerTable = $('#customer-report').DataTable({
