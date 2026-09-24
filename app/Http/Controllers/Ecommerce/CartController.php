@@ -420,12 +420,45 @@ class CartController extends Controller
             CouponCartDiscount::where('customer_id',Auth::id())->delete();
             CouponCart::where('customer_id',Auth::id())->delete();
 
-            $cart = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();
+            $cart = Cart::with('product')
+                ->where('user_id', Auth::id())
+                ->where('qty', '>', 0)
+                ->get();
+
+            // A product may have been permanently deleted after it was added
+            // to the cart. Do not pass such orphaned rows to the view.
+            $orphanedCartIds = $cart->filter(fn ($item) => !$item->product)
+                ->pluck('id');
+
+            if ($orphanedCartIds->isNotEmpty()) {
+                Cart::whereIn('id', $orphanedCartIds)->delete();
+                $cart = $cart->filter(fn ($item) => $item->product)->values();
+            }
             
             $totalProducts = $cart->count();
         } else {
             $cart = session('cart', []);
-            $totalProducts = count(session('cart', []));
+
+            // Guest cart entries are stdClass objects, so explicitly resolve
+            // their product relationship before rendering the cart page.
+            $validCart = [];
+            foreach ($cart as $order) {
+                $product = Product::withTrashed()->find($order->product_id ?? null);
+
+                if (!$product) {
+                    continue;
+                }
+
+                $order->product = $product;
+                $validCart[] = $order;
+            }
+
+            if (count($validCart) !== count($cart)) {
+                session(['cart' => $validCart]);
+            }
+
+            $cart = $validCart;
+            $totalProducts = count($cart);
         }
 
         $coupons = Coupon::where('status','ACTIVE')->where('activation_type','<>','manual')->get();

@@ -17,9 +17,21 @@
 			<div class="top-cart-items" id="top-cart-items">
 				@php
 					if(Auth::check()){
-						$cartx = \App\Models\Ecommerce\Cart::where('user_id', auth()->user()->id)->where('qty', '>', 0)->get();
+						$cartx = \App\Models\Ecommerce\Cart::with('product')
+							->where('user_id', auth()->id())
+							->where('qty', '>', 0)
+							->get()
+							->filter(fn ($item) => $item->product);
 					} else {
-						$cartx = session('cart', []);
+						$cartx = [];
+						foreach (session('cart', []) as $guestCartItem) {
+							$guestCartItem->product = \App\Models\Ecommerce\Product::withTrashed()
+								->find($guestCartItem->product_id ?? null);
+
+							if ($guestCartItem->product) {
+								$cartx[] = $guestCartItem;
+							}
+						}
 					}
 					
 					$carttotal = 0;
@@ -29,6 +41,7 @@
 				@foreach($cartx as $cart)
 
 					@php
+						$cartId = $cart->id ?? $cart->product_id;
 						$carttotal += $cart->price*$cart->qty;
 						$totalsaved += $cart->product->price - $cart->product->discount_price;
 					@endphp
@@ -44,39 +57,39 @@
 
 								<div class="d-flex mt-2">
 									<div class="quantity">
-										<input type="button" value="-" class="minus" onclick="minus_qty('{{$cart->id}}');" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) disabled @endif />
-										<input type="text" name="quantity[]" class="qty" value="{{$cart->qty}}" id="quantity{{$cart->id}}" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) readonly @endif />
-										<input type="button" value="+" class="plus" onclick="plus_qty('{{$cart->id}}');" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) disabled @endif />
+						<input type="button" value="-" class="minus" onclick="minus_qty('{{$cartId}}');" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) disabled @endif />
+						<input type="text" name="quantity[]" class="qty" value="{{$cart->qty}}" id="quantity{{$cartId}}" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) readonly @endif />
+						<input type="button" value="+" class="plus" onclick="plus_qty('{{$cartId}}');" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) disabled @endif />
 
-										<input type="hidden" id="orderID{{$cart->id}}" value="{{$cart->product_id}}">
-										<input type="hidden" id="prevqty{{$cart->id}}" value="{{ $cart->qty }}">
-										<input type="hidden" id="maxorder{{$cart->id}}" value="{{ $cart->product->Inventory }}">
-										<input type="hidden" id="cartItemPrice{{$cart->id}}" value="{{ $cart->price }}">
+						<input type="hidden" id="orderID{{$cartId}}" value="{{$cart->product_id}}">
+						<input type="hidden" id="prevqty{{$cartId}}" value="{{ $cart->qty }}">
+						<input type="hidden" id="maxorder{{$cartId}}" value="{{ $cart->product->Inventory }}">
+						<input type="hidden" id="cartItemPrice{{$cartId}}" value="{{ $cart->price }}">
 									</div>
 									
 
 									<div class="cart-product-subtotal">
-										<input type="hidden" id="product_name_{{$cart->id}}" value="{{$cart->product->name}}">
-										<input type="hidden" name="product_price[]" id="input_order{{$cart->id}}_product_price" value="{{$cart->product->discountedprice}}">
+						<input type="hidden" id="product_name_{{$cartId}}" value="{{$cart->product->name}}">
+						<input type="hidden" name="product_price[]" id="input_order{{$cartId}}_product_price" value="{{$cart->product->discountedprice}}">
 	
 	
-										<input type="hidden" id="price{{$cart->id}}" value="{{number_format($cart->product->discountedprice,2,'.','')}}">
-										<input type="hidden" class="input_product_total_price" data-id="{{$cart->id}}" data-productid="{{$cart->product_id}}" id="input_order{{$cart->id}}_product_total_price" value="{{$cart->product->discountedprice*$cart->qty}}">
+						<input type="hidden" id="price{{$cartId}}" value="{{number_format($cart->product->discountedprice,2,'.','')}}">
+						<input type="hidden" class="input_product_total_price" data-id="{{$cartId}}" data-productid="{{$cart->product_id}}" id="input_order{{$cartId}}_product_total_price" value="{{$cart->product->discountedprice*$cart->qty}}">
 	
 										<!-- Coupon Inputs -->
-										<input type="hidden" class="cart_product_reward" id="cart_product_reward{{$cart->id}}" value="0">
-										<input type="hidden" class="cart_product_discount" id="cart_product_discount{{$cart->id}}" value="0">
-										<span class="amount" id="order{{$cart->id}}_total_price" hidden>₱{{ number_format($cart->product->discountedprice*$cart->qty,2) }}</span>
+						<input type="hidden" class="cart_product_reward" id="cart_product_reward{{$cartId}}" value="0">
+						<input type="hidden" class="cart_product_discount" id="cart_product_discount{{$cartId}}" value="0">
+						<span class="amount" id="order{{$cartId}}_total_price" hidden>₱{{ number_format($cart->product->discountedprice*$cart->qty,2) }}</span>
 									</div>
 								</div>
 
 								<div class="d-flex mt-2">
 									{{-- <a href="javascript:void(0)" class="fw-normal text-black-50 text-smaller" onclick="toggleQuantityInput(this);">Edit</a> --}}
-									<a href="javascript:;" class="fw-normal text-black-50 text-smaller" onclick="top_remove_product('{{$cart->id}}');"><u>Remove</u></a>
+						<a href="javascript:;" class="fw-normal text-black-50 text-smaller" onclick="top_remove_product('{{$cartId}}');"><u>Remove</u></a>
 								</div>
 
 								
-								@if(Setting::isThreeDaysOnCart($cart->id))
+								@if(Auth::check() && Setting::isThreeDaysOnCart($cartId))
 									<div class="d-flex mt-2">
 										<small class="badge bg-danger">For removal</small>
 									</div>

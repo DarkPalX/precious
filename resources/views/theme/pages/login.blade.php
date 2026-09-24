@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="content-wrap">
-        <div class="tabs divcenter nobottommargin clearfix" id="tab-login-register" style="max-width: 500px;">
+        <div class="tabs divcenter nobottommargin clearfix" id="tab-login-register" style="width: 100%; max-width: 500px; margin-left: auto; margin-right: auto;">
 
                 <div class="tab-container">
                     @if($message = Session::get('error'))
@@ -69,18 +69,5 @@
             });
         });
 
-        $(".show_hide_password a").on('click', function(event) {
-            event.preventDefault();
-            if($(this).parent().parent().siblings('input').attr("type") == "text"){
-                $(this).parent().parent().siblings('input').attr('type', 'password');
-                $(this).children('i').addClass( "icon-eye-slash" );
-                $(this).children('i').removeClass( "icon-eye" );
-            }else if($(this).parent().parent().siblings('input').attr("type") == "password"){
-                $(this).parent().parent().siblings('input').attr('type', 'text');
-                $(this).children('i').removeClass( "icon-eye-slash" );
-                $(this).children('i').addClass( "icon-eye" );
-            }
-        });
     </script>
 @endsection
-

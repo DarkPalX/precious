@@ -157,9 +157,16 @@ class Setting {
     }
 
     public static function isThreeDaysOnCart($id){
+        if (!auth()->check()) {
+            return false;
+        }
+
         $threeDaysAgo = now()->subDays(3);
     
-        $isThreeDaysOnCart = Cart::where('id', $id)->where('created_at', '<', $threeDaysAgo)->where('user_id', auth()->user()->id)->exists();
+        $isThreeDaysOnCart = Cart::where('id', $id)
+            ->where('created_at', '<', $threeDaysAgo)
+            ->where('user_id', auth()->id())
+            ->exists();
         return $isThreeDaysOnCart;
     }
     
