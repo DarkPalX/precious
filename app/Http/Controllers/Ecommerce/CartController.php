@@ -622,6 +622,9 @@ class CartController extends Controller
         $page = new Page();
         $page->name = 'Checkout';
 
+        
+        $setting = \App\Models\Setting::whereId(1)->first();
+
         $locations = DeliverableCities::query()
             ->select(
                 'province',
@@ -695,7 +698,7 @@ class CartController extends Controller
 
         // $lbc_provinces = LBCHelper::provinces();
 
-        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'locations', 'use_ecredit', 'has_ebook', 'has_physical'));
+        return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'locations', 'use_ecredit', 'has_ebook', 'has_physical', 'setting'));
         // return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'provinces', 'cities', 'use_ecredit', 'has_ebook'));
         // return view('theme.pages.ecommerce.checkout', compact('orders', 'cart', 'coupons', 'customer', 'page', 'lbc_provinces'));
     }

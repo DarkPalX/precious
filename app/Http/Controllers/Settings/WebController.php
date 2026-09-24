@@ -275,6 +275,7 @@ class WebController extends Controller
         $setting->coupon_discount_limit = $request->coupon_discount_limit;
         $setting->cart_notification_duration = $request->cart_notification_duration;
         $setting->cart_product_duration = $request->cart_product_duration;
+        $setting->cod_toggle = $request->cod_toggle == "on" ? 1 : 0;
         $setting->user_id = Auth::id();
         $setting->save();
 
