@@ -45,6 +45,7 @@ class ReportsController extends Controller
             'top-products/mobile' => 'top_products_mobile',
             'subscribers/mobile' => 'subscribers_mobile',
             'downloads/mobile' => 'downloads',
+            'read-counts/mobile' => 'read_counts',
         ];
 
         $handler = null;
@@ -57,6 +58,32 @@ class ReportsController extends Controller
         abort_unless($handler && in_array($format, ['csv', 'excel', 'pdf'], true), 404);
 
         $params = $request->except(['source', 'format', 'export']);
+
+        // Read counts is a server-side DataTable report, so its export data
+        // is returned as JSON instead of being rendered as an HTML table.
+        if ($handler === 'read_counts') {
+            $dataRequest = Request::create('/', 'GET', array_merge($params, [
+                'is_export' => 1,
+            ]));
+            $dataRequest->headers->set('X-Requested-With', 'XMLHttpRequest');
+            $response = $this->{$handler}($dataRequest);
+            $payload = $response instanceof \Illuminate\Http\JsonResponse
+                ? $response->getData(true)
+                : [];
+
+            $headers = ['Code', 'Name', 'Author', 'Read Counts'];
+            $rows = array_map(function ($row) {
+                return [
+                    $row['sku'] ?? '',
+                    $row['name'] ?? '',
+                    $row['author'] ?? '',
+                    $row['read_count'] ?? 0,
+                ];
+            }, $payload['data'] ?? []);
+
+            return $this->streamReportTable($headers, $rows, $format, 'read-counts');
+        }
+
         $view = $this->{$handler}(Request::create('/', 'GET', $params));
         abort_unless($view instanceof \Illuminate\Contracts\View\View, 422, 'Report cannot be exported');
         [$headers, $rows] = $this->extractReportTable($view->render());
