@@ -167,25 +167,33 @@ class CustomerFrontController extends Controller
 
 
             foreach ($cart as $order) {
-                $product = Product::find($order['product_id']);
-                $cart = Cart::where('product_id', $order['product_id'])
+                // Guest cart items may be stored as stdClass objects or arrays.
+                $productId = data_get($order, 'product_id');
+                $quantity = (int) data_get($order, 'qty', 0);
+
+                $product = Product::withTrashed()->find($productId);
+
+                if (!$product || $quantity < 1) {
+                    continue;
+                }
+
+                $cartPrice = data_get($order, 'price', $product->price);
+                $cart = Cart::where('product_id', $productId)
                     ->where('user_id', Auth::id())
                     ->first();
 
                 if (!empty($cart)) {
-                    $newQty = $cart->qty + $order['qty'];
+                    $newQty = $cart->qty + $quantity;
                     $cart->update([
                         'qty' => $newQty,
-                        'price' => $product->price,
-                        'paella_price' => $order['paella_price']
+                        'price' => $cartPrice
                     ]);
                 } else {
                     Cart::create([
-                        'product_id' => $order['product_id'],
+                        'product_id' => $productId,
                         'user_id' => Auth::id(),
-                        'qty' => $order['qty'],
-                        'price' => $product->price,
-                        'paella_price' => $order['paella_price']
+                        'qty' => $quantity,
+                        'price' => $cartPrice
                     ]);
                 }
             }

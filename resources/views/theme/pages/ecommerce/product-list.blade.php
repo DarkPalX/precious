@@ -99,6 +99,7 @@
                                     <a data-bs-toggle="tooltip" data-bs-placement="left" onclick="" title="Add to Bag" data-hover-animate="fadeInRightSmall" href="javascript:void(0)" class="btn btn-light h-bg-color h-text-light border-0 mb-2"><i class="icon-shopping-bag"></i></a>
                                 </div> --}}
 
+								{{-- @auth --}}
 								<div class="position-relative">
 									@if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book")
 										@if(App\Models\CustomerLibrary::already_purchased($product->id))
@@ -131,6 +132,7 @@
 										@endif
 									@endif
 								</div>
+								{{-- @endauth --}}
 								
 							</div>
 

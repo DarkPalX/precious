@@ -9,7 +9,7 @@
     <li class="nav-item @if (url()->current() == route('dashboard')) active @endif">
         <a href="{{ route('dashboard') }}" class="nav-link"><i data-feather="home"></i><span>Dashboard</span></a>
     </li>    
-    
+        
     @if (auth()->user()->has_access_to_pages_module() || auth()->user()->has_access_to('pages'))
         <li class="nav-item with-sub @if (request()->routeIs('pages*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="layers"></i> <span>Pages</span></a>
@@ -313,6 +313,10 @@
 
         <li class="nav-item @if (\Route::current()->getName() == 'report.top-products')) active show @endif">
             <a href="{{ route('report.top-products') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Top Rated Products</span></a>
+        </li>
+        
+        <li class="nav-item @if (\Route::current()->getName() == 'report.customer-list')) active show @endif">
+            <a href="{{ route('report.customer-list') }}" class="nav-link" target="_blank"><i data-feather="file"></i> <span>Customer List</span></a>
         </li>
 
         {{-- <li class="nav-item @if (\Route::current()->getName() == 'report.product-list')) active show @endif">

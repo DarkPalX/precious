@@ -336,7 +336,22 @@
                                             Note:  The Product Cart Duration should have a longer duration (hrs.) than the Cart Email Notification Duration (hrs.). </small>
                                         </div>
                                     </div>
+
+                                    <h4 class="mg-t-50">Payment Method</h4>
+                                    
                                     <div class="form-group">
+                                        <label class="d-block">Cash on Delivery (COD)</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" name="cod_toggle" {{ $web->cod_toggle ? "checked" : "" }} id="customSwitch1">
+                                            <label class="custom-control-label" id="label_cod_toggle" for="customSwitch1">{{ $web->cod_toggle ? "Enabled" : "Disabled" }}</label>
+                                        </div>
+                                        @error('visibility')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+
+                                    <div class="form-group mt-5">
                                         <button type="submit" class="btn btn-xs btn-primary">Save Changes</button>
                                     </div>
                                 </form>

@@ -59,6 +59,7 @@
                     </div><!-- #top-search end -->
                     
                     @if(!Str::contains(url()->current(), '/cart'))
+                    {{-- @if(Auth::check() && !Str::contains(url()->current(), '/cart')) --}}
                         <div id="top-cart" class="header-misc-icon">
                             <a href="javascript:;" class="side-panel-trigger">
                                 <i class="icon-line-bag"></i>

@@ -246,7 +246,8 @@
 
                                                 <div class="form-group">
                                                     <label for="amount">Amount</label>
-                                                    <input type="text" name="amount" class="form-control" value="{{ number_format($sale->net_amount, 2) }}" readonly required>
+                                                    <input type="text" class="form-control" value="{{ number_format($sale->net_amount, 2) }}" readonly>
+                                                    <input type="text" name="amount" class="form-control" value="{{ $sale->net_amount }}" readonly required hidden>
                                                 </div>
 
                                                 <div class="form-group">

@@ -109,6 +109,20 @@
             $('#sales-table').DataTable().destroy();
         }
 
+        function downloadSalesExport(format) {
+            var params = new URLSearchParams({
+                start_date: $('input[name="start_date"]').val() || '',
+                end_date: $('input[name="end_date"]').val() || '',
+                customer: $('#customer').val() || '',
+                product: $('#product').val() || '',
+                category: $('#category').val() || '',
+                del_status: $('#del_status').val() || '',
+                export: format
+            });
+            window.location.href = "{{ route('report.sales-transaction') }}?" + params.toString();
+        }
+
+        /* Legacy browser-side all-rows exporter retained below only for reference. */
         function exportAllSales(e, dt, button, config, builtInName) {
             $.ajax({
                 url: "{{ route('report.sales-transaction') }}",
@@ -201,21 +215,21 @@
                     extend: 'print',
                     exportOptions: { columns: ':visible' },
                     action: function (e, dt, button, config) {
-                        exportAllSales(e, dt, button, config, 'print');
+                        $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
                     }
                 },
                 {
                     extend: 'csv',
                     exportOptions: { columns: ':visible' },
                     action: function (e, dt, button, config) {
-                        exportAllSales(e, dt, button, config, 'csvHtml5');
+                        downloadSalesExport('csv');
                     }
                 },
                 {
                     extend: 'excel',
                     exportOptions: { columns: ':visible' },
                     action: function (e, dt, button, config) {
-                        exportAllSales(e, dt, button, config, 'excelHtml5');
+                        downloadSalesExport('excel');
                     }
                 },
                 {   
@@ -223,7 +237,7 @@
                     text: 'PDF',
                     exportOptions: { columns: ':visible' },
                     action: function (e, dt, button, config) {
-                        exportAllSales(e, dt, button, config, 'pdfHtml5');
+                        downloadSalesExport('pdf');
                     },
                     orientation : 'landscape',
                     pageSize : 'LEGAL'

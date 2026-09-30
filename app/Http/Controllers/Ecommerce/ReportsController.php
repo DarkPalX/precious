@@ -26,6 +26,222 @@ class ReportsController extends Controller
 {
 
     private $pageCount = 500;
+
+    public function report_export(Request $request)
+    {
+        $source = trim((string) $request->get('source'));
+        $format = strtolower((string) $request->get('format', 'csv'));
+        $handlers = [
+            'best-sellers' => 'best_sellers',
+            'top-buyers' => 'top_buyers',
+            'top-products' => 'top_products',
+            'product-list' => 'product_list',
+            'inventory_reorder_point' => 'inventory_reorder_point',
+            'coupon_list' => 'coupon_list',
+            'promo-list' => 'promo_list',
+            'payment-list' => 'payment_list',
+            'best-sellers/mobile' => 'best_sellers_mobile',
+            'top-buyers/mobile' => 'top_buyers_mobile',
+            'top-products/mobile' => 'top_products_mobile',
+            'subscribers/mobile' => 'subscribers_mobile',
+            'downloads/mobile' => 'downloads',
+            'read-counts/mobile' => 'read_counts',
+        ];
+
+        $handler = null;
+        foreach ($handlers as $suffix => $method) {
+            if (substr($source, -strlen($suffix)) === $suffix) {
+                $handler = $method;
+                break;
+            }
+        }
+        abort_unless($handler && in_array($format, ['csv', 'excel', 'pdf'], true), 404);
+
+        $params = $request->except(['source', 'format', 'export']);
+
+        // Read counts is a server-side DataTable report, so its export data
+        // is returned as JSON instead of being rendered as an HTML table.
+        if ($handler === 'read_counts') {
+            $dataRequest = Request::create('/', 'GET', array_merge($params, [
+                'is_export' => 1,
+            ]));
+            $dataRequest->headers->set('X-Requested-With', 'XMLHttpRequest');
+            $response = $this->{$handler}($dataRequest);
+            $payload = $response instanceof \Illuminate\Http\JsonResponse
+                ? $response->getData(true)
+                : [];
+
+            $headers = ['Code', 'Name', 'Author', 'Read Counts'];
+            $rows = array_map(function ($row) {
+                return [
+                    $row['sku'] ?? '',
+                    $row['name'] ?? '',
+                    $row['author'] ?? '',
+                    $row['read_count'] ?? 0,
+                ];
+            }, $payload['data'] ?? []);
+
+            return $this->streamReportTable($headers, $rows, $format, 'read-counts');
+        }
+
+        $view = $this->{$handler}(Request::create('/', 'GET', $params));
+        abort_unless($view instanceof \Illuminate\Contracts\View\View, 422, 'Report cannot be exported');
+        [$headers, $rows] = $this->extractReportTable($view->render());
+        abort_unless($headers, 422, 'Report has no exportable table');
+
+        return $this->streamReportTable($headers, $rows, $format, 'report-export');
+    }
+
+    private function extractReportTable($html)
+    {
+        $previous = libxml_use_internal_errors(true);
+        $document = new \DOMDocument();
+        $document->loadHTML('<?xml encoding="UTF-8">' . $html);
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+        $xpath = new \DOMXPath($document);
+        $table = $xpath->query('//table[@id="example"]')->item(0);
+        if (!$table) {
+            return [[], []];
+        }
+
+        $headers = [];
+        $rows = [];
+        foreach ($xpath->query('.//tr', $table) as $index => $tr) {
+            $cells = [];
+            foreach ($xpath->query('./th|./td', $tr) as $cell) {
+                $cells[] = trim(preg_replace('/\s+/', ' ', $cell->textContent));
+            }
+            if (!$cells || (count($cells) === 1 && stripos($cells[0], 'no ') === 0)) {
+                continue;
+            }
+            if ($index === 0) {
+                $headers = $cells;
+            } elseif (count($cells) === count($headers)) {
+                $rows[] = $cells;
+            }
+        }
+
+        return [$headers, $rows];
+    }
+
+    private function streamReportTable(array $headers, array $rows, $format, $filename)
+    {
+        if ($format === 'csv') {
+            return response()->streamDownload(function () use ($headers, $rows) {
+                @set_time_limit(0);
+                $handle = fopen('php://output', 'w');
+                fputcsv($handle, $headers);
+                foreach ($rows as $row) {
+                    fputcsv($handle, $row);
+                }
+                fclose($handle);
+            }, $filename . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+        }
+
+        if ($format === 'excel') {
+            return response()->streamDownload(function () use ($headers, $rows) {
+                @set_time_limit(0);
+                echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>td,th{border:1px solid #ccc;padding:4px;}th{font-weight:bold;background:#eee;}</style></head><body><table><tr>';
+                foreach ($headers as $header) {
+                    echo '<th>' . e($header) . '</th>';
+                }
+                echo '</tr>';
+                foreach ($rows as $row) {
+                    echo '<tr>';
+                    foreach ($row as $value) {
+                        echo '<td>' . e($value) . '</td>';
+                    }
+                    echo '</tr>';
+                }
+                echo '</table></body></html>';
+            }, $filename . '.xls', ['Content-Type' => 'application/vnd.ms-excel; charset=UTF-8']);
+        }
+
+        return $this->streamReportPdf($headers, $rows, $filename . '.pdf');
+    }
+
+    private function streamReportPdf(array $headers, array $rows, $filename)
+    {
+        return response()->streamDownload(function () use ($headers, $rows) {
+            @set_time_limit(0);
+            $file = tempnam(sys_get_temp_dir(), 'report-export-');
+            $handle = fopen($file, 'w+b');
+            $offsets = [0];
+            fwrite($handle, "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+            $writeObject = function ($number, $body) use ($handle, &$offsets) {
+                $offsets[$number] = ftell($handle);
+                fwrite($handle, $number . " 0 obj\n" . $body . "\nendobj\n");
+            };
+            $writeObject(1, '<< /Type /Catalog /Pages 2 0 R >>');
+            $pages = [];
+            $page = 0;
+
+            foreach (array_chunk($rows, 45) as $pageRows) {
+                $page++;
+                $pageObject = 4 + (($page - 1) * 2);
+                $contentObject = $pageObject + 1;
+                $pages[] = $pageObject . ' 0 R';
+                $widths = array_fill(0, count($headers), max(70, floor(960 / max(1, count($headers)))));
+                $content = "0.75 w\n0.92 0.92 0.92 rg\n24 570 960 18 re f\n0 0 0 RG\n0 0 0 rg\n";
+                $content .= "24 30 m 984 30 l S\n24 588 m 984 588 l S\n";
+                $x = 24;
+                foreach ($widths as $width) {
+                    $content .= $x . ' 30 m ' . $x . " 588 l S\n";
+                    $x += $width;
+                }
+                $content .= "984 30 m 984 588 l S\n24 570 m 984 570 l S\n";
+                for ($i = 1; $i <= count($pageRows); $i++) {
+                    $y = 570 - ($i * 12);
+                    $content .= '24 ' . $y . ' m 984 ' . $y . " l S\n";
+                }
+                $draw = function ($text, $cellX, $y, $width) {
+                    $text = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', (string) $text);
+                    $limit = max(1, floor(($width - 6) / 3.6));
+                    if (strlen($text) > $limit) {
+                        $text = substr($text, 0, max(1, $limit - 3)) . '...';
+                    }
+                    $text = str_replace(['\\', '(', ')'], ['\\\\', '\\(', '\\)'], $text);
+                    return "BT\n/F1 6 Tf\n" . ($cellX + 3) . ' ' . $y . " Td\n(" . $text . ") Tj\nET\n";
+                };
+                $x = 24;
+                foreach ($headers as $i => $header) {
+                    $content .= $draw($header, $x, 575, $widths[$i]);
+                    $x += $widths[$i];
+                }
+                foreach ($pageRows as $rowIndex => $row) {
+                    $x = 24;
+                    $y = 561 - ($rowIndex * 12);
+                    foreach ($row as $i => $value) {
+                        $content .= $draw($value, $x, $y, $widths[$i]);
+                        $x += $widths[$i];
+                    }
+                }
+                $writeObject($contentObject, '<< /Length ' . strlen($content) . " >>\nstream\n" . $content . 'endstream');
+                $writeObject($pageObject, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1008 612] /Resources << /Font << /F1 3 0 R >> >> /Contents ' . $contentObject . ' 0 R >>');
+            }
+
+            if (!$page) {
+                $pages[] = '4 0 R';
+                $page = 1;
+            }
+            $writeObject(3, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+            $writeObject(2, '<< /Type /Pages /Kids [' . implode(' ', $pages) . '] /Count ' . count($pages) . ' >>');
+            $xref = ftell($handle);
+            $max = max(array_keys($offsets));
+            fwrite($handle, "xref\n0 " . ($max + 1) . "\n0000000000 65535 f \n");
+            for ($i = 1; $i <= $max; $i++) {
+                fwrite($handle, sprintf("%010d 00000 n \n", $offsets[$i]));
+            }
+            fwrite($handle, "trailer\n<< /Size " . ($max + 1) . " /Root 1 0 R >>\nstartxref\n" . $xref . "\n%%EOF");
+            rewind($handle);
+            while (!feof($handle)) {
+                echo fread($handle, 1024 * 1024);
+            }
+            fclose($handle);
+            @unlink($file);
+        }, $filename, ['Content-Type' => 'application/pdf']);
+    }
     
     public function best_sellers(Request $request)
     {
@@ -55,6 +271,10 @@ class ReportsController extends Controller
         $product   = $request->get('product');
         $category  = $request->get('category');
         $status    = $request->get('del_status');
+
+        if (in_array($request->get('export'), ['csv', 'excel', 'pdf'], true)) {
+            return $this->streamSalesExport($request, false);
+        }
 
         if ($request->ajax() || $request->get('export') === 'csv') {
             $query = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
@@ -250,14 +470,396 @@ class ReportsController extends Controller
 
     }
 
+    private function streamSalesExport(Request $request, $mobile)
+    {
+        if (!$mobile) {
+            return $this->streamWebSalesExportFast($request);
+        }
+
+        $query = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
+            ->where(function ($q) use ($mobile) {
+                if ($mobile) {
+                    $q->whereIn('ecommerce_sales_headers.order_source', ['Android', 'iOS']);
+                } else {
+                    $q->where('ecommerce_sales_headers.order_source', '<>', 'Android')
+                        ->orWhereNull('ecommerce_sales_headers.order_source');
+                }
+            })
+            ->whereNotNull('ecommerce_sales_headers.id')
+            ->whereHas('header.user')
+            ->with(['header.user', 'product.category', 'header.deliveries'])
+            ->select([
+                'ecommerce_sales_details.*',
+                'ecommerce_sales_headers.order_number',
+                'ecommerce_sales_headers.payment_method',
+                'ecommerce_sales_headers.created_at as header_created_at',
+                'ecommerce_sales_headers.delivery_status',
+                'ecommerce_sales_headers.customer_delivery_adress',
+            ]);
+
+        foreach ([
+            'customer' => 'ecommerce_sales_headers.customer_name',
+            'product' => 'ecommerce_sales_details.product_name',
+            'category' => 'ecommerce_sales_details.product_category',
+        ] as $input => $column) {
+            if ($request->get($input)) {
+                $query->where($column, $request->get($input));
+            }
+        }
+        if ($request->get('del_status')) {
+            $query->where('ecommerce_sales_headers.delivery_status', $request->get('del_status'));
+        }
+        if ($request->get('start_date') && $request->get('end_date')) {
+            $query->whereBetween('ecommerce_sales_headers.created_at', [
+                $request->get('start_date') . ' 00:00:00',
+                $request->get('end_date') . ' 23:59:59',
+            ]);
+        }
+
+        $headers = ['Date', 'Order #', 'Customer #', 'Customer', 'Delivery Address', 'Product', 'Category', 'Qty', 'Price', 'Gross', 'Discount', 'Net Price', 'Payment Method', 'Status'];
+        $rows = [];
+        foreach ($query->cursor() as $sale) {
+            $qty = $mobile ? max(1, (int) $sale->qty) : $sale->qty;
+            $status = in_array(strtolower($sale->product->book_type ?? ''), ['ebook', 'e-book'])
+                ? 'Delivered'
+                : ($sale->delivery_status ?? '');
+            $lastDelivery = optional($sale->header->deliveries->last());
+            if ($lastDelivery && $lastDelivery->remarks != '') {
+                $status .= ' | ' . $lastDelivery->remarks;
+            }
+            $rows[] = [
+                \SettingHelper::datetimeFormat2($sale->header_created_at),
+                is_numeric($sale->order_number) ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) : ($sale->order_number ?? ''),
+                str_pad(($sale->header->user->id ?? 0), 8, '0', STR_PAD_LEFT),
+                $sale->header->customer_name ?? '',
+                $sale->customer_delivery_adress ?? '',
+                $sale->product_name ?? '',
+                $sale->product->category->name ?? 'Uncategorized',
+                $qty,
+                number_format($sale->price, 2),
+                number_format($sale->price * $qty, 2),
+                number_format($sale->discount_amount, 2),
+                number_format(($sale->price * $qty) - $sale->discount_amount, 2),
+                $sale->payment_method ?? $sale->header->payment_method ?? '',
+                $status,
+            ];
+        }
+
+        return $this->streamReportTable($headers, $rows, $request->get('export'), $mobile ? 'mobile-sales-report' : 'sales-report');
+    }
+
+    private function streamWebSalesExportFast(Request $request)
+    {
+        // The old export loaded header, user, product, category, and delivery
+        // relations once per row. This single query avoids the N+1 slowdown.
+        $query = DB::table('ecommerce_sales_details as d')
+            ->join('ecommerce_sales_headers as h', 'd.sales_header_id', '=', 'h.id')
+            ->leftJoin('users as u', 'h.user_id', '=', 'u.id')
+            ->leftJoin('products as p', 'd.product_id', '=', 'p.id')
+            ->leftJoin('product_categories as pc', 'p.category_id', '=', 'pc.id')
+            ->where(function ($q) {
+                $q->where('h.order_source', '<>', 'Android')
+                    ->orWhereNull('h.order_source');
+            })
+            ->where('d.product_category', '<>', 0)
+            ->whereNotNull('h.id')
+            ->whereNotNull('u.id')
+            ->select([
+                'd.product_name', 'd.qty', 'd.price', 'd.discount_amount',
+                'h.order_number', 'h.user_id', 'h.customer_name',
+                'h.customer_delivery_adress', 'h.payment_method',
+                'h.delivery_status', 'h.created_at as header_created_at',
+                'p.book_type', 'pc.name as category_name',
+                DB::raw('(select ds.remarks from ecommerce_delivery_status ds where ds.order_id = h.id order by ds.id desc limit 1) as delivery_remarks'),
+            ])
+            ->orderByDesc('h.created_at');
+
+        foreach ([
+            'customer' => 'h.customer_name',
+            'product' => 'd.product_name',
+            'category' => 'd.product_category',
+        ] as $input => $column) {
+            if ($request->get($input)) {
+                $query->where($column, $request->get($input));
+            }
+        }
+        if ($request->get('del_status')) {
+            $query->where('h.delivery_status', $request->get('del_status'));
+        }
+        if ($request->get('start_date') && $request->get('end_date')) {
+            $query->whereBetween('h.created_at', [
+                $request->get('start_date') . ' 00:00:00',
+                $request->get('end_date') . ' 23:59:59',
+            ]);
+        }
+
+        $headers = ['Date', 'Order #', 'Customer #', 'Customer', 'Delivery Address', 'Product', 'Category', 'Qty', 'Price', 'Gross', 'Discount', 'Net Price', 'Payment Method', 'Status'];
+        $rows = [];
+        foreach ($query->cursor() as $sale) {
+            $qty = (int) $sale->qty;
+            $status = in_array(strtolower((string) $sale->book_type), ['ebook', 'e-book'])
+                ? 'Delivered'
+                : (string) ($sale->delivery_status ?? '');
+            if ($sale->delivery_remarks !== null && $sale->delivery_remarks !== '') {
+                $status .= ' | ' . $sale->delivery_remarks;
+            }
+            $rows[] = [
+                \SettingHelper::datetimeFormat2($sale->header_created_at),
+                is_numeric($sale->order_number) ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) : ($sale->order_number ?? ''),
+                str_pad((string) ($sale->user_id ?? 0), 8, '0', STR_PAD_LEFT),
+                $sale->customer_name ?? '',
+                $sale->customer_delivery_adress ?? '',
+                $sale->product_name ?? '',
+                $sale->category_name ?? 'Uncategorized',
+                $qty,
+                number_format($sale->price, 2),
+                number_format($sale->price * $qty, 2),
+                number_format($sale->discount_amount, 2),
+                number_format(($sale->price * $qty) - $sale->discount_amount, 2),
+                $sale->payment_method ?? '',
+                $status,
+            ];
+        }
+
+        return $this->streamReportTable($headers, $rows, $request->get('export'), 'sales-report');
+    }
+
     public function customer_list(Request $request)
     {
-        
-        $rs = User::where('role_id','6')->get();        
+        $startDate = $request->get('start_date', $request->get('start'));
+        $endDate = $request->get('end_date', $request->get('end'));
+        $platform = strtolower(trim((string) $request->get('platform', '')));
 
-        return view('admin.ecommerce.reports.customer-list',compact('rs'));
+        $query = User::where('role_id', 6)
+            ->where('is_active', 1)
+            ->select([
+                'id', 'firstname', 'lastname', 'email', 'mobile', 'phone',
+                'address_street', 'address_municipality',
+                'address_city', 'address_zip', 'email_verified_at',
+                'verification_code'
+            ])
+            ->when($startDate, function ($query) use ($startDate) {
+                $query->where('email_verified_at', '>=', $startDate . ' 00:00:00');
+            })
+            ->when($endDate, function ($query) use ($endDate) {
+                $query->where('email_verified_at', '<=', $endDate . ' 23:59:59');
+            })
+            ->when($platform === 'web', function ($query) {
+                $query->whereNull('verification_code');
+            })
+            ->when($platform === 'mobile', function ($query) {
+                $query->whereNotNull('verification_code');
+            })
+            ->orderByDesc('email_verified_at');
+
+        $export = $request->get('export');
+        if ($export === 'csv') {
+            return response()->streamDownload(function () use ($query) {
+                @set_time_limit(0);
+                $handle = fopen('php://output', 'w');
+                fputcsv($handle, ['Name', 'Email', 'Mobile', 'Address', 'Account Created', 'Platform']);
+
+                foreach ($query->cursor() as $customer) {
+                    fputcsv($handle, $this->customerExportRow($customer));
+                }
+
+                fclose($handle);
+            }, 'customers-list.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+        }
+
+        // Do not send all rows to DataTables for file exports. Production servers
+        // commonly hit PHP/proxy limits when 49k rows are returned as one JSON body.
+        if ($export === 'excel') {
+            return $this->streamCustomerExcel($query);
+        }
+
+        if ($export === 'pdf') {
+            return $this->streamCustomerPdf($query);
+        }
+
+        if ($request->ajax()) {
+
+            return datatables()->of($query)
+                ->addColumn('customer_name', function ($customer) {
+                    return trim($customer->firstname . ' ' . $customer->lastname);
+                })
+                ->addColumn('address', function ($customer) {
+                    return implode(', ', array_filter([
+                        $customer->address_street,
+                        $customer->address_municipality,
+                        $customer->address_city,
+                        $customer->address_zip,
+                    ]));
+                })
+                ->addColumn('account_created', function ($customer) {
+                    return optional($customer->email_verified_at)->format('Y-m-d H:i');
+                })
+                ->addColumn('platform', function ($customer) {
+                    return is_null($customer->verification_code) ? 'Web' : 'Mobile';
+                })
+                ->make(true);
+        }
+
+        return view('admin.ecommerce.reports.customer-list', compact(
+            'startDate', 'endDate', 'platform'
+        ));
 
     }
+
+    private function customerExportRow($customer)
+    {
+        return [
+            trim($customer->firstname . ' ' . $customer->lastname),
+            $customer->email,
+            $customer->mobile,
+            trim(implode(', ', array_filter([
+                $customer->address_street,
+                $customer->address_municipality,
+                $customer->address_city,
+                $customer->address_zip,
+            ]))),
+            optional($customer->email_verified_at)->format('Y-m-d H:i'),
+            is_null($customer->verification_code) ? 'Web' : 'Mobile',
+        ];
+    }
+
+    private function streamCustomerExcel($query)
+    {
+        return response()->streamDownload(function () use ($query) {
+            @set_time_limit(0);
+            // Excel opens this streamed HTML workbook as an .xls file. It keeps
+            // memory usage constant and does not require PhpSpreadsheet.
+            echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><style>td,th{border:1px solid #ccc;padding:4px;}th{font-weight:bold;background:#eee;}</style></head><body><table>';
+            echo '<tr><th>Name</th><th>Email</th><th>Mobile</th><th>Address</th><th>Account Created</th><th>Platform</th></tr>';
+            foreach ($query->cursor() as $customer) {
+                echo '<tr>';
+                foreach ($this->customerExportRow($customer) as $value) {
+                    echo '<td>' . e($value) . '</td>';
+                }
+                echo '</tr>';
+            }
+            echo '</table></body></html>';
+        }, 'customers-list.xls', ['Content-Type' => 'application/vnd.ms-excel; charset=UTF-8']);
+    }
+
+    private function streamCustomerPdf($query)
+    {
+        return response()->streamDownload(function () use ($query) {
+            @set_time_limit(0);
+            $file = tempnam(sys_get_temp_dir(), 'customer-report-');
+            $handle = fopen($file, 'w+b');
+            $offsets = [0];
+            fwrite($handle, "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+
+            $writeObject = function ($number, $body) use ($handle, &$offsets) {
+                $offsets[$number] = ftell($handle);
+                fwrite($handle, $number . " 0 obj\n" . $body . "\nendobj\n");
+            };
+
+            // Object 1 points to the pages object, which is written after all
+            // streamed pages have been discovered.
+            $writeObject(1, '<< /Type /Catalog /Pages 2 0 R >>');
+            $pageReferences = [];
+            $pageNumber = 0;
+            $rows = [];
+            $writePage = function ($pageRows) use (&$pageNumber, &$pageReferences, $writeObject) {
+                $pageNumber++;
+                $pageObject = 4 + (($pageNumber - 1) * 2);
+                $contentObject = $pageObject + 1;
+                $pageReferences[] = $pageObject . ' 0 R';
+
+                // Landscape Legal table: fixed widths keep every page aligned,
+                // while clipping long values prevents cells from overflowing.
+                $x = 24;
+                $top = 588;
+                $headerHeight = 18;
+                $rowHeight = 12;
+                $widths = [150, 190, 90, 300, 140, 90];
+                $headers = ['Name', 'Email', 'Mobile', 'Address', 'Account Created', 'Platform'];
+                $content = "0.75 w\n";
+                $content .= "0.92 0.92 0.92 rg\n" . $x . ' ' . ($top - $headerHeight) . ' 960 ' . $headerHeight . " re f\n";
+                // Reset both stroke and fill colors after the gray header fill;
+                // otherwise all cell text inherits the light-gray fill color.
+                $content .= "0 0 0 RG\n0 0 0 rg\n";
+
+                $verticals = [$x];
+                foreach ($widths as $width) {
+                    $x += $width;
+                    $verticals[] = $x;
+                }
+                foreach ($verticals as $vertical) {
+                    $content .= $vertical . ' ' . ($top - $headerHeight - (count($pageRows) * $rowHeight)) . ' m ' . $vertical . ' ' . $top . " l S\n";
+                }
+                for ($line = 0; $line <= count($pageRows) + 1; $line++) {
+                    $y = $top - ($line === 0 ? 0 : ($line === 1 ? $headerHeight : $headerHeight + (($line - 1) * $rowHeight)));
+                    $content .= '24 ' . $y . ' m 984 ' . $y . " l S\n";
+                }
+
+                $drawCellText = function ($text, $cellX, $baseline, $cellWidth) {
+                    $text = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', (string) $text);
+                    $maxCharacters = max(1, floor(($cellWidth - 6) / 3.6));
+                    if (strlen($text) > $maxCharacters) {
+                        $text = substr($text, 0, max(1, $maxCharacters - 3)) . '...';
+                    }
+                    $text = str_replace(['\\', '(', ')'], ['\\\\', '\\(', '\\)'], $text);
+                    return "BT\n/F1 6 Tf\n" . ($cellX + 3) . ' ' . $baseline . " Td\n(" . $text . ") Tj\nET\n";
+                };
+
+                $cellX = 24;
+                foreach ($headers as $index => $header) {
+                    $content .= $drawCellText($header, $cellX, $top - 13, $widths[$index]);
+                    $cellX += $widths[$index];
+                }
+                foreach ($pageRows as $rowIndex => $row) {
+                    $cellX = 24;
+                    $baseline = $top - $headerHeight - ($rowIndex * $rowHeight) - 9;
+                    foreach ($row as $columnIndex => $value) {
+                        $content .= $drawCellText($value, $cellX, $baseline, $widths[$columnIndex]);
+                        $cellX += $widths[$columnIndex];
+                    }
+                }
+                $writeObject($contentObject, '<< /Length ' . strlen($content) . " >>\nstream\n" . $content . 'endstream');
+                $writeObject($pageObject, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 1008 612] /Resources << /Font << /F1 3 0 R >> >> /Contents ' . $contentObject . ' 0 R >>');
+            };
+
+            foreach ($query->cursor() as $customer) {
+                $rows[] = $this->customerExportRow($customer);
+                if (count($rows) === 45) {
+                    $writePage($rows);
+                    $rows = [];
+                }
+            }
+            if ($rows || !$pageNumber) {
+                $writePage($rows);
+            }
+            $writeObject(3, '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
+            $writeObject(2, '<< /Type /Pages /Kids [' . implode(' ', $pageReferences) . '] /Count ' . count($pageReferences) . ' >>');
+
+            $xref = ftell($handle);
+            $maxObject = max(array_keys($offsets));
+            fwrite($handle, "xref\n0 " . ($maxObject + 1) . "\n0000000000 65535 f \n");
+            for ($i = 1; $i <= $maxObject; $i++) {
+                fwrite($handle, sprintf("%010d 00000 n \n", $offsets[$i]));
+            }
+            fwrite($handle, "trailer\n<< /Size " . ($maxObject + 1) . " /Root 1 0 R >>\nstartxref\n" . $xref . "\n%%EOF");
+            fflush($handle);
+            rewind($handle);
+            while (!feof($handle)) {
+                echo fread($handle, 1024 * 1024);
+            }
+            fclose($handle);
+            @unlink($file);
+        }, 'customers-list.pdf', ['Content-Type' => 'application/pdf']);
+    }
+
+    // public function customer_list(Request $request)
+    // {
+        
+    //     $rs = User::where('role_id','6')->get();
+
+    //     return view('admin.ecommerce.reports.customer-list',compact('rs'));
+
+    // }
 
     public function inventory_reorder_point(Request $request)
     {
@@ -446,7 +1048,7 @@ class ReportsController extends Controller
         $endDate   = $request->get('end', false);
 
         $rs = SalesDetail::select('product_id',
-                          DB::raw('SUM(qty) as total_quantity'),
+                          DB::raw('SUM(CASE WHEN qty = 0 THEN 1 ELSE qty END) as total_quantity'),
                           DB::raw('SUM(net_amount) as total_net_amount'))
                  ->where('qty', 0);
 
@@ -469,6 +1071,10 @@ class ReportsController extends Controller
         $product   = $request->get('product');
         $category  = $request->get('category');
         $status    = $request->get('del_status');
+
+        if (in_array($request->get('export'), ['csv', 'excel', 'pdf'], true)) {
+            return $this->streamSalesExport($request, true);
+        }
 
         if ($request->ajax()) {
             $query = SalesDetail::join('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
@@ -777,7 +1383,9 @@ class ReportsController extends Controller
         $startDate = $request->get('start', false);
         $endDate   = $request->get('end', false);
 
-        $rs = Product::query();
+        $rs = Product::query()
+            ->whereNotNull('name')
+            ->whereRaw("TRIM(name) <> ''");
       
         if ($startDate && $endDate) {
             $rs->whereBetween('created_at', [$startDate . " 00:00:00", $endDate . " 23:59:59"]);

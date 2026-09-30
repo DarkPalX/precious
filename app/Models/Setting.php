@@ -28,7 +28,8 @@ class Setting extends Model
                             'gcash_account_name',
                             'gcash_account_number',
                             'maya_account_name',
-                            'maya_account_number'
+                            'maya_account_number',
+                            'cod_toggle'
                         ];
 
     public static function getWebsiteName()
@@ -93,7 +94,8 @@ class Setting extends Model
         'gcash_account_name' => 'GCash account name',
         'gcash_account_number' => 'GCash account number',
         'maya_account_name' => 'Maya account name',
-        'maya_account_number' => 'Maya account number'
+        'maya_account_number' => 'Maya account number',
+        'cod_toggle' => 'cod toggle'
 
     ];
     // END Need to change every model

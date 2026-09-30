@@ -57,17 +57,16 @@
 
 
 <script>
-    $(".show_hide_password a").on('click', function(event) {
+    $(document).on('click', '.show_hide_password a', function(event) {
         event.preventDefault();
-        if($(this).parent().parent().siblings('input').attr("type") == "text"){
-            $(this).parent().parent().siblings('input').attr('type', 'password');
-            $(this).children('i').addClass( "icon-eye-slash" );
-            $(this).children('i').removeClass( "icon-eye" );
-        }else if($(this).parent().parent().siblings('input').attr("type") == "password"){
-            $(this).parent().parent().siblings('input').attr('type', 'text');
-            $(this).children('i').removeClass( "icon-eye-slash" );
-            $(this).children('i').addClass( "icon-eye" );
-        }
+
+        var passwordInput = $(this).closest('.show_hide_password').find('input').first();
+        var passwordIcon = $(this).find('i');
+        var isVisible = passwordInput.attr('type') === 'text';
+
+        passwordInput.attr('type', isVisible ? 'password' : 'text');
+        passwordIcon.toggleClass('icon-eye-slash', isVisible);
+        passwordIcon.toggleClass('icon-eye', !isVisible);
     });
 
     function top_remove_product(id){
