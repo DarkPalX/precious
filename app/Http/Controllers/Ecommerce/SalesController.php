@@ -214,7 +214,7 @@ class SalesController extends Controller
         if(isset($_GET['del_status']) && $_GET['del_status']<>'')
             $sales = $sales->where('delivery_status','like',''.$_GET['del_status'].'');
         $sales = $sales->orderBy('id','desc');
-        $sales = $sales->paginate(100);
+        $sales = $sales->paginate(10);
 
         $filter = $listing->get_filter($this->searchFields);
         $searchType = 'simple_search';
@@ -222,7 +222,7 @@ class SalesController extends Controller
         foreach($sales as $sale){
             $sale->updateOrderStatus();
         }
-
+      
         return view('admin.ecommerce.sales.index',compact('sales','filter','searchType', 'deliveryStatus', 'startDate', 'endDate', 'customer', 'order_source'));
 
     }

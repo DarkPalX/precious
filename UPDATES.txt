@@ -1,3 +1,21 @@
+######################################### OCTOBER 6, 2026 #######################################
+SQL:
+
+CREATE TABLE IF NOT EXISTS below_stock_products (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    product_id BIGINT UNSIGNED NOT NULL,
+    reorder_point DECIMAL(16,2) NOT NULL DEFAULT 0.00,
+    inventory DECIMAL(16,2) NOT NULL DEFAULT 0.00,
+    PRIMARY KEY (id),
+    INDEX idx_below_stock_product_id (product_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+
+
+
+
 ######################################### SEPTEMBER 24, 2026 #######################################
 ALTER TABLE settings 
     ADD (

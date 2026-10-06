@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\RefreshBelowStockProducts;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -31,6 +32,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->job(new RefreshBelowStockProducts)->everyMinute();
+
         // Check Coupon validity every minute.
         $schedule->command('coupon_validity:cron')
                  ->everyMinute();
