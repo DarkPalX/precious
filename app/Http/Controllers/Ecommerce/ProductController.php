@@ -49,15 +49,16 @@ class ProductController extends Controller
         $searchType = 'simple_search';
 
         $advanceSearchData = $listing->get_search_data($this->advanceSearchFields);
-        $uniqueProductByCategory = $listing->get_unique_item_by_column(Product::class, 'category_id');
+        // $uniqueProductByCategory = $listing->get_unique_item_by_column(Product::class, 'category_id');
+        $uniqueProductByCategory = $products->unique('category_id')->values()->all();
 
         // $uniqueProductByBrand = $listing->get_unique_item_by_column(Product::class, 'brand_id');
         $brands = Brand::orderBy('name', 'asc')->get();
 
-        $uniqueProductByUser = $listing->get_unique_item_by_column(Product::class, 'created_by');
+        // $uniqueProductByUser = $listing->get_unique_item_by_column(Product::class, 'created_by');
+        $uniqueProductByUser = $products->unique('created_by')->values()->all();
 
         return view('admin.ecommerce.products.index',compact('products', 'filter', 'searchType','uniqueProductByCategory','brands','uniqueProductByUser','advanceSearchData'));
-
     }
 
     public function advance_index(Request $request)
