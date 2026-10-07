@@ -118,10 +118,32 @@ class PromoController extends Controller
      */
     public function edit($id)
     {
-        $categories = ProductCategory::where('status','PUBLISHED')->orderBy('name','asc')->get();
-        $promo = Promo::find($id);
+        $promo = Promo::findOrFail($id);
+        $selectedProductIds = PromoProducts::where('promo_id', $promo->id)
+            ->pluck('product_id')
+            ->flip();
 
-        return view('admin.ecommerce.promos.edit',compact('categories','promo'));
+        $categories = ProductCategory::where('status', 'PUBLISHED')
+            ->with(['published_products' => function ($query) {
+                $query->select(['id', 'category_id', 'name'])
+                    ->orderBy('name');
+            }])
+            ->orderBy('name', 'asc')
+            ->get();
+
+        foreach ($categories as $category) {
+            $category->selected_product_count = $category->published_products
+                ->filter(function ($product) use ($selectedProductIds) {
+                    return $selectedProductIds->has($product->id);
+                })
+                ->count();
+        }
+
+        return view('admin.ecommerce.promos.edit', compact(
+            'categories',
+            'promo',
+            'selectedProductIds'
+        ));
     }
 
     /**

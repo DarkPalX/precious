@@ -191,7 +191,13 @@ class SalesController extends Controller
         $customer = $request->get('customer_filter', false);
         $order_source = $request->get('order_source_filter', false);
 
-        $sales = SalesHeader::where('id','>','0');
+        $sales = SalesHeader::with([
+            'payments' => function ($query) {
+                $query->orderByDesc('payment_date');
+            },
+            'items.product',
+            'deliveries',
+        ])->where('id','>','0');
         if(isset($_GET['startdate']) && $_GET['startdate']<>'')
             $sales = $sales->where('created_at','>=',$_GET['startdate']);
         if(isset($_GET['enddate']) && $_GET['enddate']<>'')

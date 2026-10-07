@@ -120,16 +120,13 @@
                                 <td><strong> {{$sale->order_number }}</strong></td>
                                 <td>{{ $sale->created_at }}</td>
                                 <td>
-                                    @if(\App\Models\Ecommerce\SalesPayment::check_if_has_added_payments($sale->id) == 1)
-                                        @php
-                                            $last_paid = \App\Models\Ecommerce\SalesPayment::where('sales_header_id',$sale->id)->orderBy('payment_date','desc')->first();
-                                        @endphp
-                                        {{ date('Y-m-d',strtotime($last_paid->payment_date) )}}
+                                    @if($sale->payments->isNotEmpty())
+                                        {{ date('Y-m-d', strtotime($sale->payments->first()->payment_date)) }}
                                     @endif
                                 </td>
                                 <td>{{ $sale->customer_name }}</td>
                                 <td>
-                                    @if(\App\Models\Ecommerce\SalesPayment::check_if_has_added_payments($sale->id) == 1)
+                                    @if($sale->payments->isNotEmpty())
                                         <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount,2) }}</a>
                                         {{-- <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount - $sale->discount_amount + $sale->ecredit_amount,2) }}</a> --}}
                                     @else
@@ -148,10 +145,8 @@
 
                                         @php
                                             $all_ebooks = true;  // Assume all are ebooks initially
-                                            $items = App\Models\Ecommerce\SalesDetail::where('sales_header_id', $sale->id)->get();
-
-                                            foreach ($items as $item) {
-                                                $product = App\Models\Ecommerce\Product::find($item->product_id);
+                                            foreach ($sale->items as $item) {
+                                                $product = $item->product;
 
                                                 if ($product && !in_array(strtolower($product->book_type), ['ebook', 'e-book'])) {
                                                     $all_ebooks = false;

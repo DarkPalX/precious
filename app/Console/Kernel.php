@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new RefreshBelowStockProducts)->everyMinute();
+        $schedule->job(new RefreshBelowStockProducts)->everyThreeHours();
 
         // Check Coupon validity every minute.
         $schedule->command('coupon_validity:cron')

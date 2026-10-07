@@ -9,25 +9,45 @@ use App\Models\ActivityLog;
 
 class Promo extends Model
 {
-	use SoftDeletes;
+    use SoftDeletes;
 
-    protected $fillable = [ 'name', 'promo_start', 'promo_end', 'discount', 'applicable_product_type', 'status', 'is_expire', 'user_id', 'type'];
+    public $table = 'promos';
+    protected $fillable = [
+        'name',
+        'promo_start',
+        'promo_end',
+        'discount',
+        'applicable_product_type',
+        'status',
+        'is_expire',
+        'user_id',
+        'type'
+    ];
     public $timestamps = true;
 
     public function products()
     {
-    	return $this->hasMany('\App\Models\Ecommerce\PromoProducts','promo_id');
+        return $this->hasMany(
+            '\App\Models\Ecommerce\PromoProducts',
+            'promo_id'
+        )->with([
+            'details.promos'
+        ]);
     }
 
     public static function update_promo_xpiration()
     {
-    	$promos = Promo::where('status','ACTIVE')->where('is_expire',0)->get();
+        $promos = Promo::where('status', 'ACTIVE')
+            ->where('is_expire', 0)
+            ->get();
 
-    	foreach($promos as $promo){
-    		if($promo->promo_end <= now()){
-    			Promo::find($promo->id)->update(['is_expire' => 1]);
-    		}
-    	}
+        foreach ($promos as $promo) {
+            if ($promo->promo_end <= now()) {
+                Promo::find($promo->id)->update([
+                    'is_expire' => 1
+                ]);
+            }
+        }
     }
 
 
@@ -53,14 +73,14 @@ class Promo extends Model
     {
         parent::boot();
 
-        self::created(function($model) {
+        self::created(function ($model) {
             $name = $model[self::$name];
 
             ActivityLog::create([
                 'log_by' => auth()->id(),
                 'activity_type' => 'insert',
-                'dashboard_activity' => 'created a new '. self::$tableTitle,
-                'activity_desc' => 'created the '. self::$tableTitle .' '. $name,
+                'dashboard_activity' => 'created a new ' . self::$tableTitle,
+                'activity_desc' => 'created the ' . self::$tableTitle . ' ' . $name,
                 'activity_date' => date("Y-m-d H:i:s"),
                 'db_table' => $model->getTable(),
                 'old_value' => '',
@@ -69,25 +89,27 @@ class Promo extends Model
             ]);
         });
 
-        self::updating(function($model) {
+        self::updating(function ($model) {
             self::$oldModel = $model->fresh();
         });
 
-        self::updated(function($model) {
+        self::updated(function ($model) {
             $name = $model[self::$name];
             $oldModel = self::$oldModel->toArray();
+
             foreach ($oldModel as $fieldName => $value) {
                 if (in_array($fieldName, self::$unrelatedFields)) {
                     continue;
                 }
 
                 $oldValue = $model[$fieldName];
+
                 if ($oldValue != $value) {
                     ActivityLog::create([
                         'log_by' => auth()->id(),
                         'activity_type' => 'update',
-                        'dashboard_activity' => 'updated the '. self::$tableTitle .' '. self::$logName[$fieldName],
-                        'activity_desc' => 'updated the '. self::$tableTitle .' '. self::$logName[$fieldName] .' of '. $name .' from '. $oldValue .' to '. $value,
+                        'dashboard_activity' => 'updated the ' . self::$tableTitle . ' ' . self::$logName[$fieldName],
+                        'activity_desc' => 'updated the ' . self::$tableTitle . ' ' . self::$logName[$fieldName] . ' of ' . $name . ' from ' . $oldValue . ' to ' . $value,
                         'activity_date' => date("Y-m-d H:i:s"),
                         'db_table' => $model->getTable(),
                         'old_value' => $oldValue,
@@ -98,13 +120,14 @@ class Promo extends Model
             }
         });
 
-        self::deleted(function($model){
+        self::deleted(function ($model) {
             $name = $model[self::$name];
+
             ActivityLog::create([
                 'log_by' => auth()->id(),
                 'activity_type' => 'delete',
-                'dashboard_activity' => 'deleted a '. self::$tableTitle,
-                'activity_desc' => 'deleted the '. self::$tableTitle .' '. $name,
+                'dashboard_activity' => 'deleted a ' . self::$tableTitle,
+                'activity_desc' => 'deleted the ' . self::$tableTitle . ' ' . $name,
                 'activity_date' => date("Y-m-d H:i:s"),
                 'db_table' => $model->getTable(),
                 'old_value' => '',
