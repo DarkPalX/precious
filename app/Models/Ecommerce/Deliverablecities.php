@@ -34,7 +34,7 @@ class Deliverablecities extends Model
         self::created(function($model) {
             $name = $model[self::$name];
             ActivityLog::create([
-                'created_by' => auth()->id(),
+                'log_by' => auth()->id(),
                 'activity_type' => 'insert',
                 'dashboard_activity' => 'created a new '. self::$tableTitle,
                 'activity_desc' => 'created the '. self::$tableTitle .' '. $name,
@@ -63,14 +63,14 @@ class Deliverablecities extends Model
                 if ($oldValue != $value) {
                     $fieldNames = implode(' ', explode('_', $fieldName));
                     ActivityLog::create([
-                        'created_by' => auth()->id(),
+                        'log_by' => auth()->id(),
                         'activity_type' => 'update',
                         'dashboard_activity' => 'updated the '. self::$tableTitle .' '. $fieldNames,
-                        'activity_desc' => 'updated the '. self::$tableTitle .' '. $fieldNames .'of '. $name .' from '. $oldValue .' to '. $value,
+                    'activity_desc' => 'updated the '. self::$tableTitle .' '. $fieldNames .' of '. $name .' from '. $value .' to '. $oldValue,
                         'activity_date' => date("Y-m-d H:i:s"),
                         'db_table' => $model->getTable(),
-                        'old_value' => $oldValue,
-                        'new_value' => $value,
+                        'old_value' => $value,
+                        'new_value' => $oldValue,
                         'reference' => $model->id
                     ]);
                 }
@@ -80,7 +80,7 @@ class Deliverablecities extends Model
         self::deleted(function($model){
             $name = $model[self::$name];
             ActivityLog::create([
-                'created_by' => auth()->id(),
+                'log_by' => auth()->id(),
                 'activity_type' => 'delete',
                 'dashboard_activity' => 'deleted a '. self::$tableTitle,
                 'activity_desc' => 'deleted the '. self::$tableTitle .' '. $name,

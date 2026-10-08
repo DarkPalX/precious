@@ -10,7 +10,8 @@ class ActivityLog extends Model
 {
     protected $table = 'cms_activity_logs';
     protected $fillable = ['log_by', 'activity_type', 'dashboard_activity', 'activity_desc', 'activity_date',
-        'db_table', 'old_value', 'new_value', 'reference'];
+        'db_table', 'old_value', 'new_value', 'reference', 'action', 'page', 'url', 'status_code',
+        'ip_address', 'user_agent'];
     public $timestamps = false;
 
     public function admin()

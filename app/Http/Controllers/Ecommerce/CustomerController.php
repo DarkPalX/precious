@@ -79,11 +79,30 @@ class CustomerController extends Controller
 
     public function update(Request $request)
     {
+        $customer = User::where('id', $request->user_id)
+            ->where('role_id', 6)
+            ->firstOrFail();
 
-        User::where('id', $request->user_id)
+        $oldEcredits = $customer->ecredits;
+
+        User::where('id', $customer->id)
         ->update([
             'ecredits' => $request->ecredits
         ]);
+
+        if ((string) $oldEcredits !== (string) $request->ecredits) {
+            ActivityLog::create([
+                'log_by' => Auth::id(),
+                'activity_type' => 'update',
+                'dashboard_activity' => 'updated customer ecredits',
+                'activity_desc' => 'updated the ecredits of customer '.($customer->name ?: $customer->email).' from '.$oldEcredits.' to '.$request->ecredits,
+                'activity_date' => now(),
+                'db_table' => 'users',
+                'old_value' => $oldEcredits,
+                'new_value' => $request->ecredits,
+                'reference' => $customer->id,
+            ]);
+        }
 
         $i = 0;
         if($request->has('user_sub_id')){

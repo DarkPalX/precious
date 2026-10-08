@@ -81,7 +81,7 @@
     @endif
 
     @if (auth()->user()->is_an_admin() || auth()->user()->has_access_to('settings'))
-        <li class="nav-item with-sub @if (request()->routeIs('account*') || request()->routeIs('website-settings*') || request()->routeIs('audit*')) active show @endif">
+        <li class="nav-item with-sub @if (request()->routeIs('account*') || request()->routeIs('website-settings*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="settings"></i> <span>Settings</span></a>
             <ul>
                 <li @if (\Route::current()->getName() == 'account.edit') class="active" @endif><a href="{{ route('account.edit') }}">Account Settings</a></li>
@@ -94,9 +94,6 @@
                     <li @if (\Route::current()->getName() == 'mobile-app-settings.edit') class="active" @endif><a href="{{ route('mobile-app-settings.edit') }}">Mobile App Settings</a></li>
                 @endif
 
-                @if (auth()->user()->has_access_to_audit_logs_module())
-                    <li @if (\Route::current()->getName() == 'audit-logs.index') class="active" @endif><a href="{{ route('audit-logs.index') }}">Audit Trail</a></li>
-                @endif
             </ul>
         </li>
     @endif
@@ -117,6 +114,12 @@
                 <li @if (request()->routeIs('access*')) class="active" @endif><a href="{{ route('access.index') }}">Access Rights</a></li>
                 <li @if (request()->routeIs('permission*')) class="active" @endif><a href="{{ route('permission.index') }}">Permissions</a></li>
             </ul>
+        </li>
+    @endif
+
+    @if (auth()->user()->has_access_to_audit_logs_module())
+        <li class="nav-item @if (request()->routeIs('audit*')) active @endif">
+            <a href="{{ route('audit-logs.index') }}" class="nav-link"><i data-feather="activity"></i> <span>Audit Trail</span></a>
         </li>
     @endif
 

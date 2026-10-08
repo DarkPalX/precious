@@ -86,11 +86,11 @@ class SentCampaign extends Model
                         'created_by' => auth()->id(),
                         'activity_type' => 'update',
                         'dashboard_activity' => 'updated the '. self::$tableTitle .' '. $fieldNames,
-                        'activity_desc' => 'updated the '. self::$tableTitle .' '. $fieldNames .'of '. $name .' from '. $oldValue .' to '. $value,
+                        'activity_desc' => 'updated the '. self::$tableTitle .' '. $fieldNames .' of '. $name .' from '. $value .' to '. $oldValue,
                         'activity_date' => date("Y-m-d H:i:s"),
                         'db_table' => $model->getTable(),
-                        'old_value' => $oldValue,
-                        'new_value' => $value,
+                        'old_value' => $value,
+                        'new_value' => $oldValue,
                         'reference' => $model->id
                     ]);
                 }

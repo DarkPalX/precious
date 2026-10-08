@@ -184,11 +184,11 @@ class Album extends Model
                         'log_by' => auth()->id(),
                         'activity_type' => 'update',
                         'dashboard_activity' => 'updated the '. self::$tableTitle .' '. self::$logName[$fieldName],
-                        'activity_desc' => 'updated the '. self::$tableTitle .' '. self::$logName[$fieldName] .' of '. $name .' from '. $oldValue .' to '. $value,
+                        'activity_desc' => 'updated the '. self::$tableTitle .' '. self::$logName[$fieldName] .' of '. $name .' from '. $value .' to '. $oldValue,
                         'activity_date' => date("Y-m-d H:i:s"),
                         'db_table' => $model->getTable(),
-                        'old_value' => $oldValue,
-                        'new_value' => $value,
+                        'old_value' => $value,
+                        'new_value' => $oldValue,
                         'reference' => $model->id
                     ]);
                 }

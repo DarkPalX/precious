@@ -233,7 +233,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
     Auth::routes();
 
-    Route::group(['middleware' => 'admin'], function (){
+    Route::group(['middleware' => ['admin', 'adminAuditTrail']], function (){
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/admin/ecommerce-dashboard', [DashboardController::class, 'ecommerce'])->name('ecom-dashboard');
