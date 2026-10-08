@@ -107,6 +107,10 @@ class ProductFrontController extends Controller
 
     public function product_ebook_list(Request $request, $category = null)
     {
+        if(session('is_ios') == false || session('is_ios') == null){
+            return redirect()->away(env('APP_URL'));
+        }
+
         // $page = new Page();
         $page = Page::where('slug', 'books')->where('status', 'PUBLISHED')->where('parent_page_id', 0)->first();
         $pageLimit = 12;
