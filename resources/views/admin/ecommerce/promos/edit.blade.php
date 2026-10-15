@@ -112,14 +112,8 @@
                     </thead>
                     <tbody id="productTableBody">
                     @foreach($categories as $category)
-                        @if(count($category->published_products) > 0)
-                            @php
-                                $cproducts = 0;
-                                $products = \App\Models\Ecommerce\Product::where('status','PUBLISHED')->where('category_id',$category->id)->get();
-                                foreach($products as $p){
-                                    $cproducts += \App\Models\Ecommerce\PromoProducts::where('promo_id',$promo->id)->where('product_id',$p->id)->count();
-                                }
-                            @endphp
+                        @if($category->published_products->isNotEmpty())
+                            @php($products = $category->published_products)
                             <tr>
                                 <td width="50%"><p class="mg-0 pd-t-5 pd-b-5 tx-uppercase tx-semibold tx-primary">{{ $category->name }}</p></td>
                                 <td class="text-right">
@@ -128,7 +122,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2" class="hiddenRow">
-                                    <div class="accordian-body collapse collapsed_items @if($cproducts>0) show @endif div_products" id="product_category{{$category->id}}">
+                                    <div class="accordian-body collapse collapsed_items @if($category->selected_product_count > 0) show @endif div_products" id="product_category{{$category->id}}">
                                         <div>
                                             <table class="table" cellpadding="0">
                                                 <thead></thead>
@@ -144,14 +138,11 @@
                                                         </td>
                                                     </tr>
                                                     @forelse($products as $product)
-                                                        @php
-                                                            $exist = \App\Models\Ecommerce\PromoProducts::where('promo_id',$promo->id)->where('product_id',$product->id)->count();
-                                                        @endphp
                                                         <tr>
                                                             <td>{{ $product->name }}</td>
                                                             <td class="text-right">
                                                                 <div class="custom-control custom-checkbox">
-                                                                    <input type="checkbox" name="productid[]" value="{{$product->id}}" class="custom-control-input cb category_{{$product->category_id}}" id="pcategory{{$product->id}}" @if($exist>0) checked @endif>
+                                                                    <input type="checkbox" name="productid[]" value="{{$product->id}}" class="custom-control-input cb category_{{$product->category_id}}" id="pcategory{{$product->id}}" @if($selectedProductIds->has($product->id)) checked @endif>
                                                                     <label class="custom-control-label" for="pcategory{{$product->id}}"></label>
                                                                 </div>
                                                             </td>

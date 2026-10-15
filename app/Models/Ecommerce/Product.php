@@ -5,31 +5,75 @@ namespace App\Models\Ecommerce;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\{User, Brand};
 
 use App\Models\Ecommerce\{
-    ProductTag, ProductCategory, ProductPhoto, PromoProducts, Cart, CustomerFavorite, CustomerWishlist, ProductReview
+    ProductTag,
+    ProductCategory,
+    ProductPhoto,
+    PromoProducts,
+    Promo,
+    Cart,
+    CustomerFavorite,
+    CustomerWishlist,
+    ProductReview
 };
 
 use Carbon\Carbon;
 use DB;
-
 
 class Product extends Model
 {
     use SoftDeletes, HasSlug;
 
     public $table = 'products';
-    protected $fillable = [ 'sku', 'book_type', 'category_id', 'name', 'author', 'slug', 'file_url', 'ebook_price', 'ebook_discount_price', 'short_description', 'description', 'price', 'mobile_price', 'discount_price', 'mobile_discount_price', 'size','weight', 'texture', 'status', 'bundle_products', 'is_bundle', 'is_featured', 'is_best_seller', 'is_free', 'is_premium', 'is_preorder', 'is_reported', 'uom', 'created_by', 'meta_title', 'meta_keyword', 'meta_description','brand_id','reorder_point', 'read_count', 'old_read_count'];
+
+    protected $fillable = [
+        'sku',
+        'book_type',
+        'category_id',
+        'name',
+        'author',
+        'slug',
+        'file_url',
+        'ebook_price',
+        'ebook_discount_price',
+        'short_description',
+        'description',
+        'price',
+        'mobile_price',
+        'discount_price',
+        'mobile_discount_price',
+        'size',
+        'weight',
+        'texture',
+        'status',
+        'bundle_products',
+        'is_bundle',
+        'is_featured',
+        'is_best_seller',
+        'is_free',
+        'is_premium',
+        'is_preorder',
+        'is_reported',
+        'uom',
+        'created_by',
+        'meta_title',
+        'meta_keyword',
+        'meta_description',
+        'brand_id',
+        'reorder_point',
+        'read_count',
+        'old_read_count'
+    ];
 
     /**
      * Get the options for generating the slug.
      */
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
@@ -38,44 +82,64 @@ class Product extends Model
 
     public function get_url()
     {
-        return env('APP_URL')."/products/".$this->slug;
+        return env('APP_URL') . "/products/" . $this->slug;
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class,'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function getPriceWithCurrencyAttribute()
     {
-    	return " ".number_format($this->price,2);
+        return " " . number_format($this->price, 2);
     }
 
-   
-    public function tags(){
+    public function tags()
+    {
         return $this->hasMany(ProductTag::class);
     }
 
-    public function category(){
-        return $this->belongsTo(ProductCategory::class)->withTrashed()->withDefault(['id' => '0','name' => 'Uncategorized']); 
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class)
+            ->withTrashed()
+            ->withDefault([
+                'id' => '0',
+                'name' => 'Uncategorized'
+            ]);
     }
 
-    public function brand(){
-        return $this->belongsTo(Brand::class)->withTrashed()->withDefault(['id' => '0','name' => 'Uncategorized']); 
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class)
+            ->withTrashed()
+            ->withDefault([
+                'id' => '0',
+                'name' => 'Uncategorized'
+            ]);
     }
 
-    public static function colors($value){
+    public static function colors($value)
+    {
+        $colors = \DB::table('products_variations')
+            ->select('color')
+            ->distinct()
+            ->where('product_id', $value)
+            ->get();
 
-        $colors = \DB::table('products_variations')->select('color')->distinct()->where('product_id',$value)->get();
         return $colors;
-
     }
 
-    public static function sizes($value){
+    public static function sizes($value)
+    {
+        $sizes = \DB::table('products_variations')
+            ->select('size')
+            ->distinct()
+            ->where('product_id', $value)
+            ->get();
 
-        $sizes = \DB::table('products_variations')->select('size')->distinct()->where('product_id',$value)->get();
         return $sizes;
-
     }
 
     public function photos()
@@ -85,158 +149,217 @@ class Product extends Model
 
     public function getPhotoPrimaryAttribute()
     {
-        $photo = $this->photos()->where('is_primary', 1)->first();
-        if(!$photo){
+        $photo = $this->photos()
+            ->where('is_primary', 1)
+            ->first();
+
+        if (!$photo) {
             return '0/no_image_available.PNG';
-        }
-        else{
+        } else {
             return $photo->path;
         }
     }
 
     public function getInventoryAttribute()
     {
-        
         $in = \DB::table('inventory_receiver_details')
-                ->leftJoin('inventory_receiver_header', 'inventory_receiver_details.header_id', '=', 'inventory_receiver_header.id')
-                ->where('inventory_receiver_details.product_id','=',$this->id)
-                ->where('inventory_receiver_header.status','=','POSTED')
-                ->sum('inventory_receiver_details.inventory');
-        if(empty($in))
-            $in=0;
+            ->leftJoin(
+                'inventory_receiver_header',
+                'inventory_receiver_details.header_id',
+                '=',
+                'inventory_receiver_header.id'
+            )
+            ->where('inventory_receiver_details.product_id', '=', $this->id)
+            ->where('inventory_receiver_header.status', '=', 'POSTED')
+            ->sum('inventory_receiver_details.inventory');
 
-        $cart = Cart::where('product_id',$this->id)->sum('qty');
+        if (empty($in)) {
+            $in = 0;
+        }
 
-         if(empty($cart))
-            $cart=0;
+        $cart = Cart::where('product_id', $this->id)->sum('qty');
+
+        if (empty($cart)) {
+            $cart = 0;
+        }
 
         $out = \DB::table('ecommerce_sales_details')
-                ->leftJoin('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
-                ->where('ecommerce_sales_details.product_id','=',$this->id)
-                ->where('ecommerce_sales_headers.payment_status','=','PAID')
-                ->where('ecommerce_sales_headers.status','=','active')
-                ->sum('qty');
-        if(empty($out))
-            $out=0;
-        
+            ->leftJoin(
+                'ecommerce_sales_headers',
+                'ecommerce_sales_details.sales_header_id',
+                '=',
+                'ecommerce_sales_headers.id'
+            )
+            ->where('ecommerce_sales_details.product_id', '=', $this->id)
+            ->where('ecommerce_sales_headers.payment_status', '=', 'PAID')
+            ->where('ecommerce_sales_headers.status', '=', 'active')
+            ->sum('qty');
+
+        if (empty($out)) {
+            $out = 0;
+        }
+
         return ($in - ($out + $cart));
-      
     }
 
     public function getInventoryActualAttribute()
     {
         $in = \DB::table('inventory_receiver_details')
-            ->leftJoin('inventory_receiver_header', 'inventory_receiver_details.header_id', '=', 'inventory_receiver_header.id')
-            ->where('inventory_receiver_details.product_id','=',$this->id)
-            ->where('inventory_receiver_header.status','=','POSTED')
+            ->leftJoin(
+                'inventory_receiver_header',
+                'inventory_receiver_details.header_id',
+                '=',
+                'inventory_receiver_header.id'
+            )
+            ->where('inventory_receiver_details.product_id', '=', $this->id)
+            ->where('inventory_receiver_header.status', '=', 'POSTED')
             ->sum('inventory_receiver_details.inventory');
 
-        if(empty($in))
-            $in=0;     
+        if (empty($in)) {
+            $in = 0;
+        }
 
-
-        $cart = Cart::where('user_id', 0)->where('product_id',$this->id)->sum('qty');
-        if(empty($cart))
-            $cart=0;   
-
-        
-        $out = \DB::table('ecommerce_sales_details')
-            ->leftJoin('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
-            ->where('ecommerce_sales_details.product_id','=',$this->id)
-            ->where('ecommerce_sales_headers.payment_status','=','PAID')
-            ->where('ecommerce_sales_headers.status','=','active')
+        $cart = Cart::where('user_id', 0)
+            ->where('product_id', $this->id)
             ->sum('qty');
 
-        if(empty($out))
-            $out=0;
-        
+        if (empty($cart)) {
+            $cart = 0;
+        }
+
+        $out = \DB::table('ecommerce_sales_details')
+            ->leftJoin(
+                'ecommerce_sales_headers',
+                'ecommerce_sales_details.sales_header_id',
+                '=',
+                'ecommerce_sales_headers.id'
+            )
+            ->where('ecommerce_sales_details.product_id', '=', $this->id)
+            ->where('ecommerce_sales_headers.payment_status', '=', 'PAID')
+            ->where('ecommerce_sales_headers.status', '=', 'active')
+            ->sum('qty');
+
+        if (empty($out)) {
+            $out = 0;
+        }
+
         // return ($in - $out);
         return ($in - ($out + $cart));
-      
     }
 
     public function getMaxpurchaseAttribute() //use for identifying the maximum qty a customer can order
     {
-        
-
         $in = \DB::table('inventory_receiver_details')
-                ->leftJoin('inventory_receiver_header', 'inventory_receiver_details.header_id', '=', 'inventory_receiver_header.id')
-                ->where('inventory_receiver_details.product_id','=',$this->id)
-                ->where('inventory_receiver_header.status','=','POSTED')
-                ->sum('inventory_receiver_details.inventory');
-        if(empty($in))
-            $in=0;
+            ->leftJoin(
+                'inventory_receiver_header',
+                'inventory_receiver_details.header_id',
+                '=',
+                'inventory_receiver_header.id'
+            )
+            ->where('inventory_receiver_details.product_id', '=', $this->id)
+            ->where('inventory_receiver_header.status', '=', 'POSTED')
+            ->sum('inventory_receiver_details.inventory');
 
-        $cart = Cart::where('product_id',$this->id)->sum('qty');
-         if(empty($cart))
-            $cart=0;
-        
+        if (empty($in)) {
+            $in = 0;
+        }
+
+        $cart = Cart::where('product_id', $this->id)->sum('qty');
+
+        if (empty($cart)) {
+            $cart = 0;
+        }
+
         $out = \DB::table('ecommerce_sales_details')
-                ->leftJoin('ecommerce_sales_headers', 'ecommerce_sales_details.sales_header_id', '=', 'ecommerce_sales_headers.id')
-                ->where('ecommerce_sales_details.product_id','=',$this->id)
-                ->where('ecommerce_sales_headers.payment_status','=','PAID')
-                ->where('ecommerce_sales_headers.status','=','active')
-                ->sum('ecommerce_sales_details.qty');
-        if(empty($out))
-            $out=0;
-        
+            ->leftJoin(
+                'ecommerce_sales_headers',
+                'ecommerce_sales_details.sales_header_id',
+                '=',
+                'ecommerce_sales_headers.id'
+            )
+            ->where('ecommerce_sales_details.product_id', '=', $this->id)
+            ->where('ecommerce_sales_headers.payment_status', '=', 'PAID')
+            ->where('ecommerce_sales_headers.status', '=', 'active')
+            ->sum('ecommerce_sales_details.qty');
+
+        if (empty($out)) {
+            $out = 0;
+        }
+
         $inventory = ($in + $this->reorder_point) - ($out + $cart);
 
         return $inventory;
-      
     }
 
-    public static function has_bundle($id){
-        
-        $bundles = Product::whereStatus('PUBLISHED')->where('is_bundle', 1)->whereRaw("FIND_IN_SET(?, bundle_products)", [$id])->first();
+    public static function has_bundle($id)
+    {
+        $bundles = Product::whereStatus('PUBLISHED')
+            ->where('is_bundle', 1)
+            ->whereRaw("FIND_IN_SET(?, bundle_products)", [$id])
+            ->first();
 
         return $bundles ? true : false;
     }
 
-    public static function getBundle($id){
-        
-        $bundles = Product::whereStatus('PUBLISHED')->where('is_bundle', 1)->whereRaw("FIND_IN_SET(?, bundle_products)", [$id])->get();
+    public static function getBundle($id)
+    {
+        $bundles = Product::whereStatus('PUBLISHED')
+            ->where('is_bundle', 1)
+            ->whereRaw("FIND_IN_SET(?, bundle_products)", [$id])
+            ->get();
 
         return $bundles;
     }
 
-    public static function has_ebook($id){
-        
-        $ebook = Product::where('id', $id)->whereStatus('PUBLISHED')->whereNotNull('file_url')->first();
+    public static function has_ebook($id)
+    {
+        $ebook = Product::where('id', $id)
+            ->whereStatus('PUBLISHED')
+            ->whereNotNull('file_url')
+            ->first();
 
         return $ebook !== null;
     }
 
-    public static function is_ebook($id){
-        
-        $ebook = Product::where('id', $id)->whereStatus('PUBLISHED')->whereRaw('LOWER(book_type) IN (?, ?)', ['ebook', 'e-book'])->whereNotNull('file_url')->exists();
+    public static function is_ebook($id)
+    {
+        $ebook = Product::where('id', $id)
+            ->whereStatus('PUBLISHED')
+            ->whereRaw(
+                'LOWER(book_type) IN (?, ?)',
+                ['ebook', 'e-book']
+            )
+            ->whereNotNull('file_url')
+            ->exists();
 
         return $ebook;
     }
 
-    public static function related_products($id){
-
-        $products = Product::whereStatus('PUBLISHED')->where('id','<>',$id)->take(3)->get();
-
+    public static function related_products($id)
+    {
+        $products = Product::whereStatus('PUBLISHED')
+            ->where('id', '<>', $id)
+            ->take(3)
+            ->get();
 
         $data = '';
 
-        foreach($products as $product){
+        foreach ($products as $product) {
             $data .= '
                 <div class="col-md-4 col-sm-6 item">
                     <div class="product-link">
                         <div class="product-card">
-                            <a href="'.route("product.front.show",$product->slug).'">
+                            <a href="' . route("product.front.show", $product->slug) . '">
                                 <div class="product-img">
-                                    <img src="'.asset("storage/products/".$product->photoPrimary).'" alt="" />
+                                    <img src="' . asset("storage/products/" . $product->photoPrimary) . '" alt="" />
                                 </div>
                                 <div class="gap-30"></div>
-                                <p class="product-title">'.$product->name.'</p>
+                                <p class="product-title">' . $product->name . '</p>
                             </a>
                             <div class="rating small">
-                                '.$product->ratingStar.'
+                                ' . $product->ratingStar . '
                             </div>
-                            <h3 class="product-price">'.$product->priceWithCurrency.'</h3>
+                            <h3 class="product-price">' . $product->priceWithCurrency . '</h3>
                         </div>
                     </div>
                 </div>
@@ -244,7 +367,6 @@ class Product extends Model
         }
 
         return $data;
-
     }
 
     public static function totalProduct()
@@ -259,26 +381,28 @@ class Product extends Model
         return $this->status != 'UNEDITABLE';
     }
 
-    public static function info($p){
-
-        $pd = Product::where('name','=',$p)->first();
+    public static function info($p)
+    {
+        $pd = Product::where('name', '=', $p)->first();
 
         return $pd;
     }
 
-    public static function detail($p){
-
-        $pd = Product::where('name',$p)->get();
+    public static function detail($p)
+    {
+        $pd = Product::where('name', $p)->get();
 
         return $pd;
-    }    
+    }
 
     public function get_image_file_name()
     {
         $path = explode('/', $this->zoom_image);
         $nameIndex = count($path) - 1;
-        if ($nameIndex < 0)
+
+        if ($nameIndex < 0) {
             return '';
+        }
 
         return $path[$nameIndex];
     }
@@ -293,40 +417,58 @@ class Product extends Model
         return $this->reviews->avg('rating');
     }
 
-    public function getRatingStarAttribute(){
+    public function getRatingStarAttribute()
+    {
         $star = 5 - (integer) $this->rating;
         $front = '';
-        for($x = 1; $x<=$this->rating; $x++){
-            $front.='<span class="fa fa-star checked"></span>';
+
+        for ($x = 1; $x <= $this->rating; $x++) {
+            $front .= '<span class="fa fa-star checked"></span>';
         }
 
-        for($x = 1; $x<=$star; $x++){
-            $front.='<span class="fa fa-star"></span>';
+        for ($x = 1; $x <= $star; $x++) {
+            $front .= '<span class="fa fa-star"></span>';
         }
 
         return $front;
     }
 
+    // PROMO RELATIONSHIP
+    public function promos()
+    {
+        return $this->belongsToMany(
+            Promo::class,
+            'promo_products',
+            'product_id',
+            'promo_id'
+        );
+    }
+
     public function getDiscountedPriceAttribute()
     {
-        $promoProducts = PromoProducts::where('product_id', $this->id);
-
-        $arr_promos = [];
-        if($promoProducts->count() > 0){
-            $products = $promoProducts->get();
-
-            foreach($products as $product){
-                array_push($arr_promos, $product->promo_id);
-            }
+        /*
+         * If promos were eager-loaded, use the already loaded collection.
+         *
+         * This prevents another database query from being executed for
+         * every product when DiscountedPrice is called inside a loop.
+         */
+        if ($this->relationLoaded('promos')) {
+            $promos = $this->promos;
+        } else {
+            /*
+             * Fallback for other parts of the system where promos were
+             * not eager-loaded.
+             */
+            $promos = $this->promos()->get();
         }
 
-        $promos = Promo::whereIn('id', $arr_promos)->whereNull('deleted_at')->where('status', 'ACTIVE')->where('applicable_product_type', '<>', 'ebook');
+        $discount = $promos
+            ->where('status', 'ACTIVE')
+            ->where('applicable_product_type', '<>', 'ebook')
+            ->max('discount');
 
-        if($promos->count() > 0){
-
-            $discount = $promos->max('discount');
-
-            $percentage = ($discount/100);
+        if ($discount) {
+            $percentage = ($discount / 100);
             $discountedAmount = ($this->price * $percentage);
 
             $price = ($this->price - $discountedAmount);
@@ -342,25 +484,27 @@ class Product extends Model
         $promoProducts = PromoProducts::where('product_id', $this->id);
 
         $arr_promos = [];
-        if($promoProducts->count() > 0){
+
+        if ($promoProducts->count() > 0) {
             $products = $promoProducts->get();
 
-            foreach($products as $product){
+            foreach ($products as $product) {
                 array_push($arr_promos, $product->promo_id);
             }
         }
 
-        $promos = Promo::whereIn('id', $arr_promos)->whereNull('deleted_at')->where('status', 'ACTIVE')
-        ->where(function($query) {
-            $query->where('applicable_product_type', 'ebook')
-                  ->orWhere('applicable_product_type', 'e-book');
-        });
+        $promos = Promo::whereIn('id', $arr_promos)
+            ->whereNull('deleted_at')
+            ->where('status', 'ACTIVE')
+            ->where(function ($query) {
+                $query->where('applicable_product_type', 'ebook')
+                    ->orWhere('applicable_product_type', 'e-book');
+            });
 
-        if($promos->count() > 0){
-
+        if ($promos->count() > 0) {
             $discount = $promos->max('discount');
 
-            $percentage = ($discount/100);
+            $percentage = ($discount / 100);
             $discountedAmount = ($this->ebook_price * $percentage);
 
             $price = ($this->ebook_price - $discountedAmount);
@@ -373,47 +517,83 @@ class Product extends Model
 
     public static function onsale_checker($id)
     {
-        $checkproduct = DB::table('promos')->join('promo_products','promos.id','=','promo_products.promo_id')->where('promos.status','ACTIVE')->where('promos.is_expire',0)->where('promo_products.product_id',$id)->count();
+        $checkproduct = DB::table('promos')
+            ->join(
+                'promo_products',
+                'promos.id',
+                '=',
+                'promo_products.promo_id'
+            )
+            ->where('promos.status', 'ACTIVE')
+            ->where('promos.is_expire', 0)
+            ->where('promo_products.product_id', $id)
+            ->count();
 
         return $checkproduct;
     }
 
     public static function featured_limit_already()
     {
-        $featured_count = Product::where('is_featured', 1)->get()->count();
+        $featured_count = Product::where('is_featured', 1)
+            ->get()
+            ->count();
 
-        return $featured_count < env('FEATURED_PRODUCTS_LIMIT') ? false : true;
+        return $featured_count < env('FEATURED_PRODUCTS_LIMIT')
+            ? false
+            : true;
     }
 
     public static function get_featured_count()
     {
-        $featured_count = Product::where('is_featured', 1)->get()->count();
+        $featured_count = Product::where('is_featured', 1)
+            ->get()
+            ->count();
 
         return $featured_count;
     }
 
     public static function best_seller_limit_already()
     {
-        $best_seller_count = Product::where('is_best_seller', 1)->get()->count();
+        $best_seller_count = Product::where('is_best_seller', 1)
+            ->get()
+            ->count();
 
-        return $best_seller_count < env('BEST_SELLER_LIMIT') ? false : true;
+        return $best_seller_count < env('BEST_SELLER_LIMIT')
+            ? false
+            : true;
     }
 
     public static function get_best_seller_count()
     {
-        $best_seller_count = Product::where('is_best_seller', 1)->get()->count();
+        $best_seller_count = Product::where('is_best_seller', 1)
+            ->get()
+            ->count();
 
         return $best_seller_count;
     }
 
     public function on_sale()
     {
-        return $this->belongsTo(PromoProducts::class,'id','product_id');
+        return $this->belongsTo(
+            PromoProducts::class,
+            'id',
+            'product_id'
+        );
     }
 
     public function getPromoDiscountAttribute()
     {
-        $discount = DB::table('promos')->join('promo_products','promos.id','=','promo_products.promo_id')->where('promos.status','ACTIVE')->where('promos.is_expire',0)->where('promo_products.product_id',$this->id)->max('promos.discount');
+        $discount = DB::table('promos')
+            ->join(
+                'promo_products',
+                'promos.id',
+                '=',
+                'promo_products.promo_id'
+            )
+            ->where('promos.status', 'ACTIVE')
+            ->where('promos.is_expire', 0)
+            ->where('promo_products.product_id', $this->id)
+            ->max('promos.discount');
 
         return $discount;
     }
@@ -422,20 +602,27 @@ class Product extends Model
     {
         $path = explode('/', $this->file_url);
         $nameIndex = count($path) - 1;
-        if ($nameIndex < 0)
+
+        if ($nameIndex < 0) {
             return '';
+        }
 
         return $path[$nameIndex];
     }
 
     public function customerFavorites()
     {
-        return $this->hasMany(CustomerFavorite::class, 'product_id');
+        return $this->hasMany(
+            CustomerFavorite::class,
+            'product_id'
+        );
     }
 
     public function customerWishlists()
     {
-        return $this->hasMany(CustomerWishlist::class, 'product_id');
+        return $this->hasMany(
+            CustomerWishlist::class,
+            'product_id'
+        );
     }
-    
 }

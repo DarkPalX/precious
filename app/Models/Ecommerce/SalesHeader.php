@@ -87,6 +87,10 @@ class SalesHeader extends Model
     	return $this->hasMany(SalesDetail::class,'sales_header_id');
     }
 
+    public function payments(){
+        return $this->hasMany(SalesPayment::class, 'sales_header_id');
+    }
+
     public function deliveries(){
         return $this->hasMany(DeliveryStatus::class,'order_id');
     }

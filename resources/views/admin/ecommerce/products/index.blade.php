@@ -55,6 +55,8 @@
                             </thead>
                             <tbody>
                             @forelse($products as $product)
+                                @php $inventory = $product->Inventory; @endphp
+                                
                                 <tr id="row{{$product->id}}" class="row_cb">
                                     <th>
                                         <div class="custom-control custom-checkbox">
@@ -83,7 +85,7 @@
                                         @endif 
                                         {{ $product->currency }} {{ number_format($product->discount_price > 0 ? $product->discount_price : $product->price,2) }}
                                     </td>
-                                    <td>{{ number_format($product->Inventory < 0 ? 0 : $product->Inventory,2) }}</td>
+                                    <td>{{ number_format($inventory < 0 ? 0 : $inventory,2) }}</td>
                                     <td>{{ $product->status }}</td>
                                     <td>{{ Setting::date_for_listing($product->updated_at) }}</td>
                                     <td class="text-right">
@@ -110,9 +112,9 @@
                                                         <i data-feather="settings"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#" onclick="add_inventory('{{$product->id}}','{{$product->Inventory}}')"> Add Inventory</a>
+                                                        <a class="dropdown-item" href="#" onclick="add_inventory('{{$product->id}}','{{$inventory}}')"> Add Inventory</a>
 
-                                                        <a class="dropdown-item" href="#" onclick="deduct_inventory('{{$product->id}}','{{$product->Inventory}}')"> Deduct Inventory</a>
+                                                        <a class="dropdown-item" href="#" onclick="deduct_inventory('{{$product->id}}','{{$inventory}}')"> Deduct Inventory</a>
 
                                                         @if($product->status == 'PUBLISHED')
                                                             <a class="dropdown-item" href="{{route('product.single-change-status',[$product->id,'PRIVATE'])}}" > Private</a>
@@ -138,7 +140,7 @@
                                 <tr>
                                     <th colspan="8" style="text-align: center;"> <p class="text-danger">No products found.</p></th>
                                 </tr>
-                                @endforelse
+                            @endforelse
                             </tbody>
                         </table>
                     </div>

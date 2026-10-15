@@ -173,15 +173,7 @@ class Setting {
 
     public static function belowReorderTotal()
     {
-        $products = Product::all();
-        $x = 0;
-        foreach($products as $product){
-            if($product->reorder_point > 0 && $product->Inventory <= $product->reorder_point){
-                $x++;           
-            }
-        }
-
-        return $x;
+        return DB::table('below_stock_products')->count();
     }
 
     public static function bannerTransition($id)

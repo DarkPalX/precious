@@ -91,6 +91,8 @@
 								<th scope="col" class="wd-20p">New Value</th>
 								<th scope="col" class="wd-5p">Module</th>
                                 <th scope="col" class="wd-10p">Activity Date</th>
+                                <th scope="col" class="wd-10p" style="display: none;">Action</th>
+                                <th scope="col" class="wd-20p" style="display: none;">Page / URL</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,6 +108,11 @@
 										<td>{{ \Illuminate\Support\Str::limit($log->new_value, 30, $end ='...') }}</td>
 										<td>{{ ucwords($log->db_table) }}</td>
 										<td>{{ $log->activity_date }}</td>
+										<td style="display: none;">{{ $log->action ?: $log->activity_type }}</td>
+										<td style="display: none;">
+											@if($log->page)<div>{{ $log->page }}</div>@endif
+											@if($log->url)<small>{{ $log->url }}</small>@endif
+										</td>
 									</tr>
 								@endif
 							@empty

@@ -191,7 +191,13 @@ class SalesController extends Controller
         $customer = $request->get('customer_filter', false);
         $order_source = $request->get('order_source_filter', false);
 
-        $sales = SalesHeader::where('id','>','0');
+        $sales = SalesHeader::with([
+            'payments' => function ($query) {
+                $query->orderByDesc('payment_date');
+            },
+            'items.product',
+            'deliveries',
+        ])->where('id','>','0');
         if(isset($_GET['startdate']) && $_GET['startdate']<>'')
             $sales = $sales->where('created_at','>=',$_GET['startdate']);
         if(isset($_GET['enddate']) && $_GET['enddate']<>'')
@@ -214,7 +220,7 @@ class SalesController extends Controller
         if(isset($_GET['del_status']) && $_GET['del_status']<>'')
             $sales = $sales->where('delivery_status','like',''.$_GET['del_status'].'');
         $sales = $sales->orderBy('id','desc');
-        $sales = $sales->paginate(100);
+        $sales = $sales->paginate(10);
 
         $filter = $listing->get_filter($this->searchFields);
         $searchType = 'simple_search';
@@ -222,7 +228,7 @@ class SalesController extends Controller
         foreach($sales as $sale){
             $sale->updateOrderStatus();
         }
-
+      
         return view('admin.ecommerce.sales.index',compact('sales','filter','searchType', 'deliveryStatus', 'startDate', 'endDate', 'customer', 'order_source'));
 
     }

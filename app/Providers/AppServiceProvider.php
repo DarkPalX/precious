@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use  Illuminate\Support\Facades\Schema;
 
@@ -49,6 +50,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Telescope 5's Sentinel middleware calls host(), which was renamed
+        // to getHost() in the Laravel 8 request API.
+        if (! method_exists(Request::class, 'host')) {
+            Request::macro('host', function () {
+                return $this->getHost();
+            });
+        }
+
         Paginator::useBootstrap();
         Schema::defaultStringLength(191);
 

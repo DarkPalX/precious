@@ -202,6 +202,32 @@
                                                         </thead>
                                                         <tbody>
                                                             @foreach($promo->products as $product)
+                                                                @php
+                                                                    $details = $product->details;
+                                                                @endphp
+
+                                                                <tr>
+                                                                    <td>
+                                                                        <span @if($details->trashed()) style="text-decoration:line-through;" @endif>
+                                                                            {{ $details->name }}
+                                                                        </span>
+                                                                    </td>
+                                                                    <td>{{ number_format($details->price, 2) }}</td>
+                                                                    <td>{{ $details->DiscountedPrice }}</td>
+                                                                    <td>
+                                                                        @if($details->trashed())
+                                                                        @else
+                                                                            <nav class="nav table-options">
+                                                                                <a class="nav-link" target="_blank" href="{{ route('product.details', $details->slug) }}" title="View Product Profile">
+                                                                                    <i data-feather="eye"></i>
+                                                                                </a>
+                                                                            </nav>
+                                                                        @endif
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                            
+                                                            {{-- @foreach($promo->products as $product)
                                                                 <tr>
                                                                     <td><span @if($product->details->trashed()) style="text-decoration:line-through;" @endif>{{ $product->details->name }}</span></td>
                                                                     <td>{{ number_format($product->details->price,2) }}</td>
@@ -215,7 +241,7 @@
                                                                         @endif
                                                                     </td>
                                                                 </tr>
-                                                            @endforeach
+                                                            @endforeach --}}
                                                         </tbody>
                                                     </table>
                                                 </div>

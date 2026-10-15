@@ -139,7 +139,6 @@ class CustomerFrontController extends Controller
             session(['is_ios' => true]);
         }
 
-        
         $userCredentials = [
             'email'    => $request->email,
             'password' => $request->password
@@ -395,6 +394,7 @@ class CustomerFrontController extends Controller
     public function logout()
     {
         Auth::logout();
+        session()->forget('is_ios');
 
         return redirect(route('home'));
     }
