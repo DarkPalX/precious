@@ -70,6 +70,9 @@
                                     To display selected items from your News List, you need to add the following keywords:
                                     <ul>
                                         <li>{Featured Articles} = Add all the news articles marked as Featured</li>
+                                        <li>{Best Sellers} = Add all the products marked as Best Seller</li>
+                                        <li>{New Releases} = Add all the latest products</li>
+                                        <li>{Featured Products} = Add all the products marked as Featured</li>
                                     </ul>
                                 </small>
                             </p>
