@@ -728,8 +728,10 @@ public function getSearchAudioBookList($data){
               COALESCE(prod_cat.created_at,'') as created_at,
               COALESCE(prod_cat.status,'') as status
             ");
+           
            $query->where("prod_cat.deleted_at","=",null);
            $query->where("prod_cat.status","=","PUBLISHED");
+           $query->orderBy("prod_cat.menu_order_no","ASC");
 
           return $query->get();
     });
