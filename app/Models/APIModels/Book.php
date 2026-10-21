@@ -717,7 +717,7 @@ public function getSearchAudioBookList($data){
 
     $CacheKey = 'all_book_category_list';
 
-    $list = Cache::remember($CacheKey, now()->addDay(), function () {
+    $list = Cache::remember($CacheKey, now()->addMinutes(2), function () {
 
         $query = DB::table('product_categories as prod_cat')
            ->selectraw("
