@@ -722,13 +722,14 @@ public function getSearchAudioBookList($data){
         $query = DB::table('product_categories as prod_cat')
            ->selectraw("
               prod_cat.id as category_ID,
+               prod_cat.menu_order_no as OrderNo,
               COALESCE(prod_cat.name,'') as CategoryName,
               COALESCE(prod_cat.mobile_file_url,'') as CategoryIcon,
               COALESCE(prod_cat.slug,'') as slug,
               COALESCE(prod_cat.created_at,'') as created_at,
               COALESCE(prod_cat.status,'') as status
             ");
-           
+
            $query->where("prod_cat.deleted_at","=",null);
            $query->where("prod_cat.status","=","PUBLISHED");
            $query->orderBy("prod_cat.menu_order_no","ASC");
