@@ -156,7 +156,7 @@
 
 
 // NEW RELEASES
-    $newProducts = \App\Models\Ecommerce\Product::whereDate('updated_at', '>=', Carbon\Carbon::now()->subDays(30))->where('status', 'PUBLISHED')->orderBy('updated_at', 'desc')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])->take(10)->get();
+    $newProducts = \App\Models\Ecommerce\Product::whereDate('updated_at', '>=', Carbon\Carbon::now()->subDays(365))->where('status', 'PUBLISHED')->orderBy('updated_at', 'desc')->whereRaw('LOWER(book_type) NOT IN (?, ?)', ['ebook', 'e-book'])->take(10)->get();
     if($newProducts->count()){
 
         $newProductsHTML = '';
