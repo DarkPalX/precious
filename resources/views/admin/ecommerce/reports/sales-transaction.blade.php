@@ -75,9 +75,10 @@
         <thead>
             <tr>
                 <th>Date</th>
+                <th>Time</th>
                 <th>Transaction Ref#</th>
-                <th>Customer No.</th>
                 <th>Client/Customer Name</th>
+                <th>Contact#</th>
                 <th>Delivery Address</th>
                 <th>Item/Purchase Description</th>
                 <th>Category</th>
@@ -122,62 +123,6 @@
             window.location.href = "{{ route('report.sales-transaction') }}?" + params.toString();
         }
 
-        /* Legacy browser-side all-rows exporter retained below only for reference. */
-        function exportAllSales(e, dt, button, config, builtInName) {
-            $.ajax({
-                url: "{{ route('report.sales-transaction') }}",
-                type: 'GET',
-                data: {
-                    start_date: $('input[name="start_date"]').val(),
-                    end_date: $('input[name="end_date"]').val(),
-                    customer: $('#customer').val(),
-                    product: $('#product').val(),
-                    category: $('#category').val(),
-                    del_status: $('#del_status').val(),
-                    start: 0,
-                    // Yajra's server-side adapter treats -1 as its default
-                    // page size in this project. Use a large export-only
-                    // length so every filtered row is returned.
-                    length: 1000000
-                },
-                success: function (response) {
-                    var exportTable = $('<table>')
-                        .append($('#sales-table thead').clone())
-                        .appendTo('body')
-                        .hide();
-                    var exportConfig = $.extend(true, {}, config);
-                    delete exportConfig.action;
-                    exportConfig.extend = builtInName;
-                    exportConfig.exportOptions = $.extend(true, {}, exportConfig.exportOptions, {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-                        modifier: { page: 'all' }
-                    });
-
-                    var exportDt = exportTable.DataTable({
-                        data: response.data,
-                        columns: [
-                            { data: 'date' }, { data: 'order_number' },
-                            { data: 'customer_no' }, { data: 'client_name' },
-                            { data: 'customer_delivery_adress' }, { data: 'product_name' },
-                            { data: 'category_name' }, { data: 'qty' },
-                            { data: 'price_formatted' }, { data: 'gross' },
-                            { data: 'discount' }, { data: 'net_price' },
-                            { data: 'payment_method' }, { data: 'status_display' }
-                        ],
-                        paging: false,
-                        searching: false,
-                        ordering: false,
-                        dom: 'B t',
-                        buttons: [exportConfig]
-                    });
-
-                    exportDt.button(0).trigger();
-                    exportDt.destroy();
-                    exportTable.remove();
-                }
-            });
-        }
-
         $('#sales-table').DataTable({
             processing: true,
             serverSide: true,
@@ -195,9 +140,10 @@
             },
             columns: [
                 { data: 'date', name: 'ecommerce_sales_headers.created_at' },
-                { data: 'order_number', name: 'ecommerce_sales_headers.order_number' }, // Explicit table reference
-                { data: 'customer_no', name: 'header.user.id', orderable: false },
-                { data: 'client_name', name: 'ecommerce_sales_headers.customer_name', orderable: false }, 
+                { data: 'time', name: 'ecommerce_sales_headers.created_at', orderable: false, searchable: false },
+                { data: 'order_number', name: 'ecommerce_sales_headers.order_number' },
+                { data: 'client_name', name: 'ecommerce_sales_headers.customer_name', orderable: false },
+                { data: 'phone', name: 'header.user.mobile', orderable: false, searchable: false },
                 { data: 'customer_delivery_adress', name: 'ecommerce_sales_headers.customer_delivery_adress' },
                 { data: 'product_name', name: 'ecommerce_sales_details.product_name' },
                 { data: 'category_name', name: 'product.category.name', orderable: false },

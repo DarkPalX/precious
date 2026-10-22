@@ -318,7 +318,10 @@ class ReportsController extends Controller
 
             return datatables()->of($query)
                 ->addColumn('date', function($sale) {
-                    return \SettingHelper::datetimeFormat2($sale->header_created_at);
+                    return Carbon::parse($sale->header_created_at)->format('m/d/Y');
+                })
+                ->addColumn('time', function($sale) {
+                    return Carbon::parse($sale->header_created_at)->format('h:i A');
                 })
                 ->addColumn('order_number', function($sale) {
                     // If order_number is already a string like "INV-001", just return it. 
@@ -327,11 +330,11 @@ class ReportsController extends Controller
                         ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) 
                         : ($sale->order_number ?? $sale->header->order_number ?? '');
                 })
-                ->addColumn('customer_no', function($sale) {
-                    return str_pad(($sale->header->user->id ?? 0), 8, '0', STR_PAD_LEFT);
-                })
                 ->addColumn('client_name', function($sale) {
                     return $sale->header->customer_name ?? '';
+                })
+                ->addColumn('phone', function($sale) {
+                    return $sale->header->user->mobile ?? $sale->header->user->phone ?? '';
                 })
                 ->addColumn('category_name', function($sale) {
                     return $sale->product->category->name ?? 'Uncategorized';
@@ -516,7 +519,9 @@ class ReportsController extends Controller
             ]);
         }
 
-        $headers = ['Date', 'Order #', 'Customer #', 'Customer', 'Delivery Address', 'Product', 'Category', 'Qty', 'Price', 'Gross', 'Discount', 'Net Price', 'Payment Method', 'Status'];
+        $headers = $mobile
+            ? ['Date', 'Time', 'Order #', 'Customer', 'Contact#', 'Product', 'Category', 'Qty', 'Price', 'Gross', 'Discount', 'Net Price', 'Payment Method', 'Status']
+            : ['Date', 'Time', 'Order #', 'Customer', 'Contact#', 'Delivery Address', 'Product', 'Category', 'Qty', 'Price', 'Gross', 'Discount', 'Net Price', 'Payment Method', 'Status'];
         $rows = [];
         foreach ($query->cursor() as $sale) {
             $qty = $mobile ? max(1, (int) $sale->qty) : $sale->qty;
@@ -527,22 +532,40 @@ class ReportsController extends Controller
             if ($lastDelivery && $lastDelivery->remarks != '') {
                 $status .= ' | ' . $lastDelivery->remarks;
             }
-            $rows[] = [
-                \SettingHelper::datetimeFormat2($sale->header_created_at),
-                is_numeric($sale->order_number) ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) : ($sale->order_number ?? ''),
-                str_pad(($sale->header->user->id ?? 0), 8, '0', STR_PAD_LEFT),
-                $sale->header->customer_name ?? '',
-                $sale->customer_delivery_adress ?? '',
-                $sale->product_name ?? '',
-                $sale->product->category->name ?? 'Uncategorized',
-                $qty,
-                number_format($sale->price, 2),
-                number_format($sale->price * $qty, 2),
-                number_format($sale->discount_amount, 2),
-                number_format(($sale->price * $qty) - $sale->discount_amount, 2),
-                $sale->payment_method ?? $sale->header->payment_method ?? '',
-                $status,
-            ];
+            $rows[] = $mobile
+                ? [
+                    Carbon::parse($sale->header_created_at)->format('m/d/Y'),
+                    Carbon::parse($sale->header_created_at)->format('h:i A'),
+                    is_numeric($sale->order_number) ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) : ($sale->order_number ?? ''),
+                    $sale->header->customer_name ?? '',
+                    $sale->header->user->mobile ?? $sale->header->user->phone ?? '',
+                    $sale->product_name ?? '',
+                    $sale->product->category->name ?? 'Uncategorized',
+                    $qty,
+                    number_format($sale->price, 2),
+                    number_format($sale->price * $qty, 2),
+                    number_format($sale->discount_amount, 2),
+                    number_format(($sale->price * $qty) - $sale->discount_amount, 2),
+                    $sale->payment_method ?? $sale->header->payment_method ?? '',
+                    $status,
+                ]
+                : [
+                    Carbon::parse($sale->header_created_at)->format('m/d/Y'),
+                    Carbon::parse($sale->header_created_at)->format('h:i A'),
+                    is_numeric($sale->order_number) ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) : ($sale->order_number ?? ''),
+                    $sale->header->customer_name ?? '',
+                    $sale->header->user->mobile ?? $sale->header->user->phone ?? '',
+                    $sale->customer_delivery_adress ?? '',
+                    $sale->product_name ?? '',
+                    $sale->product->category->name ?? 'Uncategorized',
+                    $qty,
+                    number_format($sale->price, 2),
+                    number_format($sale->price * $qty, 2),
+                    number_format($sale->discount_amount, 2),
+                    number_format(($sale->price * $qty) - $sale->discount_amount, 2),
+                    $sale->payment_method ?? $sale->header->payment_method ?? '',
+                    $status,
+                ];
         }
 
         return $this->streamReportTable($headers, $rows, $request->get('export'), $mobile ? 'mobile-sales-report' : 'sales-report');
@@ -566,7 +589,7 @@ class ReportsController extends Controller
             ->whereNotNull('u.id')
             ->select([
                 'd.product_name', 'd.qty', 'd.price', 'd.discount_amount',
-                'h.order_number', 'h.user_id', 'h.customer_name',
+                'h.order_number', 'h.user_id', 'h.customer_name', 'u.mobile', 'u.phone',
                 'h.customer_delivery_adress', 'h.payment_method',
                 'h.delivery_status', 'h.created_at as header_created_at',
                 'p.book_type', 'pc.name as category_name',
@@ -593,7 +616,7 @@ class ReportsController extends Controller
             ]);
         }
 
-        $headers = ['Date', 'Order #', 'Customer #', 'Customer', 'Delivery Address', 'Product', 'Category', 'Qty', 'Price', 'Gross', 'Discount', 'Net Price', 'Payment Method', 'Status'];
+        $headers = ['Date', 'Time', 'Order #', 'Customer', 'Contact#', 'Delivery Address', 'Product', 'Category', 'Qty', 'Price', 'Gross', 'Discount', 'Net Price', 'Payment Method', 'Status'];
         $rows = [];
         foreach ($query->cursor() as $sale) {
             $qty = (int) $sale->qty;
@@ -604,10 +627,11 @@ class ReportsController extends Controller
                 $status .= ' | ' . $sale->delivery_remarks;
             }
             $rows[] = [
-                \SettingHelper::datetimeFormat2($sale->header_created_at),
+                Carbon::parse($sale->header_created_at)->format('m/d/Y'),
+                Carbon::parse($sale->header_created_at)->format('h:i A'),
                 is_numeric($sale->order_number) ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) : ($sale->order_number ?? ''),
-                str_pad((string) ($sale->user_id ?? 0), 8, '0', STR_PAD_LEFT),
                 $sale->customer_name ?? '',
+                $sale->mobile ?? $sale->phone ?? '',
                 $sale->customer_delivery_adress ?? '',
                 $sale->product_name ?? '',
                 $sale->category_name ?? 'Uncategorized',
@@ -1122,18 +1146,21 @@ class ReportsController extends Controller
                     return max(1, (int) $sale->qty);
                 })
                 ->addColumn('date', function($sale) {
-                    return \SettingHelper::datetimeFormat2($sale->header_created_at);
+                    return Carbon::parse($sale->header_created_at)->format('m/d/Y');
+                })
+                ->addColumn('time', function($sale) {
+                    return Carbon::parse($sale->header_created_at)->format('h:i A');
                 })
                 ->addColumn('order_number', function($sale) {
                     return is_numeric($sale->order_number) 
                         ? str_pad($sale->order_number, 8, '0', STR_PAD_LEFT) 
                         : ($sale->order_number ?? $sale->header->order_number ?? '');
                 })
-                ->addColumn('customer_no', function($sale) {
-                    return str_pad(($sale->header->user->id ?? 0), 8, '0', STR_PAD_LEFT);
-                })
                 ->addColumn('client_name', function($sale) {
                     return $sale->header->customer_name ?? '';
+                })
+                ->addColumn('phone', function($sale) {
+                    return $sale->header->user->mobile ?? $sale->header->user->phone ?? '';
                 })
                 ->addColumn('category_name', function($sale) {
                     // FIXED: Added null-safe navigation to handle instances where product or category is null/0
