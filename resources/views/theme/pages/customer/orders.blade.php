@@ -24,7 +24,7 @@
                     <th>Order #</th>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th>Delivery Status</th>
+                    <th>Status</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -56,7 +56,7 @@
                             <td>{{$sale->order_number}}</td>
                             <td>{{$sale->created_at}}</td>
                             <td>{{number_format($sale->net_amount,2)}}</td>
-                            <td>{{$deliveryStatus}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif</td> 
+                            <td>{{$deliveryStatus}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary" style="font-size:10px;"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif</td> 
                             <td>
                                 <ul class="nav nav-pills">
                                     <li class="nav-item dropdown">
