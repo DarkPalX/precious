@@ -64,10 +64,14 @@ class SalesHeader extends Model
         if($this->delivery_status != 'Delivered'){
 
             $all_ebooks = true;
-            $items = SalesDetail::where('sales_header_id', (int) $this->id)->get();
+            $items = $this->relationLoaded('items')
+                ? $this->items
+                : $this->items()->with('product')->get();
 
             foreach ($items as $item) {
-                $product = Product::find($item->product_id);
+                $product = $item->relationLoaded('product')
+                    ? $item->product
+                    : Product::find($item->product_id);
 
                 if ($product && !in_array(strtolower($product->book_type), ['ebook', 'e-book'])) {
                     $all_ebooks = false;
@@ -78,6 +82,7 @@ class SalesHeader extends Model
             if ($all_ebooks) {
                 SalesHeader::whereId((int) $this->id)->update(['delivery_status' => 'Delivered']);
                 DeliveryStatus::where('order_id', (int) $this->id)->update(['status' => 'Delivered']);
+                $this->delivery_status = 'Delivered';
             }
 
         }

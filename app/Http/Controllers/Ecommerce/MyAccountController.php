@@ -400,11 +400,23 @@ class MyAccountController extends Controller
 
     public function orders(){
 
-        $sales = SalesHeader::where('user_id',Auth::id())->orderBy('id','desc')->paginate(10);
+        $sales = SalesHeader::with([
+            'items.product',
+            'deliveries',
+            'coupons.details',
+        ])->where('user_id', Auth::id())
+            // The web transaction history excludes mobile-app orders.
+            ->whereRaw("LOWER(COALESCE(order_source, '')) NOT IN (?, ?)", ['android', 'ios'])
+            // Exclude an entire transaction when any of its items is an ebook.
+            ->whereDoesntHave('items.product', function ($query) {
+                $query->whereRaw("LOWER(book_type) IN (?, ?)", ['ebook', 'e-book']);
+            })
+            ->orderByDesc('id')
+            ->paginate(10);
+
         foreach($sales as $sale){
             $sale->updateOrderStatus();
         }
-        $sales = SalesHeader::where('user_id',Auth::id())->orderBy('id','desc')->paginate(10);
 
         $page = new Page();
         $page->name = 'Sales Transaction';

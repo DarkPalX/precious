@@ -1,5 +1,15 @@
 @extends('theme.main')
 
+@section('pagecss')
+    <style>
+        .orders-table th,
+        .orders-table td {
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+    </style>
+@endsection
+
 @section('content')
 @php
     $modals='';
@@ -18,10 +28,11 @@
         <div class="col-lg-9">
             <h2>Transactions</h2>
             
-            <table class="table table-hover">
+            <table class="table table-hover orders-table">
                 <thead>
                   <tr>
                     <th>Order #</th>
+                    <th>Title</th>
                     <th>Date</th>
                     <th>Amount</th>
                     <th>Status</th>
@@ -31,59 +42,58 @@
                 <tbody>
                     @forelse($sales as $sale)
                         @php
-                            $balance = \App\Models\Ecommerce\SalesHeader::balance($sale->id);
-
-                            
-                            $all_ebooks = true;  // Assume all are ebooks initially
-                            $items = App\Models\Ecommerce\SalesDetail::where('sales_header_id', $sale->id)->get();
-
-                            foreach ($items as $item) {
-                                $product = App\Models\Ecommerce\Product::find($item->product_id);
-
-                                if ($product && !in_array(strtolower($product->book_type), ['ebook', 'e-book'])) {
-                                    $all_ebooks = false;
-                                    break;  // No need to continue checking
-                                }
-                            }
-
+                            $items = $sale->items;
                             $deliveryStatus = $sale->delivery_status;
-
-                            if ($all_ebooks) {
-                                $deliveryStatus = "Delivered";
-                            }
                         @endphp
-                        <tr>
-                            <td>{{$sale->order_number}}</td>
-                            <td>{{$sale->created_at}}</td>
-                            <td>{{number_format($sale->net_amount,2)}}</td>
-                            <td>{{$deliveryStatus}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary" style="font-size:10px;"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif</td> 
-                            <td>
-                                <ul class="nav nav-pills">
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle p-0" data-bs-toggle="dropdown" href="#">
-                                        <i class="icon-cog1"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <a class="dropdown-item" href="#" onclick="view_items('{{$sale->id}}');">View Details</a>
-                                            @if($sale->status != 'CANCELLED')
-                                                {{-- @if($sale->payment_status == 'UNPAID')
-                                                    <a href="{{route('my-account.pay-again',$sale->id)}}"  class="dropdown-item">Pay Now</a>
-                                                @endif --}}
-
-                                                <a class="dropdown-item" href="#" onclick="view_deliveries('{{$sale->id}}');">View Deliveries</a>
-                                                <a class="dropdown-item" href="#" 
-                                                    onclick="cancel_unpaid_order('{{$sale->id}}')" 
-                                                    @if(in_array($deliveryStatus, ['Pending', 'Processing Stock', 'Delivered']) && $sale->payment_status === 'PAID') hidden @endif>
-                                                    Cancel Order
+                        @forelse($items as $itemIndex => $item)
+                            <tr>
+                                <td>{{$itemIndex === 0 ? $sale->order_number : ''}}</td>
+                                <td>
+                                    {{$item->product_name}}
+                                    @if($item->qty > 1)
+                                        <small class="d-block text-muted">Qty: {{$item->qty}}</small>
+                                    @endif
+                                </td>
+                                <td>{{$itemIndex === 0 ? $sale->created_at : ''}}</td>
+                                <td>{{number_format($item->qty * $item->price, 2)}}</td>
+                                <td>
+                                    @if($itemIndex === 0)
+                                        {{$deliveryStatus}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary" style="font-size:10px;"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($itemIndex === 0)
+                                        <ul class="nav nav-pills">
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle p-0" data-bs-toggle="dropdown" href="#">
+                                                <i class="icon-cog1"></i>
                                                 </a>
-
-                                                {{-- <a class="dropdown-item" href="#" onclick="cancel_unpaid_order('{{$sale->id}}')" @if($sale->delivery_status != "Pending" && $sale->delivery_status != "Pending" && $sale->delivery_status != "Delivered") hidden @endif>Cancel Order</a> --}}
-                                            @endif
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <a class="dropdown-item" href="#" onclick="view_items('{{$sale->id}}');">View Details</a>
+                                                    @if($sale->status != 'CANCELLED')
+                                                        <a class="dropdown-item" href="#" onclick="view_deliveries('{{$sale->id}}');">View Deliveries</a>
+                                                        <a class="dropdown-item" href="#" 
+                                                            onclick="cancel_unpaid_order('{{$sale->id}}')" 
+                                                            @if(in_array($deliveryStatus, ['Pending', 'Processing Stock', 'Delivered']) && $sale->payment_status === 'PAID') hidden @endif>
+                                                            Cancel Order
+                                                        </a>
+                                                    @endif
+                                                </ul>
+                                            </li>
                                         </ul>
-                                    </li>
-                                </ul> 
-                            </td>
-                        </tr>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td>{{$sale->order_number}}</td>
+                                <td class="text-muted">No items</td>
+                                <td>{{$sale->created_at}}</td>
+                                <td>{{number_format($sale->net_amount,2)}}</td>
+                                <td>{{$deliveryStatus}}</td>
+                                <td></td>
+                            </tr>
+                        @endforelse
                         @php
                             $modals .= '
                                 <div class="modal fade" id="delivery'.$sale->id.'" tabindex="-1" role="dialog" aria-labelledby="centerModalLabel" aria-hidden="true">
@@ -234,7 +244,7 @@
 
                     @empty
                         <tr>
-                            <td colspan="5">No orders found.</td>
+                            <td colspan="6">No orders found.</td>
                         </tr>
                     @endforelse
                 </tbody>
