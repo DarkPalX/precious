@@ -49,6 +49,9 @@
                     <li class="nav-item">
                         <a class="nav-link" id="email-bank-tab" data-toggle="tab" href="#email-bank" role="tab" aria-controls="email-bank" aria-selected="false">Email & Banking</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="ad-free-tab" data-toggle="tab" href="#ad-free" role="tab" aria-controls="ad-free" aria-selected="false">Ad-Free Settings</a>
+                    </li>
                 </ul>
                 <div class="tab-content rounded bd bd-gray-300 bd-t-0 pd-20" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -723,6 +726,36 @@
                                 </div>
                                 
                                 <div class="col-lg-12 mg-t-30">
+                                    <button class="btn btn-primary btn-sm btn-uppercase" type="submit">Save Settings</button>
+                                    <a href="{{ route('website-settings.edit') }}" class="btn btn-outline-secondary btn-sm btn-uppercase">Discard Changes</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Ad-Free Settings Tab -->
+                    <div class="tab-pane fade" id="ad-free" role="tabpanel" aria-labelledby="ad-free-tab">
+                        <div class="col-md-6 mg-t-15">
+                            <p class="tx-13 mg-b-30">Configure the date and optional time range during which advertisements should be disabled.</p>
+                            <form action="{{ route('website-settings.update-ad-free-settings') }}" method="post" class="parsley-style-1" data-parsley-validate novalidate>
+                                @csrf
+                                <div class="form-group">
+                                    <label>Date From</label>
+                                    <input type="date" name="date_from" class="form-control" value="{{ old('date_from', optional($adFreeSetting)->date_from) }}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Date To</label>
+                                    <input type="date" name="date_to" class="form-control" value="{{ old('date_to', optional($adFreeSetting)->date_to) }}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Time From</label>
+                                    <input type="time" name="time_from" class="form-control" value="{{ old('time_from', optional($adFreeSetting)->time_from ? substr($adFreeSetting->time_from, 0, 5) : '') }}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Time To</label>
+                                    <input type="time" name="time_to" class="form-control" value="{{ old('time_to', optional($adFreeSetting)->time_to ? substr($adFreeSetting->time_to, 0, 5) : '') }}">
+                                </div>
+                                <div class="col-lg-12 mg-t-30 pd-x-0">
                                     <button class="btn btn-primary btn-sm btn-uppercase" type="submit">Save Settings</button>
                                     <a href="{{ route('website-settings.edit') }}" class="btn btn-outline-secondary btn-sm btn-uppercase">Discard Changes</a>
                                 </div>

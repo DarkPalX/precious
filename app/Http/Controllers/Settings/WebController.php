@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\MediaAccounts;
 use App\Models\Permission;
 use App\Models\Setting;
+use App\Models\AdFreeSetting;
 
 use Auth;
 
@@ -23,8 +24,9 @@ class WebController extends Controller
     {
         $web = Setting::first();
         $medias = MediaAccounts::get();
+        $adFreeSetting = AdFreeSetting::first();
 
-        return view('admin.settings.website.index',compact('web','medias'));
+        return view('admin.settings.website.index', compact('web', 'medias', 'adFreeSetting'));
     }
 
     public function update(Request $request)
@@ -280,5 +282,24 @@ class WebController extends Controller
         $setting->save();
 
         return back()->with('success', __('standard.settings.website.coupon_setting_updates_success'));
+    }
+
+    public function update_ad_free_settings(Request $request)
+    {
+        $this->validate($request, [
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+            'time_from' => 'nullable|date_format:H:i',
+            'time_to' => 'nullable|date_format:H:i',
+        ]);
+
+        $setting = AdFreeSetting::firstOrNew(['id' => 1]);
+        $setting->date_from = $request->date_from;
+        $setting->date_to = $request->date_to;
+        $setting->time_from = $request->time_from;
+        $setting->time_to = $request->time_to;
+        $setting->save();
+
+        return back()->with('success', 'Successfully Updated Ad-Free Settings');
     }
 }

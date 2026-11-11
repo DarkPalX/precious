@@ -253,6 +253,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
             Route::post('/website-settings/update-paynamics', [WebController::class, 'update_paynamics'])->name('website-settings.update-paynamics');
             Route::post('/website-settings/update-signin', [WebController::class, 'update_signin'])->name('website-settings.update-signin');
             Route::post('/website-settings/update-email-bank-info', [WebController::class, 'update_email_bank_info'])->name('website-settings.update-email-bank-info');
+            Route::post('/website-settings/update-ad-free-settings', [WebController::class, 'update_ad_free_settings'])->name('website-settings.update-ad-free-settings');
             Route::post('/website-settings/update_media_accounts', [WebController::class, 'update_media_accounts'])->name('website-settings.update-media-accounts');
             Route::post('/website-settings/update_data_privacy', [WebController::class, 'update_data_privacy'])->name('website-settings.update-data-privacy');
             Route::post('/website-settings/remove_logo', [WebController::class, 'remove_logo'])->name('website-settings.remove-logo');

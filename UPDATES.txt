@@ -1,3 +1,25 @@
+######################################### NOVEMBER 11, 2026 #######################################
+SQL:
+
+CREATE TABLE `ad_free_settings` (
+    `id` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    `date_from` DATE NULL,
+    `date_to` DATE NULL,
+    `time_from` TIME NULL,
+    `time_to` TIME NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `chk_ad_free_settings_single_row`
+        CHECK (`id` = 1)
+);
+
+
+
+
+
+
+
+
+
 ######################################### OCTOBER 8, 2026 #######################################
 SQL:
 
