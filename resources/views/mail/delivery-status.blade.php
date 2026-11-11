@@ -33,6 +33,7 @@
                         
                         <tr>
                             <td align="left" class="content-text">
+                                @php($isPickup = strtolower((string) $h->delivery_type) === 'pickup')
                                 <p>Dear <strong>{{ $h->user->firstname }}</strong>,</p>
                                 <p>Good day!</p>
                                 
@@ -59,29 +60,38 @@
                                         <strong>Status Detail:</strong> Returned to Sender<br>
                                         <strong>Remarks:</strong> {{ optional($h->deliveries->last())->remarks ?? 'Package was undeliverable or rejected.' }}
                                     </div>
-                                    <p>Please reach out to us if you would like to arrange for a re-delivery (additional shipping fees may apply) or to process a manual pickup.</p>
+                                    @if($isPickup)
+                                        <p>Please contact us if you need assistance arranging pickup for this order.</p>
+                                    @else
+                                        <p>Please reach out to us if you would like to arrange for a re-delivery (additional shipping fees may apply) or to process a manual pickup.</p>
+                                    @endif
 
                                 {{-- 4. CONDITION FOR IN TRANSIT --}}
                                 @elseif($h->delivery_status == 'In Transit')
-                                    <p>We are pleased to inform you that your order <strong>(Invoice #{{ $h->order_number }})</strong> is now in transit. Please see the delivery details below:</p>
-                                    
-                                    <p style="margin-bottom: 0;"><strong>DOOR-TO-DOOR DELIVERY</strong></p>
-                                    <ul>
-                                        <li><strong>Metro Manila:</strong> Delivered via Champ Courier (2-3 days)</li>
-                                        <li><strong>Outside Metro Manila:</strong> Delivered via Flash Express, J&amp;T Express and other couriers (5-7 days)</li>
-                                    </ul>
-
-                                    <p><strong>Note on Tracking:</strong> A tracking number will be provided by <strong>CHAMP COURIER</strong>.</p>
-
-                                    <p style="margin-bottom: 0;"><strong>FOR PICK-UP ORDERS</strong></p>
-                                    <ul>
-                                        <li><strong>Address:</strong> G/F Jrich Corporate Center, 16 Sto. Domingo Ave. cor. P. Florentino St., Quezon City</li>
-                                        <li><strong>Schedule:</strong> Monday to Friday, 10:00 AM &ndash; 5:00 PM</li>
-                                    </ul>
+                                    @if($isPickup)
+                                        <p>Your order <strong>(Invoice #{{ $h->order_number }})</strong> is ready for pickup. Please see the pickup details below:</p>
+                                        <p style="margin-bottom: 0;"><strong>FOR PICK-UP ORDERS</strong></p>
+                                        <ul>
+                                            <li><strong>Address:</strong> G/F Jrich Corporate Center, 16 Sto. Domingo Ave. cor. P. Florentino St., Quezon City</li>
+                                            <li><strong>Schedule:</strong> Monday to Friday, 10:00 AM &ndash; 5:00 PM</li>
+                                        </ul>
+                                    @else
+                                        <p>We are pleased to inform you that your order <strong>(Invoice #{{ $h->order_number }})</strong> is now in transit. Please see the delivery details below:</p>
+                                        <p style="margin-bottom: 0;"><strong>DOOR-TO-DOOR DELIVERY</strong></p>
+                                        <ul>
+                                            <li><strong>Metro Manila:</strong> Delivered via Champ Courier (2-3 days)</li>
+                                            <li><strong>Outside Metro Manila:</strong> Delivered via Flash Express, J&amp;T Express and other couriers (5-7 days)</li>
+                                        </ul>
+                                        <p><strong>Note on Tracking:</strong> A tracking number will be provided by <strong>CHAMP COURIER</strong>.</p>
+                                    @endif
 
                                 {{-- 5. DEFAULT (PROCESSING / OTHERS) --}}
                                 @else
-                                    <p>Your order, <strong>Invoice #{{ $h->order_number }}</strong>, is now being processed and will be prepared for shipment shortly. We will notify you once it has been endorsed to our courier.</p>
+                                    @if($isPickup)
+                                        <p>Your pickup order, <strong>Invoice #{{ $h->order_number }}</strong>, is now being processed. We will notify you when it is ready for pickup.</p>
+                                    @else
+                                        <p>Your order, <strong>Invoice #{{ $h->order_number }}</strong>, is now being processed and will be prepared for shipment shortly. We will notify you once it has been endorsed to our courier.</p>
+                                    @endif
                                     
                                     <div class="status-box">
                                         STATUS: {{ $h->delivery_status }}
