@@ -130,6 +130,14 @@ class CartController extends Controller
             'qty'        => 'required|integer|min:1',
         ]);
 
+        if ((int) $request->qty > Cart::MAX_ITEM_QUANTITY) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You can only add up to 2 pieces of the same item.',
+                'totalItems' => Setting::EcommerceCartTotalItems(),
+            ]);
+        }
+
         $product = Product::findOrFail((int) $request->product_id);
 
         // Fetch active promo discount
@@ -160,6 +168,14 @@ class CartController extends Controller
                 ->first();
 
             if ($cart) {
+                if ($cart->qty + (int) $request->qty > Cart::MAX_ITEM_QUANTITY) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'You can only add up to 2 pieces of the same item.',
+                        'totalItems' => Setting::EcommerceCartTotalItems(),
+                    ]);
+                }
+
                 $cart->update([
                     'qty'             => $cart->qty + $request->qty,
                     'price'           => $finalPrice,
@@ -182,6 +198,14 @@ class CartController extends Controller
 
             foreach ($cart as $key => $order) {
                 if ($order->product_id == $product->id) {
+                    if ($order->qty + (int) $request->qty > Cart::MAX_ITEM_QUANTITY) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'You can only add up to 2 pieces of the same item.',
+                            'totalItems' => Setting::EcommerceCartTotalItems(),
+                        ]);
+                    }
+
                     $cart[$key]->qty += $request->qty;
                     $cart[$key]->price = $finalPrice;
                     $cart[$key]->discount_amount = $discountedAmount;
@@ -227,6 +251,19 @@ class CartController extends Controller
 
     public function ebook_add_to_cart(Request $request)
     {       
+        $request->validate([
+            'product_id' => 'required|integer|exists:products,id',
+            'qty' => 'required|integer|min:1',
+        ]);
+
+        if ((int) $request->qty > Cart::MAX_ITEM_QUANTITY) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You can only add up to 2 pieces of the same item.',
+                'totalItems' => Setting::EcommerceCartTotalItems(),
+            ]);
+        }
+
         $product = Product::whereId((int) $request->product_id)->first();
 
         $promo = DB::table('promos')
@@ -252,6 +289,14 @@ class CartController extends Controller
 
             if (!empty($cart)) {
                 $newQty = $cart->qty + $request->qty;
+
+                if ($newQty > Cart::MAX_ITEM_QUANTITY) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'You can only add up to 2 pieces of the same item.',
+                        'totalItems' => Setting::EcommerceCartTotalItems(),
+                    ]);
+                }
                 
                 $save = $cart->update([
                     'qty' => $newQty,
@@ -274,6 +319,14 @@ class CartController extends Controller
 
             foreach ($cart as $key => $order) {
                 if ($order->product_id == $request->product_id) {
+                    if ($order->qty + (int) $request->qty > Cart::MAX_ITEM_QUANTITY) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'You can only add up to 2 pieces of the same item.',
+                            'totalItems' => Setting::EcommerceCartTotalItems(),
+                        ]);
+                    }
+
                     $cart[$key]->qty += $request->qty;
                     $cart[$key]->ebook_price = $price;
                     $not_exist = false;
@@ -400,11 +453,67 @@ class CartController extends Controller
 
     public function buy_now(Request $request)
     {
-        $requestData = $request->all();
+        $request->validate([
+            'product_id' => 'required|integer|exists:products,id',
+            'qty' => 'required|integer|min:1|max:2',
+        ]);
 
-        $requestData['user_id'] = Auth::id();
+        $existingQty = 0;
+        if (auth()->check()) {
+            $existingQty = (int) Cart::where('user_id', Auth::id())
+                ->where('product_id', $request->product_id)
+                ->value('qty');
+        } else {
+            foreach (session('cart', []) as $order) {
+                if (($order->product_id ?? null) == $request->product_id) {
+                    $existingQty = (int) $order->qty;
+                    break;
+                }
+            }
+        }
 
-        Cart::create($requestData);
+        if ($existingQty + (int) $request->qty > Cart::MAX_ITEM_QUANTITY) {
+            return back()->with('error', 'You can only add up to 2 pieces of the same item.');
+        }
+
+        if (auth()->check()) {
+            $cart = Cart::where('user_id', Auth::id())
+                ->where('product_id', $request->product_id)
+                ->first();
+
+            if ($cart) {
+                $cart->update(['qty' => $cart->qty + (int) $request->qty]);
+            } else {
+                Cart::create([
+                    'user_id' => Auth::id(),
+                    'product_id' => $request->product_id,
+                    'qty' => $request->qty,
+                    'price' => $request->price,
+                ]);
+            }
+        } else {
+            $cart = session('cart', []);
+            $found = false;
+
+            foreach ($cart as $key => $order) {
+                if (($order->product_id ?? null) == $request->product_id) {
+                    $cart[$key]->qty += (int) $request->qty;
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                $order = new \stdClass();
+                $order->id = (string) \Illuminate\Support\Str::uuid();
+                $order->product_id = $request->product_id;
+                $order->qty = $request->qty;
+                $order->price = $request->price;
+                $cart[] = $order;
+            }
+
+            session(['cart' => $cart]);
+        }
 
         return redirect(route('cart.front.show'));
     } 
@@ -415,6 +524,10 @@ class CartController extends Controller
         Coupon::checkCouponAvailability();
 
         if (auth()->check()) {
+
+			Cart::where('user_id', Auth::id())
+				->where('qty', '>', Cart::MAX_ITEM_QUANTITY)
+				->update(['qty' => Cart::MAX_ITEM_QUANTITY]);
 
             // reset coupon carts of customer
             CouponCartDiscount::where('customer_id',Auth::id())->delete();
@@ -438,6 +551,13 @@ class CartController extends Controller
             $totalProducts = $cart->count();
         } else {
             $cart = session('cart', []);
+
+			foreach ($cart as $order) {
+				if (($order->qty ?? 0) > Cart::MAX_ITEM_QUANTITY) {
+					$order->qty = Cart::MAX_ITEM_QUANTITY;
+				}
+			}
+			session(['cart' => $cart]);
 
             // Guest cart entries are stdClass objects, so explicitly resolve
             // their product relationship before rendering the cart page.
@@ -491,6 +611,14 @@ class CartController extends Controller
             'orderID'  => 'required',
             'quantity' => 'required|integer|min:1',
         ]);
+
+        if ((int) $request->quantity > Cart::MAX_ITEM_QUANTITY) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You can only keep up to 2 pieces of the same item in your cart.',
+                'totalItems' => Setting::EcommerceCartTotalItems(),
+            ]);
+        }
 
         $inventory = 0;
 

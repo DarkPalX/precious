@@ -143,9 +143,9 @@
                           <td>
                             <form class=" mb-0 d-flex justify-content-between align-items-center" method="post" enctype='multipart/form-data'>
                                 <div class="quantity clearfix">
-                                    <input type="button" value="-" class="minus" onclick="minus_qty();" @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book") disabled @endif>
-                                    <input type="number" step="1" min="1" name="quantity" id="quantity" value="1" title="Qty" class="qty" readonly/>
-                                    <input type="button" value="+" class="plus" onclick="plus_qty();" @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book") disabled @endif>
+                                    <input type="button" value="-" class="minus" onclick="decrease_product_quantity();" @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book") disabled @endif>
+                                    <input type="number" step="1" min="1" max="2" name="quantity" id="quantity" value="1" title="Qty" class="qty" readonly/>
+                                    <input type="button" value="+" class="plus" onclick="increase_product_quantity();" @if(strtolower($product->book_type) == "ebook" || strtolower($product->book_type) == "e-book") disabled @endif>
                                 </div>
                             </form>
                           </td>
@@ -588,6 +588,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
     <script>
 
+        function increase_product_quantity() {
+            var quantity = parseInt($('#quantity').val(), 10);
+            if (quantity >= 2) {
+                swal('Quantity limit', 'You can only add up to 2 pieces of the same item.', 'warning');
+                return;
+            }
+            $('#quantity').val(quantity + 1);
+        }
+
+        function decrease_product_quantity() {
+            var quantity = parseInt($('#quantity').val(), 10);
+            $('#quantity').val(Math.max(1, quantity - 1));
+        }
+
         function buynow(){
             var qty   = parseFloat($('#quantity').val());
             var remaining_stock = parseFloat($('#remaining_stock').val());
@@ -627,6 +641,11 @@
             var price = parseFloat($('#product_price').val());
             var remaining_stock = parseFloat($('#remaining_stock').val());
             var book_type = $('#book_type').val();
+
+            if (qty > 2) {
+                swal('Quantity limit', 'You can only add up to 2 pieces of the same item.', 'warning');
+                return;
+            }
 
             if(qty <= remaining_stock || (book_type.toLowerCase() === "e-book" || book_type.toLowerCase() === "ebook")){
 
@@ -715,7 +734,7 @@
                                 toast: true,
                                 position: 'center',
                                 title: "Warning!",
-                                text: "We have insufficient inventory for this item.",
+                                text: returnData.message || "We have insufficient inventory for this item.",
                                 type: "warning",
                                 showCancelButton: true,
                                 timerProgressBar: true, 

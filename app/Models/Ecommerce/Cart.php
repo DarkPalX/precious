@@ -14,6 +14,7 @@ class Cart extends Model
     protected $table = 'ecommerce_shopping_cart';
     protected $fillable = ['user_id', 'product_id', 'price', 'qty', 'discount_amount'];
     const GUEST_CART = 'cart';
+    const MAX_ITEM_QUANTITY = 2;
     
     public function user()
     {

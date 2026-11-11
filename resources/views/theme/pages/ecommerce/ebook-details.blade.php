@@ -124,9 +124,9 @@
                           <td>
                             <form class=" mb-0 d-flex justify-content-between align-items-center" method="post" enctype='multipart/form-data'>
                                 <div class="quantity clearfix">
-                                    <input type="button" value="-" class="minus" onclick="minus_qty();">
-                                    <input type="number" step="1" min="1" name="quantity" id="quantity" value="1" title="Qty" class="qty" readonly/>
-                                    <input type="button" value="+" class="plus" onclick="plus_qty();">
+                                    <input type="button" value="-" class="minus" onclick="decrease_product_quantity();">
+                                    <input type="number" step="1" min="1" max="2" name="quantity" id="quantity" value="1" title="Qty" class="qty" readonly/>
+                                    <input type="button" value="+" class="plus" onclick="increase_product_quantity();">
                                 </div>
                             </form>
                           </td>
@@ -581,6 +581,11 @@
         var price = parseFloat($('#product_price').val());
         var remaining_stock = 1000;
 
+        if (qty > 2) {
+            swal('Quantity limit', 'You can only add up to 2 pieces of the same item.', 'warning');
+            return;
+        }
+
         if(qty <= remaining_stock){
 
             $.ajax({
@@ -668,7 +673,7 @@
                             toast: true,
                             position: 'center',
                             title: "Warning!",
-                            text: "We have insufficient inventory for this item.",
+                                text: returnData.message || "We have insufficient inventory for this item.",
                             type: "warning",
                             showCancelButton: true,
                             timerProgressBar: true, 
@@ -700,6 +705,20 @@
 </script>
 
 <script>
+
+    function increase_product_quantity() {
+        var quantity = parseInt($('#quantity').val(), 10);
+        if (quantity >= 2) {
+            swal('Quantity limit', 'You can only add up to 2 pieces of the same item.', 'warning');
+            return;
+        }
+        $('#quantity').val(quantity + 1);
+    }
+
+    function decrease_product_quantity() {
+        var quantity = parseInt($('#quantity').val(), 10);
+        $('#quantity').val(Math.max(1, quantity - 1));
+    }
     
     // for edit quantity
 	function FormatAmount(number, numberOfDigits) {

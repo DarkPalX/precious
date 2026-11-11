@@ -113,7 +113,7 @@
 	                            <td class="cart-product-quantity">
 	                                <div class="quantity">
 	                                    <input type="button" value="-" class="minus" onclick="minus_qty('{{$orderID}}');" @if(in_array(strtolower($order->product->book_type), ['ebook', 'e-book'])) disabled @endif />
-	                                    <input type="text" name="quantity[]" class="qty" value="{{$order->qty}}" id="quantity{{$orderID}}"  @if(in_array(strtolower($order->product->book_type), ['ebook', 'e-book'])) readonly @endif />
+	                                    <input type="text" name="quantity[]" class="qty" value="{{$order->qty}}" id="quantity{{$orderID}}" max="2" readonly />
 	                                    <input type="button" value="+" class="plus" onclick="plus_qty('{{$orderID}}');" @if(in_array(strtolower($order->product->book_type), ['ebook', 'e-book'])) disabled @endif />
 
 	                                    <input type="hidden" id="orderID_{{$orderID}}" value="{{$order->product_id}}">
@@ -316,6 +316,11 @@
         function plus_qty(id){
         	var qty = parseFloat($('#quantity'+id).val())+1;
 
+            if(qty > 2){
+                swal('Quantity limit', 'You can only keep up to 2 pieces of the same item in your cart.', 'warning');
+                return false;
+            }
+
         	if(parseInt($('#maxorder'+id).val()) < 1){
                 swal({
                     title: '',
@@ -364,6 +369,13 @@
                 url: "{{route('cart.update')}}",
                 
                 success: function(returnData) {
+
+					if (!returnData.success) {
+						$('#quantity'+id).val($('#prevqty'+id).val());
+						cart_total();
+						swal('Quantity limit', returnData.message, 'warning');
+						return;
+					}
 
 					$('#maxorder'+id).val(returnData.maxOrder);
                 	$('.top-cart-number').html(returnData['totalItems']);

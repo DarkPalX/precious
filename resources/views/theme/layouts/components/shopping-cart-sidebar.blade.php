@@ -17,6 +17,10 @@
 			<div class="top-cart-items" id="top-cart-items">
 				@php
 					if(Auth::check()){
+					\App\Models\Ecommerce\Cart::where('user_id', auth()->id())
+						->where('qty', '>', \App\Models\Ecommerce\Cart::MAX_ITEM_QUANTITY)
+						->update(['qty' => \App\Models\Ecommerce\Cart::MAX_ITEM_QUANTITY]);
+
 						$cartx = \App\Models\Ecommerce\Cart::with('product')
 							->where('user_id', auth()->id())
 							->where('qty', '>', 0)
@@ -24,7 +28,11 @@
 							->filter(fn ($item) => $item->product);
 					} else {
 						$cartx = [];
-						foreach (session('cart', []) as $guestCartItem) {
+						$guestCart = session('cart', []);
+						foreach ($guestCart as $guestCartItem) {
+							if (($guestCartItem->qty ?? 0) > \App\Models\Ecommerce\Cart::MAX_ITEM_QUANTITY) {
+								$guestCartItem->qty = \App\Models\Ecommerce\Cart::MAX_ITEM_QUANTITY;
+							}
 							$guestCartItem->product = \App\Models\Ecommerce\Product::withTrashed()
 								->find($guestCartItem->product_id ?? null);
 
@@ -32,6 +40,7 @@
 								$cartx[] = $guestCartItem;
 							}
 						}
+						session(['cart' => $guestCart]);
 					}
 					
 					$carttotal = 0;
@@ -58,7 +67,7 @@
 								<div class="d-flex mt-2">
 									<div class="quantity">
 						<input type="button" value="-" class="minus" onclick="minus_qty('{{$cartId}}');" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) disabled @endif />
-						<input type="text" name="quantity[]" class="qty" value="{{$cart->qty}}" id="quantity{{$cartId}}" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) readonly @endif />
+		<input type="text" name="quantity[]" class="qty" value="{{$cart->qty}}" id="quantity{{$cartId}}" max="2" readonly />
 						<input type="button" value="+" class="plus" onclick="plus_qty('{{$cartId}}');" @if(in_array(strtolower($cart->product->book_type), ['ebook', 'e-book'])) disabled @endif />
 
 						<input type="hidden" id="orderID{{$cartId}}" value="{{$cart->product_id}}">
@@ -158,6 +167,11 @@
     function plus_qty(id){
 		var qty = parseFloat($('#quantity'+id).val())+1;
 
+		if(qty > 2){
+			swal('Quantity limit', 'You can only keep up to 2 pieces of the same item in your cart.', 'warning');
+			return false;
+		}
+
 		if(parseInt($('#maxorder'+id).val()) < 1){
 			swal({
 				title: '',
@@ -206,6 +220,13 @@
 			url: "{{route('cart.update')}}",
 			
 			success: function(returnData) {
+
+				if (!returnData.success) {
+					$('#quantity'+id).val($('#prevqty'+id).val());
+					cart_total();
+					swal('Quantity limit', returnData.message, 'warning');
+					return;
+				}
 
 				$('#maxorder'+id).val(returnData.maxOrder);
 				$('.top-cart-number').html(returnData['totalItems']);
