@@ -24,13 +24,17 @@
                         <td style="padding:15px;">
                             <strong>Payment Details</strong><br><br>
                             
-                            <strong>GCash:</strong><br>
+                            {{-- <strong>GCash:</strong><br>
                             Account Name: <strong>{{ $setting->gcash_account_name }}</strong><br>
                             Account Number: <strong>{{ $setting->gcash_account_number }}</strong><br><br>
                             
                             <strong>Maya:</strong><br>
                             Account Name: <strong>{{ $setting->maya_account_name }}</strong><br>
-                            Account Number: <strong>{{ $setting->maya_account_number }}</strong>
+                            Account Number: <strong>{{ $setting->maya_account_number }}</strong> --}}
+                            
+                            <strong>GCash/Maya:</strong><br>
+                            Account Name: <strong>{{ $setting->gcash_account_name }}</strong><br>
+                            Account Number: <strong>{{ $setting->gcash_account_number }}</strong>
                         </td>
                     </tr>
                 </table>
