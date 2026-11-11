@@ -401,9 +401,12 @@ class MyAccountController extends Controller
     public function orders(){
 
         $sales = SalesHeader::with([
-            'items.product',
-            'deliveries',
-            'coupons.details',
+            'items:id,sales_header_id,product_id,product_name,price,qty',
+            'items.product:id,book_type',
+            'deliveries:id,order_id,status,remarks,created_at',
+            'coupons:id,sales_header_id,coupon_id',
+            'coupons.details:id,name',
+            'payments:id,sales_header_id,status,amount',
         ])->where('user_id', Auth::id())
             // The web transaction history excludes mobile-app orders.
             ->whereRaw("LOWER(COALESCE(order_source, '')) NOT IN (?, ?)", ['android', 'ios'])

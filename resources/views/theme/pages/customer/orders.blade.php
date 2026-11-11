@@ -6,6 +6,26 @@
         .orders-table td {
             border-bottom: 1px solid #dee2e6;
             vertical-align: middle;
+            font-size: 12px;
+            padding: 0.45rem 0.35rem;
+        }
+
+        .orders-table th {
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .orders-table .transaction-item-arrow {
+            color: #6c757d;
+            display: inline-block;
+            font-size: 20px;
+            line-height: 12px;
+            margin-left: 2px;
+            transform: translateY(2px);
+        }
+
+        .orders-table .transaction-start-row td {
+            border-top: 2px solid #adb5bd;
         }
     </style>
 @endsection
@@ -35,19 +55,26 @@
                     <th>Title</th>
                     <th>Date</th>
                     <th>Amount</th>
+                    <th>Shipping Fee</th>
                     <th>Status</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                    @forelse($sales as $sale)
+                    @forelse($sales as $saleIndex => $sale)
                         @php
                             $items = $sale->items;
                             $deliveryStatus = $sale->delivery_status;
                         @endphp
                         @forelse($items as $itemIndex => $item)
-                            <tr>
-                                <td>{{$itemIndex === 0 ? $sale->order_number : ''}}</td>
+                            <tr @if($itemIndex === 0 && $saleIndex > 0) class="transaction-start-row" @endif>
+                                <td>
+                                    @if($itemIndex === 0)
+                                        {{$sale->order_number}}
+                                    @else
+                                        <span class="transaction-item-arrow" title="Additional item in this transaction" aria-label="Additional item in this transaction">↳</span>
+                                    @endif
+                                </td>
                                 <td>
                                     {{$item->product_name}}
                                     @if($item->qty > 1)
@@ -56,6 +83,7 @@
                                 </td>
                                 <td>{{$itemIndex === 0 ? $sale->created_at : ''}}</td>
                                 <td>{{number_format($item->qty * $item->price, 2)}}</td>
+                                <td>{{ $itemIndex === 0 ? number_format($sale->delivery_fee_amount - $sale->delivery_fee_discount, 2) : '' }}</td>
                                 <td>
                                     @if($itemIndex === 0)
                                         {{$deliveryStatus}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary" style="font-size:10px;"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif
@@ -90,6 +118,7 @@
                                 <td class="text-muted">No items</td>
                                 <td>{{$sale->created_at}}</td>
                                 <td>{{number_format($sale->net_amount,2)}}</td>
+                                <td>{{number_format($sale->delivery_fee_amount - $sale->delivery_fee_discount, 2)}}</td>
                                 <td>{{$deliveryStatus}}</td>
                                 <td></td>
                             </tr>
@@ -244,7 +273,7 @@
 
                     @empty
                         <tr>
-                            <td colspan="6">No orders found.</td>
+                            <td colspan="7">No orders found.</td>
                         </tr>
                     @endforelse
                 </tbody>

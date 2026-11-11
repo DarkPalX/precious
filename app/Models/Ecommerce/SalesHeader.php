@@ -39,16 +39,22 @@ class SalesHeader extends Model
         return $paid;
     }
     public function getPaymentstatusAttribute(){
-        $payment_method = SalesHeader::where('id', $this->id)->value('payment_method');
+        $payment_method = $this->getRawOriginal('payment_method');
 
         if($payment_method != 'bank'){
-            $paid = SalesPayment::where('sales_header_id',$this->id)->whereStatus('PAID')->sum('amount');
-            $is_already_paid = SalesHeader::where('id', $this->id)->value('payment_status');
+            $paid = $this->relationLoaded('payments')
+                ? $this->payments->where('status', 'PAID')->sum('amount')
+                : SalesPayment::where('sales_header_id', $this->id)->whereStatus('PAID')->sum('amount');
+            $is_already_paid = $this->getRawOriginal('payment_status');
 
             if($this->net_amount && $paid >= $this->net_amount || $is_already_paid == 'PAID'){
-            $tag_as_paid = SalesHeader::whereId((int) $this->id)->update(['payment_status' => 'PAID']);
+                if($is_already_paid != 'PAID'){
+                    SalesHeader::whereId((int) $this->id)->update(['payment_status' => 'PAID']);
+                    $this->attributes['payment_status'] = 'PAID';
+                }
                 if($this->delivery_status == 'Pending'){
-                    $update_delivery_status = SalesHeader::whereId((int) $this->id)->update(['delivery_status' => 'Processing Stock']);
+                    SalesHeader::whereId((int) $this->id)->update(['delivery_status' => 'Processing Stock']);
+                    $this->attributes['delivery_status'] = 'Processing Stock';
                 }
                 return 'PAID';
             }else{
