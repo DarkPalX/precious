@@ -53,6 +53,7 @@
                   <tr>
                     <th>Order #</th>
                     <th>Title</th>
+                    <th>Type</th>
                     <th>Date</th>
                     <th>Amount per Product</th>
                     <th>Shipping Fee</th>
@@ -68,6 +69,19 @@
                             $deliveryStatus = $sale->delivery_status;
                         @endphp
                         @forelse($items as $itemIndex => $item)
+                            @php
+                                $isEbook = $item->product
+                                    && in_array(strtolower($item->product->book_type ?? ''), ['ebook', 'e-book']);
+                                $discountedPrice = $isEbook
+                                    ? (float) ($item->product->ebook_discount_price ?? 0)
+                                    : (float) ($item->product->discount_price ?? 0);
+                                $regularPrice = $isEbook
+                                    ? (float) ($item->product->ebook_price ?? 0)
+                                    : (float) ($item->product->price ?? 0);
+                                $unitPrice = $discountedPrice > 0
+                                    ? $discountedPrice
+                                    : ((float) $item->price > 0 ? (float) $item->price : $regularPrice);
+                            @endphp
                             <tr @if($itemIndex === 0 && $saleIndex > 0) class="transaction-start-row" @endif>
                                 <td>
                                     @if($itemIndex === 0)
@@ -82,8 +96,9 @@
                                         <small class="d-block text-muted">Qty: {{$item->qty}}</small>
                                     @endif
                                 </td>
+                                <td>{{$isEbook ? 'E-book' : 'Physical Book'}}</td>
                                 <td>{{$itemIndex === 0 ? $sale->created_at : ''}}</td>
-                                <td>{{number_format($item->qty * $item->price, 2)}}</td>
+                                <td>{{number_format($item->qty * $unitPrice, 2)}}</td>
                                 <td>{{ $itemIndex === 0 ? number_format($sale->delivery_fee_amount - $sale->delivery_fee_discount, 2) : '' }}</td>
                                 <td>{{ $itemIndex === 0 ? number_format($sale->net_amount, 2) : '' }}</td>
                                 <td>
@@ -118,6 +133,7 @@
                             <tr>
                                 <td>{{$sale->order_number}}</td>
                                 <td class="text-muted">No items</td>
+                                <td></td>
                                 <td>{{$sale->created_at}}</td>
                                 <td>{{number_format($sale->net_amount,2)}}</td>
                                 <td>{{number_format($sale->delivery_fee_amount - $sale->delivery_fee_discount, 2)}}</td>
@@ -276,7 +292,7 @@
 
                     @empty
                         <tr>
-                            <td colspan="8">No orders found.</td>
+                            <td colspan="9">No orders found.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -402,7 +402,7 @@ class MyAccountController extends Controller
 
         $sales = SalesHeader::with([
             'items:id,sales_header_id,product_id,product_name,price,qty',
-            'items.product:id,book_type',
+            'items.product:id,book_type,price,discount_price,ebook_price,ebook_discount_price',
             'deliveries:id,order_id,status,remarks,created_at',
             'coupons:id,sales_header_id,coupon_id',
             'coupons.details:id,name',
