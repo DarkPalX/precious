@@ -54,8 +54,9 @@
                     <th>Order #</th>
                     <th>Title</th>
                     <th>Date</th>
-                    <th>Amount</th>
+                    <th>Amount per Product</th>
                     <th>Shipping Fee</th>
+                    <th>Total Amount</th>
                     <th>Status</th>
                     <th></th>
                   </tr>
@@ -84,6 +85,7 @@
                                 <td>{{$itemIndex === 0 ? $sale->created_at : ''}}</td>
                                 <td>{{number_format($item->qty * $item->price, 2)}}</td>
                                 <td>{{ $itemIndex === 0 ? number_format($sale->delivery_fee_amount - $sale->delivery_fee_discount, 2) : '' }}</td>
+                                <td>{{ $itemIndex === 0 ? number_format($sale->net_amount, 2) : '' }}</td>
                                 <td>
                                     @if($itemIndex === 0)
                                         {{$deliveryStatus}} @if(optional($sale->deliveries->last())->remarks) <span class="text-primary" style="font-size:10px;"> {{ ' | ' . ($sale->cancellation_request == 1 ? $sale->cancellation_reason : optional($sale->deliveries->last())->remarks)}} </span> @endif
@@ -119,6 +121,7 @@
                                 <td>{{$sale->created_at}}</td>
                                 <td>{{number_format($sale->net_amount,2)}}</td>
                                 <td>{{number_format($sale->delivery_fee_amount - $sale->delivery_fee_discount, 2)}}</td>
+                                <td>{{number_format($sale->net_amount,2)}}</td>
                                 <td>{{$deliveryStatus}}</td>
                                 <td></td>
                             </tr>
@@ -273,7 +276,7 @@
 
                     @empty
                         <tr>
-                            <td colspan="7">No orders found.</td>
+                            <td colspan="8">No orders found.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -233,6 +233,204 @@ class SalesController extends Controller
 
     }
 
+    // public function index(Request $request)
+    // {
+    //     //to check update coupon availability
+    //     Coupon::checkCouponAvailability();
+
+    //     $customConditions = [
+    //         [
+    //             'field' => 'status',
+    //             'operator' => '=',
+    //             'value' => 'active',
+    //             'apply_to_deleted_data' => true
+    //         ],
+    //     ];
+
+        
+
+    //     $listing = new ListingHelper('desc',10,'order_number',$customConditions);
+    //     //$sales = $listing->simple_search(SalesHeader::class, $this->searchFields);
+
+    //     $trans = SalesHeader::where('delivery_tracking_number','!=','')->get();
+    //     foreach($trans as $tran){
+    //         if($tran->delivery_type == 'xde'){
+    //             $tracking = XDEHelper::get_delivery_status($tran->delivery_tracking_number);
+                
+    //             $countdelivery = DeliveryStatus::where('order_id',$tran->id)->get()->count();
+    //             if($countdelivery < count($tracking)){
+                    
+    //                 for ($i=0;$i<count($tracking);$i++){
+    //                     $save = DeliveryStatus::create([
+    //                         'order_id' => $tran->id,
+    //                         'user_id' => $tran->user_id,
+    //                         'status'  => $tracking[$i]['status'],
+    //                         'remarks'  => $tracking[$i]['comment'],
+    //                         'date'  => $tracking[$i]['created_at'],
+    //                     ]);
+                        
+    //                     $status='';
+    //                     if($tracking[$i]['status']=='released'){
+    //                         $status='Released';
+    //                         $remarks='Cargo has been released to another 3pl.';
+    //                     }
+    //                     else if($tracking[$i]['status']=='accepted_by_courier'){
+    //                         $status='Accepted by XDE';
+    //                         $remarks='Accepted by XDE’s courier for delivery or sort';
+    //                     }
+    //                     else if($tracking[$i]['status']=='picked'){
+    //                         $status='Picked';
+    //                         $remarks='Cargo has been picked up from supplier’s/shipper’s
+    //                             warehouse and is being shipped to XDE main warehouse
+    //                             for sorting.';
+    //                     }
+    //                     else if($tracking[$i]['status']=='accepted_to_warehouse'){
+    //                         $status='Accepted to Warehouse';
+    //                         $remarks='Cargo has arrived to an XDE Main Warehouse.';
+    //                     }
+    //                     else if($tracking[$i]['status']=='forwarded_to_branch'){
+    //                         $status='Forwarded to Branch';
+    //                         $remarks='Cargo has been transferred from Main warehouse and
+    //                             being shipped to an XDE branch.';
+    //                     }
+    //                     else if($tracking[$i]['status']=='accepted_to_branch'){
+    //                         $status='Accepted to Branch';
+    //                         $remarks='Cargo has arrived to an XDE Branch.';
+    //                     }
+    //                     else if($tracking[$i]['status']=='returned_to_warehouse'){
+    //                         $status='Returned to Warehouse';
+    //                         $remarks='Cargo has been returned back to the warehouse after a
+    //                             failed delivery attempt.';
+    //                     } 
+    //                     else if($tracking[$i]['status']=='forwarded_to_warehouse'){
+    //                         $status='Forwarded to Warehouse';
+    //                         $remarks='Cargo is out for transfer to another hub or warehouse
+    //                             closer to it’s destination.';
+    //                     } 
+    //                     else if($tracking[$i]['status']=='first_delivery_attempt'){
+    //                         $status='First Delivery Attempt';
+    //                         $remarks='Cargo is being delivered to consignee as the first attempt.';
+    //                     }  
+    //                     else if($tracking[$i]['status']=='first_attempt_failed'){
+    //                         $status='First Attempt Failed';
+    //                         $remarks='Cargo was not successfully delivered on the first attempt.';
+    //                     } 
+    //                     else if($tracking[$i]['status']=='redelivery_attempt'){
+    //                         $status='Redelivery Attempt';
+    //                         $remarks='Cargo is being delivered to consignee as the second or
+    //                             third attempt.';
+    //                     } 
+    //                     else if($tracking[$i]['status']=='redelivery_attempt_failed'){
+    //                         $status='Redelivery Attempt Failed';
+    //                         $remarks='Cargo was not successfully delivered on the second
+    //                             attempt.';
+    //                     } 
+    //                     else if($tracking[$i]['status']=='delivery_successful'){
+    //                         $status='Delivery Successful';
+    //                         $remarks='Cargo has been successfully delivered to consignee.';
+    //                     }
+    //                     else if($tracking[$i]['status']=='forwarded_to_main'){
+    //                         $status='Forwarded to Main';
+    //                         $remarks='Cargo will be returned to shipper and is heading back from
+    //                             an XDE Branch to the XDE Main Warehouse.';
+    //                     } 
+    //                     else if($tracking[$i]['status']=='failed_delivery_return'){
+    //                         $status='Failed Delivery Return';
+    //                         $remarks='Cargo has reached it’s 3rd delivery attempt or has been
+    //                             cancelled by consignee. The cargo will be prepared to be
+    //                             returned back to shipper.';
+    //                     } 
+    //                     else if($tracking[$i]['status']=='rejected'){
+    //                         $status='Rejected';
+    //                         $remarks='Cargo has been cancelled and was not handed over to
+    //                             XDE.';
+    //                     }  
+    //                     else if($tracking[$i]['status']=='for_disposition'){
+    //                         $status='For Disposition';
+    //                         $remarks='Cargo is being evaluated for disposition';
+    //                     }   
+    //                     else if($tracking[$i]['status']=='claims'){
+    //                         $status='Claims';
+    //                         $remarks='Cargo has not been returned and has been charged for
+    //                             claims';
+    //                     } 
+    //                     else if($tracking[$i]['status']=='out_for_return'){
+    //                         $status='Out for Return';
+    //                         $remarks='Cargo is being shipped back to the shipper/supplier from
+    //                             the XDE Main Warehouse';
+    //                     }  
+    //                     else if($tracking[$i]['status']=='returned'){
+    //                         $status='Returned';
+    //                         $remarks='Cargo is returned to shipper/supplier. Closing status for any
+    //                             cancelled delivery.';
+    //                     }  
+    //                     else if($tracking[$i]['status']=='pod_returned'){
+    //                         $status='POD Returned';
+    //                         $remarks='Cargo’s signed proof of delivery has been returned to XDE
+    //                             office. Closing status for all successful delivery';
+    //                     } 
+    //                     else if($tracking[$i]['status']=='cancelled_order'){
+    //                         $status='Order Cancelled';
+    //                         $remarks='Order Cancelled';
+    //                     }
+                        
+    //                     $update = SalesHeader::whereId((int) $tran->id)->update([
+    //                         'delivery_status' => $status
+    //                     ]);
+    //                 }
+    //             }   
+    //         }
+            
+    //     }
+
+    //     $deliveryStatus = $request->get('del_status', false);
+    //     $startDate = $request->get('startdate', false);
+    //     $endDate = $request->get('enddate', false);
+    //     $customer = $request->get('customer_filter', false);
+    //     $order_source = $request->get('order_source_filter', false);
+
+    //     $sales = SalesHeader::with([
+    //         'payments' => function ($query) {
+    //             $query->orderByDesc('payment_date');
+    //         },
+    //         'items.product',
+    //         'deliveries',
+    //     ])->where('id','>','0');
+    //     if(isset($_GET['startdate']) && $_GET['startdate']<>'')
+    //         $sales = $sales->where('created_at','>=',$_GET['startdate']);
+    //     if(isset($_GET['enddate']) && $_GET['enddate']<>'')
+    //         $sales = $sales->where('created_at','<=',$_GET['enddate'].' 23:59:59');
+    //     if(isset($_GET['search']) && $_GET['search']<>'')
+    //         $sales = $sales->where('order_number','like','%'.$_GET['search'].'%');
+    //     if(isset($_GET['customer_filter']) && $_GET['customer_filter']<>'')
+    //         $sales = $sales->where('customer_name','like','%'.$_GET['customer_filter'].'%');
+    //     // if(isset($_GET['order_source_filter']) && $_GET['order_source_filter']<>'')
+    //     //     $sales = $sales->where('order_source','like','%'.$_GET['order_source_filter'].'%');
+
+    //     if(isset($_GET['order_source_filter']) && $_GET['order_source_filter']<>'') {
+    //         if ($_GET['order_source_filter'] === 'null') {
+    //             $sales = $sales->whereNull('order_source');
+    //         } else {
+    //             $sales = $sales->where('order_source', '=', $_GET['order_source_filter']);
+    //         }
+    //     }
+
+    //     if(isset($_GET['del_status']) && $_GET['del_status']<>'')
+    //         $sales = $sales->where('delivery_status','like',''.$_GET['del_status'].'');
+    //     $sales = $sales->orderBy('id','desc');
+    //     $sales = $sales->paginate(10);
+
+    //     $filter = $listing->get_filter($this->searchFields);
+    //     $searchType = 'simple_search';
+
+    //     foreach($sales as $sale){
+    //         $sale->updateOrderStatus();
+    //     }
+      
+    //     return view('admin.ecommerce.sales.index',compact('sales','filter','searchType', 'deliveryStatus', 'startDate', 'endDate', 'customer', 'order_source'));
+
+    // }
+
     public function store(Request $request)
     {
         //

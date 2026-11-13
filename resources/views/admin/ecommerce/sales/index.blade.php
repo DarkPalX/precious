@@ -10,6 +10,34 @@
             padding: 10px;
             font-size: 13px;
         }
+
+        @media (min-width: 1200px) {
+            .container.pd-x-0 {
+                max-width: calc(100% - 30px);
+            }
+        }
+
+        #table_sales {
+            width: 100%;
+            min-width: 1150px;
+        }
+
+        .table-list {
+            overflow-x: auto;
+        }
+
+        #table_sales .transaction-item-arrow {
+            color: #6c757d;
+            display: inline-block;
+            font-size: 18px;
+            line-height: 12px;
+            margin-right: 4px;
+            transform: translateY(2px);
+        }
+
+        #table_sales .transaction-start-row td {
+            border-top: 2px solid #adb5bd;
+        }
     </style>
 @endsection
 
@@ -103,8 +131,11 @@
                         <tr>
                             <th>Order #</th>
                             <th>Order Date</th>
+                            <th>Book Title</th>
                             <th>Payment Date</th>
                             <th>Customer</th>
+                            <th>Amount per Product</th>
+                            <th>Shipping Fee</th>
                             <th>Total Amount</th>
                             <th>Payment Method</th> 
                             <th>Payment Status</th> 
@@ -115,38 +146,54 @@
                         </thead>
                         <tbody>
 
-                        @forelse($sales as $sale)
-                            <tr class="pd-20">
-                                <td><strong> {{$sale->order_number }}</strong></td>
-                                <td>{{ $sale->created_at }}</td>
+                        @forelse($sales as $saleIndex => $sale)
+                            @forelse($sale->items as $itemIndex => $item)
+                            <tr class="pd-20 @if($itemIndex === 0 && $saleIndex > 0) transaction-start-row @endif">
                                 <td>
-                                    @if($sale->payments->isNotEmpty())
+                                    @if($itemIndex === 0)
+                                        <strong>{{ $sale->order_number }}</strong>
+                                    @else
+                                        <span class="transaction-item-arrow" title="Additional item in this transaction" aria-label="Additional item in this transaction">&#8627;</span>
+                                    @endif
+                                </td>
+                                <td>{{ $itemIndex === 0 ? $sale->created_at : '' }}</td>
+                                <td>
+                                    {{ $item->product_name }}
+                                    @if($item->qty > 1)
+                                        <small class="d-block text-muted">Qty: {{ $item->qty }}</small>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($itemIndex === 0 && $sale->payments->isNotEmpty())
                                         {{ date('Y-m-d', strtotime($sale->payments->first()->payment_date)) }}
                                     @endif
                                 </td>
-                                <td>{{ $sale->customer_name }}</td>
+                                <td>{{ $itemIndex === 0 ? $sale->customer_name : '' }}</td>
+                                <td>{{ number_format($item->qty * $item->price, 2) }}</td>
+                                <td>{{ $itemIndex === 0 ? number_format($sale->delivery_fee_amount - $sale->delivery_fee_discount, 2) : '' }}</td>
                                 <td>
-                                    @if($sale->payments->isNotEmpty())
+                                    @if($itemIndex === 0 && $sale->payments->isNotEmpty())
                                         <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount,2) }}</a>
                                         {{-- <a href="javascript:;" onclick="show_added_payments('{{$sale->id}}');">{{ number_format($sale->net_amount - $sale->discount_amount + $sale->ecredit_amount,2) }}</a> --}}
-                                    @else
+                                    @elseif($itemIndex === 0)
                                         {{ number_format($sale->net_amount, 2) }}
                                         {{-- {{ number_format($sale->net_amount - $sale->discount_amount + $sale->ecredit_amount,2) }} --}}
                                     @endif
                                 </td>
-                                <td class="text-uppercase">{{ $sale->payment_method }}</td>
-                                <td>{{ $sale->payment_status }}</td>
+                                <td class="text-uppercase">{{ $itemIndex === 0 ? $sale->payment_method : '' }}</td>
+                                <td>{{ $itemIndex === 0 ? $sale->payment_status : '' }}</td>
                                 {{-- <td>{{ $sale->Paymentstatus }}</td> --}}
                                 {{-- <td><a href="{{route('admin.report.delivery_report',$sale->id)}}" target="_blank">{{$sale->delivery_status}}</a></td> --}}
                                 <td>
+                                    @if($itemIndex === 0)
                                     @if($sale->cancellation_request == 1)
                                         <a href="{{route('admin.report.delivery_report',$sale->id)}}" target="_blank">CANCELLED <span class="text-danger">| {{$sale->cancellation_reason}}</span></a>
                                     @else
 
                                         @php
                                             $all_ebooks = true;  // Assume all are ebooks initially
-                                            foreach ($sale->items as $item) {
-                                                $product = $item->product;
+                                            foreach ($sale->items as $saleItem) {
+                                                $product = $saleItem->product;
 
                                                 if ($product && !in_array(strtolower($product->book_type), ['ebook', 'e-book'])) {
                                                     $all_ebooks = false;
@@ -165,9 +212,11 @@
                                         <a href="{{ route('admin.report.delivery_report', $sale->id) }}" target="_blank">{{ $deliveryStatus }} @if(optional($sale->deliveries->last())->remarks) <span class="text-dark"> |  {{ optional($sale->deliveries->last())->remarks }}</span> @endif</a>
                                         
                                     @endif
+                                    @endif
                                 </td>
-                                <td>{{ $sale->order_source ?? 'Website' }}</td>
+                                <td>{{ $itemIndex === 0 ? ($sale->order_source ?? 'Website') : '' }}</td>
                                 <td>
+                                    @if($itemIndex === 0)
                                     <nav class="nav table-options">
                                         @if($sale->trashed())
                                             <nav class="nav table-options">
@@ -203,9 +252,31 @@
                                             </div>
                                         @endif
                                     </nav>
+                                    @endif
 
                                 </td>
                             </tr>
+                            @empty
+                                <tr class="pd-20 @if($saleIndex > 0) transaction-start-row @endif">
+                                    <td><strong>{{ $sale->order_number }}</strong></td>
+                                    <td>{{ $sale->created_at }}</td>
+                                    <td class="text-muted">No items</td>
+                                    <td>
+                                        @if($sale->payments->isNotEmpty())
+                                            {{ date('Y-m-d', strtotime($sale->payments->first()->payment_date)) }}
+                                        @endif
+                                    </td>
+                                    <td>{{ $sale->customer_name }}</td>
+                                    <td>{{ number_format($sale->net_amount, 2) }}</td>
+                                    <td>{{ number_format($sale->delivery_fee_amount - $sale->delivery_fee_discount, 2) }}</td>
+                                    <td>{{ number_format($sale->net_amount, 2) }}</td>
+                                    <td class="text-uppercase">{{ $sale->payment_method }}</td>
+                                    <td>{{ $sale->payment_status }}</td>
+                                    <td>{{ $sale->delivery_status }}</td>
+                                    <td>{{ $sale->order_source ?? 'Website' }}</td>
+                                    <td></td>
+                                </tr>
+                            @endforelse
 
                             {{-- Payment Status Update --}}
                             <div class="modal effect-scale" id="prompt-change-payment-status{{ $sale->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
