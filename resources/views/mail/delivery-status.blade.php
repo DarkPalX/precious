@@ -72,7 +72,7 @@
                                         <p>Your order <strong>(Invoice #{{ $h->order_number }})</strong> is ready for pickup. Please see the pickup details below:</p>
                                         <p style="margin-bottom: 0;"><strong>FOR PICK-UP ORDERS</strong></p>
                                         <ul>
-                                            <li><strong>Address:</strong> G/F Jrich Corporate Center, 16 Sto. Domingo Ave. cor. P. Florentino St., Quezon City</li>
+                                            <li><strong>Address:</strong> 16 Jrich Bldg. Sto. Domingo Ave. cor. P. Florentino, Quezon City, 1114</li>
                                             <li><strong>Schedule:</strong> Monday to Friday, 10:00 AM &ndash; 5:00 PM</li>
                                         </ul>
                                     @else
