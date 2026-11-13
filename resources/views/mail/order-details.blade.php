@@ -99,13 +99,13 @@
                             </table>
 
                             <div style="margin-top: 40px; border-top: 1px solid #dddddd; padding-top: 20px;">
-                                <h3 style="margin: 0 0 10px 0; color: #333333;">Payment Instructions:</h3>
+                                {{-- <h3 style="margin: 0 0 10px 0; color: #333333;">Payment Instructions:</h3>
                                 
                                 <p style="margin: 0; font-weight: bold; font-size: 15px;">For COD (Cash on Delivery):</p>
                                 <p style="margin: 5px 0 15px 0; color: #555555;">Pay with cash when the courier delivers your order.<br>
                                 <span style="color: #ff0000; font-style: italic; font-size: 13px;">Note: COD is available only within Metro Manila and selected areas.</span></p>
 
-                                <p style="margin: 20px 0 5px 0; font-weight: bold; font-size: 15px;">For NON-COD:</p>
+                                <p style="margin: 20px 0 5px 0; font-weight: bold; font-size: 15px;">For NON-COD:</p> --}}
                                 <p style="margin: 0 0 25px 0; color: #555555; line-height: 22px;">
                                     Please settle your payment using any of the methods listed below. Once completed, take a screenshot of your successful transaction or receipt and email it to <strong style="color: #333333;">{{ $setting->payment_email }}</strong>. Please include your <strong>Full Name</strong> and <strong>Order Invoice Number</strong> for verification.
                                 </p>
