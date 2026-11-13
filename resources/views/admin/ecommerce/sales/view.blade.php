@@ -45,26 +45,6 @@
 
     <div class="row row-sm mg-b-10">
 
-        @php
-            $all_ebooks = true;  // Assume all are ebooks initially
-            $items = App\Models\Ecommerce\SalesDetail::where('sales_header_id', $sales->id)->get();
-
-            foreach ($items as $item) {
-                $product = App\Models\Ecommerce\Product::find($item->product_id);
-
-                if ($product && !in_array(strtolower($product->book_type), ['ebook', 'e-book'])) {
-                    $all_ebooks = false;
-                    break;  // No need to continue checking
-                }
-            }
-
-            $deliveryStatus = $sales->delivery_status;
-
-            if ($all_ebooks) {
-                $deliveryStatus = "Delivered";
-            }
-        @endphp
-
         <div class="col-sm-6 col-lg-8 mg-t-10">
             <label class="tx-sans tx-uppercase tx-10 tx-medium tx-spacing-1 tx-color-03">Customer Details</label>
             <p class="mg-b-3">Mobile No: {{$sales->customer_contact_number}}</p>
@@ -113,8 +93,37 @@
                 @forelse($salesDetails as $details)
 
                 @php
-                $discount = \App\Models\Ecommerce\CouponSale::total_product_discount($sales->id,$details->product_id,$details->qty,$details->price);
-                $product_subtotal = $details->price*$details->qty;
+                $product = $details->product;
+                $isAndroidEbook = strtolower($sales->order_source ?? '') === 'android'
+                    && $product
+                    && in_array(strtolower($product->book_type ?? ''), ['ebook', 'e-book']);
+                $displayQty = $isAndroidEbook && (int) $details->qty === 0 ? 1 : (int) $details->qty;
+
+                $catalogDiscountPrice = $product && in_array(strtolower($product->book_type ?? ''), ['ebook', 'e-book'])
+                    ? (float) $product->ebook_discount_price
+                    : (float) ($product->discount_price ?? 0);
+                $catalogPrice = $product && in_array(strtolower($product->book_type ?? ''), ['ebook', 'e-book'])
+                    ? (float) $product->ebook_price
+                    : (float) ($product->price ?? 0);
+                $displayUnitPrice = $catalogDiscountPrice > 0
+                    ? $catalogDiscountPrice
+                    : (float) $details->price;
+
+                if ($isAndroidEbook && $details->discount_amount > 0) {
+                    $displayUnitPrice = (float) $details->discount_amount;
+                }
+
+                if ($displayUnitPrice <= 0) {
+                    $displayUnitPrice = $catalogPrice;
+                }
+
+                $discount = \App\Models\Ecommerce\CouponSale::total_product_discount($sales->id,$details->product_id,$displayQty,$displayUnitPrice);
+                $product_subtotal = $displayUnitPrice * $displayQty;
+                $originalPrice = $product && in_array(strtolower($product->book_type ?? ''), ['ebook', 'e-book'])
+                    ? ($product->ebook_price ?? $displayUnitPrice)
+                    : ($product->price ?? $displayUnitPrice);
+                $discountedPrice = $displayUnitPrice;
+                $displayDiscount = max(0, (float) $originalPrice - (float) $discountedPrice);
 
                 $subtotal += $product_subtotal;
                 @endphp
@@ -122,23 +131,18 @@
                     <td class="tx-nowrap">{{$details->product_name}}</td>
                     
 
-                    @if($details->product && in_array(strtolower($details->product->book_type ?? ''), ['ebook', 'e-book']))
+                    @if($product && in_array(strtolower($product->book_type ?? ''), ['ebook', 'e-book']))
                         <td class="tx-nowrap">Delivered</td>
                     @else
                         <td class="tx-nowrap">{{$sales->delivery_status}}</td>
                     @endif
 
-                    <td class="tx-right">{{number_format($details->qty, 0)}}</td>
+                    <td class="tx-right">{{number_format($displayQty, 0)}}</td>
 
-                    @if($details->product && in_array(strtolower($details->product->book_type), ['ebook', 'e-book']))
-                        <td class="tx-right">{{number_format($details->product->ebook_price ?? $details->price, 2)}}</td>
-                        <td class="tx-right">{{number_format($details->product->ebook_discount_price ?? 0, 2)}}</td>
-                    @else
-                        <td class="tx-right">{{number_format($details->product->price ?? $details->price, 2)}}</td>
-                        <td class="tx-right">{{number_format($details->product->discount_price ?? 0, 2)}}</td>
-                    @endif
+                    <td class="tx-right">{{number_format($originalPrice, 2)}}</td>
+                    <td class="tx-right">{{number_format($discountedPrice, 2)}}</td>
                     
-                    <td class="tx-right">{{number_format($details->discount_amount, 2)}}</td>
+                    <td class="tx-right">{{number_format($displayDiscount, 2)}}</td>
                     <td class="tx-right">{{number_format($product_subtotal, 2)}}</td>
                 </tr>
                 @empty

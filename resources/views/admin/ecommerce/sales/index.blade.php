@@ -148,6 +148,30 @@
 
                         @forelse($sales as $saleIndex => $sale)
                             @forelse($sale->items as $itemIndex => $item)
+                            @php
+                                $product = $item->product;
+                                $isAndroidEbook = strtolower($sale->order_source ?? '') === 'android'
+                                    && $product
+                                    && in_array(strtolower($product->book_type ?? ''), ['ebook', 'e-book']);
+                                $displayQty = $isAndroidEbook && (int) $item->qty === 0 ? 1 : (int) $item->qty;
+                                $catalogDiscountPrice = $product && in_array(strtolower($product->book_type ?? ''), ['ebook', 'e-book'])
+                                    ? (float) $product->ebook_discount_price
+                                    : (float) ($product->discount_price ?? 0);
+                                $catalogPrice = $product && in_array(strtolower($product->book_type ?? ''), ['ebook', 'e-book'])
+                                    ? (float) $product->ebook_price
+                                    : (float) ($product->price ?? 0);
+                                $displayUnitPrice = $catalogDiscountPrice > 0
+                                    ? $catalogDiscountPrice
+                                    : (float) $item->price;
+
+                                if ($isAndroidEbook && $item->discount_amount > 0) {
+                                    $displayUnitPrice = (float) $item->discount_amount;
+                                }
+
+                                if ($displayUnitPrice <= 0) {
+                                    $displayUnitPrice = $catalogPrice;
+                                }
+                            @endphp
                             <tr class="pd-20 @if($itemIndex === 0 && $saleIndex > 0) transaction-start-row @endif">
                                 <td>
                                     @if($itemIndex === 0)
@@ -159,9 +183,7 @@
                                 <td>{{ $itemIndex === 0 ? $sale->created_at : '' }}</td>
                                 <td>
                                     {{ $item->product_name }}
-                                    @if($item->qty > 1)
-                                        <small class="d-block text-muted">Qty: {{ $item->qty }}</small>
-                                    @endif
+                                    <small class="d-block text-muted">Qty: {{ $displayQty }}</small>
                                 </td>
                                 <td>
                                     @if($itemIndex === 0 && $sale->payments->isNotEmpty())
@@ -169,7 +191,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $itemIndex === 0 ? $sale->customer_name : '' }}</td>
-                                <td>{{ number_format($item->qty * $item->price, 2) }}</td>
+                                <td>{{ number_format($displayQty * $displayUnitPrice, 2) }}</td>
                                 <td>{{ $itemIndex === 0 ? number_format($sale->delivery_fee_amount - $sale->delivery_fee_discount, 2) : '' }}</td>
                                 <td>
                                     @if($itemIndex === 0 && $sale->payments->isNotEmpty())

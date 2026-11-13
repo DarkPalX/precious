@@ -474,33 +474,32 @@ class SalesController extends Controller
 
     public function show($id)
     {
-        $sales = SalesHeader::where('id',$id)->first();
-        $salesPayments = SalesPayment::where('sales_header_id',$id)->get();
-        $salesDetails = SalesDetail::where('sales_header_id',$id)->get();
-        $totalPayment = SalesPayment::where('sales_header_id',$id)->sum('amount');
-        $totalNet = SalesHeader::where('id',$id)->sum('net_amount');
-        if($totalNet <= $totalPayment)
-            $status = 'PAID';
-        else 
-            $status = 'UNPAID';
+        $sales = SalesHeader::with([
+            'customer_details:id,email,address_street,address_municipality,address_city,address_zip',
+            'items.product:id,book_type,ebook_price,ebook_discount_price,price,discount_price',
+            'coupons.details',
+        ])->withSum('payments as total_payment', 'amount')->findOrFail($id);
+
+        $salesDetails = $sales->items;
+        $status = (float) $sales->net_amount <= (float) $sales->total_payment ? 'PAID' : 'UNPAID';
 
         $sales->updateOrderStatus();
 
-        return view('admin.ecommerce.sales.view',compact('sales','salesPayments','salesDetails','status'));
+        return view('admin.ecommerce.sales.view',compact('sales','salesDetails','status'));
     }
 
     public function print($id)
     {
-        $sales = SalesHeader::where('id',$id)->first();
-        $salesPayments = SalesPayment::where('sales_header_id',$id)->get();
-        $salesDetails = SalesDetail::where('sales_header_id',$id)->get();
-        $totalPayment = SalesPayment::where('sales_header_id',$id)->sum('amount');
-        $totalNet = SalesHeader::where('id',$id)->sum('net_amount');
-        if($totalNet <= $totalPayment)
-        $status = 'PAID';
-        else $status = 'UNPAID';
+        $sales = SalesHeader::with([
+            'customer_details:id,email,address_street,address_municipality,address_city,address_zip',
+            'items.product:id,book_type,ebook_price,ebook_discount_price,price,discount_price',
+            'coupons.details',
+        ])->withSum('payments as total_payment', 'amount')->findOrFail($id);
 
-        return view('admin.ecommerce.sales.print',compact('sales','salesPayments','salesDetails','status'));
+        $salesDetails = $sales->items;
+        $status = (float) $sales->net_amount <= (float) $sales->total_payment ? 'PAID' : 'UNPAID';
+
+        return view('admin.ecommerce.sales.print',compact('sales','salesDetails','status'));
     }
 
     public function quick_update(Request $request)
