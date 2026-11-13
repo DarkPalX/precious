@@ -35,6 +35,18 @@
                             <strong>GCash/Maya:</strong><br>
                             Account Name: <strong>{{ $setting->gcash_account_name }}</strong><br>
                             Account Number: <strong>{{ $setting->gcash_account_number }}</strong>
+                            
+                            <strong>GCash:</strong><br>
+                            Account Name: <strong>Jenette Robles</strong><br>
+                            Account Number: <strong>09228684353</strong>
+                            
+                            <strong>Maya:</strong><br>
+                            Account Name: <strong>Epifanio Periña Jr.</strong><br>
+                            Account Number: <strong>09178457765</strong>
+                            
+                            <strong>GCash:</strong><br>
+                            Account Name: <strong>Dojillo Perina Epifanio</strong><br>
+                            Account Number: <strong>09178457765</strong>
                         </td>
                     </tr>
                 </table>
