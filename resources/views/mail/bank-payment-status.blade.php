@@ -52,22 +52,22 @@
                     <tr>
                         <td style="padding:15px;">
                             Bank Name: <strong>Chinabank</strong><br>
-                            Account Name: <strong>Precious Pages Corporation</strong><br>
-                            Account Number: <strong>1425 000 0889</strong>
+                            Account Name: <strong>{{ $setting->chinabank_account_name }}</strong><br>
+                            Account Number: <strong>{{ $setting->chinabank_account_number }}</strong>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:15px;">
                             Bank Name: <strong>Metrobank</strong><br>
-                            Account Name: <strong>Precious Pages Corporation</strong><br>
-                            Account Number: <strong>0617 0615 09417</strong>
+                            Account Name: <strong>{{ $setting->metrobank_account_name }}</strong><br>
+                            Account Number: <strong>{{ $setting->metrobank_account_number }}</strong>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:15px;">
                             Bank Name: <strong>Security Bank</strong><br>
-                            Account Name: <strong>Precious Pages Corporation</strong><br>
-                            Account Number: <strong>0000077982455</strong>
+                            Account Name: <strong>{{ $setting->security_bank_account_name }}</strong><br>
+                            Account Number: <strong>{{ $setting->security_bank_account_number }}</strong>
                         </td>
                     </tr>
                 </table>

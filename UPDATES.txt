@@ -33,6 +33,14 @@ ADD COLUMN chapters INT NULL DEFAULT NULL AFTER book_type;
 
 
 
+ALTER TABLE `settings`
+    ADD COLUMN `chinabank_account_name` VARCHAR(150) NULL AFTER `bdo_account_number`,
+    ADD COLUMN `chinabank_account_number` VARCHAR(150) NULL AFTER `chinabank_account_name`,
+    ADD COLUMN `metrobank_account_name` VARCHAR(150) NULL AFTER `chinabank_account_number`,
+    ADD COLUMN `metrobank_account_number` VARCHAR(150) NULL AFTER `metrobank_account_name`,
+    ADD COLUMN `security_bank_account_name` VARCHAR(150) NULL AFTER `metrobank_account_number`,
+    ADD COLUMN `security_bank_account_number` VARCHAR(150) NULL AFTER `security_bank_account_name`;
+
 
 
 

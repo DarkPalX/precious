@@ -205,6 +205,12 @@ class WebController extends Controller
         $ecommerce->bpi_account_number = $request->bpi_account_number;
         $ecommerce->bdo_account_name = $request->bdo_account_name;
         $ecommerce->bdo_account_number = $request->bdo_account_number;
+        $ecommerce->chinabank_account_name = $request->chinabank_account_name;
+        $ecommerce->chinabank_account_number = $request->chinabank_account_number;
+        $ecommerce->metrobank_account_name = $request->metrobank_account_name;
+        $ecommerce->metrobank_account_number = $request->metrobank_account_number;
+        $ecommerce->security_bank_account_name = $request->security_bank_account_name;
+        $ecommerce->security_bank_account_number = $request->security_bank_account_number;
         $ecommerce->gcash_account_name = $request->gcash_account_name;
         $ecommerce->gcash_account_number = $request->gcash_account_number;
         $ecommerce->maya_account_name = $request->maya_account_name;
