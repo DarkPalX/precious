@@ -64,7 +64,7 @@ class Book extends Model
                 COALESCE(prds.category_id, 0) AS category_id,
                 COALESCE(prds.book_type, '') AS book_type,
 
-                COALESCE(prds.chapters, 0) AS chapters,
+                COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku, '') AS sku,
                 COALESCE(prds.size, '') AS size,
@@ -202,7 +202,7 @@ public function getContinueToReadBookList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
-                COALESCE(prds.chapters, 0) AS chapters,
+                COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
                 COALESCE(prds.size,'') as size,
@@ -292,7 +292,7 @@ public function getTopReadsBookList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
-                COALESCE(prds.chapters, 0) AS chapters,
+                COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
                 COALESCE(prds.size,'') as size,
@@ -396,7 +396,7 @@ public function getSearchBookList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
-                COALESCE(prds.chapters, 0) AS chapters,
+                COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
                 COALESCE(prds.size,'') as size,
@@ -569,7 +569,7 @@ public function getSearchAudioBookList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
-                COALESCE(prds.chapters, 0) AS chapters,
+                COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
                 COALESCE(prds.size,'') as size,
@@ -681,7 +681,7 @@ public function getSearchAudioBookList($data){
             COALESCE(prds.category_id,0) as category_id,
             COALESCE(prds.book_type,'') as book_type,
 
-            COALESCE(prds.chapters, 0) AS chapters,
+            COALESCE(prds.chapters, 0) AS total_chapters,
 
             COALESCE(prds.sku,'') as sku,
             COALESCE(prds.size,'') as size,
@@ -819,7 +819,7 @@ public function getDetailsCatalogueList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
-                COALESCE(prds.chapters, 0) AS chapters,
+                COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
                 COALESCE(prds.size,'') as size,
