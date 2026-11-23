@@ -6,11 +6,21 @@
         .row-selected {
             background-color: #92b7da !important;
         }
+
+        .products-page {
+            width: 100%;
+            max-width: none !important;
+        }
+
+        .products-page .table-responsive-lg,
+        .products-page table {
+            width: 100%;
+        }
     </style>
 @endsection
 
 @section('content')
-    <div class="container pd-x-0">
+    <div class="container-fluid products-page pd-x-0">
         <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
             <div>
                 <nav aria-label="breadcrumb">
