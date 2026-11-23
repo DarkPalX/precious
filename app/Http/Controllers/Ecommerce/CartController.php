@@ -7,6 +7,7 @@ use App\Mail\SalesCompleted;
 use App\Mail\BankPaymentStatusMail;
 use App\Mail\EwalletPaymentStatusMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -823,6 +824,13 @@ class CartController extends Controller
 
         $customer  = User::find(Auth::id());
         $orders    = Cart::where('user_id',Auth::id())->where('qty', '>', 0)->get();    
+
+        // A completed checkout clears the cart. Do not show a stale checkout
+        // page when the user navigates back after placing an order.
+        if ($orders->isEmpty()) {
+            return redirect()->route('product.front.list');
+        }
+
         $cart      = CouponCartDiscount::where('customer_id',Auth::id())->first();
 
         $coupons = CouponCart::where('customer_id', Auth::id())->get();
@@ -935,6 +943,13 @@ class CartController extends Controller
 
     public static function save_sales_process(Request $request) 
     {
+        // Browser-back/resubmit protection: the cart is removed after the
+        // first successful checkout, so an empty cart cannot create another order.
+        if (!Cart::where('user_id', Auth::id())->where('qty', '>', 0)->exists()) {
+            return redirect()->route('product.front.list')
+                ->with('error', 'Your cart is empty. This checkout has already been completed.');
+        }
+
         $coupon_total_discount = number_format(($request->coupon_total_discount  + $request->shippingFeeDiscount),2,'.','');
         
         $totalPrice = number_format($request->total_amount,2,'.','');
@@ -991,16 +1006,21 @@ class CartController extends Controller
 
         Cart::where('user_id', Auth::id())->delete();
 
-        if (env('MAIL_HOST') !== 'sandbox.smtp.mailtrap.io') {
-            Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));  
-        }
+        try {
+            Mail::to(Auth::user())->send(new SalesCompleted($salesHeader, Setting::info()));
 
-        if ($request->payment_method == 'bank') {
-            Mail::to(Auth::user())->send(new BankPaymentStatusMail($salesHeader, Setting::info()));
-        }
+            if ($request->payment_method == 'bank') {
+                Mail::to(Auth::user())->send(new BankPaymentStatusMail($salesHeader, Setting::info()));
+            }
 
-        if ($request->payment_method == 'ewallet') {
-            Mail::to(Auth::user())->send(new EwalletPaymentStatusMail($salesHeader, Setting::info()));
+            if ($request->payment_method == 'ewallet') {
+                Mail::to(Auth::user())->send(new EwalletPaymentStatusMail($salesHeader, Setting::info()));
+            }
+        } catch (\Throwable $exception) {
+            Log::warning('Order email notification failed after checkout.', [
+                'sales_header_id' => $salesHeader->id,
+                'message' => $exception->getMessage(),
+            ]);
         }
 
         //to check update coupon availability
@@ -1183,6 +1203,12 @@ class CartController extends Controller
     // }
     
     public function success(){
+
+        // The success page belongs to the checkout that just completed. Pull
+        // the marker so refresh/back cannot reopen the completed transaction.
+        if (!session()->pull('shid')) {
+            return redirect()->route('product.front.list');
+        }
         
         $page = new Page();
         $page->name = 'Success';

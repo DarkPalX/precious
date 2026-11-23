@@ -119,7 +119,7 @@
                                         <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 20px; margin-left: 20px;">
                                             <tr>
                                                 <td width="50" valign="middle">
-                                                    <img src="https://play-lh.googleusercontent.com/UblHlJXPdYZjXR9jJgkbVdKYQX2iLBGbFvbcITooYpg89d-_QBD5o_wfPtpJeo0Br6g=w240-h480-rw" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
+                                                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ8sURHYDshjhBfNJkE-mWMnV3U7n256pfSwiHCjTcuxQ1pvDpG" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
                                                 </td>
                                                 <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
                                                     Acct. Name: {{ $setting->bpi_account_name }}<br>
@@ -131,7 +131,7 @@
                                         <table border="0" cellpadding="0" cellspacing="0" style="margin-left: 20px;">
                                             <tr>
                                                 <td width="50" valign="middle">
-                                                    <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ8sURHYDshjhBfNJkE-mWMnV3U7n256pfSwiHCjTcuxQ1pvDpG" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
+                                                    <img src="https://play-lh.googleusercontent.com/UblHlJXPdYZjXR9jJgkbVdKYQX2iLBGbFvbcITooYpg89d-_QBD5o_wfPtpJeo0Br6g=w240-h480-rw" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
                                                 </td>
                                                 <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
                                                     Acct. Name: {{ $setting->bdo_account_name }}<br>
