@@ -167,6 +167,8 @@ public function getSubscribedReadBooksList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
+                COALESCE(prds.chapters, 0) AS total_chapters,
+
                 COALESCE(prds.sku,'') as sku,
                 COALESCE(prds.size,'') as size,
                 COALESCE(prds.weight,'') as weight,
@@ -303,7 +305,9 @@ public function getSubscribedReadBooksList($data){
           COALESCE(prds.file_url,'') as file_url,          
 
           COALESCE(prds.category_id,0) as category_id,
-          COALESCE(prds.book_type,'') as book_type,          
+          COALESCE(prds.book_type,'') as book_type,  
+
+          COALESCE(prds.chapters, 0) AS total_chapters,        
       
           COALESCE(prds.sku,'') as sku,          
           COALESCE(prds.size,'') as size,
