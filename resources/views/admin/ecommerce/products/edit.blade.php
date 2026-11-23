@@ -90,7 +90,9 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    @php($selectedGenres = old('genre_ids', $product->genres->pluck('id')->toArray()))
+                    @php
+                        $selectedGenres = old('genre_ids', $product->genres->pluck('id')->toArray());
+                    @endphp
                     <div class="form-group">
                         <label class="d-block">Genre</label>
                         <select name="genre_ids[]" id="genre_ids" class="selectpicker mg-b-5" multiple data-style="btn btn-outline-light btn-md btn-block tx-left" title="Select genre(s)" data-width="100%" data-live-search="true">

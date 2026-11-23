@@ -9,6 +9,7 @@ use Facades\App\Helpers\ListingHelper;
 use Facades\App\Helpers\FileHelper;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 
 use App\Models\Ecommerce\{
@@ -716,8 +717,8 @@ class ProductController extends Controller
                 if($row > 1){
 
                     $genreMap = [];
-                    foreach (ProductGenre::where('status', 'PUBLISHED')->get() as $genre) {
-                        $genreMap[mb_strtolower(trim($genre->name))] = $genre->id;
+                    foreach (ProductGenre::withTrashed()->get() as $genre) {
+                        $genreMap[mb_strtolower(trim($genre->name))] = $genre;
                     }
 
                     $categoryMap = [];
@@ -738,8 +739,19 @@ class ProductController extends Controller
                     $genreIds = [];
                     foreach ($genreNames as $genreName) {
                         $genreKey = mb_strtolower(trim($genreName));
-                        if (isset($genreMap[$genreKey])) {
-                            $genreIds[] = $genreMap[$genreKey];
+                        if (!isset($genreMap[$genreKey])) {
+                            $genreMap[$genreKey] = ProductGenre::create([
+                                'name' => trim($genreName),
+                                'slug' => Str::slug(trim($genreName)),
+                                'status' => 'PUBLISHED',
+                                'created_by' => Auth::id(),
+                            ]);
+                        } elseif ($genreMap[$genreKey]->trashed()) {
+                            $genreMap[$genreKey]->restore();
+                        }
+
+                        if ($genreMap[$genreKey]) {
+                            $genreIds[] = $genreMap[$genreKey]->id;
                         }
                     }
                     $description = nl2br(iconv(mb_detect_encoding($data[7], mb_detect_order(), true), "UTF-8//IGNORE", $data[7]));
