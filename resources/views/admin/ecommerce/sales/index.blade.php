@@ -107,7 +107,7 @@
                                     </div>
                                     
                                     <div class="mg-b-10 mg-r-5">
-                                        <input name="search" type="search" id="search" class="form-control" style="font-size:12px;width: 150px;"  placeholder="Search Order Number" value="{{ $filter->search }}">
+                                        <input name="search" type="search" id="search" class="form-control" style="font-size:12px;width: 150px;"  placeholder="Search Order # or Buyer Name" value="{{ request('search') }}">
                                     </div>
 
                                     <div class="mg-b-10">

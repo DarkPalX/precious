@@ -202,8 +202,14 @@ class SalesController extends Controller
             $sales = $sales->where('created_at','>=',$_GET['startdate']);
         if(isset($_GET['enddate']) && $_GET['enddate']<>'')
             $sales = $sales->where('created_at','<=',$_GET['enddate'].' 23:59:59');
-        if(isset($_GET['search']) && $_GET['search']<>'')
-            $sales = $sales->where('order_number','like','%'.$_GET['search'].'%');
+        if ($request->filled('search')) {
+            $search = trim($request->get('search'));
+
+            $sales = $sales->where(function ($query) use ($search) {
+                $query->where('order_number', 'like', "%{$search}%")
+                    ->orWhere('customer_name', 'like', "%{$search}%");
+            });
+        }
         if(isset($_GET['customer_filter']) && $_GET['customer_filter']<>'')
             $sales = $sales->where('customer_name','like','%'.$_GET['customer_filter'].'%');
         // if(isset($_GET['order_source_filter']) && $_GET['order_source_filter']<>'')
