@@ -20,6 +20,43 @@
             width: 0;
             display: none;
         }
+
+        .ui-autocomplete {
+            z-index: 2000 !important;
+            width: auto;
+            max-height: 220px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 4px 0;
+            background: #ffffff;
+            border: 1px solid #ced4da;
+            box-shadow: 0 3px 8px rgba(0,0,0,.15);
+        }
+
+        .ui-autocomplete .ui-menu-item-wrapper {
+            padding: 6px 10px;
+            color: #333333;
+            cursor: pointer;
+        }
+
+        .ui-autocomplete .ui-menu-item-wrapper.ui-state-active {
+            margin: 0;
+            background: #0d6efd;
+            border: 0;
+            color: #ffffff;
+        }
+
+        .ui-helper-hidden-accessible {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
     </style>
 @endsection
 
@@ -97,13 +134,9 @@
 
                     <div class="form-group">
                         <label class="d-block">Genre</label>
-                        <select name="genre_ids[]" id="genre_ids" class="selectpicker mg-b-5" multiple data-style="btn btn-outline-light btn-md btn-block tx-left" title="Select genre(s)" data-width="100%" data-live-search="true">
-                            @foreach ($genres as $genre)
-                                <option value="{{ $genre->id }}" @if(in_array($genre->id, old('genre_ids', []))) selected @endif>{{ $genre->name }}</option>
-                            @endforeach
-                        </select>
-                        <small class="text-muted">You may select more than one genre.</small>
-                        @error('genre_ids') <span class="text-danger">{{ $message }}</span> @enderror
+                        <input name="genre_names" id="genre_names" type="text" class="form-control" value="{{ old('genre_names') }}" data-role="tagsinput" placeholder="Type a genre and press Enter">
+                        <small class="text-muted">Type a genre and press Enter. Multiple genres are supported.</small>
+                        @error('genre_names') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     
                     <div class="form-group">
@@ -441,6 +474,24 @@
             let objUpload;
             let objRemove;
             $('.selectpicker').selectpicker();
+
+            var genreSuggestions = @json($genres->pluck('name')->values());
+            var genreInput = $('#genre_names').tagsinput('input');
+            genreInput.autocomplete({
+                source: genreSuggestions,
+                minLength: 0,
+                open: function () {
+                    $('.ui-autocomplete').css('width', $('#genre_names').closest('.bootstrap-tagsinput').outerWidth() + 'px');
+                },
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $('#genre_names').tagsinput('add', ui.item.value);
+                    genreInput.val('');
+                }
+            }).on('focus', function () {
+                $(this).autocomplete('search', this.value);
+            });
+
 
             $("#customSwitch1").change(function() {
                 if(this.checked) {

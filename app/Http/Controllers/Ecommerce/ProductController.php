@@ -138,7 +138,7 @@ class ProductController extends Controller
         }
 
         $product = Product::create($requestData);
-        $product->genres()->sync($request->input('genre_ids', []));
+        $this->syncProductGenres($product, $request->input('genre_ids', []), $request->input('genre_names'));
 
         $this->tags($product->id, $request->tags);
 
@@ -192,6 +192,45 @@ class ProductController extends Controller
                 'created_by' => Auth::id()
             ]);
         }
+    }
+
+    private function syncProductGenres(Product $product, array $genreIds = [], $newGenres = null)
+    {
+        $existingGenreIds = [];
+        $newGenreNames = array_filter(array_map('trim', explode(',', (string) $newGenres)));
+
+        foreach ($genreIds as $genreId) {
+            if (is_numeric($genreId)) {
+                $existingGenreIds[] = (int) $genreId;
+            } elseif (strpos($genreId, 'new:') === 0) {
+                $newGenreNames[] = trim(substr($genreId, 4));
+            }
+        }
+
+        $genreMap = [];
+        foreach (ProductGenre::withTrashed()->get() as $genre) {
+            $genreMap[mb_strtolower(trim($genre->name))] = $genre;
+        }
+
+        foreach (array_filter(array_map('trim', $newGenreNames)) as $genreName) {
+            $key = mb_strtolower($genreName);
+
+            if (!isset($genreMap[$key])) {
+                $genreMap[$key] = ProductGenre::create([
+                    'name' => $genreName,
+                    'slug' => Str::slug($genreName),
+                    'status' => 'PUBLISHED',
+                    'created_by' => Auth::id(),
+                ]);
+            } elseif ($genreMap[$key]->trashed()) {
+                $genreMap[$key]->restore();
+            }
+
+            $existingGenreIds[] = $genreMap[$key]->id;
+        }
+
+        $existingGenreIds = ProductGenre::whereIn('id', array_unique($existingGenreIds))->pluck('id')->all();
+        $product->genres()->sync(array_values(array_unique($existingGenreIds)));
     }
 
 
@@ -265,7 +304,7 @@ class ProductController extends Controller
         }
 
         $product->update($requestData);
-        $product->genres()->sync($request->input('genre_ids', []));
+        $this->syncProductGenres($product, $request->input('genre_ids', []), $request->input('genre_names'));
         $this->update_tags($product->id,$request->tags);
 
         $photos = $this->set_order(request('photos'));
