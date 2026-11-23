@@ -46,6 +46,8 @@
                                     <th style="width: 20%;overflow: hidden;">Name</th>
                                     <th style="width: 10%;">Author</th>
                                     <th style="width: 10%;">Category</th>
+                                    <th style="width: 15%;">Genre</th>
+                                    <th style="width: 8%;">Chapters</th>
                                     <th style="width: 10%;">Price</th>
                                     <th style="width: 10%;">Inventory</th>
                                     <th style="width: 10%;">Status</th>
@@ -79,6 +81,8 @@
                                     </td>
                                     <td>{{ $product->author ?? 'Unknown' }}</td>
                                     <td>{{ $product->category->name }}</td>
+                                    <td>{{ $product->genres->pluck('name')->implode(', ') }}</td>
+                                    <td>{{ $product->chapters ?? 0 }}</td>
                                     <td>
                                         @if($product->discount_price > 0)
                                             <del class="text-secondary">{{ $product->currency }} {{ number_format($product->price,2) }}</del>
@@ -138,7 +142,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <th colspan="8" style="text-align: center;"> <p class="text-danger">No products found.</p></th>
+                                    <th colspan="11" style="text-align: center;"> <p class="text-danger">No products found.</p></th>
                                 </tr>
                             @endforelse
                             </tbody>

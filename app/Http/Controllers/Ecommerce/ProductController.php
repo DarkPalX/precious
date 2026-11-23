@@ -672,7 +672,7 @@ class ProductController extends Controller
         );
 
         $products = Product::all();
-        $columns = array('SKU', 'Name', 'Author', 'Book Type', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point', 'Stock');
+        $columns = array('SKU', 'Name', 'Author', 'Book Type', 'Category', 'Genre', 'Chapters', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point', 'Stock');
 
         foreach($attributes as $attr){
             array_push($columns, $attr->name);
@@ -706,7 +706,7 @@ class ProductController extends Controller
                 // number of fields in the csv
                 $col_count = count($data);
 
-                $excel_columns = array('SKU', 'Name', 'Author', 'Book Type', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point', 'Stock');
+                $excel_columns = array('SKU', 'Name', 'Author', 'Book Type', 'Category', 'Genre', 'Chapters', 'Description', 'Price', 'Discount Price', 'Size', 'Weight', 'Texture', 'UoM', 'Reorder Point', 'Stock');
 
                 $attributes = FormAttribute::orderBy('name', 'asc')->get();
                 foreach($attributes as $attr){
@@ -715,6 +715,16 @@ class ProductController extends Controller
 
                 if($row > 1){
 
+                    $genreMap = [];
+                    foreach (ProductGenre::where('status', 'PUBLISHED')->get() as $genre) {
+                        $genreMap[mb_strtolower(trim($genre->name))] = $genre->id;
+                    }
+
+                    $categoryMap = [];
+                    foreach (ProductCategory::get() as $category) {
+                        $categoryMap[mb_strtolower(trim($category->name))] = $category->id;
+                    }
+
                     $code = mb_convert_encoding($data[0], "UTF-8");
                     // $name = mb_convert_encoding($data[1], "UTF-8");
                     $slug = Page::convert_to_slug($data[1]);
@@ -722,7 +732,17 @@ class ProductController extends Controller
                     // Format Description
                     $name = nl2br(iconv(mb_detect_encoding($data[1], mb_detect_order(), true), "UTF-8//IGNORE", $data[1]));
                     $author = nl2br(iconv(mb_detect_encoding($data[2], mb_detect_order(), true), "UTF-8//IGNORE", $data[2]));
-                    $description = nl2br(iconv(mb_detect_encoding($data[4], mb_detect_order(), true), "UTF-8//IGNORE", $data[4]));
+                    $categoryName = trim(mb_convert_encoding($data[4] ?? '', "UTF-8"));
+                    $categoryId = $categoryMap[mb_strtolower($categoryName)] ?? null;
+                    $genreNames = array_filter(array_map('trim', explode(',', mb_convert_encoding($data[5] ?? '', "UTF-8"))));
+                    $genreIds = [];
+                    foreach ($genreNames as $genreName) {
+                        $genreKey = mb_strtolower(trim($genreName));
+                        if (isset($genreMap[$genreKey])) {
+                            $genreIds[] = $genreMap[$genreKey];
+                        }
+                    }
+                    $description = nl2br(iconv(mb_detect_encoding($data[7], mb_detect_order(), true), "UTF-8//IGNORE", $data[7]));
 
 
                     $product = Product::create([
@@ -730,20 +750,24 @@ class ProductController extends Controller
                         'name' => $name,
                         'author' => $author,
                         'book_type' => $data[3],
+                        'category_id' => $categoryId,
+                        'chapters' => ($data[6] ?? '') !== '' ? (int) $data[6] : null,
                         'slug' => $slug,
                         'description' => '<p>' . $description . '</p>',
-                        'price' => str_replace(',','',$data[5]) < 0 ? 0.0000 : str_replace(',','',$data[5]),
-                        'discount_price' => str_replace(',','',$data[6]) < 0 ? 0.0000 : str_replace(',','',$data[6]),
-                        'size' => $data[7],
-                        'weight' => $data[8],
-                        'texture' => $data[9],
-                        'uom' => $data[10],
-                        'reorder_point' => $data[11] ?: 0,
+                        'price' => str_replace(',','',$data[8]) < 0 ? 0.0000 : str_replace(',','',$data[8]),
+                        'discount_price' => str_replace(',','',$data[9]) < 0 ? 0.0000 : str_replace(',','',$data[9]),
+                        'size' => $data[10],
+                        'weight' => $data[11],
+                        'texture' => $data[12],
+                        'uom' => $data[13],
+                        'reorder_point' => $data[14] ?: 0,
                         'status' => 'PRIVATE',
                         'created_by' => Auth::id()
                     ]);
 
-                    if (is_numeric($data[12]) && $data[12] > 0) {
+                    $product->genres()->sync($genreIds);
+
+                    if (is_numeric($data[15]) && $data[15] > 0) {
 
                         $header= InventoryReceiverHeader::create([
                             'user_id' => Auth::id(),
@@ -754,14 +778,14 @@ class ProductController extends Controller
                 
                         InventoryReceiverDetail::create([
                             'product_id' => $product->id,
-                            'inventory' => $data[12] ?: 0,
+                            'inventory' => $data[15] ?: 0,
                             'header_id' => $header->id
                         ]);
                         
                     }
 
 
-                    for ($x = 8; $x <= $col_count; $x++) {
+                    for ($x = 17; $x <= $col_count; $x++) {
 
                         if($data[$x-1] != ""){
                             ProductAdditionalInfo::create([
