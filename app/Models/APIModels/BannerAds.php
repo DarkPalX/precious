@@ -58,11 +58,12 @@ class BannerAds extends Model
     
   // }
 
-  public function getHomeSliderBannerList($data){
+public function getHomeSliderBannerList($data){
 
     $cacheKey = 'home_slider_banners';
-    // 1 Hour Set To Cache
-    return Cache::remember($cacheKey, 3600, function() {
+
+    // Cache for 2 minutes
+    return Cache::remember($cacheKey, now()->addMinutes(2), function() {
 
         $query = DB::table('mobile_banners as mob_ban')
             ->join('mobile_albums as mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id')
@@ -74,7 +75,6 @@ class BannerAds extends Model
                 COALESCE(mob_ban.description,'') as description,
                 COALESCE(mob_ban.alt,'') as alt,
                 COALESCE(mob_ban.image_path,'') as image_path,
-
                 COALESCE(mob_ban.button_text,'') as button_text,
                 COALESCE(mob_ban.url,'') as url_link,
                 COALESCE(mob_ban.order,0) as order_sequence
@@ -86,7 +86,7 @@ class BannerAds extends Model
             ->whereNull('mob_ban.deleted_at')
 
             ->orderBy('mob_ban.order', 'ASC')
-            ->limit(5);
+            ->limit(15);
 
         return $query->get();
     });
@@ -157,7 +157,7 @@ class BannerAds extends Model
             ->whereNull('mob_ban.deleted_at')
 
             ->orderBy('mob_ban.order', 'ASC')
-            ->limit(10);
+            ->limit(15);
 
         return $query->get();
     });
@@ -198,11 +198,12 @@ class BannerAds extends Model
     
   // }
 
-  public function getPopUpBannerListAll($data){
+  public function getPopUpBannerList($data){
 
-    $cacheKey = 'popup_banner_list_all';
+    $cacheKey = 'popup_banner_list';
 
-    return Cache::remember($cacheKey, 3600, function() {
+    // Cache for 2 minutes
+    return Cache::remember($cacheKey, now()->addMinutes(2), function() {
 
         $query = DB::table('mobile_banners as mob_ban')
             ->join('mobile_albums as mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id')
@@ -214,21 +215,19 @@ class BannerAds extends Model
                 COALESCE(mob_ban.description,'') as description,
                 COALESCE(mob_ban.alt,'') as alt,
                 COALESCE(mob_ban.image_path,'') as image_path,
-
                 COALESCE(mob_ban.button_text,'') as button_text,
                 COALESCE(mob_ban.url,'') as url_link,
-
-                COALESCE(mob_alb.banner_type,'') as banner_type,
                 COALESCE(mob_ban.order,0) as order_sequence
             ")
 
             ->where('mob_alb.status', '=', 1)
             ->where('mob_alb.type', '=', 'main_banner')
+            ->where('mob_alb.banner_type', '=', 'image')
             ->where('mob_ban.album_id', '=', 1)
             ->whereNull('mob_ban.deleted_at')
 
             ->orderBy('mob_ban.order', 'ASC')
-            ->limit(10);
+            ->limit(15);
 
         return $query->get();
     });
