@@ -146,8 +146,8 @@
                                                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAoRWTh82aAgiQ3VG5yXaV0vX0LTO42ozax3EuhDveqQ&s" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
                                                 </td>
                                                 <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
-                                                    Acct. Name: Precious Pages Corporation<br>
-                                                    Account No.: 1425 000 0889
+                                                    Acct. Name: {{ $setting->chinabank_account_name }}<br>
+                                                    Account No.: {{ $setting->chinabank_account_number }}
                                                 </td>
                                             </tr>
                                         </table>
@@ -158,8 +158,8 @@
                                                     <img src="https://companieslogo.com/img/orig/MTPOY-1a51b472.png?t=1720244493" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
                                                 </td>
                                                 <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
-                                                    Acct. Name: Precious Pages Corporation<br>
-                                                    Account No.: 0617 0615 09417
+                                                    Acct. Name: {{ $setting->metrobank_account_name }}<br>
+                                                    Account No.: {{ $setting->metrobank_account_number }}
                                                 </td>
                                             </tr>
                                         </table>
@@ -170,8 +170,8 @@
                                                     <img src="https://integratedreport.securitybank.com/wp-content/uploads/2023/04/security-bank-icon.png" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
                                                 </td>
                                                 <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
-                                                    Acct. Name: Precious Pages Corporation<br>
-                                                    Account No.: 0000077982455
+                                                    Acct. Name: {{ $setting->security_bank_account_name }}<br>
+                                                    Account No.: {{ $setting->security_bank_account_number }}
                                                 </td>
                                             </tr>
                                         </table>

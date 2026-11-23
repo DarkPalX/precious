@@ -697,6 +697,42 @@
                                         </div>
                                     </div>
 
+                                    <h6>Chinabank</h6>
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Account Name <span class="tx-danger">*</span></label>
+                                            <input type="text" name="chinabank_account_name" class="form-control" value="{{ old('chinabank_account_name',$web->chinabank_account_name) }}" required maxlength="150">
+                                        </div>
+                                        <div class="parsley-input">
+                                            <label>Account Number <span class="tx-danger">*</span></label>
+                                            <input type="text" name="chinabank_account_number" class="form-control" value="{{ old('chinabank_account_number',$web->chinabank_account_number) }}" required maxlength="150">
+                                        </div>
+                                    </div>
+
+                                    <h6>Metrobank</h6>
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Account Name <span class="tx-danger">*</span></label>
+                                            <input type="text" name="metrobank_account_name" class="form-control" value="{{ old('metrobank_account_name',$web->metrobank_account_name) }}" required maxlength="150">
+                                        </div>
+                                        <div class="parsley-input">
+                                            <label>Account Number <span class="tx-danger">*</span></label>
+                                            <input type="text" name="metrobank_account_number" class="form-control" value="{{ old('metrobank_account_number',$web->metrobank_account_number) }}" required maxlength="150">
+                                        </div>
+                                    </div>
+
+                                    <h6>Security Bank</h6>
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Account Name <span class="tx-danger">*</span></label>
+                                            <input type="text" name="security_bank_account_name" class="form-control" value="{{ old('security_bank_account_name',$web->security_bank_account_name) }}" required maxlength="150">
+                                        </div>
+                                        <div class="parsley-input">
+                                            <label>Account Number <span class="tx-danger">*</span></label>
+                                            <input type="text" name="security_bank_account_number" class="form-control" value="{{ old('security_bank_account_number',$web->security_bank_account_number) }}" required maxlength="150">
+                                        </div>
+                                    </div>
+
                                     <hr>
                                     <h5>E-Wallets</h5>
 
