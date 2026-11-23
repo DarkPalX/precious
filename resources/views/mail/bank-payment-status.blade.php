@@ -37,16 +37,37 @@
                     <tr>
                         <td style="padding:15px;">
                             <strong>Bank Details</strong><br><br>
-                            Bank Name: <strong>BDO Unibank</strong><br>
+                            Bank Name: <strong>BPI</strong><br>
+                            Account Name: <strong>{{ $setting->bpi_account_name }}</strong><br>
+                            Account Number: <strong>{{ $setting->bpi_account_number }}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:15px;">
+                            Bank Name: <strong>BDO</strong><br>
                             Account Name: <strong>{{ $setting->bdo_account_name }}</strong><br>
                             Account Number: <strong>{{ $setting->bdo_account_number }}</strong>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:15px;">
-                            Bank Name: <strong>BPI</strong><br>
-                            Account Name: <strong>{{ $setting->bpi_account_name }}</strong><br>
-                            Account Number: <strong>{{ $setting->bpi_account_number }}</strong>
+                            Bank Name: <strong>Chinabank</strong><br>
+                            Account Name: <strong>Precious Pages Corporation</strong><br>
+                            Account Number: <strong>1425 000 0889</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:15px;">
+                            Bank Name: <strong>Metrobank</strong><br>
+                            Account Name: <strong>Precious Pages Corporation</strong><br>
+                            Account Number: <strong>0617 0615 09417</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:15px;">
+                            Bank Name: <strong>Security Bank</strong><br>
+                            Account Name: <strong>Precious Pages Corporation</strong><br>
+                            Account Number: <strong>0000077982455</strong>
                         </td>
                     </tr>
                 </table>

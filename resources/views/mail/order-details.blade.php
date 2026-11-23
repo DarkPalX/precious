@@ -128,7 +128,7 @@
                                             </tr>
                                         </table>
 
-                                        <table border="0" cellpadding="0" cellspacing="0" style="margin-left: 20px;">
+                                        <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 20px; margin-left: 20px;">
                                             <tr>
                                                 <td width="50" valign="middle">
                                                     <img src="https://play-lh.googleusercontent.com/UblHlJXPdYZjXR9jJgkbVdKYQX2iLBGbFvbcITooYpg89d-_QBD5o_wfPtpJeo0Br6g=w240-h480-rw" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
@@ -136,6 +136,42 @@
                                                 <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
                                                     Acct. Name: {{ $setting->bdo_account_name }}<br>
                                                     Account No.: {{ $setting->bdo_account_number }}
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 20px; margin-left: 20px;">
+                                            <tr>
+                                                <td width="50" valign="middle">
+                                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAoRWTh82aAgiQ3VG5yXaV0vX0LTO42ozax3EuhDveqQ&s" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
+                                                </td>
+                                                <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
+                                                    Acct. Name: Precious Pages Corporation<br>
+                                                    Account No.: 1425 000 0889
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 20px; margin-left: 20px;">
+                                            <tr>
+                                                <td width="50" valign="middle">
+                                                    <img src="https://companieslogo.com/img/orig/MTPOY-1a51b472.png?t=1720244493" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
+                                                </td>
+                                                <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
+                                                    Acct. Name: Precious Pages Corporation<br>
+                                                    Account No.: 0617 0615 09417
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <table border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 20px; margin-left: 20px;">
+                                            <tr>
+                                                <td width="50" valign="middle">
+                                                    <img src="https://integratedreport.securitybank.com/wp-content/uploads/2023/04/security-bank-icon.png" width="45" style="border-radius: 4px; background: white; padding: 2px; display: block;">
+                                                </td>
+                                                <td style="font-size: 12px; color: #ffffff; line-height: 16px; padding-left: 10px; font-family: sans-serif;">
+                                                    Acct. Name: Precious Pages Corporation<br>
+                                                    Account No.: 0000077982455
                                                 </td>
                                             </tr>
                                         </table>
