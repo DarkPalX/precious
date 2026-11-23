@@ -58,12 +58,11 @@ class BannerAds extends Model
     
   // }
 
-public function getHomeSliderBannerList($data){
+  public function getHomeSliderBannerList($data){
 
     $cacheKey = 'home_slider_banners';
-
-    // Cache for 2 minutes
-    return Cache::remember($cacheKey, now()->addMinutes(2), function() {
+    // 1 Hour Set To Cache
+    return Cache::remember($cacheKey, 3600, function() {
 
         $query = DB::table('mobile_banners as mob_ban')
             ->join('mobile_albums as mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id')
@@ -75,6 +74,7 @@ public function getHomeSliderBannerList($data){
                 COALESCE(mob_ban.description,'') as description,
                 COALESCE(mob_ban.alt,'') as alt,
                 COALESCE(mob_ban.image_path,'') as image_path,
+
                 COALESCE(mob_ban.button_text,'') as button_text,
                 COALESCE(mob_ban.url,'') as url_link,
                 COALESCE(mob_ban.order,0) as order_sequence
@@ -86,7 +86,7 @@ public function getHomeSliderBannerList($data){
             ->whereNull('mob_ban.deleted_at')
 
             ->orderBy('mob_ban.order', 'ASC')
-            ->limit(15);
+            ->limit(5);
 
         return $query->get();
     });
@@ -157,7 +157,7 @@ public function getHomeSliderBannerList($data){
             ->whereNull('mob_ban.deleted_at')
 
             ->orderBy('mob_ban.order', 'ASC')
-            ->limit(15);
+            ->limit(10);
 
         return $query->get();
     });
@@ -198,12 +198,11 @@ public function getHomeSliderBannerList($data){
     
   // }
 
-  public function getPopUpBannerList($data){
+  public function getPopUpBannerListAll($data){
 
-    $cacheKey = 'popup_banner_list';
+    $cacheKey = 'popup_banner_list_all';
 
-    // Cache for 2 minutes
-    return Cache::remember($cacheKey, now()->addMinutes(2), function() {
+    return Cache::remember($cacheKey, 3600, function() {
 
         $query = DB::table('mobile_banners as mob_ban')
             ->join('mobile_albums as mob_alb', 'mob_alb.id', '=', 'mob_ban.album_id')
@@ -215,19 +214,21 @@ public function getHomeSliderBannerList($data){
                 COALESCE(mob_ban.description,'') as description,
                 COALESCE(mob_ban.alt,'') as alt,
                 COALESCE(mob_ban.image_path,'') as image_path,
+
                 COALESCE(mob_ban.button_text,'') as button_text,
                 COALESCE(mob_ban.url,'') as url_link,
+
+                COALESCE(mob_alb.banner_type,'') as banner_type,
                 COALESCE(mob_ban.order,0) as order_sequence
             ")
 
             ->where('mob_alb.status', '=', 1)
             ->where('mob_alb.type', '=', 'main_banner')
-            ->where('mob_alb.banner_type', '=', 'image')
             ->where('mob_ban.album_id', '=', 1)
             ->whereNull('mob_ban.deleted_at')
 
             ->orderBy('mob_ban.order', 'ASC')
-            ->limit(15);
+            ->limit(10);
 
         return $query->get();
     });
