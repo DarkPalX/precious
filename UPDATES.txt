@@ -1,3 +1,41 @@
+######################################### NOVEMBER 23, 2026 #######################################
+
+CREATE TABLE IF NOT EXISTS product_genres (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(150) NOT NULL,
+    slug VARCHAR(180) NOT NULL,
+    status VARCHAR(30) NOT NULL DEFAULT 'PUBLISHED',
+    created_by BIGINT UNSIGNED NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    updated_at TIMESTAMP NULL DEFAULT NULL,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY product_genres_name_unique (name),
+    UNIQUE KEY product_genres_slug_unique (slug),
+    KEY product_genres_status_index (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+CREATE TABLE IF NOT EXISTS product_genre (
+    product_id BIGINT UNSIGNED NOT NULL,
+    genre_id BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    updated_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (product_id, genre_id),
+    KEY product_genre_genre_id_index (genre_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+ALTER TABLE products
+ADD COLUMN chapters INT NULL DEFAULT NULL AFTER book_type;
+
+
+
+
+
+
 ######################################### NOVEMBER 11, 2026 #######################################
 SQL:
 

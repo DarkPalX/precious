@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 
 use App\Models\Ecommerce\{
-    ProductCategory, ProductPhoto, ProductTag, Product, InventoryReceiverHeader, InventoryReceiverDetail, Cart, FormAttribute, ProductAdditionalInfo, EbookCustomer
+    ProductCategory, ProductGenre, ProductPhoto, ProductTag, Product, InventoryReceiverHeader, InventoryReceiverDetail, Cart, FormAttribute, ProductAdditionalInfo, EbookCustomer
 };
 
 use App\Models\{
@@ -94,8 +94,9 @@ class ProductController extends Controller
         $parentCategories  = ProductCategory::where('parent_id', 0)->orderBy('name','asc')->get();
         $attributes = FormAttribute::orderBy('name', 'asc')->get();
         $products = Product::all();
+        $genres = ProductGenre::where('status', 'PUBLISHED')->orderBy('name')->get();
 
-        return view('admin.ecommerce.products.create',compact('parentCategories', 'attributes', 'products'));
+        return view('admin.ecommerce.products.create',compact('parentCategories', 'attributes', 'products', 'genres'));
     }
 
     public function create_bundle()
@@ -136,6 +137,7 @@ class ProductController extends Controller
         }
 
         $product = Product::create($requestData);
+        $product->genres()->sync($request->input('genre_ids', []));
 
         $this->tags($product->id, $request->tags);
 
@@ -215,8 +217,9 @@ class ProductController extends Controller
         $parentCategories  = ProductCategory::where('parent_id', 0)->orderBy('name','asc')->get();
 
         $attributes = FormAttribute::orderBy('name', 'asc')->get();
+        $genres = ProductGenre::where('status', 'PUBLISHED')->orderBy('name')->get();
 
-        return view('admin.ecommerce.products.edit',compact('product','parentCategories', 'attributes'));
+        return view('admin.ecommerce.products.edit',compact('product','parentCategories', 'attributes', 'genres'));
     }
 
     public function edit_bundle($id)
@@ -261,6 +264,7 @@ class ProductController extends Controller
         }
 
         $product->update($requestData);
+        $product->genres()->sync($request->input('genre_ids', []));
         $this->update_tags($product->id,$request->tags);
 
         $photos = $this->set_order(request('photos'));

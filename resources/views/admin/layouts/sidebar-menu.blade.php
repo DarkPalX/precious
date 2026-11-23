@@ -156,7 +156,7 @@
     @endif
 
     @if(auth()->user()->has_access_to_module('products') || auth()->user()->has_access_to_module('product_categories') || auth()->user()->has_access_to_module('brands'))
-        <li class="nav-item with-sub @if (request()->routeIs('products*') || request()->routeIs('product-categories*') || request()->routeIs('product-review*') || request()->routeIs('product-catalog*') || request()->routeIs('brands*')) active show @endif">
+        <li class="nav-item with-sub @if (request()->routeIs('products*') || request()->routeIs('product-categories*') || request()->routeIs('product-genres*') || request()->routeIs('product-review*') || request()->routeIs('product-catalog*') || request()->routeIs('brands*')) active show @endif">
             <a href="" class="nav-link"><i data-feather="box"></i> <span>Products</span></a>
             <ul>
                 @if (auth()->user()->has_access_to_module('products'))
@@ -172,6 +172,7 @@
                         <li @if (\Route::current()->getName() == 'product-categories.create') class="active" @endif><a href="{{ route('product-categories.create') }}">Create a Category</a></li>
                     @endif
                 @endif
+                <li @if (request()->routeIs('product-genres*')) class="active" @endif><a href="{{ route('product-genres.index') }}">Manage Genres</a></li>
                 @if (auth()->user()->has_access_to_module('product-review'))
                     <li @if (\Route::current()->getName() == 'product-review.index') class="active" @endif><a href="{{ route('product-review.index') }}">Product Reviews</a></li>
                 @endif

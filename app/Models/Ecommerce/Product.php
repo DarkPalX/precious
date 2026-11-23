@@ -19,7 +19,7 @@ use App\Models\Ecommerce\{
     Cart,
     CustomerFavorite,
     CustomerWishlist,
-    ProductReview
+    ProductReview, ProductGenre
 };
 
 use Carbon\Carbon;
@@ -34,6 +34,7 @@ class Product extends Model
     protected $fillable = [
         'sku',
         'book_type',
+        'chapters',
         'category_id',
         'name',
         'author',
@@ -108,6 +109,11 @@ class Product extends Model
                 'id' => '0',
                 'name' => 'Uncategorized'
             ]);
+    }
+
+    public function genres()
+    {
+        return $this->belongsToMany(ProductGenre::class, 'product_genre', 'product_id', 'genre_id');
     }
 
     public function brand()

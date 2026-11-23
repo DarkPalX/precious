@@ -73,6 +73,12 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    <div class="form-group">
+                        <label class="d-block">Number of Chapters</label>
+                        <input name="chapters" id="chapters" value="{{ old('chapters') }}" type="number" min="0" step="1" class="form-control @error('chapters') is-invalid @enderror">
+                        @error('chapters') <span class="text-danger">{{ $message }}</span> @enderror
+                    </div>
                     
                     <div class="form-group">
                         <label class="d-block">Category *</label>
@@ -87,6 +93,17 @@
                         @error('category_id')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="d-block">Genre</label>
+                        <select name="genre_ids[]" id="genre_ids" class="selectpicker mg-b-5" multiple data-style="btn btn-outline-light btn-md btn-block tx-left" title="Select genre(s)" data-width="100%" data-live-search="true">
+                            @foreach ($genres as $genre)
+                                <option value="{{ $genre->id }}" @if(in_array($genre->id, old('genre_ids', []))) selected @endif>{{ $genre->name }}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">You may select more than one genre.</small>
+                        @error('genre_ids') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     
                     <div class="form-group">

@@ -19,7 +19,7 @@ use App\Http\Controllers\Settings\{
 
 // Ecommerce Controller
 use App\Http\Controllers\Ecommerce\{
-    CustomerController, CustomerFrontController, ProductCategoryController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController, CustomerWishlistController, BannerAdController, ProductCatalogHeaderController
+    CustomerController, CustomerFrontController, ProductCategoryController, ProductGenreController, ProductController, ProductFrontController, InventoryReceiverHeaderController, PromoController, DeliverablecitiesController, CouponController, CouponFrontController, CartController, MyAccountController, SalesController, ReportsController, BrandController, FormAttributeController, ProductReviewController, CustomerFavoriteController, CustomerWishlistController, BannerAdController, ProductCatalogHeaderController
 };
 
 use App\Http\Controllers\MailingList\{SubscriberController, GroupController, CampaignController, SubscriberFrontController};
@@ -393,6 +393,7 @@ Route::group(['prefix' => 'admin-panel'], function (){
 
             // Product Categories
                 Route::resource('/admin/product-categories',ProductCategoryController::class);
+                Route::resource('/admin/product-genres', ProductGenreController::class)->except(['show']);
                 Route::post('/admin/product-category-get-slug', [ProductCategoryController::class, 'get_slug'])->name('product.category.get-slug');
                 Route::post('/admin/product-categories-single-delete', [ProductCategoryController::class, 'single_delete'])->name('product.category.single.delete');
                 Route::get('/admin/product-category/search', [ProductCategoryController::class, 'search'])->name('product.category.search');
