@@ -373,12 +373,13 @@
                                                 <div class="form-group">
                                                     <label for="delivery_status">Status</label>
                                                     <select id="delivery_status" class="custom-select mg-b-5" name="delivery_status" data-style="btn btn-outline-light btn-md btn-block tx-left" title="- None -" data-width="100%" required="required">
-                                                        <option value="Pending">Pending</option>
-                                                        <option value="Processing">Processing</option>
-                                                        <option value="In Transit">In Transit</option>
-                                                        <option value="Delivered">Delivered</option>
-                                                        <option value="Returned">Returned</option>
-                                                        <option value="Cancelled">Cancelled</option>
+                                                        <option value="Pending" @if($sale->delivery_status === 'Pending') selected @endif>Pending</option>
+                                                        <option value="Processing" @if($sale->delivery_status === 'Processing') selected @endif>Processing</option>
+                                                        <option value="Processing Stock" @if($sale->delivery_status === 'Processing Stock') selected @endif>Processing Stock</option>
+                                                        <option value="In Transit" @if($sale->delivery_status === 'In Transit') selected @endif>In Transit</option>
+                                                        <option value="Delivered" @if($sale->delivery_status === 'Delivered') selected @endif>Delivered</option>
+                                                        <option value="Returned" @if($sale->delivery_status === 'Returned') selected @endif>Returned</option>
+                                                        <option value="Cancelled" @if($sale->delivery_status === 'Cancelled') selected @endif>Cancelled</option>
                                                     </select>
                                                     <p class="tx-10 text-danger" id="error">
                                                         @error('delivery_status')

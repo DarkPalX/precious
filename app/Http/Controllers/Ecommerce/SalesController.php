@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Mail\DeliveryStatusMail;
+use App\Mail\PaymentStatusMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Str;
 
@@ -474,6 +476,8 @@ class SalesController extends Controller
             'payment_status' => $status
         ]);
 
+        $this->sendPaymentStatusEmail(SalesHeader::findOrFail($request->id));
+
         return back()->with('success','Successfully updated payment!');
         //return $status;
     }
@@ -533,9 +537,11 @@ class SalesController extends Controller
             'created_by' => Auth::id()
         ]);
 
-        $update = SalesHeader::whereId((int) $request->trx_id)->update([
+        SalesHeader::whereId((int) $request->trx_id)->update([
             'payment_status' => "PAID"
         ]);
+
+        $this->sendPaymentStatusEmail(SalesHeader::findOrFail($request->trx_id));
 
         return back()->with('success','Successfully updated payment status!');
 
@@ -546,7 +552,8 @@ class SalesController extends Controller
         $sales = explode(",", $request->del_id);
         foreach($sales as $sale){
             logger($sale);
-            $update = SalesHeader::whereId((int) $sale)->update([
+            $order = SalesHeader::findOrFail((int) $sale);
+            $order->update([
                 'delivery_status' => $request->delivery_status
             ]);
 
@@ -558,7 +565,6 @@ class SalesController extends Controller
             ]);
 
             if($request->delivery_status == 'Delivered'){
-                $order = SalesHeader::find($sale);
                 $order->update(['payment_status' => 'PAID']);
                 SalesPayment::create([
                     'sales_header_id' => $sale,
@@ -570,17 +576,57 @@ class SalesController extends Controller
                     'created_by' => Auth::id()
                 ]);
             }
-        }
 
-        $order = SalesHeader::findOrFail($request->del_id);
-        
-        Mail::to($order->customer_email)->send(new DeliveryStatusMail($order, Setting::info()));
+            $this->sendDeliveryStatusEmail($order->fresh());
+        }
         
         //to check update coupon availability
         Coupon::checkCouponAvailability();
 
         return back()->with('success','Successfully updated delivery status!');
 
+    }
+
+    private function sendPaymentStatusEmail(SalesHeader $order)
+    {
+        $recipient = $order->customer_email ?: optional($order->user)->email;
+
+        if (!$recipient) {
+            Log::warning('Payment status email skipped because the order has no customer email.', [
+                'sales_header_id' => $order->id,
+            ]);
+            return;
+        }
+
+        try {
+            Mail::to($recipient)->send(new PaymentStatusMail($order, Setting::info()));
+        } catch (\Throwable $exception) {
+            Log::warning('Payment status email failed.', [
+                'sales_header_id' => $order->id,
+                'message' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function sendDeliveryStatusEmail(SalesHeader $order)
+    {
+        $recipient = $order->customer_email ?: optional($order->user)->email;
+
+        if (!$recipient) {
+            Log::warning('Delivery status email skipped because the order has no customer email.', [
+                'sales_header_id' => $order->id,
+            ]);
+            return;
+        }
+
+        try {
+            Mail::to($recipient)->send(new DeliveryStatusMail($order, Setting::info()));
+        } catch (\Throwable $exception) {
+            Log::warning('Delivery status email failed.', [
+                'sales_header_id' => $order->id,
+                'message' => $exception->getMessage(),
+            ]);
+        }
     }
 
     public function view_payment($id)
