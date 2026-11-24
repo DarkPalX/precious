@@ -384,6 +384,17 @@ Route::post('/post-comment-review',[
    'as'=> 'post-comment-review'
 ]);
 
+// REPLY  COMMENT===================================================================
+Route::post('/get-review-reply-list',[
+   'uses'=>'App\Http\Controllers\ApiController@getBookReviewReply',
+   'as'=> 'get-review-reply-list'
+]);
+
+Route::post('/post-comment-review-reply',[
+   'uses'=>'App\Http\Controllers\ApiController@doPostCommentReviewReply',
+   'as'=> 'post-comment-review-reply'
+]);
+
 //BANNER ADS==========================================================================
 
 //SLIDER IMAGE ONLY
