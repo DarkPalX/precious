@@ -759,6 +759,31 @@
                                             <input type="text" name="maya_account_number" data-toggle="tooltip" data-placement="right" class="form-control" value="{{ old('maya_account_number',$web->maya_account_number) }}" data-parsley-class-handler="#website" required @htmlValidationMessage({{__('standard.empty_all_field')}}) maxlength="150">
                                         </div>
                                     </div>
+
+                                    <hr>
+                                    <h5>Other Settings</h5>
+                                    <p class="tx-13 text-muted">These messages are used in the delivery status email when an order is in transit. Line breaks are preserved.</p>
+
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Door-to-door Details</label>
+                                            <textarea name="door_to_door_details" class="form-control" rows="5">{{ old('door_to_door_details', $web->door_to_door_details) }}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Pickup Order Details</label>
+                                            <textarea name="pickup_order_details" class="form-control" rows="5">{{ old('pickup_order_details', $web->pickup_order_details) }}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="parsley-input">
+                                            <label>Ending Inquiry</label>
+                                            <textarea name="ending_inquiry" class="form-control" rows="5">{{ old('ending_inquiry', $web->ending_inquiry) }}</textarea>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <div class="col-lg-12 mg-t-30">

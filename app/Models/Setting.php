@@ -35,6 +35,9 @@ class Setting extends Model
                             'gcash_account_number',
                             'maya_account_name',
                             'maya_account_number',
+                            'door_to_door_details',
+                            'pickup_order_details',
+                            'ending_inquiry',
                             'cod_toggle'
                         ];
 
@@ -107,6 +110,9 @@ class Setting extends Model
         'gcash_account_number' => 'GCash account number',
         'maya_account_name' => 'Maya account name',
         'maya_account_number' => 'Maya account number',
+        'door_to_door_details' => 'door-to-door details',
+        'pickup_order_details' => 'pickup order details',
+        'ending_inquiry' => 'ending inquiry',
         'cod_toggle' => 'cod toggle'
 
     ];

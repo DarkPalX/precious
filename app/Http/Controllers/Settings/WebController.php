@@ -215,6 +215,9 @@ class WebController extends Controller
         $ecommerce->gcash_account_number = $request->gcash_account_number;
         $ecommerce->maya_account_name = $request->maya_account_name;
         $ecommerce->maya_account_number = $request->maya_account_number;
+        $ecommerce->door_to_door_details = $request->door_to_door_details;
+        $ecommerce->pickup_order_details = $request->pickup_order_details;
+        $ecommerce->ending_inquiry = $request->ending_inquiry;
 
         $ecommerce->save();
 

@@ -1,3 +1,15 @@
+######################################### NOVEMBER 24, 2026 #######################################
+
+ALTER TABLE settings
+ADD COLUMN door_to_door_details TEXT NULL,
+ADD COLUMN pickup_order_details TEXT NULL,
+ADD COLUMN ending_inquiry TEXT NULL;
+
+
+
+
+
+
 ######################################### NOVEMBER 23, 2026 #######################################
 
 CREATE TABLE IF NOT EXISTS product_genres (
