@@ -2351,6 +2351,60 @@ public function doPostCommentReview(Request $request){
            
   }
 
+//REPLY COMMENTS=====================================================================
+public function getBookReviewReply(Request $request){
+    
+    $Misc = new Misc();
+    $Review = new Review();
+
+    $response = "Failed";
+    $responseMessage = "";
+
+    
+    $data['ProductID']=$request->post('ProductID');
+    $data['ProductReviewID']=$request->post('ProductReviewID');
+
+    $data["SearchText"] = '';
+    $data["Status"] = '';
+    $data["PageNo"] = 0;
+    $data["Limit"] = 0;
+
+    $result=$Review->getReviewReplyList($data);  
+    return response()->json($result); 
+    
+}
+
+public function doPostCommentReviewReply(Request $request){
+
+    $Misc = new Misc();
+    $Review = new Review();
+
+    $response = "Failed";
+    $responseMessage = "";
+             
+    $data['UserID'] = $request->post('UserID');
+    $data['ProductReviewID'] = $request->post('ProductReviewID');
+    $data['ProductID'] = $request->post('ProductID');
+
+    $data['Reply'] = $request->post('Reply');
+
+
+    if(empty($data['Reply'])){
+      $ResponseMessage = 'Reply is required.';
+       return response()->json([
+           'response' => 'Failed',
+           'message' => $ResponseMessage,
+       ]);
+    }
+    
+    $retVal=$Review->doPostCommentReply($data);
+     return response()->json([
+      'response' => 'Success',
+      'message' => "Your reply has successfully send & subject for Admins approval.",
+    ]);                     
+           
+  }
+
 //SLIDER BANNER ADS=====================================================================
 public function getHomeSliderBanner(Request $request){
         
