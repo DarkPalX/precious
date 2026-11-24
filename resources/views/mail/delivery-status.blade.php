@@ -33,7 +33,7 @@
                         
                         <tr>
                             <td align="left" class="content-text">
-                                @php($isPickup = strtolower((string) $h->delivery_type) === 'pickup')
+                                @php($isPickup = preg_match('/pick[\s_-]*up/i', (string) $h->delivery_type) === 1)
                                 <p>Dear <strong>{{ $h->user->firstname }}</strong>,</p>
                                 <p>Good day!</p>
                                 
@@ -68,21 +68,28 @@
 
                                 {{-- 4. CONDITION FOR IN TRANSIT --}}
                                 @elseif($h->delivery_status == 'In Transit')
-                                    @if($isPickup)
-                                        <p>Your order <strong>(Invoice #{{ $h->order_number }})</strong> is ready for pickup. Please see the pickup details below:</p>
-                                        <p style="margin-bottom: 0;"><strong>FOR PICK-UP ORDERS</strong></p>
-                                        <ul>
-                                            <li><strong>Address:</strong> 16 Jrich Bldg. Sto. Domingo Ave. cor. P. Florentino, Quezon City, 1114</li>
-                                            <li><strong>Schedule:</strong> Monday to Friday, 10:00 AM &ndash; 5:00 PM</li>
-                                        </ul>
+                                    <p>We're pleased to inform you that your order <strong>(Invoice #{{ $h->order_number }})</strong> has been picked up and is now in-transit. It will be delivered soon!</p>
+
+                                    @if(!empty($setting->door_to_door_details))
+                                        <div>{!! nl2br(e($setting->door_to_door_details)) !!}</div>
                                     @else
-                                        <p>We are pleased to inform you that your order <strong>(Invoice #{{ $h->order_number }})</strong> is now in transit. Please see the delivery details below:</p>
                                         <p style="margin-bottom: 0;"><strong>DOOR-TO-DOOR DELIVERY</strong></p>
                                         <ul>
                                             <li><strong>Metro Manila:</strong> Delivered via Champ Courier (2-3 days)</li>
                                             <li><strong>Outside Metro Manila:</strong> Delivered via Flash Express, J&amp;T Express and other couriers (5-7 days)</li>
                                         </ul>
-                                        <p><strong>Note on Tracking:</strong> A tracking number will be provided by <strong>CHAMP COURIER</strong>.</p>
+                                    @endif
+
+                                    <p>To track your order, please contact your courier and use your order number for verification/tracking.</p>
+
+                                    @if(!empty($setting->pickup_order_details))
+                                        <div>{!! nl2br(e($setting->pickup_order_details)) !!}</div>
+                                    @else
+                                        <p style="margin-bottom: 0;"><strong>PICK-UP ORDERS</strong></p>
+                                        <ul>
+                                            <li><strong>Address:</strong> 16 Jrich Bldg. Sto. Domingo Ave. cor. P. Florentino, Quezon City, 1114</li>
+                                            <li><strong>Schedule:</strong> Monday to Friday, 10:00 AM &ndash; 5:00 PM</li>
+                                        </ul>
                                     @endif
 
                                 {{-- 5. DEFAULT (PROCESSING / OTHERS) --}}
@@ -100,11 +107,16 @@
 
                                 {{-- Universal Inquiry Text --}}
                                 @if($h->delivery_status != 'Delivered')
-                                <p>Should you have any inquiries, please feel free to contact us at 
-                                    <strong>{{ $setting->mobile_no }} (Mobile)</strong>, 
-                                    <strong>{{ $setting->tel_no }} (Landline)</strong>, 
-                                    or via email at <strong>{{ $setting->email }}</strong>.
-                                </p>
+                                    @if(!empty($setting->ending_inquiry))
+                                        <br>
+                                        <div>{!! nl2br(e($setting->ending_inquiry)) !!}</div>
+                                    @else
+                                        <p>Should you have any inquiries, please feel free to contact us at
+                                            <strong>{{ $setting->mobile_no }} (Mobile)</strong>,
+                                            <strong>{{ $setting->tel_no }} (Landline)</strong>,
+                                            or via email at <strong>{{ $setting->email }}</strong>.
+                                        </p>
+                                    @endif
                                 @endif
 
                                 <p>Thank you!</p>
