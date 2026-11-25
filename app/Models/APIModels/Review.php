@@ -24,6 +24,120 @@ use App\Models\APIModels\UserCustomer;
 
 class Review extends Model
 {
+
+  //BAD WORDS FILTER ====================================================
+  private $defaultBadWords = [
+    // English
+    'fuck', 'shit', 'bitch', 'asshole', 'bastard', 'dick', 'pussy',
+    'cunt', 'slut', 'whore', 'motherfucker', 'nigger', 'faggot',
+    // Filipino / Tagalog
+    'putang ina', 'putangina', 'puta', 'tangina', 'tang ina', 'gago',
+    'gaga', 'tarantado', 'ulol', 'bobo', 'tanga', 'pakyu', 'bwisit',
+    'leche', 'pokpok', 'kantot', 'hindot', 'burat', 'tite', 'puki',
+    'pekpek', 'kupal', 'inutil', 'lintik', 'hayop ka',
+  ];
+
+  //replce letter with these
+  private $leetMap = [
+    'a' => '[a@4]',
+    'e' => '[e3]',
+    'i' => '[i1!|]',
+    'o' => '[o0]',
+    's' => '[s$5]',
+    't' => '[t7+]',
+    'u' => '[uv]',
+  ];
+
+  private function getBadWords(){
+
+    $words = config('badwords.words', $this->defaultBadWords);
+
+    return is_array($words) ? $words : $this->defaultBadWords;
+  }
+
+  /**
+   * Build a case-insensitive regex for one bad word.
+   * - matches whole words only (so "class" or "assistant" are NOT censored)
+   * - allows leetspeak (sh1t, @sshole)
+   * - allows repeated letters (fuuuck)
+   * - allows common endings (fucker, fucking, shits)
+   */
+  private function buildBadWordPattern($word){
+
+    $word    = mb_strtolower(trim($word), 'UTF-8');
+    $letters = preg_split('//u', $word, -1, PREG_SPLIT_NO_EMPTY);
+    $pattern = '';
+
+    foreach($letters as $ch){
+
+      if($ch === ' '){
+        $pattern .= '\s+';
+        continue;
+      }
+
+      $class = isset($this->leetMap[$ch]) ? $this->leetMap[$ch] : preg_quote($ch, '/');
+
+      // + allows repeated letters: fuuuck
+      $pattern .= $class . '+';
+    }
+
+    return '/(?<![\p{L}\p{N}])' . $pattern . '(?:s|es|ed|er|ers|ing|in)?(?![\p{L}\p{N}])/iu';
+  }
+
+  /**
+   * Replace bad words in a text with asterisks (same length as the word).
+   * Example: "you are a fucking idiot" => "you are a ******* idiot"
+   */
+  public function filterBadWords($text, $mask = '*'){
+
+    $text = (string) $text;
+
+    if(trim($text) === ''){
+      return $text;
+    }
+
+    foreach($this->getBadWords() as $word){
+
+      if(trim($word) === ''){
+        continue;
+      }
+
+      $text = preg_replace_callback(
+        $this->buildBadWordPattern($word),
+        function($m) use ($mask){
+          return str_repeat($mask, mb_strlen($m[0], 'UTF-8'));
+        },
+        $text
+      );
+
+      // preg_replace_callback returns null on regex error, keep text safe
+      if($text === null){
+        return '';
+      }
+    }
+
+    return $text;
+  }
+
+  /**
+   * Returns true if the text contains at least one bad word.
+   * Useful if you want to reject the comment instead of censoring it.
+   */
+  public function hasBadWords($text){
+
+    $text = (string) $text;
+
+    foreach($this->getBadWords() as $word){
+
+      if(trim($word) !== '' && preg_match($this->buildBadWordPattern($word), $text)){
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  //REVIEW LIST ==========================================================
   
  public function getReviewList($data){
     
@@ -114,6 +228,9 @@ class Review extends Model
 
     $Comment=$data['Comment'];
     $Rating=$data['Rating'];
+
+    // Censor bad words 
+    $Comment = $this->filterBadWords($Comment);
     
     if($UserID> 0){
 
@@ -212,6 +329,9 @@ class Review extends Model
     $ProductReviewID=$data['ProductReviewID'];
 
     $Reply=$data['Reply'];
+
+    // Censor bad words 
+    $Reply = $this->filterBadWords($Reply);
     
     if($UserID> 0){
 
