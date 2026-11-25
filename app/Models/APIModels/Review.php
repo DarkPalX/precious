@@ -151,77 +151,49 @@ class Review extends Model
   
 
   //REPLY ===============================================================
+  public function getReviewReplyList($data){
 
-   public function getReviewReplyList($data){
-    
-    $ProductID  = $data['ProductID'];
-    $ProductReviewID  = $data['ProductReviewID'];
-    $Status     = $data['Status'];
-    $SearchText = $data['SearchText'];
-    
-    $Limit  = $data['Limit'];
-    $PageNo = $data['PageNo'];
+    $ProductReviewID = (int) ($data['ProductReviewID'] ?? 0);
+    $UserID          = (int) ($data['UserID'] ?? 0);
 
-    $cacheKey = 'review_reply_list_' . $ProductID . '_' . $Status . '_' . md5($SearchText);
+    $Limit  = (int) ($data['Limit'] ?? 100);
+    $PageNo = (int) ($data['PageNo'] ?? 1);
 
-    return Cache::remember($cacheKey, now()->addMinutes(10), function () use (
-        $ProductID,
-        $Status,
-        $SearchText
-    ) {
+    if ($Limit <= 0 || $Limit > 200) { $Limit = 100; }
+    if ($PageNo <= 0) { $PageNo = 1; }
 
-        $query = DB::table('product_reviews as revs')
-            ->join('users as usrs', 'usrs.id', '=', 'revs.user_id')
+    if ($ProductReviewID <= 0) {
+        return collect([]);
+    }
 
-            ->selectraw("
-                revs.id as review_ID,
+    $query = DB::table('product_reviews_reply as rr')
+        ->join('users as usrs', 'usrs.id', '=', 'rr.user_id')
+         
 
+           ->selectraw("
+                rr.id as reply_ID,
+                rr.product_review_id as review_ID,
                 COALESCE(usrs.avatar,'') as avatar,
 
-                COALESCE(revs.product_id,0) as product_id,
-                COALESCE(revs.product_name,'') as product_name,
-                COALESCE(revs.user_id,0) as user_id,
-                COALESCE(revs.name,'') as name,
-                COALESCE(revs.email,'') as email,
-                COALESCE(revs.comment,'') as comment,
-                COALESCE(revs.rating,0) as rating,
-
+                COALESCE(rr.product_id,0) as product_id,
+                COALESCE(rr.user_id,0) as user_id,
+                COALESCE(rr.name,'') as name,
+                COALESCE(rr.email,'') as email,
+                COALESCE(rr.reply,'') as reply,
+      
                 DATE_FORMAT(
-                    revs.created_at,
+                    rr.created_at,
                     '%m/%d/%Y %H:%i'
-                ) as rating_date_format,
+                ) as reply_date_format,
 
-                COALESCE(revs.status,'') as status,
-                COALESCE(revs.created_at,'') as created_at
+                COALESCE(rr.status,'') as status,
+                COALESCE(rr.created_at,'') as created_at
             ");
+        
+        $query->where('rr.product_review_id', '=', $ProductReviewID);
+        $query->where('rr.status', '=', 1);
 
-        $query->where('revs.product_id', '=', $ProductID);
-        $query->where('revs.status', '=', 1);
-
-        if($SearchText != ''){
-
-            $arSearchText = explode(" ", $SearchText);
-
-            if(count($arSearchText) > 0){
-
-                for($x = 0; $x < count($arSearchText); $x++) {
-
-                    $search = str_replace("'", "''", $arSearchText[$x]);
-
-                    $query->whereRaw(
-                        "CONCAT_WS(' ',
-                            COALESCE(revs.product_name,''),
-                            COALESCE(revs.comment,'')
-                        ) LIKE '%".$search."%'"
-                    );
-                }
-            }
-        }
-
-        $query->orderBy('revs.created_at', 'DESC');
-
-        return $query->limit(50)->get();
-    });
+    return $query->get();
 }
 
    public function doPostCommentReply($data) {
@@ -256,7 +228,7 @@ class Review extends Model
          $EmailAddress=$info->emailaddress;
      }
           
-      $ProductReviewID = DB::table('product_reviews')
+      $ProductReviewID = DB::table('product_reviews_reply')
             ->insertGetId([                                    
               'product_id' => $ProductID,
               'product_name' => $ProductName,                        
@@ -275,4 +247,5 @@ class Review extends Model
     return 'Success';
 
   }
+
 }
