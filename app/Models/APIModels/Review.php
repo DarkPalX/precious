@@ -55,13 +55,6 @@ class Review extends Model
     return is_array($words) ? $words : $this->defaultBadWords;
   }
 
-  /**
-   * Build a case-insensitive regex for one bad word.
-   * - matches whole words only (so "class" or "assistant" are NOT censored)
-   * - allows leetspeak (sh1t, @sshole)
-   * - allows repeated letters (fuuuck)
-   * - allows common endings (fucker, fucking, shits)
-   */
   private function buildBadWordPattern($word){
 
     $word    = mb_strtolower(trim($word), 'UTF-8');
@@ -84,10 +77,6 @@ class Review extends Model
     return '/(?<![\p{L}\p{N}])' . $pattern . '(?:s|es|ed|er|ers|ing|in)?(?![\p{L}\p{N}])/iu';
   }
 
-  /**
-   * Replace bad words in a text with asterisks (same length as the word).
-   * Example: "you are a fucking idiot" => "you are a ******* idiot"
-   */
   public function filterBadWords($text, $mask = '*'){
 
     $text = (string) $text;
@@ -110,7 +99,6 @@ class Review extends Model
         $text
       );
 
-      // preg_replace_callback returns null on regex error, keep text safe
       if($text === null){
         return '';
       }
@@ -119,16 +107,11 @@ class Review extends Model
     return $text;
   }
 
-  /**
-   * Returns true if the text contains at least one bad word.
-   * Useful if you want to reject the comment instead of censoring it.
-   */
+
   public function hasBadWords($text){
 
     $text = (string) $text;
-
     foreach($this->getBadWords() as $word){
-
       if(trim($word) !== '' && preg_match($this->buildBadWordPattern($word), $text)){
         return true;
       }
@@ -156,21 +139,19 @@ class Review extends Model
         $SearchText
     ) {
 
-        // ── NEW: one row per review with the number of VISIBLE replies ──
-        // Aggregated in a sub-query first, then LEFT JOINed, so a review
-        // with many replies is still returned as a single row (no row
-        // multiplication) and a review with no replies gets 0.
-        // Only approved replies (status = 1) are counted, which matches
-        // what getReviewReplyList() actually returns to the app.
-        $replyCounts = DB::table('product_reviews_reply')
-            ->selectRaw('product_review_id, COUNT(*) as total_reply')
+        // Number of APPROVED replies per review.
+     
+        $replyCounts = DB::table('product_reviews')
+            ->selectRaw('parent_id, COUNT(*) as total_reply')
             ->where('product_id', '=', $ProductID)
+            ->where('parent_id', '>', 0)
             ->where('status', '=', 1)
-            ->groupBy('product_review_id');
+            ->whereNull('deleted_at')
+            ->groupBy('parent_id');
 
         $query = DB::table('product_reviews as revs')
             ->join('users as usrs', 'usrs.id', '=', 'revs.user_id')
-            ->leftJoinSub($replyCounts, 'rc', 'rc.product_review_id', '=', 'revs.id')
+            ->leftJoinSub($replyCounts, 'rc', 'rc.parent_id', '=', 'revs.id')
 
             ->selectraw("
                 revs.id as review_ID,
@@ -198,6 +179,13 @@ class Review extends Model
 
         $query->where('revs.product_id', '=', $ProductID);
         $query->where('revs.status', '=', 1);
+        $query->whereNull('revs.deleted_at');
+
+        // ONLY real reviews - replies (parent_id > 0) must never show up here
+        $query->where(function ($q) {
+            $q->whereNull('revs.parent_id')
+              ->orWhere('revs.parent_id', '=', 0);
+        });
 
         if($SearchText != ''){
 
@@ -213,7 +201,6 @@ class Review extends Model
                         continue;
                     }
 
-                    // bound parameter instead of string concatenation
                     $query->whereRaw(
                         "CONCAT_WS(' ',
                             COALESCE(revs.product_name,''),
@@ -276,6 +263,7 @@ class Review extends Model
               'comment' => trim($Comment),
               'rating' => $Rating,
               'status' => 0,
+              'parent_id' => null,      // a review, not a reply
               'created_at' => $TODAY,
               'updated_at' => $TODAY,
             ]);
@@ -289,6 +277,7 @@ class Review extends Model
 
 
   //REPLY ===============================================================
+
   public function getReviewReplyList($data){
 
     $ProductReviewID = (int) ($data['ProductReviewID'] ?? 0);
@@ -304,40 +293,43 @@ class Review extends Model
         return collect([]);
     }
 
-    $query = DB::table('product_reviews_reply as rr')
+    $query = DB::table('product_reviews as rr')
         ->join('users as usrs', 'usrs.id', '=', 'rr.user_id')
 
+        ->selectRaw("
+            rr.id as reply_ID,
+            rr.parent_id as review_ID,
+            COALESCE(usrs.avatar,'') as avatar,
 
-           ->selectraw("
-                rr.id as reply_ID,
-                rr.product_review_id as review_ID,
-                COALESCE(usrs.avatar,'') as avatar,
+            COALESCE(rr.product_id,0) as product_id,
+            COALESCE(rr.user_id,0) as user_id,
+            COALESCE(rr.name,'') as name,
+            COALESCE(rr.email,'') as email,
+            COALESCE(rr.comment,'') as reply,
 
-                COALESCE(rr.product_id,0) as product_id,
-                COALESCE(rr.user_id,0) as user_id,
-                COALESCE(rr.name,'') as name,
-                COALESCE(rr.email,'') as email,
-                COALESCE(rr.reply,'') as reply,
+            DATE_FORMAT(
+                rr.created_at,
+                '%m/%d/%Y %H:%i'
+            ) as reply_date_format,
 
-                DATE_FORMAT(
-                    rr.created_at,
-                    '%m/%d/%Y %H:%i'
-                ) as reply_date_format,
+            COALESCE(rr.status,'') as status,
+            COALESCE(rr.created_at,'') as created_at,
 
-                COALESCE(rr.status,'') as status,
-                COALESCE(rr.created_at,'') as created_at
-            ");
+            CASE WHEN rr.user_id = ? THEN 1 ELSE 0 END as is_mine
+        ", [$UserID]);
 
-        $query->where('rr.product_review_id', '=', $ProductReviewID);
-        $query->where('rr.status', '=', 1);
+    $query->where('rr.parent_id', '=', $ProductReviewID);
+    $query->where('rr.status', '=', 1);
+    $query->whereNull('rr.deleted_at');
+
+
+    $query->orderBy('rr.created_at', 'ASC');
 
     return $query->get();
-}
+  }
 
-   public function doPostCommentReply($data) {
+  public function doPostCommentReply($data) {
 
-    $Misc  = New Misc();
-    $Book  = New Book();
     $UserCustomer  = New UserCustomer();
 
     $TODAY = date("Y-m-d H:i:s");
@@ -345,37 +337,55 @@ class Review extends Model
     $FullName="";
     $EmailAddress="";
 
-    $UserID=$data['UserID'];
-    $ProductID=$data['ProductID'];
-    $ProductReviewID=$data['ProductReviewID'];
+    $UserID          = (int) ($data['UserID'] ?? 0);
+    $ProductReviewID = (int) ($data['ProductReviewID'] ?? 0);
 
-    $Reply=$data['Reply'];
+    $Reply = trim((string) ($data['Reply'] ?? ''));
+
+    if($UserID <= 0 || $ProductReviewID <= 0 || $Reply === ''){
+      return 'Failed';
+    }
+
+    $parent = DB::table('product_reviews')
+          ->where('id', '=', $ProductReviewID)
+          ->where('status', '=', 1)
+          ->whereNull('deleted_at')
+          ->where(function ($q) {
+              $q->whereNull('parent_id')->orWhere('parent_id', '=', 0);
+          })
+          ->first();
+
+    if(!$parent){
+      return 'Failed';
+    }
 
     // Censor bad words
-    $Reply = $this->filterBadWords($Reply);
+    $Reply = trim($this->filterBadWords($Reply));
 
-    if($UserID> 0){
+    if($Reply === ''){
+      return 'Failed';
+    }
 
-     $info=$UserCustomer->getCustomerInformation($data);
-     if(isset($info)>0){
-         $FullName=$info->fullname;
-         $EmailAddress=$info->emailaddress;
-     }
+    $info=$UserCustomer->getCustomerInformation($data);
+    if(isset($info)>0){
+        $FullName=$info->fullname;
+        $EmailAddress=$info->emailaddress;
+    }
 
-      $ProductReviewID = DB::table('product_reviews_reply')
-            ->insertGetId([
-              'product_review_id' => $ProductReviewID,
-              'product_id' => $ProductID,
-              'user_id' => $UserID,
-              'name' => $FullName,
-              'email' => $EmailAddress,
-              'reply' => trim($Reply),
-              'status' => 0,
-              'created_at' => $TODAY,
-              'updated_at' => $TODAY,
-            ]);
-
-       }
+    DB::table('product_reviews')
+          ->insertGetId([
+            'parent_id'    => $ProductReviewID,       // the review this reply belongs to
+            'product_id'   => $parent->product_id,
+            'product_name' => $parent->product_name,
+            'user_id'      => $UserID,                // the person who replied
+            'name'         => $FullName,
+            'email'        => $EmailAddress,
+            'comment'      => $Reply,                 // reply text
+            'rating'       => 0,                      // NOT NULL column; replies have no stars
+            'status'       => 0,                      // waits for admin approval
+            'created_at'   => $TODAY,
+            'updated_at'   => $TODAY,
+          ]);
 
     return 'Success';
 
