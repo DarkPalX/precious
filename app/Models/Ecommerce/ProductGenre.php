@@ -11,9 +11,4 @@ class ProductGenre extends Model
 
     protected $table = 'product_genres';
     protected $fillable = ['name', 'slug', 'status', 'created_by'];
-
-    public function products()
-    {
-        return $this->belongsToMany(Product::class, 'product_genre', 'genre_id', 'product_id');
-    }
 }

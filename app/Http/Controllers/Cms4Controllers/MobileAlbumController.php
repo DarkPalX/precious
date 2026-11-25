@@ -58,6 +58,8 @@ class MobileAlbumController extends Controller
      */
     public function store(Request $request)
     {
+        $this->normalizeBannerUrls($request);
+
         if (MobileAlbum::has_invalid_data() || MobileBanner::has_invalid_data()) {
             $errors = MobileAlbum::get_error_messages()
                 ->merge(MobileBanner::get_error_messages());
@@ -120,6 +122,7 @@ class MobileAlbumController extends Controller
      */
     public function update(Request $request, MobileAlbum $mobile_album)
     {
+        $this->normalizeBannerUrls($request);
 
         if (MobileAlbum::has_invalid_data() || MobileBanner::has_invalid_data()) {
             $errors = MobileAlbum::get_error_messages()
@@ -156,6 +159,23 @@ class MobileAlbumController extends Controller
         $mobile_album->addBanners($newBanners);
 
         return back()->with('success', __('standard.banner.update_success'));
+    }
+
+    private function normalizeBannerUrls(Request $request)
+    {
+        $banners = $request->input('banners', []);
+
+        foreach ($banners as $key => $banner) {
+            $url = trim($banner['url'] ?? '');
+
+            if ($url !== '' && !preg_match('/^https?:\/\//i', $url)) {
+                $url = 'https://' . $url;
+            }
+
+            $banners[$key]['url'] = $url !== '' ? $url : null;
+        }
+
+        $request->merge(['banners' => $banners]);
     }
 
     public function change_status($id)

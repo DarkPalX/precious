@@ -91,7 +91,7 @@
                                     </td>
                                     <td>{{ $product->author ?? 'Unknown' }}</td>
                                     <td>{{ $product->category->name }}</td>
-                                    <td>{{ $product->genres->pluck('name')->implode(', ') }}</td>
+                                    <td>{{ $product->genre }}</td>
                                     <td>{{ $product->chapters ?? 0 }}</td>
                                     <td>
                                         @if($product->discount_price > 0)

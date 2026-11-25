@@ -1,3 +1,30 @@
+######################################### NOVEMBER 25, 2026 #######################################
+
+ALTER TABLE products
+ADD COLUMN genre TEXT NULL AFTER category_id;
+
+
+UPDATE products p
+JOIN (
+    SELECT
+        pg.product_id,
+        GROUP_CONCAT(
+            DISTINCT g.name
+            ORDER BY g.name
+            SEPARATOR ','
+        ) AS genre_names
+    FROM product_genre pg
+    INNER JOIN product_genres g
+        ON g.id = pg.genre_id
+    GROUP BY pg.product_id
+) x ON x.product_id = p.id
+SET p.genre = x.genre_names;
+
+
+DROP TABLE IF EXISTS product_genre;
+
+
+
 ######################################### NOVEMBER 24, 2026 #######################################
 
 ALTER TABLE settings

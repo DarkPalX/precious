@@ -96,7 +96,6 @@ class ProductController extends Controller
         $attributes = FormAttribute::orderBy('name', 'asc')->get();
         $products = Product::all();
         $genres = ProductGenre::where('status', 'PUBLISHED')->orderBy('name')->get();
-
         return view('admin.ecommerce.products.create',compact('parentCategories', 'attributes', 'products', 'genres'));
     }
 
@@ -126,6 +125,7 @@ class ProductController extends Controller
         $requestData['is_premium'] = $request->has('is_premium');
         $requestData['is_preorder'] = $request->has('is_preorder');
         $requestData['description'] = $request->long_description;
+        $requestData['genre'] = $this->normalizeGenres($request->input('genre'));
         $requestData['created_by'] = Auth::id();
 
 
@@ -138,8 +138,6 @@ class ProductController extends Controller
         }
 
         $product = Product::create($requestData);
-        $this->syncProductGenres($product, $request->input('genre_ids', []), $request->input('genre_names'));
-
         $this->tags($product->id, $request->tags);
 
         $newPhotos = $this->set_order(request('photos'));
@@ -194,43 +192,33 @@ class ProductController extends Controller
         }
     }
 
-    private function syncProductGenres(Product $product, array $genreIds = [], $newGenres = null)
+    private function normalizeGenres($genres): ?string
     {
-        $existingGenreIds = [];
-        $newGenreNames = array_filter(array_map('trim', explode(',', (string) $newGenres)));
+        $names = array_filter(array_map('trim', explode(',', (string) $genres)));
+        $names = array_values(array_unique($names, SORT_STRING));
 
-        foreach ($genreIds as $genreId) {
-            if (is_numeric($genreId)) {
-                $existingGenreIds[] = (int) $genreId;
-            } elseif (strpos($genreId, 'new:') === 0) {
-                $newGenreNames[] = trim(substr($genreId, 4));
-            }
-        }
+        foreach ($names as $name) {
+            $existingGenre = ProductGenre::withTrashed()
+                ->whereRaw('LOWER(name) = ?', [mb_strtolower($name)])
+                ->first();
 
-        $genreMap = [];
-        foreach (ProductGenre::withTrashed()->get() as $genre) {
-            $genreMap[mb_strtolower(trim($genre->name))] = $genre;
-        }
+            if ($existingGenre) {
+                if ($existingGenre->trashed()) {
+                    $existingGenre->restore();
+                }
 
-        foreach (array_filter(array_map('trim', $newGenreNames)) as $genreName) {
-            $key = mb_strtolower($genreName);
-
-            if (!isset($genreMap[$key])) {
-                $genreMap[$key] = ProductGenre::create([
-                    'name' => $genreName,
-                    'slug' => Str::slug($genreName),
-                    'status' => 'PUBLISHED',
-                    'created_by' => Auth::id(),
-                ]);
-            } elseif ($genreMap[$key]->trashed()) {
-                $genreMap[$key]->restore();
+                continue;
             }
 
-            $existingGenreIds[] = $genreMap[$key]->id;
+            ProductGenre::create([
+                'name' => $name,
+                'slug' => Str::slug($name),
+                'status' => 'PUBLISHED',
+                'created_by' => Auth::id(),
+            ]);
         }
 
-        $existingGenreIds = ProductGenre::whereIn('id', array_unique($existingGenreIds))->pluck('id')->all();
-        $product->genres()->sync(array_values(array_unique($existingGenreIds)));
+        return $names ? implode(', ', $names) : null;
     }
 
 
@@ -258,7 +246,6 @@ class ProductController extends Controller
 
         $attributes = FormAttribute::orderBy('name', 'asc')->get();
         $genres = ProductGenre::where('status', 'PUBLISHED')->orderBy('name')->get();
-
         return view('admin.ecommerce.products.edit',compact('product','parentCategories', 'attributes', 'genres'));
     }
 
@@ -287,6 +274,7 @@ class ProductController extends Controller
         $requestData = $request->all();
         $requestData['slug'] = $slug;
         $requestData['description'] = $request->long_description;
+        $requestData['genre'] = $this->normalizeGenres($request->input('genre'));
         $requestData['status'] = $request->has('status') ? 'PUBLISHED' : 'PRIVATE';
         $requestData['is_featured'] = $request->has('is_featured');
         $requestData['is_best_seller'] = $request->has('is_best_seller');
@@ -304,7 +292,6 @@ class ProductController extends Controller
         }
 
         $product->update($requestData);
-        $this->syncProductGenres($product, $request->input('genre_ids', []), $request->input('genre_names'));
         $this->update_tags($product->id,$request->tags);
 
         $photos = $this->set_order(request('photos'));
@@ -755,11 +742,6 @@ class ProductController extends Controller
 
                 if($row > 1){
 
-                    $genreMap = [];
-                    foreach (ProductGenre::withTrashed()->get() as $genre) {
-                        $genreMap[mb_strtolower(trim($genre->name))] = $genre;
-                    }
-
                     $categoryMap = [];
                     foreach (ProductCategory::get() as $category) {
                         $categoryMap[mb_strtolower(trim($category->name))] = $category->id;
@@ -775,24 +757,6 @@ class ProductController extends Controller
                     $categoryName = trim(mb_convert_encoding($data[4] ?? '', "UTF-8"));
                     $categoryId = $categoryMap[mb_strtolower($categoryName)] ?? null;
                     $genreNames = array_filter(array_map('trim', explode(',', mb_convert_encoding($data[5] ?? '', "UTF-8"))));
-                    $genreIds = [];
-                    foreach ($genreNames as $genreName) {
-                        $genreKey = mb_strtolower(trim($genreName));
-                        if (!isset($genreMap[$genreKey])) {
-                            $genreMap[$genreKey] = ProductGenre::create([
-                                'name' => trim($genreName),
-                                'slug' => Str::slug(trim($genreName)),
-                                'status' => 'PUBLISHED',
-                                'created_by' => Auth::id(),
-                            ]);
-                        } elseif ($genreMap[$genreKey]->trashed()) {
-                            $genreMap[$genreKey]->restore();
-                        }
-
-                        if ($genreMap[$genreKey]) {
-                            $genreIds[] = $genreMap[$genreKey]->id;
-                        }
-                    }
                     $description = nl2br(iconv(mb_detect_encoding($data[7], mb_detect_order(), true), "UTF-8//IGNORE", $data[7]));
 
 
@@ -802,6 +766,7 @@ class ProductController extends Controller
                         'author' => $author,
                         'book_type' => $data[3],
                         'category_id' => $categoryId,
+                        'genre' => $this->normalizeGenres(implode(', ', $genreNames)),
                         'chapters' => ($data[6] ?? '') !== '' ? (int) $data[6] : null,
                         'slug' => $slug,
                         'description' => '<p>' . $description . '</p>',
@@ -815,8 +780,6 @@ class ProductController extends Controller
                         'status' => 'PRIVATE',
                         'created_by' => Auth::id()
                     ]);
-
-                    $product->genres()->sync($genreIds);
 
                     if (is_numeric($data[15]) && $data[15] > 0) {
 
