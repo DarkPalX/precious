@@ -2391,12 +2391,12 @@ public function doPostCommentReviewReply(Request $request){
         'Reply'           => trim((string) $request->post('Reply', '')),
     ];
 
-    //   $data = [
-    //     'UserID'          => 98042,
-    //     'ProductID'       => 95,
-    //     'ProductReviewID' => 135,
-    //     'Reply'           => 'Hello po mam nice comment',
-    // ];
+      $data = [
+        'UserID'          => 98042,
+        'ProductID'       => 95,
+        'ProductReviewID' => 135,
+        'Reply'           => 'Hello po mam nice comment',
+    ];
 
     if ($data['Reply'] === '') {
         return response()->json([
