@@ -19,7 +19,7 @@ use App\Models\Ecommerce\{
     Cart,
     CustomerFavorite,
     CustomerWishlist,
-    ProductReview, ProductGenre
+    ProductReview
 };
 
 use Carbon\Carbon;
@@ -36,6 +36,7 @@ class Product extends Model
         'book_type',
         'chapters',
         'category_id',
+        'genre',
         'name',
         'author',
         'slug',
@@ -109,11 +110,6 @@ class Product extends Model
                 'id' => '0',
                 'name' => 'Uncategorized'
             ]);
-    }
-
-    public function genres()
-    {
-        return $this->belongsToMany(ProductGenre::class, 'product_genre', 'product_id', 'genre_id');
     }
 
     public function brand()

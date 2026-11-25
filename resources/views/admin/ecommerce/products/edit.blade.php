@@ -130,11 +130,11 @@
                     <div class="form-group">
                         <label class="d-block">Genre</label>
                         @php
-                            $selectedGenreNames = old('genre_names', $product->genres->pluck('name')->implode(','));
+                            $selectedGenreNames = old('genre', $product->genre);
                         @endphp
-                        <input name="genre_names" id="genre_names" type="text" class="form-control" value="{{ $selectedGenreNames }}" data-role="tagsinput" placeholder="Type a genre and press Enter">
+                        <input name="genre" id="genre" type="text" class="form-control" value="{{ $selectedGenreNames }}" data-role="tagsinput" placeholder="Type a genre and press Enter">
                         <small class="text-muted">Type a genre and press Enter. Multiple genres are supported.</small>
-                        @error('genre_names') <span class="text-danger">{{ $message }}</span> @enderror
+                        @error('genre') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
                     <div class="form-group">
                         <label class="d-block">Price (in Php) *</label>
@@ -559,22 +559,18 @@
             $('.selectpicker').selectpicker();
 
             var genreSuggestions = @json($genres->pluck('name')->values());
-            var genreInput = $('#genre_names').tagsinput('input');
+            var genreInput = $('#genre').tagsinput('input');
             genreInput.autocomplete({
                 source: genreSuggestions,
                 minLength: 0,
-                open: function () {
-                    $('.ui-autocomplete').css('width', $('#genre_names').closest('.bootstrap-tagsinput').outerWidth() + 'px');
-                },
                 select: function (event, ui) {
                     event.preventDefault();
-                    $('#genre_names').tagsinput('add', ui.item.value);
+                    $('#genre').tagsinput('add', ui.item.value);
                     genreInput.val('');
                 }
             }).on('focus', function () {
                 $(this).autocomplete('search', this.value);
             });
-
 
             $("#customSwitch1").change(function() {
                 if(this.checked) {
