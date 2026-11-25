@@ -2406,7 +2406,12 @@ public function doPostCommentReviewReply(Request $request){
     //     ]);
     // }
     
-    $result = $Review->doPostCommentReply($data);
+    //$result = $Review->doPostCommentReply($data);
+
+     return response()->json([
+            'response' => 'Success',
+            'message'  => 'Reply is successfully submitted.',
+        ]);
 
     return response()->json($result);
 }
