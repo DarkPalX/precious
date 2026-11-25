@@ -222,7 +222,8 @@ class Review extends Model
      }
           
       $ProductReviewID = DB::table('product_reviews_reply')
-            ->insertGetId([                                    
+            ->insertGetId([    
+              'product_review_id' => $ProductReviewID,                                   
               'product_id' => $ProductID,                  
               'user_id' => $UserID,
               'name' => $FullName,                        
