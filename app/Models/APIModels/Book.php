@@ -63,7 +63,8 @@ class Book extends Model
 
                 COALESCE(prds.category_id, 0) AS category_id,
                 COALESCE(prds.book_type, '') AS book_type,
-
+              
+                COALESCE(prds.genre, '') AS genre,
                 COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku, '') AS sku,
@@ -141,6 +142,7 @@ class Book extends Model
                         "CONCAT_WS(' ',
                             COALESCE(prds.name,''),
                             COALESCE(prds.author,''),
+                            COALESCE(prds.genre,''),
                             COALESCE(prds.subtitle,''),
                             COALESCE(prds.book_type,''),
                             COALESCE(prod_cat.name,'')
@@ -201,7 +203,8 @@ public function getContinueToReadBookList($data){
 
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
-
+              
+                COALESCE(prds.genre, '') AS genre,
                 COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
@@ -291,7 +294,8 @@ public function getTopReadsBookList($data){
 
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
-
+               
+                COALESCE(prds.genre, '') AS genre,
                 COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
@@ -396,6 +400,7 @@ public function getSearchBookList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
+                COALESCE(prds.genre, '') AS genre,
                 COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
@@ -483,6 +488,7 @@ public function getSearchBookList($data){
                         "CONCAT_WS(' ',
                             COALESCE(prds.name,''),
                             COALESCE(prds.author,''),
+                            COALESCE(prds.genre,''),
                             COALESCE(prds.subtitle,''),
                             COALESCE(prds.book_type,''),
                             COALESCE(prod_cat.name,'')
@@ -569,6 +575,7 @@ public function getSearchAudioBookList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
+                COALESCE(prds.genre, '') AS genre,
                 COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
@@ -646,6 +653,7 @@ public function getSearchAudioBookList($data){
                         "CONCAT_WS(' ',
                             COALESCE(prds.name,''),
                             COALESCE(prds.author,''),
+                            COALESCE(prds.genre,''),
                             COALESCE(prds.subtitle,''),
                             COALESCE(prds.book_type,''),
                             COALESCE(prod_cat.name,''),
@@ -681,6 +689,7 @@ public function getSearchAudioBookList($data){
             COALESCE(prds.category_id,0) as category_id,
             COALESCE(prds.book_type,'') as book_type,
 
+            COALESCE(prds.genre, '') AS genre,
             COALESCE(prds.chapters, 0) AS total_chapters,
 
             COALESCE(prds.sku,'') as sku,
@@ -819,6 +828,7 @@ public function getDetailsCatalogueList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
+                COALESCE(prds.genre, '') AS genre,
                 COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
