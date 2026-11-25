@@ -220,6 +220,10 @@
                                                                     <input name="banners[`+image_count+`][image_path]" class="image_path" type="text" value="`+returnData.image_url+`" required onvalid="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Please upload image.')" oninput="this.setCustomValidity('')"/>
                                                                 </div>
                                                             </div>
+                                                            <div class="form-group mg-t-15">
+                                                                <label>Attach URL</label>
+                                                                <input name="banners[`+image_count+`][url]" type="text" class="form-control" placeholder="example.com">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

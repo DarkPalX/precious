@@ -1,7 +1,7 @@
 ######################################### NOVEMBER 25, 2026 #######################################
 
 ALTER TABLE products
-ADD COLUMN IF NOT EXISTS genre TEXT NULL AFTER category_id;
+ADD COLUMN genre TEXT NULL AFTER category_id;
 
 
 UPDATE products p
