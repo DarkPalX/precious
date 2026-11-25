@@ -2353,57 +2353,55 @@ public function doPostCommentReview(Request $request){
 
 //REPLY COMMENTS=====================================================================
 public function getBookReviewReply(Request $request){
-    
-    $Misc = new Misc();
+
     $Review = new Review();
 
-    $response = "Failed";
-    $responseMessage = "";
+    $data = [
+        'UserID'          => (int) $request->post('UserID', 0),
+        'ProductID'       => (int) $request->post('ProductID', 0),
+        'ProductReviewID' => (int) $request->post('ProductReviewID', 0),
+        'PageNo'          => (int) $request->post('PageNo', 1),
+        'Limit'           => (int) $request->post('Limit', 100),
+    ];
 
-    
-    $data['ProductID']=$request->post('ProductID');
-    $data['ProductReviewID']=$request->post('ProductReviewID');
+    if ($data['ProductReviewID'] <= 0) {
+        return response()->json([
+            'response' => 'Failed',
+            'message'  => 'Invalid review.',
+            'Replies'  => [],
+        ]);
+    }
 
-    $data["SearchText"] = '';
-    $data["Status"] = '';
-    $data["PageNo"] = 0;
-    $data["Limit"] = 0;
+    $replies = $Review->getReviewReplyList($data);
 
-    $result=$Review->getReviewReplyList($data);  
-    return response()->json($result); 
-    
+    return response()->json([
+        'response' => 'Success',
+        'Replies'  => $replies,
+    ]);
 }
 
 public function doPostCommentReviewReply(Request $request){
 
-    $Misc = new Misc();
     $Review = new Review();
 
-    $response = "Failed";
-    $responseMessage = "";
-             
-    $data['UserID'] = $request->post('UserID');
-    $data['ProductReviewID'] = $request->post('ProductReviewID');
-    $data['ProductID'] = $request->post('ProductID');
+    $data = [
+        'UserID'          => (int) $request->post('UserID', 0),
+        'ProductID'       => (int) $request->post('ProductID', 0),
+        'ProductReviewID' => (int) $request->post('ProductReviewID', 0),
+        'Reply'           => trim((string) $request->post('Reply', '')),
+    ];
 
-    $data['Reply'] = $request->post('Reply');
-
-
-    if(empty($data['Reply'])){
-      $ResponseMessage = 'Reply is required.';
-       return response()->json([
-           'response' => 'Failed',
-           'message' => $ResponseMessage,
-       ]);
+    if ($data['Reply'] === '') {
+        return response()->json([
+            'response' => 'Failed',
+            'message'  => 'Reply is required.',
+        ]);
     }
     
-    $retVal=$Review->doPostCommentReply($data);
-     return response()->json([
-      'response' => 'Success',
-      'message' => "Your reply has successfully send & subject for Admins approval.",
-    ]);                     
-           
-  }
+    $result = $Review->doPostCommentReply($data);
+
+    return response()->json($result);
+}
 
 //SLIDER BANNER ADS=====================================================================
 public function getHomeSliderBanner(Request $request){
