@@ -204,8 +204,6 @@ class Review extends Model
 
     $TODAY = date("Y-m-d H:i:s");
     
-    $ProductName="";
-
     $FullName="";
     $EmailAddress="";
 
@@ -214,14 +212,8 @@ class Review extends Model
     $ProductReviewID=$data['ProductReviewID'];
 
     $Reply=$data['Reply'];
-
     
     if($UserID> 0){
-
-     $info=$Book->getBookInfoByID($ProductID);
-     if(isset($info)>0){
-         $ProductName=$info->name;
-     }
 
      $info=$UserCustomer->getCustomerInformation($data);
      if(isset($info)>0){
