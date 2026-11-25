@@ -2384,34 +2384,30 @@ public function doPostCommentReviewReply(Request $request){
 
     $Review = new Review();
 
-    // $data = [
-    //     'UserID'          => (int) $request->post('UserID', 0),
-    //     'ProductID'       => (int) $request->post('ProductID', 0),
-    //     'ProductReviewID' => (int) $request->post('ProductReviewID', 0),
-    //     'Reply'           => trim((string) $request->post('Reply', '')),
-    // ];
-
-
-      $data = [
-        'UserID'          => 98042,
-        'ProductID'       => 95,
-        'ProductReviewID' => 135,
-        'Reply'           => 'Hello po mam nice comment',
+    $data = [
+        'UserID'          => (int) $request->post('UserID', 0),
+        'ProductID'       => (int) $request->post('ProductID', 0),
+        'ProductReviewID' => (int) $request->post('ProductReviewID', 0),
+        'Reply'           => trim((string) $request->post('Reply', '')),
     ];
 
-    // if ($data['Reply'] === '') {
-    //     return response()->json([
-    //         'response' => 'Failed',
-    //         'message'  => 'Reply is required.',
-    //     ]);
-    // }
-    
-    //$result = $Review->doPostCommentReply($data);
+    //   $data = [
+    //     'UserID'          => 98042,
+    //     'ProductID'       => 95,
+    //     'ProductReviewID' => 135,
+    //     'Reply'           => 'Hello po mam nice comment',
+    // ];
 
-     return response()->json([
-            'response' => 'Success',
-            'message'  => 'Reply is successfully submitted.',
+    if ($data['Reply'] === '') {
+        return response()->json([
+            'response' => 'Failed',
+            'message'  => 'Reply is required.',
         ]);
+    }
+    
+    $result = $Review->doPostCommentReply($data);
+
+  
 
     return response()->json($result);
 }
