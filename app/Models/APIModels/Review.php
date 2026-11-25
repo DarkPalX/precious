@@ -211,9 +211,10 @@ class Review extends Model
 
     $UserID=$data['UserID'];
     $ProductID=$data['ProductID'];
+    $ProductReviewID=$data['ProductReviewID'];
 
-    $Comment=$data['Comment'];
-    $Rating=$data['Rating'];
+    $Reply=$data['Reply'];
+
     
     if($UserID> 0){
 
@@ -230,13 +231,11 @@ class Review extends Model
           
       $ProductReviewID = DB::table('product_reviews_reply')
             ->insertGetId([                                    
-              'product_id' => $ProductID,
-              'product_name' => $ProductName,                        
+              'product_id' => $ProductID,                  
               'user_id' => $UserID,
               'name' => $FullName,                        
               'email' => $EmailAddress,                         
-              'comment' => trim($Comment), 
-              'rating' => $Rating, 
+              'reply' => trim($Reply), 
               'status' => 0, 
               'created_at' => $TODAY,             
               'updated_at' => $TODAY,             
