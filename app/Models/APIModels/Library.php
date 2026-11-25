@@ -62,6 +62,7 @@ class Library extends Model
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
+                COALESCE(prds.genre, '') AS genre,
                 COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
@@ -167,6 +168,7 @@ public function getSubscribedReadBooksList($data){
                 COALESCE(prds.category_id,0) as category_id,
                 COALESCE(prds.book_type,'') as book_type,
 
+                COALESCE(prds.genre, '') AS genre,
                 COALESCE(prds.chapters, 0) AS total_chapters,
 
                 COALESCE(prds.sku,'') as sku,
@@ -266,123 +268,123 @@ public function getSubscribedReadBooksList($data){
     return $IsExist;
   }
 
-    public function checkProductsIfExistInSubscribeDownloadLibrary($ProductID,$CustomerID){
+  //   public function checkProductsIfExistInSubscribeDownloadLibrary($ProductID,$CustomerID){
       
-    $IsExist = false; 
+  //   $IsExist = false; 
     
-    $list = DB::table('subscribed_books')          
-        ->whereRaw('user_id=?',[$CustomerID])    
-        ->whereRaw('product_id=?',[$ProductID])                                    
-        ->where('is_downloaded','=',1)
-        ->where('deleted_at','=',null)
-        ->get();
+  //   $list = DB::table('subscribed_books')          
+  //       ->whereRaw('user_id=?',[$CustomerID])    
+  //       ->whereRaw('product_id=?',[$ProductID])                                    
+  //       ->where('is_downloaded','=',1)
+  //       ->where('deleted_at','=',null)
+  //       ->get();
 
-    if(count($list)>0){
-        $IsExist=true;
-    }else{
-        $IsExist=false;
-    }
+  //   if(count($list)>0){
+  //       $IsExist=true;
+  //   }else{
+  //       $IsExist=false;
+  //   }
     
-    return $IsExist;
-  }
+  //   return $IsExist;
+  // }
 
-  public function getSubscribedDownloadedBooksList($data){
+  // public function getSubscribedDownloadedBooksList($data){
     
-    $UserID=$data['UserID'];
+  //   $UserID=$data['UserID'];
         
-    $query = DB::table('subscribed_books as rbooks')
-      ->join('products as prds', 'prds.id', '=', 'rbooks.product_id') 
+  //   $query = DB::table('subscribed_books as rbooks')
+  //     ->join('products as prds', 'prds.id', '=', 'rbooks.product_id') 
     
-       ->selectraw("
-          prds.id as book_ID,
+  //      ->selectraw("
+  //         prds.id as book_ID,
 
-          COALESCE(prds.name,'') as name,
-          COALESCE(prds.author,'') as author,
-          COALESCE(prds.subtitle,'') as subtitle,
-          COALESCE(prds.description,'') as short_description,
+  //         COALESCE(prds.name,'') as name,
+  //         COALESCE(prds.author,'') as author,
+  //         COALESCE(prds.subtitle,'') as subtitle,
+  //         COALESCE(prds.description,'') as short_description,
           
-          COALESCE(prds.slug,'') as slug,
-          COALESCE(prds.file_url,'') as file_url,          
+  //         COALESCE(prds.slug,'') as slug,
+  //         COALESCE(prds.file_url,'') as file_url,          
 
-          COALESCE(prds.category_id,0) as category_id,
-          COALESCE(prds.book_type,'') as book_type,  
+  //         COALESCE(prds.category_id,0) as category_id,
+  //         COALESCE(prds.book_type,'') as book_type,  
 
-          COALESCE(prds.chapters, 0) AS total_chapters,        
+  //         COALESCE(prds.chapters, 0) AS total_chapters,        
       
-          COALESCE(prds.sku,'') as sku,          
-          COALESCE(prds.size,'') as size,
-          COALESCE(prds.weight,'') as weight,
-          COALESCE(prds.texture,'') as texture,
-          COALESCE(prds.uom,'') as uom,
+  //         COALESCE(prds.sku,'') as sku,          
+  //         COALESCE(prds.size,'') as size,
+  //         COALESCE(prds.weight,'') as weight,
+  //         COALESCE(prds.texture,'') as texture,
+  //         COALESCE(prds.uom,'') as uom,
 
-          COALESCE(prds.is_featured,0) as is_featured,
-          COALESCE(prds.is_best_seller,0) as is_best_seller,
-          COALESCE(prds.is_free,0) as is_free,
-          COALESCE(prds.is_premium,0) as is_premium,
+  //         COALESCE(prds.is_featured,0) as is_featured,
+  //         COALESCE(prds.is_best_seller,0) as is_best_seller,
+  //         COALESCE(prds.is_free,0) as is_free,
+  //         COALESCE(prds.is_premium,0) as is_premium,
 
-          COALESCE(prds.ebook_price,0) as price,   
-          COALESCE(prds.ebook_discount_price,0) as discount_price,      
+  //         COALESCE(prds.ebook_price,0) as price,   
+  //         COALESCE(prds.ebook_discount_price,0) as discount_price,      
           
-          COALESCE(prds.reorder_point,0) as reorder_point,  
-           COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
+  //         COALESCE(prds.reorder_point,0) as reorder_point,  
+  //          COALESCE(prds.read_count, 0) + COALESCE(prds.old_read_count, 0) AS read_count,
 
-          CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,  
+  //         CONCAT(COALESCE(prds.name,''),' ', COALESCE(prds.author,''),'', COALESCE(prds.book_type,'') ,'', COALESCE(prds.subtitle,'')) as search_fields,  
 
-          COALESCE((
-               SELECT 
-                  prod_img.path FROM 
-                      product_photos as prod_img                  
-                  INNER JOIN products as prods ON prods.id = prod_img.product_id
-                      WHERE prod_img.product_id = rbooks.product_id
-                      AND prod_img.is_primary = 1 LIMIT 1                                
-              )
-        ,'') as image_path,
+  //         COALESCE((
+  //              SELECT 
+  //                 prod_img.path FROM 
+  //                     product_photos as prod_img                  
+  //                 INNER JOIN products as prods ON prods.id = prod_img.product_id
+  //                     WHERE prod_img.product_id = rbooks.product_id
+  //                     AND prod_img.is_primary = 1 LIMIT 1                                
+  //             )
+  //       ,'') as image_path,
 
-        COALESCE((
-               SELECT ROUND(avg(rating))
-                  FROM product_reviews as rev
-                WHERE rev.product_id = prds.id     
-                AND rev.status = 1 LIMIT 1                                
-              )
-        ,0) as rating,
+  //       COALESCE((
+  //              SELECT ROUND(avg(rating))
+  //                 FROM product_reviews as rev
+  //               WHERE rev.product_id = prds.id     
+  //               AND rev.status = 1 LIMIT 1                                
+  //             )
+  //       ,0) as rating,
 
-        COALESCE((
-               SELECT 
-                  promo.discount FROM 
-                        promos as promo                  
-                  INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = rbooks.product_id  
-                       AND promo.applicable_product_type !='physical'
-                       AND promo.status = 'ACTIVE'                      
-                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
-              )
-        ,0) as promo_discount_percent,
+  //       COALESCE((
+  //              SELECT 
+  //                 promo.discount FROM 
+  //                       promos as promo                  
+  //                 INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+  //                      WHERE promo_prods.product_id = rbooks.product_id  
+  //                      AND promo.applicable_product_type !='physical'
+  //                      AND promo.status = 'ACTIVE'                      
+  //                      AND promo_prods.deleted_at IS NULL LIMIT 1                                
+  //             )
+  //       ,0) as promo_discount_percent,
 
-        COALESCE((
-               SELECT 
-                   (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
-                        promos as promo                  
-                  INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
-                       WHERE promo_prods.product_id = rbooks.product_id     
-                       AND promo.applicable_product_type !='physical'                   
-                       AND promo.status = 'ACTIVE'
-                       AND promo_prods.deleted_at IS NULL LIMIT 1                                
-              )
-        ,0) as promo_discount_price,
+  //       COALESCE((
+  //              SELECT 
+  //                  (prds.ebook_price - (promo.discount/100 * prds.ebook_price)) FROM 
+  //                       promos as promo                  
+  //                 INNER JOIN promo_products as promo_prods ON promo_prods.promo_id = promo.id  
+  //                      WHERE promo_prods.product_id = rbooks.product_id     
+  //                      AND promo.applicable_product_type !='physical'                   
+  //                      AND promo.status = 'ACTIVE'
+  //                      AND promo_prods.deleted_at IS NULL LIMIT 1                                
+  //             )
+  //       ,0) as promo_discount_price,
 
-          COALESCE(prds.status,'') as status          
+  //         COALESCE(prds.status,'') as status          
           
-        ");    
+  //       ");    
 
-    $query->where("rbooks.user_id",'=',$UserID);    
-    $query->where("rbooks.is_downloaded",'=',1);        
-    $query->where("rbooks.deleted_at",'=',null);   
+  //   $query->where("rbooks.user_id",'=',$UserID);    
+  //   $query->where("rbooks.is_downloaded",'=',1);        
+  //   $query->where("rbooks.deleted_at",'=',null);   
    
-    $list = $query->limit(20)->get();  // get temp 50
+  //   $list = $query->limit(20)->get();  // get temp 50
                              
-     return $list;             
+  //    return $list;             
            
-  }
+  // }
 
   public function saveReadSubscribedBooks($data){
 
