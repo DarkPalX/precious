@@ -138,13 +138,13 @@ class Review extends Model
   }
 
   //REVIEW LIST ==========================================================
-  
- public function getReviewList($data){
-    
+
+  public function getReviewList($data){
+
     $ProductID  = $data['ProductID'];
     $Status     = $data['Status'];
     $SearchText = $data['SearchText'];
-    
+
     $Limit  = $data['Limit'];
     $PageNo = $data['PageNo'];
 
@@ -156,8 +156,21 @@ class Review extends Model
         $SearchText
     ) {
 
+        // ── NEW: one row per review with the number of VISIBLE replies ──
+        // Aggregated in a sub-query first, then LEFT JOINed, so a review
+        // with many replies is still returned as a single row (no row
+        // multiplication) and a review with no replies gets 0.
+        // Only approved replies (status = 1) are counted, which matches
+        // what getReviewReplyList() actually returns to the app.
+        $replyCounts = DB::table('product_reviews_reply')
+            ->selectRaw('product_review_id, COUNT(*) as total_reply')
+            ->where('product_id', '=', $ProductID)
+            ->where('status', '=', 1)
+            ->groupBy('product_review_id');
+
         $query = DB::table('product_reviews as revs')
             ->join('users as usrs', 'usrs.id', '=', 'revs.user_id')
+            ->leftJoinSub($replyCounts, 'rc', 'rc.product_review_id', '=', 'revs.id')
 
             ->selectraw("
                 revs.id as review_ID,
@@ -178,7 +191,9 @@ class Review extends Model
                 ) as rating_date_format,
 
                 COALESCE(revs.status,'') as status,
-                COALESCE(revs.created_at,'') as created_at
+                COALESCE(revs.created_at,'') as created_at,
+
+                COALESCE(rc.total_reply,0) as reply_count
             ");
 
         $query->where('revs.product_id', '=', $ProductID);
@@ -192,13 +207,19 @@ class Review extends Model
 
                 for($x = 0; $x < count($arSearchText); $x++) {
 
-                    $search = str_replace("'", "''", $arSearchText[$x]);
+                    $search = trim($arSearchText[$x]);
 
+                    if($search === ''){
+                        continue;
+                    }
+
+                    // bound parameter instead of string concatenation
                     $query->whereRaw(
                         "CONCAT_WS(' ',
                             COALESCE(revs.product_name,''),
                             COALESCE(revs.comment,'')
-                        ) LIKE '%".$search."%'"
+                        ) LIKE ?",
+                        ['%' . $search . '%']
                     );
                 }
             }
@@ -208,7 +229,7 @@ class Review extends Model
 
         return $query->limit(50)->get();
     });
-}
+  }
 
   public function doPostComment($data) {
 
@@ -217,7 +238,7 @@ class Review extends Model
     $UserCustomer  = New UserCustomer();
 
     $TODAY = date("Y-m-d H:i:s");
-    
+
     $ProductName="";
 
     $FullName="";
@@ -229,9 +250,9 @@ class Review extends Model
     $Comment=$data['Comment'];
     $Rating=$data['Rating'];
 
-    // Censor bad words 
+    // Censor bad words
     $Comment = $this->filterBadWords($Comment);
-    
+
     if($UserID> 0){
 
      $info=$Book->getBookInfoByID($ProductID);
@@ -244,19 +265,19 @@ class Review extends Model
          $FullName=$info->fullname;
          $EmailAddress=$info->emailaddress;
      }
-          
+
       $ProductReviewID = DB::table('product_reviews')
-            ->insertGetId([                                    
+            ->insertGetId([
               'product_id' => $ProductID,
-              'product_name' => $ProductName,                        
+              'product_name' => $ProductName,
               'user_id' => $UserID,
-              'name' => $FullName,                        
-              'email' => $EmailAddress,                         
-              'comment' => trim($Comment), 
-              'rating' => $Rating, 
-              'status' => 0, 
-              'created_at' => $TODAY,             
-              'updated_at' => $TODAY,             
+              'name' => $FullName,
+              'email' => $EmailAddress,
+              'comment' => trim($Comment),
+              'rating' => $Rating,
+              'status' => 0,
+              'created_at' => $TODAY,
+              'updated_at' => $TODAY,
             ]);
 
        }
@@ -264,8 +285,8 @@ class Review extends Model
     return 'Success';
 
   }
-   
-  
+
+
 
   //REPLY ===============================================================
   public function getReviewReplyList($data){
@@ -285,7 +306,7 @@ class Review extends Model
 
     $query = DB::table('product_reviews_reply as rr')
         ->join('users as usrs', 'usrs.id', '=', 'rr.user_id')
-         
+
 
            ->selectraw("
                 rr.id as reply_ID,
@@ -297,7 +318,7 @@ class Review extends Model
                 COALESCE(rr.name,'') as name,
                 COALESCE(rr.email,'') as email,
                 COALESCE(rr.reply,'') as reply,
-      
+
                 DATE_FORMAT(
                     rr.created_at,
                     '%m/%d/%Y %H:%i'
@@ -306,7 +327,7 @@ class Review extends Model
                 COALESCE(rr.status,'') as status,
                 COALESCE(rr.created_at,'') as created_at
             ");
-        
+
         $query->where('rr.product_review_id', '=', $ProductReviewID);
         $query->where('rr.status', '=', 1);
 
@@ -320,7 +341,7 @@ class Review extends Model
     $UserCustomer  = New UserCustomer();
 
     $TODAY = date("Y-m-d H:i:s");
-    
+
     $FullName="";
     $EmailAddress="";
 
@@ -330,9 +351,9 @@ class Review extends Model
 
     $Reply=$data['Reply'];
 
-    // Censor bad words 
+    // Censor bad words
     $Reply = $this->filterBadWords($Reply);
-    
+
     if($UserID> 0){
 
      $info=$UserCustomer->getCustomerInformation($data);
@@ -340,18 +361,18 @@ class Review extends Model
          $FullName=$info->fullname;
          $EmailAddress=$info->emailaddress;
      }
-          
+
       $ProductReviewID = DB::table('product_reviews_reply')
-            ->insertGetId([    
-              'product_review_id' => $ProductReviewID,                                   
-              'product_id' => $ProductID,                  
+            ->insertGetId([
+              'product_review_id' => $ProductReviewID,
+              'product_id' => $ProductID,
               'user_id' => $UserID,
-              'name' => $FullName,                        
-              'email' => $EmailAddress,                         
-              'reply' => trim($Reply), 
-              'status' => 0, 
-              'created_at' => $TODAY,             
-              'updated_at' => $TODAY,             
+              'name' => $FullName,
+              'email' => $EmailAddress,
+              'reply' => trim($Reply),
+              'status' => 0,
+              'created_at' => $TODAY,
+              'updated_at' => $TODAY,
             ]);
 
        }
