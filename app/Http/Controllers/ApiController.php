@@ -3164,6 +3164,28 @@ public function getCompanyPrivacyPolicy(Request $request){
   }
 
 
+// GET ADS SETTINGAS INFORMATION========================================================================
+public function getAdsSettingsInformation(Request $request){
+
+    $BannerAds = new BannerAds();
+
+    $Info = $BannerAds->getAdsSettings();
+
+    if ($Info !== null) {
+        return response()->json([
+            'response' => 'Success',
+            'data'     => $Info,
+            'message'  => "Successfully get ads settings",
+        ]);
+    }
+
+    return response()->json([
+        'response' => 'Failed',
+        'data'     => null,
+        'message'  => "Something went wrong while getting ads settings",
+    ]);
+}
+
 // GET MOBILE APP SETTINGAS INFORMATION========================================================================
  public function getMobileSettingsInformation(Request $request){
 
