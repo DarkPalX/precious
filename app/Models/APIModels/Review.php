@@ -382,7 +382,7 @@ class Review extends Model
             'email'        => $EmailAddress,
             'comment'      => $Reply,                 // reply text
             'rating'       => 0,                      // NOT NULL column; replies have no stars
-            'status'       => 0,                      // waits for admin approval
+            'status'       => 1,                      // No more admn approval
             'created_at'   => $TODAY,
             'updated_at'   => $TODAY,
           ]);
