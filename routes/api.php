@@ -532,13 +532,14 @@ Route::post('/get-mobile-setting-info',[
    'as'=> 'get-mobile-setting-info'
 ]);
 
-// //EPUB VIEWER=============================================================================
-// Route::get('/show-viewer',[
-//    'uses'=>'App\Http\Controllers\ApiController@showViewerEpub',
-//    'as'=> 'show-viewer'
-// ]);
+// ADS SETTINGS=================================================================================
+Route::post('/get-ads-setting-info',[
+   'uses'=>'App\Http\Controllers\ApiController@getAdsSettingsInformation',
+   'as'=> 'get-ads-setting-info'
+]);
 
-//CHECK SERVER and LARAVEL STATUS
+
+//CHECK SERVER and LARAVEL STATUS ====================================================================
 Route::get('/health', function () {
     try {
         DB::connection()->getPdo();
