@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
+use Carbon\Carbon;
+
 use Session;
 use Hash;
 use View;
@@ -199,5 +201,31 @@ class BannerAds extends Model
 
   }
 
+
+ // ADS SETTINGS===============================================================
+    public function getAdsSettings(){
+
+        $row = DB::table('ad_free_settings')->where('id', 1)->first();
+
+        if (!$row) {
+            return null;
+        }
+
+        $now = now(); // server time, app timezone
+
+        $from = (!empty($row->date_from) && !empty($row->time_from))
+            ? Carbon::parse($row->date_from . ' ' . $row->time_from) : null;
+
+        $to = (!empty($row->date_to) && !empty($row->time_to))
+            ? Carbon::parse($row->date_to . ' ' . $row->time_to) : null;
+
+        return (object) [
+            'id'             => (int) $row->id,
+            'datetime_from'  => $from ? $from->format('Y-m-d H:i:s') : null,
+            'datetime_to'    => $to   ? $to->format('Y-m-d H:i:s')   : null,
+            'is_ad_free_now' => ($from && $to) ? $now->between($from, $to) : false,
+            'server_time'    => $now->format('Y-m-d H:i:s'),
+        ];
+    }
 
 }
