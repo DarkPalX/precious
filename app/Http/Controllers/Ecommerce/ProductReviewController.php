@@ -54,6 +54,7 @@ class ProductReviewController extends Controller
     public function index($param = null)
     {
         $listing = new ListingHelper('asc', 10, 'product_name');
+        $listing->group_by_parent();
 
         $reviews = $listing->simple_search(ProductReview::class, $this->searchFields);
 

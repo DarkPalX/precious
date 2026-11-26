@@ -14,6 +14,14 @@ class ListingHelper
     private $customQueries = [];
     private $customQueryFields = [];
     private $leftJoinTables = [];
+    private $parentGroupField = null;
+
+    public function group_by_parent($field = 'parent_id')
+    {
+        $this->parentGroupField = $field;
+
+        return $this;
+    }
 
     public function sort_by($sortByField, $sortBy = 'desc')
     {
@@ -92,7 +100,23 @@ class ListingHelper
         $customQueryFields = $this->customQueryFields;
         $joinTables = $this->leftJoinTables;
 
-        $models = $model::orderBy($orderBy, $sortBy);
+        $models = $model::query();
+
+        if ($this->parentGroupField) {
+            $parentGroupField = $this->parentGroupField;
+            $table = $models->getModel()->getTable();
+            $groupKey = "COALESCE(NULLIF(`{$table}`.`{$parentGroupField}`, 0), `{$table}`.`id`)";
+            $latestGroupUpdate = "(SELECT MAX(grouped_reviews.updated_at) FROM `{$table}` AS grouped_reviews WHERE COALESCE(NULLIF(grouped_reviews.`{$parentGroupField}`, 0), grouped_reviews.`id`) = {$groupKey})";
+
+            // Keep a parent and its replies together before pagination, ordered
+            // by the most recently updated review in each group. A null
+            // parent_id and the legacy 0 value both represent a top-level review.
+            $models->orderByRaw("{$latestGroupUpdate} {$sortBy}")
+                ->orderByRaw("CASE WHEN {$parentGroupField} IS NULL OR {$parentGroupField} = 0 THEN 0 ELSE 1 END ASC")
+                ->orderBy($orderBy, $sortBy);
+        } else {
+            $models->orderBy($orderBy, $sortBy);
+        }
 
         foreach ($joinTables as $table) {
             $models->leftJoin($table['name'], $table['field1'], $table['field2']);

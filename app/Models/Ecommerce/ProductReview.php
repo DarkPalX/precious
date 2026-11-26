@@ -15,7 +15,7 @@ class ProductReview extends Model
     use HasFactory, softDeletes;
 
     public $table = 'product_reviews';
-    protected $fillable = ['product_id', 'product_name', 'user_id', 'name', 'email', 'comment','rating', 'status'];
+    protected $fillable = ['product_id', 'product_name', 'user_id', 'name', 'email', 'comment','rating', 'status', 'parent_id'];
     
     public static function getProductName($id){
         $product_name = Product::where('id', $id)->first();
@@ -30,6 +30,16 @@ class ProductReview extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(self::class, 'parent_id');
     }
 
     public static function review_counter($productId,$rating)
