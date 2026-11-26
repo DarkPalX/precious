@@ -10,6 +10,25 @@ Manage Product Reviews
     .row-selected {
         background-color: #92b7da !important;
     }
+
+    #product-reviews-table .review-reply-row td {
+        background-color: #f8f9fb;
+    }
+
+    #product-reviews-table .review-reply-row td:nth-child(2) {
+        padding-left: 28px;
+    }
+
+    #product-reviews-table .review-reply-arrow {
+        display: inline-block;
+        margin-right: 8px;
+        color: #6c757d;
+        font-size: 16px;
+    }
+
+    #product-reviews-table .review-parent-row td {
+        border-top: 1px solid #cbd3dc;
+    }
 </style>
 @endsection
 
@@ -128,7 +147,7 @@ Manage Product Reviews
             <div class="col-md-12">
                 <div class="table-list mg-b-10">
                     <div class="table-responsive-lg">
-                        <table class="table mg-b-0 table-light table-hover" style="word-break: break-all;">
+                        <table class="table mg-b-0 table-light table-hover" id="product-reviews-table" style="word-break: break-all;">
                             <thead>
                                 <tr>
                                     <th style="width: 5%;">
@@ -148,7 +167,7 @@ Manage Product Reviews
                             </thead>
                             <tbody>
                                 @forelse($reviews as $review)
-                                <tr id="row{{$review->id}}">
+                                <tr id="row{{$review->id}}" class="{{ $review->parent_id ? 'review-reply-row' : 'review-parent-row' }}">
                                     <th>
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input cb" id="cb{{ $review->id }}">
@@ -156,7 +175,10 @@ Manage Product Reviews
                                         </div>
                                     </th>
                                     <td>
-                                        <strong @if($review->trashed()) style="text-decoration:line-through;" @endif> {{ $review->product_name }}</strong>
+                                        @if($review->parent_id)
+                                            <span class="review-reply-arrow" title="Reply to review #{{ $review->parent_id }}" aria-label="Reply to review">&#8627;</span>
+                                        @endif
+                                        <strong @if($review->trashed()) style="text-decoration:line-through;" @endif>{{ $review->product_name }}</strong>
                                     </td>
                                     <td>{{ $review->name }}</td>
                                     <td>
